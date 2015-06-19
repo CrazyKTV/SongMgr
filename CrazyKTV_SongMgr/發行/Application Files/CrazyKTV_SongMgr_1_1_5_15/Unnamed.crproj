@@ -1,0 +1,7 @@
+<project outputDir="C:\Users\Ken\Documents\Visual Studio 2013\Projects\CrazyKTV_SongMgr\CrazyKTV_SongMgr\發行\Application Files\CrazyKTV_SongMgr_1_1_5_15\Confused" baseDir="C:\Users\Ken\Documents\Visual Studio 2013\Projects\CrazyKTV_SongMgr\CrazyKTV_SongMgr\發行\Application Files\CrazyKTV_SongMgr_1_1_5_15" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" inherit="false" />
+  <packer id="compressor" />
+  <module path="CrazyKTV_SongMgr.exe">
+    <rule pattern="true" inherit="false" />
+  </module>
+</project>

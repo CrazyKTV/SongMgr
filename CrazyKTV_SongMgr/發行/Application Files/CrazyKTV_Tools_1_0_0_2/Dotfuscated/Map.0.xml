@@ -1,0 +1,634 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
+<dotfuscatorMap version="1.1">
+    <header>
+        <timestamp>2015-03-14T18:43:36</timestamp>
+        <product version="5.5.4954.46574" user="已取消註冊 " serial="000-00-000-391">Dotfuscator and Analytics Community Edition</product>
+    </header>
+    <mapping>
+        <module>
+            <name>CrazyKTV_Tools.exe</name>
+            <type>
+                <name>&lt;PrivateImplementationDetails&gt;{4FDEF88A-4166-46F1-BFF3-6949D29DB3D2}</name>
+                <newname>a</newname>
+                <methodlist />
+                <fieldlist>
+                    <field>
+                        <signature>System.Collections.Generic.Dictionary`2&lt;string,int32&gt;</signature>
+                        <name>$$method0x6000020-1</name>
+                        <newname>a</newname>
+                    </field>
+                </fieldlist>
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.ControlExtentions</name>
+                <methodlist>
+                    <method>
+                        <signature>void(System.Windows.Forms.Control, bool)</signature>
+                        <name>MakeDoubleBuffered</name>
+                    </method>
+                </methodlist>
+                <fieldlist />
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.Global</name>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.cctor</name>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>string</signature>
+                        <name>ScreenDpiVars</name>
+                    </field>
+                    <field>
+                        <signature>string</signature>
+                        <name>SongQuerySqlStr</name>
+                    </field>
+                </fieldlist>
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.MainFrom</name>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>void(string, string)</signature>
+                        <name>Create_CrazyKTV_Config</name>
+                    </method>
+                    <method>
+                        <signature>void(bool)</signature>
+                        <name>Dispose</name>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>InitializeComponent</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(string)</signature>
+                        <name>Load_CrazyKTV_Config</name>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>MainFrom_Load</name>
+                        <newname>h</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>MainTabControl_SelectedIndexChanged</name>
+                        <newname>g</newname>
+                    </method>
+                    <method>
+                        <signature>void(string)</signature>
+                        <name>Save_CrazyKTV_Config</name>
+                    </method>
+                    <method>
+                        <signature>void(object, System.Windows.Forms.DataGridViewCellFormattingEventArgs)</signature>
+                        <name>SongQuery_DataGridView_CellFormatting</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.Windows.Forms.DataGridViewCellMouseEventArgs)</signature>
+                        <name>SongQuery_DataGridView_CellMouseClick</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_DataGridView_ContextMenuItem_Click</name>
+                        <newname>j</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_DataGridView_ContextMenuItem_RightClick</name>
+                        <newname>i</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_DataGridView_DateTimePicker_ValueChanged</name>
+                        <newname>k</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.Windows.Forms.DataGridViewEditingControlShowingEventArgs)</signature>
+                        <name>SongQuery_DataGridView_EditingControlShowing</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_EditMode_CheckBox_CheckedChanged</name>
+                        <newname>m</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_Query_Button_Click</name>
+                        <newname>n</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_QueryType_ComboBox_SelectedIndexChanged</name>
+                        <newname>o</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.Windows.Forms.KeyPressEventArgs)</signature>
+                        <name>SongQuery_QueryValue_TextBox_KeyPress</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>SongQuery_Save_Button_Click</name>
+                        <newname>l</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>Theme_ApplyTheme_Button_Click</name>
+                        <newname>f</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>Theme_AutoScreen_CheckedChanged</name>
+                        <newname>d</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>Theme_D3DButton_CheckedChanged</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>Theme_ListView_SelectedIndexChanged</name>
+                        <newname>e</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>Theme_ScreenDpi_SelectedIndexChanged</name>
+                        <newname>c</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>Theme_WinState_CheckedChanged</name>
+                        <newname>b</newname>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>System.ComponentModel.IContainer</signature>
+                        <name>components</name>
+                        <newname>a</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.TabControl</signature>
+                        <name>MainTabControl</name>
+                        <newname>b</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.DataGridView</signature>
+                        <name>SongQuery_DataGridView</name>
+                        <newname>m</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.CheckBox</signature>
+                        <name>SongQuery_EditMode_CheckBox</name>
+                        <newname>w</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.GroupBox</signature>
+                        <name>SongQuery_Maintenance_GroupBox</name>
+                        <newname>t</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Button</signature>
+                        <name>SongQuery_Query_Button</name>
+                        <newname>q</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.GroupBox</signature>
+                        <name>SongQuery_Query_GroupBox</name>
+                        <newname>n</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.GroupBox</signature>
+                        <name>SongQuery_QueryStatus_GroupBox</name>
+                        <newname>u</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>SongQuery_QueryStatus_Label</name>
+                        <newname>v</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.ComboBox</signature>
+                        <name>SongQuery_QueryType_ComboBox</name>
+                        <newname>s</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>SongQuery_QueryType_Label</name>
+                        <newname>r</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>SongQuery_QueryValue_Label</name>
+                        <newname>o</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.TextBox</signature>
+                        <name>SongQuery_QueryValue_TextBox</name>
+                        <newname>p</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Button</signature>
+                        <name>SongQuery_Save_Button</name>
+                        <newname>x</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.TabPage</signature>
+                        <name>SongQuery_TabPage</name>
+                        <newname>l</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Button</signature>
+                        <name>Theme_ApplyTheme_Button</name>
+                        <newname>d</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.CheckBox</signature>
+                        <name>Theme_AutoScreen_CheckBox</name>
+                        <newname>k</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.CheckBox</signature>
+                        <name>Theme_D3DButton_CheckBox</name>
+                        <newname>i</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.ListView</signature>
+                        <name>Theme_ListView</name>
+                        <newname>e</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.PictureBox</signature>
+                        <name>Theme_PictureBox</name>
+                        <newname>f</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.ComboBox</signature>
+                        <name>Theme_ScreenDpi_ComboBox</name>
+                        <newname>h</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>Theme_ScreenDpi_Label</name>
+                        <newname>j</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.TabPage</signature>
+                        <name>Theme_TabPage</name>
+                        <newname>c</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.CheckBox</signature>
+                        <name>Theme_WinState_CheckBox</name>
+                        <newname>g</newname>
+                    </field>
+                </fieldlist>
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.MainFrom/&lt;&gt;c__DisplayClass2</name>
+                <newname>CrazyKTV_Tools.MainFrom/b</newname>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>bool(string)</signature>
+                        <name>&lt;SongQuery_DataGridView_CellMouseClick&gt;b__1</name>
+                        <newname>b</newname>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>string</signature>
+                        <name>EditCell</name>
+                        <newname>a</newname>
+                    </field>
+                </fieldlist>
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.MainFrom/&lt;&gt;c__DisplayClass5</name>
+                <newname>CrazyKTV_Tools.MainFrom/c</newname>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>bool(System.IO.FileInfo)</signature>
+                        <name>&lt;MainFrom_Load&gt;b__4</name>
+                        <newname>b</newname>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>string[]</signature>
+                        <name>ThemeFileExtensions</name>
+                        <newname>a</newname>
+                    </field>
+                </fieldlist>
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.MainFrom/&lt;&gt;c__DisplayClass9</name>
+                <newname>CrazyKTV_Tools.MainFrom/a</newname>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>bool(System.Xml.Linq.XElement)</signature>
+                        <name>&lt;Load_CrazyKTV_Config&gt;b__7</name>
+                        <newname>b</newname>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>string</signature>
+                        <name>CrazyKTV_ConfigName</name>
+                        <newname>a</newname>
+                    </field>
+                </fieldlist>
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.Program</name>
+                <newname>b</newname>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>Main</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>bool()</signature>
+                        <name>SetProcessDPIAware</name>
+                    </method>
+                </methodlist>
+                <fieldlist />
+                <propertylist />
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.Properties.Resources</name>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>System.Globalization.CultureInfo()</signature>
+                        <name>get_Culture</name>
+                        <newname>b</newname>
+                    </method>
+                    <method>
+                        <signature>System.Resources.ResourceManager()</signature>
+                        <name>get_ResourceManager</name>
+                        <newname>c</newname>
+                    </method>
+                    <method>
+                        <signature>System.Drawing.Bitmap()</signature>
+                        <name>get_tbasic</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
+                        <signature>void(System.Globalization.CultureInfo)</signature>
+                        <name>set_Culture</name>
+                        <newname>a</newname>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>System.Globalization.CultureInfo</signature>
+                        <name>resourceCulture</name>
+                        <newname>b</newname>
+                    </field>
+                    <field>
+                        <signature>System.Resources.ResourceManager</signature>
+                        <name>resourceMan</name>
+                        <newname>a</newname>
+                    </field>
+                </fieldlist>
+                <propertylist>
+                    <property>
+                        <signature>System.Globalization.CultureInfo()</signature>
+                        <name>Culture</name>
+                    </property>
+                    <property>
+                        <signature>System.Resources.ResourceManager()</signature>
+                        <name>ResourceManager</name>
+                    </property>
+                    <property>
+                        <signature>System.Drawing.Bitmap()</signature>
+                        <name>tbasic</name>
+                    </property>
+                </propertylist>
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.Properties.Settings</name>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.cctor</name>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>string()</signature>
+                        <name>get_CrazySongConnectionString</name>
+                        <newname>b</newname>
+                    </method>
+                    <method>
+                        <signature>CrazyKTV_Tools.Properties.Settings()</signature>
+                        <name>get_Default</name>
+                        <newname>a</newname>
+                    </method>
+                </methodlist>
+                <fieldlist>
+                    <field>
+                        <signature>CrazyKTV_Tools.Properties.Settings</signature>
+                        <name>defaultInstance</name>
+                        <newname>a</newname>
+                    </field>
+                </fieldlist>
+                <propertylist>
+                    <property>
+                        <signature>string()</signature>
+                        <name>CrazySongConnectionString</name>
+                    </property>
+                    <property>
+                        <signature>CrazyKTV_Tools.Properties.Settings()</signature>
+                        <name>Default</name>
+                    </property>
+                </propertylist>
+                <eventlist />
+            </type>
+            <type>
+                <name>CrazyKTV_Tools.SongQuery</name>
+                <methodlist>
+                    <method>
+                        <signature>void()</signature>
+                        <name>.ctor</name>
+                    </method>
+                    <method>
+                        <signature>string(int32, int32)</signature>
+                        <name>GetContextMenuStr</name>
+                    </method>
+                    <method>
+                        <signature>System.Collections.Generic.List`1&lt;string&gt;(string)</signature>
+                        <name>GetDataGridViewColumnSet</name>
+                    </method>
+                    <method>
+                        <signature>System.Data.DataTable(string, string)</signature>
+                        <name>GetOleDbDataTable</name>
+                    </method>
+                    <method>
+                        <signature>string(int32, int32, string)</signature>
+                        <name>GetSingerTypeStr</name>
+                    </method>
+                    <method>
+                        <signature>string(int32)</signature>
+                        <name>GetSongLangStr</name>
+                    </method>
+                    <method>
+                        <signature>string(string, string)</signature>
+                        <name>GetSongQuerySqlStr</name>
+                    </method>
+                    <method>
+                        <signature>System.Collections.ArrayList()</signature>
+                        <name>GetSongQueryTypeList</name>
+                    </method>
+                    <method>
+                        <signature>string(int32, string)</signature>
+                        <name>GetSongTrackStr</name>
+                    </method>
+                    <method>
+                        <signature>System.Data.OleDb.OleDbConnection(string)</signature>
+                        <name>OleDbOpenConn</name>
+                    </method>
+                    <method>
+                        <signature>void(string, string, System.Data.DataTable)</signature>
+                        <name>OleDbUpdate</name>
+                    </method>
+                </methodlist>
+                <fieldlist />
+                <propertylist />
+                <eventlist />
+            </type>
+        </module>
+    </mapping>
+    <statistics>
+        <statisticline>
+            <description>Total Classes</description>
+            <statistic>11</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Methods</description>
+            <statistic>56</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Fields</description>
+            <statistic>33</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Properties</description>
+            <statistic>5</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Events</description>
+            <statistic>0</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Classes Renamed</description>
+            <statistic>5</statistic>
+            <statistic>45.45%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Methods Renamed</description>
+            <statistic>30</statistic>
+            <statistic>53.57%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Fields Renamed</description>
+            <statistic>31</statistic>
+            <statistic>93.94%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Properties Renamed</description>
+            <statistic>0</statistic>
+            <statistic>0.00%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Total Events Renamed</description>
+            <statistic>0</statistic>
+            <statistic>0.00%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'a'</description>
+            <statistic>10</statistic>
+            <statistic>17.86%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'b'</description>
+            <statistic>6</statistic>
+            <statistic>10.71%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'c'</description>
+            <statistic>2</statistic>
+            <statistic>3.57%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'd'</description>
+            <statistic>1</statistic>
+            <statistic>1.79%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'e'</description>
+            <statistic>1</statistic>
+            <statistic>1.79%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'f'</description>
+            <statistic>1</statistic>
+            <statistic>1.79%</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'g'</description>
+            <statistic>1</statistic>
+            <statistic>1.79%</statistic>
+        </statisticline>
+    </statistics>
+</dotfuscatorMap>
