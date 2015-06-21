@@ -34,7 +34,7 @@
     <PublisherName>Ken Luo</PublisherName>
     <SuiteName>CrazyKTV 輔助工具</SuiteName>
     <ApplicationRevision>28</ApplicationRevision>
-    <ApplicationVersion>1.2.7.%2a</ApplicationVersion>
+    <ApplicationVersion>1.2.8.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
