@@ -204,7 +204,7 @@ namespace CrazyKTV_SongMgr
                         DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
                         if (dt.Rows.Count == 0)
                         {
-                            SongQuery_QueryStatus_Label.Text = "查無【" + SongQueryStatusText + "】的相關歌曲,請重新查詢...";
+                            SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
                         }
                         else
                         {
@@ -244,11 +244,11 @@ namespace CrazyKTV_SongMgr
 
                             if (dt.Rows.Count == 0)
                             {
-                                SongQuery_QueryStatus_Label.Text = "查無【" + SongQueryStatusText + "】的相關歌曲,請重新查詢...";
+                                SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
                             }
                             else
                             {
-                                SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關【" + SongQueryStatusText + "】的歌曲。";
+                                SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
 
                                 SongQuery_DataGridView.DataSource = dt;
 
@@ -796,6 +796,7 @@ namespace CrazyKTV_SongMgr
                 case "3":
                 case "4":
                 case "5":
+                case "6":
                     Global.SongQueryQueryType = "SongQuery";
                     SongQuery_EditMode_CheckBox.Enabled = true;
                     SongQuery_Query_Button.Enabled = false;
@@ -857,6 +858,11 @@ namespace CrazyKTV_SongMgr
                             SongQueryValue = "NA";
                             SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                             break;
+                        case "6":
+                            SongQueryType = "DuplicateSongOnlyChorusSinger";
+                            SongQueryValue = "NA";
+                            SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
+                            break;
                     }
 
                     if (SongQueryValue == "")
@@ -897,7 +903,7 @@ namespace CrazyKTV_SongMgr
                                         break;
                                 }
 
-                                SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關【" + SongQueryStatusText + "】的異常歌曲。";
+                                SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的異常歌曲。";
 
                                 if (dt.Rows.Count > 0)
                                 {
@@ -1063,7 +1069,7 @@ namespace CrazyKTV_SongMgr
                             }
 
 
-                            SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆屬於【" + SongQueryStatusText + "】的最愛歌曲。";
+                            SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆屬於『" + SongQueryStatusText + "』的最愛歌曲。";
 
                             if (dt.Rows.Count > 0)
                             {
@@ -1358,6 +1364,9 @@ namespace CrazyKTV_SongMgr
                 case "DuplicateSongIgnoreSongType":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_Singer HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_Singer = ktv_Song.Song_Singer))) order by Song_SongName";
                     break;
+                case "DuplicateSongOnlyChorusSinger":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_SongType, Song_SingerType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_SongType = ktv_Song.Song_SongType and Song_SingerType = 3))) order by Song_SongName";
+                    break;
                 case "FavoriteSong":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
                     break;
@@ -1452,7 +1461,7 @@ namespace CrazyKTV_SongMgr
         public static DataTable GetSongQueryExceptionalList()
         {
             DataTable list = new DataTable();
-            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)" };
+            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌手)" };
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
 
