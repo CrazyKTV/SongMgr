@@ -164,11 +164,11 @@ namespace CrazyKTV_SongMgr
 
                             if ((string)QueryType == "SingerName")
                             {
-                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關【" + SingerMgr_QueryValue_TextBox.Text + "】的歌手。";
+                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SingerMgr_QueryValue_TextBox.Text + "』的歌手。";
                             }
                             else
                             {
-                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關【" + SingerMgr_QueryType_ComboBox.Text + "】的歌手。";
+                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SingerMgr_QueryType_ComboBox.Text + "』的歌手。";
                             }
 
                             SingerMgr_DataGridView.DataSource = dt;
