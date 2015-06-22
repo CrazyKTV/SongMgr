@@ -130,6 +130,7 @@
     <Compile Include="CommonFunc.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MainCfg.cs">
       <SubType>Form</SubType>
     </Compile>

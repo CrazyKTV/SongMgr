@@ -74,22 +74,21 @@ namespace CrazyKTV_SongMgr
             string DuplicateSongFileName = "";
             string DuplicateSongPath = "";
             float DuplicateSongMB = 0;
-            string ChorusSingerCombine = "";
+            List<string> ChorusSingerList = new List<string>() { "未有合唱歌手資料" };
 
             if (Global.SongAddDT.Rows[i].Field<int>("Song_SingerType") == 3)
             {
                 Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                if (r.Matches(Global.SongAddDT.Rows[i].Field<string>("Song_Singer")).Count == 1)
+                if (r.Matches(Global.SongAddDT.Rows[i].Field<string>("Song_Singer")).Count > 0)
                 {
-                    string[] ChorusSingers = Regex.Split(Global.SongAddDT.Rows[i].Field<string>("Song_Singer"), "&", RegexOptions.None);
-                    ChorusSingerCombine = ChorusSingers[1] + "&" + ChorusSingers[0];
+                    ChorusSingerList = new List<string>(Regex.Split(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower(), "&", RegexOptions.None));
                 }
             }
 
             var query = from row in Global.SongDT.AsEnumerable()
                         where row.Field<string>("Song_Lang").Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Lang")) &&
                               row.Field<string>("Song_Singer").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower()) ||
-                              row.Field<string>("Song_Singer").ToLower().Equals(ChorusSingerCombine.ToLower()) &&
+                              row.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
                               row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
                         select row;
 
