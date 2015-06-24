@@ -87,9 +87,9 @@ namespace CrazyKTV_SongMgr
 
             var query = from row in Global.SongDT.AsEnumerable()
                         where row.Field<string>("Song_Lang").Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Lang")) &&
+                              row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower()) &&
                               row.Field<string>("Song_Singer").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower()) ||
-                              row.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
-                              row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
+                              row.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray())
                         select row;
 
             foreach (DataRow row in query)
