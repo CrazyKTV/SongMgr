@@ -210,7 +210,6 @@ namespace CrazyKTV_SongMgr
                         SongQueryType = "SongTrack";
                         SongQueryStatusText = "歌曲聲道為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQueryValue = SongQuery_QueryValue_ComboBox.SelectedValue.ToString();
-                        Console.WriteLine(SongQueryValue);
                         break;
                 }
 
