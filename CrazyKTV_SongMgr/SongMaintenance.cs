@@ -2047,6 +2047,13 @@ namespace CrazyKTV_SongMgr
                 string SongSongType = row["Song_SongType"].ToString();
                 string SongFileName = row["Song_FileName"].ToString();
                 string SongPath = row["Song_Path"].ToString();
+                
+                bool HasInvalidChar = false;
+                Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+                if (r.IsMatch(SongLang)) HasInvalidChar = true;
+                if (r.IsMatch(SongSinger)) HasInvalidChar = true;
+                if (r.IsMatch(SongSongName)) HasInvalidChar = true;
+                if (r.IsMatch(SongSongType)) HasInvalidChar = true;
 
                 if (SongSingerType < 0 | SongSingerType > 10)
                 {
@@ -2131,11 +2138,12 @@ namespace CrazyKTV_SongMgr
                         }
                         break;
                 }
-
-                string SongDestPath = Path.Combine(SongPath, SongFileName);
+                
+                string SongDestPath = "";
+                if (!HasInvalidChar) { SongDestPath = Path.Combine(SongPath, SongFileName); }
+                
                 bool FileIOError = false;
-
-                if (File.Exists(SongSrcPath))
+                if (File.Exists(SongSrcPath) & !HasInvalidChar)
                 {
                     if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
                    
@@ -2165,15 +2173,23 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongSrcPath + " (唯讀或使用中)";
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        lock (LockThis) { Global.TotalList[2]++; }
                     }
                 }
                 else
                 {
                     FileIOError = true;
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    if (HasInvalidChar)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongSongType + " (含有非法字元)";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    else
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
                     lock (LockThis) { Global.TotalList[1]++; }
                 }
 
