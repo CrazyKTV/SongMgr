@@ -113,6 +113,10 @@ namespace CrazyKTV_SongMgr
         private void SongMgrCfg_SongTrackMode_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.SongMgrSongTrackMode = SongMgrCfg_SongTrackMode_CheckBox.Checked.ToString();
+            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack");
+            SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
+            SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
+            SongAdd_DefaultSongTrack_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongTrack);
         }
 
         private void SongMgrCfg_MaxDigitCode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
