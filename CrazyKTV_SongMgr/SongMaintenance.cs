@@ -86,11 +86,11 @@ namespace CrazyKTV_SongMgr
                             string str = "";
                             SpellList = new List<string>();
 
-                            str = row["Singer_Id"].ToString() + "*";
-                            str += row["Singer_Name"].ToString() + "*";
+                            str = row["Singer_Id"].ToString() + "|";
+                            str += row["Singer_Name"].ToString() + "|";
                             SpellList = CommonFunc.GetSongNameSpell(row["Singer_Name"].ToString());
                             if (SpellList[2] == "") SpellList[2] = "0";
-                            str += SpellList[0] + "*" + SpellList[2] + "*" + SpellList[1] + "*" + SpellList[3];
+                            str += SpellList[0] + "|" + SpellList[2] + "|" + SpellList[1] + "|" + SpellList[3];
                             list.Add(str);
                         }
 
@@ -103,7 +103,7 @@ namespace CrazyKTV_SongMgr
 
                         foreach (string str in list)
                         {
-                            valuelist = new List<string>(str.Split('*'));
+                            valuelist = new List<string>(str.Split('|'));
 
                             cmd.Parameters.AddWithValue("@SingerSpell", valuelist[2]);
                             cmd.Parameters.AddWithValue("@SingerStrokes", valuelist[3]);
@@ -148,11 +148,11 @@ namespace CrazyKTV_SongMgr
                             string str = "";
                             SpellList = new List<string>();
 
-                            str = row["Singer_Id"].ToString() + "*";
-                            str += row["Singer_Name"].ToString() + "*";
+                            str = row["Singer_Id"].ToString() + "|";
+                            str += row["Singer_Name"].ToString() + "|";
                             SpellList = CommonFunc.GetSongNameSpell(row["Singer_Name"].ToString());
                             if (SpellList[2] == "") SpellList[2] = "0";
-                            str += SpellList[0] + "*" + SpellList[2] + "*" + SpellList[1] + "*" + SpellList[3];
+                            str += SpellList[0] + "|" + SpellList[2] + "|" + SpellList[1] + "|" + SpellList[3];
                             list.Add(str);
                         }
 
@@ -165,7 +165,7 @@ namespace CrazyKTV_SongMgr
 
                         foreach (string str in list)
                         {
-                            valuelist = new List<string>(str.Split('*'));
+                            valuelist = new List<string>(str.Split('|'));
 
                             cmd.Parameters.AddWithValue("@SingerSpell", valuelist[2]);
                             cmd.Parameters.AddWithValue("@SingerStrokes", valuelist[3]);
@@ -210,11 +210,11 @@ namespace CrazyKTV_SongMgr
                             string str = "";
                             SpellList = new List<string>();
 
-                            str = row["Song_Id"].ToString() + "*";
-                            str += row["Song_SongName"].ToString() + "*";
+                            str = row["Song_Id"].ToString() + "|";
+                            str += row["Song_SongName"].ToString() + "|";
                             SpellList = CommonFunc.GetSongNameSpell(row["Song_SongName"].ToString());
                             if (SpellList[2] == "") SpellList[2] = "0";
-                            str += SpellList[0] + "*" + SpellList[1] + "*" + SpellList[2] + "*" + SpellList[3];
+                            str += SpellList[0] + "|" + SpellList[1] + "|" + SpellList[2] + "|" + SpellList[3];
                             list.Add(str);
                             this.BeginInvoke((Action)delegate()
                             {
@@ -231,7 +231,7 @@ namespace CrazyKTV_SongMgr
 
                         foreach (string str in list)
                         {
-                            valuelist = new List<string>(str.Split('*'));
+                            valuelist = new List<string>(str.Split('|'));
 
                             cmd.Parameters.AddWithValue("@SongSpell", valuelist[2]);
                             cmd.Parameters.AddWithValue("@SongSpellNum", valuelist[3]);
@@ -358,9 +358,9 @@ namespace CrazyKTV_SongMgr
                         string NewSongId = Idlist[LangIndex].ToString(MaxDigitCode);
                         Idlist[LangIndex]++;
 
-                        str = row["Song_Id"].ToString() + "*";
-                        str += NewSongId + "*";
-                        str += row["Song_SongName"].ToString() + "*";
+                        str = row["Song_Id"].ToString() + "|";
+                        str += NewSongId + "|";
+                        str += row["Song_SongName"].ToString() + "|";
                         str += row["Song_Lang"].ToString();
                         list.Add(str);
                     }
@@ -370,8 +370,8 @@ namespace CrazyKTV_SongMgr
                         {
                             Global.TotalList[1]++;
                         }
-                        str = row["Song_Id"].ToString() + "*";
-                        str += row["Song_SongName"].ToString() + "*";
+                        str = row["Song_Id"].ToString() + "|";
+                        str += row["Song_SongName"].ToString() + "|";
                         str += row["Song_Lang"].ToString();
 
                         Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
@@ -395,7 +395,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
                 cmd.Parameters.AddWithValue("@OldSongId", valuelist[0]);
@@ -503,9 +503,9 @@ namespace CrazyKTV_SongMgr
                         string LangStr = row["Song_Lang"].ToString();
                         string NewSongId = SongMaintenance.GetNextSongId(LangStr);
 
-                        str = row["Song_Id"].ToString() + "*";
-                        str += NewSongId + "*";
-                        str += row["Song_SongName"].ToString() + "*";
+                        str = row["Song_Id"].ToString() + "|";
+                        str += NewSongId + "|";
+                        str += row["Song_SongName"].ToString() + "|";
                         str += row["Song_Lang"].ToString();
                         list.Add(str);
                     }
@@ -515,8 +515,8 @@ namespace CrazyKTV_SongMgr
                         {
                             Global.TotalList[1]++;
                         }
-                        str = row["Song_Id"].ToString() + "*";
-                        str += row["Song_SongName"].ToString() + "*";
+                        str = row["Song_Id"].ToString() + "|";
+                        str += row["Song_SongName"].ToString() + "|";
                         str += row["Song_Lang"].ToString();
 
                         Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
@@ -540,7 +540,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
                 cmd.Parameters.AddWithValue("@OldSongId", valuelist[0]);
@@ -616,10 +616,10 @@ namespace CrazyKTV_SongMgr
                 switch (row["Song_Track"].ToString())
                 {
                     case "1":
-                        list.Add("2*" + row["Song_Id"].ToString());
+                        list.Add("2" + "|" + row["Song_Id"].ToString());
                         break;
                     case "2":
-                        list.Add("1*" + row["Song_Id"].ToString());
+                        list.Add("1" + "|" + row["Song_Id"].ToString());
                         break;
                 }
                 this.BeginInvoke((Action)delegate()
@@ -637,7 +637,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongTrack", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
@@ -724,7 +724,7 @@ namespace CrazyKTV_SongMgr
             
             foreach (DataRow row in Global.SongDT.AsEnumerable())
             {
-                list.Add((string)VolumeValue + "*" + row["Song_Id"].ToString());
+                list.Add((string)VolumeValue + "|" + row["Song_Id"].ToString());
                 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -741,7 +741,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
@@ -1192,7 +1192,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (DataRow row in Global.SongDT.AsEnumerable())
             {
-                list.Add("0" + "*" + row["Song_Id"].ToString());
+                list.Add("0" + "|" + row["Song_Id"].ToString());
 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -1209,7 +1209,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
@@ -1312,7 +1312,7 @@ namespace CrazyKTV_SongMgr
                 foreach (DataRow row in query)
                 {
                     SongPath = row["Song_Path"].ToString().Replace(SrcSongPath, DestSongPath);
-                    list.Add(SongPath + "*" + row["Song_Id"].ToString());
+                    list.Add(SongPath + "|" + row["Song_Id"].ToString());
 
                     this.BeginInvoke((Action)delegate()
                     {
@@ -1330,7 +1330,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongPath", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
@@ -1582,7 +1582,7 @@ namespace CrazyKTV_SongMgr
                 SongWordCountList = CommonFunc.GetSongWordCount(row["Song_SongName"].ToString());
                 string SongWordCount = SongWordCountList[0];
 
-                list.Add(SongWordCount + "*" + row["Song_Id"].ToString());
+                list.Add(SongWordCount + "|" + row["Song_Id"].ToString());
 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -1599,7 +1599,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in list)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongWordCount", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
@@ -2052,7 +2052,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SongSingerType = 10;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "*" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
 
@@ -2067,7 +2067,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SongTrack = 1;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "*" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
                 string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
@@ -2165,14 +2165,14 @@ namespace CrazyKTV_SongMgr
                 {
                     FileIOError = true;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "*" + SongSrcPath;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     lock (LockThis) { Global.TotalList[1]++; }
                 }
 
                 if (!FileIOError)
                 {
-                    string RebuildSongFileValue = SongId + "*" + SongSingerType + "*" + SongTrack + "*" + SongFileName + "*" + SongPath;
+                    string RebuildSongFileValue = SongId + "|" + SongSingerType + "|" + SongTrack + "|" + SongFileName + "|" + SongPath;
                     RebuildSongFileValueList.Add(RebuildSongFileValue);
                     lock (LockThis) { Global.TotalList[0]++; }
 
@@ -2193,7 +2193,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in RebuildSongFileValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongSingerType", valuelist[1]);
@@ -2210,7 +2210,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "*" + valuelist[3] + "*" + valuelist[4];
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "|" + valuelist[3] + "|" + valuelist[4];
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     lock (LockThis)
                     {

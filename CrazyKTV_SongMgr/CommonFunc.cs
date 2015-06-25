@@ -874,7 +874,7 @@ namespace CrazyKTV_SongMgr
 
                         spelllist = new List<string>();
                         spelllist = CommonFunc.GetSongNameSpell(SingerName);
-                        Addlist.Add("ktv_Singer" + "*" + SingerId + "*" + SingerName + "*" + SingerType + "*" + spelllist[0] + "*" + spelllist[2] + "*" + spelllist[1] + "*" + spelllist[3]);
+                        Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
                     }
 
                     this.BeginInvoke((Action)delegate()
@@ -900,7 +900,7 @@ namespace CrazyKTV_SongMgr
 
                 foreach (string AddStr in Addlist)
                 {
-                    list = new List<string>(AddStr.Split('*'));
+                    list = new List<string>(AddStr.Split('|'));
 
                     switch (list[0])
                     {
@@ -980,7 +980,7 @@ namespace CrazyKTV_SongMgr
 
                                 spelllist = new List<string>();
                                 spelllist = CommonFunc.GetSongNameSpell(SingerName);
-                                Addlist.Add("ktv_Singer" + "*" + SingerId + "*" + SingerName + "*" + SingerType + "*" + spelllist[0] + "*" + spelllist[2] + "*" + spelllist[1] + "*" + spelllist[3]);
+                                Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
                                 break;
                             }
                         }
@@ -989,7 +989,7 @@ namespace CrazyKTV_SongMgr
 
                 foreach (string AddStr in Addlist)
                 {
-                    list = new List<string>(AddStr.Split('*'));
+                    list = new List<string>(AddStr.Split('|'));
 
                     switch (list[0])
                     {

@@ -437,7 +437,7 @@ namespace CrazyKTV_SongMgr
                         if (DuplicateSong)
                         {
                             Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】已有重複歌曲: " + DupSongRow["Song_Id"].ToString() + "*" + DupSongRow["Song_Lang"].ToString() + "*" + DupSongRow["Song_Singer"].ToString() + "*" + DupSongRow["Song_SongName"].ToString() + "*" + SongSongType;
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】已有重複歌曲: " + DupSongRow["Song_Id"].ToString() + "|" + DupSongRow["Song_Lang"].ToString() + "|" + DupSongRow["Song_Singer"].ToString() + "|" + DupSongRow["Song_SongName"].ToString() + "|" + SongSongType;
                             Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                             this.BeginInvoke((Action)delegate()
                             {
@@ -660,7 +660,7 @@ namespace CrazyKTV_SongMgr
                         SongQuery_DataGridView.Rows[i].Cells["Song_PlayCount"].Style.ForeColor = Color.Black;
                         SongQuery_DataGridView.Rows[i].Cells["Song_CreatDate"].Style.ForeColor = Color.Black;
                     });
-                    string SongUpdateValue = SongId + "*" + SongLang + "*" + SongSingerType + "*" + SongSinger + "*" + SongSongName + "*" + SongTrack + "*" + SongSongType + "*" + SongVolume + "*" + SongWordCount + "*" + SongPlayCount + "*" + SongMB + "*" + SongCreatDate + "*" + SongFileName + "*" + SongPath + "*" + SongSpell + "*" + SongSpellNum + "*" + SongSongStroke + "*" + SongPenStyle + "*" + SongPlayState + "*" + OldSongId;
+                    string SongUpdateValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + OldSongId;
                     SongUpdateValueList.Add(SongUpdateValue);
                 }
             }
@@ -674,7 +674,7 @@ namespace CrazyKTV_SongMgr
 
             foreach(string str in SongUpdateValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);

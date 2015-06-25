@@ -617,7 +617,6 @@ namespace CrazyKTV_SongMgr
                             string SongSinger = SongQuery_DataGridView.SelectedRows[i].Cells["Song_Singer"].Value.ToString();
                             string SongSongName = SongQuery_DataGridView.SelectedRows[i].Cells["Song_SongName"].Value.ToString();
                             string SongSongType = SongQuery_DataGridView.SelectedRows[i].Cells["Song_SongType"].Value.ToString();
-                            string str = CellValue + "*" + SongSinger + "*" + SongSongName + "*" + SongSongType;
 
                             SongQuery_DataGridView.SelectedRows[i].Cells["Song_Id"].Value = NewSongID;
                             SongQuery_DataGridView.SelectedRows[i].Cells[CellName].Value = CellValue;

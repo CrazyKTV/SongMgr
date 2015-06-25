@@ -479,7 +479,7 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError)
                     {
-                        string SongAddValue = SongID + "*" + SongLang + "*" + SongSingerType + "*" + SongSinger + "*" + SongSongName + "*" + SongTrack + "*" + SongSongType + "*" + SongVolume + "*" + SongWordCount + "*" + SongPlayCount + "*" + SongMB + "*" + SongCreatDate + "*" + SongFileName + "*" + SongPath + "*" + SongSpell + "*" + SongSpellNum + "*" + SongSongStroke + "*" + SongPenStyle + "*" + SongPlayState + "*" + SongAddSinger + "*" + SongAddAllSinger;
+                        string SongAddValue = SongID + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
                         Global.SongAddValueList.Add(SongAddValue);
                         lock (LockThis) { Global.TotalList[0]++; }
                     }
@@ -713,7 +713,7 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError)
                     {
-                        string SongAddValue = SongId + "*" + SongLang + "*" + SongSingerType + "*" + SongSinger + "*" + SongSongName + "*" + SongTrack + "*" + SongSongType + "*" + SongVolume + "*" + SongWordCount + "*" + SongPlayCount + "*" + SongMB + "*" + SongCreatDate + "*" + SongFileName + "*" + SongPath + "*" + SongSpell + "*" + SongSpellNum + "*" + SongSongStroke + "*" + SongPenStyle + "*" + SongPlayState;
+                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState;
                         Global.SongAddValueList.Add(SongAddValue);
                         lock (LockThis) { Global.TotalList[3]++; }
                     }

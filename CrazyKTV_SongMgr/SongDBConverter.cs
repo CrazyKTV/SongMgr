@@ -417,7 +417,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in Global.SongDBConvValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
@@ -798,7 +798,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SongSingerType = 10;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "*" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
 
@@ -813,7 +813,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SongTrack = 1;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "*" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
                 string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
@@ -911,14 +911,14 @@ namespace CrazyKTV_SongMgr
                 {
                     FileIOError = true;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "*" + SongSrcPath;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     lock (LockThis) { Global.TotalList[1]++; }
                 }
 
                 if (!FileIOError)
                 {
-                    string RebuildSongFileValue = SongId + "*" + SongSingerType + "*" + SongTrack + "*" + SongFileName + "*" + SongPath;
+                    string RebuildSongFileValue = SongId + "|" + SongSingerType + "|" + SongTrack + "|" + SongFileName + "|" + SongPath;
                     RebuildSongFileValueList.Add(RebuildSongFileValue);
                     lock (LockThis) { Global.TotalList[0]++; }
 
@@ -940,7 +940,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in RebuildSongFileValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongSingerType", valuelist[1]);
@@ -957,7 +957,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "*" + valuelist[3] + "*" + valuelist[4];
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "|" + valuelist[3] + "|" + valuelist[4];
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     lock (LockThis)
                     {

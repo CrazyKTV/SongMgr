@@ -498,7 +498,7 @@ namespace CrazyKTV_SongMgr
 
             foreach(string str in Global.SongAddValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
@@ -848,7 +848,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in Global.SongAddValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);

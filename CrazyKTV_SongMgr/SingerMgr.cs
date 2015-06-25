@@ -241,7 +241,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                string UpdateValue = SingerId + "*" + SingerName + "*" + SingerType + "*" + SingerSpell + "*" + SingerStrokes + "*" + SingerSpellNum + "*" + SingerPenStyle + "*" + SingerDTSingerId;
+                string UpdateValue = SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle + "|" + SingerDTSingerId;
                 UpdateValueList.Add(UpdateValue);
             }
             
@@ -261,7 +261,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string str in UpdateValueList)
             {
-                valuelist = new List<string>(str.Split('*'));
+                valuelist = new List<string>(str.Split('|'));
 
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@SingerId", valuelist[0]);
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@SingerName", valuelist[1]);
