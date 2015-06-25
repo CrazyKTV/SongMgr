@@ -278,6 +278,7 @@ namespace CrazyKTV_SongMgr
             string SongDBVerUpdatecmdSqlStr = "";
             string GodLiuColumnDropSqlStr = "";
             bool RebuildSingerData = true;
+            bool UpdateError = false;
 
             List<string> GodLiuColumnlist = new List<string>() { "Song_SongNameFuzzy", "Song_SingerFuzzy", "Song_FuzzyVer", "DLspace", "Epasswd", "imgpath", "cashboxsongid", "cashboxdat", "holidaysongid" };
 
@@ -287,18 +288,22 @@ namespace CrazyKTV_SongMgr
                     if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
                     File.Copy(Global.CrazyktvDatabaseFile, Application.StartupPath + @"\SongMgr\Backup\CrazySongOld.mdb", true);
                     
-                    OleDbCommand[] cmds = 
+                    dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, "select * from ktv_Song", "");
+                    foreach (DataColumn row in dt.Columns)
+                    {
+                        Console.WriteLine(row.ColumnName + " : " + row.DataType);
+                    }
+
+                    OleDbCommand[] Ocmds = 
                     {
                         new OleDbCommand("drop table ktv_Singer", conn),
-                        new OleDbCommand("create table ktv_AllSinger (Singer_Id INTEGER NOT NULL PRIMARY KEY, Singer_Name TEXT(40) WITH COMPRESSION, Singer_Type TEXT(20) WITH COMPRESSION, Singer_Spell TEXT(40) WITH COMPRESSION, Singer_Strokes BYTE, Singer_SpellNum TEXT(10) WITH COMPRESSION, Singer_PenStyle TEXT(80) WITH COMPRESSION)", conn),
-                        new OleDbCommand("create table ktv_Singer (Singer_Id INTEGER NOT NULL PRIMARY KEY, Singer_Name TEXT(40) WITH COMPRESSION, Singer_Type TEXT(20) WITH COMPRESSION, Singer_Spell TEXT(40) WITH COMPRESSION, Singer_Strokes BYTE, Singer_SpellNum TEXT(10) WITH COMPRESSION, Singer_PenStyle TEXT(80) WITH COMPRESSION)", conn),
+                        new OleDbCommand("create table ktv_AllSinger (Singer_Id INTEGER NOT NULL PRIMARY KEY, Singer_Name TEXT(60) WITH COMPRESSION, Singer_Type TEXT(20) WITH COMPRESSION, Singer_Spell TEXT(60) WITH COMPRESSION, Singer_Strokes BYTE, Singer_SpellNum TEXT(60) WITH COMPRESSION, Singer_PenStyle TEXT(60) WITH COMPRESSION)", conn),
+                        new OleDbCommand("create table ktv_Singer (Singer_Id INTEGER NOT NULL PRIMARY KEY, Singer_Name TEXT(60) WITH COMPRESSION, Singer_Type TEXT(20) WITH COMPRESSION, Singer_Spell TEXT(60) WITH COMPRESSION, Singer_Strokes BYTE, Singer_SpellNum TEXT(60) WITH COMPRESSION, Singer_PenStyle TEXT(60) WITH COMPRESSION)", conn),
                         new OleDbCommand("create table ktv_Version (Id INTEGER NOT NULL PRIMARY KEY, SongDB TEXT(10), SingerDB INTEGER, PhoneticsDB INTEGER)", conn),
-                        new OleDbCommand("insert into ktv_Version ( Id, SongDB, SingerDB, PhoneticsDB) values ( 1, '1.00', 0, 0 )", conn),
-                        new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(60) WITH COMPRESSION", conn)
+                        new OleDbCommand("insert into ktv_Version ( Id, SongDB, SingerDB, PhoneticsDB) values ( 1, '1.00', 0, 0 )", conn)
                     };
 
-                    foreach (OleDbCommand cmd in cmds)
+                    foreach (OleDbCommand cmd in Ocmds)
                     {
                         cmd.ExecuteNonQuery();
                     }
@@ -311,11 +316,7 @@ namespace CrazyKTV_SongMgr
                     OleDbCommand[] Acmds = 
                     {
                         new OleDbCommand("create table ktv_Version (Id INTEGER NOT NULL PRIMARY KEY, SongDB TEXT(10), SingerDB INTEGER, PhoneticsDB INTEGER)", conn),
-                        new OleDbCommand("insert into ktv_Version ( Id, SongDB, SingerDB, PhoneticsDB) values ( 1, '1.00', 0, 0 )", conn),
-                        new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(60) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_AllSinger alter column Singer_PenStyle TEXT(80) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_Singer alter column Singer_PenStyle TEXT(80) WITH COMPRESSION", conn)
+                        new OleDbCommand("insert into ktv_Version ( Id, SongDB, SingerDB, PhoneticsDB) values ( 1, '1.00', 0, 0 )", conn)
                     };
 
                     foreach (OleDbCommand cmd in Acmds)
@@ -327,78 +328,100 @@ namespace CrazyKTV_SongMgr
                     if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
                     File.Copy(Global.CrazyktvDatabaseFile, Application.StartupPath + @"\SongMgr\Backup\" + DateTime.Now.ToLongDateString() + "_CrazySong.mdb", true);
                     RebuildSingerData = bool.Parse(Global.DBVerRebuildSingerData);
-
-                    OleDbCommand[] Ucmds = 
-                    {
-                        new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(60) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_AllSinger alter column Singer_PenStyle TEXT(80) WITH COMPRESSION", conn),
-                        new OleDbCommand("alter table ktv_Singer alter column Singer_PenStyle TEXT(80) WITH COMPRESSION", conn)
-                    };
-
-                    foreach (OleDbCommand cmd in Ucmds)
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
                     break;
             }
 
-            SongDBVerUpdatecmdSqlStr = "update ktv_Version set SongDB = @SongDB where Id=@Id";
-            SongDBVerUpdatecmd = new OleDbCommand(SongDBVerUpdatecmdSqlStr, conn);
-            SongDBVerUpdatecmd.Parameters.AddWithValue("@SongDB", Global.CrazyktvSongDBVer);
-            SongDBVerUpdatecmd.Parameters.AddWithValue("@Id", "1");
-            SongDBVerUpdatecmd.ExecuteNonQuery();
-            SongDBVerUpdatecmd.Parameters.Clear();
-
-            string ColumnQuerySqlStr = "select top 1 * from ktv_Song";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, ColumnQuerySqlStr, "");
-
-            if (dt.Rows.Count > 0)
+            OleDbCommand[] cmds =
             {
-                foreach (DataColumn column in dt.Columns)
+                new OleDbCommand("alter table ktv_AllSinger alter column Singer_Name TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_AllSinger alter column Singer_Spell TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_AllSinger alter column Singer_SpellNum TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_AllSinger alter column Singer_PenStyle TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Singer alter column Singer_Name TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Singer alter column Singer_Spell TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Singer alter column Singer_SpellNum TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Singer alter column Singer_PenStyle TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Song alter column Song_SongName TEXT(80) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Song alter column Song_Singer TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Song alter column Song_FileName TEXT(255) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Song alter column Song_SpellNum TEXT(80) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(80) WITH COMPRESSION", conn)
+            };
+
+            try
+            {
+                foreach (OleDbCommand cmd in cmds)
                 {
-                    if (GodLiuColumnlist.IndexOf(column.ColumnName) != -1)
-                    {
-                        switch (column.ColumnName)
-                        {
-                            case "Song_SongNameFuzzy":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SongNameFuzzy";
-                                break;
-                            case "Song_SingerFuzzy":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SingerFuzzy";
-                                break;
-                            case "Song_FuzzyVer":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_FuzzyVer";
-                                break;
-                            case "DLspace":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column DLspace";
-                                break;
-                            case "Epasswd":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Epasswd";
-                                break;
-                            case "imgpath":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column imgpath";
-                                break;
-                            case "cashboxsongid":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxsongid";
-                                break;
-                            case "cashboxdat":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxdat";
-                                break;
-                            case "holidaysongid":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column holidaysongid";
-                                break;
-                        }
-                        GodLiuColumnDropcmd = new OleDbCommand(GodLiuColumnDropSqlStr, conn);
-                        GodLiuColumnDropcmd.ExecuteNonQuery();
-                    }
+                    cmd.ExecuteNonQuery();
                 }
             }
-            conn.Close();
-            dt.Dispose();
+            catch
+            {
+                UpdateError = true;
+                SongMaintenance_Tooltip_Label.Text = "已放棄自動更新,因有其它的應用程式正在占用資料庫檔案,請關閉程式後再試。";
+                SongMaintenance_DBVerTooltip_Label.Text = "歌庫版本更新失敗...";
+            }
 
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => Common_UpdateDBTask(RebuildSingerData)));
+            if (!UpdateError)
+            {
+                SongDBVerUpdatecmdSqlStr = "update ktv_Version set SongDB = @SongDB where Id=@Id";
+                SongDBVerUpdatecmd = new OleDbCommand(SongDBVerUpdatecmdSqlStr, conn);
+                SongDBVerUpdatecmd.Parameters.AddWithValue("@SongDB", Global.CrazyktvSongDBVer);
+                SongDBVerUpdatecmd.Parameters.AddWithValue("@Id", "1");
+                SongDBVerUpdatecmd.ExecuteNonQuery();
+                SongDBVerUpdatecmd.Parameters.Clear();
+
+                string ColumnQuerySqlStr = "select top 1 * from ktv_Song";
+                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, ColumnQuerySqlStr, "");
+
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataColumn column in dt.Columns)
+                    {
+                        if (GodLiuColumnlist.IndexOf(column.ColumnName) != -1)
+                        {
+                            switch (column.ColumnName)
+                            {
+                                case "Song_SongNameFuzzy":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SongNameFuzzy";
+                                    break;
+                                case "Song_SingerFuzzy":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SingerFuzzy";
+                                    break;
+                                case "Song_FuzzyVer":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_FuzzyVer";
+                                    break;
+                                case "DLspace":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column DLspace";
+                                    break;
+                                case "Epasswd":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Epasswd";
+                                    break;
+                                case "imgpath":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column imgpath";
+                                    break;
+                                case "cashboxsongid":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxsongid";
+                                    break;
+                                case "cashboxdat":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxdat";
+                                    break;
+                                case "holidaysongid":
+                                    GodLiuColumnDropSqlStr = "alter table ktv_Song drop column holidaysongid";
+                                    break;
+                            }
+                            GodLiuColumnDropcmd = new OleDbCommand(GodLiuColumnDropSqlStr, conn);
+                            GodLiuColumnDropcmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                conn.Close();
+                dt.Dispose();
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => Common_UpdateDBTask(RebuildSingerData)));
+            }
         }
 
         private void Common_UpdateDBTask(bool RebuildSingerData)
