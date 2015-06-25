@@ -18,15 +18,32 @@ namespace CrazyKTV_SongMgr
     {
         private void SongAdd_Save_Button_Click(object sender, EventArgs e)
         {
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongLang", Global.SongAddDefaultSongLang);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSingerType", Global.SongAddDefaultSingerType);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongTrack", Global.SongAddDefaultSongTrack);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongType", Global.SongAddDefaultSongType);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongVolume", Global.SongAddDefaultSongVolume);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr", Global.SongAddSpecialStr);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode", Global.SongAddSongIdentificationMode);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", Global.SongAddDupSongMode);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
+            switch (SongAdd_Save_Button.Text)
+            {
+                case "儲存設定":
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongLang", Global.SongAddDefaultSongLang);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSingerType", Global.SongAddDefaultSingerType);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongTrack", Global.SongAddDefaultSongTrack);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongType", Global.SongAddDefaultSongType);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongVolume", Global.SongAddDefaultSongVolume);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr", Global.SongAddSpecialStr);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode", Global.SongAddSongIdentificationMode);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", Global.SongAddDupSongMode);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
+                    break;
+                case "取消更新":
+                    SongAdd_Add_Button.Text = "加入歌庫";
+                    SongAdd_Save_Button.Text = "儲存設定";
+                    SongAdd_Add_Button.Enabled = false;
+                    SongAdd_Tooltip_Label.Text = "已取消更新重複歌曲!";
+                    SongAdd_DataGridView.DataSource = null;
+                    SongAdd_DataGridView.AllowDrop = true;
+                    SongAdd_DataGridView.Enabled = true;
+                    SongAdd_DragDrop_Label.Visible = true;
+                    Common_SwitchSetUI(true);
+                    break;
+            }
+
         }
 
         private void SongAdd_DefaultSongInfo_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -783,7 +800,9 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     SongAdd_Add_Button.Text = "更新歌庫";
+                    SongAdd_Save_Button.Text = "取消更新";
                     SongAdd_Add_Button.Enabled = true;
+                    SongAdd_Save_Button.Enabled = true;
                     SongAdd_DataGridView.DataSource = Global.DupSongAddDT;
                     SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.Enabled = true;
@@ -905,6 +924,7 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                 SongAdd_Add_Button.Text = "加入歌庫";
+                SongAdd_Save_Button.Text = "儲存設定";
                 SongAdd_Add_Button.Enabled = false;
                 SongAdd_DataGridView.DataSource = null;
                 SongAdd_DataGridView.AllowDrop = true;
