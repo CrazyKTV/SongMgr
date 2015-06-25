@@ -964,7 +964,14 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "男歌星", "女歌星", "樂團", "外國男", "外國女", "外國樂團", "其它", "新進歌星" };
                     break;
                 case "DefaultSongTrack":
-                    list = new List<string>() { "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
+                    if (Global.SongMgrSongTrackMode == "True")
+                    {
+                        list = new List<string>() { "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
+                    }
+                    else
+                    {
+                        list = new List<string>() { "左聲道 / 音軌1", "右聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
+                    }
                     break;
                 case "DefaultSongType":
                     string str = "";
