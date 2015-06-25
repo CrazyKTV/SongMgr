@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -71,6 +72,15 @@ namespace CrazyKTV_SongMgr
                         SongAdd_Tooltip_Label.Text = "此項目的值不可為空白!";
                         e.Cancel = true;
                     }
+                    else
+                    {
+                        Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+                        if (r.IsMatch(e.FormattedValue.ToString()))
+                        {
+                            SongAdd_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                            e.Cancel = true;
+                        }
+                    }
                     break;
             }
         }
@@ -79,7 +89,6 @@ namespace CrazyKTV_SongMgr
         {
             if (SongAdd_DataGridView.CurrentCell.ColumnIndex < 0) return;
             Control parentCTL = e.Control.Parent;
-            e.Control.KeyPress -= new KeyPressEventHandler(SongAdd_DataGridView_Keyin_Number);
 
             switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
             {
@@ -147,7 +156,7 @@ namespace CrazyKTV_SongMgr
                     break;
             }
 
-            if (SongAdd_Tooltip_Label.Text == "此項目只能輸入數字!" | SongAdd_Tooltip_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SongAdd_Tooltip_Label.Text == "此項目只能輸入數字及小數點!" | SongAdd_Tooltip_Label.Text == "此項目的值不可為空白!") SongAdd_Tooltip_Label.Text = "";
+            if (SongAdd_Tooltip_Label.Text == "此項目只能輸入數字!" | SongAdd_Tooltip_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SongAdd_Tooltip_Label.Text == "此項目只能輸入數字及小數點!" | SongAdd_Tooltip_Label.Text == "此項目的值不可為空白!" | SongAdd_Tooltip_Label.Text == "此項目的值含有非法字元!") SongAdd_Tooltip_Label.Text = "";
         }
 
         private void SongAdd_DataGridView_Keyin_Number(object sender, KeyPressEventArgs e)

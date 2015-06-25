@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -34,6 +35,15 @@ namespace CrazyKTV_SongMgr
                     {
                         SingerMgr_Tooltip_Label.Text = "此項目的值不可為空白!";
                         e.Cancel = true;
+                    }
+                    else
+                    {
+                        Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+                        if (r.IsMatch(e.FormattedValue.ToString()))
+                        {
+                            SingerMgr_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                            e.Cancel = true;
+                        }
                     }
                     break;
             }
@@ -164,7 +174,7 @@ namespace CrazyKTV_SongMgr
                     dt.Dispose();
                 });
             }
-            if (SingerMgr_Tooltip_Label.Text == "此項目只能輸入數字!" | SingerMgr_Tooltip_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SingerMgr_Tooltip_Label.Text == "此項目只能輸入數字及小數點!" | SingerMgr_Tooltip_Label.Text == "此項目的值不可為空白!") SingerMgr_Tooltip_Label.Text = "";
+            if (SingerMgr_Tooltip_Label.Text == "此項目只能輸入數字!" | SingerMgr_Tooltip_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SingerMgr_Tooltip_Label.Text == "此項目只能輸入數字及小數點!" | SingerMgr_Tooltip_Label.Text == "此項目的值不可為空白!" | SingerMgr_Tooltip_Label.Text == "此項目的值含有非法字元!") SingerMgr_Tooltip_Label.Text = "";
         }
 
         private void SingerMgr_DataGridView_ContextMenuItem_Click(object sender, EventArgs e)

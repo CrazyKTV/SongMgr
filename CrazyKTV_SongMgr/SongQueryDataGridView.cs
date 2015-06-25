@@ -66,6 +66,21 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "歌手名稱":
                 case "歌曲名稱":
+                    if (e.FormattedValue.ToString() == "")
+                    {
+                        SongQuery_QueryStatus_Label.Text = "此項目的值不可為空白!";
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+                        if (r.IsMatch(e.FormattedValue.ToString()))
+                        {
+                            SongQuery_QueryStatus_Label.Text = "此項目的值含有非法字元!";
+                            e.Cancel = true;
+                        }
+                    }
+                    break;
                 case "點播次數":
                     if (e.FormattedValue.ToString() == "")
                     {
@@ -80,7 +95,6 @@ namespace CrazyKTV_SongMgr
         {
             if (SongQuery_DataGridView.CurrentCell.ColumnIndex < 0) return;
             Control parentCTL = e.Control.Parent;
-            e.Control.KeyPress -= new KeyPressEventHandler(SongQuery_DataGridView_Keyin_Number);
 
             switch (SongQuery_DataGridView.Columns[SongQuery_DataGridView.CurrentCell.ColumnIndex].HeaderText)
             {
@@ -98,7 +112,6 @@ namespace CrazyKTV_SongMgr
                     dtPicker.CustomFormat = "yyyy/MM/dd";
                     dtPicker.Format = DateTimePickerFormat.Custom;
                     dtPicker.Location = new Point(e.Control.Location.X - e.Control.Margin.Left < 0 ? 0 : e.Control.Location.X - e.Control.Margin.Left, e.Control.Location.Y - e.Control.Margin.Top < 0 ? 0 : e.Control.Location.Y - e.Control.Margin.Top);
-
 
                     if (e.Control.Text != "")
                     {
@@ -180,7 +193,7 @@ namespace CrazyKTV_SongMgr
                     });
                 }
             }
-            if (SongQuery_QueryStatus_Label.Text == "此項目只能輸入數字!" | SongQuery_QueryStatus_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SongQuery_QueryStatus_Label.Text == "此項目只能輸入數字及小數點!" | SongQuery_QueryStatus_Label.Text == "此項目的值不可為空白!") SongQuery_QueryStatus_Label.Text = "";
+            if (SongQuery_QueryStatus_Label.Text == "此項目只能輸入數字!" | SongQuery_QueryStatus_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SongQuery_QueryStatus_Label.Text == "此項目只能輸入數字及小數點!" | SongQuery_QueryStatus_Label.Text == "此項目的值不可為空白!" | SongQuery_QueryStatus_Label.Text == "此項目的值含有非法字元!") SongQuery_QueryStatus_Label.Text = "";
         }
 
         private void SongQuery_DataGridView_Keyin_Number(object sender, KeyPressEventArgs e)
@@ -213,7 +226,6 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
             }
-
         }
 
         private void SongQuery_DataGridView_DateTimePicker_CloseUp(Object sender, EventArgs e)
