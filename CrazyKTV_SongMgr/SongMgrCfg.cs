@@ -117,6 +117,16 @@ namespace CrazyKTV_SongMgr
             SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongTrack_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongTrack);
+            if (SongQuery_QueryType_ComboBox.SelectedValue != null)
+            {
+                if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "8")
+                {
+                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack");
+                    SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
+                    SongQuery_QueryValue_ComboBox.ValueMember = "Value";
+                    SongQuery_QueryValue_ComboBox.SelectedValue = 1;
+                }
+            }
         }
 
         private void SongMgrCfg_MaxDigitCode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)

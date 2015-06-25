@@ -107,6 +107,22 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Visible = true;
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
+                case "8":
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.Text = "";
+                    SongQuery_QueryValue_TextBox.Enabled = false;
+                    SongQuery_QueryValue_TextBox.Visible = false;
+                    SongQuery_Paste_Button.Enabled = false;
+                    SongQuery_Clear_Button.Enabled = false;
+
+                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack");
+                    SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
+                    SongQuery_QueryValue_ComboBox.ValueMember = "Value";
+                    SongQuery_QueryValue_ComboBox.SelectedValue = 1;
+
+                    SongQuery_QueryValue_ComboBox.Visible = true;
+                    SongQuery_QueryValue_ComboBox.Focus();
+                    break;
             }
         }
 
@@ -189,6 +205,12 @@ namespace CrazyKTV_SongMgr
                         SongQueryType = "SingerType";
                         SongQueryStatusText = "歌手類別為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQueryValue = Global.CrazyktvSingerTypeList.IndexOf(SongQuery_QueryValue_ComboBox.Text).ToString();
+                        break;
+                    case "8":
+                        SongQueryType = "SongTrack";
+                        SongQueryStatusText = "歌曲聲道為" + SongQuery_QueryValue_ComboBox.Text;
+                        SongQueryValue = SongQuery_QueryValue_ComboBox.SelectedValue.ToString();
+                        Console.WriteLine(SongQueryValue);
                         break;
                 }
 
@@ -1349,6 +1371,16 @@ namespace CrazyKTV_SongMgr
                         SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_SingerType = " + QueryValue + SongQueryOrderStr;
                     }
                     break;
+                case "SongTrack":
+                    if (Global.SongQueryFilter != "全部")
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Track = " + QueryValue + SongQueryFilterStr + SongQueryOrderStr;
+                    }
+                    else
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Track = " + QueryValue + SongQueryOrderStr;
+                    }
+                    break;
                 case "FileNotExists":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
                     break;
@@ -1380,27 +1412,15 @@ namespace CrazyKTV_SongMgr
             DataTable list = new DataTable();
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
-            list.Rows.Add(list.NewRow());
-            list.Rows[0][0] = "歌曲名稱";
-            list.Rows[0][1] = 1;
-            list.Rows.Add(list.NewRow());
-            list.Rows[1][0] = "歌手名稱";
-            list.Rows[1][1] = 2;
-            list.Rows.Add(list.NewRow());
-            list.Rows[2][0] = "歌曲編號";
-            list.Rows[2][1] = 3;
-            list.Rows.Add(list.NewRow());
-            list.Rows[3][0] = "新進歌曲";
-            list.Rows[3][1] = 4;
-            list.Rows.Add(list.NewRow());
-            list.Rows[4][0] = "合唱歌曲";
-            list.Rows[4][1] = 5;
-            list.Rows.Add(list.NewRow());
-            list.Rows[5][0] = "歌曲類別";
-            list.Rows[5][1] = 6;
-            list.Rows.Add(list.NewRow());
-            list.Rows[6][0] = "歌手類別";
-            list.Rows[6][1] = 7;
+
+            List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道" };
+
+            foreach (string str in ItemList)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = str;
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
             return list;
         }
 
@@ -1436,6 +1456,23 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                     break;
+                case "SongTrack":
+                    if (Global.SongMgrSongTrackMode == "True")
+                    {
+                        valuelist = new List<string>() { "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
+                    }
+                    else
+                    {
+                        valuelist = new List<string>() { "左聲道 / 音軌1", "右聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
+                    }
+
+                    foreach (string value in valuelist)
+                    {
+                        list.Rows.Add(list.NewRow());
+                        list.Rows[list.Rows.Count - 1][0] = value;
+                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                    }
+                    break;
             }
             return list;
         }
@@ -1461,9 +1498,10 @@ namespace CrazyKTV_SongMgr
         public static DataTable GetSongQueryExceptionalList()
         {
             DataTable list = new DataTable();
-            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌手)" };
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌手)" };
 
             foreach (string str in ItemList)
             {
