@@ -890,6 +890,13 @@ namespace CrazyKTV_SongMgr
                         switch (RebuildMode)
                         {
                             case "1":
+                                FileAttributes attributes = File.GetAttributes(SongSrcPath);
+                                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                                {
+                                    attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                    File.SetAttributes(SongSrcPath, attributes);
+                                }
+
                                 if (File.Exists(SongDestPath)) File.Delete(SongDestPath);
                                 File.Move(SongSrcPath, SongDestPath);
                                 break;
