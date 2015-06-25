@@ -287,12 +287,6 @@ namespace CrazyKTV_SongMgr
                 case "OldDB": // 轉換舊版資料庫
                     if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
                     File.Copy(Global.CrazyktvDatabaseFile, Application.StartupPath + @"\SongMgr\Backup\CrazySongOld.mdb", true);
-                    
-                    dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, "select * from ktv_Song", "");
-                    foreach (DataColumn row in dt.Columns)
-                    {
-                        Console.WriteLine(row.ColumnName + " : " + row.DataType);
-                    }
 
                     OleDbCommand[] Ocmds = 
                     {
@@ -913,7 +907,6 @@ namespace CrazyKTV_SongMgr
                         }
                     });
                 }
-
                 string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
                 string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
                 string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
@@ -1008,6 +1001,19 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+                    
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        switch (TooltipName)
+                        {
+                            case "SongMaintenance":
+                                SongMaintenance_Tooltip_Label.Text = "正在從第 " + ChorusSingerList.IndexOf(ChorusSinger) + " 組合唱歌手解析歌手資料,請稍待...";
+                                break;
+                            case "SingerMgr":
+                                SingerMgr_Tooltip_Label.Text = "正在從第 " + ChorusSingerList.IndexOf(ChorusSinger) + " 組合唱歌手解析歌手資料,請稍待...";
+                                break;
+                        }
+                    });
                 }
 
                 foreach (string AddStr in Addlist)
@@ -1038,10 +1044,10 @@ namespace CrazyKTV_SongMgr
                         switch (TooltipName)
                         {
                             case "SongMaintenance":
-                                SongMaintenance_Tooltip_Label.Text = "正在重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                SongMaintenance_Tooltip_Label.Text = "正在從合唱歌手重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
                                 break;
                             case "SingerMgr":
-                                SingerMgr_Tooltip_Label.Text = "正在重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                SingerMgr_Tooltip_Label.Text = "正在從合唱歌手重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
                                 break;
                         }
                     });
