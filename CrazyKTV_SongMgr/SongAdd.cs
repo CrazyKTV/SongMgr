@@ -173,7 +173,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongAdd_SpecialStr_TextBox_Enter(object sender, EventArgs e)
         {
-            SongAdd_Tooltip_Label.Text = "";
+            if (SongAdd_Tooltip_Label.Text != "此項目的值含有非法字元!") SongAdd_Tooltip_Label.Text = "";
             SongAdd_SpecialStr_Button.Text = "加入";
         }
 

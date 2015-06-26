@@ -71,6 +71,14 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void Common_TextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((int)e.KeyChar == 13)
+            {
+                SendKeys.Send("{tab}");
+            }
+        }
+
         private void Common_IsNullOrEmpty_TextBox_Validating(object sender, CancelEventArgs e)
         {
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
@@ -78,8 +86,58 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_Tooltip_Label.Text = "此項目的值不能為空白!";
                 e.Cancel = true;
             }
+            else
+            {
+                if (SongMaintenance_Tooltip_Label.Text == "此項目的值不能為空白!") SongMaintenance_Tooltip_Label.Text = "";
+                Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+                if (r.IsMatch(((TextBox)sender).Text))
+                {
+                    e.Cancel = true;
+                    SongMaintenance_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                }
+                else
+                {
+                    if (SongMaintenance_Tooltip_Label.Text == "此項目的值含有非法字元!") SongMaintenance_Tooltip_Label.Text = "";
+                }
+            }
         }
 
+        private void Common_HasInvalidChar_TextBox_Validating(object sender, CancelEventArgs e)
+        {
+            Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+            if (r.IsMatch(((TextBox)sender).Text))
+            {
+                e.Cancel = true;
+                switch (((TextBox)sender).Name)
+                {
+                    case "SongAdd_SpecialStr_TextBox":
+                        SongAdd_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                        break;
+                    case "SingerMgr_SingerAddName_TextBox":
+                        SingerMgr_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                        break;
+                    case "SongMgrCfg_SongType_TextBox":
+                        SongMgrCfg_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                        break;
+                }
+            }
+            else
+            {
+                switch (((TextBox)sender).Name)
+                {
+                    case "SongAdd_SpecialStr_TextBox":
+                        if (SongAdd_Tooltip_Label.Text == "此項目的值含有非法字元!") SongAdd_Tooltip_Label.Text = "";
+                        break;
+                    case "SingerMgr_SingerAddName_TextBox":
+                        if (SingerMgr_Tooltip_Label.Text == "此項目的值含有非法字元!") SingerMgr_Tooltip_Label.Text = "";
+                        break;
+                    case "SongMgrCfg_SongType_TextBox":
+                        if (SongMgrCfg_Tooltip_Label.Text == "此項目的值含有非法字元!") SongMgrCfg_Tooltip_Label.Text = "";
+                        break;
+                }
+            }
+        }
+        
         private void Common_ListBox_DoubleClick(object sender, EventArgs e)
         {
             string str = "";
