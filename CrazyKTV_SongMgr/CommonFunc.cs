@@ -396,6 +396,7 @@ namespace CrazyKTV_SongMgr
                 new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn),
                 new OleDbCommand("alter table ktv_Song alter column Song_SongName TEXT(80) WITH COMPRESSION", conn),
                 new OleDbCommand("alter table ktv_Song alter column Song_Singer TEXT(60) WITH COMPRESSION", conn),
+                new OleDbCommand("alter table ktv_Song alter column Song_Spell TEXT(80) WITH COMPRESSION", conn),
                 new OleDbCommand("alter table ktv_Song alter column Song_FileName TEXT(255) WITH COMPRESSION", conn),
                 new OleDbCommand("alter table ktv_Song alter column Song_SpellNum TEXT(80) WITH COMPRESSION", conn),
                 new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(80) WITH COMPRESSION", conn)
