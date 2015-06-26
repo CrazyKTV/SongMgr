@@ -2412,7 +2412,17 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongMaintenance_EnableDBVerUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.DBVerEnableDBVerUpdate = SongMaintenance_EnableDBVerUpdate_CheckBox.Checked.ToString();
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
+        }
 
+        private void SongMaintenance_EnableRebuildSingerData_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.DBVerRebuildSingerData = SongMaintenance_EnableRebuildSingerData_CheckBox.Checked.ToString();
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", Global.DBVerRebuildSingerData);
+        }
 
 
 
