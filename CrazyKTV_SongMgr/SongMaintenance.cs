@@ -868,7 +868,6 @@ namespace CrazyKTV_SongMgr
                                 conn.Close();
                                 SongMaintenance_Favorite_TextBox.Text = "";
 
-                                Global.SongQueryFavoriteQuery = "False";
                                 SongQuery_GetFavoriteUserList();
                                 SongMaintenance_GetFavoriteUserList();
                                 if (Global.SongQueryQueryType == "FavoriteQuery")
@@ -958,7 +957,6 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
                                 conn.Close();
-                                Global.SongQueryFavoriteQuery = "False";
                                 SongQuery_GetFavoriteUserList();
                                 SongMaintenance_GetFavoriteUserList();
                                 if (Global.SongQueryQueryType == "FavoriteQuery")
@@ -1055,7 +1053,6 @@ namespace CrazyKTV_SongMgr
                             SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 位最愛用戶及 " + Global.TotalList[1] + " 首最愛歌曲,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
 
-                            Global.SongQueryFavoriteQuery = "False";
                             SongQuery_GetFavoriteUserList();
                             SongMaintenance_GetFavoriteUserList();
                             if (Global.SongQueryQueryType == "FavoriteQuery")

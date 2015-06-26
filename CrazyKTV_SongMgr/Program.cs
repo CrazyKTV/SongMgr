@@ -110,7 +110,6 @@ namespace CrazyKTV_SongMgr
         public static string CrazyktvPlayScreen = "1";
 
         public static string SongQueryQueryType = "SongQuery";
-        public static string SongQueryFavoriteQuery = "True";
         public static string SongQueryFuzzyQuery = "True";
         public static string SongQueryFilter = "全部";
 

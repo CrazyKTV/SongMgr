@@ -533,7 +533,6 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
 
                 // 載入我的最愛清單
-                Global.SongQueryFavoriteQuery = "False";
                 SongQuery_GetFavoriteUserList();
                 SongMaintenance_GetFavoriteUserList();
 
