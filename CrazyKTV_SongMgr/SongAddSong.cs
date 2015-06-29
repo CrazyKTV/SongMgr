@@ -76,21 +76,27 @@ namespace CrazyKTV_SongMgr
             float DuplicateSongMB = 0;
             List<string> ChorusSingerList = new List<string>() { "未有合唱歌手資料" };
 
-            if (Global.SongAddDT.Rows[i].Field<int>("Song_SingerType") == 3)
+            var query = from row in Global.SongDT.AsEnumerable()
+                        where row.Field<string>("Song_Lang").Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Lang")) &&
+                              row.Field<string>("Song_Singer").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower()) &&
+                              row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
+                        select row;
+
+            if (query.Count<DataRow>() == 0 & Global.SongAddDT.Rows[i].Field<int>("Song_SingerType") == 3)
             {
                 Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                 if (r.Matches(Global.SongAddDT.Rows[i].Field<string>("Song_Singer")).Count > 0)
                 {
                     ChorusSingerList = new List<string>(Regex.Split(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower(), "&", RegexOptions.None));
                 }
-            }
 
-            var query = from row in Global.SongDT.AsEnumerable()
+                query = from row in Global.SongDT.AsEnumerable()
                         where row.Field<string>("Song_Lang").Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Lang")) &&
-                              row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower()) &&
-                              row.Field<string>("Song_Singer").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower()) ||
-                              row.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray())
+                              row.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
+                              row.Field<string>("Song_Singer").Length.Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").Length) &&
+                              row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
                         select row;
+            }
 
             foreach (DataRow row in query)
             {
