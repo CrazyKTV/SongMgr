@@ -98,41 +98,44 @@ namespace CrazyKTV_SongMgr
                         select row;
             }
 
-            foreach (DataRow row in query)
+            if (query.Count<DataRow>() > 0)
             {
-                if (row["Song_SongType"] == null)
+                foreach (DataRow row in query)
                 {
-                    if (Global.SongAddDT.Rows[i].Field<string>("Song_SongType") == "")
+                    if (row["Song_SongType"] == null)
                     {
-                        DuplicateSong = "DuplicateSong";
-                        DuplicateSongId = row.Field<string>("Song_Id");
-                        DuplicateSongFileName = row.Field<string>("Song_FileName");
-                        DuplicateSongPath = row.Field<string>("Song_Path");
-                        string file = Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName"));
-                        if (File.Exists(file))
+                        if (Global.SongAddDT.Rows[i].Field<string>("Song_SongType") == "")
                         {
-                            FileInfo f = new FileInfo(file);
-                            DuplicateSongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                            DuplicateSong = "DuplicateSong";
+                            DuplicateSongId = row.Field<string>("Song_Id");
+                            DuplicateSongFileName = row.Field<string>("Song_FileName");
+                            DuplicateSongPath = row.Field<string>("Song_Path");
+                            string file = Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName"));
+                            if (File.Exists(file))
+                            {
+                                FileInfo f = new FileInfo(file);
+                                DuplicateSongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                            }
                         }
                     }
-                }
-                else
-                {
-                    if (row["Song_SongType"].ToString() == Global.SongAddDT.Rows[i].Field<string>("Song_SongType"))
+                    else
                     {
-                        DuplicateSong = "DuplicateSong";
-                        DuplicateSongId = row.Field<string>("Song_Id");
-                        DuplicateSongFileName = row.Field<string>("Song_FileName");
-                        DuplicateSongPath = row.Field<string>("Song_Path");
-                        string file = Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName"));
-                        if (File.Exists(file))
+                        if (row["Song_SongType"].ToString() == Global.SongAddDT.Rows[i].Field<string>("Song_SongType"))
                         {
-                            FileInfo f = new FileInfo(file);
-                            DuplicateSongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                            DuplicateSong = "DuplicateSong";
+                            DuplicateSongId = row.Field<string>("Song_Id");
+                            DuplicateSongFileName = row.Field<string>("Song_FileName");
+                            DuplicateSongPath = row.Field<string>("Song_Path");
+                            string file = Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName"));
+                            if (File.Exists(file))
+                            {
+                                FileInfo f = new FileInfo(file);
+                                DuplicateSongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                            }
                         }
                     }
+                    if (DuplicateSong == "DuplicateSong") break;
                 }
-                if (DuplicateSong == "DuplicateSong") break;
             }
 
             if (DuplicateSong == "DuplicateSong")

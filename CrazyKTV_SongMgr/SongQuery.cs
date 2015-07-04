@@ -406,6 +406,7 @@ namespace CrazyKTV_SongMgr
 
                 bool DuplicateSong = false;
                 bool MoveError = false;
+                List<string> ChorusSingerList = new List<string>() { "未有合唱歌手資料" };
 
                 var query = from DupSongRow in Global.SongDT.AsEnumerable()
                             where DupSongRow.Field<string>("Song_Id") != OldSongId &&
@@ -413,6 +414,23 @@ namespace CrazyKTV_SongMgr
                                   DupSongRow.Field<string>("Song_Singer").ToLower().Equals(SongSinger.ToLower()) &&
                                   DupSongRow.Field<string>("Song_SongName").ToLower().Equals(SongSongName.ToLower())
                             select DupSongRow;
+
+                if (query.Count<DataRow>() == 0 & SongSingerType == 3)
+                {
+                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                    if (r.Matches(SongSinger).Count > 0)
+                    {
+                        ChorusSingerList = new List<string>(Regex.Split(SongSinger.ToLower(), "&", RegexOptions.None));
+                    }
+
+                    query = from DupSongRow in Global.SongDT.AsEnumerable()
+                                where DupSongRow.Field<string>("Song_Id") != OldSongId &&
+                                      DupSongRow.Field<string>("Song_Lang").Equals(SongLang) &&
+                                      DupSongRow.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
+                                      DupSongRow.Field<string>("Song_Singer").Length.Equals(SongSinger.Length) &&
+                                      DupSongRow.Field<string>("Song_SongName").ToLower().Equals(SongSongName.ToLower())
+                                select DupSongRow;
+                }
 
                 if (query.Count<DataRow>() > 0)
                 {
