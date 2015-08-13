@@ -149,10 +149,10 @@ namespace CrazyKTV_SongMgr
             switch (SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue.ToString())
             {
                 case "1":
-                    Global.SongMgrLangCode = "10000,20000,30000,40000,50000,60000,70000,80000,90000,95000";
+                    Global.SongMgrLangCode = "10001,20001,30001,40001,50001,60001,70001,80001,90001,95001";
                     break;
                 case "2":
-                    Global.SongMgrLangCode = "100000,200000,300000,400000,500000,600000,700000,800000,900000,950000";
+                    Global.SongMgrLangCode = "100001,200001,300001,400001,500001,600001,700001,800001,900001,950001";
                     break;
             }
             string[] str = Global.SongMgrLangCode.Split(',');
