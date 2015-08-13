@@ -290,6 +290,7 @@
             this.SongMaintenance_Lang1IDStr_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_Lang1_TextBox = new System.Windows.Forms.TextBox();
             this.SongMaintenance_Lang1_Label = new System.Windows.Forms.Label();
+            this.SongMaintenance_SongPath_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_DBVer_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_DBVerUpdate_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_EnableRebuildSingerData_CheckBox = new System.Windows.Forms.CheckBox();
@@ -2941,6 +2942,7 @@
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_Misc_TabPage);
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_Favorite_TabPage);
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_CustomLang_TabPage);
+            this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_SongPath_TabPage);
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_DBVer_TabPage);
             this.SongMaintenance_TabControl.Location = new System.Drawing.Point(382, 136);
             this.SongMaintenance_TabControl.Margin = new System.Windows.Forms.Padding(14, 14, 3, 3);
@@ -3727,6 +3729,16 @@
             this.SongMaintenance_Lang1_Label.Size = new System.Drawing.Size(58, 22);
             this.SongMaintenance_Lang1_Label.TabIndex = 0;
             this.SongMaintenance_Lang1_Label.Text = "語系1:";
+            // 
+            // SongMaintenance_SongPath_TabPage
+            // 
+            this.SongMaintenance_SongPath_TabPage.Location = new System.Drawing.Point(4, 34);
+            this.SongMaintenance_SongPath_TabPage.Name = "SongMaintenance_SongPath_TabPage";
+            this.SongMaintenance_SongPath_TabPage.Padding = new System.Windows.Forms.Padding(10, 14, 10, 14);
+            this.SongMaintenance_SongPath_TabPage.Size = new System.Drawing.Size(585, 432);
+            this.SongMaintenance_SongPath_TabPage.TabIndex = 4;
+            this.SongMaintenance_SongPath_TabPage.Text = "歌庫路徑";
+            this.SongMaintenance_SongPath_TabPage.UseVisualStyleBackColor = true;
             // 
             // SongMaintenance_DBVer_TabPage
             // 
@@ -4912,7 +4924,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "MainForm";
-            this.Text = "CrazyKTV 加歌程式 v1.3.2 Beta";
+            this.Text = "CrazyKTV 加歌程式 v1.3.2 Beta 2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.MainTabControl.ResumeLayout(false);
@@ -5358,6 +5370,7 @@
         private System.Windows.Forms.GroupBox SongMaintenance_DBVerUpdate_GroupBox;
         private System.Windows.Forms.CheckBox SongMaintenance_EnableRebuildSingerData_CheckBox;
         private System.Windows.Forms.CheckBox SongMaintenance_EnableDBVerUpdate_CheckBox;
+        private System.Windows.Forms.TabPage SongMaintenance_SongPath_TabPage;
     }
 }
 
