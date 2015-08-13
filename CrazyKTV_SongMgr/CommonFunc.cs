@@ -259,6 +259,14 @@ namespace CrazyKTV_SongMgr
                         Global.CrazyktvDatabaseMaxDigitCode = "Pass";
                     }
                 }
+                else
+                {
+                    if (Directory.Exists(Global.SongMgrDestFolder)) { Common_SwitchDBVerErrorUI(true); } else { Common_SwitchDBVerErrorUI(false); }
+                    SongMaintenance_CodeConvTo5_Button.Enabled = false;
+                    SongMaintenance_CodeConvTo6_Button.Enabled = false;
+                    SongMaintenance_CodeCorrect_Button.Enabled = false;
+                    Global.CrazyktvDatabaseMaxDigitCode = "Pass";
+                }
                 dt.Dispose();
                 Common_CheckDBUpdate();
             }
