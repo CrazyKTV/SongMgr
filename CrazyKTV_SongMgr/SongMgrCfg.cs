@@ -99,7 +99,9 @@ namespace CrazyKTV_SongMgr
             {
                 case "1":
                 case "2":
+                case "3":
                     Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
+                    if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "3") { SongMgrCfg_DestFolder_Button.Enabled = false; } else { SongMgrCfg_DestFolder_Button.Enabled = true; }
                     break;
             }
         }
@@ -530,6 +532,9 @@ namespace CrazyKTV_SongMgr
             list.Rows.Add(list.NewRow());
             list.Rows[1][0] = "自動複製來源 KTV 檔案至歌庫資料夾";
             list.Rows[1][1] = 2;
+            list.Rows.Add(list.NewRow());
+            list.Rows[2][0] = "不搬移及複製來源 KTV 檔案";
+            list.Rows[2][1] = 3;
             return list;
         }
 

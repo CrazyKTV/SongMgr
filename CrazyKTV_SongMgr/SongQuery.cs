@@ -476,55 +476,58 @@ namespace CrazyKTV_SongMgr
                         SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
                     }
 
-                    switch (Global.SongMgrFolderStructure)
+                    if (Global.SongMgrSongAddMode != "3")
                     {
-                        case "1":
-                            if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                            {
+                        switch (Global.SongMgrFolderStructure)
+                        {
+                            case "1":
+                                if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
+                                {
+                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                }
+                                else
+                                {
+                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                }
+                                break;
+                            case "2":
                                 SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                            }
-                            else
-                            {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                            }
-                            break;
-                        case "2":
-                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                            break;
-                    }
+                                break;
+                        }
 
-                    switch (Global.SongMgrFileStructure)
-                    {
-                        case "1":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                        case "2":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                        case "3":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
+                        switch (Global.SongMgrFileStructure)
+                        {
+                            case "1":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
+                            case "2":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
+                            case "3":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
+                        }
                     }
 
                     this.BeginInvoke((Action)delegate()
@@ -534,35 +537,49 @@ namespace CrazyKTV_SongMgr
                         SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongPath + SongFileName;
                     });
 
-                    string SongDestPath = Path.Combine(SongPath, SongFileName);
-
-                    if (File.Exists(SongSrcPath))
+                    if (Global.SongMgrSongAddMode != "3")
                     {
-                        if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
+                        string SongDestPath = Path.Combine(SongPath, SongFileName);
 
-                        if (File.Exists(SongDestPath))
+                        if (File.Exists(SongSrcPath))
                         {
-                            if (SongSrcPath.ToLower() == SongDestPath.ToLower())
-                            {
-                                try
-                                {
-                                    FileAttributes attributes = File.GetAttributes(SongSrcPath);
-                                    if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                                    {
-                                        attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
-                                        File.SetAttributes(SongSrcPath, attributes);
-                                    }
+                            if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
 
-                                    File.Move(SongSrcPath, SongPath + "Temp_" + SongFileName);
-                                    File.Move(SongPath + "Temp_" + SongFileName, SongDestPath);
+                            if (File.Exists(SongDestPath))
+                            {
+                                if (SongSrcPath.ToLower() == SongDestPath.ToLower())
+                                {
+                                    try
+                                    {
+                                        FileAttributes attributes = File.GetAttributes(SongSrcPath);
+                                        if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                                        {
+                                            attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                            File.SetAttributes(SongSrcPath, attributes);
+                                        }
+
+                                        File.Move(SongSrcPath, SongPath + "Temp_" + SongFileName);
+                                        File.Move(SongPath + "Temp_" + SongFileName, SongDestPath);
+                                    }
+                                    catch
+                                    {
+                                        MoveError = true;
+                                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                        this.BeginInvoke((Action)delegate ()
+                                        {
+                                            SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
+                                        });
+                                    }
                                 }
-                                catch
+                                else
                                 {
                                     MoveError = true;
                                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (歌庫裡已存在該首歌曲的檔案)";
                                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                    this.BeginInvoke((Action)delegate()
+                                    this.BeginInvoke((Action)delegate ()
                                     {
                                         SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
                                     });
@@ -570,48 +587,36 @@ namespace CrazyKTV_SongMgr
                             }
                             else
                             {
-                                MoveError = true;
-                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (歌庫裡已存在該首歌曲的檔案)";
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                this.BeginInvoke((Action)delegate()
+                                try
                                 {
-                                    SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
-                                });
+                                    File.Move(SongSrcPath, SongDestPath);
+                                }
+                                catch
+                                {
+                                    MoveError = true;
+                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                    this.BeginInvoke((Action)delegate ()
+                                    {
+                                        SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
+                                    });
+                                }
                             }
                         }
                         else
                         {
-                            try
+                            MoveError = true;
+                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案不存在)";
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                            this.BeginInvoke((Action)delegate ()
                             {
-                                File.Move(SongSrcPath, SongDestPath);
-                            }
-                            catch
-                            {
-                                MoveError = true;
-                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                this.BeginInvoke((Action)delegate()
-                                {
-                                    SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
-                                });
-                            }
+                                SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
+                            });
                         }
                     }
-                    else
-                    {
-                        MoveError = true;
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案不存在)";
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        this.BeginInvoke((Action)delegate()
-                        {
-                            SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
-                        });
-                    }
                 }
-
                 
                 if (MoveError | DuplicateSong)
                 {
