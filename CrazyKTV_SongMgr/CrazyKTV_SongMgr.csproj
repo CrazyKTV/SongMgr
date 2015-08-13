@@ -30,9 +30,9 @@
     <MapFileExtensions>false</MapFileExtensions>
     <SupportUrl>https://www.facebook.com/NewCrazyKTV</SupportUrl>
     <ErrorReportUrl>https://www.facebook.com/NewCrazyKTV</ErrorReportUrl>
-    <ProductName>CrazyKTV 輔助工具</ProductName>
+    <ProductName>CrazyKTV 加歌程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
-    <SuiteName>CrazyKTV 輔助工具</SuiteName>
+    <SuiteName>CrazyKTV 加歌程式</SuiteName>
     <ApplicationRevision>31</ApplicationRevision>
     <ApplicationVersion>1.3.1.31</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -72,7 +72,7 @@
     <ManifestKeyFile>CrazyKTV_Tools_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
