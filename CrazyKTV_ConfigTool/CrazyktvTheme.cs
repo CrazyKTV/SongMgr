@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CrazyKTV_SongMgr
+namespace CrazyKTV_ConfigTool
 {
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
         private void CrazyktvTheme_SaveCrazyktvCfgFile()
         {
@@ -22,13 +22,13 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.CrazyktvCfgFile, "PlayScreen", Global.CrazyktvPlayScreen);
         }
 
-        private void CrazyktvTheme_AutoScreen_CheckedChanged(object sender, EventArgs e)
+        private void CrazyktvTheme_AutoScreen_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.CrazyktvAutoScreen = CrazyktvTheme_AutoScreen_CheckBox.Checked.ToString();
             CrazyktvTheme_SaveCrazyktvCfgFile();
         }
 
-        private void CrazyktvTheme_ScreenDpi_SelectedIndexChanged(object sender, EventArgs e)
+        private void CrazyktvTheme_ScreenDpi_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (CrazyktvTheme_ScreenDpi_ComboBox.SelectedValue.ToString())
             {
@@ -51,13 +51,13 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void CrazyktvTheme_WinState_CheckedChanged(object sender, EventArgs e)
+        private void CrazyktvTheme_WinState_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.CrazyktvWinState = CrazyktvTheme_WinState_CheckBox.Checked.ToString();
             CrazyktvTheme_SaveCrazyktvCfgFile();
         }
 
-        private void CrazyktvTheme_D3DButton_CheckedChanged(object sender, EventArgs e)
+        private void CrazyktvTheme_D3DButton_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.CrazyktvD3DButton = CrazyktvTheme_D3DButton_CheckBox.Checked.ToString();
             CrazyktvTheme_SaveCrazyktvCfgFile();
@@ -93,7 +93,7 @@ namespace CrazyKTV_SongMgr
                 ListView.SelectedListViewItemCollection selected = CrazyktvTheme_ListView.SelectedItems;
                 string imagefile = selected[0].SubItems[1].Text;
                 Bitmap bmpPic1 = new Bitmap(Image.FromFile(imagefile), 1024, 768);
-                Bitmap bmpPic2 = new Bitmap(global::CrazyKTV_SongMgr.Properties.Resources.tbasic, 1024, 768);
+                Bitmap bmpPic2 = new Bitmap(global::CrazyKTV_ConfigTool.Properties.Resources.tbasic, 1024, 768);
                 Graphics g = Graphics.FromImage(bmpPic1);
                 g.DrawImage(bmpPic2, new Point(0, 0));
                 CrazyktvTheme_PictureBox.Image = new Bitmap(bmpPic1);
@@ -106,7 +106,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void Theme_ApplyTheme_Button_Click(object sender, EventArgs e)
+        private void CrazyktvTheme_ApplyTheme_Button_Click(object sender, EventArgs e)
         {
             if (CrazyktvTheme_ListView.SelectedItems.Count > 0)
             {

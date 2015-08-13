@@ -102,13 +102,6 @@ namespace CrazyKTV_SongMgr
         public static DateTime TimerStartTime = new DateTime();
         public static DateTime TimerEndTime = new DateTime();
 
-        public static string CrazyktvAutoScreen = "False";
-        public static string CrazyktvScreenDpi = "0";
-        public static string CrazyktvWinState = "False";
-        public static string CrazyktvD3DButton = "True";
-        public static string CrazyktvMainScreen = "0";
-        public static string CrazyktvPlayScreen = "1";
-
         public static string SongQueryQueryType = "SongQuery";
         public static string SongQueryFuzzyQuery = "True";
         public static string SongQueryFilter = "全部";

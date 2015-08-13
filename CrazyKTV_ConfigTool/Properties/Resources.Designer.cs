@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CrazyKTV_SongMgr.Properties {
+namespace CrazyKTV_ConfigTool.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CrazyKTV_SongMgr.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CrazyKTV_SongMgr.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CrazyKTV_ConfigTool.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,12 +61,12 @@ namespace CrazyKTV_SongMgr.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 (圖示) 的類型 System.Drawing.Icon 當地語系化資源。
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Icon SongMgr {
+        internal static System.Drawing.Bitmap tbasic {
             get {
-                object obj = ResourceManager.GetObject("SongMgr", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("tbasic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

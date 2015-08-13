@@ -39,16 +39,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.MainTabControl = new System.Windows.Forms.TabControl();
-            this.CrazyktvTheme_TabPage = new System.Windows.Forms.TabPage();
-            this.CrazyktvTheme_MainScreen_CheckBox = new System.Windows.Forms.CheckBox();
-            this.CrazyktvTheme_D3DButton_CheckBox = new System.Windows.Forms.CheckBox();
-            this.CrazyktvTheme_ScreenDpi_Label = new System.Windows.Forms.Label();
-            this.CrazyktvTheme_AutoScreen_CheckBox = new System.Windows.Forms.CheckBox();
-            this.CrazyktvTheme_ScreenDpi_ComboBox = new System.Windows.Forms.ComboBox();
-            this.CrazyktvTheme_WinState_CheckBox = new System.Windows.Forms.CheckBox();
-            this.CrazyktvTheme_PictureBox = new System.Windows.Forms.PictureBox();
-            this.CrazyktvTheme_ListView = new System.Windows.Forms.ListView();
-            this.CrazyktvTheme_ApplyTheme_Button = new System.Windows.Forms.Button();
             this.SongQuery_TabPage = new System.Windows.Forms.TabPage();
             this.SongQuery_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongQuery_FavoriteQuery_ComboBox = new System.Windows.Forms.ComboBox();
@@ -393,8 +383,6 @@
             this.SongLog_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.MainTabControl.SuspendLayout();
-            this.CrazyktvTheme_TabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CrazyktvTheme_PictureBox)).BeginInit();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
             this.SongQuery_Query_GroupBox.SuspendLayout();
@@ -461,7 +449,6 @@
             // 
             // MainTabControl
             // 
-            this.MainTabControl.Controls.Add(this.CrazyktvTheme_TabPage);
             this.MainTabControl.Controls.Add(this.SongQuery_TabPage);
             this.MainTabControl.Controls.Add(this.SongAdd_TabPage);
             this.MainTabControl.Controls.Add(this.SingerMgr_TabPage);
@@ -477,175 +464,9 @@
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1006, 717);
+            this.MainTabControl.Size = new System.Drawing.Size(1006, 722);
             this.MainTabControl.TabIndex = 0;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
-            // 
-            // CrazyktvTheme_TabPage
-            // 
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_MainScreen_CheckBox);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_D3DButton_CheckBox);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_ScreenDpi_Label);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_AutoScreen_CheckBox);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_ScreenDpi_ComboBox);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_WinState_CheckBox);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_PictureBox);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_ListView);
-            this.CrazyktvTheme_TabPage.Controls.Add(this.CrazyktvTheme_ApplyTheme_Button);
-            this.CrazyktvTheme_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CrazyktvTheme_TabPage.Location = new System.Drawing.Point(4, 34);
-            this.CrazyktvTheme_TabPage.Margin = new System.Windows.Forms.Padding(0);
-            this.CrazyktvTheme_TabPage.Name = "CrazyktvTheme_TabPage";
-            this.CrazyktvTheme_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.CrazyktvTheme_TabPage.Size = new System.Drawing.Size(998, 679);
-            this.CrazyktvTheme_TabPage.TabIndex = 0;
-            this.CrazyktvTheme_TabPage.Text = "佈景主題";
-            this.CrazyktvTheme_TabPage.UseVisualStyleBackColor = true;
-            // 
-            // CrazyktvTheme_MainScreen_CheckBox
-            // 
-            this.CrazyktvTheme_MainScreen_CheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_MainScreen_CheckBox.AutoSize = true;
-            this.CrazyktvTheme_MainScreen_CheckBox.Checked = true;
-            this.CrazyktvTheme_MainScreen_CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CrazyktvTheme_MainScreen_CheckBox.Location = new System.Drawing.Point(600, 555);
-            this.CrazyktvTheme_MainScreen_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_MainScreen_CheckBox.Name = "CrazyktvTheme_MainScreen_CheckBox";
-            this.CrazyktvTheme_MainScreen_CheckBox.Size = new System.Drawing.Size(185, 26);
-            this.CrazyktvTheme_MainScreen_CheckBox.TabIndex = 7;
-            this.CrazyktvTheme_MainScreen_CheckBox.Text = "顯示點歌台在主螢幕";
-            this.CrazyktvTheme_MainScreen_CheckBox.UseVisualStyleBackColor = true;
-            this.CrazyktvTheme_MainScreen_CheckBox.CheckedChanged += new System.EventHandler(this.CrazyktvTheme_MainScreen_CheckBox_CheckedChanged);
-            // 
-            // CrazyktvTheme_D3DButton_CheckBox
-            // 
-            this.CrazyktvTheme_D3DButton_CheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_D3DButton_CheckBox.AutoSize = true;
-            this.CrazyktvTheme_D3DButton_CheckBox.Checked = true;
-            this.CrazyktvTheme_D3DButton_CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CrazyktvTheme_D3DButton_CheckBox.Location = new System.Drawing.Point(600, 518);
-            this.CrazyktvTheme_D3DButton_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_D3DButton_CheckBox.Name = "CrazyktvTheme_D3DButton_CheckBox";
-            this.CrazyktvTheme_D3DButton_CheckBox.Size = new System.Drawing.Size(165, 26);
-            this.CrazyktvTheme_D3DButton_CheckBox.TabIndex = 6;
-            this.CrazyktvTheme_D3DButton_CheckBox.Text = "使用 3D 圖檔按鈕";
-            this.CrazyktvTheme_D3DButton_CheckBox.UseVisualStyleBackColor = true;
-            this.CrazyktvTheme_D3DButton_CheckBox.CheckedChanged += new System.EventHandler(this.CrazyktvTheme_D3DButton_CheckedChanged);
-            // 
-            // CrazyktvTheme_ScreenDpi_Label
-            // 
-            this.CrazyktvTheme_ScreenDpi_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_ScreenDpi_Label.AutoSize = true;
-            this.CrazyktvTheme_ScreenDpi_Label.Location = new System.Drawing.Point(335, 556);
-            this.CrazyktvTheme_ScreenDpi_Label.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_ScreenDpi_Label.Name = "CrazyktvTheme_ScreenDpi_Label";
-            this.CrazyktvTheme_ScreenDpi_Label.Size = new System.Drawing.Size(163, 22);
-            this.CrazyktvTheme_ScreenDpi_Label.TabIndex = 3;
-            this.CrazyktvTheme_ScreenDpi_Label.Text = "自訂點歌台螢幕大小";
-            // 
-            // CrazyktvTheme_AutoScreen_CheckBox
-            // 
-            this.CrazyktvTheme_AutoScreen_CheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_AutoScreen_CheckBox.AutoSize = true;
-            this.CrazyktvTheme_AutoScreen_CheckBox.Location = new System.Drawing.Point(339, 518);
-            this.CrazyktvTheme_AutoScreen_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_AutoScreen_CheckBox.Name = "CrazyktvTheme_AutoScreen_CheckBox";
-            this.CrazyktvTheme_AutoScreen_CheckBox.Size = new System.Drawing.Size(219, 26);
-            this.CrazyktvTheme_AutoScreen_CheckBox.TabIndex = 2;
-            this.CrazyktvTheme_AutoScreen_CheckBox.Text = "自動偵測點歌台螢幕大小";
-            this.CrazyktvTheme_AutoScreen_CheckBox.UseVisualStyleBackColor = true;
-            this.CrazyktvTheme_AutoScreen_CheckBox.CheckedChanged += new System.EventHandler(this.CrazyktvTheme_AutoScreen_CheckedChanged);
-            // 
-            // CrazyktvTheme_ScreenDpi_ComboBox
-            // 
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_ScreenDpi_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CrazyktvTheme_ScreenDpi_ComboBox.FormattingEnabled = true;
-            this.CrazyktvTheme_ScreenDpi_ComboBox.ItemHeight = 22;
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Items.AddRange(new object[] {
-            "1024 x 768 (4:3)",
-            "1920 x 1080 (16:9)",
-            "640 x 480 (4:3)",
-            "800 x 480 (5:3)",
-            "800 x 600 (4:3)",
-            "1280 x 720 (16:9)",
-            "1280 x 800 (16:10)",
-            "1280 x 1024 (5:4)",
-            "1366 x 768 (16:9)",
-            "1440 x 900 (16:10)",
-            "1600 x 1024 (16:10)",
-            "1600 x 1200 (4:3)",
-            "1680 x 1050 (16:10)"});
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Location = new System.Drawing.Point(339, 590);
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Name = "CrazyktvTheme_ScreenDpi_ComboBox";
-            this.CrazyktvTheme_ScreenDpi_ComboBox.Size = new System.Drawing.Size(208, 30);
-            this.CrazyktvTheme_ScreenDpi_ComboBox.TabIndex = 4;
-            this.CrazyktvTheme_ScreenDpi_ComboBox.SelectedIndexChanged += new System.EventHandler(this.CrazyktvTheme_ScreenDpi_SelectedIndexChanged);
-            // 
-            // CrazyktvTheme_WinState_CheckBox
-            // 
-            this.CrazyktvTheme_WinState_CheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_WinState_CheckBox.AutoSize = true;
-            this.CrazyktvTheme_WinState_CheckBox.Location = new System.Drawing.Point(339, 632);
-            this.CrazyktvTheme_WinState_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_WinState_CheckBox.Name = "CrazyktvTheme_WinState_CheckBox";
-            this.CrazyktvTheme_WinState_CheckBox.Size = new System.Drawing.Size(219, 26);
-            this.CrazyktvTheme_WinState_CheckBox.TabIndex = 5;
-            this.CrazyktvTheme_WinState_CheckBox.Text = "使用視窗模式啟動點歌台";
-            this.CrazyktvTheme_WinState_CheckBox.UseVisualStyleBackColor = true;
-            this.CrazyktvTheme_WinState_CheckBox.CheckedChanged += new System.EventHandler(this.CrazyktvTheme_WinState_CheckedChanged);
-            // 
-            // CrazyktvTheme_PictureBox
-            // 
-            this.CrazyktvTheme_PictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.CrazyktvTheme_PictureBox.BackColor = System.Drawing.Color.DarkGray;
-            this.CrazyktvTheme_PictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CrazyktvTheme_PictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.CrazyktvTheme_PictureBox.Image = global::CrazyKTV_SongMgr.Properties.Resources.tbasic;
-            this.CrazyktvTheme_PictureBox.Location = new System.Drawing.Point(339, 23);
-            this.CrazyktvTheme_PictureBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.CrazyktvTheme_PictureBox.MaximumSize = new System.Drawing.Size(1024, 768);
-            this.CrazyktvTheme_PictureBox.Name = "CrazyktvTheme_PictureBox";
-            this.CrazyktvTheme_PictureBox.Size = new System.Drawing.Size(636, 472);
-            this.CrazyktvTheme_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.CrazyktvTheme_PictureBox.TabIndex = 3;
-            this.CrazyktvTheme_PictureBox.TabStop = false;
-            // 
-            // CrazyktvTheme_ListView
-            // 
-            this.CrazyktvTheme_ListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_ListView.FullRowSelect = true;
-            this.CrazyktvTheme_ListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.CrazyktvTheme_ListView.Location = new System.Drawing.Point(23, 23);
-            this.CrazyktvTheme_ListView.MultiSelect = false;
-            this.CrazyktvTheme_ListView.Name = "CrazyktvTheme_ListView";
-            this.CrazyktvTheme_ListView.Scrollable = false;
-            this.CrazyktvTheme_ListView.Size = new System.Drawing.Size(293, 583);
-            this.CrazyktvTheme_ListView.TabIndex = 0;
-            this.CrazyktvTheme_ListView.UseCompatibleStateImageBehavior = false;
-            this.CrazyktvTheme_ListView.View = System.Windows.Forms.View.Details;
-            this.CrazyktvTheme_ListView.SelectedIndexChanged += new System.EventHandler(this.CrazyktvTheme_ListView_SelectedIndexChanged);
-            // 
-            // CrazyktvTheme_ApplyTheme_Button
-            // 
-            this.CrazyktvTheme_ApplyTheme_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CrazyktvTheme_ApplyTheme_Button.AutoSize = true;
-            this.CrazyktvTheme_ApplyTheme_Button.Enabled = false;
-            this.CrazyktvTheme_ApplyTheme_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CrazyktvTheme_ApplyTheme_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.CrazyktvTheme_ApplyTheme_Button.Location = new System.Drawing.Point(23, 606);
-            this.CrazyktvTheme_ApplyTheme_Button.Margin = new System.Windows.Forms.Padding(6);
-            this.CrazyktvTheme_ApplyTheme_Button.Name = "CrazyktvTheme_ApplyTheme_Button";
-            this.CrazyktvTheme_ApplyTheme_Button.Size = new System.Drawing.Size(294, 48);
-            this.CrazyktvTheme_ApplyTheme_Button.TabIndex = 1;
-            this.CrazyktvTheme_ApplyTheme_Button.Text = "套用背景";
-            this.CrazyktvTheme_ApplyTheme_Button.UseVisualStyleBackColor = true;
-            this.CrazyktvTheme_ApplyTheme_Button.Click += new System.EventHandler(this.Theme_ApplyTheme_Button_Click);
             // 
             // SongQuery_TabPage
             // 
@@ -659,7 +480,7 @@
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongQuery_TabPage.Name = "SongQuery_TabPage";
             this.SongQuery_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongQuery_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongQuery_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongQuery_TabPage.TabIndex = 1;
             this.SongQuery_TabPage.Text = "歌庫查詢";
             this.SongQuery_TabPage.UseVisualStyleBackColor = true;
@@ -1222,7 +1043,7 @@
             this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.SongQuery_DataGridView.RowTemplate.Height = 27;
             this.SongQuery_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 291);
+            this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
             this.SongQuery_DataGridView.TabIndex = 4;
             this.SongQuery_DataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.SongQuery_DataGridView_CellBeginEdit);
             this.SongQuery_DataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellEndEdit);
@@ -1286,7 +1107,7 @@
             this.SongAdd_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongAdd_TabPage.Name = "SongAdd_TabPage";
             this.SongAdd_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongAdd_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongAdd_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongAdd_TabPage.TabIndex = 3;
             this.SongAdd_TabPage.Text = "加歌頁面";
             this.SongAdd_TabPage.UseVisualStyleBackColor = true;
@@ -1681,7 +1502,7 @@
             this.SingerMgr_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SingerMgr_TabPage.Name = "SingerMgr_TabPage";
             this.SingerMgr_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SingerMgr_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SingerMgr_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SingerMgr_TabPage.TabIndex = 8;
             this.SingerMgr_TabPage.Text = "歌手管理";
             this.SingerMgr_TabPage.UseVisualStyleBackColor = true;
@@ -2315,7 +2136,7 @@
             this.SongMgrCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongMgrCfg_TabPage.Name = "SongMgrCfg_TabPage";
             this.SongMgrCfg_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongMgrCfg_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongMgrCfg_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongMgrCfg_TabPage.TabIndex = 2;
             this.SongMgrCfg_TabPage.Text = "歌庫設定";
             this.SongMgrCfg_TabPage.UseVisualStyleBackColor = true;
@@ -3003,7 +2824,7 @@
             this.SongMaintenance_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongMaintenance_TabPage.Name = "SongMaintenance_TabPage";
             this.SongMaintenance_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongMaintenance_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongMaintenance_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongMaintenance_TabPage.TabIndex = 7;
             this.SongMaintenance_TabPage.Text = "歌庫維護";
             this.SongMaintenance_TabPage.UseVisualStyleBackColor = true;
@@ -4254,7 +4075,7 @@
             this.MainCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.MainCfg_TabPage.Name = "MainCfg_TabPage";
             this.MainCfg_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.MainCfg_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.MainCfg_TabPage.Size = new System.Drawing.Size(998, 684);
             this.MainCfg_TabPage.TabIndex = 9;
             this.MainCfg_TabPage.Text = "程式設定";
             this.MainCfg_TabPage.UseVisualStyleBackColor = true;
@@ -4412,7 +4233,7 @@
             this.SongDBConverter_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongDBConverter_TabPage.Name = "SongDBConverter_TabPage";
             this.SongDBConverter_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongDBConverter_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongDBConverter_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongDBConverter_TabPage.TabIndex = 5;
             this.SongDBConverter_TabPage.Text = "歌庫轉換";
             this.SongDBConverter_TabPage.UseVisualStyleBackColor = true;
@@ -4958,7 +4779,7 @@
             this.SongAddResult_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_TabPage.Name = "SongAddResult_TabPage";
             this.SongAddResult_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongAddResult_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongAddResult_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongAddResult_TabPage.TabIndex = 4;
             this.SongAddResult_TabPage.Text = "加歌結果";
             this.SongAddResult_TabPage.UseVisualStyleBackColor = true;
@@ -4980,8 +4801,8 @@
             // 
             this.SongAddResult_SplitContainer.Panel2.Controls.Add(this.SongAddResult_FailureSong_GroupBox);
             this.SongAddResult_SplitContainer.Panel2.Padding = new System.Windows.Forms.Padding(3);
-            this.SongAddResult_SplitContainer.Size = new System.Drawing.Size(958, 639);
-            this.SongAddResult_SplitContainer.SplitterDistance = 318;
+            this.SongAddResult_SplitContainer.Size = new System.Drawing.Size(958, 644);
+            this.SongAddResult_SplitContainer.SplitterDistance = 320;
             this.SongAddResult_SplitContainer.SplitterWidth = 3;
             this.SongAddResult_SplitContainer.TabIndex = 0;
             // 
@@ -4993,7 +4814,7 @@
             this.SongAddResult_DuplicateSong_GroupBox.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_DuplicateSong_GroupBox.Name = "SongAddResult_DuplicateSong_GroupBox";
             this.SongAddResult_DuplicateSong_GroupBox.Padding = new System.Windows.Forms.Padding(16, 14, 16, 14);
-            this.SongAddResult_DuplicateSong_GroupBox.Size = new System.Drawing.Size(952, 312);
+            this.SongAddResult_DuplicateSong_GroupBox.Size = new System.Drawing.Size(952, 314);
             this.SongAddResult_DuplicateSong_GroupBox.TabIndex = 0;
             this.SongAddResult_DuplicateSong_GroupBox.TabStop = false;
             this.SongAddResult_DuplicateSong_GroupBox.Text = "重複歌曲 (雙擊滑鼠左鍵可複製至剪貼簿)";
@@ -5007,7 +4828,7 @@
             this.SongAddResult_DuplicateSong_ListBox.Location = new System.Drawing.Point(16, 41);
             this.SongAddResult_DuplicateSong_ListBox.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_DuplicateSong_ListBox.Name = "SongAddResult_DuplicateSong_ListBox";
-            this.SongAddResult_DuplicateSong_ListBox.Size = new System.Drawing.Size(920, 257);
+            this.SongAddResult_DuplicateSong_ListBox.Size = new System.Drawing.Size(920, 259);
             this.SongAddResult_DuplicateSong_ListBox.TabIndex = 0;
             this.SongAddResult_DuplicateSong_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
@@ -5019,7 +4840,7 @@
             this.SongAddResult_FailureSong_GroupBox.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_FailureSong_GroupBox.Name = "SongAddResult_FailureSong_GroupBox";
             this.SongAddResult_FailureSong_GroupBox.Padding = new System.Windows.Forms.Padding(16, 14, 16, 14);
-            this.SongAddResult_FailureSong_GroupBox.Size = new System.Drawing.Size(952, 312);
+            this.SongAddResult_FailureSong_GroupBox.Size = new System.Drawing.Size(952, 315);
             this.SongAddResult_FailureSong_GroupBox.TabIndex = 0;
             this.SongAddResult_FailureSong_GroupBox.TabStop = false;
             this.SongAddResult_FailureSong_GroupBox.Text = "失敗歌曲 (雙擊滑鼠左鍵可複製至剪貼簿)";
@@ -5033,7 +4854,7 @@
             this.SongAddResult_FailureSong_ListBox.Location = new System.Drawing.Point(16, 41);
             this.SongAddResult_FailureSong_ListBox.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_FailureSong_ListBox.Name = "SongAddResult_FailureSong_ListBox";
-            this.SongAddResult_FailureSong_ListBox.Size = new System.Drawing.Size(920, 257);
+            this.SongAddResult_FailureSong_ListBox.Size = new System.Drawing.Size(920, 260);
             this.SongAddResult_FailureSong_ListBox.TabIndex = 0;
             this.SongAddResult_FailureSong_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
@@ -5044,7 +4865,7 @@
             this.SongLog_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongLog_TabPage.Name = "SongLog_TabPage";
             this.SongLog_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongLog_TabPage.Size = new System.Drawing.Size(998, 679);
+            this.SongLog_TabPage.Size = new System.Drawing.Size(998, 684);
             this.SongLog_TabPage.TabIndex = 6;
             this.SongLog_TabPage.Text = "操作記錄";
             this.SongLog_TabPage.UseVisualStyleBackColor = true;
@@ -5084,21 +4905,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1006, 717);
+            this.ClientSize = new System.Drawing.Size(1006, 722);
             this.Controls.Add(this.MainTabControl);
             this.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "MainFrom";
-            this.Text = "CrazyKTV 輔助工具 v1.3.1";
+            this.Text = "CrazyKTV 加歌程式 v1.3.2 Beta";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFrom_FormClosing);
             this.Load += new System.EventHandler(this.MainFrom_Load);
-            this.Shown += new System.EventHandler(this.MainFrom_Shown);
             this.MainTabControl.ResumeLayout(false);
-            this.CrazyktvTheme_TabPage.ResumeLayout(false);
-            this.CrazyktvTheme_TabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CrazyktvTheme_PictureBox)).EndInit();
             this.SongQuery_TabPage.ResumeLayout(false);
             this.SongQuery_OtherQuery_GroupBox.ResumeLayout(false);
             this.SongQuery_OtherQuery_GroupBox.PerformLayout();
@@ -5198,15 +5015,6 @@
         #endregion
 
         private System.Windows.Forms.TabControl MainTabControl;
-        private System.Windows.Forms.TabPage CrazyktvTheme_TabPage;
-        private System.Windows.Forms.Button CrazyktvTheme_ApplyTheme_Button;
-        private System.Windows.Forms.ListView CrazyktvTheme_ListView;
-        private System.Windows.Forms.PictureBox CrazyktvTheme_PictureBox;
-        private System.Windows.Forms.CheckBox CrazyktvTheme_WinState_CheckBox;
-        private System.Windows.Forms.ComboBox CrazyktvTheme_ScreenDpi_ComboBox;
-        private System.Windows.Forms.CheckBox CrazyktvTheme_D3DButton_CheckBox;
-        private System.Windows.Forms.Label CrazyktvTheme_ScreenDpi_Label;
-        private System.Windows.Forms.CheckBox CrazyktvTheme_AutoScreen_CheckBox;
         private System.Windows.Forms.TabPage SongQuery_TabPage;
         private System.Windows.Forms.DataGridView SongQuery_DataGridView;
         private System.Windows.Forms.GroupBox SongQuery_Query_GroupBox;
@@ -5457,7 +5265,6 @@
         private System.Windows.Forms.Button SongMaintenance_SongPathChange_Button;
         private System.Windows.Forms.TextBox SongMaintenance_DestSongPath_TextBox;
         private System.Windows.Forms.Label SongMaintenance_DestSongPath_Label;
-        private System.Windows.Forms.CheckBox CrazyktvTheme_MainScreen_CheckBox;
         private System.Windows.Forms.Label SongMaintenance_Lang1_Label;
         private System.Windows.Forms.TextBox SongMaintenance_Lang1_TextBox;
         private System.Windows.Forms.TextBox SongMaintenance_Lang1IDStr_TextBox;
