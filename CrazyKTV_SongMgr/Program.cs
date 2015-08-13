@@ -20,7 +20,7 @@ namespace CrazyKTV_SongMgr
             if (Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainFrom());
+            Application.Run(new MainForm());
         }
     }
 

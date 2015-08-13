@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
 {
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
         private void SingerMgr_DefaultSingerDataTable_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {

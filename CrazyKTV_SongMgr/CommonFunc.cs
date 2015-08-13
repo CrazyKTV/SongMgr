@@ -28,7 +28,7 @@ namespace CrazyKTV_SongMgr
         }
     }
 
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
         private static object LockThis = new object();
 

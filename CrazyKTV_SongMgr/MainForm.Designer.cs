@@ -1,6 +1,6 @@
 ﻿namespace CrazyKTV_SongMgr
 {
-    partial class MainFrom
+    partial class MainForm
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -37,7 +37,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.SongQuery_TabPage = new System.Windows.Forms.TabPage();
             this.SongQuery_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
@@ -4900,7 +4900,7 @@
             this.SongLog_ListBox.TabIndex = 0;
             this.SongLog_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
-            // MainFrom
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -4911,10 +4911,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
-            this.Name = "MainFrom";
+            this.Name = "MainForm";
             this.Text = "CrazyKTV 加歌程式 v1.3.2 Beta";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFrom_FormClosing);
-            this.Load += new System.EventHandler(this.MainFrom_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.MainTabControl.ResumeLayout(false);
             this.SongQuery_TabPage.ResumeLayout(false);
             this.SongQuery_OtherQuery_GroupBox.ResumeLayout(false);

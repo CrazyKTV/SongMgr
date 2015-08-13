@@ -18,9 +18,9 @@ using System.Xml.Linq;
 
 namespace CrazyKTV_SongMgr
 {
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
-        public MainFrom()
+        public MainForm()
         {
             InitializeComponent();
             SongQuery_DataGridView.MakeDoubleBuffered(true);
@@ -29,7 +29,7 @@ namespace CrazyKTV_SongMgr
         }
 
         
-        private void MainFrom_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             // 歌庫版本資訊
             if (!File.Exists(Global.CrazyktvSongDBUpdateFile))
@@ -354,7 +354,7 @@ namespace CrazyKTV_SongMgr
 
         }
 
-        private void MainFrom_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
         }

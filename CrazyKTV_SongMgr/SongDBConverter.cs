@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
 {
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
         private void SongDBConverter_SrcDBFile_Button_Click(object sender, EventArgs e)
         {

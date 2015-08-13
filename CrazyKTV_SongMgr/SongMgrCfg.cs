@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
 {
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
         private void SongMgrCfg_Save_Button_Click(object sender, EventArgs e)
         {
