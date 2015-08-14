@@ -1642,13 +1642,18 @@ namespace CrazyKTV_SongMgr
             return WordCountList;
         }
 
-        
         public static List<string> GetSongNameSpell(string SongStr)
         {
             List<string> SpellList = new List<string>() { "", "", "0", "" };
             if (string.IsNullOrEmpty(SongStr)) return SpellList;
 
             List<string> list = new List<string>();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("SortIndex", typeof(string));
+            dt.Columns.Add("Spell", typeof(string));
+            dt.Columns.Add("SpellNum", typeof(string));
+            dt.Columns.Add("Stroke", typeof(string));
+            dt.Columns.Add("PenStyle", typeof(string));
 
             SongStr = Regex.Replace(SongStr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""); // 排除解析括號字串
             SongStr = Regex.Replace(SongStr, @"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])", @" $1 "); // 以空格隔開中英字串
@@ -1657,60 +1662,61 @@ namespace CrazyKTV_SongMgr
             if (SongStr != "")
             {
                 list = new List<string>(Regex.Split(SongStr, @"[\s]+", RegexOptions.None));
-
                 foreach (string str in list)
                 {
-                    Regex r = new Regex("^[A-Za-z0-9]");
+                    DataRow dtrow = dt.NewRow();
+                    dtrow["SortIndex"] = list.IndexOf(str);
 
+                    Regex r = new Regex("^[A-Za-z0-9]");
                     if (r.IsMatch(str))
                     {
                         r = new Regex("^[A-Za-z]");
                         if (r.IsMatch(str))
                         {
-                            SpellList[0] = SpellList[0] + str.Substring(0, 1).ToUpper(); // 拼音
+                            dtrow["Spell"] = str.Substring(0, 1).ToUpper(); // 拼音
                             switch (str.Substring(0, 1).ToUpper())
                             {
                                 case "A":
                                 case "B":
                                 case "C":
-                                    SpellList[1] = SpellList[1] + "2"; // 手機輸入
+                                    dtrow["SpellNum"] = "2"; // 手機輸入
                                     break;
                                 case "D":
                                 case "E":
                                 case "F":
-                                    SpellList[1] = SpellList[1] + "3";
+                                    dtrow["SpellNum"] = "3";
                                     break;
                                 case "G":
                                 case "H":
                                 case "I":
-                                    SpellList[1] = SpellList[1] + "4";
+                                    dtrow["SpellNum"] = "4";
                                     break;
                                 case "J":
                                 case "K":
                                 case "L":
-                                    SpellList[1] = SpellList[1] + "5";
+                                    dtrow["SpellNum"] = "5";
                                     break;
                                 case "M":
                                 case "N":
                                 case "O":
-                                    SpellList[1] = SpellList[1] + "6";
+                                    dtrow["SpellNum"] = "6";
                                     break;
                                 case "P":
                                 case "Q":
                                 case "R":
                                 case "S":
-                                    SpellList[1] = SpellList[1] + "7";
+                                    dtrow["SpellNum"] = "7";
                                     break;
                                 case "T":
                                 case "U":
                                 case "V":
-                                    SpellList[1] = SpellList[1] + "8";
+                                    dtrow["SpellNum"] = "8";
                                     break;
                                 case "W":
                                 case "X":
                                 case "Y":
                                 case "Z":
-                                    SpellList[1] = SpellList[1] + "9";
+                                    dtrow["SpellNum"] = "9";
                                     break;
                             }
                         }
@@ -1725,130 +1731,213 @@ namespace CrazyKTV_SongMgr
                                     {
                                         case "0":
                                         case "6":
-                                            SpellList[0] = SpellList[0] + "ㄌ"; // 拼音
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄌ"; // 拼音
                                             break;
                                         case "1":
-                                            SpellList[0] = SpellList[0] + "ㄧ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄧ";
                                             break;
                                         case "2":
-                                            SpellList[0] = SpellList[0] + "ㄦ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄦ";
                                             break;
                                         case "3":
                                         case "4":
-                                            SpellList[0] = SpellList[0] + "ㄙ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄙ";
                                             break;
                                         case "5":
-                                            SpellList[0] = SpellList[0] + "ㄨ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄨ";
                                             break;
                                         case "7":
-                                            SpellList[0] = SpellList[0] + "ㄑ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄑ";
                                             break;
                                         case "8":
-                                            SpellList[0] = SpellList[0] + "ㄅ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄅ";
                                             break;
                                         case "9":
-                                            SpellList[0] = SpellList[0] + "ㄐ";
+                                            dtrow["Spell"] = dtrow["Spell"] + "ㄐ";
                                             break;
                                     }
-                                    SpellList[1] = SpellList[1] + str.Substring(i, 1); // 手機輸入
+                                    dtrow["SpellNum"] = dtrow["SpellNum"] + str.Substring(i, 1); // 手機輸入
                                 }
                             }
                             else
                             {
                                 for (int i = 0; i < str.Length; i++)
                                 {
-                                    SpellList[0] = SpellList[0] + str.Substring(i, 1); // 拼音
-                                    SpellList[1] = SpellList[1] + str.Substring(i, 1); // 手機輸入
+                                    dtrow["Spell"] = dtrow["Spell"] + str.Substring(i, 1); // 拼音
+                                    dtrow["SpellNum"] = dtrow["SpellNum"] + str.Substring(i, 1); // 手機輸入
                                 }
                             }
                         }
-
-                        if (SpellList[2] == "") SpellList[2] = "1"; // 筆劃
-                        SpellList[3] = SpellList[3] + ""; // 筆形順序
+                        
+                        if (list.IndexOf(str) == 0) dtrow["Stroke"] = "1"; // 筆劃
+                        dtrow["PenStyle"] = ""; // 筆形順序
                     }
                     else
                     {
-                        // 查找資料庫拼音資料
-                        var query = from row in Global.PhoneticsDT.AsEnumerable()
-                                    where row.Field<string>("Word").Equals(str) & row.Field<Int16>("SortIdx") < 2
-                                    select row;
-
-                        foreach (DataRow row in query)
+                        if (Global.PhoneticsWordList.IndexOf(str) >= 0)
                         {
-                            SpellList[0] = SpellList[0] + (row["Spell"].ToString()).Substring(0, 1); // 拼音
+                            dtrow["Spell"] = Global.PhoneticsSpellList[Global.PhoneticsWordList.IndexOf(str)]; // 拼音
 
-                            switch ((row["Spell"].ToString()).Substring(0, 1))
+                            switch (dtrow["Spell"].ToString())
                             {
                                 case "ㄅ":
                                 case "ㄆ":
                                 case "ㄇ":
                                 case "ㄈ":
-                                    SpellList[1] = SpellList[1] + "1"; // 手機輸入
+                                    dtrow["SpellNum"] = "1"; // 手機輸入
                                     break;
                                 case "ㄉ":
                                 case "ㄊ":
                                 case "ㄋ":
                                 case "ㄌ":
-                                    SpellList[1] = SpellList[1] + "2";
+                                    dtrow["SpellNum"] = "2";
                                     break;
                                 case "ㄍ":
                                 case "ㄎ":
                                 case "ㄏ":
-                                    SpellList[1] = SpellList[1] + "3";
+                                    dtrow["SpellNum"] = "3";
                                     break;
                                 case "ㄐ":
                                 case "ㄑ":
                                 case "ㄒ":
-                                    SpellList[1] = SpellList[1] + "4";
+                                    dtrow["SpellNum"] = "4";
                                     break;
                                 case "ㄓ":
                                 case "ㄔ":
                                 case "ㄕ":
                                 case "ㄖ":
-                                    SpellList[1] = SpellList[1] + "5";
+                                    dtrow["SpellNum"] = "5";
                                     break;
                                 case "ㄗ":
                                 case "ㄘ":
                                 case "ㄙ":
-                                    SpellList[1] = SpellList[1] + "6";
+                                    dtrow["SpellNum"] = "6";
                                     break;
                                 case "ㄚ":
                                 case "ㄛ":
                                 case "ㄜ":
                                 case "ㄝ":
-                                    SpellList[1] = SpellList[1] + "7";
+                                    dtrow["SpellNum"] = "7";
                                     break;
                                 case "ㄞ":
                                 case "ㄟ":
                                 case "ㄠ":
                                 case "ㄡ":
-                                    SpellList[1] = SpellList[1] + "8";
+                                    dtrow["SpellNum"] = "8";
                                     break;
                                 case "ㄢ":
                                 case "ㄣ":
                                 case "ㄤ":
                                 case "ㄥ":
                                 case "ㄦ":
-                                    SpellList[1] = SpellList[1] + "9";
+                                    dtrow["SpellNum"] = "9";
                                     break;
                                 case "ㄧ":
                                 case "ㄨ":
                                 case "ㄩ":
-                                    SpellList[1] = SpellList[1] + "0";
+                                    dtrow["SpellNum"] = "0";
                                     break;
                             }
 
-                            if (SpellList[2] == "") SpellList[2] = row["Strokes"].ToString(); // 筆劃
-                            SpellList[3] = SpellList[3] + (row["PenStyle"].ToString()).Substring(0, 1); // 筆形順序
-                            break;
+                            if (list.IndexOf(str) == 0) dtrow["Stroke"] = Global.PhoneticsStrokesList[Global.PhoneticsWordList.IndexOf(str)]; // 筆劃
+                            dtrow["PenStyle"] = Global.PhoneticsPenStyleList[Global.PhoneticsWordList.IndexOf(str)]; // 筆形順序
+
                         }
+
+                        // 舊的截取拼音方式 (暫時留著,以供沒改到的地方用)
+                        if (dtrow["Spell"].ToString() == "")
+                        {
+                            // 查找資料庫拼音資料
+                            var query = from row in Global.PhoneticsDT.AsEnumerable()
+                                        where row.Field<string>("Word").Equals(str) & row.Field<Int16>("SortIdx") < 2
+                                        select row;
+
+                            foreach (DataRow row in query)
+                            {
+                                dtrow["Spell"] = (row["Spell"].ToString()).Substring(0, 1); // 拼音
+
+                                switch ((row["Spell"].ToString()).Substring(0, 1))
+                                {
+                                    case "ㄅ":
+                                    case "ㄆ":
+                                    case "ㄇ":
+                                    case "ㄈ":
+                                        dtrow["SpellNum"] = "1"; // 手機輸入
+                                        break;
+                                    case "ㄉ":
+                                    case "ㄊ":
+                                    case "ㄋ":
+                                    case "ㄌ":
+                                        dtrow["SpellNum"] = "2";
+                                        break;
+                                    case "ㄍ":
+                                    case "ㄎ":
+                                    case "ㄏ":
+                                        dtrow["SpellNum"] = "3";
+                                        break;
+                                    case "ㄐ":
+                                    case "ㄑ":
+                                    case "ㄒ":
+                                        dtrow["SpellNum"] = "4";
+                                        break;
+                                    case "ㄓ":
+                                    case "ㄔ":
+                                    case "ㄕ":
+                                    case "ㄖ":
+                                        dtrow["SpellNum"] = "5";
+                                        break;
+                                    case "ㄗ":
+                                    case "ㄘ":
+                                    case "ㄙ":
+                                        dtrow["SpellNum"] = "6";
+                                        break;
+                                    case "ㄚ":
+                                    case "ㄛ":
+                                    case "ㄜ":
+                                    case "ㄝ":
+                                        dtrow["SpellNum"] = "7";
+                                        break;
+                                    case "ㄞ":
+                                    case "ㄟ":
+                                    case "ㄠ":
+                                    case "ㄡ":
+                                        dtrow["SpellNum"] = "8";
+                                        break;
+                                    case "ㄢ":
+                                    case "ㄣ":
+                                    case "ㄤ":
+                                    case "ㄥ":
+                                    case "ㄦ":
+                                        dtrow["SpellNum"] = "9";
+                                        break;
+                                    case "ㄧ":
+                                    case "ㄨ":
+                                    case "ㄩ":
+                                        dtrow["SpellNum"] = "0";
+                                        break;
+                                }
+
+                                if (list.IndexOf(str) == 0) dtrow["Stroke"] = row["Strokes"].ToString(); // 筆劃
+                                dtrow["PenStyle"] = (row["PenStyle"].ToString()).Substring(0, 1); // 筆形順序
+                                break;
+                            }
+                        }
+
                     }
+                    dt.Rows.Add(dtrow);
                 }
             }
-            else
+            
+            dt.DefaultView.Sort = "SortIndex DESC";
+            foreach (DataRow row in dt.AsEnumerable())
             {
-                SpellList[2] = "0";
+                SpellList[0] = SpellList[0] + row["Spell"].ToString();
+                SpellList[1] = SpellList[1] + row["SpellNum"].ToString();
+                if (row["Stroke"].ToString() != "") SpellList[2] = row["Stroke"].ToString();
+                SpellList[3] = SpellList[3] + row["PenStyle"].ToString();
             }
+
+            if (SpellList[2] == "") SpellList[2] = "0";
             return SpellList;
         }
 

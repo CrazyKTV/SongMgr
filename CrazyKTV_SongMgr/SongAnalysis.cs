@@ -38,18 +38,59 @@ namespace CrazyKTV_SongMgr
             Global.SongAddDT.Columns.Add("Song_SrcPath", typeof(string));
             Global.SongAddDT.Columns.Add("Song_SortIndex", typeof(string));
 
-            string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
-            Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
+            Global.SongAnalysisSingerList  = new List<string>();
+            Global.SongAnalysisSingerLowCaseList = new List<string>();
+            Global.SongAnalysisSingerTypeList = new List<string>();
 
             string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
             Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
 
+            foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
+            {
+                Global.SongAnalysisSingerList.Add(row["Singer_Name"].ToString());
+                Global.SongAnalysisSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                Global.SongAnalysisSingerTypeList.Add(row["Singer_Type"].ToString());
+            }
+
+            string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
+            Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
+
+            foreach (DataRow row in Global.SingerDT.AsEnumerable())
+            {
+                if (Global.SongAnalysisSingerLowCaseList.IndexOf(row["Singer_Name"].ToString().ToLower()) < 0)
+                {
+                    Global.SongAnalysisSingerList.Add(row["Singer_Name"].ToString());
+                    Global.SongAnalysisSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                    Global.SongAnalysisSingerTypeList.Add(row["Singer_Type"].ToString());
+                }
+            }
+
+            Global.PhoneticsWordList = new List<string>();
+            Global.PhoneticsSpellList = new List<string>();
+            Global.PhoneticsStrokesList = new List<string>();
+            Global.PhoneticsPenStyleList = new List<string>();
+
             string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
             Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+            var query = from row in Global.PhoneticsDT.AsEnumerable()
+                        where row.Field<Int16>("SortIdx") < 2
+                        select row;
+
+            foreach (DataRow row in query)
+            {
+                Global.PhoneticsWordList.Add(row["Word"].ToString());
+                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+            }
         }
 
         public static void DisposeSongDataTable()
         {
+            Global.SongAnalysisSingerList.Clear();
+            Global.SongAnalysisSingerLowCaseList.Clear();
+            Global.SongAnalysisSingerTypeList.Clear();
             Global.SongAddDT.Dispose();
             Global.SingerDT.Dispose();
             Global.AllSingerDT.Dispose();
@@ -89,9 +130,9 @@ namespace CrazyKTV_SongMgr
             string SeparateStr = "[-_](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))";
 
             List<string> SongLangList = (List<string>) SongLangIDList;
-            List<string> AnalysisList = new List<string>() { "男歌星", "男", "女歌星", "女", "樂團", "團體", "團", "合唱", "對唱", "外國男", "外男", "外國女", "外女", "外國樂團", "外團", "未知" };
+            List<string> SingerTypeList = new List<string>() { "男歌星", "男", "女歌星", "女", "樂團", "團體", "團", "合唱", "對唱", "外國男", "外男", "外國女", "外女", "外國樂團", "外團", "未知" };
             List<string> SongTrackList = new List<string>() { "vl", "vr", "v3", "v4", "v5" };
-            List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
+            List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.ToLower().Split(','));
 
             string DirStr = Path.GetDirectoryName((string)file);
             List<string> list = new List<string>();
@@ -102,65 +143,31 @@ namespace CrazyKTV_SongMgr
                 if (SongSingerType != "" & SongSinger != "" & SongLang != "") break;
                 string splitstr = Regex.Replace(str, @"%%|^\s*|\s*$", "");
                 
-                // 查找資料庫歌手表
-                var query = from row in Global.SingerDT.AsEnumerable()
-                            where row.Field<string>("Singer_Name").ToLower().Equals(splitstr.ToLower())
-                            select row;
-
-                if (query.Count<DataRow>() > 0)
+                if(Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower()) >= 0)
                 {
-                    foreach (DataRow row in query)
-                    {
-                        if (SongSingerType == "") SongSingerType = row["Singer_Type"].ToString();
-                        SongSinger = row["Singer_Name"].ToString();
-                        break;
-                    }
-                }
-
-                // 查找資料庫所有歌手表
-                if(SongSinger == "")
-                {
-                    var queryall = from row in Global.AllSingerDT.AsEnumerable()
-                                   where row.Field<string>("Singer_Name").ToLower().Equals(splitstr.ToLower())
-                                   select row;
-
-                    if (queryall.Count<DataRow>() > 0)
-                    {
-                        foreach (DataRow row in queryall)
-                        {
-                            if (SongSingerType == "") SongSingerType = row["Singer_Type"].ToString();
-                            SongSinger = row["Singer_Name"].ToString();
-                            break;
-                        }
-                    }
+                    SongSinger = Global.SongAnalysisSingerList[Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower())];
+                    if (SongSingerType == "") SongSingerType = Global.SongAnalysisSingerTypeList[Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower())];
                 }
 
                 // 查看資料夾名稱中有無語系類別
-                foreach (string s in SongLangList)
+                if (SongLangList.IndexOf(splitstr) >= 0)
                 {
-                    if (s == splitstr)
-                    {
-                        SongLang = GetSongInfo("SongLang", s);
-                        SongLangStr = s;
-                        if (SongLang != "") break;
-                    }
+                    SongLang = GetSongInfo("SongLang", splitstr);
+                    SongLangStr = splitstr;
                 }
 
                 // 查看資料夾名稱中有無歌手類別
-                foreach (string s in AnalysisList)
+                if (SingerTypeList.IndexOf(splitstr) >= 0)
                 {
-                    if (s == splitstr)
+                    if (SongSingerType == "" | GetSongInfo("SongSingerType", splitstr) == "3")
                     {
-                        if (SongSingerType == "" | GetSongInfo("SongSingerType", s) == "3")
-                        {
-                            SongSingerType = GetSongInfo("SongSingerType", s);
-                            SongSingerTypeStr = s;
-                        }
-                        break;
+                        SongSingerType = GetSongInfo("SongSingerType", splitstr);
+                        SongSingerTypeStr = splitstr;
                     }
                 }
             }
 
+            // 從檔案名稱查找歌曲資訊
             string FileStr = Path.GetFileNameWithoutExtension((string)file);
 
             // 特殊歌手及歌曲名稱處理
@@ -196,123 +203,77 @@ namespace CrazyKTV_SongMgr
                 if (SongSingerType != "" & SongSinger != "" & SongLang != "" & SongTrack != "" & SongSongType != "") break;
                 string splitstr = Regex.Replace(str, @"%%|^\s*|\s*$", "");
 
-                // 查找資料庫歌手表
                 if (SongSinger == "")
                 {
-                    var query = from row in Global.SingerDT.AsEnumerable()
-                                where row.Field<string>("Singer_Name").ToLower().Equals(splitstr.ToLower())
-                                select row;
-
-                    if (query.Count<DataRow>() > 0)
+                    if (Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower()) >= 0)
                     {
-                        foreach (DataRow row in query)
-                        {
-                            if (SongSingerType == "") SongSingerType = row["Singer_Type"].ToString();
-                            SongSinger = row["Singer_Name"].ToString();
-                            break;
-                        }
-                    }
-
-                    // 查找資料庫所有歌手表
-                    if (SongSinger == "")
-                    {
-                        var queryall = from row in Global.AllSingerDT.AsEnumerable()
-                                       where row.Field<string>("Singer_Name").ToLower().Equals(splitstr.ToLower())
-                                       select row;
-
-                        if (queryall.Count<DataRow>() > 0)
-                        {
-                            foreach (DataRow row in queryall)
-                            {
-                                if (SongSingerType == "") SongSingerType = row["Singer_Type"].ToString();
-                                SongSinger = row["Singer_Name"].ToString();
-                                break;
-                            }
-                        }
+                        SongSinger = Global.SongAnalysisSingerList[Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower())];
+                        if (SongSingerType == "") SongSingerType = Global.SongAnalysisSingerTypeList[Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower())];
                     }
                 }
-                
+
                 // 查看檔案名稱中有無語系類別
                 if (SongLang == "")
                 {
-                    foreach (string s in SongLangList)
+                    if (SongLangList.IndexOf(splitstr) >= 0)
                     {
-                        if (s == splitstr)
-                        {
-                            SongLang = GetSongInfo("SongLang", s);
-                            SongLangStr = s;
-                            if (SongLang != "") break;
-                        }
+                        SongLang = GetSongInfo("SongLang", splitstr);
+                        SongLangStr = splitstr;
+                    }
+                    else
+                    {
                         // 歌名[歌曲類別][語系] 處理
                         MatchCollection matches = Regex.Matches(splitstr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
                         if (matches.Count > 0)
                         {
-                            Match m = Regex.Match(splitstr, @"[\{\(\[｛（［【]" + s + @"[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
-                            if (m.Success)
+                            foreach (Match match in matches)
                             {
-                                SongLang = GetSongInfo("SongLang", s);
-                                SongLangRemoveStr = s;
-
-                                switch (matches.Count)
+                                string MatchStr = Regex.Replace(match.Value, @"^[\{\(\[｛（［【]|[】］）｝\]\)\}]$", "", RegexOptions.IgnoreCase);
+                                if (SongLangList.IndexOf(MatchStr) >= 0)
                                 {
-                                    case 2:
-                                        foreach (Match match in matches)
-                                        {
-                                            if (match.Value != m.Value & match.Value == matches[0].Value)
-                                            {
-                                                SongSongType = Regex.Replace(match.Value, @"^[\{\(\[｛（［【]|[】］）｝\]\)\}]$", "", RegexOptions.IgnoreCase);
-                                                SongSongTypeRemoveStr = SongSongType;
-                                                if (SongSongTypeRemoveStr != "") break;
-                                            }
-                                        }
-                                        break;
+                                    SongLang = GetSongInfo("SongLang", MatchStr);
+                                    SongLangRemoveStr = MatchStr;
+                                }
+                                else
+                                {
+                                    if (matches.Count > 1)
+                                    {
+                                        SongSongType = MatchStr;
+                                        SongSongTypeRemoveStr = MatchStr;
+                                    }
                                 }
                             }
-                            if (SongLang != "") break;
                         }
                     }
                 }
 
                 // 查看檔案名稱中有無歌手類別
-                foreach (string s in AnalysisList)
+                if (SingerTypeList.IndexOf(splitstr) >= 0)
                 {
-                    if (s == splitstr)
+                    if (SongSingerType == "" | GetSongInfo("SongSingerType", splitstr) == "3")
                     {
-                        if (SongSingerType == "" | GetSongInfo("SongSingerType", s) == "3")
-                        {
-                            SongSingerType = GetSongInfo("SongSingerType", s);
-                            SongSingerTypeStr = s;
-                        }
-                        break;
-                    }
-                }
-                
-                // 查看檔案名稱中有無歌曲聲道
-                if (SongTrack == "")
-                {
-                    foreach (string s in SongTrackList)
-                    {
-                        if (string.Compare(s, splitstr, true) == 0)
-                        {
-                            SongTrack = GetSongInfo("SongTrack", s);
-                            SongTrackStr = s;
-                            if (SongTrack != "") break;
-                        }
+                        SongSingerType = GetSongInfo("SongSingerType", splitstr);
+                        SongSingerTypeStr = splitstr;
                     }
                 }
 
+                // 查看檔案名稱中有無歌曲聲道
+                if (SongTrack == "")
+                {
+                    if (SongTrackList.IndexOf(splitstr.ToLower()) >= 0)
+                    {
+                        SongTrack = GetSongInfo("SongTrack", splitstr);
+                        SongTrackStr = splitstr;
+                    }
+                }
 
                 // 查看檔案名稱中有無歌曲類別
                 if (SongSongType == "")
                 {
-                    foreach (string s in SongSongTypeList)
+                    if (SongSongTypeList.IndexOf(splitstr.ToLower()) >= 0)
                     {
-                        if (string.Compare(s, splitstr, true) == 0)
-                        {
-                            SongSongType = s;
-                            SongSongTypeStr = s;
-                            if (SongSongType != "") break;
-                        }
+                        SongSongType = splitstr;
+                        SongSongTypeStr = splitstr;
                     }
                 }
             }
@@ -731,7 +692,7 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SongTrack":
-                    switch (SongInfoValue)
+                    switch (SongInfoValue.ToLower())
                     {
                         case "vl":
                             if (Global.SongMgrSongTrackMode == "True") { infovalue = "2"; } else { infovalue = "1"; }
