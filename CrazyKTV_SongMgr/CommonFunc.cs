@@ -1257,6 +1257,7 @@ namespace CrazyKTV_SongMgr
             return icn;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
         public static DataTable GetOleDbDataTable(string Database, string OleDbString, string Password)
         {
             DataTable myDataTable = new DataTable();
@@ -1270,6 +1271,7 @@ namespace CrazyKTV_SongMgr
             return myDataTable;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
         public static string OleDbCheckDB(string Database, string OleDbString, string Password)
         {
             string str = "";

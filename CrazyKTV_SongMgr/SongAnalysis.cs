@@ -91,6 +91,10 @@ namespace CrazyKTV_SongMgr
             Global.SongAnalysisSingerList.Clear();
             Global.SongAnalysisSingerLowCaseList.Clear();
             Global.SongAnalysisSingerTypeList.Clear();
+            Global.PhoneticsWordList.Clear();
+            Global.PhoneticsSpellList.Clear();
+            Global.PhoneticsStrokesList.Clear();
+            Global.PhoneticsPenStyleList.Clear();
             Global.SongAddDT.Dispose();
             Global.SingerDT.Dispose();
             Global.AllSingerDT.Dispose();

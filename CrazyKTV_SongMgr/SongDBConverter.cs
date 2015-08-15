@@ -744,30 +744,20 @@ namespace CrazyKTV_SongMgr
                 Global.TimerEndTime = DateTime.Now;
                 SongDBConverter_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[0] + " 首歌曲,忽略 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成轉換。";
 
-                if (Global.TotalList[0] > 0)
-                {
-                    SongDBConverter_SrcDBFile_Button.Enabled = false;
-                    SongDBConverter_SrcDBType_ComboBox.Enabled = false;
-                    SongDBConverter_DestDBFile_Button.Enabled = false;
-                    SongDBConverter_RebuildSongFolder_Button.Enabled = true;
-                    SongDBConverter_RebuildMode_ComboBox.Enabled = true;
-                    SongDBConverter_Converter_GroupBox.Enabled = true;
-                }
-                else
-                {
-                    SongDBConverter_SrcDBFile_TextBox.Text = "";
-                    SongDBConverter_DestDBFile_TextBox.Text = "";
-                    SongDBConverter_SrcDBFile_Button.Enabled = true;
-                    SongDBConverter_SrcDBType_ComboBox.Enabled = true;
-                    SongDBConverter_DestDBFile_Button.Enabled = true;
-                    SongDBConverter_RebuildSongFolder_Button.Enabled = false;
-                    SongDBConverter_RebuildMode_ComboBox.Enabled = false;
-                    SongDBConverter_JetktvPathCfg_GroupBox.Enabled = true;
-                    SongDBConverter_JetktvLangCfg_GroupBox.Enabled = true;
-                    SongDBConverter_Converter_GroupBox.Enabled = true;
-                }
+                SongDBConverter_SrcDBFile_TextBox.Text = "";
+                SongDBConverter_DestDBFile_TextBox.Text = "";
+                SongDBConverter_SrcDBFile_Button.Enabled = true;
+                SongDBConverter_SrcDBType_ComboBox.Enabled = true;
+                SongDBConverter_DestDBFile_Button.Enabled = true;
+                SongDBConverter_RebuildSongFolder_Button.Enabled = false;
+                SongDBConverter_RebuildMode_ComboBox.Enabled = false;
+                SongDBConverter_JetktvPathCfg_GroupBox.Enabled = true;
+                SongDBConverter_JetktvLangCfg_GroupBox.Enabled = true;
+                SongDBConverter_Converter_GroupBox.Enabled = true;
+
                 Common_SwitchSetUI(true);
             });
+            SongDBConverterSongDB.DisposeSongDataTable();
         }
 
         // 重建歌庫檔案
