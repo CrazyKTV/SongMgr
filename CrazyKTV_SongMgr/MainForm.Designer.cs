@@ -333,16 +333,10 @@
             this.SongDBConverter_TabPage = new System.Windows.Forms.TabPage();
             this.SongDBConverter_ConvHelp_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongDBConverter_ConvHelp_RichTextBox = new System.Windows.Forms.RichTextBox();
-            this.SongDBConverter_RebuildSongFile_Button = new System.Windows.Forms.Button();
             this.SongDBConverter_StartConv_Button = new System.Windows.Forms.Button();
             this.SongDBConverter_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongDBConverter_Tooltip_Label = new System.Windows.Forms.Label();
             this.SongDBConverter_Converter_GroupBox = new System.Windows.Forms.GroupBox();
-            this.SongDBConverter_RebuildMode_ComboBox = new System.Windows.Forms.ComboBox();
-            this.SongDBConverter_RebuildMode_Label = new System.Windows.Forms.Label();
-            this.SongDBConverter_RebuildSongFolder_Button = new System.Windows.Forms.Button();
-            this.SongDBConverter_RebuildSongFolder_TextBox = new System.Windows.Forms.TextBox();
-            this.SongDBConverter_RebuildSongFolder_Label = new System.Windows.Forms.Label();
             this.SongDBConverter_SrcDBType_ComboBox = new System.Windows.Forms.ComboBox();
             this.SongDBConverter_SrcDBType_Label = new System.Windows.Forms.Label();
             this.SongDBConverter_DestDBFile_Button = new System.Windows.Forms.Button();
@@ -4235,7 +4229,6 @@
             // SongDBConverter_TabPage
             // 
             this.SongDBConverter_TabPage.Controls.Add(this.SongDBConverter_ConvHelp_GroupBox);
-            this.SongDBConverter_TabPage.Controls.Add(this.SongDBConverter_RebuildSongFile_Button);
             this.SongDBConverter_TabPage.Controls.Add(this.SongDBConverter_StartConv_Button);
             this.SongDBConverter_TabPage.Controls.Add(this.SongDBConverter_Tooltip_GroupBox);
             this.SongDBConverter_TabPage.Controls.Add(this.SongDBConverter_Converter_GroupBox);
@@ -4277,20 +4270,6 @@
             this.SongDBConverter_ConvHelp_RichTextBox.TabIndex = 0;
             this.SongDBConverter_ConvHelp_RichTextBox.Text = "";
             // 
-            // SongDBConverter_RebuildSongFile_Button
-            // 
-            this.SongDBConverter_RebuildSongFile_Button.AutoSize = true;
-            this.SongDBConverter_RebuildSongFile_Button.Enabled = false;
-            this.SongDBConverter_RebuildSongFile_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongDBConverter_RebuildSongFile_Button.Location = new System.Drawing.Point(743, 336);
-            this.SongDBConverter_RebuildSongFile_Button.Margin = new System.Windows.Forms.Padding(6, 14, 6, 6);
-            this.SongDBConverter_RebuildSongFile_Button.Name = "SongDBConverter_RebuildSongFile_Button";
-            this.SongDBConverter_RebuildSongFile_Button.Size = new System.Drawing.Size(110, 35);
-            this.SongDBConverter_RebuildSongFile_Button.TabIndex = 2;
-            this.SongDBConverter_RebuildSongFile_Button.Text = "重建歌檔";
-            this.SongDBConverter_RebuildSongFile_Button.UseVisualStyleBackColor = true;
-            this.SongDBConverter_RebuildSongFile_Button.Click += new System.EventHandler(this.SongDBConverter_RebuildSongFile_Button_Click);
-            // 
             // SongDBConverter_StartConv_Button
             // 
             this.SongDBConverter_StartConv_Button.AutoSize = true;
@@ -4313,7 +4292,7 @@
             this.SongDBConverter_Tooltip_GroupBox.Margin = new System.Windows.Forms.Padding(3, 14, 6, 3);
             this.SongDBConverter_Tooltip_GroupBox.Name = "SongDBConverter_Tooltip_GroupBox";
             this.SongDBConverter_Tooltip_GroupBox.Padding = new System.Windows.Forms.Padding(0);
-            this.SongDBConverter_Tooltip_GroupBox.Size = new System.Drawing.Size(708, 35);
+            this.SongDBConverter_Tooltip_GroupBox.Size = new System.Drawing.Size(830, 35);
             this.SongDBConverter_Tooltip_GroupBox.TabIndex = 1;
             this.SongDBConverter_Tooltip_GroupBox.TabStop = false;
             // 
@@ -4324,18 +4303,13 @@
             this.SongDBConverter_Tooltip_Label.Location = new System.Drawing.Point(0, 0);
             this.SongDBConverter_Tooltip_Label.Margin = new System.Windows.Forms.Padding(0);
             this.SongDBConverter_Tooltip_Label.Name = "SongDBConverter_Tooltip_Label";
-            this.SongDBConverter_Tooltip_Label.Size = new System.Drawing.Size(708, 35);
+            this.SongDBConverter_Tooltip_Label.Size = new System.Drawing.Size(830, 35);
             this.SongDBConverter_Tooltip_Label.TabIndex = 0;
             this.SongDBConverter_Tooltip_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.SongDBConverter_Tooltip_Label.UseMnemonic = false;
             // 
             // SongDBConverter_Converter_GroupBox
             // 
-            this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_RebuildMode_ComboBox);
-            this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_RebuildMode_Label);
-            this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_RebuildSongFolder_Button);
-            this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_RebuildSongFolder_TextBox);
-            this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_RebuildSongFolder_Label);
             this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_SrcDBType_ComboBox);
             this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_SrcDBType_Label);
             this.SongDBConverter_Converter_GroupBox.Controls.Add(this.SongDBConverter_DestDBFile_Button);
@@ -4351,64 +4325,6 @@
             this.SongDBConverter_Converter_GroupBox.TabIndex = 0;
             this.SongDBConverter_Converter_GroupBox.TabStop = false;
             this.SongDBConverter_Converter_GroupBox.Text = "歌庫轉換";
-            // 
-            // SongDBConverter_RebuildMode_ComboBox
-            // 
-            this.SongDBConverter_RebuildMode_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SongDBConverter_RebuildMode_ComboBox.Enabled = false;
-            this.SongDBConverter_RebuildMode_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongDBConverter_RebuildMode_ComboBox.FormattingEnabled = true;
-            this.SongDBConverter_RebuildMode_ComboBox.Location = new System.Drawing.Point(127, 240);
-            this.SongDBConverter_RebuildMode_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
-            this.SongDBConverter_RebuildMode_ComboBox.Name = "SongDBConverter_RebuildMode_ComboBox";
-            this.SongDBConverter_RebuildMode_ComboBox.Size = new System.Drawing.Size(320, 30);
-            this.SongDBConverter_RebuildMode_ComboBox.TabIndex = 12;
-            // 
-            // SongDBConverter_RebuildMode_Label
-            // 
-            this.SongDBConverter_RebuildMode_Label.AutoSize = true;
-            this.SongDBConverter_RebuildMode_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongDBConverter_RebuildMode_Label.Location = new System.Drawing.Point(16, 244);
-            this.SongDBConverter_RebuildMode_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongDBConverter_RebuildMode_Label.Name = "SongDBConverter_RebuildMode_Label";
-            this.SongDBConverter_RebuildMode_Label.Size = new System.Drawing.Size(82, 22);
-            this.SongDBConverter_RebuildMode_Label.TabIndex = 11;
-            this.SongDBConverter_RebuildMode_Label.Text = "重建方式:";
-            // 
-            // SongDBConverter_RebuildSongFolder_Button
-            // 
-            this.SongDBConverter_RebuildSongFolder_Button.AutoSize = true;
-            this.SongDBConverter_RebuildSongFolder_Button.Enabled = false;
-            this.SongDBConverter_RebuildSongFolder_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongDBConverter_RebuildSongFolder_Button.Location = new System.Drawing.Point(866, 189);
-            this.SongDBConverter_RebuildSongFolder_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.SongDBConverter_RebuildSongFolder_Button.Name = "SongDBConverter_RebuildSongFolder_Button";
-            this.SongDBConverter_RebuildSongFolder_Button.Size = new System.Drawing.Size(70, 32);
-            this.SongDBConverter_RebuildSongFolder_Button.TabIndex = 10;
-            this.SongDBConverter_RebuildSongFolder_Button.Text = "瀏覽";
-            this.SongDBConverter_RebuildSongFolder_Button.UseVisualStyleBackColor = true;
-            this.SongDBConverter_RebuildSongFolder_Button.Click += new System.EventHandler(this.SongDBConverter_RebuildSongFolder_Button_Click);
-            // 
-            // SongDBConverter_RebuildSongFolder_TextBox
-            // 
-            this.SongDBConverter_RebuildSongFolder_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongDBConverter_RebuildSongFolder_TextBox.Location = new System.Drawing.Point(127, 190);
-            this.SongDBConverter_RebuildSongFolder_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
-            this.SongDBConverter_RebuildSongFolder_TextBox.Name = "SongDBConverter_RebuildSongFolder_TextBox";
-            this.SongDBConverter_RebuildSongFolder_TextBox.ReadOnly = true;
-            this.SongDBConverter_RebuildSongFolder_TextBox.Size = new System.Drawing.Size(727, 30);
-            this.SongDBConverter_RebuildSongFolder_TextBox.TabIndex = 9;
-            // 
-            // SongDBConverter_RebuildSongFolder_Label
-            // 
-            this.SongDBConverter_RebuildSongFolder_Label.AutoSize = true;
-            this.SongDBConverter_RebuildSongFolder_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongDBConverter_RebuildSongFolder_Label.Location = new System.Drawing.Point(16, 194);
-            this.SongDBConverter_RebuildSongFolder_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongDBConverter_RebuildSongFolder_Label.Name = "SongDBConverter_RebuildSongFolder_Label";
-            this.SongDBConverter_RebuildSongFolder_Label.Size = new System.Drawing.Size(99, 22);
-            this.SongDBConverter_RebuildSongFolder_Label.TabIndex = 8;
-            this.SongDBConverter_RebuildSongFolder_Label.Text = "重建資料夾:";
             // 
             // SongDBConverter_SrcDBType_ComboBox
             // 
@@ -5133,13 +5049,7 @@
         private System.Windows.Forms.Label SongDBConverter_SrcDBFile_Label;
         private System.Windows.Forms.GroupBox SongDBConverter_Tooltip_GroupBox;
         private System.Windows.Forms.Label SongDBConverter_Tooltip_Label;
-        private System.Windows.Forms.Button SongDBConverter_RebuildSongFile_Button;
         private System.Windows.Forms.Button SongDBConverter_StartConv_Button;
-        private System.Windows.Forms.Label SongDBConverter_RebuildSongFolder_Label;
-        private System.Windows.Forms.ComboBox SongDBConverter_RebuildMode_ComboBox;
-        private System.Windows.Forms.Label SongDBConverter_RebuildMode_Label;
-        private System.Windows.Forms.Button SongDBConverter_RebuildSongFolder_Button;
-        private System.Windows.Forms.TextBox SongDBConverter_RebuildSongFolder_TextBox;
         private System.Windows.Forms.CheckBox SongMgrCfg_SongTrackMode_CheckBox;
         private System.Windows.Forms.GroupBox SongDBConverter_ConvHelp_GroupBox;
         private System.Windows.Forms.RichTextBox SongDBConverter_ConvHelp_RichTextBox;

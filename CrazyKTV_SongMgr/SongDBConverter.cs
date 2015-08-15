@@ -140,26 +140,6 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongDBConverter_RebuildSongFolder_Button_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog opd = new FolderBrowserDialog();
-            opd.SelectedPath = Application.StartupPath;
-
-            if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
-            {
-                if (Directory.GetFiles(opd.SelectedPath, "*", SearchOption.AllDirectories).Count() == 0)
-                {
-                    if (SongDBConverter_Tooltip_Label.Text == "請選擇一個空白的資料夾!") SongDBConverter_Tooltip_Label.Text = "";
-                    SongDBConverter_RebuildSongFolder_TextBox.Text = opd.SelectedPath;
-                    SongDBConverter_SwitchButton(2);
-                }
-                else
-                {
-                    SongDBConverter_Tooltip_Label.Text = "請選擇一個空白的資料夾!";
-                }
-            }
-        }
-
         private void SongDBConverter_StartConv_Button_Click(object sender, EventArgs e)
         {
             Global.TimerStartTime = DateTime.Now;
@@ -167,14 +147,12 @@ namespace CrazyKTV_SongMgr
             {
                 case "1":
                     SongDBConverter_StartConv_Button.Enabled = false;
-                    SongDBConverter_RebuildSongFile_Button.Enabled = false;
                     SongDBConverter_Converter_GroupBox.Enabled = false;
                     Common_SwitchSetUI(false);
                     Task.Factory.StartNew(SongDBConverter_ConvFromSrcDBTask, 1);
                     break;
                 case "2":
                     SongDBConverter_StartConv_Button.Enabled = false;
-                    SongDBConverter_RebuildSongFile_Button.Enabled = false;
                     SongDBConverter_Converter_GroupBox.Enabled = false;
                     SongDBConverter_JetktvPathCfg_GroupBox.Enabled = false;
                     SongDBConverter_JetktvLangCfg_GroupBox.Enabled = false;
@@ -182,20 +160,6 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.StartNew(SongDBConverter_ConvFromSrcDBTask, 2);
                     break;
             }
-        }
-
-        private void SongDBConverter_RebuildSongFile_Button_Click(object sender, EventArgs e)
-        {
-            Global.TimerStartTime = DateTime.Now;
-            SongDBConverter_StartConv_Button.Enabled = false;
-            SongDBConverter_RebuildSongFile_Button.Enabled = false;
-            SongDBConverter_Converter_GroupBox.Enabled = false;
-
-            string SongDestDBFile = SongDBConverter_DestDBFile_TextBox.Text;
-            string RebuildSongPath = SongDBConverter_RebuildSongFolder_TextBox.Text;
-            string RebuildMode = SongDBConverter_RebuildMode_ComboBox.SelectedValue.ToString();
-            Common_SwitchSetUI(false);
-            Task.Factory.StartNew(() => SongDBConverter_RebuildSongFileTask(SongDestDBFile, RebuildSongPath, RebuildMode));
         }
 
         private void SongDBConverter_SetRtfText(string titlestr, string textstr)
@@ -217,13 +181,6 @@ namespace CrazyKTV_SongMgr
                         SongDBConverter_StartConv_Button.Enabled = true;
                     }
                     else { SongDBConverter_StartConv_Button.Enabled = false; }
-                    break;
-                case 2:
-                    if (SongDBConverter_RebuildSongFolder_TextBox.Text.Length > 0)
-                    {
-                        SongDBConverter_RebuildSongFile_Button.Enabled = true;
-                    }
-                    else { SongDBConverter_RebuildSongFile_Button.Enabled = false; }
                     break;
             }
         }
@@ -749,8 +706,6 @@ namespace CrazyKTV_SongMgr
                 SongDBConverter_SrcDBFile_Button.Enabled = true;
                 SongDBConverter_SrcDBType_ComboBox.Enabled = true;
                 SongDBConverter_DestDBFile_Button.Enabled = true;
-                SongDBConverter_RebuildSongFolder_Button.Enabled = false;
-                SongDBConverter_RebuildMode_ComboBox.Enabled = false;
                 SongDBConverter_JetktvPathCfg_GroupBox.Enabled = true;
                 SongDBConverter_JetktvLangCfg_GroupBox.Enabled = true;
                 SongDBConverter_Converter_GroupBox.Enabled = true;
@@ -760,254 +715,7 @@ namespace CrazyKTV_SongMgr
             SongDBConverterSongDB.DisposeSongDataTable();
         }
 
-        // 重建歌庫檔案
-        private void SongDBConverter_RebuildSongFileTask(string SongDestDBFile, string RebuildSongPath, string RebuildMode)
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
 
-            DataTable dt = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_FileName, Song_Path from ktv_Song";
-            dt = CommonFunc.GetOleDbDataTable(SongDestDBFile, SongQuerySqlStr, "");
-            List<string> RebuildSongFileValueList = new List<string>();
-
-            foreach (DataRow row in dt.Rows)
-            {
-                string SongId = row["Song_Id"].ToString();
-                string SongLang = row["Song_Lang"].ToString();
-                int SongSingerType = Convert.ToInt32(row["Song_SingerType"]);
-                string SongSinger = row["Song_Singer"].ToString();
-                string SongSongName = row["Song_SongName"].ToString();
-                int SongTrack = Convert.ToInt32(row["Song_Track"]);
-                string SongSongType = row["Song_SongType"].ToString();
-                string SongFileName = row["Song_FileName"].ToString();
-                string SongPath = row["Song_Path"].ToString();
-
-                bool HasInvalidChar = false;
-                Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
-                if (r.IsMatch(SongLang)) HasInvalidChar = true;
-                if (r.IsMatch(SongSinger)) HasInvalidChar = true;
-                if (r.IsMatch(SongSongName)) HasInvalidChar = true;
-                if (r.IsMatch(SongSongType)) HasInvalidChar = true;
-
-                if (SongSingerType < 0 | SongSingerType > 10)
-                {
-                    SongSingerType = 10;
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-
-                string SongSingerStr = SongSinger;
-                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
-                string CrtchorusSeparate;
-                string SongInfoSeparate;
-                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
-                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-
-                if (SongTrack < 1 | SongTrack > 5 )
-                {
-                    SongTrack = 1;
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "|" + SongSongName;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
-
-                // 重建歌檔
-                string SongSrcPath = Path.Combine(SongPath, SongFileName);
-                string SongExtension = Path.GetExtension(SongSrcPath);
-
-                if (SongSingerType == 3)
-                {
-                    SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
-                }
-
-                switch (Global.SongMgrFolderStructure)
-                {
-                    case "1":
-                        if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                        {
-                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        }
-                        else
-                        {
-                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                        }
-                        break;
-                    case "2":
-                        SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        break;
-                }
-
-                switch (Global.SongMgrFileStructure)
-                {
-                    case "1":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                    case "2":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                    case "3":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                }
-
-                string SongDestPath = "";
-                if (!HasInvalidChar) { SongDestPath = Path.Combine(SongPath, SongFileName); }
-
-                bool FileIOError = false;
-                if (File.Exists(SongSrcPath) & !HasInvalidChar)
-                {
-                    if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
-                   
-                    try
-                    {
-                        switch (RebuildMode)
-                        {
-                            case "1":
-                                FileAttributes attributes = File.GetAttributes(SongSrcPath);
-                                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                                {
-                                    attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
-                                    File.SetAttributes(SongSrcPath, attributes);
-                                }
-
-                                if (File.Exists(SongDestPath)) File.Delete(SongDestPath);
-                                File.Move(SongSrcPath, SongDestPath);
-                                break;
-                            case "2":
-                                File.Copy(SongSrcPath, SongDestPath, true);
-                                break;
-                        }
-                    }
-                    catch
-                    {
-                        FileIOError = true;
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】檔案處理發生錯誤: " + SongSrcPath + " (唯讀或使用中)";
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        lock (LockThis) { Global.TotalList[2]++; }
-                    }
-                }
-                else
-                {
-                    FileIOError = true;
-                    if (HasInvalidChar)
-                    {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongSongType + " (含有非法字元)";
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    }
-                    else
-                    {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    }
-                    lock (LockThis) { Global.TotalList[1]++; }
-                }
-
-                if (!FileIOError)
-                {
-                    string RebuildSongFileValue = SongId + "|" + SongSingerType + "|" + SongTrack + "|" + SongFileName + "|" + SongPath;
-                    RebuildSongFileValueList.Add(RebuildSongFileValue);
-                    lock (LockThis) { Global.TotalList[0]++; }
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongDBConverter_Tooltip_Label.Text = "已成功將 " + Global.TotalList[0] + " 首歌曲重建至重建資料夾,請稍待...";
-                    });
-                }
-            }
-            dt.Dispose();
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(SongDestDBFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Id = @SongId, Song_SingerType = @SongSingerType, Song_Track = @SongTrack, Song_FileName = @SongFileName, Song_Path = @SongPath";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in RebuildSongFileValueList)
-            {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongSingerType", valuelist[1]);
-                cmd.Parameters.AddWithValue("@SongTrack", valuelist[2]);
-                cmd.Parameters.AddWithValue("@SongFileName", valuelist[3]);
-                cmd.Parameters.AddWithValue("@SongPath", valuelist[4]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis) { Global.TotalList[3]++; }
-                }
-                catch
-                {
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "|" + valuelist[3] + "|" + valuelist[4];
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    lock (LockThis)
-                    {
-                        Global.TotalList[0]--;
-                        Global.TotalList[2]++;
-                    }
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongDBConverter_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[3] + " 首歌曲的資料庫資料,請稍待...";
-                });
-            }
-            RebuildSongFileValueList.Clear();
-            conn.Close();
-
-            this.BeginInvoke((Action)delegate()
-            {
-                Global.TimerEndTime = DateTime.Now;
-                SongDBConverter_Tooltip_Label.Text = "總共重建 " + Global.TotalList[0] + " 首歌曲,忽略 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成重建。";
-
-                SongDBConverter_SrcDBFile_TextBox.Text = "";
-                SongDBConverter_DestDBFile_TextBox.Text = "";
-                SongDBConverter_RebuildSongFolder_TextBox.Text = "";
-
-                SongDBConverter_SrcDBFile_Button.Enabled = true;
-                SongDBConverter_SrcDBType_ComboBox.Enabled = true;
-                SongDBConverter_DestDBFile_Button.Enabled = true;
-                SongDBConverter_RebuildSongFolder_Button.Enabled = false;
-                SongDBConverter_RebuildMode_ComboBox.Enabled = false;
-                SongDBConverter_Converter_GroupBox.Enabled = true;
-                SongDBConverter_JetktvPathCfg_GroupBox.Enabled = false;
-                SongDBConverter_JetktvLangCfg_GroupBox.Enabled = false;
-                Common_SwitchSetUI(true);
-            });
-        }
     }
 
 
@@ -1023,20 +731,6 @@ namespace CrazyKTV_SongMgr
             list.Rows[0][1] = 1;
             list.Rows.Add(list.NewRow());
             list.Rows[1][0] = "JetKTV 資料庫";
-            list.Rows[1][1] = 2;
-            return list;
-        }
-
-        public static DataTable GetRebuildModeList()
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-            list.Rows.Add(list.NewRow());
-            list.Rows[0][0] = "自動搬移來源 KTV 檔案至重建資料夾";
-            list.Rows[0][1] = 1;
-            list.Rows.Add(list.NewRow());
-            list.Rows[1][0] = "自動複製來源 KTV 檔案至重建資料夾";
             list.Rows[1][1] = 2;
             return list;
         }

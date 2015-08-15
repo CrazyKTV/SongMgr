@@ -325,11 +325,6 @@ namespace CrazyKTV_SongMgr
             SongDBConverter_SrcDBType_ComboBox.ValueMember = "Value";
             SongDBConverter_SrcDBType_ComboBox.SelectedValue = 1;
 
-            SongDBConverter_RebuildMode_ComboBox.DataSource = SongDBConverter.GetRebuildModeList();
-            SongDBConverter_RebuildMode_ComboBox.DisplayMember = "Display";
-            SongDBConverter_RebuildMode_ComboBox.ValueMember = "Value";
-            SongDBConverter_RebuildMode_ComboBox.SelectedValue = 1;
-
             // 歌庫轉換 - 載入說明
             SongDBConverter_SetRtfText("來源資料庫: ", "請選擇你要轉換的點歌軟體歌曲資料庫檔案。" + Environment.NewLine);
             SongDBConverter_SetRtfText("資料庫類型: ", "請選擇你要轉換的點歌軟體類型。" + Environment.NewLine);

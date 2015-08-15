@@ -92,15 +92,6 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            if(!File.Exists(file))
-            {
-                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】已忽略轉換此首歌曲,因為此首歌曲檔案不存在: " + file;
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                lock (LockThis) Global.TotalList[1]++;
-                ConvStatus = false;
-            }
-
             if(ConvStatus == true)
             {
                 string SongSingerType = "";
@@ -194,8 +185,7 @@ namespace CrazyKTV_SongMgr
 
                 // 計算歌曲大小
                 float SongMB = 0;
-                FileInfo f = new FileInfo(file);
-                SongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                SongMB = float.Parse(Global.SongSrcDT.Rows[i]["Song_MB"].ToString());
 
                 // 取得歌曲拼音
                 List<string> SongSpellList = new List<string>();
@@ -294,40 +284,6 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            if (!File.Exists(file))
-            {
-                int count = Global.SongDBConvJetktvPathList.Count;
-                if (count > 0)
-                {
-                    foreach (string pathstr in Global.SongDBConvJetktvPathList)
-                    {
-                        ConvStatus = false;
-                        SongPath = pathstr;
-                        file = Path.Combine(SongPath, SongFileName);
-                        if (File.Exists(file))
-                        {
-                            ConvStatus = true;
-                            break;
-                        }
-                    }
-                    if (ConvStatus == false)
-                    {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】已忽略轉換此首歌曲,因為此首歌曲檔案不存在: " + file;
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        lock (LockThis) Global.TotalList[1]++;
-                    }
-                }
-                else
-                {
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】已忽略轉換此首歌曲,因為此首歌曲檔案不存在: " + file;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    lock (LockThis) Global.TotalList[1]++;
-                    ConvStatus = false;
-                }
-            }
-
             if (ConvStatus == true)
             {
                 if (SongSingerType == "")
@@ -411,8 +367,11 @@ namespace CrazyKTV_SongMgr
 
                 // 計算歌曲大小
                 float SongMB = 0;
-                FileInfo f = new FileInfo(file);
-                SongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                if (File.Exists(file))
+                {
+                    FileInfo f = new FileInfo(file);
+                    SongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
+                }
 
                 // 取得歌曲拼音
                 List<string> SongSpellList = new List<string>();
