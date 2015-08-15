@@ -335,7 +335,7 @@ namespace CrazyKTV_SongMgr
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             Global.SongDBConvValueList = new List<string>();
-            Global.TotalList = new List<int>() { 0, 0, 0 };
+            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
             string SongSrcDBFile = SongDBConverter_SrcDBFile_TextBox.Text;
             string SongDestDBFile = SongDBConverter_DestDBFile_TextBox.Text;
 
@@ -398,6 +398,7 @@ namespace CrazyKTV_SongMgr
                 try
                 {
                     cmd.ExecuteNonQuery();
+                    Global.TotalList[3]++;
                 }
                 catch
                 {
@@ -411,10 +412,7 @@ namespace CrazyKTV_SongMgr
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    if (Global.SongDBConvValueList.IndexOf(str) > 0)
-                    {
-                        SongDBConverter_Tooltip_Label.Text = "正在將第 " + Global.SongDBConvValueList.IndexOf(str) + " 首歌曲寫入資料庫,請稍待...";
-                    }
+                    SongDBConverter_Tooltip_Label.Text = "正在將第 " + Global.TotalList[3] + " 首歌曲寫入資料庫,請稍待...";
                 });
 
             }

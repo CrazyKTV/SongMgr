@@ -185,7 +185,10 @@ namespace CrazyKTV_SongMgr
 
                 // 計算歌曲大小
                 float SongMB = 0;
-                SongMB = float.Parse(Global.SongSrcDT.Rows[i]["Song_MB"].ToString());
+                if (Global.SongSrcDT.Rows[i]["Song_MB"].ToString() != "")
+                {
+                    SongMB = float.Parse(Global.SongSrcDT.Rows[i]["Song_MB"].ToString());
+                }
 
                 // 取得歌曲拼音
                 List<string> SongSpellList = new List<string>();
