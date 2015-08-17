@@ -109,6 +109,7 @@
             this.SongAdd_DefaultSingerType_Label = new System.Windows.Forms.Label();
             this.SongAdd_DefaultSongLang_Label = new System.Windows.Forms.Label();
             this.SongAdd_SongAddCfg_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongAdd_UseCustomSongID_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_EngSongNameFormat_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_DupSongMode_ComboBox = new System.Windows.Forms.ComboBox();
             this.SongAdd_DupSongMode_Label = new System.Windows.Forms.Label();
@@ -381,7 +382,6 @@
             this.SongLog_TabPage = new System.Windows.Forms.TabPage();
             this.SongLog_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
-            this.SongAdd_UseCustomSongID_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -1431,6 +1431,19 @@
             this.SongAdd_SongAddCfg_GroupBox.TabIndex = 0;
             this.SongAdd_SongAddCfg_GroupBox.TabStop = false;
             this.SongAdd_SongAddCfg_GroupBox.Text = "加歌設定";
+            // 
+            // SongAdd_UseCustomSongID_CheckBox
+            // 
+            this.SongAdd_UseCustomSongID_CheckBox.AutoSize = true;
+            this.SongAdd_UseCustomSongID_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_UseCustomSongID_CheckBox.Location = new System.Drawing.Point(20, 177);
+            this.SongAdd_UseCustomSongID_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
+            this.SongAdd_UseCustomSongID_CheckBox.Name = "SongAdd_UseCustomSongID_CheckBox";
+            this.SongAdd_UseCustomSongID_CheckBox.Size = new System.Drawing.Size(253, 26);
+            this.SongAdd_UseCustomSongID_CheckBox.TabIndex = 5;
+            this.SongAdd_UseCustomSongID_CheckBox.Text = "優先使用檔名自訂的歌曲編號";
+            this.SongAdd_UseCustomSongID_CheckBox.UseVisualStyleBackColor = true;
+            this.SongAdd_UseCustomSongID_CheckBox.CheckedChanged += new System.EventHandler(this.SongAdd_UseCustomSongID_CheckBox_CheckedChanged);
             // 
             // SongAdd_EngSongNameFormat_CheckBox
             // 
@@ -4889,19 +4902,6 @@
             this.SongLog_ListBox.TabIndex = 0;
             this.SongLog_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
-            // SongAdd_UseCustomSongID_CheckBox
-            // 
-            this.SongAdd_UseCustomSongID_CheckBox.AutoSize = true;
-            this.SongAdd_UseCustomSongID_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_UseCustomSongID_CheckBox.Location = new System.Drawing.Point(20, 177);
-            this.SongAdd_UseCustomSongID_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
-            this.SongAdd_UseCustomSongID_CheckBox.Name = "SongAdd_UseCustomSongID_CheckBox";
-            this.SongAdd_UseCustomSongID_CheckBox.Size = new System.Drawing.Size(253, 26);
-            this.SongAdd_UseCustomSongID_CheckBox.TabIndex = 5;
-            this.SongAdd_UseCustomSongID_CheckBox.Text = "優先使用檔名自訂的歌曲編號";
-            this.SongAdd_UseCustomSongID_CheckBox.UseVisualStyleBackColor = true;
-            this.SongAdd_UseCustomSongID_CheckBox.CheckedChanged += new System.EventHandler(this.SongAdd_UseCustomSongID_CheckBox_CheckedChanged);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -4914,7 +4914,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "MainForm";
-            this.Text = "CrazyKTV 加歌程式 v1.3.2 Beta 3";
+            this.Text = "CrazyKTV 加歌程式 v1.3.2 Beta 4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.MainTabControl.ResumeLayout(false);
