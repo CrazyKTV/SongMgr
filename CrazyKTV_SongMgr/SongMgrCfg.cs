@@ -79,12 +79,17 @@ namespace CrazyKTV_SongMgr
 
                 if (Global.CrazyktvDatabaseVer == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                 {
+                    if (Global.CrazyktvDatabaseVer == "Error") SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
+                    else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongQuery_QueryStatus_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
+                    else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongQuery_QueryStatus_Label.Text = "資料庫檔案不存在!";
+                    else if (!Directory.Exists(Global.SongMgrDestFolder)) SongQuery_QueryStatus_Label.Text = "歌庫資料夾不存在!";
                     Common_SwitchDBVerErrorUI(false);
                 }
                 else
                 {
                     // 統計歌曲數量
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    SongQuery_QueryStatus_Label.Text = "";
                     Common_SwitchDBVerErrorUI(true);
                 }
 
