@@ -56,6 +56,7 @@ namespace CrazyKTV_SongMgr
         public static string SongAddSongIdentificationMode = "1";
         public static string SongAddDupSongMode = "1";
         public static string SongAddEngSongNameFormat = "False";
+        public static string SongAddUseCustomSongID = "False";
 
         public static string MainCfgAlwaysOnTop = "False";
         public static string MainCfgHideSongDBConverterTabPage = "False";
@@ -86,6 +87,8 @@ namespace CrazyKTV_SongMgr
 
         public static List<string> SongAddValueList = new List<string>();
         public static List<string> SongAddChorusSingerList = new List<string>();
+        public static List<string> SongAddAllSongIDList = new List<string>();
+
         public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
         public static List<string> SongDBConvValueList = new List<string>();
         public static List<string> SongDBConvJetktvLangList = new List<string>();

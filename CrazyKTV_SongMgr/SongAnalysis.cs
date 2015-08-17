@@ -360,6 +360,7 @@ namespace CrazyKTV_SongMgr
                                 {
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
+                                        SongID = list[0];
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                         if (r.IsMatch(list[1])) SongSingerType = "3";
                                         SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
@@ -375,6 +376,7 @@ namespace CrazyKTV_SongMgr
                                 {
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
+                                        SongID = list[0];
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                         if (r.IsMatch(list[1]))
                                         {
@@ -396,6 +398,7 @@ namespace CrazyKTV_SongMgr
                                 {
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
+                                        SongID = list[0];
                                         if (list.Count > 2)
                                         {
                                             SongSongName = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
@@ -512,6 +515,11 @@ namespace CrazyKTV_SongMgr
                                 SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                 break;
                             default:
+                                if (CommonFunc.IsSongId(list[0]))
+                                {
+                                    SongID = list[0];
+                                }
+
                                 if (SongSinger == "")
                                 {
                                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");

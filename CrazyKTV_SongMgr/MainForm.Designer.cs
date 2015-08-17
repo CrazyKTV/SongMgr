@@ -381,6 +381,7 @@
             this.SongLog_TabPage = new System.Windows.Forms.TabPage();
             this.SongLog_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
+            this.SongAdd_UseCustomSongID_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -1416,6 +1417,7 @@
             // 
             // SongAdd_SongAddCfg_GroupBox
             // 
+            this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_UseCustomSongID_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_EngSongNameFormat_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_DupSongMode_ComboBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_DupSongMode_Label);
@@ -1434,8 +1436,8 @@
             // 
             this.SongAdd_EngSongNameFormat_CheckBox.AutoSize = true;
             this.SongAdd_EngSongNameFormat_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EngSongNameFormat_CheckBox.Location = new System.Drawing.Point(20, 136);
-            this.SongAdd_EngSongNameFormat_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 12);
+            this.SongAdd_EngSongNameFormat_CheckBox.Location = new System.Drawing.Point(20, 139);
+            this.SongAdd_EngSongNameFormat_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 6);
             this.SongAdd_EngSongNameFormat_CheckBox.Name = "SongAdd_EngSongNameFormat_CheckBox";
             this.SongAdd_EngSongNameFormat_CheckBox.Size = new System.Drawing.Size(253, 26);
             this.SongAdd_EngSongNameFormat_CheckBox.TabIndex = 4;
@@ -4887,6 +4889,19 @@
             this.SongLog_ListBox.TabIndex = 0;
             this.SongLog_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
+            // SongAdd_UseCustomSongID_CheckBox
+            // 
+            this.SongAdd_UseCustomSongID_CheckBox.AutoSize = true;
+            this.SongAdd_UseCustomSongID_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_UseCustomSongID_CheckBox.Location = new System.Drawing.Point(20, 177);
+            this.SongAdd_UseCustomSongID_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
+            this.SongAdd_UseCustomSongID_CheckBox.Name = "SongAdd_UseCustomSongID_CheckBox";
+            this.SongAdd_UseCustomSongID_CheckBox.Size = new System.Drawing.Size(253, 26);
+            this.SongAdd_UseCustomSongID_CheckBox.TabIndex = 5;
+            this.SongAdd_UseCustomSongID_CheckBox.Text = "優先使用檔名自訂的歌曲編號";
+            this.SongAdd_UseCustomSongID_CheckBox.UseVisualStyleBackColor = true;
+            this.SongAdd_UseCustomSongID_CheckBox.CheckedChanged += new System.EventHandler(this.SongAdd_UseCustomSongID_CheckBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -5346,6 +5361,7 @@
         private System.Windows.Forms.TextBox SongMaintenance_MultiSongPath_TextBox;
         private System.Windows.Forms.Button SongMaintenance_MultiSongPath_Button;
         private System.Windows.Forms.ListBox SongMaintenance_MultiSongPath_ListBox;
+        private System.Windows.Forms.CheckBox SongAdd_UseCustomSongID_CheckBox;
     }
 }
 

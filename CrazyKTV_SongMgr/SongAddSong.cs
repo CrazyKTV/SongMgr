@@ -17,6 +17,12 @@ namespace CrazyKTV_SongMgr
             string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType, Song_FileName, Song_Path from ktv_Song";
             Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
+            Global.SongAddAllSongIDList = new List<string>();
+            foreach (DataRow row in Global.SongDT.AsEnumerable())
+            {
+                Global.SongAddAllSongIDList.Add(row["Song_Id"].ToString());
+            }
+
             string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
             Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
 
@@ -58,6 +64,7 @@ namespace CrazyKTV_SongMgr
 
         public static void DisposeSongDataTable()
         {
+            Global.SongAddAllSongIDList.Clear();
             Global.SongDT.Dispose();
             Global.SingerDT.Dispose();
             Global.AllSingerDT.Dispose();
@@ -218,7 +225,7 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                string SongID = "";
+                string SongID = Global.SongAddDT.Rows[i].Field<string>("Song_Id"); ;
                 string SongLang = Global.SongAddDT.Rows[i].Field<string>("Song_Lang");
                 int SongSingerType = Global.SongAddDT.Rows[i].Field<int>("Song_SingerType");
                 string SongSinger = Global.SongAddDT.Rows[i].Field<string>("Song_Singer");
@@ -289,53 +296,73 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                // 查詢歌曲編號有無斷號
-                lock (LockThis)
+                bool UseCustomSongID = false;
+                if (Global.SongAddUseCustomSongID == "True")
                 {
-                    if (Global.NotExistsSongIdDT.Rows.Count != 0)
+                    if (SongID != "")
                     {
-                        string RemoveRowindex = "";
-                        var Query = from row in Global.NotExistsSongIdDT.AsEnumerable()
-                                    where row.Field<string>("Song_Lang").Equals(SongLang)
-                                    orderby row.Field<string>("Song_Id")
-                                    select row;
-
-                        foreach (DataRow row in Query)
+                        switch (Global.SongMgrMaxDigitCode)
                         {
-                            SongID = row["Song_Id"].ToString();
-                            RemoveRowindex = Global.NotExistsSongIdDT.Rows.IndexOf(row).ToString();
-                            break;
-                        }
-                        if (RemoveRowindex != "")
-                        {
-                            DataRow row = Global.NotExistsSongIdDT.Rows[Convert.ToInt32(RemoveRowindex)];
-                            Global.NotExistsSongIdDT.Rows.Remove(row);
+                            case "1":
+                                if (SongID.Length == 5 & Global.SongAddAllSongIDList.IndexOf(SongID) < 0) UseCustomSongID = true;
+                                break;
+                            case "2":
+                                if (SongID.Length == 6 & Global.SongAddAllSongIDList.IndexOf(SongID) < 0) UseCustomSongID = true;
+                                break;
                         }
                     }
                 }
-
-                // 若無斷號查詢各語系下個歌曲編號
-                if (SongID == "")
+                    
+                // 查詢歌曲編號有無斷號
+                if (!UseCustomSongID)
                 {
-                    string MaxDigitCode = "";
-                    switch (Global.SongMgrMaxDigitCode)
+                    lock (LockThis)
                     {
-                        case "1":
-                            MaxDigitCode = "D5";
-                            break;
-                        case "2":
-                            MaxDigitCode = "D6";
-                            break;
+                        if (Global.NotExistsSongIdDT.Rows.Count != 0)
+                        {
+                            string RemoveRowindex = "";
+                            var Query = from row in Global.NotExistsSongIdDT.AsEnumerable()
+                                        where row.Field<string>("Song_Lang").Equals(SongLang)
+                                        orderby row.Field<string>("Song_Id")
+                                        select row;
+
+                            foreach (DataRow row in Query)
+                            {
+                                SongID = row["Song_Id"].ToString();
+                                RemoveRowindex = Global.NotExistsSongIdDT.Rows.IndexOf(row).ToString();
+                                break;
+                            }
+                            if (RemoveRowindex != "")
+                            {
+                                DataRow row = Global.NotExistsSongIdDT.Rows[Convert.ToInt32(RemoveRowindex)];
+                                Global.NotExistsSongIdDT.Rows.Remove(row);
+                            }
+                        }
                     }
 
-                    foreach (string langstr in Global.CrazyktvSongLangList)
+                    // 若無斷號查詢各語系下個歌曲編號
+                    if (SongID == "")
                     {
-                        if (langstr == SongLang)
+                        string MaxDigitCode = "";
+                        switch (Global.SongMgrMaxDigitCode)
                         {
-                            int LangIndex = Global.CrazyktvSongLangList.IndexOf(langstr);
-                            Global.MaxIDList[LangIndex]++;
-                            SongID = Global.MaxIDList[LangIndex].ToString(MaxDigitCode);
-                            break;
+                            case "1":
+                                MaxDigitCode = "D5";
+                                break;
+                            case "2":
+                                MaxDigitCode = "D6";
+                                break;
+                        }
+
+                        foreach (string langstr in Global.CrazyktvSongLangList)
+                        {
+                            if (langstr == SongLang)
+                            {
+                                int LangIndex = Global.CrazyktvSongLangList.IndexOf(langstr);
+                                Global.MaxIDList[LangIndex]++;
+                                SongID = Global.MaxIDList[LangIndex].ToString(MaxDigitCode);
+                                break;
+                            }
                         }
                     }
                 }
@@ -499,7 +526,11 @@ namespace CrazyKTV_SongMgr
                     {
                         string SongAddValue = SongID + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
                         Global.SongAddValueList.Add(SongAddValue);
-                        lock (LockThis) { Global.TotalList[0]++; }
+                        lock (LockThis)
+                        {
+                            Global.SongAddAllSongIDList.Add(SongID);
+                            Global.TotalList[0]++;
+                        }
                     }
                 }
             }

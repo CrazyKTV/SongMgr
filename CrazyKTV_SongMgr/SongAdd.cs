@@ -28,6 +28,7 @@ namespace CrazyKTV_SongMgr
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode", Global.SongAddSongIdentificationMode);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", Global.SongAddDupSongMode);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
                     break;
                 case "取消更新":
                     SongAdd_Add_Button.Text = "加入歌庫";
@@ -455,16 +456,14 @@ namespace CrazyKTV_SongMgr
             int count = Global.SongAddDT.Rows.Count;
 
             for (int i = 0; i < count; i++)
-            //Parallel.For(0, count, (i, loopState) =>
+            {
+                SongAddSong.StartAddSong(i);
+
+                this.BeginInvoke((Action)delegate ()
                 {
-                    SongAddSong.StartAddSong(i);
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongAdd_Tooltip_Label.Text = "已成功加入 " + Global.TotalList[0] + " 首歌曲,忽略重複歌曲 " + Global.TotalList[1] + " 首...";
-                    });
-                }//);
-
+                    SongAdd_Tooltip_Label.Text = "已成功加入 " + Global.TotalList[0] + " 首歌曲,忽略重複歌曲 " + Global.TotalList[1] + " 首...";
+                });
+            }
 
             OleDbConnection SongAddConn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
@@ -936,6 +935,10 @@ namespace CrazyKTV_SongMgr
             });
         }
 
+        private void SongAdd_UseCustomSongID_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongAddUseCustomSongID = SongAdd_UseCustomSongID_CheckBox.Checked.ToString();
+        }
 
 
     }
