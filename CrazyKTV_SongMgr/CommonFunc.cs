@@ -667,7 +667,7 @@ namespace CrazyKTV_SongMgr
         {
             if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDatabaseVer != "Error")
             {
-                string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType, Song_FileName, Song_Path from ktv_Song";
+                string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song";
                 Global.SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
                 List<int> SongLangCount = new List<int>();
@@ -1174,9 +1174,9 @@ namespace CrazyKTV_SongMgr
 
     class CommonFunc
     {
+        private static object LockThis = new object();
         public static void CreateConfigXmlFile(string ConfigFile)
         {
-
             XDocument xmldoc = new XDocument
                 (
                     new XDeclaration("1.0", "utf-16", null),
@@ -2024,30 +2024,68 @@ namespace CrazyKTV_SongMgr
         {
             List<int> SongLangCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            foreach (string langstr in Global.CrazyktvSongLangList)
+            var SongLangCountTask = Task.Factory.StartNew(() =>
             {
-                var query = from row in Global.SongStatisticsDT.AsEnumerable()
-                            where row.Field<string>("Song_Lang").Equals(langstr)
-                            select row;
-                if (query.Count<DataRow>() > 0)
+                Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
                 {
-                    SongLangCount[Global.CrazyktvSongLangList.IndexOf(langstr)] = query.Count<DataRow>();
-                    SongLangCount[10] += query.Count<DataRow>();
-                }
-                else
-                {
-                    SongLangCount[Global.CrazyktvSongLangList.IndexOf(langstr)] = 0;
-                }
-            }
-            if (Directory.Exists(Global.SongMgrDestFolder))
-            {
-                List<string> SupportFormat = new List<string>();
-                SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
+                    var query = from row in Global.SongStatisticsDT.AsEnumerable()
+                                where row.Field<string>("Song_Lang").Equals(langstr)
+                                select row;
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        SongLangCount[Global.CrazyktvSongLangList.IndexOf(langstr)] = query.Count<DataRow>();
+                    }
+                    else
+                    {
+                        SongLangCount[Global.CrazyktvSongLangList.IndexOf(langstr)] = 0;
+                    }
+                });
 
-                DirectoryInfo dir = new DirectoryInfo(Global.SongMgrDestFolder);
-                FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
-                SongLangCount[11] = Files.Count();
-            }
+                for (int i = 0; i < 10; i++)
+                {
+                    SongLangCount[10] += SongLangCount[i];
+                }
+            });
+
+            var FileCountTask = Task.Factory.StartNew(() =>
+            {
+                if (Directory.Exists(Global.SongMgrDestFolder))
+                {
+                    List<string> SupportFormat = new List<string>();
+                    SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
+
+                    if (Global.SongMaintenanceEnableMultiSongPath == "True")
+                    {
+                        int FileCount = 0;
+                        DirectoryInfo dir = new DirectoryInfo(Global.SongMgrDestFolder);
+                        FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
+                        FileCount = Files.Count();
+
+                        Parallel.ForEach(Global.SongMaintenanceMultiSongPathList, (SongPath, loopState) =>
+                        {
+                            if (Directory.Exists(SongPath))
+                            {
+                                DirectoryInfo mdir = new DirectoryInfo(SongPath);
+                                FileInfo[] mFiles = mdir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
+                                lock(LockThis)
+                                {
+                                    FileCount += mFiles.Count();
+                                }
+                            }
+                        });
+
+                        SongLangCount[11] = FileCount;
+                    }
+                    else
+                    {
+                        DirectoryInfo dir = new DirectoryInfo(Global.SongMgrDestFolder);
+                        FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
+                        SongLangCount[11] = Files.Count();
+                    }
+                }
+            });
+
+            Task.WaitAll(SongLangCountTask, FileCountTask);
             return SongLangCount;
         }
 

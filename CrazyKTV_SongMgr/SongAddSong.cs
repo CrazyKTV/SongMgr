@@ -604,20 +604,56 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
+                    bool UseMultiSongPath = false;
+                    string MultiSongPath = "";
+                    if (Global.SongMaintenanceEnableMultiSongPath == "True" & SongPath.ContainsAny(Global.SongMaintenanceMultiSongPathList.ToArray()))
+                    {
+                        foreach (string str in Global.SongMaintenanceMultiSongPathList)
+                        {
+                            if (SongPath.Contains(str))
+                            {
+                                MultiSongPath = str;
+                                UseMultiSongPath = true;
+                                break;
+                            }
+                        }
+                    }
+
                     switch (Global.SongMgrFolderStructure)
                     {
                         case "1":
                             if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
                             {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                if (UseMultiSongPath)
+                                {
+                                    SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
+                                }
+                                else
+                                {
+                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                }
                             }
                             else
                             {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                if (UseMultiSongPath)
+                                {
+                                    SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                }
+                                else
+                                {
+                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                }
                             }
                             break;
                         case "2":
-                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                            if (UseMultiSongPath)
+                            {
+                                SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
+                            }
+                            else
+                            {
+                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                            }
                             break;
                     }
 

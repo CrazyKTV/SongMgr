@@ -15,6 +15,80 @@ namespace CrazyKTV_SongMgr
 {
     public partial class MainForm : Form
     {
+        private void SongMaintenance_Save_Button_Click(object sender, EventArgs e)
+        {
+            switch (SongMaintenance_Save_Button.Text)
+            {
+                case "儲存設定":
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", Global.DBVerRebuildSingerData);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
+                    break;
+                case "更新語系":
+                    Global.CrazyktvSongLangList = new List<string>();
+                    Global.CrazyktvSongLangIDList = new List<string>();
+                    TextBox[] SongMaintenance_Lang_TextBox =
+                    {
+                        SongMaintenance_Lang1_TextBox,
+                        SongMaintenance_Lang2_TextBox,
+                        SongMaintenance_Lang3_TextBox,
+                        SongMaintenance_Lang4_TextBox,
+                        SongMaintenance_Lang5_TextBox,
+                        SongMaintenance_Lang6_TextBox,
+                        SongMaintenance_Lang7_TextBox,
+                        SongMaintenance_Lang8_TextBox,
+                        SongMaintenance_Lang9_TextBox,
+                        SongMaintenance_Lang10_TextBox
+                    };
+
+                    for (int i = 0; i < SongMaintenance_Lang_TextBox.Count<TextBox>(); i++)
+                    {
+                        Global.CrazyktvSongLangList.Add(SongMaintenance_Lang_TextBox[i].Text);
+                    }
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
+
+                    TextBox[] SongMaintenance_LangIDStr_TextBox =
+                    {
+                        SongMaintenance_Lang1IDStr_TextBox,
+                        SongMaintenance_Lang2IDStr_TextBox,
+                        SongMaintenance_Lang3IDStr_TextBox,
+                        SongMaintenance_Lang4IDStr_TextBox,
+                        SongMaintenance_Lang5IDStr_TextBox,
+                        SongMaintenance_Lang6IDStr_TextBox,
+                        SongMaintenance_Lang7IDStr_TextBox,
+                        SongMaintenance_Lang8IDStr_TextBox,
+                        SongMaintenance_Lang9IDStr_TextBox,
+                        SongMaintenance_Lang10IDStr_TextBox
+                    };
+
+                    for (int i = 0; i < SongMaintenance_LangIDStr_TextBox.Count<TextBox>(); i++)
+                    {
+                        Global.CrazyktvSongLangIDList.Add(SongMaintenance_LangIDStr_TextBox[i].Text);
+                    }
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr", string.Join("*", Global.CrazyktvSongLangIDList));
+
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆自訂語系資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_RefreshSongLang();
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                    break;
+            }
+        }
+
         private void SongMaintenance_SingerSpellCorrect_Button_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("你確定要校正歌手拼音嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -1407,75 +1481,22 @@ namespace CrazyKTV_SongMgr
             switch (SongMaintenance_TabControl.SelectedTab.Name)
             {
                 case "SongMaintenance_CustomLang_TabPage":
+                    SongMaintenance_Save_Button.Text = "更新語系";
+                    SongMaintenance_Save_Button.Enabled = true;
+                    break;
+                case "SongMaintenance_MultiSongPath_TabPage":
+                    SongMaintenance_Save_Button.Text = "儲存設定";
+                    SongMaintenance_Save_Button.Enabled = true;
+                    break;
+                case "SongMaintenance_DBVer_TabPage":
+                    SongMaintenance_Save_Button.Text = "儲存設定";
                     SongMaintenance_Save_Button.Enabled = true;
                     break;
                 default:
+                    SongMaintenance_Save_Button.Text = "儲存設定";
                     SongMaintenance_Save_Button.Enabled = false;
                     break;
             }
-        }
-
-        private void SongMaintenance_Save_Button_Click(object sender, EventArgs e)
-        {
-            Global.CrazyktvSongLangList = new List<string>();
-            Global.CrazyktvSongLangIDList = new List<string>();
-            TextBox[] SongMaintenance_Lang_TextBox =
-            {
-                SongMaintenance_Lang1_TextBox,
-                SongMaintenance_Lang2_TextBox,
-                SongMaintenance_Lang3_TextBox,
-                SongMaintenance_Lang4_TextBox,
-                SongMaintenance_Lang5_TextBox,
-                SongMaintenance_Lang6_TextBox,
-                SongMaintenance_Lang7_TextBox,
-                SongMaintenance_Lang8_TextBox,
-                SongMaintenance_Lang9_TextBox,
-                SongMaintenance_Lang10_TextBox
-            };
-
-            for (int i = 0; i < SongMaintenance_Lang_TextBox.Count<TextBox>(); i++)
-            {
-                Global.CrazyktvSongLangList.Add(SongMaintenance_Lang_TextBox[i].Text);
-            }
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
-
-            TextBox[] SongMaintenance_LangIDStr_TextBox =
-            {
-              SongMaintenance_Lang1IDStr_TextBox,
-              SongMaintenance_Lang2IDStr_TextBox,
-              SongMaintenance_Lang3IDStr_TextBox,
-              SongMaintenance_Lang4IDStr_TextBox,
-              SongMaintenance_Lang5IDStr_TextBox,
-              SongMaintenance_Lang6IDStr_TextBox,
-              SongMaintenance_Lang7IDStr_TextBox,
-              SongMaintenance_Lang8IDStr_TextBox,
-              SongMaintenance_Lang9IDStr_TextBox,
-              SongMaintenance_Lang10IDStr_TextBox
-            };
-
-            for (int i = 0; i < SongMaintenance_LangIDStr_TextBox.Count<TextBox>(); i++)
-            {
-                Global.CrazyktvSongLangIDList.Add(SongMaintenance_LangIDStr_TextBox[i].Text);
-            }
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr", string.Join("*", Global.CrazyktvSongLangIDList));
-
-            Global.TimerStartTime = DateTime.Now;
-            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-            Common_SwitchSetUI(false);
-
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
-
-            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-            {
-                Global.TimerEndTime = DateTime.Now;
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆自訂語系資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                    Common_RefreshSongLang();
-                    Common_SwitchSetUI(true);
-                });
-            });
         }
 
         private void SongMaintenance_SongLangUpdateTask()
@@ -2412,15 +2433,131 @@ namespace CrazyKTV_SongMgr
         private void SongMaintenance_EnableDBVerUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.DBVerEnableDBVerUpdate = SongMaintenance_EnableDBVerUpdate_CheckBox.Checked.ToString();
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
         }
 
         private void SongMaintenance_EnableRebuildSingerData_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.DBVerRebuildSingerData = SongMaintenance_EnableRebuildSingerData_CheckBox.Checked.ToString();
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", Global.DBVerRebuildSingerData);
         }
 
+        private void SongMaintenance_EnableMultiSongPath_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongMaintenanceEnableMultiSongPath = SongMaintenance_EnableMultiSongPath_CheckBox.Checked.ToString();
+            switch (Global.SongMaintenanceEnableMultiSongPath)
+            {
+                case "True":
+                    SongMaintenance_MultiSongPath_ListBox.Enabled = true;
+                    SongMaintenance_MultiSongPath_Button.Enabled = true;
+                    // 統計歌曲數量
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
+                case "False":
+                    SongMaintenance_MultiSongPath_ListBox.Enabled = false;
+                    SongMaintenance_MultiSongPath_Button.Enabled = false;
+                    // 統計歌曲數量
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
+            }
+        }
+
+        private void SongMaintenance_MultiSongPath_ListBox_Enter(object sender, EventArgs e)
+        {
+            SongMaintenance_MultiSongPath_Button.Text = "移除";
+        }
+
+        private void SongMaintenance_MultiSongPath_TextBox_Enter(object sender, EventArgs e)
+        {
+            if (SongMaintenance_MultiSongPath_TextBox.Text != "")
+            {
+                SongMaintenance_MultiSongPath_Button.Text = "加入";
+            }
+            else
+            {
+                SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
+            }
+        }
+
+        private void SongMaintenance_MultiSongPath_Button_Click(object sender, EventArgs e)
+        {
+            switch (SongMaintenance_MultiSongPath_Button.Text)
+            {
+                case "瀏覽":
+                    FolderBrowserDialog opd = new FolderBrowserDialog();
+                    if (SongMaintenance_MultiSongPath_TextBox.Text != "") opd.SelectedPath = SongMaintenance_MultiSongPath_TextBox.Text;
+
+                    if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
+                    {
+                        SongMaintenance_MultiSongPath_TextBox.Text = opd.SelectedPath + @"\";
+                        SongMaintenance_MultiSongPath_Button.Text = "加入";
+                    }
+                    break;
+                case "加入":
+                    DataTable dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
+                    if (dt == null)
+                    {
+                        dt = new DataTable();
+                        dt.Columns.Add(new DataColumn("Display", typeof(string)));
+                        dt.Columns.Add(new DataColumn("Value", typeof(int)));
+                        dt.Rows.Add(dt.NewRow());
+                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
+                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                    }
+                    else
+                    {
+                        dt.Rows.Add(dt.NewRow());
+                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
+                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                    }
+                    SongMaintenance_MultiSongPath_TextBox.Text = "";
+                    SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
+
+                    SongMaintenance_MultiSongPath_ListBox.DataSource = dt;
+                    SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
+                    SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
+
+                    Global.SongMaintenanceMultiSongPathList = new List<string>();
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            if (row["Display"].ToString() != "")
+                            {
+                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
+                            }
+                        }
+                    }
+                    
+                    // 統計歌曲數量
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
+                case "移除":
+                    if (SongMaintenance_MultiSongPath_ListBox.SelectedItem != null)
+                    {
+                        int index = SongMaintenance_MultiSongPath_ListBox.SelectedIndex;
+                        dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
+                        dt.Rows.RemoveAt(index);
+
+                        Global.SongMaintenanceMultiSongPathList = new List<string>();
+
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            if (row["Display"].ToString() != "")
+                            {
+                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "已無可以刪除的多重歌庫資料夾路徑!";
+                    }
+
+                    // 統計歌曲數量
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
+            }
+        }
 
 
 
@@ -2477,6 +2614,24 @@ namespace CrazyKTV_SongMgr
             Global.SingerDT.Dispose();
             Global.AllSingerDT.Dispose();
             Global.PhoneticsDT.Dispose();
+        }
+
+        public static DataTable GetMultiSongPathList()
+        {
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            if (Global.SongMaintenanceMultiSongPathList.Count > 0)
+            {
+                foreach (string s in Global.SongMaintenanceMultiSongPathList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = s;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+            }
+            return list;
         }
 
         public static string GetNextSongId(string LangStr)

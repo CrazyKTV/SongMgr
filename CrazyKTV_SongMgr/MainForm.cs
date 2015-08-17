@@ -64,6 +64,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", Global.DBVerRebuildSingerData);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
             }
 
             List<string> list = new List<string>()
@@ -101,7 +103,9 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrDefaultSingerDataTable"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath")
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -254,6 +258,16 @@ namespace CrazyKTV_SongMgr
 
             if (list[33] != "") Global.DBVerRebuildSingerData = list[33];
             SongMaintenance_EnableRebuildSingerData_CheckBox.Checked = bool.Parse(Global.DBVerRebuildSingerData);
+
+            if (list[34] != "") Global.SongMaintenanceEnableMultiSongPath = list[34];
+            SongMaintenance_EnableMultiSongPath_CheckBox.Checked = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
+            SongMaintenance_MultiSongPath_ListBox.Enabled = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
+            SongMaintenance_MultiSongPath_Button.Enabled = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
+
+            if (list[35] != "") Global.SongMaintenanceMultiSongPathList = new List<string>(list[35].Split(','));
+            SongMaintenance_MultiSongPath_ListBox.DataSource = SongMaintenance.GetMultiSongPathList();
+            SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
+            SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
 
             // 建立歌曲操作記錄資料表
             Global.SongLogDT = new DataTable();
@@ -435,149 +449,20 @@ namespace CrazyKTV_SongMgr
                         else if (SongMaintenance_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMaintenance_Tooltip_Label.Text = "";
                     }
 
-                    if (SongMaintenance_TabControl.SelectedTab.Name == "SongMaintenance_CustomLang_TabPage")
+                    switch (SongMaintenance_TabControl.SelectedTab.Name)
                     {
-                        SongMaintenance_Save_Button.Enabled = true;
-                    }
-                    else
-                    {
-                        SongMaintenance_Save_Button.Enabled = false;
+                        case "SongMaintenance_CustomLang_TabPage":
+                        case "SongMaintenance_MultiSongPath_TabPage":
+                        case "SongMaintenance_DBVer_TabPage":
+                            SongMaintenance_Save_Button.Enabled = true;
+                            break;
+                        default:
+                            SongMaintenance_Save_Button.Enabled = false;
+                            break;
                     }
                     break;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }
