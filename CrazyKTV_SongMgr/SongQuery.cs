@@ -875,9 +875,9 @@ namespace CrazyKTV_SongMgr
                 case "6":
                     Global.SongQueryQueryType = "SongQuery";
                     SongQuery_EditMode_CheckBox.Enabled = true;
-                    
                     SongQuery_Query_Button.Enabled = false;
                     Common_SwitchSetUI(false);
+                    SongQuery_QueryStatus_Label.Text = "查詢中,請稍待...";
 
                     var tasks = new List<Task>();
                     tasks.Add(Task.Factory.StartNew(() => SongQuery_ExceptionalQueryTask()));
@@ -948,7 +948,6 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        SongQuery_QueryStatus_Label.Text = "查詢中,請稍待...";
                         try
                         {
                             DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
@@ -958,7 +957,6 @@ namespace CrazyKTV_SongMgr
                             }
                             else
                             {
-
                                 switch (SongQuery_ExceptionalQuery_ComboBox.SelectedValue.ToString())
                                 {
                                     case "1":
