@@ -2449,13 +2449,13 @@ namespace CrazyKTV_SongMgr
                     SongMaintenance_MultiSongPath_ListBox.Enabled = true;
                     SongMaintenance_MultiSongPath_Button.Enabled = true;
                     // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    if (Global.CrazyktvDatabaseVer == "OK") Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     break;
                 case "False":
                     SongMaintenance_MultiSongPath_ListBox.Enabled = false;
                     SongMaintenance_MultiSongPath_Button.Enabled = false;
                     // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    if (Global.CrazyktvDatabaseVer == "OK") Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     break;
             }
         }
