@@ -218,7 +218,32 @@ namespace CrazyKTV_SongMgr
                 {
                     try
                     {
-                        DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                        DataTable dt = new DataTable();
+                        switch (SongQueryType)
+                        {
+                            case "SongName":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                List<string> SynonymousSomeNameList = new List<string>();
+                                SynonymousSomeNameList = CommonFunc.GetSynonymousSomeNameList(SongQueryValue);
+
+                                if (SynonymousSomeNameList.Count > 0)
+                                {
+                                    foreach (string SynonymousSomeName in SynonymousSomeNameList)
+                                    {
+                                        DataTable SynonymousSongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SynonymousSomeName), "");
+                                        foreach (DataRow row in SynonymousSongDT.Rows)
+                                        {
+                                            dt.ImportRow(row);
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                break;
+                        }
+
                         if (dt.Rows.Count == 0)
                         {
                             SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
@@ -877,7 +902,6 @@ namespace CrazyKTV_SongMgr
                     SongQuery_EditMode_CheckBox.Enabled = true;
                     SongQuery_Query_Button.Enabled = false;
                     Common_SwitchSetUI(false);
-                    SongQuery_QueryStatus_Label.Text = "查詢中,請稍待...";
 
                     var tasks = new List<Task>();
                     tasks.Add(Task.Factory.StartNew(() => SongQuery_ExceptionalQueryTask()));
@@ -1589,7 +1613,7 @@ namespace CrazyKTV_SongMgr
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌手)" };
+            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)" };
 
             foreach (string str in ItemList)
             {
