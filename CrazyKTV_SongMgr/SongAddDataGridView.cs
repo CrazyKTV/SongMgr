@@ -137,6 +137,10 @@ namespace CrazyKTV_SongMgr
         {
             switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
             {
+                case "歌手名稱":
+                    string SongSinger = SongAdd_DataGridView.CurrentCell.Value.ToString();
+                    if (SongSinger.ContainsAny("&", "+")) SongAdd_DataGridView.CurrentRow.Cells["Song_SingerType"].Value = "3";
+                    break;
                 case "歌曲名稱":
                     string SongSongName = SongAdd_DataGridView.CurrentCell.Value.ToString();
                     // 計算歌曲字數
