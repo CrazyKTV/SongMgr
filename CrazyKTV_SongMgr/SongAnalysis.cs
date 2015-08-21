@@ -128,15 +128,17 @@ namespace CrazyKTV_SongMgr
             string SongSingerTypeStr = "";
             string SongTrackStr = "";
             string SongSongTypeStr = "";
-            string SongLangRemoveStr = "";
-            string SongSongTypeRemoveStr = "";
-            
+
             string SeparateStr = "[-_](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))";
 
             List<string> SongLangList = (List<string>) SongLangIDList;
             List<string> SingerTypeList = new List<string>() { "男歌星", "男", "女歌星", "女", "樂團", "團體", "團", "合唱", "對唱", "外國男", "外男", "外國女", "外女", "外國樂團", "外團", "未知" };
-            List<string> SongTrackList = new List<string>() { "vl", "vr", "v3", "v4", "v5" };
-            List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.ToLower().Split(','));
+            List<string> SongTrackList = new List<string>() { "vl", "vr", "v3", "v4", "v5", "左", "右" };
+            List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
+            List<string> SongSongTypeLowCaseList = SongSongTypeList.ConvertAll(str => str.ToLower());
+
+            string FileNameRemoveStr = "";
+            List<string> FileNameRemoveList = new List<string>();
 
             string DirStr = Path.GetDirectoryName((string)file);
             List<string> list = new List<string>();
@@ -181,6 +183,13 @@ namespace CrazyKTV_SongMgr
                 FileStr = Regex.Replace(FileStr, str, "%%" + str + "%%", RegexOptions.IgnoreCase);
             }
 
+            // 歌手-歌名(語系-類別-聲道) 名稱處理
+            FileStr = Regex.Replace(FileStr, @"[\{\(\[｛（［【].+?[_-].+?[】］）｝\]\)\}]", delegate (Match match)
+            {
+                string str = "%%" + match.ToString() + "%%";
+                return str;
+            });
+
             string FileStrOpti = FileStr;
             if (SongSingerType != "")
             {
@@ -216,6 +225,76 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
+                // 括號字串處理
+                MatchCollection matches = Regex.Matches(splitstr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                if (matches.Count > 0)
+                {
+                    foreach (Match match in matches)
+                    {
+                        string MatchStr = Regex.Replace(match.Value, @"^[\{\(\[｛（［【]|[】］）｝\]\)\}]$", "", RegexOptions.IgnoreCase);
+                        if (MatchStr.ContainsAny("_", "-"))
+                        {
+                            List<string> BracketStrlist = new List<string>(Regex.Split(((string)MatchStr), SeparateStr, RegexOptions.None));
+                            string BracketSeparateStr = (MatchStr.Contains("_")) ? "_" : "-";
+
+                            foreach (string BracketStr in BracketStrlist)
+                            {
+                                if (SongLangList.IndexOf(BracketStr) >= 0)
+                                {
+                                    SongLang = GetSongInfo("SongLang", BracketStr);
+                                    FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                }
+                                else if (SongTrackList.IndexOf(BracketStr.ToLower()) >= 0 || BracketStr.ToLower() == "l" || BracketStr.ToLower() == "r")
+                                {
+                                    SongTrack = GetSongInfo("SongTrack", BracketStr);
+                                    FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                }
+                                else
+                                {
+                                    if (BracketStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
+                                    SongSongType = BracketStr;
+                                    FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                }
+                            }
+                            FileNameRemoveList.Add(FileNameRemoveStr);
+                        }
+                        else
+                        {
+                            if (SongLangList.IndexOf(MatchStr) >= 0)
+                            {
+                                SongLang = GetSongInfo("SongLang", MatchStr);
+                                FileNameRemoveList.Add(MatchStr);
+                            }
+                            else
+                            {
+                                if (matches.Count > 1)
+                                {
+                                    if (SongTrackList.IndexOf(MatchStr.ToLower()) >= 0 || MatchStr.ToLower() == "l" || MatchStr.ToLower() == "r")
+                                    {
+                                        SongTrack = GetSongInfo("SongTrack", MatchStr);
+                                        FileNameRemoveList.Add(MatchStr);
+                                    }
+                                    else
+                                    {
+                                        if (MatchStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
+                                        SongSongType = MatchStr;
+                                        FileNameRemoveList.Add(MatchStr);
+                                    }
+                                }
+                                else
+                                {
+                                    if (MatchStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
+                                    if (SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower()) >= 0)
+                                    {
+                                        SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower())];
+                                        FileNameRemoveList.Add(MatchStr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // 查看檔案名稱中有無語系類別
                 if (SongLang == "")
                 {
@@ -223,31 +302,6 @@ namespace CrazyKTV_SongMgr
                     {
                         SongLang = GetSongInfo("SongLang", splitstr);
                         SongLangStr = splitstr;
-                    }
-                    else
-                    {
-                        // 歌名[歌曲類別][語系] 處理
-                        MatchCollection matches = Regex.Matches(splitstr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
-                        if (matches.Count > 0)
-                        {
-                            foreach (Match match in matches)
-                            {
-                                string MatchStr = Regex.Replace(match.Value, @"^[\{\(\[｛（［【]|[】］）｝\]\)\}]$", "", RegexOptions.IgnoreCase);
-                                if (SongLangList.IndexOf(MatchStr) >= 0)
-                                {
-                                    SongLang = GetSongInfo("SongLang", MatchStr);
-                                    SongLangRemoveStr = MatchStr;
-                                }
-                                else
-                                {
-                                    if (matches.Count > 1)
-                                    {
-                                        SongSongType = MatchStr;
-                                        SongSongTypeRemoveStr = MatchStr;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -274,9 +328,9 @@ namespace CrazyKTV_SongMgr
                 // 查看檔案名稱中有無歌曲類別
                 if (SongSongType == "")
                 {
-                    if (SongSongTypeList.IndexOf(splitstr.ToLower()) >= 0)
+                    if (SongSongTypeLowCaseList.IndexOf(splitstr.ToLower()) >= 0)
                     {
-                        SongSongType = splitstr;
+                        SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(splitstr.ToLower())];
                         SongSongTypeStr = splitstr;
                     }
                 }
@@ -328,17 +382,15 @@ namespace CrazyKTV_SongMgr
                     str = Regex.Replace(str, "^[_-]|[_-]$", "", RegexOptions.IgnoreCase);
                 }
 
-                // 歌名[歌曲類別][語系] 處理
-                if (SongLangRemoveStr != "")
+                // 去除括號內要移除的字串
+                if (FileNameRemoveList.Count > 0)
                 {
-                    str = Regex.Replace(str, @"[\{\(\[｛（［【]" + SongLangRemoveStr + @"[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
+                    foreach (string RemoveStr in FileNameRemoveList)
+                    {
+                        str = Regex.Replace(str, @"[\{\(\[｛（［【]" + RemoveStr + @"[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
+                    }
                 }
-
-                if (SongSongTypeRemoveStr != "")
-                {
-                    str = Regex.Replace(str, @"[\{\(\[｛（［【]" + SongSongTypeRemoveStr + @"[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
-                }
-
+                
                 list = new List<string>(Regex.Split(str, SeparateStr, RegexOptions.None));
 
                 switch (Global.SongAddSongIdentificationMode)
@@ -707,9 +759,13 @@ namespace CrazyKTV_SongMgr
                     switch (SongInfoValue.ToLower())
                     {
                         case "vl":
+                        case "l":
+                        case "左":
                             if (Global.SongMgrSongTrackMode == "True") { infovalue = "2"; } else { infovalue = "1"; }
                             break;
                         case "vr":
+                        case "r":
+                        case "右":
                             if (Global.SongMgrSongTrackMode == "True") { infovalue = "1"; } else { infovalue = "2"; }
                             break;
                         case "v3":

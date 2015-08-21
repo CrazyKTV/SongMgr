@@ -209,7 +209,6 @@ namespace CrazyKTV_SongMgr
                         break;
                 }
 
-                
                 if (SongQueryValue == "")
                 {
                     SongQuery_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
@@ -224,18 +223,24 @@ namespace CrazyKTV_SongMgr
                             case "SongName":
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
 
-                                List<string> SynonymousSomeNameList = new List<string>();
-                                SynonymousSomeNameList = CommonFunc.GetSynonymousSomeNameList(SongQueryValue);
-
-                                if (SynonymousSomeNameList.Count > 0)
+                                if (Global.SongQuerySynonymousQuery)
                                 {
-                                    foreach (string SynonymousSomeName in SynonymousSomeNameList)
+                                    List<string> SynonymousSongNameList = new List<string>();
+                                    SynonymousSongNameList = CommonFunc.GetSynonymousSongNameList(SongQueryValue);
+
+                                    if (SynonymousSongNameList.Count > 0)
                                     {
-                                        DataTable SynonymousSongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SynonymousSomeName), "");
-                                        foreach (DataRow row in SynonymousSongDT.Rows)
+                                        DataTable SynonymousSongDT = new DataTable();
+                                        foreach (string SynonymousSongName in SynonymousSongNameList)
                                         {
-                                            dt.ImportRow(row);
+                                            SynonymousSongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SynonymousSongName), "");
+                                            foreach (DataRow row in SynonymousSongDT.Rows)
+                                            {
+                                                dt.ImportRow(row);
+                                            }
                                         }
+                                        SynonymousSongDT.Dispose();
+                                        SynonymousSongDT = null;
                                     }
                                 }
                                 break;
@@ -328,7 +333,6 @@ namespace CrazyKTV_SongMgr
 
                                 SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                 SongQuery_DataGridView.Focus();
-                                dt.Dispose();
                             }
                         }
                     }
@@ -874,6 +878,11 @@ namespace CrazyKTV_SongMgr
             tasks.Add(Task.Factory.StartNew(() => Common_GetSongStatisticsTask()));
             tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6)));
             return RemoveSongIdlist;
+        }
+
+        private void SongQuery_SynonymousQuery_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongQuerySynonymousQuery = SongQuery_SynonymousQuery_CheckBox.Checked;
         }
 
         private void SongQuery_FuzzyQuery_CheckBox_CheckedChanged(object sender, EventArgs e)

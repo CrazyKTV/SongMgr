@@ -306,12 +306,13 @@ namespace CrazyKTV_SongMgr
             SongQuery_QueryType_ComboBox.ValueMember = "Value";
             SongQuery_QueryType_ComboBox.SelectedValue = 1;
 
-            SongQuery_FuzzyQuery_CheckBox.Checked = bool.Parse(Global.SongQueryFuzzyQuery);
-
             SongQuery_QueryFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList();
             SongQuery_QueryFilter_ComboBox.DisplayMember = "Display";
             SongQuery_QueryFilter_ComboBox.ValueMember = "Value";
             SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+
+            SongQuery_FuzzyQuery_CheckBox.Checked = bool.Parse(Global.SongQueryFuzzyQuery);
+            SongQuery_SynonymousQuery_CheckBox.Checked = Global.SongQuerySynonymousQuery;
 
             SongQuery_ExceptionalQuery_ComboBox.DataSource = SongQuery.GetSongQueryExceptionalList();
             SongQuery_ExceptionalQuery_ComboBox.DisplayMember = "Display";

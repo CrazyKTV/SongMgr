@@ -46,6 +46,7 @@
             this.SongQuery_ExceptionalQuery_ComboBox = new System.Windows.Forms.ComboBox();
             this.SongQuery_ExceptionalQuery_Label = new System.Windows.Forms.Label();
             this.SongQuery_Query_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongQuery_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongQuery_Clear_Button = new System.Windows.Forms.Button();
             this.SongQuery_Paste_Button = new System.Windows.Forms.Button();
             this.SongQuery_QueryFilter_ComboBox = new System.Windows.Forms.ComboBox();
@@ -549,6 +550,7 @@
             // 
             // SongQuery_Query_GroupBox
             // 
+            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_SynonymousQuery_CheckBox);
             this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_Clear_Button);
             this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_Paste_Button);
             this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryFilter_ComboBox);
@@ -568,6 +570,19 @@
             this.SongQuery_Query_GroupBox.TabIndex = 0;
             this.SongQuery_Query_GroupBox.TabStop = false;
             this.SongQuery_Query_GroupBox.Text = "歌曲查詢";
+            // 
+            // SongQuery_SynonymousQuery_CheckBox
+            // 
+            this.SongQuery_SynonymousQuery_CheckBox.AutoSize = true;
+            this.SongQuery_SynonymousQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_SynonymousQuery_CheckBox.Location = new System.Drawing.Point(175, 135);
+            this.SongQuery_SynonymousQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
+            this.SongQuery_SynonymousQuery_CheckBox.Name = "SongQuery_SynonymousQuery_CheckBox";
+            this.SongQuery_SynonymousQuery_CheckBox.Size = new System.Drawing.Size(83, 26);
+            this.SongQuery_SynonymousQuery_CheckBox.TabIndex = 11;
+            this.SongQuery_SynonymousQuery_CheckBox.Text = "同義字";
+            this.SongQuery_SynonymousQuery_CheckBox.UseVisualStyleBackColor = true;
+            this.SongQuery_SynonymousQuery_CheckBox.CheckedChanged += new System.EventHandler(this.SongQuery_SynonymousQuery_CheckBox_CheckedChanged);
             // 
             // SongQuery_Clear_Button
             // 
@@ -5362,6 +5377,7 @@
         private System.Windows.Forms.Button SongMaintenance_MultiSongPath_Button;
         private System.Windows.Forms.ListBox SongMaintenance_MultiSongPath_ListBox;
         private System.Windows.Forms.CheckBox SongAdd_UseCustomSongID_CheckBox;
+        private System.Windows.Forms.CheckBox SongQuery_SynonymousQuery_CheckBox;
     }
 }
 

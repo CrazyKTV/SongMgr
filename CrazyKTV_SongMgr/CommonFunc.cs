@@ -2161,9 +2161,9 @@ namespace CrazyKTV_SongMgr
             return new string(c);
         }
 
-        public static List<string> GetSynonymousSomeNameList(string SongQueryValue)
+        public static List<string> GetSynonymousSongNameList(string SongQueryValue)
         {
-            List<string> SynonymousSomeNameList = new List<string>();
+            List<string> SynonymousSongNameList = new List<string>();
 
             string SynonymousWord = string.Join("|", Global.SynonymousWordList);
             List<string> SynonymousWordList = new List<string>(SynonymousWord.Split('|'));
@@ -2183,9 +2183,9 @@ namespace CrazyKTV_SongMgr
                                 foreach (string wordstr in list)
                                 {
                                     string SongName = Regex.Replace(SongQueryValue, match.Value, wordstr, RegexOptions.IgnoreCase);
-                                    if (SynonymousSomeNameList.IndexOf(SongName) < 0 && SongName != SongQueryValue)
+                                    if (SynonymousSongNameList.IndexOf(SongName) < 0 && SongName != SongQueryValue)
                                     {
-                                        SynonymousSomeNameList.Add(SongName);
+                                        SynonymousSongNameList.Add(SongName);
                                     }
                                 }
                             }
@@ -2193,7 +2193,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
             }
-            return SynonymousSomeNameList;
+            return SynonymousSongNameList;
         }
 
 
