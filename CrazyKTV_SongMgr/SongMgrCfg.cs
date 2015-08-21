@@ -51,6 +51,9 @@ namespace CrazyKTV_SongMgr
                 // 檢查是否有自訂語系
                 Common_CheckSongLang();
 
+                // 歌庫維護 - 設定自訂語系相關控制項
+                SongMaintenance_SetCustomLangControl();
+
                 // 統計歌曲數量
                 Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
 
