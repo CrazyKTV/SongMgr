@@ -252,8 +252,16 @@ namespace CrazyKTV_SongMgr
                                 else
                                 {
                                     if (BracketStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
-                                    SongSongType = BracketStr;
-                                    FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                    if (SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower()) >= 0)
+                                    {
+                                        SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower())];
+                                        FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                    }
+                                    else
+                                    {
+                                        SongSongType = BracketStr;
+                                        FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                    }
                                 }
                             }
                             FileNameRemoveList.Add(FileNameRemoveStr);
@@ -277,8 +285,16 @@ namespace CrazyKTV_SongMgr
                                     else
                                     {
                                         if (MatchStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
-                                        SongSongType = MatchStr;
-                                        FileNameRemoveList.Add(MatchStr);
+                                        if (SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower()) >= 0)
+                                        {
+                                            SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower())];
+                                            FileNameRemoveList.Add(MatchStr);
+                                        }
+                                        else
+                                        {
+                                            SongSongType = MatchStr;
+                                            FileNameRemoveList.Add(MatchStr);
+                                        }
                                     }
                                 }
                                 else
