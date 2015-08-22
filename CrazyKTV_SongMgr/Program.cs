@@ -24,7 +24,6 @@ namespace CrazyKTV_SongMgr
     class Global
     {
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
-        public static string CrazyktvDatabaseVer = "";
         public static string CrazyktvSongDBVer = "1.00";
         public static string CrazyktvSongDBUpdateFile = Application.StartupPath + @"\SongMgr\Update\UpdateDB.xml";
         public static string CrazyktvDatabaseMaxDigitCode = "";
@@ -75,6 +74,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> CrazyktvSongLangList = new List<string>() { "國語", "台語", "粵語", "日語", "英語", "客語", "原住民語", "韓語", "兒歌", "其它" };
         public static List<string> CrazyktvSongLangIDList = new List<string>() { "國語,國", "台語,台,閩南,閩", "粵語,粵,廣東", "日語,日文,日", "英語,英文,英", "客語,客", "原住民語,民謠", "韓語,韓", "兒歌,兒", "其它" };
         public static List<string> CrazyktvSingerTypeList = new List<string>() { "男歌星", "女歌星", "樂團", "合唱", "外國男", "外國女", "外國樂團", "其它", "未使用", "未使用", "新進歌星" };
+        public static List<string> CrazyktvDBTableList = new List<string>();
 
         public static List<string> SongAnalysisSingerList = new List<string>();
         public static List<string> SongAnalysisSingerLowCaseList = new List<string>();

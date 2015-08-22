@@ -371,9 +371,9 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Focus();
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.OnHalf;
 
-                    if (Global.CrazyktvDatabaseVer == "Error" | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDatabaseVer == "Error") SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
+                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongQuery_QueryStatus_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
                         else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongQuery_QueryStatus_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongQuery_QueryStatus_Label.Text = "歌庫資料夾不存在!";
@@ -392,9 +392,9 @@ namespace CrazyKTV_SongMgr
                         SongAdd_Tooltip_Label.Text = "注意: 已有語系的歌曲編號僅剩 " + Global.RemainingSongID + " 個編號可用!";
                     }
 
-                    if (Global.CrazyktvDatabaseVer == "Error" | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDatabaseVer == "Error") SongAdd_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongAdd_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongAdd_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
                         else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongAdd_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongAdd_Tooltip_Label.Text = "歌庫資料夾不存在!";
@@ -408,9 +408,9 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SingerMgr_TabPage":
-                    if (Global.CrazyktvDatabaseVer == "Error" | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDatabaseVer == "Error") SingerMgr_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SingerMgr_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SingerMgr_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
                         else if (!File.Exists(Global.CrazyktvDatabaseFile)) SingerMgr_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SingerMgr_Tooltip_Label.Text = "歌庫資料夾不存在!";
@@ -424,9 +424,9 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SongMgrCfg_TabPage":
-                    if (Global.CrazyktvDatabaseVer == "Error" | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDatabaseVer == "Error") SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
                         else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
@@ -440,9 +440,9 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SongMaintenance_TabPage":
-                    if (Global.CrazyktvDatabaseVer == "Error" | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDatabaseVer == "Error") SongMaintenance_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMaintenance_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMaintenance_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
                         else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMaintenance_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMaintenance_Tooltip_Label.Text = "歌庫資料夾不存在!";

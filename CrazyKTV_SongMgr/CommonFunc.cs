@@ -168,16 +168,15 @@ namespace CrazyKTV_SongMgr
         {
             if (File.Exists(Global.CrazyktvDatabaseFile))
             {
-                string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
-                Global.CrazyktvDatabaseVer = CommonFunc.OleDbCheckDB(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+                Global.CrazyktvDBTableList = CommonFunc.GetOleDbTableList(Global.CrazyktvDatabaseFile, "");
             }
 
-            if (Global.CrazyktvDatabaseVer == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+            if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 || !File.Exists(Global.CrazyktvDatabaseFile) || !Directory.Exists(Global.SongMgrDestFolder))
             {
                 Common_SwitchDBVerErrorUI(false);
             }
 
-            if (Global.CrazyktvDatabaseVer == "Error")
+            if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0)
             {
                 if (File.Exists(Global.CrazyktvDatabaseFile) & File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdateSingerDB.txt") & File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt"))
                 {
@@ -188,7 +187,7 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            if (Global.CrazyktvDatabaseVer != "Error" & File.Exists(Global.CrazyktvDatabaseFile))
+            if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0 & File.Exists(Global.CrazyktvDatabaseFile))
             {
                 DataTable dt = new DataTable();
                 string SongQuerySqlStr = "select Song_Id from ktv_Song";
@@ -267,20 +266,14 @@ namespace CrazyKTV_SongMgr
                     Global.CrazyktvDatabaseMaxDigitCode = "Pass";
                 }
                 dt.Dispose();
+                dt = null;
                 Common_CheckDBUpdate();
             }
         }
 
         private void Common_CheckDBUpdate()
         {
-            string VersionQuerySqlStr = "select * from ktv_Version";
-            string VersionQueryStatus = "";
-            if (File.Exists(Global.CrazyktvDatabaseFile))
-            {
-                VersionQueryStatus = CommonFunc.OleDbCheckDB(Global.CrazyktvDatabaseFile, VersionQuerySqlStr, "");
-            }
-
-            if (Global.CrazyktvDatabaseVer != "Error" & VersionQueryStatus == "Error")
+            if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0 && Global.CrazyktvDBTableList.IndexOf("ktv_Version") < 0)
             {
                 if (File.Exists(Global.CrazyktvDatabaseFile) & File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdateSingerDB.txt") & File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt"))
                 {
@@ -293,6 +286,7 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
+                string VersionQuerySqlStr = "select * from ktv_Version";
                 DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, VersionQuerySqlStr, "");
                 double SongDBVer = 0.00;
                 string SingerDBVer = "0";
@@ -329,6 +323,8 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
+                dt.Dispose();
+                dt = null;
             }
         }
         
@@ -665,7 +661,7 @@ namespace CrazyKTV_SongMgr
 
         private void Common_GetSongStatisticsTask()
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDatabaseVer != "Error")
+            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song";
                 Global.SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
@@ -758,7 +754,7 @@ namespace CrazyKTV_SongMgr
 
         private void Common_CheckSongLang()
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDatabaseVer != "Error")
+            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
                 bool UpdateLang = false;
                 List<string> list = new List<string>();
@@ -811,7 +807,7 @@ namespace CrazyKTV_SongMgr
 
         private void Common_GetSingerStatisticsTask()
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDatabaseVer != "Error")
+            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
                 SingerMgr.CreateSongDataTable();
                 List<int> SingerTypeCount = new List<int>();
@@ -1277,33 +1273,32 @@ namespace CrazyKTV_SongMgr
             return myDataTable;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
-        public static string OleDbCheckDB(string Database, string OleDbString, string Password)
+        public static List<string> GetOleDbTableList(string Database, string Password)
         {
-            string str = "";
-            OleDbConnection icn = OleDbOpenConn(Database, Password);
-            if (icn.State == ConnectionState.Open)
-            {
-                OleDbDataAdapter da = new OleDbDataAdapter(OleDbString, icn);
-                DataSet ds = new DataSet();
-                ds.Clear();
+            List<string> list = new List<string>();
 
-                try
-                {
-                    da.Fill(ds);
-                    str = "OK";
-                }
-                catch
-                {
-                    str = "Error";
-                }
-                if (icn.State == ConnectionState.Open) icn.Close();
-            }
-            else
+            if (File.Exists(Database))
             {
-                str = "Error";
+                OleDbConnection conn = new OleDbConnection();
+                conn = CommonFunc.OleDbOpenConn(Database, Password);
+                DataTable dt = conn.GetSchema("Tables");
+
+                if (dt.Rows.Count > 0)
+                {
+                    Global.CrazyktvDBTableList = new List<string>();
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        if (row["TABLE_TYPE"].ToString() == "TABLE")
+                        {
+                            list.Add(row["TABLE_NAME"].ToString());
+                        }
+                    }
+                }
+                conn.Close();
+                dt.Dispose();
+                dt = null;
             }
-            return str;
+            return list;
         }
 
         public static void CompactAccessDB(string connectionString, string mdwfilename)
@@ -1441,7 +1436,7 @@ namespace CrazyKTV_SongMgr
 
         public static void GetRemainingSongId(int DigitCode)
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDatabaseVer != "Error")
+            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
                 List<string> StartIdlist = new List<string>();
                 StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
@@ -1956,7 +1951,7 @@ namespace CrazyKTV_SongMgr
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDatabaseVer != "Error")
+            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
                 DataTable dt = new DataTable();
                 string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";

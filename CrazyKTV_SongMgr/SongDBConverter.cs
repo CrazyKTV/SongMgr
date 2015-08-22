@@ -23,18 +23,20 @@ namespace CrazyKTV_SongMgr
             
             if (opd.ShowDialog() == DialogResult.OK && opd.FileName.Length > 0)
             {
+                List<string> list = new List<string>();
                 string SongQuerySqlStr = "";
-                string dbtype = "";
                 DataTable dt = new DataTable();
-
-                switch(SongDBConverter_SrcDBType_ComboBox.SelectedValue.ToString())
+                
+                switch (SongDBConverter_SrcDBType_ComboBox.SelectedValue.ToString())
                 {
                     case "1":
                         SongDBConverter_SrcDBFile_TextBox.Text = "";
                         SongDBConverter_StartConv_Button.Enabled = false;
                         SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType from ktv_Song";
-                        dbtype = CommonFunc.OleDbCheckDB(opd.FileName, SongQuerySqlStr, "");
-                        if (dbtype != "Error")
+
+                        list = CommonFunc.GetOleDbTableList(opd.FileName, "");
+
+                        if (list.IndexOf("ktv_Song") >= 0)
                         {
                             if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫不是 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
                         }
@@ -57,14 +59,18 @@ namespace CrazyKTV_SongMgr
                                 SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
                             }
                         }
+
                         dt.Dispose();
+                        dt = null;
                         break;
                     case "2":
                         SongDBConverter_SrcDBFile_TextBox.Text = "";
                         SongDBConverter_StartConv_Button.Enabled = false;
                         SongQuerySqlStr = "select Song_ID, Song_Type, Song_Singer, Song_SingerList, Song_Title from Tbl_Song";
-                        dbtype = CommonFunc.OleDbCheckDB(opd.FileName, SongQuerySqlStr, "tmwcmgumbonqd");
-                        if (dbtype != "Error")
+
+                        list = CommonFunc.GetOleDbTableList(opd.FileName, "tmwcmgumbonqd");
+
+                        if (list.IndexOf("Tbl_Song") >= 0)
                         {
                             if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫不是 JetKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
                         }
@@ -87,7 +93,9 @@ namespace CrazyKTV_SongMgr
                                 SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
                             }
                         }
+
                         dt.Dispose();
+                        dt = null;
                         break;
 
                 }
@@ -106,12 +114,11 @@ namespace CrazyKTV_SongMgr
                 SongDBConverter_DestDBFile_TextBox.Text = "";
                 SongDBConverter_StartConv_Button.Enabled = false;
 
-                DataTable dt = new DataTable();
-                string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
                 string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType from ktv_Song";
-                Global.CrazyktvDatabaseVer = CommonFunc.OleDbCheckDB(opd.FileName, SongAllSingerQuerySqlStr, "");
+                List<string> list = new List<string>();
+                list = CommonFunc.GetOleDbTableList(opd.FileName, "");
 
-                if (Global.CrazyktvDatabaseVer != "Error")
+                if (list.IndexOf("ktv_AllSinger") >= 0)
                 {
                     if (SongDBConverter_Tooltip_Label.Text == "你選取的目的資料庫不是新版的 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
                 }
@@ -122,7 +129,7 @@ namespace CrazyKTV_SongMgr
                     
                 if (SongDBConverter_Tooltip_Label.Text != "你選取的目的資料庫不是新版的 CrazyKTV 資料庫!")
                 {
-                    dt = new DataTable();
+                    DataTable dt = new DataTable();
                     dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, "");
 
                     if (dt.Rows.Count > 0)
@@ -135,8 +142,10 @@ namespace CrazyKTV_SongMgr
                         SongDBConverter_DestDBFile_TextBox.Text = opd.FileName;
                         SongDBConverter_SwitchButton(1);
                     }
+
+                    dt.Dispose();
+                    dt = null;
                 }
-                dt.Dispose();
             }
         }
 
