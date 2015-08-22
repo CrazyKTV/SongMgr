@@ -1084,7 +1084,7 @@ namespace CrazyKTV_SongMgr
         {
             if (MainTabControl.SelectedTab.Name == "SongQuery_TabPage")
             {
-                if (SongQuery_FavoriteQuery_ComboBox.Text != "System.Data.DataRowView" & SongQuery_FavoriteQuery_ComboBox.Text != "無最愛用戶")
+                if (SongQuery_FavoriteQuery_ComboBox.Focused && SongQuery_FavoriteQuery_ComboBox.Text != "System.Data.DataRowView" && SongQuery_FavoriteQuery_ComboBox.Text != "無最愛用戶")
                 {
                     Global.SongQueryQueryType = "FavoriteQuery";
                     SongQuery_EditMode_CheckBox.Checked = false;
