@@ -71,8 +71,6 @@ namespace CrazyKTV_SongMgr
             Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
             Global.AllSingerDT = null;
-            Global.DupSongAddDT.Dispose();
-            Global.DupSongAddDT = null;
         }
 
         public static void StartAddSong(int i)

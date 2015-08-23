@@ -1378,6 +1378,7 @@ namespace CrazyKTV_SongMgr
             SongAdd_DataGridView.AllowDrop = true;
             SongAdd_Add_Button.Text = "加入歌庫";
             SongAdd_Add_Button.Enabled = false;
+            SongAdd_Save_Button.Text = "儲存設定";
             SongAdd_Tooltip_Label.Text = "";
 
             SingerMgr_DataGridView.DataSource = null;

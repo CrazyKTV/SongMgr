@@ -738,19 +738,29 @@ namespace CrazyKTV_SongMgr
             Global.SongAddChorusSingerList.Clear();
             SongAddConn.Close();
 
-            if (Global.SongAddDupSongMode == "3") 
+            List<int> TotalList = Global.TotalList;
+            bool UpdateDupSong = false;
+            switch (Global.SongAddDupSongMode)
             {
-                SongAdd_SongUpdateTask();
-                Global.DupSongAddDT = new DataTable(); 
+                case "1":
+                    Global.DupSongAddDT.Dispose();
+                    Global.DupSongAddDT = null;
+                    break;
+                case "2":
+                    if (Global.DupSongAddDT.Rows.Count > 0) UpdateDupSong = true;
+                    break;
+                case "3":
+                    SongAdd_SongUpdateTask();
+                    Global.DupSongAddDT.Dispose();
+                    Global.DupSongAddDT = null;
+                    break;
             }
-                
-            
+
             this.BeginInvoke((Action)delegate()
             {
-                if (Global.DupSongAddDT.Rows.Count == 0)
+                Global.TimerEndTime = DateTime.Now;
+                if (!UpdateDupSong)
                 {
-                    Global.TimerEndTime = DateTime.Now;
-
                     switch (Global.SongAddDupSongMode)
                     {
                         case "1":
@@ -760,7 +770,7 @@ namespace CrazyKTV_SongMgr
                             SongAdd_Tooltip_Label.Text = "總共加入 " + Global.TotalList[0] + " 首歌曲,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成加歌。";
                             break;
                         case "3":
-                            SongAdd_Tooltip_Label.Text = "總共加入 " + Global.TotalList[0] + " 首歌曲,忽略重複歌曲 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成加歌。";
+                            SongAdd_Tooltip_Label.Text = "總共加入 " + TotalList[0] + " 首歌曲,加入重複歌曲 " + Global.TotalList[0] + " 首,失敗 " + TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成加歌。";
                             break;
                     }
 
@@ -796,6 +806,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
+                    SongAdd_Tooltip_Label.Text = "總共加入 " + Global.TotalList[0] + " 首歌曲,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成加歌。";
                     SongAdd_Add_Button.Text = "更新歌庫";
                     SongAdd_Save_Button.Text = "取消更新";
                     SongAdd_Add_Button.Enabled = true;
@@ -803,6 +814,8 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.DataSource = Global.DupSongAddDT;
                     SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.Enabled = true;
+                    Global.DupSongAddDT.Dispose();
+                    Global.DupSongAddDT = null;
                 }
             });
             SongAddSong.DisposeSongDataTable();
@@ -813,12 +826,10 @@ namespace CrazyKTV_SongMgr
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             Global.TotalList = new List<int>() { 0, 0, 0, 0, 0 };
 
-            switch (Global.SongAddDupSongMode)
+            if (Global.SongAddDupSongMode == "2")
             {
-                case "2":
-                    Global.DupSongAddDT = new DataTable();
-                    Global.DupSongAddDT = SongAdd_DataGridView.DataSource as DataTable;
-                    break;
+                Global.DupSongAddDT = new DataTable();
+                Global.DupSongAddDT = SongAdd_DataGridView.DataSource as DataTable;
             }
 
             Global.SongAddValueList = new List<string>();
@@ -889,50 +900,49 @@ namespace CrazyKTV_SongMgr
             }
             conn.Close();
 
-
-            this.BeginInvoke((Action)delegate()
+            if (Global.SongAddDupSongMode == "2")
             {
-                Global.TimerEndTime = DateTime.Now;
-
-                switch (Global.SongAddDupSongMode)
+                this.BeginInvoke((Action)delegate ()
                 {
-                    case "2":
-                        SongAdd_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成更新。";
-                        break;
-                }
+                    Global.TimerEndTime = DateTime.Now;
+                    SongAdd_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成更新。";
 
-                if (CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType") != Global.SongMgrSongType)
-                {
-                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", Global.SongMgrSongType);
-                }
-                SongMgrCfg_SongType_ListBox.DataSource = SongMgrCfg.GetSongTypeList();
-                SongMgrCfg_SongType_ListBox.DisplayMember = "Display";
-                SongMgrCfg_SongType_ListBox.ValueMember = "Value";
+                    if (CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType") != Global.SongMgrSongType)
+                    {
+                        CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", Global.SongMgrSongType);
+                    }
 
-                SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    SongMgrCfg_SongType_ListBox.DataSource = SongMgrCfg.GetSongTypeList();
+                    SongMgrCfg_SongType_ListBox.DisplayMember = "Display";
+                    SongMgrCfg_SongType_ListBox.ValueMember = "Value";
 
-                SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
-                SongQuery_RefreshSongType();
-                SongAdd_RefreshDefaultSongType();
-                Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
-                Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
+                    SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+                    SongQuery_QueryType_ComboBox.SelectedValue = 4;
+                    SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
 
-                SongAdd_Add_Button.Text = "加入歌庫";
-                SongAdd_Save_Button.Text = "儲存設定";
-                SongAdd_Add_Button.Enabled = false;
-                SongAdd_DataGridView.DataSource = null;
-                SongAdd_DataGridView.AllowDrop = true;
-                SongAdd_DataGridView.Enabled = true;
-                SongAdd_DragDrop_Label.Visible = true;
-                Common_SwitchSetUI(true);
+                    SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                    SongQuery_RefreshSongType();
+                    SongAdd_RefreshDefaultSongType();
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+                    Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
-                SongQuery_QueryType_ComboBox.SelectedValue = 1;
-                SongQuery_QueryValue_TextBox.Text = "";
-                MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
-            });
+                    SongAdd_Add_Button.Text = "加入歌庫";
+                    SongAdd_Save_Button.Text = "儲存設定";
+                    SongAdd_Add_Button.Enabled = false;
+                    SongAdd_DataGridView.DataSource = null;
+                    SongAdd_DataGridView.AllowDrop = true;
+                    SongAdd_DataGridView.Enabled = true;
+                    SongAdd_DragDrop_Label.Visible = true;
+                    Common_SwitchSetUI(true);
+
+                    SongQuery_QueryType_ComboBox.SelectedValue = 1;
+                    SongQuery_QueryValue_TextBox.Text = "";
+                    MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
+                });
+                Global.DupSongAddDT.Dispose();
+                Global.DupSongAddDT = null;
+            }
         }
 
         private void SongAdd_UseCustomSongID_CheckBox_CheckedChanged(object sender, EventArgs e)
