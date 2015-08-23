@@ -27,7 +27,7 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "更新語系":
                     Global.CrazyktvSongLangList = new List<string>();
-                    Global.CrazyktvSongLangIDList = new List<string>();
+                    Global.CrazyktvSongLangKeyWordList = new List<string>();
                     TextBox[] SongMaintenance_Lang_TextBox =
                     {
                         SongMaintenance_Lang1_TextBox,
@@ -64,9 +64,9 @@ namespace CrazyKTV_SongMgr
 
                     for (int i = 0; i < SongMaintenance_LangIDStr_TextBox.Count<TextBox>(); i++)
                     {
-                        Global.CrazyktvSongLangIDList.Add(SongMaintenance_LangIDStr_TextBox[i].Text);
+                        Global.CrazyktvSongLangKeyWordList.Add(SongMaintenance_LangIDStr_TextBox[i].Text);
                     }
-                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr", string.Join("*", Global.CrazyktvSongLangIDList));
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
 
                     Global.TimerStartTime = DateTime.Now;
                     Global.TotalList = new List<int>() { 0, 0, 0, 0 };
@@ -1472,7 +1472,7 @@ namespace CrazyKTV_SongMgr
 
             for (int i = 0; i < SongMaintenance_LangIDStr_TextBox.Count<TextBox>(); i++)
             {
-                SongMaintenance_LangIDStr_TextBox[i].Text = Global.CrazyktvSongLangIDList[i];
+                SongMaintenance_LangIDStr_TextBox[i].Text = Global.CrazyktvSongLangKeyWordList[i];
             }
         }
 
@@ -1504,36 +1504,42 @@ namespace CrazyKTV_SongMgr
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             List<string> list = new List<string>();
 
-            if (File.Exists(Application.StartupPath + @"\Lang\Taiwan.lang"))
+            if (File.Exists(Application.StartupPath + @"\SongMgr\Custom.lang"))
             {
-                StreamReader sr = new StreamReader(Application.StartupPath + @"\Lang\Taiwan.lang", Encoding.Unicode);
-                while (!sr.EndOfStream)
+                File.Copy(Application.StartupPath + @"\SongMgr\Custom.lang", Application.StartupPath + @"\Lang\Custom.lang", true);
+
+                if (File.Exists(Application.StartupPath + @"\Lang\Custom.lang"))
                 {
-                    list.Add(sr.ReadLine());
+                    StreamReader sr = new StreamReader(Application.StartupPath + @"\Lang\Custom.lang", Encoding.Unicode);
+                    while (!sr.EndOfStream)
+                    {
+                        list.Add(sr.ReadLine());
+                    }
+                    sr.Close();
+
+                    list[2] = string.Join(",", Global.CrazyktvSongLangList);
+
+                    StreamWriter sw = new StreamWriter(Application.StartupPath + @"\Lang\Custom.lang", false, Encoding.Unicode);
+                    foreach (string str in list)
+                    {
+                        sw.WriteLine(str);
+                    }
+                    sw.Close();
+
+                    CommonFunc.SaveConfigXmlFile(Global.CrazyktvCfgFile, "Language", "Custom");
                 }
-                sr.Close();
-
-                list[2] = string.Join(",", Global.CrazyktvSongLangList);
-
-                StreamWriter sw = new StreamWriter(Application.StartupPath + @"\Lang\Taiwan.lang", false, Encoding.Unicode);
-                foreach (string str in list)
-                {
-                    sw.WriteLine(str);
-                }
-                sw.Close();
-
-                CommonFunc.SaveConfigXmlFile(Global.CrazyktvCfgFile, "Language", "Taiwan");
             }
 
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Langauage_Name = @LangauageName";
+            string sqlColumnStr = "Langauage_Name = @LangauageName, Langauage_KeyWord = @LangauageKeyWord";
             string SongUpdateSqlStr = "update ktv_Langauage set " + sqlColumnStr + " where Langauage_Id=@LangauageId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
 
             foreach (string str in Global.CrazyktvSongLangList)
             {
                 cmd.Parameters.AddWithValue("@LangauageName", str);
+                cmd.Parameters.AddWithValue("@LangauageKeyWord", Global.CrazyktvSongLangKeyWordList[Global.CrazyktvSongLangList.IndexOf(str)]);
                 cmd.Parameters.AddWithValue("@LangauageId", Global.CrazyktvSongLangList.IndexOf(str));
 
                 try

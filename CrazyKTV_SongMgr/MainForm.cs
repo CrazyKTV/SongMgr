@@ -54,7 +54,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode", Global.SongAddSongIdentificationMode);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", Global.SongAddDupSongMode);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr", string.Join("*", Global.CrazyktvSongLangIDList));
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong", Global.SongMgrBackupRemoveSong);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop", Global.MainCfgAlwaysOnTop);
@@ -93,7 +93,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop"),
@@ -220,8 +220,24 @@ namespace CrazyKTV_SongMgr
             SongAdd_DupSongMode_ComboBox.ValueMember = "Value";
             SongAdd_DupSongMode_ComboBox.SelectedValue = Global.SongAddDupSongMode;
 
-            if (list[22] != "") Global.CrazyktvSongLangIDList = new List<string>(list[22].Split('*'));
-            if (Global.CrazyktvSongLangList.Count < 10) Global.CrazyktvSongLangIDList = new List<string>() { "國語,國", "台語,台,閩南,閩", "粵語,粵,廣東", "日語,日文,日", "英語,英文,英", "客語,客", "原住民語,民謠", "韓語,韓", "兒歌,兒", "其它" };
+            if (list[22] != "")
+            {
+                Global.CrazyktvSongLangKeyWordList = new List<string>(list[22].Split('|'));
+            }
+            else
+            {
+                string str = CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr");
+                Global.CrazyktvSongLangKeyWordList = new List<string>(str.Split('*'));
+                if (Global.CrazyktvSongLangKeyWordList.Count < 10)
+                {
+                    Global.CrazyktvSongLangKeyWordList = new List<string>() { "國語,國", "台語,台,閩南,閩", "粵語,粵,廣東", "日語,日文,日", "英語,英文,英", "客語,客", "原住民語,民謠", "韓語,韓", "兒歌,兒", "其它" };
+                }
+                else
+                {
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
+                    CommonFunc.RemoveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr");
+                }
+            }
 
             if (list[23] != "") Global.SongMgrBackupRemoveSong = list[23];
             SongMgrCfg_BackupRemoveSong_CheckBox.Checked = bool.Parse(Global.SongMgrBackupRemoveSong);
@@ -373,9 +389,9 @@ namespace CrazyKTV_SongMgr
 
                     if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
+                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongQuery_QueryStatus_Label.Text = "資料庫檔案不存在!";
+                        else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongQuery_QueryStatus_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongQuery_QueryStatus_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongQuery_QueryStatus_Label.Text = "歌庫資料夾不存在!";
                     }
                     else
@@ -394,9 +410,9 @@ namespace CrazyKTV_SongMgr
 
                     if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongAdd_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongAdd_Tooltip_Label.Text = "資料庫檔案不存在!";
+                        else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongAdd_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongAdd_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongAdd_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongAdd_Tooltip_Label.Text = "歌庫資料夾不存在!";
                     }
                     else
@@ -410,9 +426,9 @@ namespace CrazyKTV_SongMgr
                 case "SingerMgr_TabPage":
                     if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SingerMgr_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SingerMgr_Tooltip_Label.Text = "資料庫檔案不存在!";
+                        else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SingerMgr_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SingerMgr_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!File.Exists(Global.CrazyktvDatabaseFile)) SingerMgr_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SingerMgr_Tooltip_Label.Text = "歌庫資料夾不存在!";
                     }
                     else
@@ -426,9 +442,9 @@ namespace CrazyKTV_SongMgr
                 case "SongMgrCfg_TabPage":
                     if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
+                        else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
                     }
                     else
@@ -442,9 +458,9 @@ namespace CrazyKTV_SongMgr
                 case "SongMaintenance_TabPage":
                     if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | Global.CrazyktvDatabaseMaxDigitCode == "Error" | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                     {
-                        if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMaintenance_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMaintenance_Tooltip_Label.Text = "資料庫檔案不存在!";
+                        else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMaintenance_Tooltip_Label.Text = "資料庫檔案為舊版本!";
                         else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMaintenance_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMaintenance_Tooltip_Label.Text = "資料庫檔案不存在!";
                         else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMaintenance_Tooltip_Label.Text = "歌庫資料夾不存在!";
                     }
                     else

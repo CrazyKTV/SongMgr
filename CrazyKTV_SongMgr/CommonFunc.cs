@@ -327,7 +327,7 @@ namespace CrazyKTV_SongMgr
                 dt = null;
             }
         }
-        
+
         private void Common_UpdateDB(string UpdateType)
         {
             Global.TimerStartTime = DateTime.Now;
@@ -348,7 +348,7 @@ namespace CrazyKTV_SongMgr
                     SongDBBackupFile = Application.StartupPath + @"\SongMgr\Backup\CrazySongOld.mdb";
                     File.Copy(Global.CrazyktvDatabaseFile, SongDBBackupFile, true);
 
-                    OleDbCommand[] Ocmds = 
+                    OleDbCommand[] Ocmds =
                     {
                         new OleDbCommand("drop table ktv_Singer", conn),
                         new OleDbCommand("create table ktv_AllSinger (Singer_Id INTEGER NOT NULL PRIMARY KEY, Singer_Name TEXT(60) WITH COMPRESSION, Singer_Type TEXT(20) WITH COMPRESSION, Singer_Spell TEXT(60) WITH COMPRESSION, Singer_Strokes BYTE, Singer_SpellNum TEXT(60) WITH COMPRESSION, Singer_PenStyle TEXT(60) WITH COMPRESSION)", conn),
@@ -367,8 +367,8 @@ namespace CrazyKTV_SongMgr
                     SongDBBackupFile = Application.StartupPath + @"\SongMgr\Backup\" + DateTime.Now.ToLongDateString() + "_CrazySong.mdb";
                     File.Copy(Global.CrazyktvDatabaseFile, SongDBBackupFile, true);
                     RebuildSingerData = bool.Parse(Global.DBVerRebuildSingerData);
-                    
-                    OleDbCommand[] Acmds = 
+
+                    OleDbCommand[] Acmds =
                     {
                         new OleDbCommand("create table ktv_Version (Id INTEGER NOT NULL PRIMARY KEY, SongDB TEXT(10), SingerDB INTEGER, PhoneticsDB INTEGER)", conn),
                         new OleDbCommand("insert into ktv_Version ( Id, SongDB, SingerDB, PhoneticsDB) values ( 1, '1.00', 0, 0 )", conn)
@@ -393,7 +393,8 @@ namespace CrazyKTV_SongMgr
             {
                 new OleDbCommand("select * from ktv_Song", conn),
                 new OleDbCommand("select * from ktv_Singer", conn),
-                new OleDbCommand("select * from ktv_Phonetics", conn)
+                new OleDbCommand("select * from ktv_Phonetics", conn),
+                new OleDbCommand("select * from ktv_Langauage", conn)
             };
 
             foreach (OleDbCommand cmd in Scmds)
@@ -416,7 +417,9 @@ namespace CrazyKTV_SongMgr
             bool UpdateKtvSong = false;
             bool UpdateKtvSinger = false;
             bool UpdatePhonetics = false;
+            bool UpdateLangauage = true;
             bool RemoveGodLiuColumn = false;
+
             List<string> GodLiuColumnlist = new List<string>();
 
             foreach (DataRow row in dt.AsEnumerable())
@@ -449,6 +452,9 @@ namespace CrazyKTV_SongMgr
                         break;
                     case "PenStyle":
                         if (row["ColumnSize"].ToString() != "40") UpdatePhonetics = true;
+                        break;
+                    case "Langauage_KeyWord":
+                        UpdateLangauage = false;
                         break;
                     case "Song_SongNameFuzzy":
                     case "Song_SingerFuzzy":
@@ -508,9 +514,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    File.Copy(SongDBBackupFile, Global.CrazyktvDatabaseFile, true);
-                    SongMaintenance_Tooltip_Label.Text = "更新歌曲資料表失敗,已放棄更新並已還原為原本的資料庫檔案。";
-                    SongMaintenance_DBVerTooltip_Label.Text = "歌庫版本更新失敗...";
+                    SongMaintenance_DBVerTooltip_Label.Text = "更新歌曲資料表失敗,已還原為原本的資料庫檔案。";
                 }
             }
 
@@ -538,9 +542,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    File.Copy(SongDBBackupFile, Global.CrazyktvDatabaseFile, true);
-                    SongMaintenance_Tooltip_Label.Text = "更新歌手資料表失敗,已放棄更新並已還原為原本的資料庫檔案。";
-                    SongMaintenance_DBVerTooltip_Label.Text = "歌庫版本更新失敗...";
+                    SongMaintenance_DBVerTooltip_Label.Text = "更新歌手資料表失敗,已還原為原本的資料庫檔案。";
                 }
             }
 
@@ -548,7 +550,7 @@ namespace CrazyKTV_SongMgr
             {
                 OleDbCommand[] Updatecmds =
                 {
-                    new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn),
+                    new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn)
                 };
 
                 try
@@ -561,59 +563,84 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    File.Copy(SongDBBackupFile, Global.CrazyktvDatabaseFile, true);
-                    SongMaintenance_Tooltip_Label.Text = "更新拼音資料表失敗,已放棄更新並已還原為原本的資料庫檔案。";
-                    SongMaintenance_DBVerTooltip_Label.Text = "歌庫版本更新失敗...";
+                    SongMaintenance_DBVerTooltip_Label.Text = "更新拼音資料表失敗,已還原為原本的資料庫檔案。";
                 }
             }
 
-            if (!UpdateError)
+            if (UpdateLangauage)
             {
+                OleDbCommand[] Updatecmds =
+                {
+                    new OleDbCommand("alter table ktv_Langauage add column Langauage_KeyWord TEXT(255) WITH COMPRESSION", conn)
+                };
+
+                try
+                {
+                    foreach (OleDbCommand cmd in Updatecmds)
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    UpdateError = true;
+                    SongMaintenance_DBVerTooltip_Label.Text = "更新語言資料表失敗,已還原為原本的資料庫檔案。";
+                }
+            }
+
+            if (RemoveGodLiuColumn)
+            {
+                foreach (string GodLiuColumn in GodLiuColumnlist)
+                {
+                    switch (GodLiuColumn)
+                    {
+                        case "Song_SongNameFuzzy":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SongNameFuzzy";
+                            break;
+                        case "Song_SingerFuzzy":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SingerFuzzy";
+                            break;
+                        case "Song_FuzzyVer":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_FuzzyVer";
+                            break;
+                        case "DLspace":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column DLspace";
+                            break;
+                        case "Epasswd":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Epasswd";
+                            break;
+                        case "imgpath":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column imgpath";
+                            break;
+                        case "cashboxsongid":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxsongid";
+                            break;
+                        case "cashboxdat":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxdat";
+                            break;
+                        case "holidaysongid":
+                            GodLiuColumnDropSqlStr = "alter table ktv_Song drop column holidaysongid";
+                            break;
+                    }
+                    GodLiuColumnDropcmd = new OleDbCommand(GodLiuColumnDropSqlStr, conn);
+                    GodLiuColumnDropcmd.ExecuteNonQuery();
+                }
+            }
+            conn.Close();
+
+            if (UpdateError)
+            {
+                File.Copy(SongDBBackupFile, Global.CrazyktvDatabaseFile, true);
+            }
+            else
+            {
+                conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
                 SongDBVerUpdatecmdSqlStr = "update ktv_Version set SongDB = @SongDB where Id=@Id";
                 SongDBVerUpdatecmd = new OleDbCommand(SongDBVerUpdatecmdSqlStr, conn);
                 SongDBVerUpdatecmd.Parameters.AddWithValue("@SongDB", Global.CrazyktvSongDBVer);
                 SongDBVerUpdatecmd.Parameters.AddWithValue("@Id", "1");
                 SongDBVerUpdatecmd.ExecuteNonQuery();
                 SongDBVerUpdatecmd.Parameters.Clear();
-
-                if (RemoveGodLiuColumn)
-                {
-                    foreach(string GodLiuColumn in GodLiuColumnlist)
-                    {
-                        switch (GodLiuColumn)
-                        {
-                            case "Song_SongNameFuzzy":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SongNameFuzzy";
-                                break;
-                            case "Song_SingerFuzzy":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_SingerFuzzy";
-                                break;
-                            case "Song_FuzzyVer":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Song_FuzzyVer";
-                                break;
-                            case "DLspace":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column DLspace";
-                                break;
-                            case "Epasswd":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column Epasswd";
-                                break;
-                            case "imgpath":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column imgpath";
-                                break;
-                            case "cashboxsongid":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxsongid";
-                                break;
-                            case "cashboxdat":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column cashboxdat";
-                                break;
-                            case "holidaysongid":
-                                GodLiuColumnDropSqlStr = "alter table ktv_Song drop column holidaysongid";
-                                break;
-                        }
-                        GodLiuColumnDropcmd = new OleDbCommand(GodLiuColumnDropSqlStr, conn);
-                        GodLiuColumnDropcmd.ExecuteNonQuery();
-                    }
-                }
                 conn.Close();
 
                 var tasks = new List<Task>();
@@ -898,10 +925,12 @@ namespace CrazyKTV_SongMgr
             if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
                 bool UpdateLang = false;
-                List<string> list = new List<string>();
+
+                List<string> LangNamelist = new List<string>();
+                List<string> LangKeyWordlist = new List<string>();
 
                 DataTable dt = new DataTable();
-                string SongQuerySqlStr = "select Langauage_Id, Langauage_Name from ktv_Langauage";
+                string SongQuerySqlStr = "select Langauage_Id, Langauage_Name, Langauage_KeyWord from ktv_Langauage";
                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
                 if (dt.Rows.Count != 0)
@@ -911,22 +940,46 @@ namespace CrazyKTV_SongMgr
                         int i = Convert.ToInt32(row["Langauage_Id"]);
                         if (i < 10)
                         {
-                            if (row["Langauage_Name"].ToString() != Global.CrazyktvSongLangList[i])
+                            if (row["Langauage_Name"].ToString() != Global.CrazyktvSongLangList[i]) UpdateLang = true;
+                            LangNamelist.Add(row["Langauage_Name"].ToString());
+
+                            if (row["Langauage_KeyWord"].ToString() == "") 
                             {
                                 UpdateLang = true;
+                                LangKeyWordlist.Add(Global.CrazyktvSongLangKeyWordList[i]);
                             }
-                            list.Add(row["Langauage_Name"].ToString());
+                            else
+                            {
+                                if (row["Langauage_KeyWord"].ToString() != Global.CrazyktvSongLangKeyWordList[i]) UpdateLang = true;
+                                LangKeyWordlist.Add(row["Langauage_KeyWord"].ToString());
+                            }
                         }
                     }
 
                     if (UpdateLang)
                     {
-                        Global.CrazyktvSongLangList = list;
+                        Global.CrazyktvSongLangList = LangNamelist;
+                        Global.CrazyktvSongLangKeyWordList = LangKeyWordlist;
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+
                         CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
-                        Common_RefreshSongLang();
+                        CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
+
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "";
+                                Common_RefreshSongLang();
+                            });
+                        });
                     }
                 }
                 dt.Dispose();
+                dt = null;
             }
         }
 
@@ -944,6 +997,7 @@ namespace CrazyKTV_SongMgr
 
             Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
             SongMgrCfg_SetLangLB();
+            SongMaintenance_SetCustomLangControl();
         }
 
         private void Common_GetSingerStatisticsTask()
@@ -1371,6 +1425,25 @@ namespace CrazyKTV_SongMgr
             {
                 XElement AddNode = new XElement("setting", new XAttribute("Name", ConfigName), new XElement("Value",  ConfigValue));
                 rootElement.Add(AddNode);
+            }
+            xmldoc.Save(ConfigFile);
+        }
+
+        public static void RemoveConfigXmlFile(string ConfigFile, string ConfigName)
+        {
+            XDocument xmldoc = XDocument.Load(ConfigFile);
+            XElement rootElement = xmldoc.XPathSelectElement("Configeruation");
+
+            var Query = from childNode in rootElement.Elements("setting")
+                        where (string)childNode.Attribute("Name") == ConfigName
+                        select childNode;
+
+            if (Query.ToList().Count > 0)
+            {
+                foreach (XElement childNode in Query)
+                {
+                    childNode.Remove();
+                }
             }
             xmldoc.Save(ConfigFile);
         }

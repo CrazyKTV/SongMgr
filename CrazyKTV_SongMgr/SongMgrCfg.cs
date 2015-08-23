@@ -85,10 +85,10 @@ namespace CrazyKTV_SongMgr
 
                 if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
                 {
-                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
-                    else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongQuery_QueryStatus_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                    else if (!File.Exists(Global.CrazyktvDatabaseFile)) SongQuery_QueryStatus_Label.Text = "資料庫檔案不存在!";
-                    else if (!Directory.Exists(Global.SongMgrDestFolder)) SongQuery_QueryStatus_Label.Text = "歌庫資料夾不存在!";
+                    if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
+                    else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                    else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
+                    else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
                     Common_SwitchDBVerErrorUI(false);
                 }
                 else

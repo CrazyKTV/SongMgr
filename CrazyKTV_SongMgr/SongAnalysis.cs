@@ -720,14 +720,14 @@ namespace CrazyKTV_SongMgr
             {
                 case "SongLang":
                     List<string> list = new List<string>();
-                    foreach (string str in Global.CrazyktvSongLangIDList)
+                    foreach (string str in Global.CrazyktvSongLangKeyWordList)
                     {
                         list = new List<string>(str.Split(','));
                         foreach (string liststr in list)
                         {
                             if (SongInfoValue == liststr)
                             {
-                                infovalue = Global.CrazyktvSongLangList[Global.CrazyktvSongLangIDList.IndexOf(str)];
+                                infovalue = Global.CrazyktvSongLangList[Global.CrazyktvSongLangKeyWordList.IndexOf(str)];
                                 break;
                             }
                         }

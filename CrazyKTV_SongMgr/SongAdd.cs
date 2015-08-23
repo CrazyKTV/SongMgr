@@ -327,7 +327,7 @@ namespace CrazyKTV_SongMgr
             SongAnalysis.CreateSongDataTable();
             int total = 0;
 
-            foreach (string str in Global.CrazyktvSongLangIDList)
+            foreach (string str in Global.CrazyktvSongLangKeyWordList)
             {
                 strlist = new List<string>(str.Split(','));
                 foreach(string liststr in strlist)
