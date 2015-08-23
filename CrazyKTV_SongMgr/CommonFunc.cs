@@ -584,7 +584,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    SongMaintenance_DBVerTooltip_Label.Text = "更新語言資料表失敗,已還原為原本的資料庫檔案。";
+                    SongMaintenance_DBVerTooltip_Label.Text = "更新語系資料表失敗,已還原為原本的資料庫檔案。";
                 }
             }
 

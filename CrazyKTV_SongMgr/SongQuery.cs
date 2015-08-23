@@ -155,9 +155,10 @@ namespace CrazyKTV_SongMgr
         {
             Global.SongQueryQueryType = "SongQuery";
             SongQuery_EditMode_CheckBox.Enabled = true;
-
             SongQuery_DataGridView.DataSource = null;
             if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+            GC.Collect();
+
             SongQuery_QueryStatus_Label.Text = "";
             string SongQueryStatusText = "";
             string SongQueryValue = "";
@@ -335,6 +336,8 @@ namespace CrazyKTV_SongMgr
                                 SongQuery_DataGridView.Focus();
                             }
                         }
+                        dt.Dispose();
+                        dt = null;
                     }
                     catch
                     {
@@ -388,6 +391,8 @@ namespace CrazyKTV_SongMgr
                 int i = Convert.ToInt32(row["RowIndex"]);
                 string OldSongId = row["SongId"].ToString();
                 string OldSongLang = row["SongLang"].ToString();
+                string OldSongSinger = "";
+                string OldSongSongName = "";
 
                 string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
                 string SongLang = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
@@ -430,7 +435,9 @@ namespace CrazyKTV_SongMgr
                 string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
 
                 bool DuplicateSong = false;
+                bool MoveFile = false;
                 bool MoveError = false;
+
                 List<string> ChorusSingerList = new List<string>() { "未有合唱歌手資料" };
 
                 var query = from DupSongRow in Global.SongDT.AsEnumerable()
@@ -483,7 +490,7 @@ namespace CrazyKTV_SongMgr
                             Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                             this.BeginInvoke((Action)delegate()
                             {
-                                SongQuery_QueryStatus_Label.Text = "已有重複歌曲,請參考操作記錄裡的內容!";
+                                SongQuery_QueryStatus_Label.Text = "已復原變更,因有重複歌曲,請參考操作記錄裡的內容!";
                             });
                             break;
                         } 
@@ -505,6 +512,8 @@ namespace CrazyKTV_SongMgr
                     {
                         bool UseMultiSongPath = false;
                         string MultiSongPath = "";
+                        MoveFile = true;
+
                         if (Global.SongMaintenanceEnableMultiSongPath == "True" & SongPath.ContainsAny(Global.SongMaintenanceMultiSongPathList.ToArray()))
                         {
                             foreach (string str in Global.SongMaintenanceMultiSongPathList)
@@ -590,6 +599,35 @@ namespace CrazyKTV_SongMgr
                                 break;
                         }
                     }
+                    else // 不搬移不複製模式
+                    {
+                        query = from OldSongRow in Global.SongDT.AsEnumerable()
+                                where OldSongRow.Field<string>("Song_Id") == OldSongId
+                                select OldSongRow;
+
+                        if (query.Count<DataRow>() > 0)
+                        {
+                            foreach (DataRow OldSongRow in query)
+                            {
+                                OldSongSinger = OldSongRow["Song_Singer"].ToString();
+                                OldSongSongName = OldSongRow["Song_SongName"].ToString();
+                                break;
+                            }
+
+                            if (SongFileName.ContainsAny(OldSongSinger, OldSongSongName))
+                            {
+                                if (OldSongSinger != SongSingerStr || OldSongSongName != SongSongName)
+                                {
+                                    MoveFile = true;
+                                    SongFileName = Regex.Replace(SongFileName, OldSongSinger + "|" + OldSongSongName, delegate (Match match)
+                                    {
+                                        string str = (match.ToString() == OldSongSinger) ? SongSingerStr : SongSongName;
+                                        return str;
+                                    });
+                                }
+                            }
+                        }
+                    }
 
                     this.BeginInvoke((Action)delegate()
                     {
@@ -598,7 +636,7 @@ namespace CrazyKTV_SongMgr
                         SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongPath + SongFileName;
                     });
 
-                    if (Global.SongMgrSongAddMode != "3")
+                    if (MoveFile)
                     {
                         string SongDestPath = Path.Combine(SongPath, SongFileName);
 
@@ -799,6 +837,7 @@ namespace CrazyKTV_SongMgr
             }
             conn.Close();
             Global.SongDT.Dispose();
+            Global.SongDT = null;
 
             if (SongIdUpdate)
             {
