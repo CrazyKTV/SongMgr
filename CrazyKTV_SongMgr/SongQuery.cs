@@ -447,7 +447,7 @@ namespace CrazyKTV_SongMgr
                                   DupSongRow.Field<string>("Song_SongName").ToLower().Equals(SongSongName.ToLower())
                             select DupSongRow;
 
-                if (query.Count<DataRow>() == 0 & SongSingerType == 3)
+                if (query.Count<DataRow>() == 0 && SongSingerType == 3)
                 {
                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                     if (r.Matches(SongSinger).Count > 0)
@@ -462,6 +462,23 @@ namespace CrazyKTV_SongMgr
                                       DupSongRow.Field<string>("Song_Singer").Length.Equals(SongSinger.Length) &&
                                       DupSongRow.Field<string>("Song_SongName").ToLower().Equals(SongSongName.ToLower())
                                 select DupSongRow;
+                }
+
+                if (query.Count<DataRow>() == 0 && Global.SongQuerySynonymousQuery)
+                {
+                    List<string> SynonymousSongNameList = new List<string>();
+                    SynonymousSongNameList = CommonFunc.GetSynonymousSongNameList(SongSongName);
+                    List<string> SynonymousSongNameLowCaseList = SynonymousSongNameList.ConvertAll(str => str.ToLower());
+
+                    if (SynonymousSongNameList.Count > 0)
+                    {
+                        query = from DupSongRow in Global.SongDT.AsEnumerable()
+                                where DupSongRow.Field<string>("Song_Id") != OldSongId &&
+                                      DupSongRow.Field<string>("Song_Lang").Equals(SongLang) &&
+                                      DupSongRow.Field<string>("Song_Singer").ToLower().Equals(SongSinger.ToLower()) &&
+                                      DupSongRow.Field<string>("Song_SongName").ToLower().ContainsAny(SynonymousSongNameLowCaseList.ToArray())
+                                select DupSongRow;
+                    }
                 }
 
                 if (query.Count<DataRow>() > 0)
