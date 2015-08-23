@@ -66,9 +66,13 @@ namespace CrazyKTV_SongMgr
         {
             Global.SongAddAllSongIDList.Clear();
             Global.SongDT.Dispose();
+            Global.SongDT = null;
             Global.SingerDT.Dispose();
+            Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
+            Global.AllSingerDT = null;
             Global.DupSongAddDT.Dispose();
+            Global.DupSongAddDT = null;
         }
 
         public static void StartAddSong(int i)
@@ -101,6 +105,22 @@ namespace CrazyKTV_SongMgr
                               row.Field<string>("Song_Singer").Length.Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").Length) &&
                               row.Field<string>("Song_SongName").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
                         select row;
+            }
+
+            if (query.Count<DataRow>() == 0 && Global.SongQuerySynonymousQuery)
+            {
+                List<string> SynonymousSongNameList = new List<string>();
+                SynonymousSongNameList = CommonFunc.GetSynonymousSongNameList(Global.SongAddDT.Rows[i].Field<string>("Song_SongName"));
+                List<string> SynonymousSongNameLowCaseList = SynonymousSongNameList.ConvertAll(str => str.ToLower());
+
+                if (SynonymousSongNameList.Count > 0)
+                {
+                    query = from row in Global.SongDT.AsEnumerable()
+                            where row.Field<string>("Song_Lang").Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Lang")) &&
+                                  row.Field<string>("Song_Singer").ToLower().Equals(Global.SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower()) &&
+                                  row.Field<string>("Song_SongName").ToLower().ContainsAny(SynonymousSongNameLowCaseList.ToArray())
+                            select row;
+                }
             }
 
             if (query.Count<DataRow>() > 0)
