@@ -64,6 +64,9 @@ namespace CrazyKTV_SongMgr
                 SongQuery_GetFavoriteUserList();
                 SongMaintenance_GetFavoriteUserList();
 
+                // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
+                Common_ClearDataGridView();
+
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", Global.CrazyktvDatabaseFile);
             }
         }

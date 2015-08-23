@@ -1364,6 +1364,26 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void Common_ClearDataGridView()
+        {
+            Global.SongQueryQueryType = "SongQuery";
+            SongQuery_EditMode_CheckBox.Checked = false;
+            SongQuery_EditMode_CheckBox.Enabled = true;
+            SongQuery_DataGridView.DataSource = null;
+            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+            SongQuery_QueryStatus_Label.Text = "";
+
+            SongAdd_DataGridView.DataSource = null;
+            SongAdd_DragDrop_Label.Visible = true;
+            SongAdd_DataGridView.AllowDrop = true;
+            SongAdd_Add_Button.Text = "加入歌庫";
+            SongAdd_Add_Button.Enabled = false;
+            SongAdd_Tooltip_Label.Text = "";
+
+            SingerMgr_DataGridView.DataSource = null;
+            SingerMgr_Tooltip_Label.Text = "";
+            GC.Collect();
+        }
 
 
     }
