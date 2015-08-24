@@ -67,6 +67,18 @@ namespace CrazyKTV_SongMgr
                 // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
                 Common_ClearDataGridView();
 
+                if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
+                {
+                    if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
+                    else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
+                    else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
+                    else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
+                }
+                else
+                {
+                    SongMgrCfg_Tooltip_Label.Text = "";
+                }
+
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", Global.CrazyktvDatabaseFile);
             }
         }
@@ -98,7 +110,7 @@ namespace CrazyKTV_SongMgr
                 {
                     // 統計歌曲數量
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    SongQuery_QueryStatus_Label.Text = "";
+                    SongMgrCfg_Tooltip_Label.Text = "";
                     Common_SwitchDBVerErrorUI(true);
                 }
 

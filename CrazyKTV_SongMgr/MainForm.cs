@@ -26,6 +26,8 @@ namespace CrazyKTV_SongMgr
                 if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Update")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Update");
                 CommonFunc.CreateConfigXmlFile(Global.CrazyktvSongDBUpdateFile);
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", Global.CrazyktvSongDBVer);
+                CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer", Global.CrazyktvSingerDBVer);
+                CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer", Global.CrazyktvPhoneticsDBVer);
             }
 
             // 載入歌庫設定
@@ -107,7 +109,9 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID"),
+                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer"),
+                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer"),
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -289,6 +293,10 @@ namespace CrazyKTV_SongMgr
 
             if (list[36] != "") Global.SongAddUseCustomSongID = list[36];
             SongAdd_UseCustomSongID_CheckBox.Checked = bool.Parse(Global.SongAddUseCustomSongID);
+
+            if (list[37] != "") Global.CrazyktvSingerDBVer = list[37];
+
+            if (list[38] != "") Global.CrazyktvPhoneticsDBVer = list[38];
 
             // 建立歌曲操作記錄資料表
             Global.SongLogDT = new DataTable();
