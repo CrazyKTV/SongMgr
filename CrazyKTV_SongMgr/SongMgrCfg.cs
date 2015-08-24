@@ -39,45 +39,16 @@ namespace CrazyKTV_SongMgr
             opd.Filter = "資料庫檔案 (*.mdb)|*.mdb";
             opd.FilterIndex = 1;
 
-
             if (opd.ShowDialog() == DialogResult.OK && opd.FileName.Length > 0)
             {
                 Global.CrazyktvDatabaseFile = opd.FileName;
                 SongMgrCfg_DBFile_TextBox.Text = opd.FileName;
 
-                // 檢查資料庫檔案是否為舊版資料庫
-                Common_CheckDBVer();
-
-                // 檢查是否有自訂語系
-                Common_CheckSongLang();
-
-                // 歌庫維護 - 設定自訂語系相關控制項
-                SongMaintenance_SetCustomLangControl();
-
-                // 統計歌曲數量
-                Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-
-                // 統計歌手數量
-                Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
-
-                // 載入我的最愛清單
-                SongQuery_GetFavoriteUserList();
-                SongMaintenance_GetFavoriteUserList();
-
                 // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
                 Common_ClearDataGridView();
 
-                if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
-                {
-                    if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
-                    else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
-                    else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                    else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
-                }
-                else
-                {
-                    SongMgrCfg_Tooltip_Label.Text = "";
-                }
+                // 檢查資料庫檔案
+                SongDBUpdate_CheckDatabaseFile();
 
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", Global.CrazyktvDatabaseFile);
             }
@@ -110,7 +81,10 @@ namespace CrazyKTV_SongMgr
                 {
                     // 統計歌曲數量
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    SongMgrCfg_Tooltip_Label.Text = "";
+                    if (SongMgrCfg_Tooltip_Label.Text == "資料庫檔案為舊版本!") SongMgrCfg_Tooltip_Label.Text = "";
+                    else if (SongMgrCfg_Tooltip_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SongMgrCfg_Tooltip_Label.Text = "";
+                    else if (SongMgrCfg_Tooltip_Label.Text == "資料庫檔案不存在!") SongMgrCfg_Tooltip_Label.Text = "";
+                    else if (SongMgrCfg_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMgrCfg_Tooltip_Label.Text = "";
                     Common_SwitchDBVerErrorUI(true);
                 }
 

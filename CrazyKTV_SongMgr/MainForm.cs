@@ -304,25 +304,7 @@ namespace CrazyKTV_SongMgr
             Global.SongLogDT.Columns.Add(new DataColumn("Value", typeof(int)));
 
             // 檢查資料庫檔案是否為舊版資料庫
-            Common_CheckDBVer();
-
-            // 檢查是否有自訂語系
-            Common_CheckSongLang();
-
-            // 統計歌曲數量
-            Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-
-            // 統計歌手數量
-            Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
-
-            // 檢查備份移除歌曲是否要刪除
-            Task.Factory.StartNew(() => Common_CheckBackupRemoveSongTask());
-
-            // 取得最小歌曲剩餘編號
-            Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
-
-            // 載入我的最愛清單
-            SongQuery_GetFavoriteUserList();
+            SongDBUpdate_CheckDatabaseFile();
 
             // 歌曲查詢 - 載入下拉選單清單及設定
             SongQuery_QueryType_ComboBox.DataSource = SongQuery.GetSongQueryTypeList();
@@ -343,9 +325,6 @@ namespace CrazyKTV_SongMgr
             SongQuery_ExceptionalQuery_ComboBox.ValueMember = "Value";
             SongQuery_ExceptionalQuery_ComboBox.SelectedValue = 1;
 
-            // 歌庫設定 - 載入下拉選單清單及設定
-            SongMgrCfg_SetLangLB();
-
             // 歌手管理 - 載入下拉選單清單及設定
             SingerMgr_QueryType_ComboBox.DataSource = SingerMgr.GetSingerTypeList();
             SingerMgr_QueryType_ComboBox.DisplayMember = "Display";
@@ -358,10 +337,6 @@ namespace CrazyKTV_SongMgr
             SingerMgr_SingerAddType_ComboBox.ValueMember = "Value";
             SingerMgr_SingerAddType_ComboBox.SelectedValue = 1;
             SingerMgr_SingerAddName_TextBox.ImeMode = ImeMode.OnHalf;
-
-            // 歌庫維護 - 載入下拉選單清單及設定
-            SongMaintenance_GetFavoriteUserList();
-            SongMaintenance_SetCustomLangControl();
 
             // 歌庫轉換 - 載入下拉選單清單
             SongDBConverter_SrcDBType_ComboBox.DataSource = SongDBConverter.GetSrcDBTypeList();
@@ -383,7 +358,10 @@ namespace CrazyKTV_SongMgr
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
+            if (File.Exists(Global.CrazyktvDatabaseFile))
+            {
+                CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
+            }
         }
 
         // 頁籤切換處理
@@ -484,7 +462,7 @@ namespace CrazyKTV_SongMgr
                         case "SongMaintenance_CustomLang_TabPage":
                         case "SongMaintenance_MultiSongPath_TabPage":
                         case "SongMaintenance_DBVer_TabPage":
-                            SongMaintenance_Save_Button.Enabled = true;
+                            if (SongMaintenance_TabControl.Enabled == true) SongMaintenance_Save_Button.Enabled = true;
                             break;
                         default:
                             SongMaintenance_Save_Button.Enabled = false;
