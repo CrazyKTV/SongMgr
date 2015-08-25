@@ -1282,7 +1282,7 @@ namespace CrazyKTV_SongMgr
                         if (ExistsIdlist.Count > 0)
                         {
                             int iMax = Convert.ToInt32(ExistsIdlist[ExistsIdlist.Count - 1]);
-                            Parallel.For(iMin, iMax, (i, ForloopState) =>
+                            for (int i = iMin; i < iMax; i++)
                             {
                                 if (ExistsIdlist.IndexOf(i.ToString(MaxDigitCode)) < 0)
                                 {
@@ -1291,7 +1291,7 @@ namespace CrazyKTV_SongMgr
                                     idrow["Song_Lang"] = str;
                                     Global.NotExistsSongIdDT.Rows.Add(idrow);
                                 }
-                            });
+                            }
                         }
                     }
                     ExistsIdlist.Clear();
