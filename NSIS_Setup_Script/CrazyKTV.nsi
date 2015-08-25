@@ -86,7 +86,7 @@ Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
 ; 設定安裝程式輸出檔案
 !ifdef INSTALLER_STD
-	OutFile ".\out\${PRODUCT_NAME}_Full.exe"
+	OutFile ".\out\${PRODUCT_NAME}_Setup.exe"
 !endif
 
 ; 設定安裝類型
