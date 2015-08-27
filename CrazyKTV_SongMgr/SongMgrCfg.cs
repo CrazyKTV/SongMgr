@@ -706,23 +706,11 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetCustomSingerTypeStructureList(int ComboBoxIndex)
         {
-            List<string> SingerTypeStructureList = new List<string>()
-            {
-                "男,男星,男歌星,男歌手",
-                "女,女星,女歌星,女歌手",
-                "團,團體,樂團",
-                "合唱,對唱",
-                "外男,外國男星,外國男歌星,外國男歌手",
-                "外女,外國女星,外國女歌星,外國女歌手",
-                "外團,外國團體,外國樂團",
-                "未知",
-            };
-
             DataTable list = new DataTable();
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            string[] str = SingerTypeStructureList[ComboBoxIndex].Split(',');
+            string[] str = Global.SingerTypeStructureList[ComboBoxIndex].Split(',');
             foreach (string s in str)
             {
                 list.Rows.Add(list.NewRow());
@@ -734,24 +722,12 @@ namespace CrazyKTV_SongMgr
 
         public static void SetCustomSingerTypeStructureList()
         {
-            List<string> SingerTypeStructureList = new List<string>()
-            {
-                "男,男星,男歌星,男歌手",
-                "女,女星,女歌星,女歌手",
-                "團,團體,樂團",
-                "合唱,對唱",
-                "外男,外國男星,外國男歌星,外國男歌手",
-                "外女,外國女星,外國女歌星,外國女歌手",
-                "外團,外國團體,外國樂團",
-                "未知",
-            };
-
             Global.SongMgrCustomSingerTypeStructureList = new List<string>();
             List<string> valuelist = new List<string>(Global.SongMgrCustomSingerTypeStructure.Split(','));
 
-            for (int i = 0; i < SingerTypeStructureList.Count; i++)
+            for (int i = 0; i < Global.SingerTypeStructureList.Count; i++)
             {
-                List<string> strlist = new List<string>(SingerTypeStructureList[i].Split(','));
+                List<string> strlist = new List<string>(Global.SingerTypeStructureList[i].Split(','));
                 Global.SongMgrCustomSingerTypeStructureList.Add(strlist[Convert.ToInt32(valuelist[i])-1]);
             }
 

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -304,10 +302,6 @@ namespace CrazyKTV_SongMgr
             if (list[39] != "") Global.SongMgrCustomSingerTypeStructure = list[39];
             SongMgrCfg_SetCustomSingerTypeStructureCbox();
 
-            MainCfg_BackupRemoveSongDays_ComboBox.DataSource = MainCfg.GetBackupRemoveSongDaysList();
-            MainCfg_BackupRemoveSongDays_ComboBox.DisplayMember = "Display";
-            MainCfg_BackupRemoveSongDays_ComboBox.ValueMember = "Value";
-            MainCfg_BackupRemoveSongDays_ComboBox.SelectedValue = Global.MainCfgBackupRemoveSongDays;
 
 
             // 建立歌曲操作記錄資料表
@@ -365,7 +359,6 @@ namespace CrazyKTV_SongMgr
 
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
 
-            Console.WriteLine(string.Join(",", Global.SongMgrCustomSingerTypeStructureList));
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
