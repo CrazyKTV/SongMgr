@@ -737,11 +737,15 @@ namespace CrazyKTV_SongMgr
                 case "SongSingerType":
                     switch (SongInfoValue)
                     {
+                        case "男歌手":
                         case "男歌星":
+                        case "男星":
                         case "男":
                             infovalue = "0";
                             break;
+                        case "女歌手":
                         case "女歌星":
+                        case "女星":
                         case "女":
                             infovalue = "1";
                             break;
@@ -754,15 +758,20 @@ namespace CrazyKTV_SongMgr
                         case "對唱":
                             infovalue = "3";
                             break;
-                        case "外國男":
+                        case "外國男歌手":
+                        case "外國男歌星":
+                        case "外國男星":
                         case "外男":
                             infovalue = "4";
                             break;
-                        case "外國女":
+                        case "外國女歌手":
+                        case "外國女歌星":
+                        case "外國女星":
                         case "外女":
                             infovalue = "5";
                             break;
                         case "外國樂團":
+                        case "外國團體":
                         case "外團":
                             infovalue = "6";
                             break;

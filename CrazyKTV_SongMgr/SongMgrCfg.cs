@@ -30,6 +30,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrFileStructure", Global.SongMgrFileStructure);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongTrackMode", Global.SongMgrSongTrackMode);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong", Global.SongMgrBackupRemoveSong);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
         }
 
         private void SongMgrCfg_DBFile_Button_Click(object sender, EventArgs e)
@@ -512,6 +513,64 @@ namespace CrazyKTV_SongMgr
             Global.SongMgrBackupRemoveSong = SongMgrCfg_BackupRemoveSong_CheckBox.Checked.ToString();
         }
 
+        private void SongMgrCfg_SetCustomSingerTypeStructureCbox()
+        {
+            ComboBox[] SongMgrCfg_CustomSingerTypeStructure_ComboBox =
+            {
+                SongMgrCfg_CustomSingerTypeStructure1_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure2_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure3_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure4_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure5_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure6_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure7_ComboBox,
+                SongMgrCfg_CustomSingerTypeStructure8_ComboBox
+            };
+
+            List<string> cboxvalue = new List<string>(Global.SongMgrCustomSingerTypeStructure.Split(','));
+
+            for (int i = 0; i < SongMgrCfg_CustomSingerTypeStructure_ComboBox.Count<ComboBox>(); i++)
+            {
+                SongMgrCfg_CustomSingerTypeStructure_ComboBox[i].DataSource = SongMgrCfg.GetCustomSingerTypeStructureList(i);
+                SongMgrCfg_CustomSingerTypeStructure_ComboBox[i].DisplayMember = "Display";
+                SongMgrCfg_CustomSingerTypeStructure_ComboBox[i].ValueMember = "Value";
+                SongMgrCfg_CustomSingerTypeStructure_ComboBox[i].SelectedValue = cboxvalue[i];
+            }
+            SongMgrCfg.SetCustomSingerTypeStructureList();
+        }
+
+        private void SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cbox = (ComboBox)sender;
+
+            if (cbox.Focused && cbox.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                ComboBox[] SongMgrCfg_CustomSingerTypeStructure_ComboBox =
+                {
+                    SongMgrCfg_CustomSingerTypeStructure1_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure2_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure3_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure4_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure5_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure6_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure7_ComboBox,
+                    SongMgrCfg_CustomSingerTypeStructure8_ComboBox
+                };
+
+                List<string> cboxvalue = new List<string>();
+                for (int i = 0; i < SongMgrCfg_CustomSingerTypeStructure_ComboBox.Count<ComboBox>(); i++)
+                {
+                    cboxvalue.Add(SongMgrCfg_CustomSingerTypeStructure_ComboBox[i].SelectedValue.ToString());
+                }
+
+                Global.SongMgrCustomSingerTypeStructure = string.Join(",", cboxvalue);
+                SongMgrCfg.SetCustomSingerTypeStructureList();
+            }
+        }
+
+
+
+
 
     }
     
@@ -645,8 +704,62 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
+        public static DataTable GetCustomSingerTypeStructureList(int ComboBoxIndex)
+        {
+            List<string> SingerTypeStructureList = new List<string>()
+            {
+                "男,男星,男歌星,男歌手",
+                "女,女星,女歌星,女歌手",
+                "團,團體,樂團",
+                "合唱,對唱",
+                "外男,外國男星,外國男歌星,外國男歌手",
+                "外女,外國女星,外國女歌星,外國女歌手",
+                "外團,外國團體,外國樂團",
+                "未知",
+            };
+
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            string[] str = SingerTypeStructureList[ComboBoxIndex].Split(',');
+            foreach (string s in str)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = s;
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+            return list;
+        }
+
+        public static void SetCustomSingerTypeStructureList()
+        {
+            List<string> SingerTypeStructureList = new List<string>()
+            {
+                "男,男星,男歌星,男歌手",
+                "女,女星,女歌星,女歌手",
+                "團,團體,樂團",
+                "合唱,對唱",
+                "外男,外國男星,外國男歌星,外國男歌手",
+                "外女,外國女星,外國女歌星,外國女歌手",
+                "外團,外國團體,外國樂團",
+                "未知",
+            };
+
+            Global.SongMgrCustomSingerTypeStructureList = new List<string>();
+            List<string> valuelist = new List<string>(Global.SongMgrCustomSingerTypeStructure.Split(','));
+
+            for (int i = 0; i < SingerTypeStructureList.Count; i++)
+            {
+                List<string> strlist = new List<string>(SingerTypeStructureList[i].Split(','));
+                Global.SongMgrCustomSingerTypeStructureList.Add(strlist[Convert.ToInt32(valuelist[i])-1]);
+            }
+
+            Global.SongMgrCustomSingerTypeStructureList.Add("歌星姓氏");
+            Global.SongMgrCustomSingerTypeStructureList.Add("全部歌星");
+            Global.SongMgrCustomSingerTypeStructureList.Add("新進");
+        }
 
 
-    
     }
 }

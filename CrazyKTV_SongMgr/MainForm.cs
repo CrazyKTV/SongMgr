@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -69,6 +70,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
             }
 
             List<string> list = new List<string>()
@@ -112,6 +114,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID"),
                 CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer"),
                 CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure")
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -298,6 +301,15 @@ namespace CrazyKTV_SongMgr
 
             if (list[38] != "") Global.CrazyktvPhoneticsDBVer = list[38];
 
+            if (list[39] != "") Global.SongMgrCustomSingerTypeStructure = list[39];
+            SongMgrCfg_SetCustomSingerTypeStructureCbox();
+
+            MainCfg_BackupRemoveSongDays_ComboBox.DataSource = MainCfg.GetBackupRemoveSongDaysList();
+            MainCfg_BackupRemoveSongDays_ComboBox.DisplayMember = "Display";
+            MainCfg_BackupRemoveSongDays_ComboBox.ValueMember = "Value";
+            MainCfg_BackupRemoveSongDays_ComboBox.SelectedValue = Global.MainCfgBackupRemoveSongDays;
+
+
             // 建立歌曲操作記錄資料表
             Global.SongLogDT = new DataTable();
             Global.SongLogDT.Columns.Add(new DataColumn("Display", typeof(string)));
@@ -353,7 +365,7 @@ namespace CrazyKTV_SongMgr
 
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
 
-
+            Console.WriteLine(string.Join(",", Global.SongMgrCustomSingerTypeStructureList));
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -471,6 +483,8 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
 
 
     }

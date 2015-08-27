@@ -46,6 +46,8 @@ namespace CrazyKTV_SongMgr
         public static string SongMgrFileStructure = "1";
         public static string SongMgrSongTrackMode = "True";
         public static string SongMgrBackupRemoveSong = "False";
+        public static string SongMgrCustomSingerTypeStructure = "1,1,1,1,1,1,1,1";
+        public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
 
         public static string SingerMgrDefaultSingerDataTable = "ktv_Singer";
         
@@ -92,7 +94,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongAddValueList = new List<string>();
         public static List<string> SongAddChorusSingerList = new List<string>();
         public static List<string> SongAddAllSongIDList = new List<string>();
-
+        
         public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
         public static List<string> SongDBConvValueList = new List<string>();
         public static List<string> SongDBConvJetktvLangList = new List<string>();

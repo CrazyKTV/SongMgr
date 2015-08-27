@@ -212,7 +212,7 @@ namespace CrazyKTV_SongMgr
             SongMgrCfg_General_GroupBox.Enabled = status;
             SongMgrCfg_SongID_GroupBox.Enabled = status;
             SongMgrCfg_SongType_GroupBox.Enabled = status;
-            SongMgrCfg_SongStructure_GroupBox.Enabled = status;
+            SongMgrCfg_SongStructure_TabControl.Enabled = status;
             SongMgrCfg_Save_Button.Enabled = status;
             SongMaintenance_SpellCorrect_GroupBox.Enabled = status;
             SongMaintenance_CodeConv_GroupBox.Enabled = status;
@@ -1082,7 +1082,7 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "男歌星", "女歌星", "樂團", "合唱歌曲", "外國男", "外國女", "外國樂團", "其它", "歌星姓氏", "全部歌星", "新進歌星" };
                     break;
                 case 2:
-                    list = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
+                    list = Global.SongMgrCustomSingerTypeStructureList;
                     break;
                 default:
                     list = new List<string>() { "男歌星", "女歌星", "樂團", "外國男", "外國女", "外國樂團", "其它", "新進歌星" };
