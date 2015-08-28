@@ -402,6 +402,7 @@
             this.SongLog_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.SongMgrCfg_CustomSingerTypeStructure_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SingerMgr_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -469,6 +470,7 @@
             this.SongLog_TabPage.SuspendLayout();
             this.SongLog_GroupBox.SuspendLayout();
             this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.SuspendLayout();
+            this.SingerMgr_OtherQuery_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -1543,6 +1545,7 @@
             // 
             // SingerMgr_TabPage
             // 
+            this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_OtherQuery_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_SingerAdd_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Manager_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Statistics_GroupBox);
@@ -2032,7 +2035,7 @@
             this.SingerMgr_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SingerMgr_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.SingerMgr_DataGridView.EnableHeadersVisualStyles = false;
-            this.SingerMgr_DataGridView.Location = new System.Drawing.Point(23, 220);
+            this.SingerMgr_DataGridView.Location = new System.Drawing.Point(23, 279);
             this.SingerMgr_DataGridView.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
             this.SingerMgr_DataGridView.MultiSelect = false;
             this.SingerMgr_DataGridView.Name = "SingerMgr_DataGridView";
@@ -2040,7 +2043,7 @@
             this.SingerMgr_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.SingerMgr_DataGridView.RowTemplate.Height = 27;
             this.SingerMgr_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.SingerMgr_DataGridView.Size = new System.Drawing.Size(468, 386);
+            this.SingerMgr_DataGridView.Size = new System.Drawing.Size(468, 327);
             this.SingerMgr_DataGridView.TabIndex = 1;
             this.SingerMgr_DataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.SingerMgr_DataGridView_CellBeginEdit);
             this.SingerMgr_DataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.SingerMgr_DataGridView_CellEndEdit);
@@ -2058,13 +2061,11 @@
             this.SingerMgr_Query_GroupBox.Controls.Add(this.SingerMgr_Query_Button);
             this.SingerMgr_Query_GroupBox.Controls.Add(this.SingerMgr_QueryValue_Label);
             this.SingerMgr_Query_GroupBox.Controls.Add(this.SingerMgr_QueryValue_TextBox);
-            this.SingerMgr_Query_GroupBox.Controls.Add(this.SingerMgr_QueryType_Label);
-            this.SingerMgr_Query_GroupBox.Controls.Add(this.SingerMgr_QueryType_ComboBox);
             this.SingerMgr_Query_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_Query_GroupBox.Location = new System.Drawing.Point(23, 23);
             this.SingerMgr_Query_GroupBox.Name = "SingerMgr_Query_GroupBox";
             this.SingerMgr_Query_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.SingerMgr_Query_GroupBox.Size = new System.Drawing.Size(468, 180);
+            this.SingerMgr_Query_GroupBox.Size = new System.Drawing.Size(468, 138);
             this.SingerMgr_Query_GroupBox.TabIndex = 0;
             this.SingerMgr_Query_GroupBox.TabStop = false;
             this.SingerMgr_Query_GroupBox.Text = "歌手查詢";
@@ -2074,8 +2075,8 @@
             this.SingerMgr_DefaultSingerDataTable_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SingerMgr_DefaultSingerDataTable_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_DefaultSingerDataTable_ComboBox.FormattingEnabled = true;
-            this.SingerMgr_DefaultSingerDataTable_ComboBox.Location = new System.Drawing.Point(127, 40);
-            this.SingerMgr_DefaultSingerDataTable_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.SingerMgr_DefaultSingerDataTable_ComboBox.Location = new System.Drawing.Point(127, 86);
+            this.SingerMgr_DefaultSingerDataTable_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
             this.SingerMgr_DefaultSingerDataTable_ComboBox.Name = "SingerMgr_DefaultSingerDataTable_ComboBox";
             this.SingerMgr_DefaultSingerDataTable_ComboBox.Size = new System.Drawing.Size(181, 30);
             this.SingerMgr_DefaultSingerDataTable_ComboBox.TabIndex = 1;
@@ -2085,8 +2086,8 @@
             // 
             this.SingerMgr_DefaultSingerDataTable_Label.AutoSize = true;
             this.SingerMgr_DefaultSingerDataTable_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_DefaultSingerDataTable_Label.Location = new System.Drawing.Point(16, 44);
-            this.SingerMgr_DefaultSingerDataTable_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.SingerMgr_DefaultSingerDataTable_Label.Location = new System.Drawing.Point(16, 90);
+            this.SingerMgr_DefaultSingerDataTable_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
             this.SingerMgr_DefaultSingerDataTable_Label.Name = "SingerMgr_DefaultSingerDataTable_Label";
             this.SingerMgr_DefaultSingerDataTable_Label.Size = new System.Drawing.Size(99, 22);
             this.SingerMgr_DefaultSingerDataTable_Label.TabIndex = 0;
@@ -2096,8 +2097,8 @@
             // 
             this.SingerMgr_QueryClear_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_QueryClear_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.SingerMgr_QueryClear_Button.Location = new System.Drawing.Point(392, 86);
-            this.SingerMgr_QueryClear_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SingerMgr_QueryClear_Button.Location = new System.Drawing.Point(392, 40);
+            this.SingerMgr_QueryClear_Button.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_QueryClear_Button.Name = "SingerMgr_QueryClear_Button";
             this.SingerMgr_QueryClear_Button.Size = new System.Drawing.Size(60, 30);
             this.SingerMgr_QueryClear_Button.TabIndex = 5;
@@ -2109,8 +2110,8 @@
             // 
             this.SingerMgr_QueryPaste_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_QueryPaste_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.SingerMgr_QueryPaste_Button.Location = new System.Drawing.Point(320, 86);
-            this.SingerMgr_QueryPaste_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SingerMgr_QueryPaste_Button.Location = new System.Drawing.Point(320, 40);
+            this.SingerMgr_QueryPaste_Button.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_QueryPaste_Button.Name = "SingerMgr_QueryPaste_Button";
             this.SingerMgr_QueryPaste_Button.Size = new System.Drawing.Size(60, 30);
             this.SingerMgr_QueryPaste_Button.TabIndex = 4;
@@ -2122,7 +2123,7 @@
             // 
             this.SingerMgr_Query_Button.AutoSize = true;
             this.SingerMgr_Query_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_Query_Button.Location = new System.Drawing.Point(382, 131);
+            this.SingerMgr_Query_Button.Location = new System.Drawing.Point(382, 85);
             this.SingerMgr_Query_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
             this.SingerMgr_Query_Button.Name = "SingerMgr_Query_Button";
             this.SingerMgr_Query_Button.Size = new System.Drawing.Size(70, 32);
@@ -2135,8 +2136,8 @@
             // 
             this.SingerMgr_QueryValue_Label.AutoSize = true;
             this.SingerMgr_QueryValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_QueryValue_Label.Location = new System.Drawing.Point(16, 90);
-            this.SingerMgr_QueryValue_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
+            this.SingerMgr_QueryValue_Label.Location = new System.Drawing.Point(16, 44);
+            this.SingerMgr_QueryValue_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
             this.SingerMgr_QueryValue_Label.Name = "SingerMgr_QueryValue_Label";
             this.SingerMgr_QueryValue_Label.Size = new System.Drawing.Size(82, 22);
             this.SingerMgr_QueryValue_Label.TabIndex = 2;
@@ -2146,8 +2147,8 @@
             // 
             this.SingerMgr_QueryValue_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_QueryValue_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.SingerMgr_QueryValue_TextBox.Location = new System.Drawing.Point(110, 86);
-            this.SingerMgr_QueryValue_TextBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SingerMgr_QueryValue_TextBox.Location = new System.Drawing.Point(110, 40);
+            this.SingerMgr_QueryValue_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_QueryValue_TextBox.Name = "SingerMgr_QueryValue_TextBox";
             this.SingerMgr_QueryValue_TextBox.Size = new System.Drawing.Size(198, 30);
             this.SingerMgr_QueryValue_TextBox.TabIndex = 3;
@@ -2157,8 +2158,8 @@
             // 
             this.SingerMgr_QueryType_Label.AutoSize = true;
             this.SingerMgr_QueryType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_QueryType_Label.Location = new System.Drawing.Point(16, 136);
-            this.SingerMgr_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
+            this.SingerMgr_QueryType_Label.Location = new System.Drawing.Point(16, 40);
+            this.SingerMgr_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 23);
             this.SingerMgr_QueryType_Label.Name = "SingerMgr_QueryType_Label";
             this.SingerMgr_QueryType_Label.Size = new System.Drawing.Size(82, 22);
             this.SingerMgr_QueryType_Label.TabIndex = 6;
@@ -2169,8 +2170,8 @@
             this.SingerMgr_QueryType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SingerMgr_QueryType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_QueryType_ComboBox.FormattingEnabled = true;
-            this.SingerMgr_QueryType_ComboBox.Location = new System.Drawing.Point(110, 132);
-            this.SingerMgr_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SingerMgr_QueryType_ComboBox.Location = new System.Drawing.Point(110, 36);
+            this.SingerMgr_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 19);
             this.SingerMgr_QueryType_ComboBox.Name = "SingerMgr_QueryType_ComboBox";
             this.SingerMgr_QueryType_ComboBox.Size = new System.Drawing.Size(198, 30);
             this.SingerMgr_QueryType_ComboBox.TabIndex = 7;
@@ -5177,6 +5178,20 @@
             this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.TabStop = false;
             this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Text = "歌手類別";
             // 
+            // SingerMgr_OtherQuery_GroupBox
+            // 
+            this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_Label);
+            this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_ComboBox);
+            this.SingerMgr_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_OtherQuery_GroupBox.Location = new System.Drawing.Point(23, 174);
+            this.SingerMgr_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.SingerMgr_OtherQuery_GroupBox.Name = "SingerMgr_OtherQuery_GroupBox";
+            this.SingerMgr_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.SingerMgr_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 88);
+            this.SingerMgr_OtherQuery_GroupBox.TabIndex = 6;
+            this.SingerMgr_OtherQuery_GroupBox.TabStop = false;
+            this.SingerMgr_OtherQuery_GroupBox.Text = "其它查詢";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -5291,6 +5306,8 @@
             this.SongLog_GroupBox.ResumeLayout(false);
             this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.ResumeLayout(false);
             this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.PerformLayout();
+            this.SingerMgr_OtherQuery_GroupBox.ResumeLayout(false);
+            this.SingerMgr_OtherQuery_GroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -5661,6 +5678,7 @@
         private System.Windows.Forms.ComboBox SongMgrCfg_CustomSingerTypeStructure7_ComboBox;
         private System.Windows.Forms.ComboBox SongMgrCfg_CustomSingerTypeStructure2_ComboBox;
         private System.Windows.Forms.GroupBox SongMgrCfg_CustomSingerTypeStructure_GroupBox;
+        private System.Windows.Forms.GroupBox SingerMgr_OtherQuery_GroupBox;
     }
 }
 
