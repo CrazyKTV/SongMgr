@@ -105,7 +105,6 @@ namespace CrazyKTV_SongMgr
         public static DataTable SingerDT = new DataTable();
         public static DataTable AllSingerDT = new DataTable();
         public static DataTable PhoneticsDT = new DataTable();
-        public static DataTable NotExistsSongIdDT = new DataTable();
         public static DataTable DuplicateSongDT = new DataTable();
         public static DataTable FailureSongDT = new DataTable();
         public static DataTable DupSongAddDT = new DataTable();
@@ -125,6 +124,8 @@ namespace CrazyKTV_SongMgr
 
         public static string SongQueryDataGridViewValue = "";
         public static string SingerQueryDataGridViewValue = "";
+
+        public static List<List<string>> LostSongIdList = new List<List<string>>();
 
         public static List<string> SynonymousWordList = new List<string>()
         {

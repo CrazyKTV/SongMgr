@@ -2638,26 +2638,12 @@ namespace CrazyKTV_SongMgr
         public static string GetNextSongId(string LangStr)
         {
             string NewSongID = "";
-            // 查詢歌曲編號有無斷號
-            if (Global.NotExistsSongIdDT.Rows.Count != 0)
-            {
-                string RemoveRowindex = "";
-                var Query = from row in Global.NotExistsSongIdDT.AsEnumerable()
-                            where row.Field<string>("Song_Lang").Equals(LangStr)
-                            orderby row.Field<string>("Song_Id")
-                            select row;
 
-                foreach (DataRow row in Query)
-                {
-                    NewSongID = row["Song_Id"].ToString();
-                    RemoveRowindex = Global.NotExistsSongIdDT.Rows.IndexOf(row).ToString();
-                    break;
-                }
-                if (RemoveRowindex != "")
-                {
-                    DataRow row = Global.NotExistsSongIdDT.Rows[Convert.ToInt32(RemoveRowindex)];
-                    Global.NotExistsSongIdDT.Rows.Remove(row);
-                }
+            // 查詢歌曲編號有無斷號
+            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(LangStr)].Count > 0)
+            {
+                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(LangStr)][0];
+                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(LangStr)].Remove(NewSongID);
             }
 
             // 若無斷號查詢各語系下個歌曲編號

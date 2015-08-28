@@ -1247,10 +1247,6 @@ namespace CrazyKTV_SongMgr
         {
             string MaxDigitCode = "";
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = "D5"; } else { MaxDigitCode = "D6"; }
-
-            Global.NotExistsSongIdDT = new DataTable();
-            Global.NotExistsSongIdDT.Columns.Add("Song_Id", typeof(string));
-            Global.NotExistsSongIdDT.Columns.Add("Song_Lang", typeof(string));
             
             List<string> StartIdlist = new List<string>();
             StartIdlist = new List<string> (Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
@@ -1258,6 +1254,13 @@ namespace CrazyKTV_SongMgr
             DataTable dt = new DataTable();
             string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
             dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+
+            Global.LostSongIdList = new List<List<string>>();
+            for (int i = 0; i < Global.CrazyktvSongLangList.Count; i++)
+            {
+                List<string> list = new List<string>();
+                Global.LostSongIdList.Add(list);
+            }
 
             if (dt.Rows.Count != 0)
             {
@@ -1286,10 +1289,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 if (ExistsIdlist.IndexOf(i.ToString(MaxDigitCode)) < 0)
                                 {
-                                    DataRow idrow = Global.NotExistsSongIdDT.NewRow();
-                                    idrow["Song_Id"] = i.ToString(MaxDigitCode);
-                                    idrow["Song_Lang"] = str;
-                                    Global.NotExistsSongIdDT.Rows.Add(idrow);
+                                    Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(str)].Add(i.ToString(MaxDigitCode));
                                 }
                             }
                         }

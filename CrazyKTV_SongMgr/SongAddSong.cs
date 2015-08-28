@@ -369,35 +369,29 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
-                
-                // 查詢歌曲編號有無斷號
-                if (!UseCustomSongID)
-                {
-                    SongID = "";
-                    lock (LockThis)
-                    {
-                        if (Global.NotExistsSongIdDT.Rows.Count != 0)
-                        {
-                            string RemoveRowindex = "";
-                            var Query = from row in Global.NotExistsSongIdDT.AsEnumerable()
-                                        where row.Field<string>("Song_Lang").Equals(SongLang)
-                                        orderby row.Field<string>("Song_Id")
-                                        select row;
 
-                            foreach (DataRow row in Query)
-                            {
-                                SongID = row["Song_Id"].ToString();
-                                RemoveRowindex = Global.NotExistsSongIdDT.Rows.IndexOf(row).ToString();
-                                break;
-                            }
-                            if (RemoveRowindex != "")
-                            {
-                                DataRow row = Global.NotExistsSongIdDT.Rows[Convert.ToInt32(RemoveRowindex)];
-                                Global.NotExistsSongIdDT.Rows.Remove(row);
-                            }
+
+                if (UseCustomSongID)
+                {
+                    if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+                    {
+                        if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongID) >= 0)
+                        {
+                            Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongID);
                         }
                     }
+                }
+                else
+                {
+                    SongID = "";
 
+                    // 查詢歌曲編號有無斷號
+                    if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+                    {
+                        SongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                        Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongID);
+                    }
+                    
                     // 若無斷號查詢各語系下個歌曲編號
                     if (SongID == "")
                     {
