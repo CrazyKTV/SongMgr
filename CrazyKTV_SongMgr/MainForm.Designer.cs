@@ -401,6 +401,7 @@
             this.SongLog_TabPage = new System.Windows.Forms.TabPage();
             this.SongLog_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -467,6 +468,7 @@
             this.SongAddResult_FailureSong_GroupBox.SuspendLayout();
             this.SongLog_TabPage.SuspendLayout();
             this.SongLog_GroupBox.SuspendLayout();
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -2383,22 +2385,7 @@
             // 
             this.SongMgrCfg_CustomStructure_TabPage.AutoScroll = true;
             this.SongMgrCfg_CustomStructure_TabPage.AutoScrollMargin = new System.Drawing.Size(0, 16);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure8_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure7_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure6_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure5_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure4_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure3_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure2_Label);
-            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure1_Label);
+            this.SongMgrCfg_CustomStructure_TabPage.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure_GroupBox);
             this.SongMgrCfg_CustomStructure_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomStructure_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongMgrCfg_CustomStructure_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -2414,10 +2401,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Location = new System.Drawing.Point(107, 314);
+            this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Location = new System.Drawing.Point(107, 330);
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure8_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.TabIndex = 18;
             this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2426,10 +2413,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Location = new System.Drawing.Point(107, 230);
+            this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Location = new System.Drawing.Point(107, 246);
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure6_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.TabIndex = 17;
             this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2438,10 +2425,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Location = new System.Drawing.Point(107, 188);
+            this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Location = new System.Drawing.Point(107, 204);
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure5_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.TabIndex = 16;
             this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2450,10 +2437,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Location = new System.Drawing.Point(107, 146);
+            this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Location = new System.Drawing.Point(107, 162);
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure4_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.TabIndex = 15;
             this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2462,10 +2449,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Location = new System.Drawing.Point(107, 104);
+            this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Location = new System.Drawing.Point(107, 120);
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure3_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.TabIndex = 14;
             this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2474,10 +2461,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Location = new System.Drawing.Point(107, 272);
+            this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Location = new System.Drawing.Point(107, 288);
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure7_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.TabIndex = 13;
             this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2486,10 +2473,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Location = new System.Drawing.Point(107, 62);
+            this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Location = new System.Drawing.Point(107, 78);
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure2_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.TabIndex = 12;
             this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2498,10 +2485,10 @@
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.FormattingEnabled = true;
-            this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Location = new System.Drawing.Point(107, 20);
+            this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Location = new System.Drawing.Point(107, 36);
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Margin = new System.Windows.Forms.Padding(6);
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Name = "SongMgrCfg_CustomSingerTypeStructure1_ComboBox";
-            this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Size = new System.Drawing.Size(160, 30);
+            this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.Size = new System.Drawing.Size(168, 30);
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.TabIndex = 11;
             this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_CustomSingerTypeStructure_ComboBox_SelectedIndexChanged);
             // 
@@ -2509,7 +2496,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure8_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure8_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure8_Label.Location = new System.Drawing.Point(13, 318);
+            this.SongMgrCfg_CustomSingerTypeStructure8_Label.Location = new System.Drawing.Point(13, 334);
             this.SongMgrCfg_CustomSingerTypeStructure8_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure8_Label.Name = "SongMgrCfg_CustomSingerTypeStructure8_Label";
             this.SongMgrCfg_CustomSingerTypeStructure8_Label.Size = new System.Drawing.Size(48, 22);
@@ -2520,7 +2507,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure7_Label.Location = new System.Drawing.Point(13, 276);
+            this.SongMgrCfg_CustomSingerTypeStructure7_Label.Location = new System.Drawing.Point(13, 292);
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.Name = "SongMgrCfg_CustomSingerTypeStructure7_Label";
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.Size = new System.Drawing.Size(82, 22);
@@ -2531,7 +2518,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure6_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure6_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure6_Label.Location = new System.Drawing.Point(13, 234);
+            this.SongMgrCfg_CustomSingerTypeStructure6_Label.Location = new System.Drawing.Point(13, 250);
             this.SongMgrCfg_CustomSingerTypeStructure6_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure6_Label.Name = "SongMgrCfg_CustomSingerTypeStructure6_Label";
             this.SongMgrCfg_CustomSingerTypeStructure6_Label.Size = new System.Drawing.Size(65, 22);
@@ -2542,7 +2529,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure5_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure5_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure5_Label.Location = new System.Drawing.Point(13, 192);
+            this.SongMgrCfg_CustomSingerTypeStructure5_Label.Location = new System.Drawing.Point(13, 208);
             this.SongMgrCfg_CustomSingerTypeStructure5_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure5_Label.Name = "SongMgrCfg_CustomSingerTypeStructure5_Label";
             this.SongMgrCfg_CustomSingerTypeStructure5_Label.Size = new System.Drawing.Size(65, 22);
@@ -2553,7 +2540,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure4_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure4_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure4_Label.Location = new System.Drawing.Point(13, 150);
+            this.SongMgrCfg_CustomSingerTypeStructure4_Label.Location = new System.Drawing.Point(13, 166);
             this.SongMgrCfg_CustomSingerTypeStructure4_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure4_Label.Name = "SongMgrCfg_CustomSingerTypeStructure4_Label";
             this.SongMgrCfg_CustomSingerTypeStructure4_Label.Size = new System.Drawing.Size(48, 22);
@@ -2564,7 +2551,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure3_Label.Location = new System.Drawing.Point(13, 108);
+            this.SongMgrCfg_CustomSingerTypeStructure3_Label.Location = new System.Drawing.Point(13, 124);
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.Name = "SongMgrCfg_CustomSingerTypeStructure3_Label";
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.Size = new System.Drawing.Size(48, 22);
@@ -2575,7 +2562,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure2_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure2_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure2_Label.Location = new System.Drawing.Point(13, 66);
+            this.SongMgrCfg_CustomSingerTypeStructure2_Label.Location = new System.Drawing.Point(13, 82);
             this.SongMgrCfg_CustomSingerTypeStructure2_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure2_Label.Name = "SongMgrCfg_CustomSingerTypeStructure2_Label";
             this.SongMgrCfg_CustomSingerTypeStructure2_Label.Size = new System.Drawing.Size(65, 22);
@@ -2586,7 +2573,7 @@
             // 
             this.SongMgrCfg_CustomSingerTypeStructure1_Label.AutoSize = true;
             this.SongMgrCfg_CustomSingerTypeStructure1_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMgrCfg_CustomSingerTypeStructure1_Label.Location = new System.Drawing.Point(13, 24);
+            this.SongMgrCfg_CustomSingerTypeStructure1_Label.Location = new System.Drawing.Point(13, 40);
             this.SongMgrCfg_CustomSingerTypeStructure1_Label.Margin = new System.Windows.Forms.Padding(3, 10, 6, 10);
             this.SongMgrCfg_CustomSingerTypeStructure1_Label.Name = "SongMgrCfg_CustomSingerTypeStructure1_Label";
             this.SongMgrCfg_CustomSingerTypeStructure1_Label.Size = new System.Drawing.Size(65, 22);
@@ -5163,6 +5150,33 @@
             this.SongLog_ListBox.TabIndex = 0;
             this.SongLog_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
+            // SongMgrCfg_CustomSingerTypeStructure_GroupBox
+            // 
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure1_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure8_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure2_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure6_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure3_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure5_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure4_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure4_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure5_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure3_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure6_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure7_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure7_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure2_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure8_Label);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Controls.Add(this.SongMgrCfg_CustomSingerTypeStructure1_ComboBox);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Location = new System.Drawing.Point(13, 17);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Name = "SongMgrCfg_CustomSingerTypeStructure_GroupBox";
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Size = new System.Drawing.Size(291, 375);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.TabIndex = 19;
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.TabStop = false;
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.Text = "歌手類別";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -5217,7 +5231,6 @@
             this.SongMgrCfg_SongStructure_TabPage.ResumeLayout(false);
             this.SongMgrCfg_SongStructure_TabPage.PerformLayout();
             this.SongMgrCfg_CustomStructure_TabPage.ResumeLayout(false);
-            this.SongMgrCfg_CustomStructure_TabPage.PerformLayout();
             this.SongMgrCfg_Tooltip_GroupBox.ResumeLayout(false);
             this.SongMgrCfg_SongID_GroupBox.ResumeLayout(false);
             this.SongMgrCfg_SongID_GroupBox.PerformLayout();
@@ -5276,6 +5289,8 @@
             this.SongAddResult_FailureSong_GroupBox.ResumeLayout(false);
             this.SongLog_TabPage.ResumeLayout(false);
             this.SongLog_GroupBox.ResumeLayout(false);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.ResumeLayout(false);
+            this.SongMgrCfg_CustomSingerTypeStructure_GroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -5645,6 +5660,7 @@
         private System.Windows.Forms.ComboBox SongMgrCfg_CustomSingerTypeStructure3_ComboBox;
         private System.Windows.Forms.ComboBox SongMgrCfg_CustomSingerTypeStructure7_ComboBox;
         private System.Windows.Forms.ComboBox SongMgrCfg_CustomSingerTypeStructure2_ComboBox;
+        private System.Windows.Forms.GroupBox SongMgrCfg_CustomSingerTypeStructure_GroupBox;
     }
 }
 
