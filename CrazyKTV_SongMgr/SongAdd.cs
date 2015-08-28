@@ -398,7 +398,7 @@ namespace CrazyKTV_SongMgr
                 SongAdd_Add_Button.Enabled = SongAdd_CheckSongAddStatus();
                 
                 Global.TimerEndTime = DateTime.Now;
-                SongAdd_Tooltip_Label.Text = "總共分析 " + total.ToString() + " 首歌曲, 共花費 "  +(long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
+                SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 "  +(long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
             });
             SongAnalysis.DisposeSongDataTable();
         }
@@ -520,6 +520,7 @@ namespace CrazyKTV_SongMgr
                 try
                 {
                     cmd.ExecuteNonQuery();
+                    Global.TotalList[3]++;
                 }
                 catch
                 {
@@ -649,10 +650,7 @@ namespace CrazyKTV_SongMgr
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    if (Global.SongAddValueList.IndexOf(str) > 0)
-                    {
-                        SongAdd_Tooltip_Label.Text = "正在將第 " + Global.SongAddValueList.IndexOf(str) + " 首歌曲寫入資料庫,請稍待...";
-                    }
+                    SongAdd_Tooltip_Label.Text = "正在將第 " + Global.TotalList[3] + " 首歌曲寫入資料庫,請稍待...";
                 });
             }
             Global.SongAddValueList.Clear();
@@ -716,6 +714,7 @@ namespace CrazyKTV_SongMgr
                             try
                             {
                                 singercmd.ExecuteNonQuery();
+                                Global.TotalList[4]++;
                             }
                             catch
                             {
@@ -728,10 +727,7 @@ namespace CrazyKTV_SongMgr
                     }
                     this.BeginInvoke((Action)delegate()
                     {
-                        if (Global.SongAddChorusSingerList.IndexOf(singer) > 0)
-                        {
-                            SongAdd_Tooltip_Label.Text = "正在檢查並加入第 " + Global.SongAddChorusSingerList.IndexOf(singer) + " 位合唱歌手,請稍待...";
-                        }
+                        SongAdd_Tooltip_Label.Text = "正在檢查並加入第 " + Global.TotalList[4] + " 位合唱歌手,請稍待...";
                     });
                 }
             }
