@@ -295,12 +295,13 @@ namespace CrazyKTV_SongMgr
                 string SongSrcPath = Global.SongAddDT.Rows[i].Field<string>("Song_SrcPath");
                 string SongExtension = Path.GetExtension(SongSrcPath);
 
+                string SingerName = SongSinger;
                 // 判斷是否要加入歌手資料至歌手資料庫
                 if (SongSingerType != 3)
                 {
                     // 查找資料庫歌手表
                     var querysinger = from row in Global.SingerDT.AsEnumerable()
-                                      where row.Field<string>("Singer_Name").ToLower().Equals(SongSinger.ToLower())
+                                      where row.Field<string>("Singer_Name").ToLower().Equals(SingerName.ToLower())
                                       select row;
 
                     if (querysinger.Count<DataRow>() == 0) SongAddSinger = "1";
@@ -312,20 +313,20 @@ namespace CrazyKTV_SongMgr
                     foreach (string SpecialSingerName in SpecialStrlist)
                     {
                         Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
-                        if (SpecialStrRegex.IsMatch(SongSinger))
+                        if (SpecialStrRegex.IsMatch(SingerName))
                         {
                             if (Global.SongAddChorusSingerList.IndexOf(SpecialSingerName) < 0)
                             {
                                 Global.SongAddChorusSingerList.Add(SpecialSingerName);
                             }
-                            SongSinger = Regex.Replace(SongSinger, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                            SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
                         }
                     }
 
                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                    if (r.IsMatch(SongSinger))
+                    if (r.IsMatch(SingerName))
                     {
-                        string[] singers = Regex.Split(SongSinger, "&", RegexOptions.None);
+                        string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
                         foreach (string str in singers)
                         {
                             string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
@@ -337,9 +338,9 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        if (Global.SongAddChorusSingerList.IndexOf(SongSinger) < 0)
+                        if (Global.SongAddChorusSingerList.IndexOf(SingerName) < 0)
                         {
-                            Global.SongAddChorusSingerList.Add(SongSinger);
+                            Global.SongAddChorusSingerList.Add(SingerName);
                         }
                     }
                 }
