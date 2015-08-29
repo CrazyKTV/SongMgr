@@ -654,7 +654,7 @@ namespace CrazyKTV_SongMgr
             // 移除原有歌曲
             bool DeleteError = false;
             string oldfile = Path.Combine(SongPath, SongFileName);
-            if (File.Exists(oldfile))
+            if (File.Exists(oldfile) && oldfile != SongSrcPath)
             {
                 FileAttributes attributes = File.GetAttributes(oldfile);
                 if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
@@ -688,7 +688,7 @@ namespace CrazyKTV_SongMgr
             else
             {
                 Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【加歌頁面】重複歌曲原有檔案不存在,已自動忽略移除原有檔案: " + oldfile;
+                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【加歌頁面】重複歌曲原有檔案不存在或為同檔案,已自動忽略移除原有檔案: " + oldfile;
                 Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
             }
 
