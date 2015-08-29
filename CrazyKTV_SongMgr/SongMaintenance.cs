@@ -2635,41 +2635,23 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
-        public static string GetNextSongId(string LangStr)
+        public static string GetNextSongId(string SongLang)
         {
             string NewSongID = "";
 
             // 查詢歌曲編號有無斷號
-            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(LangStr)].Count > 0)
+            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
             {
-                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(LangStr)][0];
-                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(LangStr)].Remove(NewSongID);
+                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
             }
 
             // 若無斷號查詢各語系下個歌曲編號
             if (NewSongID == "")
             {
-                string MaxDigitCode = "";
-                switch (Global.SongMgrMaxDigitCode)
-                {
-                    case "1":
-                        MaxDigitCode = "D5";
-                        break;
-                    case "2":
-                        MaxDigitCode = "D6";
-                        break;
-                }
-
-                foreach (string str in Global.CrazyktvSongLangList)
-                {
-                    if (str == LangStr)
-                    {
-                        int LangIndex = Global.CrazyktvSongLangList.IndexOf(str);
-                        Global.MaxIDList[LangIndex]++;
-                        NewSongID = Global.MaxIDList[LangIndex].ToString(MaxDigitCode);
-                        break;
-                    }
-                }
+                string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+                Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)]++;
+                NewSongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
             }
             return NewSongID;
         }

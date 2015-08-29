@@ -1812,27 +1812,9 @@ namespace CrazyKTV_SongMgr
             // 若無斷號查詢各語系下個歌曲編號
             if (NewSongID == "")
             {
-                string MaxDigitCode = "";
-                switch (Global.SongMgrMaxDigitCode)
-                {
-                    case "1":
-                        MaxDigitCode = "D5";
-                        break;
-                    case "2":
-                        MaxDigitCode = "D6";
-                        break;
-                }
-
-                foreach (string langstr in Global.CrazyktvSongLangList)
-                {
-                    if (langstr == SongLang)
-                    {
-                        int LangIndex = Global.CrazyktvSongLangList.IndexOf(langstr);
-                        Global.MaxIDList[LangIndex]++;
-                        NewSongID = Global.MaxIDList[LangIndex].ToString(MaxDigitCode);
-                        break;
-                    }
-                }
+                string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+                Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)]++;
+                NewSongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
             }
             return NewSongID;
         }

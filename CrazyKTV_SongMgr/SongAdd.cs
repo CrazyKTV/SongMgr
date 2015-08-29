@@ -355,6 +355,9 @@ namespace CrazyKTV_SongMgr
             this.BeginInvoke((Action)delegate()
             {
                 int sortindex = 0;
+
+                Global.SongAddDT.DefaultView.Sort = "Song_Singer, Song_SongName";
+                Global.SongAddDT = Global.SongAddDT.DefaultView.ToTable();
                 SongAdd_DataGridView.DataSource = Global.SongAddDT;
                 
                 for (int i = 0; i < SongAdd_DataGridView.ColumnCount; i++)
@@ -493,161 +496,104 @@ namespace CrazyKTV_SongMgr
             List<string> singeraddedlist = new List<string>();
             List<string> allsingeraddedlist = new List<string>();
 
-            foreach(string str in Global.SongAddValueList)
+            foreach (string str in Global.SongAddValueList)
             {
                 valuelist = new List<string>(str.Split('|'));
 
-                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
-                cmd.Parameters.AddWithValue("@SongSingerType", valuelist[2]);
-                cmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
-                cmd.Parameters.AddWithValue("@SongSongName", valuelist[4]);
-                cmd.Parameters.AddWithValue("@SongTrack", valuelist[5]);
-                cmd.Parameters.AddWithValue("@SongSongType", valuelist[6]);
-                cmd.Parameters.AddWithValue("@SongVolume", valuelist[7]);
-                cmd.Parameters.AddWithValue("@SongWordCount", valuelist[8]);
-                cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[9]);
-                cmd.Parameters.AddWithValue("@SongMB", valuelist[10]);
-                cmd.Parameters.AddWithValue("@SongCreatDate", valuelist[11]);
-                cmd.Parameters.AddWithValue("@SongFileName", valuelist[12]);
-                cmd.Parameters.AddWithValue("@SongPath", valuelist[13]);
-                cmd.Parameters.AddWithValue("@SongSpell", valuelist[14]);
-                cmd.Parameters.AddWithValue("@SongSpellNum", valuelist[15]);
-                cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
-                cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
-                cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
+                var AddSongDBTask = Task.Factory.StartNew(() =>
+                {
+                    cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+                    cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
+                    cmd.Parameters.AddWithValue("@SongSingerType", valuelist[2]);
+                    cmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                    cmd.Parameters.AddWithValue("@SongSongName", valuelist[4]);
+                    cmd.Parameters.AddWithValue("@SongTrack", valuelist[5]);
+                    cmd.Parameters.AddWithValue("@SongSongType", valuelist[6]);
+                    cmd.Parameters.AddWithValue("@SongVolume", valuelist[7]);
+                    cmd.Parameters.AddWithValue("@SongWordCount", valuelist[8]);
+                    cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[9]);
+                    cmd.Parameters.AddWithValue("@SongMB", valuelist[10]);
+                    cmd.Parameters.AddWithValue("@SongCreatDate", valuelist[11]);
+                    cmd.Parameters.AddWithValue("@SongFileName", valuelist[12]);
+                    cmd.Parameters.AddWithValue("@SongPath", valuelist[13]);
+                    cmd.Parameters.AddWithValue("@SongSpell", valuelist[14]);
+                    cmd.Parameters.AddWithValue("@SongSpellNum", valuelist[15]);
+                    cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
+                    cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
+                    cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
 
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    Global.TotalList[3]++;
-                }
-                catch
-                {
-                    Global.TotalList[0]--;
-                    Global.TotalList[2]++;
-                    Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
-                    Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌曲時發生未知的錯誤: " + str;
-                    Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
-                }
-                cmd.Parameters.Clear();
-
-                if (valuelist[19] == "1")
-                {
-                    string addstatus = "";
-                    if (singeraddedlist.Count == 0)
+                    try
                     {
-                        singeraddedlist.Add(valuelist[3]);
+                        cmd.ExecuteNonQuery();
+                        Global.TotalList[3]++;
                     }
-                    else
+                    catch
                     {
-                        foreach(string singerstr in singeraddedlist)
-                        {
-                            if(singerstr == valuelist[3])
-                            {
-                                addstatus = "added";
-                                break;
-                            }
-                        }
-                        if (addstatus != "added") singeraddedlist.Add(valuelist[3]);
+                        Global.TotalList[0]--;
+                        Global.TotalList[2]++;
+                        Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                        Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌曲時發生未知的錯誤: " + str;
+                        Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
                     }
+                    cmd.Parameters.Clear();
+                });
 
-                    if (addstatus != "added")
+
+                var AddSingerDBTask = Task.Factory.StartNew(() =>
+                {
+                    if (valuelist[19] == "1")
                     {
-                        if (NotExistsSingerId.Count > 0)
+                        string addstatus = "";
+                        if (singeraddedlist.Count == 0)
                         {
-                            NextSingerId = NotExistsSingerId[0];
-                            NotExistsSingerId.RemoveAt(0);
+                            singeraddedlist.Add(valuelist[3]);
                         }
                         else
                         {
-                            NextSingerId = MaxSingerId.ToString();
-                            MaxSingerId++;
+                            if (singeraddedlist.IndexOf(valuelist[3]) >= 0) addstatus = "added";
                         }
 
-                        spelllist = new List<string>();
-                        spelllist = CommonFunc.GetSongNameSpell(valuelist[3]);
-
-                        singercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
-                        singercmd.Parameters.AddWithValue("@SingerName", valuelist[3]);
-                        singercmd.Parameters.AddWithValue("@SingerType", valuelist[2]);
-                        singercmd.Parameters.AddWithValue("@SingerSpell", spelllist[0]);
-                        singercmd.Parameters.AddWithValue("@SingerStrokes", spelllist[2]);
-                        singercmd.Parameters.AddWithValue("@SingerSpellNum", spelllist[1]);
-                        singercmd.Parameters.AddWithValue("@SingerPenStyle", spelllist[3]);
-                        
-                        try
+                        if (addstatus != "added")
                         {
-                            singercmd.ExecuteNonQuery();
-                        }
-                        catch
-                        {
-                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
-                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌手至 ktv_Singer 時發生錯誤: " + valuelist[3];
-                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
-                        }
-                        singercmd.Parameters.Clear();
-                    }
-                }
-
-                if (valuelist[20] == "1")
-                {
-                    string addstatus = "";
-                    if (allsingeraddedlist.Count == 0)
-                    {
-                        allsingeraddedlist.Add(valuelist[3]);
-                    }
-                    else
-                    {
-                        foreach (string singerstr in allsingeraddedlist)
-                        {
-                            if (singerstr == valuelist[3])
+                            singeraddedlist.Add(valuelist[3]);
+                            if (NotExistsSingerId.Count > 0)
                             {
-                                addstatus = "added";
-                                break;
+                                NextSingerId = NotExistsSingerId[0];
+                                NotExistsSingerId.RemoveAt(0);
                             }
+                            else
+                            {
+                                NextSingerId = MaxSingerId.ToString();
+                                MaxSingerId++;
+                            }
+
+                            spelllist = new List<string>();
+                            spelllist = CommonFunc.GetSongNameSpell(valuelist[3]);
+
+                            singercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
+                            singercmd.Parameters.AddWithValue("@SingerName", valuelist[3]);
+                            singercmd.Parameters.AddWithValue("@SingerType", valuelist[2]);
+                            singercmd.Parameters.AddWithValue("@SingerSpell", spelllist[0]);
+                            singercmd.Parameters.AddWithValue("@SingerStrokes", spelllist[2]);
+                            singercmd.Parameters.AddWithValue("@SingerSpellNum", spelllist[1]);
+                            singercmd.Parameters.AddWithValue("@SingerPenStyle", spelllist[3]);
+
+                            try
+                            {
+                                singercmd.ExecuteNonQuery();
+                            }
+                            catch
+                            {
+                                Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌手至 ktv_Singer 時發生錯誤: " + valuelist[3];
+                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                            }
+                            singercmd.Parameters.Clear();
                         }
-                        if (addstatus != "added") allsingeraddedlist.Add(valuelist[3]);
                     }
+                });
 
-                    if (addstatus != "added")
-                    {
-                        if (NotExistsAllSingerId.Count > 0)
-                        {
-                            NextSingerId = NotExistsAllSingerId[0];
-                            NotExistsAllSingerId.RemoveAt(0);
-                        }
-                        else
-                        {
-                            NextSingerId = MaxAllSingerId.ToString();
-                            MaxAllSingerId++;
-                        }
-
-                        spelllist = new List<string>();
-                        spelllist = CommonFunc.GetSongNameSpell(valuelist[3]);
-
-                        allsingercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
-                        allsingercmd.Parameters.AddWithValue("@SingerName", valuelist[3]);
-                        allsingercmd.Parameters.AddWithValue("@SingerType", valuelist[2]);
-                        allsingercmd.Parameters.AddWithValue("@SingerSpell", spelllist[0]);
-                        allsingercmd.Parameters.AddWithValue("@SingerStrokes", spelllist[2]);
-                        allsingercmd.Parameters.AddWithValue("@SingerSpellNum", spelllist[1]);
-                        allsingercmd.Parameters.AddWithValue("@SingerPenStyle", spelllist[3]);
-
-                        try
-                        {
-                            allsingercmd.ExecuteNonQuery();
-                        }
-                        catch
-                        {
-                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
-                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌手至 ktv_AllSinger 時發生錯誤: " + valuelist[3];
-                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
-                        }
-                        allsingercmd.Parameters.Clear();
-                    }
-                }
-
+                Task.WaitAll(AddSongDBTask, AddSingerDBTask);
                 this.BeginInvoke((Action)delegate()
                 {
                     SongAdd_Tooltip_Label.Text = "正在將第 " + Global.TotalList[3] + " 首歌曲寫入資料庫,請稍待...";
@@ -658,36 +604,40 @@ namespace CrazyKTV_SongMgr
             // 加入合唱歌手
             if (Global.SongAddChorusSingerList.Count > 0)
             {
-                Global.SingerDT = new DataTable();
+                List<string> AllSingerList = new List<string>();
+                List<string> AllSingerLowCaseList = new List<string>();
+                List<string> AllSingerTypeList = new List<string>();
+
+                List<string> SingerList = new List<string>();
+                List<string> SingerLowCaseList = new List<string>();
+
+                string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
+                Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+
+                foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
+                {
+                    AllSingerList.Add(row["Singer_Name"].ToString());
+                    AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                    AllSingerTypeList.Add(row["Singer_Type"].ToString());
+                }
+
                 string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
                 Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
 
-                Global.AllSingerDT = new DataTable();
-                string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
-                Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+                foreach (DataRow row in Global.SingerDT.AsEnumerable())
+                {
+                    SingerList.Add(row["Singer_Name"].ToString());
+                    SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                }
 
                 foreach (string singer in Global.SongAddChorusSingerList)
                 {
                     string singertype = "";
-                    // 查找資料庫所有歌手表
-                    var querysingerall = from row in Global.AllSingerDT.AsEnumerable()
-                                         where row.Field<string>("Singer_Name").ToLower().Equals(singer.ToLower())
-                                         select row;
 
-                    if (querysingerall.Count<DataRow>() != 0)
+                    if (AllSingerLowCaseList.IndexOf(singer.ToLower()) >= 0)
                     {
-                        foreach (DataRow row in querysingerall)
-                        {
-                            singertype = row["Singer_Type"].ToString();
-                            break;
-                        }
-
-                        // 查找資料庫歌手表
-                        var querysinger = from row in Global.SingerDT.AsEnumerable()
-                                          where row.Field<string>("Singer_Name").ToLower().Equals(singer.ToLower())
-                                          select row;
-
-                        if (querysinger.Count<DataRow>() == 0)
+                        singertype = AllSingerTypeList[AllSingerLowCaseList.IndexOf(singer.ToLower())];
+                        if (SingerLowCaseList.IndexOf(singer.ToLower()) < 0)
                         {
                             if (NotExistsSingerId.Count > 0)
                             {
@@ -725,11 +675,17 @@ namespace CrazyKTV_SongMgr
                             singercmd.Parameters.Clear();
                         }
                     }
+
                     this.BeginInvoke((Action)delegate()
                     {
                         SongAdd_Tooltip_Label.Text = "正在檢查並加入第 " + Global.TotalList[4] + " 位合唱歌手,請稍待...";
                     });
                 }
+                AllSingerList.Clear();
+                AllSingerLowCaseList.Clear();
+                AllSingerTypeList.Clear();
+                SingerList.Clear();
+                SingerLowCaseList.Clear();
             }
             Global.SongAddChorusSingerList.Clear();
             SongAddConn.Close();

@@ -674,7 +674,8 @@ namespace CrazyKTV_SongMgr
             // 排序索引
             if (SongLang == "未知") SongSortIndex = "1";
             if (SongSortIndex == "") { if (SongSingerType == "10") SongSortIndex = "2"; }
-            if (SongSortIndex == "") SongSortIndex = "3";
+            if (SongSortIndex == "") { if (SongID != "") SongSortIndex = "3"; }
+            if (SongSortIndex == "") SongSortIndex = "4";
 
             // 加歌狀態
             if (SongLang == "未知") SongAddStatus = "語系類別必須有值才能加歌!";

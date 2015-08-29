@@ -1199,7 +1199,7 @@ namespace CrazyKTV_SongMgr
             if(dt.Rows.Count != 0)
             {
                 int i;
-                foreach (string str in Global.CrazyktvSongLangList)
+                Parallel.ForEach(Global.CrazyktvSongLangList, (str, loopState) =>
                 {
                     var query = from row in dt.AsEnumerable()
                                 where row.Field<string>("Song_Lang").Equals(str) &&
@@ -1213,9 +1213,10 @@ namespace CrazyKTV_SongMgr
                         Global.MaxIDList[i] = Convert.ToInt32(row["Song_Id"]);
                         break;
                     }
-                }
+                });
             }
             dt.Dispose();
+            dt = null;
         }
 
         public static int GetMaxSingerId(string TableName, string DatabaseFile)

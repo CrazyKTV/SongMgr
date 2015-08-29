@@ -60,17 +60,43 @@ namespace CrazyKTV_SongMgr
             Global.DupSongAddDT.Columns.Add("Song_PlayState", typeof(int));
             Global.DupSongAddDT.Columns.Add("Song_SrcPath", typeof(string));
             Global.DupSongAddDT.Columns.Add("Song_SortIndex", typeof(string));
+
+            Global.PhoneticsWordList = new List<string>();
+            Global.PhoneticsSpellList = new List<string>();
+            Global.PhoneticsStrokesList = new List<string>();
+            Global.PhoneticsPenStyleList = new List<string>();
+
+            string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+            Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+            var query = from row in Global.PhoneticsDT.AsEnumerable()
+                        where row.Field<Int16>("SortIdx") < 2
+                        select row;
+
+            foreach (DataRow row in query)
+            {
+                Global.PhoneticsWordList.Add(row["Word"].ToString());
+                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+            }
         }
 
         public static void DisposeSongDataTable()
         {
             Global.SongAddAllSongIDList.Clear();
+            Global.PhoneticsWordList.Clear();
+            Global.PhoneticsSpellList.Clear();
+            Global.PhoneticsStrokesList.Clear();
+            Global.PhoneticsPenStyleList.Clear();
             Global.SongDT.Dispose();
             Global.SongDT = null;
             Global.SingerDT.Dispose();
             Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
             Global.AllSingerDT = null;
+            Global.PhoneticsDT.Dispose();
+            Global.PhoneticsDT = null;
         }
 
         public static void StartAddSong(int i)
@@ -269,7 +295,6 @@ namespace CrazyKTV_SongMgr
                 string SongSrcPath = Global.SongAddDT.Rows[i].Field<string>("Song_SrcPath");
                 string SongExtension = Path.GetExtension(SongSrcPath);
 
-
                 // 判斷是否要加入歌手資料至歌手資料庫
                 if (SongSingerType != 3)
                 {
@@ -279,27 +304,42 @@ namespace CrazyKTV_SongMgr
                                       select row;
 
                     if (querysinger.Count<DataRow>() == 0) SongAddSinger = "1";
-
-                    /* 查找資料庫所有歌手表
-                    var querysingerall = from row in Global.AllSingerDT.AsEnumerable()
-                                         where row.Field<string>("Singer_Name").ToLower().Equals(SongSinger.ToLower())
-                                         select row;
-
-                    if (querysingerall.Count<DataRow>() == 0) SongAddAllSinger = "1";
-                    */
                 }
                 else
                 {
+                    // 處理合唱歌曲中的特殊歌手名稱
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                    foreach (string SpecialSingerName in SpecialStrlist)
+                    {
+                        Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                        if (SpecialStrRegex.IsMatch(SongSinger))
+                        {
+                            if (Global.SongAddChorusSingerList.IndexOf(SpecialSingerName) < 0)
+                            {
+                                Global.SongAddChorusSingerList.Add(SpecialSingerName);
+                            }
+                            SongSinger = Regex.Replace(SongSinger, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                        }
+                    }
+
                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                     if (r.IsMatch(SongSinger))
                     {
                         string[] singers = Regex.Split(SongSinger, "&", RegexOptions.None);
                         foreach (string str in singers)
                         {
-                            if(Global.SongAddChorusSingerList.IndexOf(str) == -1)
+                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                            if (Global.SongAddChorusSingerList.IndexOf(SingerStr) < 0)
                             {
-                                Global.SongAddChorusSingerList.Add(str);
+                                Global.SongAddChorusSingerList.Add(SingerStr);
                             }
+                        }
+                    }
+                    else
+                    {
+                        if (Global.SongAddChorusSingerList.IndexOf(SongSinger) < 0)
+                        {
+                            Global.SongAddChorusSingerList.Add(SongSinger);
                         }
                     }
                 }
@@ -370,7 +410,6 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-
                 if (UseCustomSongID)
                 {
                     if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
@@ -379,6 +418,12 @@ namespace CrazyKTV_SongMgr
                         {
                             Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongID);
                         }
+                    }
+
+                    string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+                    if (SongID == (Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)] + 1).ToString(MaxDigitCode))
+                    {
+                        CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
                     }
                 }
                 else
@@ -395,27 +440,9 @@ namespace CrazyKTV_SongMgr
                     // 若無斷號查詢各語系下個歌曲編號
                     if (SongID == "")
                     {
-                        string MaxDigitCode = "";
-                        switch (Global.SongMgrMaxDigitCode)
-                        {
-                            case "1":
-                                MaxDigitCode = "D5";
-                                break;
-                            case "2":
-                                MaxDigitCode = "D6";
-                                break;
-                        }
-
-                        foreach (string langstr in Global.CrazyktvSongLangList)
-                        {
-                            if (langstr == SongLang)
-                            {
-                                int LangIndex = Global.CrazyktvSongLangList.IndexOf(langstr);
-                                Global.MaxIDList[LangIndex]++;
-                                SongID = Global.MaxIDList[LangIndex].ToString(MaxDigitCode);
-                                break;
-                            }
-                        }
+                        string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+                        Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)]++;
+                        SongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
                     }
                 }
 
