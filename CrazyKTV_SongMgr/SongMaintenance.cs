@@ -367,10 +367,35 @@ namespace CrazyKTV_SongMgr
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeConvEndTask =>
                 {
+                    if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt"))
+                    {
+                        Global.SongDT = new DataTable();
+                        string SongQuerySqlStr = "select Song_Id, Song_Path, Song_SongName, Song_Singer, Song_Volume, Song_Track, Song_Lang, Song_FileName, Song_SingerType, Song_SongType from ktv_Song order by Song_Id";
+                        Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+
+                        var FavoriteImportTask = Task.Factory.StartNew(() => SongMaintenance_FavoriteImportTask());
+                        FavoriteImportTask.Wait();
+
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            SongQuery_GetFavoriteUserList();
+                            SongMaintenance_GetFavoriteUserList();
+                            if (Global.SongQueryQueryType == "FavoriteQuery")
+                            {
+                                Global.SongQueryQueryType = "SongQuery";
+                                SongQuery_EditMode_CheckBox.Enabled = true;
+                                SongQuery_DataGridView.DataSource = null;
+                                if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                                SongQuery_QueryStatus_Label.Text = "";
+                            }
+                        });
+                    }
+
                     this.BeginInvoke((Action)delegate()
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[0] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[2] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[3] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+
                         SongDBUpdate_CheckDatabaseFile();
                         Common_SwitchSetUI(true);
                         SongMaintenance.DisposeSongDataTable();
@@ -396,10 +421,34 @@ namespace CrazyKTV_SongMgr
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeConvEndTask =>
                 {
+                    if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt"))
+                    {
+                        Global.SongDT = new DataTable();
+                        string SongQuerySqlStr = "select Song_Id, Song_Path, Song_SongName, Song_Singer, Song_Volume, Song_Track, Song_Lang, Song_FileName, Song_SingerType, Song_SongType from ktv_Song order by Song_Id";
+                        Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+
+                        var FavoriteImportTask = Task.Factory.StartNew(() => SongMaintenance_FavoriteImportTask());
+                        FavoriteImportTask.Wait();
+
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            SongQuery_GetFavoriteUserList();
+                            SongMaintenance_GetFavoriteUserList();
+                            if (Global.SongQueryQueryType == "FavoriteQuery")
+                            {
+                                Global.SongQueryQueryType = "SongQuery";
+                                SongQuery_EditMode_CheckBox.Enabled = true;
+                                SongQuery_DataGridView.DataSource = null;
+                                if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                                SongQuery_QueryStatus_Label.Text = "";
+                            }
+                        });
+                    }
+
                     this.BeginInvoke((Action)delegate()
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[0] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[2] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[3] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                         SongDBUpdate_CheckDatabaseFile();
                         Common_SwitchSetUI(true);
                         SongMaintenance.DisposeSongDataTable();
@@ -411,6 +460,54 @@ namespace CrazyKTV_SongMgr
         private void SongMaintenance_CodeConvTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            List<string> Favoritelist = new List<string>();
+            string SongQuerySqlStr = "";
+            DataTable dt = new DataTable();
+
+            SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    Favoritelist.Add("ktv_User," + row["User_Id"].ToString() + "," + row["User_Name"].ToString());
+                }
+            }
+
+            SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    var query = from QueryRow in Global.SongDT.AsEnumerable()
+                                where QueryRow.Field<string>("Song_Id").Equals(row["Song_Id"].ToString())
+                                select QueryRow;
+
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        foreach (DataRow songrow in query)
+                        {
+                            Favoritelist.Add("ktv_Favorite," + row["User_Id"].ToString() + "," + songrow["Song_Lang"].ToString() + "," + songrow["Song_Singer"].ToString() + "," + songrow["Song_SongName"].ToString());
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt");
+            foreach (string str in Favoritelist)
+            {
+                sw.WriteLine(str);
+            }
+
+            sw.Close();
+            dt.Dispose();
+            dt = null;
 
             string MaxDigitCode = "";
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = "D5"; } else { MaxDigitCode = "D6"; }
@@ -442,7 +539,7 @@ namespace CrazyKTV_SongMgr
                     {
                         lock (LockThis)
                         {
-                            Global.TotalList[1]++;
+                            Global.TotalList[3]++;
                         }
                         str = row["Song_Id"].ToString() + "|";
                         str += row["Song_SongName"].ToString() + "|";
@@ -481,14 +578,14 @@ namespace CrazyKTV_SongMgr
                     cmd.ExecuteNonQuery();
                     lock (LockThis)
                     {
-                        Global.TotalList[0]++;
+                        Global.TotalList[2]++;
                     }
                 }
                 catch
                 {
                     lock (LockThis)
                     {
-                        Global.TotalList[1]++;
+                        Global.TotalList[3]++;
                     }
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【編碼位數轉換】更新資料庫時發生錯誤: " + str;
@@ -498,7 +595,7 @@ namespace CrazyKTV_SongMgr
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的歌曲編號,請稍待...";
+                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[2] + " 首歌曲的歌曲編號,請稍待...";
                 });
             }
             conn.Close();
