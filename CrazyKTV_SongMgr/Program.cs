@@ -94,7 +94,9 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongAddValueList = new List<string>();
         public static List<string> SongAddChorusSingerList = new List<string>();
         public static List<string> SongAddAllSongIDList = new List<string>();
-        
+        public static List<string> SongAddAllSongInfoList = new List<string>();
+        public static List<string> SongAddAllSongFilePathList = new List<string>();
+
         public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
         public static List<string> SongDBConvValueList = new List<string>();
         public static List<string> SongDBConvJetktvLangList = new List<string>();
