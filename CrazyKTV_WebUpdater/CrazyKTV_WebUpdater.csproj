@@ -26,9 +26,9 @@
     <MapFileExtensions>false</MapFileExtensions>
     <SupportUrl>https://www.facebook.com/NewCrazyKTV</SupportUrl>
     <ErrorReportUrl>https://www.facebook.com/NewCrazyKTV</ErrorReportUrl>
-    <ProductName>CrazyKTV 網頁更新程式</ProductName>
+    <ProductName>CrazyKTV 更新程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
-    <SuiteName>CrazyKTV 網頁更新程式</SuiteName>
+    <SuiteName>CrazyKTV 更新程式</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
@@ -59,8 +59,7 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\CrazyKTV_WebUpdater.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>CEB8A5F7738C4F56BDD8A4CAF729E9C84505788C</ManifestCertificateThumbprint>
@@ -125,6 +124,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="UpdateFile\CrazyKTV_WebUpdater.ver" />
     <None Include="UpdateFile\README_使用說明.doc" />
   </ItemGroup>
   <ItemGroup>
@@ -147,10 +147,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Resources\CrazyKTV_WebUpdater.ico" />
     <Content Include="UpdateFile\CassiniDev4-lib.dll" />
     <Content Include="UpdateFile\CrazyKTV.exe" />
     <Content Include="UpdateFile\CrazyKTVEX.exe" />

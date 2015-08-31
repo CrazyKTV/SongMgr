@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace CrazyKTV_WebUpdater
             BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(control, setting, null);
         }
+
     }
 
     class CommonFunc
@@ -33,9 +35,10 @@ namespace CrazyKTV_WebUpdater
             xmldoc.Save(VersionFile);
         }
 
-        public static string LoadVersionXmlFile(string VersionFile, string FileName)
+        public static List<string> LoadVersionXmlFile(string VersionFile, string FileName)
         {
-            string Value = "";
+            List<string> Value = new List<string>();
+            Value.Add(FileName);
             try
             {
                 XElement rootElement = XElement.Load(VersionFile);
@@ -45,7 +48,9 @@ namespace CrazyKTV_WebUpdater
 
                 foreach (XElement childNode in Query)
                 {
-                    Value = childNode.Value;
+                    Value.Add(childNode.Element("Ver").Value);
+                    Value.Add(childNode.Element("Url").Value);
+                    Value.Add(childNode.Element("Desc").Value);
                 }
             }
             catch
@@ -76,10 +81,13 @@ namespace CrazyKTV_WebUpdater
             }
             else
             {
-                XElement AddNode = new XElement("setting", new XAttribute("Name", FileName), new XElement("Ver", FileVer), new XElement("Url", FileUrl), new XElement("Desc", FileDesc));
+                XElement AddNode = new XElement("File", new XAttribute("Name", FileName), new XElement("Ver", FileVer), new XElement("Url", FileUrl), new XElement("Desc", FileDesc));
                 rootElement.Add(AddNode);
             }
             xmldoc.Save(VersionFile);
         }
+
+
+
     }
 }

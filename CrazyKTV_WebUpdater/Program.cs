@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CrazyKTV_WebUpdater
@@ -21,5 +22,10 @@ namespace CrazyKTV_WebUpdater
     class Global
     {
         public static string WebUpdaterFile = Application.StartupPath + @"\CrazyKTV_WebUpdater.ver";
+        public static string WebUpdaterTempFile = Application.StartupPath + @"\CrazyKTV_WebUpdater.tmp";
+        public static string WebUpdaterUrl = "https://raw.githubusercontent.com/KenLuoTW/CrazyKTVSongMgr/master/CrazyKTV_WebUpdater/UpdateFile/CrazyKTV_WebUpdater.ver";
+
+        public static List<List<string>> LocaleVerList = new List<List<string>>();
+        public static List<List<string>> RemoteVerList = new List<List<string>>();
     }
 }
