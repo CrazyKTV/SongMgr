@@ -126,7 +126,7 @@
     <value>12, 603</value>
   </data>
   <data name="progressBar1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>982, 30</value>
+    <value>978, 30</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="progressBar1.TabIndex" type="System.Int32, mscorlib">
@@ -148,7 +148,7 @@
     <value>12, 639</value>
   </data>
   <data name="progressBar2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>982, 30</value>
+    <value>978, 30</value>
   </data>
   <data name="progressBar2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -166,7 +166,7 @@
     <value>2</value>
   </data>
   <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微軟正黑體, 12pt</value>
+    <value>微軟正黑體, 12pt, style=Bold</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -175,7 +175,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>982, 35</value>
+    <value>978, 35</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -202,7 +202,7 @@
     <value>20, 20</value>
   </data>
   <data name="webBrowser1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>982, 585</value>
+    <value>978, 585</value>
   </data>
   <data name="webBrowser1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -229,7 +229,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>982, 35</value>
+    <value>978, 35</value>
   </data>
   <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -256,7 +256,7 @@
     <value>True</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1006, 722</value>
+    <value>1002, 718</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微軟正黑體, 10.2pt</value>
@@ -426,9 +426,6 @@
         AAAD/wAA/+AAAA//AAD/+AAAH/8AAP/8AAA//wAA//+AAH//AAD//+AA//8AAP//+AP//wAA////////
         AAA=
 </value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>CrazyKTV 更新程式 v1.0.0</value>
