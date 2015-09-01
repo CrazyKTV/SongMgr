@@ -144,7 +144,11 @@ namespace CrazyKTV_WebUpdater
                         label1.Text = "正在下載 " + list[0] + " 更新檔案...";
                     });
                     CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, list[0], list[1], list[2], list[3]);
-                    if (list[0] != "VersionInfo") DownloadFile(list[0], list[2], true);
+                    if (list[0] != "VersionInfo")
+                    {
+                        if (list[0] == "CrazySong.mdb" && File.Exists(Application.StartupPath + @"\CrazySong.mdb")) list[0] = "CrazySongEmpty.mdb";
+                        DownloadFile(list[0], list[2], true);
+                    }
                 }
             }
 
@@ -168,7 +172,7 @@ namespace CrazyKTV_WebUpdater
             {
                 if (File.Exists(file))
                 {
-                    Process p = Process.Start(file, "/S");
+                    Process p = Process.Start(file, "-y");
                     p.WaitForExit();
                     File.Delete(file);
                 }
