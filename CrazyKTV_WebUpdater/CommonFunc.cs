@@ -55,7 +55,6 @@ namespace CrazyKTV_WebUpdater
             }
             catch
             {
-                Path.GetFileName(VersionFile);
                 MessageBox.Show("【" + Path.GetFileName(VersionFile) + "】設定檔內容有錯誤,請刪除後再執行。");
             }
             return Value;
@@ -87,7 +86,30 @@ namespace CrazyKTV_WebUpdater
             xmldoc.Save(VersionFile);
         }
 
+        public static List<List<string>> ScanVersionXmlFile(string VersionFile)
+        {
+            List<List<string>> VerValueListList = new List<List<string>>();
 
+            try
+            {
+                XElement rootElement = XElement.Load(VersionFile);
+
+                foreach(XElement childNode in rootElement.Elements("File"))
+                {
+                    List<string> list = new List<string>();
+                    list.Add(childNode.Attribute("Name").Value);
+                    list.Add(childNode.Element("Ver").Value);
+                    list.Add(childNode.Element("Url").Value);
+                    list.Add(childNode.Element("Desc").Value);
+                    VerValueListList.Add(list);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("【" + Path.GetFileName(VersionFile) + "】設定檔內容有錯誤,請刪除後再執行。");
+            }
+            return VerValueListList;
+        }
 
     }
 }
