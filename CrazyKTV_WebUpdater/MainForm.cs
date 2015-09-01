@@ -67,6 +67,8 @@ namespace CrazyKTV_WebUpdater
 
         private void UpdateFileTask()
         {
+            string UnFolderFileArguments = "-y";
+
             this.BeginInvoke((Action)delegate()
             {
                 progressBar2.Maximum = Global.RemoteVerList.Count;
@@ -101,6 +103,10 @@ namespace CrazyKTV_WebUpdater
                         {
                             if (list[0] == "CrazySong.mdb" && File.Exists(Application.StartupPath + @"\CrazySong.mdb")) list[0] = "CrazySongEmpty.mdb";
                             DownloadFile(list[0], list[2], true);
+                        }
+                        else
+                        {
+                            if (list[2] != "") UnFolderFileArguments = list[2];
                         }
                     }
                 }
@@ -139,7 +145,7 @@ namespace CrazyKTV_WebUpdater
             {
                 if (File.Exists(file))
                 {
-                    Process p = Process.Start(file, "-y");
+                    Process p = Process.Start(file, UnFolderFileArguments);
                     p.WaitForExit();
                     File.Delete(file);
                 }
