@@ -2673,13 +2673,35 @@ namespace CrazyKTV_SongMgr
             string SongQuerySqlStr = "select Song_Id, Song_Path, Song_SongName, Song_Singer, Song_Volume, Song_Track, Song_Lang, Song_FileName, Song_SingerType, Song_SongType from ktv_Song order by Song_Id";
             Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
+            Global.SingerList = new List<string>();
+            Global.SingerLowCaseList = new List<string>();
+            Global.SingerTypeList = new List<string>();
+
             Global.SingerDT = new DataTable();
-            string SongSingerQuerySqlStr = "select Singer_Id, Singer_Name from ktv_Singer";
+            string SongSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_Singer";
             Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
 
+            foreach (DataRow row in Global.SingerDT.AsEnumerable())
+            {
+                Global.SingerList.Add(row["Singer_Name"].ToString());
+                Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                Global.SingerTypeList.Add(row["Singer_Type"].ToString());
+            }
+
+            Global.AllSingerList = new List<string>();
+            Global.AllSingerLowCaseList = new List<string>();
+            Global.AllSingerTypeList = new List<string>();
+
             Global.AllSingerDT = new DataTable();
-            string SongAllSingerQuerySqlStr = "select Singer_Id, Singer_Name from ktv_AllSinger";
+            string SongAllSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_AllSinger";
             Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+
+            foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
+            {
+                Global.AllSingerList.Add(row["Singer_Name"].ToString());
+                Global.AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                Global.AllSingerTypeList.Add(row["Singer_Type"].ToString());
+            }
 
             Global.PhoneticsWordList = new List<string>();
             Global.PhoneticsSpellList = new List<string>();
@@ -2704,14 +2726,24 @@ namespace CrazyKTV_SongMgr
 
         public static void DisposeSongDataTable()
         {
+            Global.SingerList.Clear();
+            Global.SingerLowCaseList.Clear();
+            Global.SingerTypeList.Clear();
+            Global.AllSingerList.Clear();
+            Global.AllSingerLowCaseList.Clear();
+            Global.AllSingerTypeList.Clear();
             Global.PhoneticsWordList.Clear();
             Global.PhoneticsSpellList.Clear();
             Global.PhoneticsStrokesList.Clear();
             Global.PhoneticsPenStyleList.Clear();
             Global.SongDT.Dispose();
+            Global.SongDT = null;
             Global.SingerDT.Dispose();
+            Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
+            Global.AllSingerDT = null;
             Global.PhoneticsDT.Dispose();
+            Global.PhoneticsDT = null;
         }
 
         public static DataTable GetMultiSongPathList()

@@ -371,6 +371,7 @@ namespace CrazyKTV_SongMgr
                 });
 
                 Global.SongStatisticsDT.Dispose();
+                Global.SongStatisticsDT = null;
             }
         }
 
@@ -593,6 +594,12 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
+                        if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                        {
+                            SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                            SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                        }
+
                         if (NotExistsSingerId.Count > 0)
                         {
                             SingerId = NotExistsSingerId[0];
@@ -622,6 +629,9 @@ namespace CrazyKTV_SongMgr
                         }
                     });
                 }
+                dt.Dispose();
+                dt = null;
+
                 string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
                 string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
                 string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
@@ -666,54 +676,50 @@ namespace CrazyKTV_SongMgr
                     });
                 }
                 Addlist.Clear();
-                Addlist = new List<string>();
+
+                Global.SingerList = new List<string>();
+                Global.SingerLowCaseList = new List<string>();
+                Global.SingerTypeList = new List<string>();
 
                 Global.SingerDT = new DataTable();
                 string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
                 Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
 
-                Global.AllSingerDT = new DataTable();
-                string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
-                Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+                foreach (DataRow row in Global.SingerDT.AsEnumerable())
+                {
+                    Global.SingerList.Add(row["Singer_Name"].ToString());
+                    Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                    Global.SingerTypeList.Add(row["Singer_Type"].ToString());
+                }
 
+                Addlist = new List<string>();
                 // 判斷是否要加入合唱歌手資料至歌庫歌手資料庫
                 foreach (string ChorusSinger in ChorusSingerList)
                 {
                     string ChorusSingerName = Regex.Replace(ChorusSinger, @"^\s*|\s*$", ""); //去除頭尾空白
                     // 查找資料庫歌庫歌手資料表
-                    var querysinger = from row in Global.SingerDT.AsEnumerable()
-                                      where row.Field<string>("Singer_Name").ToLower().Equals(ChorusSingerName.ToLower())
-                                      select row;
-
-                    if (querysinger.Count<DataRow>() == 0)
+                    if (Global.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
                     {
                         // 查找資料庫預設歌手資料表
-                        var querysingerall = from row in Global.AllSingerDT.AsEnumerable()
-                                             where row.Field<string>("Singer_Name").ToLower().Equals(ChorusSingerName.ToLower())
-                                             select row;
-                        if (querysingerall.Count<DataRow>() > 0)
+                        if(Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
                         {
-                            foreach (DataRow row in querysingerall)
+                            SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                            SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+
+                            if (NotExistsSingerId.Count > 0)
                             {
-                                SingerName = row["Singer_Name"].ToString();
-                                SingerType = row["Singer_Type"].ToString();
-
-                                if (NotExistsSingerId.Count > 0)
-                                {
-                                    SingerId = NotExistsSingerId[0];
-                                    NotExistsSingerId.RemoveAt(0);
-                                }
-                                else
-                                {
-                                    SingerId = MaxSingerId.ToString();
-                                    MaxSingerId++;
-                                }
-
-                                spelllist = new List<string>();
-                                spelllist = CommonFunc.GetSongNameSpell(SingerName);
-                                Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
-                                break;
+                                SingerId = NotExistsSingerId[0];
+                                NotExistsSingerId.RemoveAt(0);
                             }
+                            else
+                            {
+                                SingerId = MaxSingerId.ToString();
+                                MaxSingerId++;
+                            }
+
+                            spelllist = new List<string>();
+                            spelllist = CommonFunc.GetSongNameSpell(SingerName);
+                            Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
                         }
                     }
                     

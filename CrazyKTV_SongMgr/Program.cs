@@ -90,6 +90,13 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongAnalysisSingerLowCaseList = new List<string>();
         public static List<string> SongAnalysisSingerTypeList = new List<string>();
 
+        public static List<string> SingerList = new List<string>();
+        public static List<string> SingerLowCaseList = new List<string>();
+        public static List<string> SingerTypeList = new List<string>();
+        public static List<string> AllSingerList = new List<string>();
+        public static List<string> AllSingerLowCaseList = new List<string>();
+        public static List<string> AllSingerTypeList = new List<string>();
+
         public static List<string> PhoneticsWordList = new List<string>();
         public static List<string> PhoneticsSpellList = new List<string>();
         public static List<string> PhoneticsPenStyleList = new List<string>();
@@ -105,6 +112,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongDBConvValueList = new List<string>();
         public static List<string> SongDBConvJetktvLangList = new List<string>();
         public static List<string> SongDBConvJetktvPathList = new List<string>();
+
 
         public static DataTable SongDT = new DataTable();
         public static DataTable SongAddDT = new DataTable();

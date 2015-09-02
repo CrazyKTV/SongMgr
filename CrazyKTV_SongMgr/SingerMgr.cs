@@ -774,21 +774,73 @@ namespace CrazyKTV_SongMgr
     {
         public static void CreateSongDataTable()
         {
+            Global.SingerList = new List<string>();
+            Global.SingerLowCaseList = new List<string>();
+            Global.SingerTypeList = new List<string>();
+
             string SongSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_Singer";
             Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
+
+            foreach (DataRow row in Global.SingerDT.AsEnumerable())
+            {
+                Global.SingerList.Add(row["Singer_Name"].ToString());
+                Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                Global.SingerTypeList.Add(row["Singer_Type"].ToString());
+            }
+
+            Global.AllSingerList = new List<string>();
+            Global.AllSingerLowCaseList = new List<string>();
+            Global.AllSingerTypeList = new List<string>();
 
             string SongAllSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_AllSinger";
             Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
 
+            foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
+            {
+                Global.AllSingerList.Add(row["Singer_Name"].ToString());
+                Global.AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                Global.AllSingerTypeList.Add(row["Singer_Type"].ToString());
+            }
+
+            Global.PhoneticsWordList = new List<string>();
+            Global.PhoneticsSpellList = new List<string>();
+            Global.PhoneticsStrokesList = new List<string>();
+            Global.PhoneticsPenStyleList = new List<string>();
+
             string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
             Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+            var query = from row in Global.PhoneticsDT.AsEnumerable()
+                        where row.Field<Int16>("SortIdx") < 2
+                        select row;
+
+            foreach (DataRow row in query)
+            {
+                Global.PhoneticsWordList.Add(row["Word"].ToString());
+                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+            }
         }
 
         public static void DisposeSongDataTable()
         {
+            Global.SingerList.Clear();
+            Global.SingerLowCaseList.Clear();
+            Global.SingerTypeList.Clear();
+            Global.AllSingerList.Clear();
+            Global.AllSingerLowCaseList.Clear();
+            Global.AllSingerTypeList.Clear();
+            Global.PhoneticsWordList.Clear();
+            Global.PhoneticsSpellList.Clear();
+            Global.PhoneticsStrokesList.Clear();
+            Global.PhoneticsPenStyleList.Clear();
             Global.SingerDT.Dispose();
+            Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
+            Global.AllSingerDT = null;
             Global.PhoneticsDT.Dispose();
+            Global.PhoneticsDT = null;
         }
 
         public static DataTable GetDefaultSingerDataTableList()
