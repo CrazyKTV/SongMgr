@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -32,6 +34,7 @@ namespace CrazyKTV_SongMgr
         public static string CrazyktvDatabaseMaxDigitCode = "";
         public static string CrazyktvCfgFile = Application.StartupPath + @"\CrazyKTV.cfg";
 
+        public static string SongMgrVer = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString().Replace(".", "");
         public static string SongMgrCfgFile = Application.StartupPath + @"\CrazyKTV_SongMgr.cfg";
         public static string SongMgrSupportFormat = ".avi;.flv;.dat;.mkv;.mp4;.mov;.mpg;.rmvb;.ts;.vob;.webm;.wmv";
         public static string SongMgrDestFolder = "";
@@ -63,6 +66,7 @@ namespace CrazyKTV_SongMgr
         public static string SongAddUseCustomSongID = "False";
 
         public static string MainCfgAlwaysOnTop = "False";
+        public static string MainCfgEnableAutoUpdate = "True";
         public static string MainCfgHideSongDBConverterTabPage = "False";
         public static string MainCfgHideSongAddResultTabPage = "True";
         public static string MainCfgHideSongLogTabPage = "True";

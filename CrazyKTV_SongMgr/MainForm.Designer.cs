@@ -349,6 +349,7 @@
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Tooltip_Label = new System.Windows.Forms.Label();
             this.MainCfg_General_ＧroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
             this.MainCfg_BackupRemoveSongDays_Label = new System.Windows.Forms.Label();
             this.MainCfg_HideSongLogTab_CheckBox = new System.Windows.Forms.CheckBox();
@@ -4488,6 +4489,7 @@
             // 
             // MainCfg_General_ＧroupBox
             // 
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_EnableAutoUpdate_CheckBox);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupRemoveSongDays_ComboBox);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupRemoveSongDays_Label);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongLogTab_CheckBox);
@@ -4503,6 +4505,19 @@
             this.MainCfg_General_ＧroupBox.TabIndex = 0;
             this.MainCfg_General_ＧroupBox.TabStop = false;
             this.MainCfg_General_ＧroupBox.Text = "程式設定";
+            // 
+            // MainCfg_EnableAutoUpdate_CheckBox
+            // 
+            this.MainCfg_EnableAutoUpdate_CheckBox.AutoSize = true;
+            this.MainCfg_EnableAutoUpdate_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_EnableAutoUpdate_CheckBox.Location = new System.Drawing.Point(200, 42);
+            this.MainCfg_EnableAutoUpdate_CheckBox.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.MainCfg_EnableAutoUpdate_CheckBox.Name = "MainCfg_EnableAutoUpdate_CheckBox";
+            this.MainCfg_EnableAutoUpdate_CheckBox.Size = new System.Drawing.Size(168, 26);
+            this.MainCfg_EnableAutoUpdate_CheckBox.TabIndex = 7;
+            this.MainCfg_EnableAutoUpdate_CheckBox.Text = "啟用程式自動更新";
+            this.MainCfg_EnableAutoUpdate_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_EnableAutoUpdate_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_EnableAutoUpdate_CheckBox_CheckedChanged);
             // 
             // MainCfg_BackupRemoveSongDays_ComboBox
             // 
@@ -5679,6 +5694,7 @@
         private System.Windows.Forms.ComboBox SongMgrCfg_CustomSingerTypeStructure2_ComboBox;
         private System.Windows.Forms.GroupBox SongMgrCfg_CustomSingerTypeStructure_GroupBox;
         private System.Windows.Forms.GroupBox SingerMgr_OtherQuery_GroupBox;
+        private System.Windows.Forms.CheckBox MainCfg_EnableAutoUpdate_CheckBox;
     }
 }
 

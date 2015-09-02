@@ -69,6 +69,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate", Global.MainCfgEnableAutoUpdate);
             }
 
             List<string> list = new List<string>()
@@ -112,7 +113,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID"),
                 CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer"),
                 CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate")
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -302,12 +304,17 @@ namespace CrazyKTV_SongMgr
             if (list[39] != "") Global.SongMgrCustomSingerTypeStructure = list[39];
             SongMgrCfg_SetCustomSingerTypeStructureCbox();
 
+            if (list[40] != "") Global.MainCfgEnableAutoUpdate = list[40];
+            MainCfg_EnableAutoUpdate_CheckBox.Checked = bool.Parse(Global.MainCfgEnableAutoUpdate);
 
 
             // 建立歌曲操作記錄資料表
             Global.SongLogDT = new DataTable();
             Global.SongLogDT.Columns.Add(new DataColumn("Display", typeof(string)));
             Global.SongLogDT.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            // 檢查程式更新
+            Common_CheckSongMgrVer();
 
             // 檢查資料庫檔案是否為舊版資料庫
             SongDBUpdate_CheckDatabaseFile();
@@ -476,8 +483,6 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
-
-
 
 
     }

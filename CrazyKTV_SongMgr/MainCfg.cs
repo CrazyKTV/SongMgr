@@ -9,6 +9,7 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_Save_Button_Click(object sender, EventArgs e)
         {
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop", Global.MainCfgAlwaysOnTop);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate", Global.MainCfgEnableAutoUpdate);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongDBConverterTabPage", Global.MainCfgHideSongDBConverterTabPage);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage", Global.MainCfgHideSongAddResultTabPage);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", Global.MainCfgHideSongLogTabPage);
@@ -19,6 +20,11 @@ namespace CrazyKTV_SongMgr
         {
             Global.MainCfgAlwaysOnTop = MainCfg_AlwaysOnTop_CheckBox.Checked.ToString();
             this.TopMost = MainCfg_AlwaysOnTop_CheckBox.Checked;
+        }
+
+        private void MainCfg_EnableAutoUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgEnableAutoUpdate = MainCfg_EnableAutoUpdate_CheckBox.Checked.ToString();
         }
 
         private void MainCfg_HideTab_CheckBox_CheckedChanged(object sender, EventArgs e)

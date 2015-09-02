@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -838,6 +839,36 @@ namespace CrazyKTV_SongMgr
             GC.Collect();
         }
 
+        private void Common_CheckSongMgrVer()
+        {
+            string WebUpdaterFile = Application.StartupPath + @"\CrazyKTV_WebUpdater.exe";
+            if (Global.MainCfgEnableAutoUpdate == "True" && File.Exists(WebUpdaterFile))
+            {
+                string WebUpdaterTempFile = Application.StartupPath + @"\CrazyKTV_WebUpdater.tmp";
+                string WebUpdaterUrl = "https://raw.githubusercontent.com/KenLuoTW/CrazyKTVSongMgr/master/CrazyKTV_WebUpdater/UpdateFile/CrazyKTV_WebUpdater.ver";
+
+                if (CommonFunc.DownloadFile(WebUpdaterTempFile, WebUpdaterUrl))
+                {
+                    if (File.Exists(WebUpdaterTempFile))
+                    {
+                        List<string> RemoteSongMgrVerList = CommonFunc.LoadVersionXmlFile(WebUpdaterTempFile, "CrazyKTV_SongMgr.exe");
+                        File.Delete(WebUpdaterTempFile);
+                        if (RemoteSongMgrVerList.Count > 0)
+                        {
+                            if (Convert.ToInt32(RemoteSongMgrVerList[1]) > Convert.ToInt32(Global.SongMgrVer))
+                            {
+                                if (MessageBox.Show("你確定要更新 CrazyKTV 加歌程式嗎?", "偵測到 CrazyKTV 加歌程式更新", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    Process p = Process.Start(WebUpdaterFile);
+                                    Environment.Exit(0);
+                                }
+                            }
+                        }
+                    }
+                }
+                File.Delete(WebUpdaterTempFile);
+            }
+        }
 
     }
 
@@ -919,6 +950,31 @@ namespace CrazyKTV_SongMgr
                 }
             }
             xmldoc.Save(ConfigFile);
+        }
+
+        public static List<string> LoadVersionXmlFile(string VersionFile, string FileName)
+        {
+            List<string> Value = new List<string>();
+            Value.Add(FileName);
+            try
+            {
+                XElement rootElement = XElement.Load(VersionFile);
+                var Query = from childNode in rootElement.Elements("File")
+                            where (string)childNode.Attribute("Name") == FileName
+                            select childNode;
+
+                foreach (XElement childNode in Query)
+                {
+                    Value.Add(childNode.Element("Ver").Value);
+                    Value.Add(childNode.Element("Url").Value);
+                    Value.Add(childNode.Element("Desc").Value);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("【" + Path.GetFileName(VersionFile) + "】設定檔內容有錯誤,請刪除後再執行。");
+            }
+            return Value;
         }
 
         public static OleDbConnection OleDbOpenConn(string Database, string Password)
