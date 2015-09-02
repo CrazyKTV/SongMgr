@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -29,40 +28,6 @@ namespace CrazyKTV_SongMgr
                 
                 switch (SongDBConverter_SrcDBType_ComboBox.SelectedValue.ToString())
                 {
-                    case "1":
-                        SongDBConverter_SrcDBFile_TextBox.Text = "";
-                        SongDBConverter_StartConv_Button.Enabled = false;
-                        SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType from ktv_Song";
-
-                        list = CommonFunc.GetOleDbTableList(opd.FileName, "");
-
-                        if (list.IndexOf("ktv_Song") >= 0)
-                        {
-                            if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫不是 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
-                        }
-                        else
-                        {
-                            SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫不是 CrazyKTV 資料庫!";
-                        }
-
-                        if (SongDBConverter_Tooltip_Label.Text != "你選取的來源資料庫不是 CrazyKTV 資料庫!")
-                        {
-                            dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, "");
-                            if (dt.Rows.Count > 0)
-                            {
-                                if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫沒有歌曲資料!") SongDBConverter_Tooltip_Label.Text = "";
-                                SongDBConverter_SrcDBFile_TextBox.Text = opd.FileName;
-                                SongDBConverter_SwitchButton(1);
-                            }
-                            else
-                            {
-                                SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
-                            }
-                        }
-
-                        dt.Dispose();
-                        dt = null;
-                        break;
                     case "2":
                         SongDBConverter_SrcDBFile_TextBox.Text = "";
                         SongDBConverter_StartConv_Button.Enabled = false;
@@ -93,11 +58,9 @@ namespace CrazyKTV_SongMgr
                                 SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
                             }
                         }
-
                         dt.Dispose();
                         dt = null;
                         break;
-
                 }
             }
         }
@@ -142,7 +105,6 @@ namespace CrazyKTV_SongMgr
                         SongDBConverter_DestDBFile_TextBox.Text = opd.FileName;
                         SongDBConverter_SwitchButton(1);
                     }
-
                     dt.Dispose();
                     dt = null;
                 }
@@ -154,12 +116,6 @@ namespace CrazyKTV_SongMgr
             Global.TimerStartTime = DateTime.Now;
             switch (SongDBConverter_SrcDBType_ComboBox.SelectedValue.ToString())
             {
-                case "1":
-                    SongDBConverter_StartConv_Button.Enabled = false;
-                    SongDBConverter_Converter_GroupBox.Enabled = false;
-                    Common_SwitchSetUI(false);
-                    Task.Factory.StartNew(SongDBConverter_ConvFromSrcDBTask, 1);
-                    break;
                 case "2":
                     SongDBConverter_StartConv_Button.Enabled = false;
                     SongDBConverter_Converter_GroupBox.Enabled = false;
@@ -205,6 +161,7 @@ namespace CrazyKTV_SongMgr
                     SongDBConverter_JetktvLangCfg_GroupBox.Visible = true;
                     SongDBConverter_ConvHelp_GroupBox.Width = 660;
                     SongDBConverter_ConvHelp_RichTextBox.Width = 628;
+                    SongDBConverter_SrcDBFile_Button.Enabled = true;
 
                     ComboBox[] SongDBConverter_JetktvLang_ComboBox = 
                     {
@@ -238,6 +195,7 @@ namespace CrazyKTV_SongMgr
                     SongDBConverter_ConvHelp_GroupBox.Visible = true;
                     SongDBConverter_ConvHelp_GroupBox.Width = 952;
                     SongDBConverter_ConvHelp_RichTextBox.Width = 920;
+                    SongDBConverter_SrcDBFile_Button.Enabled = false;
                     break;
             }
         }
@@ -357,9 +315,6 @@ namespace CrazyKTV_SongMgr
             {
                 switch ((int)DBType)
                 {
-                    case 1:
-                        SongDBConverterSongDB.StartConvFromOldDB(i);
-                        break;
                     case 2:
                         SongDBConverterSongDB.StartConvFromJetktvDB(i);
                         break;
@@ -542,166 +497,8 @@ namespace CrazyKTV_SongMgr
                     });
                 }
             }
-
-            
-            if ((int)DBType == 1)
-            {
-                // 轉換我的最愛
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongDBConverter_Tooltip_Label.Text = "正在轉換我的最愛,請稍待...";
-                });
-
-                List<string> list = new List<string>();
-                List<string> Addlist = new List<string>();
-
-                OleDbCommand Ucmd = new OleDbCommand();
-                OleDbCommand Fcmd = new OleDbCommand();
-                OleDbCommand Rcmd = new OleDbCommand();
-
-                string TruncateSqlStr = "";
-
-                TruncateSqlStr = "delete * from ktv_User";
-                Ucmd = new OleDbCommand(TruncateSqlStr, conn);
-                Ucmd.ExecuteNonQuery();
-
-                TruncateSqlStr = "delete * from ktv_Favorite";
-                Fcmd = new OleDbCommand(TruncateSqlStr, conn);
-                Fcmd.ExecuteNonQuery();
-                
-                string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
-                dt = CommonFunc.GetOleDbDataTable(SongSrcDBFile, SongQuerySqlStr, "");
-
-                if (dt.Rows.Count > 0)
-                {
-                    foreach (DataRow row in dt.AsEnumerable())
-                    {
-                        Addlist.Add("ktv_User," + row["User_Id"].ToString() + "," + row["User_Name"].ToString());
-                    }
-                }
-
-                SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
-                dt = CommonFunc.GetOleDbDataTable(SongSrcDBFile, SongQuerySqlStr, "");
-                
-                if (dt.Rows.Count > 0)
-                {
-                    foreach (DataRow row in dt.AsEnumerable())
-                    {
-                        Addlist.Add("ktv_Favorite," + row["User_Id"].ToString() + "," + row["Song_Id"].ToString());
-                    }
-                }
-
-                string UserColumnStr = "User_Id, User_Name";
-                string UserValuesStr = "@UserId, @UserName";
-                string UserAddSqlStr = "insert into ktv_User ( " + UserColumnStr + " ) values ( " + UserValuesStr + " )";
-                Ucmd = new OleDbCommand(UserAddSqlStr, conn);
-
-                string FavoriteColumnStr = "User_Id, Song_Id";
-                string FavoriteValuesStr = "@UserId, @SongId";
-                string FavoriteAddSqlStr = "insert into ktv_Favorite ( " + FavoriteColumnStr + " ) values ( " + FavoriteValuesStr + " )";
-                Fcmd = new OleDbCommand(FavoriteAddSqlStr, conn);
-
-                foreach(string AddStr in Addlist)
-                {
-                    list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
-                    switch (list[0])
-                    {
-                        case "ktv_User":
-                            Ucmd.Parameters.AddWithValue("@UserId", list[1]);
-                            Ucmd.Parameters.AddWithValue("@UserName", list[2]);
-                            try
-                            {
-                                Ucmd.ExecuteNonQuery();
-                            }
-                            catch
-                            {
-                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】轉換最愛用戶 ktv_User 時發生錯誤: " + AddStr;
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                            }
-                            Ucmd.Parameters.Clear();
-                            break;
-                        case "ktv_Favorite":
-                            Fcmd.Parameters.AddWithValue("@UserId", list[1]);
-                            Fcmd.Parameters.AddWithValue("@SongId", list[2]);
-                            try
-                            {
-                                Fcmd.ExecuteNonQuery();
-                            }
-                            catch
-                            {
-                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】轉換最愛歌曲 ktv_Favorite 時發生錯誤: " + AddStr;
-                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                            }
-                            Fcmd.Parameters.Clear();
-                            break;
-                    }
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongDBConverter_Tooltip_Label.Text = "正在轉換第 " + Addlist.IndexOf(AddStr) + " 筆我的最愛資料,請稍待...";
-                    });
-                }
-
-                // 轉換遙控器設定
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongDBConverter_Tooltip_Label.Text = "正在轉換遙控器設定,請稍待...";
-                });
-
-                list = new List<string>();
-                Addlist = new List<string>();
-
-                string RemoteQuerySqlStr = "select Remote_Id, Remote_Subject, Remote_Controler, Remote_Controler2, Remote_Name from ktv_Remote";
-                dt = CommonFunc.GetOleDbDataTable(SongSrcDBFile, RemoteQuerySqlStr, "");
-
-                if (dt.Rows.Count > 0)
-                {
-                    foreach (DataRow row in dt.AsEnumerable())
-                    {
-                        Addlist.Add(row["Remote_Id"].ToString() + "," + row["Remote_Subject"].ToString() + "," + row["Remote_Controler"].ToString() + "," + row["Remote_Controler2"].ToString() + "," + row["Remote_Name"].ToString());
-                    }
-                }
-
-                string RemoteColumnStr = "Remote_Id = @RemoteId, Remote_Subject = @RemoteSubject, Remote_Controler = @RemoteControler, Remote_Controler2 = @RemoteControler2, Remote_Name = @RemoteName";
-                string RemoteUpdateSqlStr = "update ktv_Remote set " + RemoteColumnStr + " where Remote_Id = @OldRemoteId";
-                Rcmd = new OleDbCommand(RemoteUpdateSqlStr, conn);
-
-                foreach (string AddStr in Addlist)
-                {
-                    list = new List<string>(AddStr.Split(','));
-
-                    Rcmd.Parameters.AddWithValue("@RemoteId", list[0]);
-                    Rcmd.Parameters.AddWithValue("@RemoteSubject", list[1]);
-                    Rcmd.Parameters.AddWithValue("@RemoteControler", list[2]);
-                    Rcmd.Parameters.AddWithValue("@RemoteControler2", list[3]);
-                    Rcmd.Parameters.AddWithValue("@RemoteName", list[4]);
-                    Rcmd.Parameters.AddWithValue("@OldRemoteId", list[0]);
-
-                    try
-                    {
-                        Rcmd.ExecuteNonQuery();
-                    }
-                    catch
-                    {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】轉換遙控器設定 ktv_Remote 時發生錯誤: " + AddStr;
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    }
-                    Rcmd.Parameters.Clear();
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongDBConverter_Tooltip_Label.Text = "正在轉換第 " + Addlist.IndexOf(AddStr) + " 筆遙控器設定資料,請稍待...";
-                    });
-                }
-            }
-
-
             dt.Dispose();
             conn.Close();
-
-
 
             this.BeginInvoke((Action)delegate()
             {
@@ -721,8 +518,6 @@ namespace CrazyKTV_SongMgr
             });
             SongDBConverterSongDB.DisposeSongDataTable();
         }
-
-
     }
 
 
@@ -734,7 +529,7 @@ namespace CrazyKTV_SongMgr
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
             list.Rows.Add(list.NewRow());
-            list.Rows[0][0] = "舊版 CrazyKTV 資料庫";
+            list.Rows[0][0] = "請選擇所要轉換的資料庫類型";
             list.Rows[0][1] = 1;
             list.Rows.Add(list.NewRow());
             list.Rows[1][0] = "JetKTV 資料庫";

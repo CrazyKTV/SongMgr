@@ -4764,6 +4764,7 @@
             // 
             // SongDBConverter_SrcDBFile_Button
             // 
+            this.SongDBConverter_SrcDBFile_Button.Enabled = false;
             this.SongDBConverter_SrcDBFile_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongDBConverter_SrcDBFile_Button.Location = new System.Drawing.Point(866, 39);
             this.SongDBConverter_SrcDBFile_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);

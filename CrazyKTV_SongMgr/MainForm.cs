@@ -359,10 +359,8 @@ namespace CrazyKTV_SongMgr
 
             // 歌庫轉換 - 載入說明
             SongDBConverter_SetRtfText("來源資料庫: ", "請選擇你要轉換的點歌軟體歌曲資料庫檔案。" + Environment.NewLine);
-            SongDBConverter_SetRtfText("資料庫類型: ", "請選擇你要轉換的點歌軟體類型。" + Environment.NewLine);
+            SongDBConverter_SetRtfText("資料庫類型: ", "請選擇你要轉換的點歌軟體資料庫類型。" + Environment.NewLine);
             SongDBConverter_SetRtfText("目的資料庫: ", "請選擇本工具所附的 CrazySongEmpty.mdb 空白資料庫檔案。" + Environment.NewLine);
-            SongDBConverter_SetRtfText("重建資料夾: ", "當你完成歌庫轉換後,此功能會開啟,請選擇一個空白的資料夾。" + Environment.NewLine + "　　　　　  重建功能會依你在歌庫設定頁面裡的歌庫結構設定來重建所有檔案。" + Environment.NewLine);
-            SongDBConverter_SetRtfText("重建方式:　 ", "可選擇使用複製或搬移檔案的方式來重建所有歌庫檔案。" + Environment.NewLine + "　　　　　  在同一磁碟代號使用搬移檔案的方式來重建歌庫檔案可加快重建速度。");
 
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
 
