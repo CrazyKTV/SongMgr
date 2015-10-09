@@ -272,7 +272,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string item in drop)
             {
-                if (item.Contains(Global.SongMgrDestFolder))
+                if (item.Contains(Global.SongMgrDestFolder) && Global.SongMgrSongAddMode != "3")
                 {
                     SongAdd_Tooltip_Label.Text = "要加入的歌曲檔案或資料夾不可與歌庫資料夾同目錄!";
                     break;
