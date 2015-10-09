@@ -177,6 +177,7 @@ namespace CrazyKTV_SongMgr
             SongAdd_SongAddCfg_GroupBox.Enabled = status;
             SongAdd_Save_Button.Enabled = status;
             SongAdd_DataGridView.Enabled = status;
+            SongAdd_DragDrop_Label.Enabled = status;
             SongMaintenance_SpellCorrect_GroupBox.Enabled = status;
             SongMaintenance_CodeConv_GroupBox.Enabled = status;
             SongMaintenance_TrackExchange_GroupBox.Enabled = status;
