@@ -249,22 +249,17 @@ namespace CrazyKTV_SongMgr
                                     SongTrack = GetSongInfo("SongTrack", BracketStr);
                                     FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
                                 }
-                                else
+                                else if (SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower()) >= 0)
                                 {
-                                    if (BracketStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
-                                    if (SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower()) >= 0)
-                                    {
-                                        SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower())];
-                                        FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
-                                    }
-                                    else
-                                    {
-                                        SongSongType = BracketStr;
-                                        FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
-                                    }
+                                    SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower())];
+                                    FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
+                                }
+                                else if (BracketStr.ContainsAny("合唱", "對唱"))
+                                {
+                                    SongSingerType = "3";
                                 }
                             }
-                            FileNameRemoveList.Add(FileNameRemoveStr);
+                            if (FileNameRemoveStr != "") FileNameRemoveList.Add(FileNameRemoveStr);
                         }
                         else
                         {
@@ -273,39 +268,19 @@ namespace CrazyKTV_SongMgr
                                 SongLang = GetSongInfo("SongLang", MatchStr);
                                 FileNameRemoveList.Add(MatchStr);
                             }
-                            else
+                            else if (SongTrackList.IndexOf(MatchStr.ToLower()) >= 0 || MatchStr.ToLower() == "l" || MatchStr.ToLower() == "r")
                             {
-                                if (matches.Count > 1)
-                                {
-                                    if (SongTrackList.IndexOf(MatchStr.ToLower()) >= 0 || MatchStr.ToLower() == "l" || MatchStr.ToLower() == "r")
-                                    {
-                                        SongTrack = GetSongInfo("SongTrack", MatchStr);
-                                        FileNameRemoveList.Add(MatchStr);
-                                    }
-                                    else
-                                    {
-                                        if (MatchStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
-                                        if (SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower()) >= 0)
-                                        {
-                                            SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower())];
-                                            FileNameRemoveList.Add(MatchStr);
-                                        }
-                                        else
-                                        {
-                                            SongSongType = MatchStr;
-                                            FileNameRemoveList.Add(MatchStr);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (MatchStr.ContainsAny("合唱", "對唱")) SongSingerType = "3";
-                                    if (SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower()) >= 0)
-                                    {
-                                        SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower())];
-                                        FileNameRemoveList.Add(MatchStr);
-                                    }
-                                }
+                                SongTrack = GetSongInfo("SongTrack", MatchStr);
+                                FileNameRemoveList.Add(MatchStr);
+                            }
+                            else if (SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower()) >= 0)
+                            {
+                                SongSongType = SongSongTypeList[SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower())];
+                                FileNameRemoveList.Add(MatchStr);
+                            }
+                            else if (MatchStr.ContainsAny("合唱", "對唱"))
+                            {
+                                SongSingerType = "3";
                             }
                         }
                     }
