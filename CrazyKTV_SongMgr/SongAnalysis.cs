@@ -403,7 +403,8 @@ namespace CrazyKTV_SongMgr
                 {
                     foreach (string RemoveStr in FileNameRemoveList)
                     {
-                        str = Regex.Replace(str, @"[\{\(\[｛（［【]" + RemoveStr + @"[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
+                        str = str.Replace(RemoveStr, "");
+                        str = Regex.Replace(str, @"[\{\(\[｛（［【]" + @"[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
                     }
                 }
                 
