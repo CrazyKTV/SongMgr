@@ -184,11 +184,18 @@ namespace CrazyKTV_SongMgr
             }
 
             // 歌手-歌名(語系-類別-聲道) 名稱處理
-            FileStr = Regex.Replace(FileStr, @"[\{\(\[｛（［【].+?[_-].+?[】］）｝\]\)\}]", delegate (Match match)
+            MatchCollection BracketMatches = Regex.Matches(FileStr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+            if (BracketMatches.Count > 0)
             {
-                string str = "%%" + match.ToString() + "%%";
-                return str;
-            });
+                foreach (Match m in BracketMatches)
+                {
+                    Console.WriteLine(m.Value);
+                    if (m.Value.ContainsAny("-", "_"))
+                    {
+                        FileStr = FileStr.Replace(m.Value, "%%" + m.Value + "%%");
+                    }
+                }
+            }
 
             string FileStrOpti = FileStr;
             if (SongSingerType != "")
