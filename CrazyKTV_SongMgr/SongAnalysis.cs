@@ -189,7 +189,6 @@ namespace CrazyKTV_SongMgr
             {
                 foreach (Match m in BracketMatches)
                 {
-                    Console.WriteLine(m.Value);
                     if (m.Value.ContainsAny("-", "_"))
                     {
                         FileStr = FileStr.Replace(m.Value, "%%" + m.Value + "%%");

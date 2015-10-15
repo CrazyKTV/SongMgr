@@ -1087,6 +1087,7 @@
             this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
             this.SongQuery_DataGridView.TabIndex = 4;
             this.SongQuery_DataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.SongQuery_DataGridView_CellBeginEdit);
+            this.SongQuery_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellDoubleClick);
             this.SongQuery_DataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellEndEdit);
             this.SongQuery_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.SongQuery_DataGridView_CellFormatting);
             this.SongQuery_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseClick);
@@ -5223,6 +5224,7 @@
             this.Text = "CrazyKTV 加歌程式 v1.3.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.VisibleChanged += new System.EventHandler(this.MainForm_VisibleChanged);
             this.MainTabControl.ResumeLayout(false);
             this.SongQuery_TabPage.ResumeLayout(false);
             this.SongQuery_OtherQuery_GroupBox.ResumeLayout(false);

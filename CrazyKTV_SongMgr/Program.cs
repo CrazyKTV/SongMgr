@@ -139,6 +139,8 @@ namespace CrazyKTV_SongMgr
         public static string SongQueryDataGridViewValue = "";
         public static string SingerQueryDataGridViewValue = "";
 
+        public static List<string> PlayerUpdateSongValueList = new List<string>();
+
         public static List<List<string>> LostSongIdList = new List<List<string>>();
 
         public static List<string> SynonymousWordList = new List<string>()

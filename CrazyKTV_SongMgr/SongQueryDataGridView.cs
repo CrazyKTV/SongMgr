@@ -585,6 +585,30 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongQuery_DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (SongQuery_EditMode_CheckBox.Checked == false)
+            {
+                int i = e.RowIndex;
+
+                string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                string SongSinger = SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
+                string SongSongName = SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
+                string SongTrack = SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
+                string SongFileName = SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
+                string SongPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString();
+                string SongFilePath = Path.Combine(SongPath, SongFileName);
+
+                List<string> PlayerSongInfoList = new List<string>() { SongId, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString() };
+
+                Global.PlayerUpdateSongValueList = new List<string>();
+                PlayerForm newPlayerForm = new PlayerForm(PlayerSongInfoList);
+                newPlayerForm.Owner = this;
+                newPlayerForm.Show();
+                this.Hide();
+            }
+        }
+
         private void SongQuery_DataGridView_ContextMenuItem_Click(object sender, EventArgs e)
         {
             int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
@@ -783,7 +807,21 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        Process.Start(file);
+                        int i = SongQuery_DataGridView.CurrentCell.RowIndex;
+
+                        string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                        string SongSinger = SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
+                        string SongSongName = SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
+                        string SongTrack = SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
+                        string SongFilePath = Path.Combine(SongPath, SongFileName);
+
+                        List<string> PlayerSongInfoList = new List<string>() { SongId, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString() };
+
+                        Global.PlayerUpdateSongValueList = new List<string>();
+                        PlayerForm newPlayerForm = new PlayerForm(PlayerSongInfoList);
+                        newPlayerForm.Owner = this;
+                        newPlayerForm.Show();
+                        this.Hide();
                     }
                     break;
                 case "刪除資料列":
