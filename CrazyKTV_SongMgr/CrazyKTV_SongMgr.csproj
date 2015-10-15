@@ -33,8 +33,8 @@
     <ProductName>CrazyKTV 加歌程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
     <SuiteName>CrazyKTV 加歌程式</SuiteName>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.3.3.03</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.3.4.01</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
@@ -225,10 +225,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="SongMgr\Custom.lang" />
-    <None Include="SongMgr\Libs\plugins\plugins.dat">
+    <Content Include="SongMgr\Custom.lang">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

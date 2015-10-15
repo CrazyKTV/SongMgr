@@ -9,16 +9,34 @@ namespace CrazyKTV_SongMgr
 {
     static class Program
     {
+        static Program()
+        {
+            AppDomain.CurrentDomain.SetData("PRIVATE_BINPATH", @"SongMgr\Libs");
+            AppDomain.CurrentDomain.SetData("BINPATH_PROBE_ONLY", @"SongMgr\Libs");
+            var m = typeof(AppDomainSetup).GetMethod("UpdateContextProperty", BindingFlags.NonPublic | BindingFlags.Static);
+            var funsion = typeof(AppDomain).GetMethod("GetFusionContext", BindingFlags.NonPublic | BindingFlags.Instance);
+            m.Invoke(null, new object[] { funsion.Invoke(AppDomain.CurrentDomain, null), "PRIVATE_BINPATH", @"SongMgr\Libs" });
+        }
+
         /// <summary>
         /// 應用程式的主要進入點。
         /// </summary>
         [STAThread]
         static void Main()
         {
+            AppDomainSetup setup = new AppDomainSetup();
+
+            setup.PrivateBinPath = setup.ApplicationBase + @"SongMgr/Libs";
+            AppDomain currentDomain = AppDomain.CreateDomain("NewDomain", null, setup);
+            currentDomain.Load("nVLC");
+
             if (Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+
+
         }
     }
 
