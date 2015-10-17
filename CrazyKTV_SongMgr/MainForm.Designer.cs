@@ -110,6 +110,7 @@
             this.SongAdd_DefaultSingerType_Label = new System.Windows.Forms.Label();
             this.SongAdd_DefaultSongLang_Label = new System.Windows.Forms.Label();
             this.SongAdd_SongAddCfg_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongAdd_EnableConvToTC_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_UseCustomSongID_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_EngSongNameFormat_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_DupSongMode_ComboBox = new System.Windows.Forms.ComboBox();
@@ -1458,6 +1459,7 @@
             // 
             // SongAdd_SongAddCfg_GroupBox
             // 
+            this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_EnableConvToTC_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_UseCustomSongID_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_EngSongNameFormat_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_DupSongMode_ComboBox);
@@ -1472,6 +1474,19 @@
             this.SongAdd_SongAddCfg_GroupBox.TabIndex = 0;
             this.SongAdd_SongAddCfg_GroupBox.TabStop = false;
             this.SongAdd_SongAddCfg_GroupBox.Text = "加歌設定";
+            // 
+            // SongAdd_EnableConvToTC_CheckBox
+            // 
+            this.SongAdd_EnableConvToTC_CheckBox.AutoSize = true;
+            this.SongAdd_EnableConvToTC_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_EnableConvToTC_CheckBox.Location = new System.Drawing.Point(20, 215);
+            this.SongAdd_EnableConvToTC_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
+            this.SongAdd_EnableConvToTC_CheckBox.Name = "SongAdd_EnableConvToTC_CheckBox";
+            this.SongAdd_EnableConvToTC_CheckBox.Size = new System.Drawing.Size(236, 26);
+            this.SongAdd_EnableConvToTC_CheckBox.TabIndex = 6;
+            this.SongAdd_EnableConvToTC_CheckBox.Text = "分析歌曲時啟用簡轉繁功能";
+            this.SongAdd_EnableConvToTC_CheckBox.UseVisualStyleBackColor = true;
+            this.SongAdd_EnableConvToTC_CheckBox.CheckedChanged += new System.EventHandler(this.SongAdd_EnableConvToTC_CheckBox_CheckedChanged);
             // 
             // SongAdd_UseCustomSongID_CheckBox
             // 
@@ -5698,6 +5713,7 @@
         private System.Windows.Forms.GroupBox SongMgrCfg_CustomSingerTypeStructure_GroupBox;
         private System.Windows.Forms.GroupBox SingerMgr_OtherQuery_GroupBox;
         private System.Windows.Forms.CheckBox MainCfg_EnableAutoUpdate_CheckBox;
+        private System.Windows.Forms.CheckBox SongAdd_EnableConvToTC_CheckBox;
     }
 }
 

@@ -141,6 +141,7 @@ namespace CrazyKTV_SongMgr
             List<string> FileNameRemoveList = new List<string>();
 
             string DirStr = Path.GetDirectoryName((string)file);
+
             List<string> list = new List<string>();
 
             list = new List<string>(Regex.Split(((string)DirStr), @"\\", RegexOptions.None));
@@ -175,6 +176,7 @@ namespace CrazyKTV_SongMgr
 
             // 從檔案名稱查找歌曲資訊
             string FileStr = Path.GetFileNameWithoutExtension((string)file);
+            if (Global.SongAddEnableConvToTC == "True") FileStr = CommonFunc.ConvToTraditionalChinese(FileStr);
 
             // 特殊歌手及歌曲名稱處理
             list = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));

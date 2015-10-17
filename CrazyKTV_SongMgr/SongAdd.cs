@@ -29,6 +29,7 @@ namespace CrazyKTV_SongMgr
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", Global.SongAddDupSongMode);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC", Global.SongAddEnableConvToTC);
                     break;
                 case "取消更新":
                     SongAdd_Add_Button.Text = "加入歌庫";
@@ -902,6 +903,10 @@ namespace CrazyKTV_SongMgr
             Global.SongAddUseCustomSongID = SongAdd_UseCustomSongID_CheckBox.Checked.ToString();
         }
 
+        private void SongAdd_EnableConvToTC_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongAddEnableConvToTC = SongAdd_EnableConvToTC_CheckBox.Checked.ToString();
+        }
 
     }
 
