@@ -39,8 +39,8 @@
             this.Player_CurrentChannel_Label = new System.Windows.Forms.Label();
             this.Player_UpdateChannel_Button = new System.Windows.Forms.Button();
             this.Player_CurrentChannelValue_Label = new System.Windows.Forms.Label();
-            this.Player_ProgressTrackBar = new CrazyKTV_SongMgr.ProgressTrackBar();
             this.Player_PlayControl_Button = new System.Windows.Forms.Button();
+            this.Player_ProgressTrackBar = new CrazyKTV_SongMgr.ProgressTrackBar();
             this.SuspendLayout();
             // 
             // Player_Panel
@@ -103,19 +103,6 @@
             this.Player_CurrentChannelValue_Label.TabIndex = 5;
             this.Player_CurrentChannelValue_Label.Text = "尚無資料";
             // 
-            // Player_ProgressTrackBar
-            // 
-            this.Player_ProgressTrackBar.Location = new System.Drawing.Point(21, 499);
-            this.Player_ProgressTrackBar.Margin = new System.Windows.Forms.Padding(12, 0, 12, 10);
-            this.Player_ProgressTrackBar.Maximum = 100;
-            this.Player_ProgressTrackBar.Minimum = 0;
-            this.Player_ProgressTrackBar.Name = "Player_ProgressTrackBar";
-            this.Player_ProgressTrackBar.ProgressBarValue = 0;
-            this.Player_ProgressTrackBar.Size = new System.Drawing.Size(640, 32);
-            this.Player_ProgressTrackBar.TabIndex = 1;
-            this.Player_ProgressTrackBar.TrackBarValue = 100;
-            this.Player_ProgressTrackBar.Click += new System.EventHandler(this.Player_ProgressTrackBar_Click);
-            // 
             // Player_PlayControl_Button
             // 
             this.Player_PlayControl_Button.AutoSize = true;
@@ -128,6 +115,19 @@
             this.Player_PlayControl_Button.Text = "暫停播放";
             this.Player_PlayControl_Button.UseVisualStyleBackColor = true;
             this.Player_PlayControl_Button.Click += new System.EventHandler(this.Player_PlayControl_Button_Click);
+            // 
+            // Player_ProgressTrackBar
+            // 
+            this.Player_ProgressTrackBar.Location = new System.Drawing.Point(21, 499);
+            this.Player_ProgressTrackBar.Margin = new System.Windows.Forms.Padding(12, 0, 12, 10);
+            this.Player_ProgressTrackBar.Maximum = 100;
+            this.Player_ProgressTrackBar.Minimum = 0;
+            this.Player_ProgressTrackBar.Name = "Player_ProgressTrackBar";
+            this.Player_ProgressTrackBar.ProgressBarValue = 0;
+            this.Player_ProgressTrackBar.Size = new System.Drawing.Size(640, 32);
+            this.Player_ProgressTrackBar.TabIndex = 1;
+            this.Player_ProgressTrackBar.TrackBarValue = 100;
+            this.Player_ProgressTrackBar.Click += new System.EventHandler(this.Player_ProgressTrackBar_Click);
             // 
             // PlayerForm
             // 

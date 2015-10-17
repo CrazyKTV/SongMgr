@@ -17,6 +17,7 @@ namespace CrazyKTV_SongMgr
         IDiskPlayer m_player;
         IMediaFromFile m_media;
         string SongId;
+        string SongLang;
         string SongSinger;
         string SongSongName;
         string SongTrack;
@@ -35,21 +36,18 @@ namespace CrazyKTV_SongMgr
         {
             InitializeComponent();
             SongId = PlayerSongInfoList[0];
-            SongSinger = PlayerSongInfoList[1];
-            SongSongName = PlayerSongInfoList[2];
-            SongTrack = PlayerSongInfoList[3];
-            SongFilePath = PlayerSongInfoList[4];
-            dvRowIndex = PlayerSongInfoList[5];
+            SongLang = PlayerSongInfoList[1];
+            SongSinger = PlayerSongInfoList[2];
+            SongSongName = PlayerSongInfoList[3];
+            SongTrack = PlayerSongInfoList[4];
+            SongFilePath = PlayerSongInfoList[5];
+            dvRowIndex = PlayerSongInfoList[6];
 
-            this.Text = SongSinger + " - " + SongSongName;
+            this.Text = "【" + SongLang + "】" + SongSinger + " - " + SongSongName;
 
             m_factory = new MediaPlayerFactory(true);
             m_player = m_factory.CreatePlayer<IDiskPlayer>();
             m_player.WindowHandle = Player_Panel.Handle;
-
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = 1000;
-            timer.Start();
 
             Player_ProgressTrackBar.ProgressBarValue = 0;
             Player_ProgressTrackBar.TrackBarValue = 0;
@@ -76,6 +74,10 @@ namespace CrazyKTV_SongMgr
                     }
                 }
             }
+
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = 1000;
+            timer.Start();
 
             List<int> TrackIdList = new List<int>();
             foreach (Declarations.TrackDescription TrackDesc in m_player.AudioTracksInfo)
@@ -152,7 +154,8 @@ namespace CrazyKTV_SongMgr
         private void PlayerForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             m_player.Stop();
-            this.Owner.Show();
+            try { this.Owner.Show(); }
+            catch { }
         }
 
         private void Player_ProgressTrackBar_Click(object sender, EventArgs e)
