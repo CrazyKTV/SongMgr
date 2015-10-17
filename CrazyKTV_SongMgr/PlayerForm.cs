@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Declarations;
 using Declarations.Events;
 using Declarations.Media;
 using Declarations.Players;
 using Implementation;
-using System.IO;
 using System.Threading;
 using System.Data.OleDb;
 
@@ -29,6 +23,8 @@ namespace CrazyKTV_SongMgr
         string SongFilePath;
         string dvRowIndex;
         string UpdateSongTrack;
+
+        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
         public PlayerForm()
         {
@@ -51,6 +47,10 @@ namespace CrazyKTV_SongMgr
             m_player = m_factory.CreatePlayer<IDiskPlayer>();
             m_player.WindowHandle = Player_Panel.Handle;
 
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = 1000;
+            timer.Start();
+
             Player_ProgressTrackBar.ProgressBarValue = 0;
             Player_ProgressTrackBar.TrackBarValue = 0;
 
@@ -60,15 +60,9 @@ namespace CrazyKTV_SongMgr
             m_player.Mute = true;
             m_player.Play();
 
-            Global.TimerStartTime = DateTime.Now;
-            Global.TimerEndTime = DateTime.Now;
-            while ((long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds < 1)
-            {
-                Global.TimerEndTime = DateTime.Now;
-            }
+            Thread.Sleep(1000);
 
             bool WaitTrackInfo = false;
-
             while (!WaitTrackInfo)
             {
                 if (m_player.AudioTrackCount > 1)
@@ -141,21 +135,23 @@ namespace CrazyKTV_SongMgr
         {
             this.BeginInvoke((Action)delegate ()
             {
-                if ((e.NewPosition * 100) > 99.9 || !m_player.IsPlaying)
-                {
-                    this.Close();
-                }
-                else
-                {
-                    Player_ProgressTrackBar.ProgressBarValue = (int)(e.NewPosition * 100);
-                    Player_ProgressTrackBar.TrackBarValue = (int)(e.NewPosition * 100);
-                }
+                Player_ProgressTrackBar.ProgressBarValue = (int)(e.NewPosition * 100);
+                Player_ProgressTrackBar.TrackBarValue = (int)(e.NewPosition * 100);
             });
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (!m_player.IsPlaying)
+            {
+                timer.Stop();
+                this.Close();
+            }
         }
 
         private void PlayerForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (m_player.IsPlaying) m_player.Stop();
+            m_player.Stop();
             this.Owner.Show();
         }
 
