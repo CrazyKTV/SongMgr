@@ -142,7 +142,7 @@ namespace CrazyKTV_SongMgr
 
         void timer_Tick(object sender, EventArgs e)
         {
-            if (!m_player.IsPlaying)
+            if (!m_player.IsPlaying && Player_PlayControl_Button.Text == "暫停播放")
             {
                 timer.Stop();
                 this.Close();
@@ -236,5 +236,22 @@ namespace CrazyKTV_SongMgr
             Player_CurrentChannelValue_Label.Text = "伴唱";
             Global.PlayerUpdateSongValueList = new List<string>() { dvRowIndex, SongTrack };
         }
+
+        private void Player_PlayControl_Button_Click(object sender, EventArgs e)
+        {
+            switch (((Button)sender).Text)
+            {
+                case "暫停播放":
+                    m_player.Pause();
+                    ((Button)sender).Text = "繼續播放";
+                    break;
+                case "繼續播放":
+                    m_player.Play();
+                    ((Button)sender).Text = "暫停播放";
+                    break;
+            }
+        }
+
+
     }
 }

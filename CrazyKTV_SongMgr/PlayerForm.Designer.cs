@@ -40,6 +40,7 @@
             this.Player_UpdateChannel_Button = new System.Windows.Forms.Button();
             this.Player_CurrentChannelValue_Label = new System.Windows.Forms.Label();
             this.Player_ProgressTrackBar = new CrazyKTV_SongMgr.ProgressTrackBar();
+            this.Player_PlayControl_Button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Player_Panel
@@ -56,7 +57,7 @@
             // 
             this.Player_SwithChannel_Button.AutoSize = true;
             this.Player_SwithChannel_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Player_SwithChannel_Button.Location = new System.Drawing.Point(21, 542);
+            this.Player_SwithChannel_Button.Location = new System.Drawing.Point(155, 542);
             this.Player_SwithChannel_Button.Margin = new System.Windows.Forms.Padding(12, 1, 12, 3);
             this.Player_SwithChannel_Button.Name = "Player_SwithChannel_Button";
             this.Player_SwithChannel_Button.Size = new System.Drawing.Size(110, 40);
@@ -69,7 +70,7 @@
             // 
             this.Player_CurrentChannel_Label.AutoSize = true;
             this.Player_CurrentChannel_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(155, 550);
+            this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(289, 550);
             this.Player_CurrentChannel_Label.Margin = new System.Windows.Forms.Padding(12, 9, 6, 10);
             this.Player_CurrentChannel_Label.Name = "Player_CurrentChannel_Label";
             this.Player_CurrentChannel_Label.Size = new System.Drawing.Size(102, 25);
@@ -95,7 +96,7 @@
             this.Player_CurrentChannelValue_Label.AutoSize = true;
             this.Player_CurrentChannelValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Player_CurrentChannelValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(263, 550);
+            this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(397, 550);
             this.Player_CurrentChannelValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 10);
             this.Player_CurrentChannelValue_Label.Name = "Player_CurrentChannelValue_Label";
             this.Player_CurrentChannelValue_Label.Size = new System.Drawing.Size(92, 25);
@@ -115,12 +116,26 @@
             this.Player_ProgressTrackBar.TrackBarValue = 100;
             this.Player_ProgressTrackBar.Click += new System.EventHandler(this.Player_ProgressTrackBar_Click);
             // 
+            // Player_PlayControl_Button
+            // 
+            this.Player_PlayControl_Button.AutoSize = true;
+            this.Player_PlayControl_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_PlayControl_Button.Location = new System.Drawing.Point(21, 542);
+            this.Player_PlayControl_Button.Margin = new System.Windows.Forms.Padding(12, 1, 12, 3);
+            this.Player_PlayControl_Button.Name = "Player_PlayControl_Button";
+            this.Player_PlayControl_Button.Size = new System.Drawing.Size(110, 40);
+            this.Player_PlayControl_Button.TabIndex = 6;
+            this.Player_PlayControl_Button.Text = "暫停播放";
+            this.Player_PlayControl_Button.UseVisualStyleBackColor = true;
+            this.Player_PlayControl_Button.Click += new System.EventHandler(this.Player_PlayControl_Button_Click);
+            // 
             // PlayerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(682, 594);
+            this.Controls.Add(this.Player_PlayControl_Button);
             this.Controls.Add(this.Player_CurrentChannelValue_Label);
             this.Controls.Add(this.Player_UpdateChannel_Button);
             this.Controls.Add(this.Player_CurrentChannel_Label);
@@ -150,5 +165,6 @@
         private System.Windows.Forms.Label Player_CurrentChannel_Label;
         private System.Windows.Forms.Button Player_UpdateChannel_Button;
         private System.Windows.Forms.Label Player_CurrentChannelValue_Label;
+        private System.Windows.Forms.Button Player_PlayControl_Button;
     }
 }
