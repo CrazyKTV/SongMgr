@@ -797,7 +797,7 @@ namespace CrazyKTV_SongMgr
 
                     foreach (FileInfo fi in Files)
                     {
-                        if ((int)(DateTime.Now - fi.CreationTime).TotalDays > Convert.ToInt32(Global.MainCfgBackupRemoveSongDays))
+                        if ((int)(DateTime.Now - fi.LastWriteTime).TotalDays > Convert.ToInt32(Global.MainCfgBackupRemoveSongDays))
                         {
                             if ((fi.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                             {
