@@ -224,6 +224,31 @@ namespace CrazyKTV_SongMgr
                             case "SongName":
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
 
+                                if (Global.SongQueryHasWideChar)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    var query = from row in dt.AsEnumerable()
+                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Song_SongName")).ToLower().Contains(CommonFunc.ConvToNarrow(SongQueryValue).ToLower())
+                                                select row;
+
+                                    if (query.Count<DataRow>() > 0)
+                                    {
+                                        foreach (DataRow row in query)
+                                        {
+                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                        }
+
+                                        if (RemoveRowsIdxlist.Count > 0)
+                                        {
+                                            for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                            {
+                                                dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                            }
+                                        }
+                                    }
+                                }
+
                                 if (Global.SongQuerySynonymousQuery)
                                 {
                                     List<string> SynonymousSongNameList = new List<string>();
@@ -242,6 +267,34 @@ namespace CrazyKTV_SongMgr
                                         }
                                         SynonymousSongDT.Dispose();
                                         SynonymousSongDT = null;
+                                    }
+                                }
+                                break;
+                            case "SingerName":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                if (Global.SongQueryHasWideChar)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    var query = from row in dt.AsEnumerable()
+                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Song_Singer")).ToLower().Contains(CommonFunc.ConvToNarrow(SongQueryValue).ToLower())
+                                                select row;
+
+                                    if (query.Count<DataRow>() > 0)
+                                    {
+                                        foreach (DataRow row in query)
+                                        {
+                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                        }
+
+                                        if (RemoveRowsIdxlist.Count > 0)
+                                        {
+                                            for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                            {
+                                                dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                            }
+                                        }
                                     }
                                 }
                                 break;
@@ -1424,16 +1477,22 @@ namespace CrazyKTV_SongMgr
             string SongQueryFilterStr = "";
             string QueryValueNarrow = QueryValue;
             string QueryValueWide = QueryValue;
+            string HasWideCharQueryValue = QueryValue;
+
+            Global.SongQueryHasWideChar = false;
 
             Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
             if (QueryType == "SongName" | QueryType == "SingerName")
             {
                 if (Global.SongQueryFuzzyQuery == "True")
                 {
-                    if (HasWideChar.IsMatch(QueryValue))
+                    if (HasWideChar.IsMatch(HasWideCharQueryValue))
                     {
+                        Global.SongQueryHasWideChar = true;
                         QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
                         QueryValueWide = CommonFunc.ConvToWide(QueryValue);
+                        HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[\x21-\x7E\xFF01-\xFF5E]", "", RegexOptions.IgnoreCase);
+                        if (HasWideCharQueryValue == "") HasWideCharQueryValue = QueryValue;
                     }
                 }
 
@@ -1449,7 +1508,7 @@ namespace CrazyKTV_SongMgr
 
                 if (HasSymbols.IsMatch(QueryValueNarrow))
                 {
-                    QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate(Match match)
+                    QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate (Match match)
                     {
                         string str = "' + \"" + match.ToString() + "\" + '";
                         return str;
@@ -1467,9 +1526,9 @@ namespace CrazyKTV_SongMgr
                 case "SongName":
                     if (Global.SongQueryFuzzyQuery == "True")
                     {
-                        if (HasWideChar.IsMatch(QueryValue))
+                        if (Global.SongQueryHasWideChar)
                         {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
+                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + HasWideCharQueryValue + "'),0) <>0" + SongQueryFilterStr;
                         }
                         else
                         {
@@ -1484,9 +1543,9 @@ namespace CrazyKTV_SongMgr
                 case "SingerName":
                     if (Global.SongQueryFuzzyQuery == "True")
                     {
-                        if (HasWideChar.IsMatch(QueryValue))
+                        if (Global.SongQueryHasWideChar)
                         {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
+                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + HasWideCharQueryValue + "'),0) <>0" + SongQueryFilterStr;
                         }
                         else
                         {

@@ -101,19 +101,24 @@ namespace CrazyKTV_SongMgr
                 string QueryValue = SingerMgr_QueryValue_TextBox.Text;
                 string QueryValueNarrow = QueryValue;
                 string QueryValueWide = QueryValue;
+                string HasWideCharQueryValue = QueryValue;
                 string SingerQuerySqlStr = "";
 
+                Global.SongQueryHasWideChar = false;
                 SingerMgr_DataGridView.DataSource = null;
 
                 Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
                 if ((string)QueryType == "SingerName")
                 {
-                    if (HasWideChar.IsMatch(QueryValue))
+                    if (HasWideChar.IsMatch(HasWideCharQueryValue))
                     {
+                        Global.SongQueryHasWideChar = true;
                         QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
                         QueryValueWide = CommonFunc.ConvToWide(QueryValue);
+                        HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[\x21-\x7E\xFF01-\xFF5E]", "", RegexOptions.IgnoreCase);
+                        if (HasWideCharQueryValue == "") HasWideCharQueryValue = QueryValue;
                     }
-                    
+
                     Regex HasSymbols = new Regex("[']");
                     if (HasSymbols.IsMatch(QueryValue))
                     {
@@ -136,9 +141,9 @@ namespace CrazyKTV_SongMgr
 
                 if ((string)QueryType == "SingerName")
                 {
-                    if (HasWideChar.IsMatch(QueryValue))
+                    if (Global.SongQueryHasWideChar)
                     {
-                        SingerQuerySqlStr = "select " + sqlColumnStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueNarrow + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueWide + "'),0) <>0 order by Singer_Name";
+                        SingerQuerySqlStr = "select " + sqlColumnStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueNarrow + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueWide + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + HasWideCharQueryValue + "'),0) <>0 order by Singer_Name";
                     }
                     else
                     {
@@ -161,9 +166,33 @@ namespace CrazyKTV_SongMgr
                         }
                         else
                         {
-
                             if ((string)QueryType == "SingerName")
                             {
+                                if (Global.SongQueryHasWideChar)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    var query = from row in dt.AsEnumerable()
+                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Singer_Name")).ToLower().Contains(CommonFunc.ConvToNarrow(QueryValue).ToLower())
+                                                select row;
+
+                                    if (query.Count<DataRow>() > 0)
+                                    {
+                                        foreach (DataRow row in query)
+                                        {
+                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                        }
+
+                                        if (RemoveRowsIdxlist.Count > 0)
+                                        {
+                                            for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                            {
+                                                dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                            }
+                                        }
+                                    }
+                                }
+
                                 SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SingerMgr_QueryValue_TextBox.Text + "』的歌手。";
                             }
                             else

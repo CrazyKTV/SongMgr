@@ -153,6 +153,7 @@ namespace CrazyKTV_SongMgr
         public static string SongQueryQueryType = "SongQuery";
         public static string SongQueryFuzzyQuery = "True";
         public static bool SongQuerySynonymousQuery = true;
+        public static bool SongQueryHasWideChar = false;
         public static string SongQueryFilter = "全部";
 
         public static string SongQueryDataGridViewValue = "";
