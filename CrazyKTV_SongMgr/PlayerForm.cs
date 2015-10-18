@@ -146,16 +146,28 @@ namespace CrazyKTV_SongMgr
         {
             if (!m_player.IsPlaying && Player_PlayControl_Button.Text == "暫停播放")
             {
-                timer.Stop();
-                this.Close();
+                try
+                {
+                    m_player.Stop();
+                }
+                finally
+                {
+                    timer.Stop();
+                    this.Close();
+                }
             }
         }
 
         private void PlayerForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            m_player.Stop();
-            try { this.Owner.Show(); }
-            catch { }
+            try
+            {
+                m_player.Stop();
+            }
+            finally
+            {
+                this.Owner.Show();
+            }
         }
 
         private void Player_ProgressTrackBar_Click(object sender, EventArgs e)
