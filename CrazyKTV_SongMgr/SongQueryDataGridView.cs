@@ -589,6 +589,8 @@ namespace CrazyKTV_SongMgr
         {
             if (SongQuery_EditMode_CheckBox.Checked == false)
             {
+                if (e.RowIndex < 0) return;
+
                 int i = e.RowIndex;
 
                 string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
@@ -603,8 +605,7 @@ namespace CrazyKTV_SongMgr
                 List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString() };
 
                 Global.PlayerUpdateSongValueList = new List<string>();
-                PlayerForm newPlayerForm = new PlayerForm(PlayerSongInfoList);
-                newPlayerForm.Owner = this;
+                PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
                 newPlayerForm.Show();
                 this.Hide();
             }
@@ -820,8 +821,7 @@ namespace CrazyKTV_SongMgr
                         List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString() };
 
                         Global.PlayerUpdateSongValueList = new List<string>();
-                        PlayerForm newPlayerForm = new PlayerForm(PlayerSongInfoList);
-                        newPlayerForm.Owner = this;
+                        PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
                         newPlayerForm.Show();
                         this.Hide();
                     }
