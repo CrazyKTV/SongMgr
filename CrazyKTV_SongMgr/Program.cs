@@ -24,12 +24,6 @@ namespace CrazyKTV_SongMgr
         [STAThread]
         static void Main()
         {
-            AppDomainSetup setup = new AppDomainSetup();
-
-            setup.PrivateBinPath = setup.ApplicationBase + @"SongMgr/Libs";
-            AppDomain currentDomain = AppDomain.CreateDomain("NewDomain", null, setup);
-            currentDomain.Load("nVLC");
-
             if (Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware();
 
             Application.EnableVisualStyles();

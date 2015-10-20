@@ -797,7 +797,7 @@ namespace CrazyKTV_SongMgr
 
                     foreach (FileInfo fi in Files)
                     {
-                        if ((int)(DateTime.Now - fi.LastWriteTime).TotalDays > Convert.ToInt32(Global.MainCfgBackupRemoveSongDays))
+                        if ((int)(DateTime.Now - fi.CreationTime).TotalDays > Convert.ToInt32(Global.MainCfgBackupRemoveSongDays))
                         {
                             if ((fi.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                             {
@@ -1793,6 +1793,13 @@ namespace CrazyKTV_SongMgr
         public static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
         {
             return attributes & ~attributesToRemove;
+        }
+
+        public static void SetFileTime(string Path, DateTime Time)
+        {
+            File.SetCreationTime(Path, Time);
+            File.SetLastWriteTime(Path, Time);
+            File.SetLastAccessTime(Path, Time);
         }
 
         public static List<int> GetSongLangCount()

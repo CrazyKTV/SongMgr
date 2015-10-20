@@ -8,6 +8,7 @@ using Declarations.Players;
 using Implementation;
 using System.Threading;
 using System.Data.OleDb;
+using System.Threading.Tasks;
 
 namespace CrazyKTV_SongMgr
 {
@@ -32,9 +33,11 @@ namespace CrazyKTV_SongMgr
             InitializeComponent();
         }
 
-        public PlayerForm(List<string> PlayerSongInfoList)
+        public PlayerForm(Form ParentForm, List<string> PlayerSongInfoList)
         {
             InitializeComponent();
+
+            this.Owner = ParentForm;
             SongId = PlayerSongInfoList[0];
             SongLang = PlayerSongInfoList[1];
             SongSinger = PlayerSongInfoList[2];
@@ -76,7 +79,7 @@ namespace CrazyKTV_SongMgr
             }
 
             timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = 1000;
+            timer.Interval = 500;
             timer.Start();
 
             List<int> TrackIdList = new List<int>();
@@ -115,7 +118,6 @@ namespace CrazyKTV_SongMgr
                 Player_CurrentChannelValue_Label.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲";
             }
 
-            m_player.Events.PlayerStopped += new EventHandler(Events_PlayerStopped);
             m_player.Events.PlayerPositionChanged += new EventHandler<MediaPlayerPositionChanged>(Events_PlayerPositionChanged);
 
             m_player.Position = 0;
@@ -124,18 +126,9 @@ namespace CrazyKTV_SongMgr
         }
 
         // Player Events
-        void Events_PlayerStopped(object sender, EventArgs e)
-        {
-            this.BeginInvoke((Action)delegate ()
-            {
-                Player_ProgressTrackBar.ProgressBarValue = 0;
-                Player_ProgressTrackBar.TrackBarValue = 0;
-            });
-        }
-
         void Events_PlayerPositionChanged(object sender, MediaPlayerPositionChanged e)
         {
-            this.BeginInvoke((Action)delegate ()
+            this.BeginInvoke((Action)delegate()
             {
                 Player_ProgressTrackBar.ProgressBarValue = (int)(e.NewPosition * 100);
                 Player_ProgressTrackBar.TrackBarValue = (int)(e.NewPosition * 100);
@@ -146,27 +139,8 @@ namespace CrazyKTV_SongMgr
         {
             if (!m_player.IsPlaying && Player_PlayControl_Button.Text == "暫停播放")
             {
-                try
-                {
-                    m_player.Stop();
-                }
-                finally
-                {
-                    timer.Stop();
-                    this.Close();
-                }
-            }
-        }
-
-        private void PlayerForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            try
-            {
-                m_player.Stop();
-            }
-            finally
-            {
-                this.Owner.Show();
+                timer.Stop();
+                this.Close();
             }
         }
 
@@ -267,6 +241,11 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-
+        private void PlayerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Task.Factory.StartNew(() => m_player.Stop());
+            timer.Dispose();
+            this.Owner.Show();
+        }
     }
 }
