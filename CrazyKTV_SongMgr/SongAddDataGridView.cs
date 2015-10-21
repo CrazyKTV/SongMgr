@@ -9,7 +9,6 @@ using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
 {
-
     public partial class MainForm : Form
     {
         #region --- SongAdd_DataGridView ---
@@ -465,13 +464,14 @@ namespace CrazyKTV_SongMgr
             switch (sender.ToString())
             {
                 case "開啟資料夾":
-                    if (!Directory.Exists(SongPath))
+                    if (!Directory.Exists(SongPath) || !File.Exists(SongFilePath))
                     {
-                        SongAdd_Tooltip_Label.Text = "【" + SongPath + "】資料夾不存在...";
+                        SongAdd_Tooltip_Label.Text = "選取歌曲的資料夾或檔案不存在...";
                     }
                     else
                     {
-                        Process.Start(SongPath);
+                        string arg = "/select, " + SongFilePath;
+                        Process.Start("explorer", arg);
                     }
                     break;
                 case "播放檔案":

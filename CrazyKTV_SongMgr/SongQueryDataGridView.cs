@@ -789,20 +789,22 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
+            string file = Path.Combine(SongPath, SongFileName);
+
             switch (sender.ToString())
             {
                 case "開啟資料夾":
-                    if (!Directory.Exists(SongPath))
+                    if (!Directory.Exists(SongPath) || !File.Exists(file))
                     {
-                        SongQuery_QueryStatus_Label.Text = "【" + SongPath + "】資料夾不存在...";
+                        SongQuery_QueryStatus_Label.Text = "選取歌曲的資料夾或檔案不存在...";
                     }
                     else
                     {
-                        Process.Start(SongPath);
+                        string arg = "/select, " + file;
+                        Process.Start("explorer", arg);
                     }
                     break;
                 case "播放檔案":
-                    string file = SongPath + SongFileName;
                     if (!File.Exists(file))
                     {
                         SongQuery_QueryStatus_Label.Text = "【" + SongFileName + "】檔案不存在...";
