@@ -171,31 +171,36 @@ namespace CrazyKTV_SongMgr
 
             if(Global.SongQueryDataGridViewValue != SongQuery_DataGridView.CurrentCell.Value.ToString())
             {
-                if (SongQuery_DataGridView.Columns[SongQuery_DataGridView.CurrentCell.ColumnIndex].HeaderText != "加歌日期")
+                switch (SongQuery_DataGridView.Columns[SongQuery_DataGridView.CurrentCell.ColumnIndex].HeaderText)
                 {
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add("RowIndex", typeof(int));
-                    dt.Columns.Add("SongId", typeof(string));
-                    dt.Columns.Add("SongLang", typeof(string));
+                    case "歌手名稱":
+                    case "歌曲名稱":
+                    case "歌曲音量":
+                    case "點播次數":
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("RowIndex", typeof(int));
+                        dt.Columns.Add("SongId", typeof(string));
+                        dt.Columns.Add("SongLang", typeof(string));
 
-                    DataRow row = dt.NewRow();
-                    row["RowIndex"] = SongQuery_DataGridView.CurrentRow.Index;
-                    row["SongId"] = SongQuery_DataGridView.CurrentRow.Cells["Song_Id"].Value.ToString();
-                    row["SongLang"] = SongQuery_DataGridView.CurrentRow.Cells["Song_Lang"].Value.ToString();
-                    dt.Rows.Add(row);
+                        DataRow row = dt.NewRow();
+                        row["RowIndex"] = SongQuery_DataGridView.CurrentRow.Index;
+                        row["SongId"] = SongQuery_DataGridView.CurrentRow.Cells["Song_Id"].Value.ToString();
+                        row["SongLang"] = SongQuery_DataGridView.CurrentRow.Cells["Song_Lang"].Value.ToString();
+                        dt.Rows.Add(row);
 
-                    Common_SwitchSetUI(false);
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(dt)));
+                        Common_SwitchSetUI(false);
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(dt)));
 
-                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                    {
-                        this.BeginInvoke((Action)delegate()
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
-                            Common_SwitchSetUI(true);
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Common_SwitchSetUI(true);
+                            });
+                            dt.Dispose();
                         });
-                        dt.Dispose();
-                    });
+                        break;
                 }
             }
             if (SongQuery_QueryStatus_Label.Text == "此項目只能輸入數字!" | SongQuery_QueryStatus_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SongQuery_QueryStatus_Label.Text == "此項目只能輸入數字及小數點!" | SongQuery_QueryStatus_Label.Text == "此項目的值不可為空白!" | SongQuery_QueryStatus_Label.Text == "此項目的值含有非法字元!") SongQuery_QueryStatus_Label.Text = "";

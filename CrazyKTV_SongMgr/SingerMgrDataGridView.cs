@@ -148,31 +148,31 @@ namespace CrazyKTV_SongMgr
                         if (SpellList[2] == "") SpellList[2] = "0";
                         SingerMgr_DataGridView.CurrentRow.Cells["Singer_Strokes"].Value = SpellList[2];
                         SingerMgr_DataGridView.CurrentRow.Cells["Singer_PenStyle"].Value = SpellList[3];
+
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("RowIndex", typeof(int));
+                        dt.Columns.Add("SingerName", typeof(string));
+                        DataRow row = dt.NewRow();
+                        row["RowIndex"] = SingerMgr_DataGridView.CurrentRow.Index;
+                        row["SingerName"] = Global.SingerQueryDataGridViewValue;
+                        dt.Rows.Add(row);
+
+                        Common_SwitchSetUI(false);
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(dt)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Common_SwitchSetUI(true);
+                                Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+                            });
+                            SingerMgr.DisposeSongDataTable();
+                            dt.Dispose();
+                        });
                         break;
                 }
-
-                DataTable dt = new DataTable();
-                dt.Columns.Add("RowIndex", typeof(int));
-                dt.Columns.Add("SingerName", typeof(string));
-                DataRow row = dt.NewRow();
-                row["RowIndex"] = SingerMgr_DataGridView.CurrentRow.Index;
-                row["SingerName"] = Global.SingerQueryDataGridViewValue;
-                dt.Rows.Add(row);
-
-                Common_SwitchSetUI(false);
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(dt)));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                {
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        Common_SwitchSetUI(true);
-                        Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
-                    });
-                    SingerMgr.DisposeSongDataTable();
-                    dt.Dispose();
-                });
             }
             if (SingerMgr_Tooltip_Label.Text == "此項目只能輸入數字!" | SingerMgr_Tooltip_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SingerMgr_Tooltip_Label.Text == "此項目只能輸入數字及小數點!" | SingerMgr_Tooltip_Label.Text == "此項目的值不可為空白!" | SingerMgr_Tooltip_Label.Text == "此項目的值含有非法字元!") SingerMgr_Tooltip_Label.Text = "";
         }
