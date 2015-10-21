@@ -481,7 +481,20 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        Process.Start(SongFilePath);
+                        int i = SongAdd_DataGridView.CurrentCell.RowIndex;
+
+                        string SongId = SongAdd_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                        string SongLang = SongAdd_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
+                        string SongSinger = SongAdd_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
+                        string SongSongName = SongAdd_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
+                        string SongTrack = SongAdd_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
+
+                        List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString(), "SongAdd" };
+
+                        Global.PlayerUpdateSongValueList = new List<string>();
+                        PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+                        newPlayerForm.Show();
+                        this.Hide();
                     }
                     break;
                 case "刪除資料列":

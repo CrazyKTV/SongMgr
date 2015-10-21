@@ -491,8 +491,16 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.PlayerUpdateSongValueList.Count > 0 )
             {
-                int i = Convert.ToInt32(Global.PlayerUpdateSongValueList[0]);
-                SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[1];
+                int i = Convert.ToInt32(Global.PlayerUpdateSongValueList[1]);
+                switch (Global.PlayerUpdateSongValueList[0])
+                {
+                    case "SongQuery":
+                        SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[2];
+                        break;
+                    case "SongAdd":
+                        SongAdd_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[2];
+                        break;
+                }
             }
         }
 

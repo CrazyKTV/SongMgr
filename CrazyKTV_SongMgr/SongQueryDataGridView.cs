@@ -820,7 +820,7 @@ namespace CrazyKTV_SongMgr
                         string SongTrack = SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
                         string SongFilePath = Path.Combine(SongPath, SongFileName);
 
-                        List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString() };
+                        List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString(), "SongQuery" };
 
                         Global.PlayerUpdateSongValueList = new List<string>();
                         PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);

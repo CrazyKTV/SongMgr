@@ -25,6 +25,7 @@ namespace CrazyKTV_SongMgr
         string SongFilePath;
         string dvRowIndex;
         string UpdateSongTrack;
+        string UpdateDataGridView;
 
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
@@ -45,6 +46,7 @@ namespace CrazyKTV_SongMgr
             SongTrack = PlayerSongInfoList[4];
             SongFilePath = PlayerSongInfoList[5];
             dvRowIndex = PlayerSongInfoList[6];
+            UpdateDataGridView = PlayerSongInfoList[7];
 
             this.Text = "【" + SongLang + "】" + SongSinger + " - " + SongSongName;
 
@@ -223,7 +225,7 @@ namespace CrazyKTV_SongMgr
             SongTrack = UpdateSongTrack;
             Player_UpdateChannel_Button.Enabled = false;
             Player_CurrentChannelValue_Label.Text = "伴唱";
-            Global.PlayerUpdateSongValueList = new List<string>() { dvRowIndex, SongTrack };
+            Global.PlayerUpdateSongValueList = new List<string>() { UpdateDataGridView, dvRowIndex, SongTrack };
         }
 
         private void Player_PlayControl_Button_Click(object sender, EventArgs e)
