@@ -134,6 +134,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongAdd_DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            if (SongAdd_DataGridView.CurrentCell.Value.ToString() == "") return;
             switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
             {
                 case "歌手名稱":

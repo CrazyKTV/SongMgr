@@ -132,6 +132,7 @@ namespace CrazyKTV_SongMgr
 
         private void SingerMgr_DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            if (SingerMgr_DataGridView.CurrentCell.Value.ToString() == "") return;
             if (Global.SingerQueryDataGridViewValue != SingerMgr_DataGridView.CurrentCell.Value.ToString())
             {
                 SingerMgr.CreateSongDataTable();

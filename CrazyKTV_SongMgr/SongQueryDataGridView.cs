@@ -144,6 +144,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongQuery_DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            if (SongQuery_DataGridView.CurrentCell.Value.ToString() == "") return;
             switch (SongQuery_DataGridView.Columns[SongQuery_DataGridView.CurrentCell.ColumnIndex].HeaderText)
             {
                 case "歌手名稱":
@@ -167,6 +168,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_DataGridView.CurrentRow.Cells["Song_PenStyle"].Value = SongSpellList[3];
                     break;
             }
+
             if(Global.SongQueryDataGridViewValue != SongQuery_DataGridView.CurrentCell.Value.ToString())
             {
                 if (SongQuery_DataGridView.Columns[SongQuery_DataGridView.CurrentCell.ColumnIndex].HeaderText != "加歌日期")
