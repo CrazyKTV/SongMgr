@@ -1128,7 +1128,7 @@ namespace CrazyKTV_SongMgr
                                         string SongInfoSeparate = (Global.SongMgrSongInfoSeparate == "1") ? "_" : "-";
 
                                         var MatchSongTrackQuery = from row in dt.AsEnumerable()
-                                                                  where !row.Field<string>("Song_FileName").Contains(SongInfoSeparate + CommonFunc.GetSongTrackStr(row.Field<byte>("Song_Track"), 1, "null"))
+                                                                  where row.Field<string>("Song_FileName").Contains(SongInfoSeparate + CommonFunc.GetSongTrackStr(row.Field<byte>("Song_Track") - 1, 1, "null"))
                                                                   select row;
 
                                         foreach (DataRow row in MatchSongTrackQuery)

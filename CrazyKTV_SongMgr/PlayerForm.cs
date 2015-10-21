@@ -80,10 +80,6 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = 500;
-            timer.Start();
-
             List<int> TrackIdList = new List<int>();
             foreach (Declarations.TrackDescription TrackDesc in m_player.AudioTracksInfo)
             {
@@ -124,7 +120,10 @@ namespace CrazyKTV_SongMgr
 
             m_player.Position = 0;
             m_player.Mute = false;
-            m_player.Play();
+
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = 500;
+            timer.Start();
         }
 
         // Player Events
