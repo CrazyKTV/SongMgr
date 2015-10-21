@@ -210,18 +210,6 @@ namespace CrazyKTV_SongMgr
 
         private void Player_UpdateChannel_Button_Click(object sender, EventArgs e)
         {
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Track = @SongTrack";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            cmd.Parameters.AddWithValue("@SongTrack", UpdateSongTrack);
-            cmd.Parameters.AddWithValue("@SongId", SongId);
-            cmd.ExecuteNonQuery();
-            cmd.Parameters.Clear();
-            conn.Close();
-            
             SongTrack = UpdateSongTrack;
             Player_UpdateChannel_Button.Enabled = false;
             Player_CurrentChannelValue_Label.Text = "伴唱";

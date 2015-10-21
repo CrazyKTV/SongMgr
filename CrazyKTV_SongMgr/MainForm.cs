@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -496,11 +497,37 @@ namespace CrazyKTV_SongMgr
                 {
                     case "SongQuery":
                         SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[2];
+
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("RowIndex", typeof(int));
+                        dt.Columns.Add("SongId", typeof(string));
+                        dt.Columns.Add("SongLang", typeof(string));
+
+                        DataRow row = dt.NewRow();
+                        row["RowIndex"] = i;
+                        row["SongId"] = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                        row["SongLang"] = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
+                        dt.Rows.Add(row);
+
+                        Common_SwitchSetUI(false);
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(dt)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            this.BeginInvoke((Action)delegate()
+                            {
+                                Common_SwitchSetUI(true);
+                            });
+                            dt.Dispose();
+                            dt = null;
+                        });
                         break;
                     case "SongAdd":
                         SongAdd_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[2];
                         break;
                 }
+                Global.PlayerUpdateSongValueList.Clear();
             }
         }
 
