@@ -15,11 +15,14 @@ namespace CrazyKTV_SongMgr
             SongQuery_DataGridView.MakeDoubleBuffered(true);
             SongAdd_DataGridView.MakeDoubleBuffered(true);
             SingerMgr_DataGridView.MakeDoubleBuffered(true);
+
+            
         }
 
         
         private void MainForm_Load(object sender, EventArgs e)
         {
+            if (CommonFunc.IsAdministrator()) this.Text += " (系統管理員)";
             // 歌庫版本資訊
             if (!File.Exists(Global.CrazyktvSongDBUpdateFile))
             {
@@ -326,7 +329,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Task.Factory.StartNew(() => Common_InitialSongDataTask());
+            Task.Factory.StartNew(() => Common_InitializeSongDataTask());
 
             // 歌曲查詢 - 載入下拉選單清單及設定
             SongQuery_QueryType_ComboBox.DataSource = SongQuery.GetSongQueryTypeList();

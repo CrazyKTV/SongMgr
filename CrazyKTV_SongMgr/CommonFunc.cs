@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -283,7 +284,7 @@ namespace CrazyKTV_SongMgr
         }
 
 
-        private void Common_InitialSongDataTask()
+        private void Common_InitializeSongDataTask()
         {
             int MaxDigitCode;
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
@@ -1822,7 +1823,6 @@ namespace CrazyKTV_SongMgr
                     foreach(DataRow row in query)
                     {
                         SongFilePath = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
-                        Console.WriteLine(SongFilePath);
                         if (File.Exists(SongFilePath)) SongFileCount[Global.CrazyktvSongLangList.IndexOf(langstr)]++;
                     }
                 }
@@ -2116,7 +2116,12 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-
+        public static bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
 
 
     }
