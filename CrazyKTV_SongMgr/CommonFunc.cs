@@ -319,7 +319,7 @@ namespace CrazyKTV_SongMgr
         {
             if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
-                string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song";
+                string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Path, Song_FileName from ktv_Song";
                 Global.SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
                 List<int> SongLangCount = new List<int>();
@@ -401,7 +401,7 @@ namespace CrazyKTV_SongMgr
                 SongFileCount = task2.Result;
                 this.BeginInvoke((Action)delegate()
                 {
-                    SongQuery_StatisticsValue_Label[11].Text = SongFileCount[0].ToString() + " 個";
+                    SongQuery_StatisticsValue_Label[11].Text = SongFileCount[10].ToString() + " 個";
                 });
 
                 Global.SongStatisticsDT.Dispose();
@@ -1803,49 +1803,39 @@ namespace CrazyKTV_SongMgr
             {
                 SongLangCount[10] += SongLangCount[i];
             }
-
             return SongLangCount;
         }
 
+
         public static List<int> GetSongFileCount()
         {
-            List<int> SongFileCount = new List<int>() { 0, 0 };
+            List<int> SongFileCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            string SongFilePath = "";
 
-            if (Directory.Exists(Global.SongMgrDestFolder))
+            Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
             {
-                List<string> SupportFormat = new List<string>();
-                SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
-
-                if (Global.SongMaintenanceEnableMultiSongPath == "True")
+                var query = from row in Global.SongStatisticsDT.AsEnumerable()
+                            where row.Field<string>("Song_Lang").Equals(langstr)
+                            select row;
+                if (query.Count<DataRow>() > 0)
                 {
-                    int FileCount = 0;
-                    DirectoryInfo dir = new DirectoryInfo(Global.SongMgrDestFolder);
-                    FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
-                    FileCount = Files.Count();
-
-                    Parallel.ForEach(Global.SongMaintenanceMultiSongPathList, (SongPath, loopState) =>
+                    foreach(DataRow row in query)
                     {
-                        if (Directory.Exists(SongPath))
-                        {
-                            DirectoryInfo mdir = new DirectoryInfo(SongPath);
-                            FileInfo[] mFiles = mdir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
-                            lock (LockThis)
-                            {
-                                FileCount += mFiles.Count();
-                            }
-                        }
-                    });
-
-                    SongFileCount[0] = FileCount;
+                        SongFilePath = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
+                        Console.WriteLine(SongFilePath);
+                        if (File.Exists(SongFilePath)) SongFileCount[Global.CrazyktvSongLangList.IndexOf(langstr)]++;
+                    }
                 }
                 else
                 {
-                    DirectoryInfo dir = new DirectoryInfo(Global.SongMgrDestFolder);
-                    FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
-                    SongFileCount[0] = Files.Count();
+                    SongFileCount[Global.CrazyktvSongLangList.IndexOf(langstr)] = 0;
                 }
-            }
+            });
 
+            for (int i = 0; i < 10; i++)
+            {
+                SongFileCount[10] += SongFileCount[i];
+            }
             return SongFileCount;
         }
 
