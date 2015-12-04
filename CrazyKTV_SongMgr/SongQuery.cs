@@ -1110,15 +1110,28 @@ namespace CrazyKTV_SongMgr
                                 switch (SongQuery_ExceptionalQuery_ComboBox.SelectedValue.ToString())
                                 {
                                     case "1":
-                                        var query = from row in dt.AsEnumerable()
-                                                    where File.Exists(Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName")))
-                                                    select row;
-
-                                        foreach (DataRow row in query)
+                                        Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
                                         {
-                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                        }
+                                            var query = from row in dt.AsEnumerable()
+                                                        where row.Field<string>("Song_Lang").Equals(langstr)
+                                                        select row;
 
+                                            if (query.Count<DataRow>() > 0)
+                                            {
+                                                foreach (DataRow row in query)
+                                                {
+                                                    if (File.Exists(Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName"))))
+                                                    {
+                                                        lock(LockThis)
+                                                        {
+                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                        RemoveRowsIdxlist.Sort();
                                         for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
                                         {
                                             dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
