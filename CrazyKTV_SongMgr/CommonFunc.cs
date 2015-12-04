@@ -1419,10 +1419,36 @@ namespace CrazyKTV_SongMgr
             return WordCountList;
         }
 
+
         public static List<string> GetSongNameSpell(string SongStr)
         {
             List<string> SpellList = new List<string>() { "", "", "0", "" };
             if (string.IsNullOrEmpty(SongStr)) return SpellList;
+
+            if (Global.PhoneticsWordList.Count == 0)
+            {
+                Global.PhoneticsWordList = new List<string>();
+                Global.PhoneticsSpellList = new List<string>();
+                Global.PhoneticsStrokesList = new List<string>();
+                Global.PhoneticsPenStyleList = new List<string>();
+
+                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+                var query = from row in Global.PhoneticsDT.AsEnumerable()
+                            where row.Field<Int16>("SortIdx") < 2
+                            select row;
+
+                foreach (DataRow row in query)
+                {
+                    Global.PhoneticsWordList.Add(row["Word"].ToString());
+                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                }
+                Global.PhoneticsDT.Dispose();
+                Global.PhoneticsDT = null;
+            }
 
             List<string> list = new List<string>();
             DataTable dt = new DataTable();
@@ -1618,88 +1644,7 @@ namespace CrazyKTV_SongMgr
 
                             if (list.IndexOf(str) == 0) dtrow["Stroke"] = Global.PhoneticsStrokesList[Global.PhoneticsWordList.IndexOf(str)]; // 筆劃
                             dtrow["PenStyle"] = Global.PhoneticsPenStyleList[Global.PhoneticsWordList.IndexOf(str)]; // 筆形順序
-
                         }
-
-                        // 舊的截取拼音方式 (暫時留著,以供沒改到的地方用)
-                        if (dtrow["Spell"].ToString() == "")
-                        {
-                            // 查找資料庫拼音資料
-                            var query = from row in Global.PhoneticsDT.AsEnumerable()
-                                        where row.Field<string>("Word").Equals(str) & row.Field<Int16>("SortIdx") < 2
-                                        select row;
-
-                            foreach (DataRow row in query)
-                            {
-                                dtrow["Spell"] = (row["Spell"].ToString()).Substring(0, 1); // 拼音
-
-                                switch ((row["Spell"].ToString()).Substring(0, 1))
-                                {
-                                    case "ㄅ":
-                                    case "ㄆ":
-                                    case "ㄇ":
-                                    case "ㄈ":
-                                        dtrow["SpellNum"] = "1"; // 手機輸入
-                                        break;
-                                    case "ㄉ":
-                                    case "ㄊ":
-                                    case "ㄋ":
-                                    case "ㄌ":
-                                        dtrow["SpellNum"] = "2";
-                                        break;
-                                    case "ㄍ":
-                                    case "ㄎ":
-                                    case "ㄏ":
-                                        dtrow["SpellNum"] = "3";
-                                        break;
-                                    case "ㄐ":
-                                    case "ㄑ":
-                                    case "ㄒ":
-                                        dtrow["SpellNum"] = "4";
-                                        break;
-                                    case "ㄓ":
-                                    case "ㄔ":
-                                    case "ㄕ":
-                                    case "ㄖ":
-                                        dtrow["SpellNum"] = "5";
-                                        break;
-                                    case "ㄗ":
-                                    case "ㄘ":
-                                    case "ㄙ":
-                                        dtrow["SpellNum"] = "6";
-                                        break;
-                                    case "ㄚ":
-                                    case "ㄛ":
-                                    case "ㄜ":
-                                    case "ㄝ":
-                                        dtrow["SpellNum"] = "7";
-                                        break;
-                                    case "ㄞ":
-                                    case "ㄟ":
-                                    case "ㄠ":
-                                    case "ㄡ":
-                                        dtrow["SpellNum"] = "8";
-                                        break;
-                                    case "ㄢ":
-                                    case "ㄣ":
-                                    case "ㄤ":
-                                    case "ㄥ":
-                                    case "ㄦ":
-                                        dtrow["SpellNum"] = "9";
-                                        break;
-                                    case "ㄧ":
-                                    case "ㄨ":
-                                    case "ㄩ":
-                                        dtrow["SpellNum"] = "0";
-                                        break;
-                                }
-
-                                if (list.IndexOf(str) == 0) dtrow["Stroke"] = row["Strokes"].ToString(); // 筆劃
-                                dtrow["PenStyle"] = (row["PenStyle"].ToString()).Substring(0, 1); // 筆形順序
-                                break;
-                            }
-                        }
-
                     }
                     dt.Rows.Add(dtrow);
                 }
