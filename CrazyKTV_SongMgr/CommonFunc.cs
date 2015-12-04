@@ -282,6 +282,39 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+
+        private void Common_InitialSongDataTask()
+        {
+            int MaxDigitCode;
+            if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
+            var tasks = new List<Task>();
+            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
+            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
+
+            Global.PhoneticsWordList = new List<string>();
+            Global.PhoneticsSpellList = new List<string>();
+            Global.PhoneticsStrokesList = new List<string>();
+            Global.PhoneticsPenStyleList = new List<string>();
+
+            string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+            Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+            var query = from row in Global.PhoneticsDT.AsEnumerable()
+                        where row.Field<Int16>("SortIdx") < 2
+                        select row;
+
+            foreach (DataRow row in query)
+            {
+                Global.PhoneticsWordList.Add(row["Word"].ToString());
+                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+            }
+            Global.PhoneticsDT.Dispose();
+            Global.PhoneticsDT = null;
+        }
+
+
         private void Common_GetSongStatisticsTask()
         {
             if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)

@@ -2048,11 +2048,7 @@ namespace CrazyKTV_SongMgr
                             if (wordlist.IndexOf(m.Value) < 0)
                             {
                                 // 查找資料庫拼音資料
-                                var query = from prow in Global.PhoneticsDT.AsEnumerable()
-                                            where prow.Field<string>("Word").Equals(m.Value) & prow.Field<Int16>("SortIdx") < 2
-                                            select prow;
-
-                                if (query.Count<DataRow>() == 0)
+                                if (Global.PhoneticsWordList.IndexOf(m.Value) < 0)
                                 {
                                     if (list.IndexOf(m.Value) < 0)
                                     {
@@ -2703,24 +2699,29 @@ namespace CrazyKTV_SongMgr
                 Global.AllSingerTypeList.Add(row["Singer_Type"].ToString());
             }
 
-            Global.PhoneticsWordList = new List<string>();
-            Global.PhoneticsSpellList = new List<string>();
-            Global.PhoneticsStrokesList = new List<string>();
-            Global.PhoneticsPenStyleList = new List<string>();
-
-            string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-            Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
-
-            var query = from row in Global.PhoneticsDT.AsEnumerable()
-                        where row.Field<Int16>("SortIdx") < 2
-                        select row;
-
-            foreach (DataRow row in query)
+            if (Global.PhoneticsWordList.Count == 0)
             {
-                Global.PhoneticsWordList.Add(row["Word"].ToString());
-                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                Global.PhoneticsWordList = new List<string>();
+                Global.PhoneticsSpellList = new List<string>();
+                Global.PhoneticsStrokesList = new List<string>();
+                Global.PhoneticsPenStyleList = new List<string>();
+
+                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+                var query = from row in Global.PhoneticsDT.AsEnumerable()
+                            where row.Field<Int16>("SortIdx") < 2
+                            select row;
+
+                foreach (DataRow row in query)
+                {
+                    Global.PhoneticsWordList.Add(row["Word"].ToString());
+                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                }
+                Global.PhoneticsDT.Dispose();
+                Global.PhoneticsDT = null;
             }
         }
 
@@ -2732,18 +2733,12 @@ namespace CrazyKTV_SongMgr
             Global.AllSingerList.Clear();
             Global.AllSingerLowCaseList.Clear();
             Global.AllSingerTypeList.Clear();
-            Global.PhoneticsWordList.Clear();
-            Global.PhoneticsSpellList.Clear();
-            Global.PhoneticsStrokesList.Clear();
-            Global.PhoneticsPenStyleList.Clear();
             Global.SongDT.Dispose();
             Global.SongDT = null;
             Global.SingerDT.Dispose();
             Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
             Global.AllSingerDT = null;
-            Global.PhoneticsDT.Dispose();
-            Global.PhoneticsDT = null;
         }
 
         public static DataTable GetMultiSongPathList()

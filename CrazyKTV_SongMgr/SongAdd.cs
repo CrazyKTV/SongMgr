@@ -356,7 +356,6 @@ namespace CrazyKTV_SongMgr
             this.BeginInvoke((Action)delegate()
             {
                 int sortindex = 0;
-
                 Global.SongAddDT.DefaultView.Sort = "Song_Singer, Song_SongName";
                 Global.SongAddDT = Global.SongAddDT.DefaultView.ToTable();
                 SongAdd_DataGridView.DataSource = Global.SongAddDT;
@@ -403,8 +402,8 @@ namespace CrazyKTV_SongMgr
                 
                 Global.TimerEndTime = DateTime.Now;
                 SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 "  +(long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
+                SongAnalysis.DisposeSongDataTable();
             });
-            SongAnalysis.DisposeSongDataTable();
         }
 
         private bool SongAdd_CheckSongAddStatus()
