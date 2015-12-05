@@ -127,7 +127,17 @@ namespace CrazyKTV_SongMgr
             {
                 MainTabPage.Show();
             }
-            
+
+            foreach (TabPage SongMgrCfgTabPage in SongMgrCfg_TabControl.TabPages)
+            {
+                SongMgrCfgTabPage.Show();
+            }
+
+            foreach (TabPage SongMaintenanceTabPage in SongMaintenance_TabControl.TabPages)
+            {
+                SongMaintenanceTabPage.Show();
+            }
+
             if (list[21] != "") Global.CrazyktvSongLangList = new List<string>(list[21].Split(','));
             if (Global.CrazyktvSongLangList.Count < 10) Global.CrazyktvSongLangList = new List<string>() { "國語", "台語", "粵語", "日語", "英語", "客語", "原住民語", "韓語", "兒歌", "其它" };
 
@@ -140,12 +150,6 @@ namespace CrazyKTV_SongMgr
             if (list[2] != "") Global.SongMgrDestFolder = list[2];
             SongMgrCfg_DestFolder_TextBox.Text = Global.SongMgrDestFolder;
             
-            if (list[3] != "") Global.SongMgrSongAddMode = list[3];
-            SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
-            SongMgrCfg_SongAddMode_ComboBox.DisplayMember = "Display";
-            SongMgrCfg_SongAddMode_ComboBox.ValueMember = "Value";
-            SongMgrCfg_SongAddMode_ComboBox.SelectedValue = int.Parse(Global.SongMgrSongAddMode);
-
             if (list[4] != "") Global.SongMgrChorusMerge = list[4];
             SongMgrCfg_CrtchorusMerge_CheckBox.Checked = bool.Parse(Global.SongMgrChorusMerge);
 
@@ -316,6 +320,12 @@ namespace CrazyKTV_SongMgr
             if (list[41] != "") Global.SongAddEnableConvToTC = list[41];
             SongAdd_EnableConvToTC_CheckBox.Checked = bool.Parse(Global.SongAddEnableConvToTC);
 
+
+            if (list[3] != "") Global.SongMgrSongAddMode = list[3];
+            SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
+            SongMgrCfg_SongAddMode_ComboBox.DisplayMember = "Display";
+            SongMgrCfg_SongAddMode_ComboBox.ValueMember = "Value";
+            SongMgrCfg_SongAddMode_ComboBox.SelectedValue = int.Parse(Global.SongMgrSongAddMode);
 
             // 建立歌曲操作記錄資料表
             Global.SongLogDT = new DataTable();

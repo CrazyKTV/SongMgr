@@ -208,24 +208,13 @@ namespace CrazyKTV_SongMgr
                 SongAddResult_FailureSong_ListBox.Items.Clear();
             }
 
-            switch (Global.SongMgrSongAddMode)
-            {
-                case "1":
-                case "2":
-                    SongMgrCfg_SongStructure_TabControl.Enabled = status;
-                    break;
-                case "3":
-                    SongMgrCfg_SongStructure_TabControl.Enabled = false;
-                    break;
-            }
-
             SongAdd_DefaultSongInfo_GroupBox.Enabled = status;
             SongAdd_SpecialStr_GroupBox.Enabled = status;
             SongAdd_SongAddCfg_GroupBox.Enabled = status;
             SongAdd_Save_Button.Enabled = status;
             SongMgrCfg_General_GroupBox.Enabled = status;
             SongMgrCfg_SongID_GroupBox.Enabled = status;
-            SongMgrCfg_SongType_GroupBox.Enabled = status;
+            SongMgrCfg_TabControl.Enabled = status;
             SongMgrCfg_Save_Button.Enabled = status;
             SongMaintenance_SpellCorrect_GroupBox.Enabled = status;
             SongMaintenance_CodeConv_GroupBox.Enabled = status;

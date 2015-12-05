@@ -100,10 +100,22 @@ namespace CrazyKTV_SongMgr
             {
                 case "1":
                 case "2":
-                    SongMgrCfg_SongStructure_TabControl.Enabled = true;
                     SongMaintenance_RebuildSongStructure_GroupBox.Enabled = true;
                     SongMgrCfg_DestFolder_TextBox.Enabled = true;
                     SongMgrCfg_DestFolder_Button.Enabled = true;
+
+                    if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) < 0)
+                    {
+                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongType_TabPage) + 1, SongMgrCfg_SongStructure_TabPage);
+                        SongMgrCfg_SongStructure_TabPage.Show();
+                    }
+
+                    if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_CustomStructure_TabPage) < 0)
+                    {
+                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongType_TabPage) + 2, SongMgrCfg_CustomStructure_TabPage);
+                        SongMgrCfg_CustomStructure_TabPage.Show();
+                    }
+
                     if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) < 0)
                     {
                         SongMaintenance_TabControl.TabPages.Insert(SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_CustomLang_TabPage) + 1, SongMaintenance_MultiSongPath_TabPage);
@@ -112,10 +124,23 @@ namespace CrazyKTV_SongMgr
                     Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
                     break;
                 case "3":
-                    SongMgrCfg_SongStructure_TabControl.Enabled = false;
+                case "4":
                     SongMaintenance_RebuildSongStructure_GroupBox.Enabled = false;
                     SongMgrCfg_DestFolder_TextBox.Enabled = false;
                     SongMgrCfg_DestFolder_Button.Enabled = false;
+
+                    if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) >= 0)
+                    {
+                        SongMgrCfg_SongStructure_TabPage.Hide();
+                        SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_SongStructure_TabPage);
+                    }
+
+                    if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_CustomStructure_TabPage) >= 0)
+                    {
+                        SongMgrCfg_CustomStructure_TabPage.Hide();
+                        SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_CustomStructure_TabPage);
+                    }
+
                     if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) >= 0)
                     {
                         SongMaintenance_MultiSongPath_TabPage.Hide();
@@ -614,6 +639,9 @@ namespace CrazyKTV_SongMgr
             list.Rows.Add(list.NewRow());
             list.Rows[2][0] = "不搬移及複製來源 KTV 檔案";
             list.Rows[2][1] = 3;
+            list.Rows.Add(list.NewRow());
+            list.Rows[3][0] = "使用歌庫資料夾監視模式";
+            list.Rows[3][1] = 4;
             return list;
         }
 
