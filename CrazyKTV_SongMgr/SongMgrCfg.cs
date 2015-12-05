@@ -104,6 +104,11 @@ namespace CrazyKTV_SongMgr
                     SongMaintenance_RebuildSongStructure_GroupBox.Enabled = true;
                     SongMgrCfg_DestFolder_TextBox.Enabled = true;
                     SongMgrCfg_DestFolder_Button.Enabled = true;
+                    if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) < 0)
+                    {
+                        SongMaintenance_TabControl.TabPages.Insert(SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_CustomLang_TabPage) + 1, SongMaintenance_MultiSongPath_TabPage);
+                        SongMaintenance_MultiSongPath_TabPage.Show();
+                    }
                     Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
                     break;
                 case "3":
@@ -111,6 +116,11 @@ namespace CrazyKTV_SongMgr
                     SongMaintenance_RebuildSongStructure_GroupBox.Enabled = false;
                     SongMgrCfg_DestFolder_TextBox.Enabled = false;
                     SongMgrCfg_DestFolder_Button.Enabled = false;
+                    if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) >= 0)
+                    {
+                        SongMaintenance_MultiSongPath_TabPage.Hide();
+                        SongMaintenance_TabControl.TabPages.Remove(SongMaintenance_MultiSongPath_TabPage);
+                    }
                     Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
                     break;
             }
