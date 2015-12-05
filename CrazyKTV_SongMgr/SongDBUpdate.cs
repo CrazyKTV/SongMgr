@@ -628,7 +628,6 @@ namespace CrazyKTV_SongMgr
                         this.BeginInvoke((Action)delegate ()
                         {
                             Common_SwitchDBVerErrorUI(false);
-                            SongMaintenance_CodeConvTo5_Button.Enabled = false;
                             SongMaintenance_CodeConvTo6_Button.Enabled = false;
                             SongMaintenance_CodeCorrect_Button.Enabled = true;
                             Global.CrazyktvDatabaseMaxDigitCode = "Error";
@@ -643,11 +642,9 @@ namespace CrazyKTV_SongMgr
                             switch (Global.SongMgrMaxDigitCode)
                             {
                                 case "1":
-                                    SongMaintenance_CodeConvTo5_Button.Enabled = false;
                                     SongMaintenance_CodeConvTo6_Button.Enabled = true;
                                     break;
                                 case "2":
-                                    SongMaintenance_CodeConvTo5_Button.Enabled = true;
                                     SongMaintenance_CodeConvTo6_Button.Enabled = false;
                                     break;
                             }
@@ -661,7 +658,6 @@ namespace CrazyKTV_SongMgr
                     this.BeginInvoke((Action)delegate ()
                     {
                         if (Directory.Exists(Global.SongMgrDestFolder)) { Common_SwitchDBVerErrorUI(true); } else { Common_SwitchDBVerErrorUI(false); }
-                        SongMaintenance_CodeConvTo5_Button.Enabled = false;
                         SongMaintenance_CodeConvTo6_Button.Enabled = false;
                         SongMaintenance_CodeCorrect_Button.Enabled = false;
                         Global.CrazyktvDatabaseMaxDigitCode = "Pass";
