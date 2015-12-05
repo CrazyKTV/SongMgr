@@ -248,6 +248,8 @@
             this.SongMaintenance_SrcSongPath_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_SongPathChange_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_PlayCount_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongMaintenance_PlayCountExport_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_PlayCountImport_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_PlayCountReset_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_TabControl = new System.Windows.Forms.TabControl();
             this.SongMaintenance_Misc_TabPage = new System.Windows.Forms.TabPage();
@@ -3235,6 +3237,8 @@
             // 
             // SongMaintenance_PlayCount_GroupBox
             // 
+            this.SongMaintenance_PlayCount_GroupBox.Controls.Add(this.SongMaintenance_PlayCountExport_Button);
+            this.SongMaintenance_PlayCount_GroupBox.Controls.Add(this.SongMaintenance_PlayCountImport_Button);
             this.SongMaintenance_PlayCount_GroupBox.Controls.Add(this.SongMaintenance_PlayCountReset_Button);
             this.SongMaintenance_PlayCount_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMaintenance_PlayCount_GroupBox.Location = new System.Drawing.Point(382, 23);
@@ -3245,10 +3249,34 @@
             this.SongMaintenance_PlayCount_GroupBox.TabStop = false;
             this.SongMaintenance_PlayCount_GroupBox.Text = "播放次數";
             // 
+            // SongMaintenance_PlayCountExport_Button
+            // 
+            this.SongMaintenance_PlayCountExport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_PlayCountExport_Button.Location = new System.Drawing.Point(177, 39);
+            this.SongMaintenance_PlayCountExport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SongMaintenance_PlayCountExport_Button.Name = "SongMaintenance_PlayCountExport_Button";
+            this.SongMaintenance_PlayCountExport_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_PlayCountExport_Button.TabIndex = 2;
+            this.SongMaintenance_PlayCountExport_Button.Text = "匯出播放次數";
+            this.SongMaintenance_PlayCountExport_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_PlayCountExport_Button.Click += new System.EventHandler(this.SongMaintenance_PlayCountExport_Button_Click);
+            // 
+            // SongMaintenance_PlayCountImport_Button
+            // 
+            this.SongMaintenance_PlayCountImport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_PlayCountImport_Button.Location = new System.Drawing.Point(16, 39);
+            this.SongMaintenance_PlayCountImport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SongMaintenance_PlayCountImport_Button.Name = "SongMaintenance_PlayCountImport_Button";
+            this.SongMaintenance_PlayCountImport_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_PlayCountImport_Button.TabIndex = 1;
+            this.SongMaintenance_PlayCountImport_Button.Text = "匯入播放次數";
+            this.SongMaintenance_PlayCountImport_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_PlayCountImport_Button.Click += new System.EventHandler(this.SongMaintenance_PlayCountImport_Button_Click);
+            // 
             // SongMaintenance_PlayCountReset_Button
             // 
             this.SongMaintenance_PlayCountReset_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_PlayCountReset_Button.Location = new System.Drawing.Point(16, 39);
+            this.SongMaintenance_PlayCountReset_Button.Location = new System.Drawing.Point(338, 39);
             this.SongMaintenance_PlayCountReset_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.SongMaintenance_PlayCountReset_Button.Name = "SongMaintenance_PlayCountReset_Button";
             this.SongMaintenance_PlayCountReset_Button.Size = new System.Drawing.Size(149, 32);
@@ -5222,7 +5250,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "MainForm";
-            this.Text = "CrazyKTV 加歌程式 v1.3.5";
+            this.Text = "CrazyKTV 加歌程式 v1.3.6 Debug";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.VisibleChanged += new System.EventHandler(this.MainForm_VisibleChanged);
@@ -5699,6 +5727,8 @@
         private System.Windows.Forms.GroupBox SingerMgr_OtherQuery_GroupBox;
         private System.Windows.Forms.CheckBox MainCfg_EnableAutoUpdate_CheckBox;
         private System.Windows.Forms.CheckBox SongAdd_EnableConvToTC_CheckBox;
+        private System.Windows.Forms.Button SongMaintenance_PlayCountExport_Button;
+        private System.Windows.Forms.Button SongMaintenance_PlayCountImport_Button;
     }
 }
 

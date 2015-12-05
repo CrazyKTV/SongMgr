@@ -89,6 +89,9 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+
+        #region --- 拼音校正 ---
+
         private void SongMaintenance_SingerSpellCorrect_Button_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("你確定要校正歌手拼音嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -343,12 +346,229 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
             }
+        }
 
-            if ((string)TableName != "ktv_Song")
+
+        #endregion
+
+
+        #region --- 聲道互換 ---
+
+
+        private void SongMaintenance_LRTrackExchange_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要互換左右聲道數值嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
 
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_LRTrackExchangeTask()));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), LRTrackExchangeEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的聲道資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
             }
         }
+
+
+        private void SongMaintenance_LRTrackExchangeTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+
+            var query = from row in Global.SongDT.AsEnumerable()
+                         where row.Field<byte>("Song_Track").Equals(1) ||
+                               row.Field<byte>("Song_Track").Equals(2)
+                         select row;
+
+            foreach (DataRow row in query)
+            {
+                switch (row["Song_Track"].ToString())
+                {
+                    case "1":
+                        list.Add("2" + "|" + row["Song_Id"].ToString());
+                        break;
+                    case "2":
+                        list.Add("1" + "|" + row["Song_Id"].ToString());
+                        break;
+                }
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的聲道資料,請稍待...";
+                });
+            }
+
+            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            OleDbCommand cmd = new OleDbCommand();
+            string sqlColumnStr = "Song_Track = @SongTrack";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+            List<string> valuelist = new List<string>();
+
+            foreach (string str in list)
+            {
+                valuelist = new List<string>(str.Split('|'));
+
+                cmd.Parameters.AddWithValue("@SongTrack", valuelist[0]);
+                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    lock (LockThis)
+                    {
+                        Global.TotalList[0]++;
+                    }
+                }
+                catch
+                {
+                    lock (LockThis)
+                    {
+                        Global.TotalList[1]++;
+                    }
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換左右聲道】更新資料庫時發生錯誤: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+                cmd.Parameters.Clear();
+
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的聲道資料,請稍待...";
+                });
+            }
+            conn.Close();
+            list.Clear();
+        }
+
+
+        #endregion
+
+
+        #region --- 音量變更 ---
+
+
+        private void SongMaintenance_VolumeChange_TextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+            {
+                SongMaintenance_Tooltip_Label.Text = "此項目的值不能為空白!";
+                e.Cancel = true;
+            }
+            else
+            {
+                if (int.Parse(((TextBox)sender).Text) > 100)
+                {
+                    SongMaintenance_Tooltip_Label.Text = "此項目只能輸入 0 ~ 100 的值!";
+                    e.Cancel = true;
+                }
+                else
+                {
+                    SongMaintenance_Tooltip_Label.Text = "";
+                }
+            }
+        }
+
+
+        private void SongMaintenance_VolumeChange_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要變更音量嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_VolumeChangeTask(SongMaintenance_VolumeChange_TextBox.Text)));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), VolumeChangeEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的音量資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            }
+        }
+
+
+        private void SongMaintenance_VolumeChangeTask(object VolumeValue)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            
+            foreach (DataRow row in Global.SongDT.AsEnumerable())
+            {
+                list.Add((string)VolumeValue + "|" + row["Song_Id"].ToString());
+                
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的音量資料,請稍待...";
+                });
+            }
+
+            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            OleDbCommand cmd = new OleDbCommand();
+            string sqlColumnStr = "Song_Volume = @SongVolume";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+            List<string> valuelist = new List<string>();
+
+            foreach (string str in list)
+            {
+                valuelist = new List<string>(str.Split('|'));
+
+                cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
+                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    lock (LockThis)
+                    {
+                        Global.TotalList[0]++;
+                    }
+                }
+                catch
+                {
+                    lock (LockThis)
+                    {
+                        Global.TotalList[1]++;
+                    }
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【變更歌曲音量】更新資料庫時發生錯誤: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+                cmd.Parameters.Clear();
+
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的音量資料,請稍待...";
+                });
+            }
+            conn.Close();
+            list.Clear();
+        }
+
+
+        #endregion
+
+
+        #region --- 編碼位數轉換 ---
 
 
         private void SongMaintenance_CodeConvTo6_Button_Click(object sender, EventArgs e)
@@ -392,7 +612,7 @@ namespace CrazyKTV_SongMgr
                         });
                     }
 
-                    this.BeginInvoke((Action)delegate()
+                    this.BeginInvoke((Action)delegate ()
                     {
                         Global.TimerEndTime = DateTime.Now;
                         SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[2] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[3] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
@@ -496,8 +716,8 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【編碼位數轉換】此首歌曲的語系資料不正確: " + str;
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
-                    
-                    this.BeginInvoke((Action)delegate()
+
+                    this.BeginInvoke((Action)delegate ()
                     {
                         SongMaintenance_Tooltip_Label.Text = "正在配發第 " + Global.SongDT.Rows.IndexOf(row) + " 首歌曲的歌曲編號,請稍待...";
                     });
@@ -540,7 +760,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate()
+                this.BeginInvoke((Action)delegate ()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[2] + " 首歌曲的歌曲編號,請稍待...";
                 });
@@ -548,6 +768,7 @@ namespace CrazyKTV_SongMgr
             conn.Close();
             list.Clear();
         }
+
 
         private void SongMaintenance_CodeCorrect_Button_Click(object sender, EventArgs e)
         {
@@ -585,7 +806,7 @@ namespace CrazyKTV_SongMgr
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeCorrectEndTask =>
                 {
-                    this.BeginInvoke((Action)delegate()
+                    this.BeginInvoke((Action)delegate ()
                     {
                         Global.TimerEndTime = DateTime.Now;
                         SongMaintenance_Tooltip_Label.Text = "總共校正 " + Global.TotalList[0] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
@@ -596,6 +817,7 @@ namespace CrazyKTV_SongMgr
                 });
             }
         }
+
 
         private void SongMaintenance_CodeCorrectTask()
         {
@@ -642,7 +864,7 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
 
-                    this.BeginInvoke((Action)delegate()
+                    this.BeginInvoke((Action)delegate ()
                     {
                         SongMaintenance_Tooltip_Label.Text = "正在配發第 " + Global.SongDT.Rows.IndexOf(row) + " 首歌曲的歌曲編號,請稍待...";
                     });
@@ -685,7 +907,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate()
+                this.BeginInvoke((Action)delegate ()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的歌曲編號,請稍待...";
                 });
@@ -694,165 +916,95 @@ namespace CrazyKTV_SongMgr
             list.Clear();
         }
 
-        private void SongMaintenance_LRTrackExchange_Button_Click(object sender, EventArgs e)
+
+        #endregion
+
+
+        #region --- 歌曲路徑變更 ---
+
+
+        private void SongMaintenance_SongPathChange_Button_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("你確定要互換左右聲道數值嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (SongMaintenance_SongPathChange_Button.Text == "瀏覽")
             {
-                Global.TimerStartTime = DateTime.Now;
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                SongMaintenance.CreateSongDataTable();
-                Common_SwitchSetUI(false);
+                FolderBrowserDialog opd = new FolderBrowserDialog();
+                if (SongMaintenance_DestSongPath_TextBox.Text != "") opd.SelectedPath = SongMaintenance_DestSongPath_TextBox.Text;
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_LRTrackExchangeTask()));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), LRTrackExchangeEndTask =>
+                if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
                 {
-                    Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的聲道資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                        Common_SwitchSetUI(true);
-                    });
-                    SongMaintenance.DisposeSongDataTable();
-                });
-            }
-        }
-
-        private void SongMaintenance_LRTrackExchangeTask()
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            List<string> list = new List<string>();
-
-            var query = from row in Global.SongDT.AsEnumerable()
-                         where row.Field<byte>("Song_Track").Equals(1) ||
-                               row.Field<byte>("Song_Track").Equals(2)
-                         select row;
-
-            foreach (DataRow row in query)
-            {
-                switch (row["Song_Track"].ToString())
-                {
-                    case "1":
-                        list.Add("2" + "|" + row["Song_Id"].ToString());
-                        break;
-                    case "2":
-                        list.Add("1" + "|" + row["Song_Id"].ToString());
-                        break;
+                    SongMaintenance_DestSongPath_TextBox.Text = opd.SelectedPath + @"\";
+                    SongMaintenance_SongPathChange_Button.Text = "變更";
                 }
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的聲道資料,請稍待...";
-                });
-            }
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Track = @SongTrack";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in list)
-            {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongTrack", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis)
-                    {
-                        Global.TotalList[0]++;
-                    }
-                }
-                catch
-                {
-                    lock (LockThis)
-                    {
-                        Global.TotalList[1]++;
-                    }
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換左右聲道】更新資料庫時發生錯誤: " + str;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的聲道資料,請稍待...";
-                });
-            }
-            conn.Close();
-            list.Clear();
-        }
-
-        private void SongMaintenance_VolumeChange_TextBox_Validating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-            {
-                SongMaintenance_Tooltip_Label.Text = "此項目的值不能為空白!";
-                e.Cancel = true;
             }
             else
             {
-                if (int.Parse(((TextBox)sender).Text) > 100)
+                if (SongMaintenance_SrcSongPath_TextBox.Text == "")
                 {
-                    SongMaintenance_Tooltip_Label.Text = "此項目只能輸入 0 ~ 100 的值!";
-                    e.Cancel = true;
+                    SongMaintenance_Tooltip_Label.Text = "你尚未輸入【原始路徑】!";
                 }
                 else
                 {
-                    SongMaintenance_Tooltip_Label.Text = "";
+                    if (MessageBox.Show("你確定要變更歌曲路徑嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Global.TimerStartTime = DateTime.Now;
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                        SongMaintenance.CreateSongDataTable();
+                        Common_SwitchSetUI(false);
+
+                        string SrcSongPath = SongMaintenance_SrcSongPath_TextBox.Text;
+                        string DestSongPath = SongMaintenance_DestSongPath_TextBox.Text;
+
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongPathChangeTask(SrcSongPath, DestSongPath)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            Global.TimerEndTime = DateTime.Now;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的歌曲路徑資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                                SongMaintenance_SrcSongPath_TextBox.Text = "";
+                                SongMaintenance_DestSongPath_TextBox.Text = "";
+                                SongMaintenance_SongPathChange_Button.Text = "瀏覽";
+                                Common_SwitchSetUI(true);
+                            });
+                            SongMaintenance.DisposeSongDataTable();
+                        });
+                    }
                 }
             }
         }
 
-        private void SongMaintenance_VolumeChange_Button_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("你確定要變更音量嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Global.TimerStartTime = DateTime.Now;
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                SongMaintenance.CreateSongDataTable();
-                Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_VolumeChangeTask(SongMaintenance_VolumeChange_TextBox.Text)));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), VolumeChangeEndTask =>
-                {
-                    Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的音量資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                        Common_SwitchSetUI(true);
-                    });
-                    SongMaintenance.DisposeSongDataTable();
-                });
-            }
-        }
-
-        private void SongMaintenance_VolumeChangeTask(object VolumeValue)
+        private void SongMaintenance_SongPathChangeTask(object ObjSrcSongPath, object ObjDestSongPath)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            string SongPath = "";
+            string SrcSongPath = (string)ObjSrcSongPath;
+            string DestSongPath = (string)ObjDestSongPath;
             List<string> list = new List<string>();
-            
-            foreach (DataRow row in Global.SongDT.AsEnumerable())
+
+            var query = from row in Global.SongDT.AsEnumerable()
+                        where row.Field<string>("Song_Path").ToLower().Contains(SrcSongPath.ToLower())
+                        select row;
+
+            if (query.Count<DataRow>() > 0)
             {
-                list.Add((string)VolumeValue + "|" + row["Song_Id"].ToString());
-                
-                this.BeginInvoke((Action)delegate()
+                foreach (DataRow row in query)
                 {
-                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的音量資料,請稍待...";
-                });
+                    SongPath = row["Song_Path"].ToString().Replace(SrcSongPath, DestSongPath);
+                    list.Add(SongPath + "|" + row["Song_Id"].ToString());
+
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的歌曲路徑資料,請稍待...";
+                    });
+                }
             }
 
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Volume = @SongVolume";
+            string sqlColumnStr = "Song_Path = @SongPath";
             string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
@@ -861,7 +1013,7 @@ namespace CrazyKTV_SongMgr
             {
                 valuelist = new List<string>(str.Split('|'));
 
-                cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
+                cmd.Parameters.AddWithValue("@SongPath", valuelist[0]);
                 cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
 
                 try
@@ -879,19 +1031,1079 @@ namespace CrazyKTV_SongMgr
                         Global.TotalList[1]++;
                     }
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【變更歌曲音量】更新資料庫時發生錯誤: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【變更歌曲路徑】更新資料庫時發生錯誤: " + str;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate()
+                this.BeginInvoke((Action)delegate ()
                 {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的音量資料,請稍待...";
+                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的歌曲路徑資料,請稍待...";
                 });
             }
             conn.Close();
             list.Clear();
         }
+
+
+        #endregion
+
+
+        #region --- 播放次數 ---
+
+
+        private void SongMaintenance_PlayCountExport_Button_Click(object sender, EventArgs e)
+        {
+            SongMaintenance.CreateSongDataTable();
+            List<string> list = new List<string>();
+
+            if (Global.SongDT.Rows.Count > 0)
+            {
+                foreach (DataRow row in Global.SongDT.AsEnumerable())
+                {
+                    if (row["Song_PlayCount"].ToString() != "")
+                    {
+                        if (Convert.ToInt32(row["Song_PlayCount"].ToString()) > 0)
+                        {
+                            list.Add("ktv_Song," + row["Song_Lang"].ToString() + "," + row["Song_Singer"].ToString() + "," + row["Song_SongName"].ToString() + "," + row["Song_PlayCount"].ToString());
+                        }
+                    }
+                }
+            }
+
+            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\PlayCount.txt");
+            foreach (string str in list)
+            {
+                sw.WriteLine(str);
+            }
+
+            SongMaintenance_Tooltip_Label.Text = @"已將播放次數資料匯出至【SongMgr\Backup\PlayCount.txt】檔案。";
+            sw.Close();
+            SongMaintenance.DisposeSongDataTable();
+        }
+
+
+        private void SongMaintenance_PlayCountImport_Button_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\PlayCount.txt"))
+            {
+                if (SongMaintenance_Tooltip_Label.Text == @"【SongMgr\Backup\PlayCount.txt】播放次數備份檔案不存在!") SongMaintenance_Tooltip_Label.Text = "";
+                if (MessageBox.Show("你確定要匯入播放次數資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    SongMaintenance.CreateSongDataTable();
+                    Common_SwitchSetUI(false);
+
+                    SongMaintenance_Tooltip_Label.Text = "正在匯入播放次數資料,請稍待...";
+
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PlayCountImportTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountImportEndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 筆播放次數資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                            SongMaintenance.DisposeSongDataTable();
+                        });
+                    });
+                }
+            }
+            else
+            {
+                SongMaintenance_Tooltip_Label.Text = @"【SongMgr\Backup\PlayCount.txt】播放次數備份檔案不存在!";
+            }
+        }
+
+
+        private void SongMaintenance_PlayCountImportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            List<string> list = new List<string>();
+            List<string> Addlist = new List<string>();
+
+            OleDbConnection conn = new OleDbConnection();
+            OleDbCommand cmd = new OleDbCommand();
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+
+            StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\PlayCount.txt", Encoding.UTF8);
+            while (!sr.EndOfStream)
+            {
+                Addlist.Add(sr.ReadLine());
+            }
+            sr.Close();
+
+            string sqlColumnStr = "Song_PlayCount = @SongPlayCount";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+
+            foreach (string AddStr in Addlist)
+            {
+                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
+                switch (list[0])
+                {
+                    case "ktv_Song":
+                        var query = from row in Global.SongDT.AsEnumerable()
+                                    where row.Field<string>("Song_Lang").Equals(list[1]) &&
+                                          row.Field<string>("Song_Singer").Equals(list[2]) &&
+                                          row.Field<string>("Song_SongName").Equals(list[3])
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
+                        {
+                            foreach (DataRow row in query)
+                            {
+                                string SongId = row["Song_Id"].ToString();
+                                cmd.Parameters.AddWithValue("@SongPlayCount", list[4]);
+                                cmd.Parameters.AddWithValue("@SongId", SongId);
+                                cmd.ExecuteNonQuery();
+                                cmd.Parameters.Clear();
+                                lock (LockThis)
+                                {
+                                    Global.TotalList[0]++;
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+            conn.Close();
+        }
+
+
+        private void SongMaintenance_PlayCountReset_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要重置播放次數嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PlayCountResetTask()));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountResetEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共重置 " + Global.TotalList[0] + " 首歌曲的播放次數,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            }
+        }
+
+
+        private void SongMaintenance_PlayCountResetTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+
+            foreach (DataRow row in Global.SongDT.AsEnumerable())
+            {
+                list.Add("0" + "|" + row["Song_Id"].ToString());
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的播放次數資料,請稍待...";
+                });
+            }
+
+            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            OleDbCommand cmd = new OleDbCommand();
+            string sqlColumnStr = "Song_PlayCount = @SongPlayCount";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+            List<string> valuelist = new List<string>();
+
+            foreach (string str in list)
+            {
+                valuelist = new List<string>(str.Split('|'));
+
+                cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[0]);
+                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    lock (LockThis)
+                    {
+                        Global.TotalList[0]++;
+                    }
+                }
+                catch
+                {
+                    lock (LockThis)
+                    {
+                        Global.TotalList[1]++;
+                    }
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【重置播放次數】更新資料庫時發生錯誤: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+                cmd.Parameters.Clear();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的播放次數資料,請稍待...";
+                });
+            }
+            conn.Close();
+            list.Clear();
+        }
+
+
+        #endregion
+
+
+        #region --- 雜項 ---
+
+
+        private void SongMaintenance_SongWordCountCorrect_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要校正歌曲字數嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_WordCountCorrectTask()));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的歌曲字數,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            }
+        }
+
+
+        private void SongMaintenance_WordCountCorrectTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            List<string> SongWordCountList = new List<string>();
+
+            foreach (DataRow row in Global.SongDT.AsEnumerable())
+            {
+                SongWordCountList = CommonFunc.GetSongWordCount(row["Song_SongName"].ToString());
+                string SongWordCount = SongWordCountList[0];
+
+                list.Add(SongWordCount + "|" + row["Song_Id"].ToString());
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的字數資料,請稍待...";
+                });
+            }
+
+            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            OleDbCommand cmd = new OleDbCommand();
+            string sqlColumnStr = "Song_WordCount = @SongWordCount";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+            List<string> valuelist = new List<string>();
+
+            foreach (string str in list)
+            {
+                valuelist = new List<string>(str.Split('|'));
+
+                cmd.Parameters.AddWithValue("@SongWordCount", valuelist[0]);
+                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    lock (LockThis)
+                    {
+                        Global.TotalList[0]++;
+                    }
+                }
+                catch
+                {
+                    lock (LockThis)
+                    {
+                        Global.TotalList[1]++;
+                    }
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【字數校正】更新資料庫時發生錯誤: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+                cmd.Parameters.Clear();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的字數資料,請稍待...";
+                });
+            }
+            conn.Close();
+            list.Clear();
+        }
+
+
+        private void SongMaintenance_RemoveEmptyDirs_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要移除空資料夾嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在解析空資料夾,請稍待...";
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RemoveEmptyDirsTask(Global.SongMgrDestFolder, false)));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        if (Global.TotalList[0] == 0)
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "恭喜！在你的歌庫資料夾裡沒有發現任何空白資料夾。";
+                        }
+                        else
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "總共移除 " + Global.TotalList[0] + " 個空資料夾,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        }
+                        Common_SwitchSetUI(true);
+                    });
+                });
+            }
+        }
+
+
+        private void SongMaintenance_RemoveEmptyDirsTask(string dir, bool stepBack)
+        {
+            string RootDir = Global.SongMgrDestFolder;
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Directory.GetFileSystemEntries(dir).Length > 0)
+            {
+                if (!stepBack)
+                {
+                    foreach (string subdir in Directory.GetDirectories(dir))
+                    {
+                        SongMaintenance_RemoveEmptyDirsTask(subdir, false);
+                    }
+                }
+            }
+            else
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(dir);
+                if ((dirinfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    dirinfo.Attributes = dirinfo.Attributes & ~FileAttributes.ReadOnly;
+                }
+
+                try
+                {
+                    Directory.Delete(dir);
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【移除空資料夾】以下為已移除的空資料夾: " + dir;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    lock (LockThis) { Global.TotalList[0]++; }
+                }
+                catch
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【移除空資料夾】無法移除因資料夾已被占用: " + dir;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+
+                string prevDir = dir.Substring(0, dir.LastIndexOf("\\"));
+                if (RootDir.Length <= prevDir.Length) SongMaintenance_RemoveEmptyDirsTask(prevDir, true);
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "已移除掉 " + Global.TotalList[0] + " 個空資料夾,請稍待...";
+                });
+            }
+        }
+
+
+        private void SongMaintenance_CompactAccessDB_Button_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Global.CrazyktvDatabaseFile))
+            {
+                if (MessageBox.Show("你確定要壓縮並修復資料庫嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+                    File.Copy(Global.CrazyktvDatabaseFile, Application.StartupPath + @"\SongMgr\Backup\" + DateTime.Now.ToLongDateString() + "_Compact_CrazySong.mdb", true);
+
+                    Common_SwitchSetUI(false);
+                    CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
+                    Common_SwitchSetUI(true);
+                }
+            }
+        }
+
+
+        #endregion
+
+
+        #region --- 遙控設定 ---
+
+
+        private void SongMaintenance_RemoteCfgExport_Button_Click(object sender, EventArgs e)
+        {
+            List<string> list = new List<string>();
+            string RemoteQuerySqlStr = "";
+            DataTable dt = new DataTable();
+
+            string sqlColumnStr = "Remote_Id, Remote_Subject, Remote_Controler, Remote_Controler2, Remote_Name";
+            RemoteQuerySqlStr = "select " + sqlColumnStr + " from ktv_Remote";
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, RemoteQuerySqlStr, "");
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    list.Add("ktv_Remote," + row["Remote_Id"].ToString() + "," + row["Remote_Subject"].ToString() + "," + row["Remote_Controler"].ToString() + "," + row["Remote_Controler2"].ToString() + "," + row["Remote_Name"].ToString());
+                }
+            }
+
+            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Remote.txt");
+            foreach (string str in list)
+            {
+                sw.WriteLine(str);
+            }
+
+            SongMaintenance_Tooltip_Label.Text = @"已將遙控設定匯出至【SongMgr\Backup\Remote.txt】檔案。";
+            sw.Close();
+            list.Clear();
+            dt.Dispose();
+        }
+
+
+        private void SongMaintenance_RemoteCfgImport_Button_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Remote.txt"))
+            {
+                if (SongMaintenance_Tooltip_Label.Text == @"【SongMgr\Backup\Remote.txt】遙控設定備份檔案不存在!") SongMaintenance_Tooltip_Label.Text = "";
+                if (MessageBox.Show("你確定要重置並匯入遙控設定嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    SongMaintenance_Tooltip_Label.Text = "正在匯入遙控設定,請稍待...";
+
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RemoteCfgImportTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 項遙控設定,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+            else
+            {
+                SongMaintenance_Tooltip_Label.Text = @"【SongMgr\Backup\Remote.txt】遙控設定備份檔案不存在!";
+            }
+        }
+
+
+        private void SongMaintenance_RemoteCfgImportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            List<string> Addlist = new List<string>();
+
+            OleDbConnection conn = new OleDbConnection();
+            OleDbCommand cmd = new OleDbCommand();
+            OleDbCommand Versioncmd = new OleDbCommand();
+
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            string TruncateSqlStr = "delete * from ktv_Remote";
+            cmd = new OleDbCommand(TruncateSqlStr, conn);
+            cmd.ExecuteNonQuery();
+
+            StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\Remote.txt", Encoding.UTF8); ;
+
+            while (!sr.EndOfStream)
+            {
+                Addlist.Add(sr.ReadLine());
+            }
+            sr.Close();
+
+            string sqlColumnStr = "Remote_Id, Remote_Subject, Remote_Controler, Remote_Controler2, Remote_Name";
+            string sqlValuesStr = "@RemoteId, @RemoteSubject, @RemoteControler, @RemoteControler2, @RemoteName";
+            string RemoteAddSqlStr = "insert into ktv_Remote ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+            cmd = new OleDbCommand(RemoteAddSqlStr, conn);
+
+            foreach (string AddStr in Addlist)
+            {
+                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
+                switch (list[0])
+                {
+                    case "ktv_Remote":
+                        cmd.Parameters.AddWithValue("@RemoteId", list[1]);
+                        cmd.Parameters.AddWithValue("@RemoteSubject", list[2]);
+                        cmd.Parameters.AddWithValue("@RemoteControler", list[3]);
+                        cmd.Parameters.AddWithValue("@RemoteControler2", list[4]);
+                        cmd.Parameters.AddWithValue("@RemoteName", list[5]);
+
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                        lock (LockThis) { Global.TotalList[0]++; }
+                        break;
+                }
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 項遙控設定資料,請稍待...";
+                });
+            }
+            conn.Close();
+        }
+
+
+        #endregion
+
+
+        #region --- 拼音資料 ---
+
+
+        private void SongMaintenance_PhoneticsExport_Button_Click(object sender, EventArgs e)
+        {
+            List<string> list = new List<string>();
+            string PhoneticsQuerySqlStr = "";
+            DataTable dt = new DataTable();
+
+            string sqlColumnStr = "Word, Code, Spell, PenStyle, SortIdx, Strokes";
+            PhoneticsQuerySqlStr = "select " + sqlColumnStr + " from ktv_Phonetics order by Code, SortIdx";
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, PhoneticsQuerySqlStr, "");
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    //list.Add("ktv_Phonetics," + row["Word"].ToString() + "," + CommonFunc.GetWordUnicode(row["Word"].ToString()) + "," + row["Spell"].ToString() + "," + row["PenStyle"].ToString() + "," + row["SortIdx"].ToString() + "," + row["Strokes"].ToString());
+                    list.Add("ktv_Phonetics," + row["Word"].ToString() + "," + row["Code"].ToString() + "," + row["Spell"].ToString() + "," + row["PenStyle"].ToString() + "," + row["SortIdx"].ToString() + "," + row["Strokes"].ToString());
+                }
+            }
+
+            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Phonetics.txt");
+            foreach (string str in list)
+            {
+                sw.WriteLine(str);
+            }
+
+            SongMaintenance_Tooltip_Label.Text = @"已將拼音資料匯出至【SongMgr\Backup\Phonetics.txt】檔案。";
+            sw.Close();
+            list.Clear();
+            dt.Dispose();
+        }
+
+
+        private void SongMaintenance_PhoneticsImport_Button_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Phonetics.txt"))
+            {
+                if (SongMaintenance_Tooltip_Label.Text == @"【SongMgr\Backup\Phonetics.txt】拼音資料備份檔案不存在!") SongMaintenance_Tooltip_Label.Text = "";
+                if (MessageBox.Show("你確定要重置並匯入拼音資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    SongMaintenance_Tooltip_Label.Text = "正在匯入拼音資料,請稍待...";
+
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PhoneticsImportTask(false)));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 項拼音資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+            else
+            {
+                SongMaintenance_Tooltip_Label.Text = @"【SongMgr\Backup\Phonetics.txt】拼音資料備份檔案不存在!";
+            }
+        }
+
+
+        private void SongMaintenance_PhoneticsImportTask(bool Update)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            List<string> Addlist = new List<string>();
+
+            OleDbConnection conn = new OleDbConnection();
+            OleDbCommand cmd = new OleDbCommand();
+            OleDbCommand Versioncmd = new OleDbCommand();
+
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            string TruncateSqlStr = "delete * from ktv_Phonetics";
+            cmd = new OleDbCommand(TruncateSqlStr, conn);
+            cmd.ExecuteNonQuery();
+
+            StreamReader sr;
+            if (Update)
+            {
+                sr = new StreamReader(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt", Encoding.UTF8);
+            }
+            else
+            {
+                sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\Phonetics.txt", Encoding.UTF8);
+            }
+
+            while (!sr.EndOfStream)
+            {
+                Addlist.Add(sr.ReadLine());
+            }
+            sr.Close();
+
+            string sqlColumnStr = "Word, Code, Spell, PenStyle, SortIdx, Strokes";
+            string sqlValuesStr = "@Word, @Code, @Spell, @PenStyle, @SortIdx, @Strokes";
+            string RemoteAddSqlStr = "insert into ktv_Phonetics ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+            cmd = new OleDbCommand(RemoteAddSqlStr, conn);
+
+            foreach (string AddStr in Addlist)
+            {
+                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
+                switch (list[0])
+                {
+                    case "ktv_Version":
+                        string VersionSqlStr = "PhoneticsDB = @PhoneticsDB";
+                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id=@Id";
+                        Versioncmd = new OleDbCommand(VersionUpdateSqlStr, conn);
+                        Versioncmd.Parameters.AddWithValue("@PhoneticsDB", list[1]);
+                        Versioncmd.Parameters.AddWithValue("@Id", "1");
+                        Versioncmd.ExecuteNonQuery();
+                        Versioncmd.Parameters.Clear();
+                        break;
+                    case "ktv_Phonetics":
+                        cmd.Parameters.AddWithValue("@Word", list[1]);
+                        cmd.Parameters.AddWithValue("@Code", list[2]);
+                        cmd.Parameters.AddWithValue("@Spell", list[3]);
+                        cmd.Parameters.AddWithValue("@PenStyle", list[4]);
+                        cmd.Parameters.AddWithValue("@SortIdx", list[5]);
+                        cmd.Parameters.AddWithValue("@Strokes", list[6]);
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                        lock (LockThis) { Global.TotalList[0]++; }
+                        break;
+                }
+
+                this.BeginInvoke((Action)delegate ()
+                {
+
+                    SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 項拼音資料,請稍待...";
+                });
+            }
+            conn.Close();
+        }
+
+
+        private void SongMaintenance_NonPhoneticsWordLog_Button_Click(object sender, EventArgs e)
+        {
+            Global.TimerStartTime = DateTime.Now;
+            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+            SongMaintenance.CreateSongDataTable();
+            Common_SwitchSetUI(false);
+
+            var tasks = new List<Task>();
+            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_NonPhoneticsWordLogTask()));
+
+            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+            {
+                Global.TimerEndTime = DateTime.Now;
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "總共從 " + Global.TotalList[0] + " 首歌曲,查詢到 " + Global.TotalList[1] + " 筆無拼音資料的文字,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                    Common_SwitchSetUI(true);
+                });
+                SongMaintenance.DisposeSongDataTable();
+            });
+        }
+
+
+        private void SongMaintenance_NonPhoneticsWordLogTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            List<string> wordlist = new List<string>();
+            string MatchWord = "";
+
+            Parallel.ForEach(Global.SongDT.AsEnumerable(), (row, loopState) =>
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                MatchWord = row["Song_Singer"].ToString() + row["Song_SongName"].ToString();
+                MatchWord = Regex.Replace(MatchWord, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
+
+                if (MatchWord != "")
+                {
+                    MatchCollection CJKCharMatches = Regex.Matches(MatchWord, @"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]|[\uac00-\ud7ff])");
+                    if (CJKCharMatches.Count > 0)
+                    {
+                        foreach (Match m in CJKCharMatches)
+                        {
+                            if (wordlist.IndexOf(m.Value) < 0)
+                            {
+                                // 查找資料庫拼音資料
+                                if (Global.PhoneticsWordList.IndexOf(m.Value) < 0)
+                                {
+                                    if (list.IndexOf(m.Value) < 0)
+                                    {
+                                        list.Add(m.Value);
+                                        lock (LockThis) { Global.TotalList[1]++; }
+                                    }
+                                }
+                                wordlist.Add(m.Value);
+                            }
+                        }
+                    }
+                }
+                lock (LockThis) { Global.TotalList[0]++; }
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + Global.TotalList[0] + " 首歌曲的拼音資料,請稍待...";
+                });
+            });
+
+            wordlist.Clear();
+            if (list.Count > 0)
+            {
+                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【記錄無拼音字】以下為無拼音資料的文字: " + string.Join(",", list);
+                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+            }
+        }
+
+
+        #endregion
+
+
+        #region --- 歌庫結構重建 ---
+
+
+        private void SongMaintenance_RebuildSongStructure_Button_Click(object sender, EventArgs e)
+        {
+            if (SongMaintenance_RebuildSongStructure_Button.Text == "瀏覽")
+            {
+                FolderBrowserDialog opd = new FolderBrowserDialog();
+                if (SongMaintenance_RebuildSongStructure_TextBox.Text != "") opd.SelectedPath = SongMaintenance_RebuildSongStructure_TextBox.Text;
+
+                if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
+                {
+                    if (Directory.GetFiles(opd.SelectedPath, "*", SearchOption.AllDirectories).Count() == 0)
+                    {
+                        if (SongMaintenance_Tooltip_Label.Text == "請選擇一個空白的資料夾!") SongMaintenance_Tooltip_Label.Text = "";
+                        SongMaintenance_RebuildSongStructure_TextBox.Text = opd.SelectedPath;
+                        SongMaintenance_RebuildSongStructure_Button.Text = "重建";
+                    }
+                    else
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "請選擇一個空白的資料夾!";
+                    }
+                }
+            }
+            else
+            {
+                if (SongMaintenance_RebuildSongStructure_TextBox.Text == "")
+                {
+                    SongMaintenance_Tooltip_Label.Text = "你尚未選擇【重建資料夾】!";
+                }
+                else
+                {
+                    if (MessageBox.Show("你確定要重建歌庫結構嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Global.TimerStartTime = DateTime.Now;
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                        SongMaintenance.CreateSongDataTable();
+                        Common_SwitchSetUI(false);
+
+                        string RebuildSongPath = SongMaintenance_RebuildSongStructure_TextBox.Text;
+
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RebuildSongStructureTask(RebuildSongPath, Global.SongMgrSongAddMode)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            Global.TimerEndTime = DateTime.Now;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "總共重建 " + Global.TotalList[0] + " 首歌曲,忽略 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成重建。";
+                                SongMaintenance_RebuildSongStructure_TextBox.Text = "";
+                                SongMaintenance_RebuildSongStructure_Button.Text = "瀏覽";
+
+                                Global.SongMgrDestFolder = RebuildSongPath;
+                                SongMgrCfg_DestFolder_TextBox.Text = RebuildSongPath;
+                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder", Global.SongMgrDestFolder);
+
+                                // 統計歌曲數量
+                                Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                                Common_SwitchSetUI(true);
+                            });
+                            SongMaintenance.DisposeSongDataTable();
+                        });
+                    }
+                }
+            }
+        }
+
+
+        private void SongMaintenance_RebuildSongStructureTask(string RebuildSongPath, string RebuildMode)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+            List<string> RebuildSongFileValueList = new List<string>();
+
+            foreach (DataRow row in Global.SongDT.Rows)
+            {
+                string SongId = row["Song_Id"].ToString();
+                string SongLang = row["Song_Lang"].ToString();
+                int SongSingerType = Convert.ToInt32(row["Song_SingerType"]);
+                string SongSinger = row["Song_Singer"].ToString();
+                string SongSongName = row["Song_SongName"].ToString();
+                int SongTrack = Convert.ToInt32(row["Song_Track"]);
+                string SongSongType = row["Song_SongType"].ToString();
+                string SongFileName = row["Song_FileName"].ToString();
+                string SongPath = row["Song_Path"].ToString();
+
+                bool HasInvalidChar = false;
+                Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
+                if (r.IsMatch(SongLang)) HasInvalidChar = true;
+                if (r.IsMatch(SongSinger)) HasInvalidChar = true;
+                if (r.IsMatch(SongSongName)) HasInvalidChar = true;
+                if (r.IsMatch(SongSongType)) HasInvalidChar = true;
+
+                if (SongSingerType < 0 | SongSingerType > 10)
+                {
+                    SongSingerType = 10;
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+
+                string SongSingerStr = SongSinger;
+                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
+                string CrtchorusSeparate;
+                string SongInfoSeparate;
+                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
+                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
+
+                if (SongTrack < 1 | SongTrack > 5)
+                {
+                    SongTrack = 1;
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "|" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
+
+                // 重建歌檔
+                string SongSrcPath = Path.Combine(SongPath, SongFileName);
+                string SongExtension = Path.GetExtension(SongSrcPath);
+
+                if (SongSingerType == 3)
+                {
+                    SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
+                }
+
+                switch (Global.SongMgrFolderStructure)
+                {
+                    case "1":
+                        if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
+                        {
+                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                        }
+                        else
+                        {
+                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                        }
+                        break;
+                    case "2":
+                        SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                        break;
+                }
+
+                switch (Global.SongMgrFileStructure)
+                {
+                    case "1":
+                        if (SongSongType == "")
+                        {
+                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        else
+                        {
+                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        break;
+                    case "2":
+                        if (SongSongType == "")
+                        {
+                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        else
+                        {
+                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        break;
+                    case "3":
+                        if (SongSongType == "")
+                        {
+                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        else
+                        {
+                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        break;
+                }
+
+                string SongDestPath = "";
+                if (!HasInvalidChar) { SongDestPath = Path.Combine(SongPath, SongFileName); }
+
+                bool FileIOError = false;
+                if (File.Exists(SongSrcPath) & !HasInvalidChar)
+                {
+                    if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
+
+                    try
+                    {
+                        switch (RebuildMode)
+                        {
+                            case "1":
+                                FileAttributes attributes = File.GetAttributes(SongSrcPath);
+                                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                                {
+                                    attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                    File.SetAttributes(SongSrcPath, attributes);
+                                }
+
+                                if (File.Exists(SongDestPath)) File.Delete(SongDestPath);
+                                File.Move(SongSrcPath, SongDestPath);
+                                break;
+                            case "2":
+                                File.Copy(SongSrcPath, SongDestPath, true);
+                                break;
+                        }
+                    }
+                    catch
+                    {
+                        FileIOError = true;
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongSrcPath + " (唯讀或使用中)";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                }
+                else
+                {
+                    FileIOError = true;
+                    if (HasInvalidChar)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongSongType + " (含有非法字元)";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    else
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    lock (LockThis) { Global.TotalList[1]++; }
+                }
+
+                if (!FileIOError)
+                {
+                    string RebuildSongFileValue = SongId + "|" + SongSingerType + "|" + SongTrack + "|" + SongFileName + "|" + SongPath;
+                    RebuildSongFileValueList.Add(RebuildSongFileValue);
+                    lock (LockThis) { Global.TotalList[0]++; }
+
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "已成功將 " + Global.TotalList[0] + " 首歌曲重建至重建資料夾,請稍待...";
+                    });
+                }
+            }
+
+            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            OleDbCommand cmd = new OleDbCommand();
+            string sqlColumnStr = "Song_Id = @SongId, Song_SingerType = @SongSingerType, Song_Track = @SongTrack, Song_FileName = @SongFileName, Song_Path = @SongPath";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+
+            List<string> valuelist = new List<string>();
+
+            foreach (string str in RebuildSongFileValueList)
+            {
+                valuelist = new List<string>(str.Split('|'));
+
+                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+                cmd.Parameters.AddWithValue("@SongSingerType", valuelist[1]);
+                cmd.Parameters.AddWithValue("@SongTrack", valuelist[2]);
+                cmd.Parameters.AddWithValue("@SongFileName", valuelist[3]);
+                cmd.Parameters.AddWithValue("@SongPath", valuelist[4]);
+                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    lock (LockThis) { Global.TotalList[3]++; }
+                }
+                catch
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "|" + valuelist[3] + "|" + valuelist[4];
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    lock (LockThis)
+                    {
+                        Global.TotalList[0]--;
+                        Global.TotalList[2]++;
+                    }
+                }
+                cmd.Parameters.Clear();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[3] + " 首歌曲的資料庫資料,請稍待...";
+                });
+            }
+            RebuildSongFileValueList.Clear();
+            conn.Close();
+        }
+
+
+        #endregion
+
+
+        #region --- 我的最愛 ---
+
 
         private void SongMaintenance_GetFavoriteUserList()
         {
@@ -1093,6 +2305,7 @@ namespace CrazyKTV_SongMgr
             dt.Dispose();
         }
 
+
         private void SongMaintenance_FavoriteExport_Button_Click(object sender, EventArgs e)
         {
             SongMaintenance.CreateSongDataTable();
@@ -1146,6 +2359,7 @@ namespace CrazyKTV_SongMgr
             SongMaintenance.DisposeSongDataTable();
         }
 
+
         private void SongMaintenance_FavoriteImport_Button_Click(object sender, EventArgs e)
         {
             if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt"))
@@ -1191,6 +2405,7 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_Tooltip_Label.Text = @"【SongMgr\Backup\Favorite.txt】我的最愛備份檔案不存在!";
             }
         }
+
 
         private void SongMaintenance_FavoriteImportTask()
         {
@@ -1275,209 +2490,11 @@ namespace CrazyKTV_SongMgr
             conn.Close();
         }
 
-        private void SongMaintenance_PlayCountReset_Button_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("你確定要重置播放次數嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Global.TimerStartTime = DateTime.Now;
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                SongMaintenance.CreateSongDataTable();
-                Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PlayCountResetTask()));
+        #endregion
 
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountResetEndTask =>
-                {
-                    Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "總共重置 " + Global.TotalList[0] + " 首歌曲的播放次數,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                        Common_SwitchSetUI(true);
-                    });
-                    SongMaintenance.DisposeSongDataTable();
-                });
-            }
-        }
 
-        private void SongMaintenance_PlayCountResetTask()
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            List<string> list = new List<string>();
-
-            foreach (DataRow row in Global.SongDT.AsEnumerable())
-            {
-                list.Add("0" + "|" + row["Song_Id"].ToString());
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的播放次數資料,請稍待...";
-                });
-            }
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_PlayCount = @SongPlayCount";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in list)
-            {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis)
-                    {
-                        Global.TotalList[0]++;
-                    }
-                }
-                catch
-                {
-                    lock (LockThis)
-                    {
-                        Global.TotalList[1]++;
-                    }
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【重置播放次數】更新資料庫時發生錯誤: " + str;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的播放次數資料,請稍待...";
-                });
-            }
-            conn.Close();
-            list.Clear();
-        }
-
-        private void SongMaintenance_SongPathChange_Button_Click(object sender, EventArgs e)
-        {
-            if (SongMaintenance_SongPathChange_Button.Text == "瀏覽")
-            {
-                FolderBrowserDialog opd = new FolderBrowserDialog();
-                if (SongMaintenance_DestSongPath_TextBox.Text != "") opd.SelectedPath = SongMaintenance_DestSongPath_TextBox.Text;
-
-                if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
-                {
-                    SongMaintenance_DestSongPath_TextBox.Text = opd.SelectedPath + @"\";
-                    SongMaintenance_SongPathChange_Button.Text = "變更";
-                }
-            }
-            else
-            {
-                if (SongMaintenance_SrcSongPath_TextBox.Text == "")
-                {
-                    SongMaintenance_Tooltip_Label.Text = "你尚未輸入【原始路徑】!";
-                }
-                else
-                {
-                    if (MessageBox.Show("你確定要變更歌曲路徑嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        Global.TimerStartTime = DateTime.Now;
-                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                        SongMaintenance.CreateSongDataTable();
-                        Common_SwitchSetUI(false);
-
-                        string SrcSongPath = SongMaintenance_SrcSongPath_TextBox.Text;
-                        string DestSongPath = SongMaintenance_DestSongPath_TextBox.Text;
-
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongPathChangeTask(SrcSongPath, DestSongPath)));
-
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                        {
-                            Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate()
-                            {
-                                SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的歌曲路徑資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                                SongMaintenance_SrcSongPath_TextBox.Text = "";
-                                SongMaintenance_DestSongPath_TextBox.Text = "";
-                                SongMaintenance_SongPathChange_Button.Text = "瀏覽";
-                                Common_SwitchSetUI(true);
-                            });
-                            SongMaintenance.DisposeSongDataTable();
-                        });
-                    }
-                }
-            }
-        }
-
-        private void SongMaintenance_SongPathChangeTask(object ObjSrcSongPath, object ObjDestSongPath)
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            string SongPath = "";
-            string SrcSongPath = (string)ObjSrcSongPath;
-            string DestSongPath = (string)ObjDestSongPath;
-            List<string> list = new List<string>();
-
-            var query = from row in Global.SongDT.AsEnumerable()
-                        where row.Field<string>("Song_Path").ToLower().Contains(SrcSongPath.ToLower())
-                        select row;
-
-            if (query.Count<DataRow>() > 0)
-            {
-                foreach (DataRow row in query)
-                {
-                    SongPath = row["Song_Path"].ToString().Replace(SrcSongPath, DestSongPath);
-                    list.Add(SongPath + "|" + row["Song_Id"].ToString());
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的歌曲路徑資料,請稍待...";
-                    });
-                }
-            }
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Path = @SongPath";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in list)
-            {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongPath", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis)
-                    {
-                        Global.TotalList[0]++;
-                    }
-                }
-                catch
-                {
-                    lock (LockThis)
-                    {
-                        Global.TotalList[1]++;
-                    }
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【變更歌曲路徑】更新資料庫時發生錯誤: " + str;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的歌曲路徑資料,請稍待...";
-                });
-            }
-            conn.Close();
-            list.Clear();
-        }
+        #region --- 自訂語系 ---
 
         private void SongMaintenance_SetCustomLangControl()
         {
@@ -1520,6 +2537,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+
         private void SongMaintenance_TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (SongMaintenance_TabControl.SelectedTab.Name)
@@ -1542,6 +2560,7 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
 
         private void SongMaintenance_SongLangUpdateTask()
         {
@@ -1609,707 +2628,141 @@ namespace CrazyKTV_SongMgr
             conn.Close();
         }
 
-        private void SongMaintenance_SongWordCountCorrect_Button_Click(object sender, EventArgs e)
+
+        #endregion
+
+
+        #region --- 多重歌庫 ---
+
+
+        private void SongMaintenance_EnableMultiSongPath_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (MessageBox.Show("你確定要校正歌曲字數嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            Global.SongMaintenanceEnableMultiSongPath = SongMaintenance_EnableMultiSongPath_CheckBox.Checked.ToString();
+            switch (Global.SongMaintenanceEnableMultiSongPath)
             {
-                Global.TimerStartTime = DateTime.Now;
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                SongMaintenance.CreateSongDataTable();
-                Common_SwitchSetUI(false);
-
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_WordCountCorrectTask()));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                {
-                    Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的歌曲字數,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                        Common_SwitchSetUI(true);
-                    });
-                    SongMaintenance.DisposeSongDataTable();
-                });
+                case "True":
+                    SongMaintenance_MultiSongPath_ListBox.Enabled = true;
+                    SongMaintenance_MultiSongPath_Button.Enabled = true;
+                    // 統計歌曲數量
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
+                case "False":
+                    SongMaintenance_MultiSongPath_ListBox.Enabled = false;
+                    SongMaintenance_MultiSongPath_Button.Enabled = false;
+                    // 統計歌曲數量
+                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
             }
         }
 
-        private void SongMaintenance_WordCountCorrectTask()
+
+        private void SongMaintenance_MultiSongPath_ListBox_Enter(object sender, EventArgs e)
         {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            List<string> list = new List<string>();
-            List<string> SongWordCountList = new List<string>();
+            SongMaintenance_MultiSongPath_Button.Text = "移除";
+        }
 
-            foreach (DataRow row in Global.SongDT.AsEnumerable())
+
+        private void SongMaintenance_MultiSongPath_TextBox_Enter(object sender, EventArgs e)
+        {
+            if (SongMaintenance_MultiSongPath_TextBox.Text != "")
             {
-                SongWordCountList = CommonFunc.GetSongWordCount(row["Song_SongName"].ToString());
-                string SongWordCount = SongWordCountList[0];
-
-                list.Add(SongWordCount + "|" + row["Song_Id"].ToString());
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的字數資料,請稍待...";
-                });
+                SongMaintenance_MultiSongPath_Button.Text = "加入";
             }
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_WordCount = @SongWordCount";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in list)
+            else
             {
-                valuelist = new List<string>(str.Split('|'));
+                SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
+            }
+        }
 
-                cmd.Parameters.AddWithValue("@SongWordCount", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
 
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis)
+        private void SongMaintenance_MultiSongPath_Button_Click(object sender, EventArgs e)
+        {
+            switch (SongMaintenance_MultiSongPath_Button.Text)
+            {
+                case "瀏覽":
+                    FolderBrowserDialog opd = new FolderBrowserDialog();
+                    if (SongMaintenance_MultiSongPath_TextBox.Text != "") opd.SelectedPath = SongMaintenance_MultiSongPath_TextBox.Text;
+
+                    if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
                     {
-                        Global.TotalList[0]++;
+                        SongMaintenance_MultiSongPath_TextBox.Text = opd.SelectedPath + @"\";
+                        SongMaintenance_MultiSongPath_Button.Text = "加入";
                     }
-                }
-                catch
-                {
-                    lock (LockThis)
+                    break;
+                case "加入":
+                    DataTable dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
+                    if (dt == null)
                     {
-                        Global.TotalList[1]++;
+                        dt = new DataTable();
+                        dt.Columns.Add(new DataColumn("Display", typeof(string)));
+                        dt.Columns.Add(new DataColumn("Value", typeof(int)));
+                        dt.Rows.Add(dt.NewRow());
+                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
+                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
                     }
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【字數校正】更新資料庫時發生錯誤: " + str;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的字數資料,請稍待...";
-                });
-            }
-            conn.Close();
-            list.Clear();
-        }
-
-        private void SongMaintenance_RemoteCfgExport_Button_Click(object sender, EventArgs e)
-        {
-            List<string> list = new List<string>();
-            string RemoteQuerySqlStr = "";
-            DataTable dt = new DataTable();
-
-            string sqlColumnStr = "Remote_Id, Remote_Subject, Remote_Controler, Remote_Controler2, Remote_Name";
-            RemoteQuerySqlStr = "select " + sqlColumnStr + " from ktv_Remote";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, RemoteQuerySqlStr, "");
-
-            if (dt.Rows.Count > 0)
-            {
-                foreach (DataRow row in dt.AsEnumerable())
-                {
-                    list.Add("ktv_Remote," + row["Remote_Id"].ToString() + "," + row["Remote_Subject"].ToString() + "," + row["Remote_Controler"].ToString() + "," + row["Remote_Controler2"].ToString() + "," + row["Remote_Name"].ToString());
-                }
-            }
-
-            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
-            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Remote.txt");
-            foreach (string str in list)
-            {
-                sw.WriteLine(str);
-            }
-
-            SongMaintenance_Tooltip_Label.Text = @"已將遙控設定匯出至【SongMgr\Backup\Remote.txt】檔案。";
-            sw.Close();
-            list.Clear();
-            dt.Dispose();
-        }
-
-        private void SongMaintenance_RemoteCfgImport_Button_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Remote.txt"))
-            {
-                if (SongMaintenance_Tooltip_Label.Text == @"【SongMgr\Backup\Remote.txt】遙控設定備份檔案不存在!") SongMaintenance_Tooltip_Label.Text = "";
-                if (MessageBox.Show("你確定要重置並匯入遙控設定嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    Global.TimerStartTime = DateTime.Now;
-                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                    Common_SwitchSetUI(false);
-
-                    SongMaintenance_Tooltip_Label.Text = "正在匯入遙控設定,請稍待...";
-
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RemoteCfgImportTask()));
-
-                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    else
                     {
-                        Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate()
-                        {
-                            SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 項遙控設定,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                            Common_SwitchSetUI(true);
-                        });
-                    });
-                }
-            }
-            else
-            {
-                SongMaintenance_Tooltip_Label.Text = @"【SongMgr\Backup\Remote.txt】遙控設定備份檔案不存在!";
-            }
-        }
+                        dt.Rows.Add(dt.NewRow());
+                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
+                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                    }
+                    SongMaintenance_MultiSongPath_TextBox.Text = "";
+                    SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
 
-        private void SongMaintenance_RemoteCfgImportTask()
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            List<string> list = new List<string>();
-            List<string> Addlist = new List<string>();
+                    SongMaintenance_MultiSongPath_ListBox.DataSource = dt;
+                    SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
+                    SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
 
-            OleDbConnection conn = new OleDbConnection();
-            OleDbCommand cmd = new OleDbCommand();
-            OleDbCommand Versioncmd = new OleDbCommand();
+                    Global.SongMaintenanceMultiSongPathList = new List<string>();
 
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            string TruncateSqlStr = "delete * from ktv_Remote";
-            cmd = new OleDbCommand(TruncateSqlStr, conn);
-            cmd.ExecuteNonQuery();
-            
-            StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\Remote.txt", Encoding.UTF8);;
-
-            while (!sr.EndOfStream)
-            {
-                Addlist.Add(sr.ReadLine());
-            }
-            sr.Close();
-
-            string sqlColumnStr = "Remote_Id, Remote_Subject, Remote_Controler, Remote_Controler2, Remote_Name";
-            string sqlValuesStr = "@RemoteId, @RemoteSubject, @RemoteControler, @RemoteControler2, @RemoteName";
-            string RemoteAddSqlStr = "insert into ktv_Remote ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-            cmd = new OleDbCommand(RemoteAddSqlStr, conn);
-
-            foreach (string AddStr in Addlist)
-            {
-                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
-                switch (list[0])
-                {
-                    case "ktv_Remote":
-                        cmd.Parameters.AddWithValue("@RemoteId", list[1]);
-                        cmd.Parameters.AddWithValue("@RemoteSubject", list[2]);
-                        cmd.Parameters.AddWithValue("@RemoteControler", list[3]);
-                        cmd.Parameters.AddWithValue("@RemoteControler2", list[4]);
-                        cmd.Parameters.AddWithValue("@RemoteName", list[5]);
-
-                        cmd.ExecuteNonQuery();
-                        cmd.Parameters.Clear();
-                        lock (LockThis) { Global.TotalList[0]++; }
-                        break;
-                }
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 項遙控設定資料,請稍待...";
-                });
-            }
-            conn.Close();
-        }
-
-        private void SongMaintenance_PhoneticsExport_Button_Click(object sender, EventArgs e)
-        {
-            List<string> list = new List<string>();
-            string PhoneticsQuerySqlStr = "";
-            DataTable dt = new DataTable();
-
-            string sqlColumnStr = "Word, Code, Spell, PenStyle, SortIdx, Strokes";
-            PhoneticsQuerySqlStr = "select " + sqlColumnStr + " from ktv_Phonetics order by Code, SortIdx";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, PhoneticsQuerySqlStr, "");
-            
-            if (dt.Rows.Count > 0)
-            {
-                foreach (DataRow row in dt.AsEnumerable())
-                {
-                    //list.Add("ktv_Phonetics," + row["Word"].ToString() + "," + CommonFunc.GetWordUnicode(row["Word"].ToString()) + "," + row["Spell"].ToString() + "," + row["PenStyle"].ToString() + "," + row["SortIdx"].ToString() + "," + row["Strokes"].ToString());
-                    list.Add("ktv_Phonetics," + row["Word"].ToString() + "," + row["Code"].ToString() + "," + row["Spell"].ToString() + "," + row["PenStyle"].ToString() + "," + row["SortIdx"].ToString() + "," + row["Strokes"].ToString());
-                }
-            }
-
-            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
-            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Phonetics.txt");
-            foreach (string str in list)
-            {
-                sw.WriteLine(str);
-            }
-
-            SongMaintenance_Tooltip_Label.Text = @"已將拼音資料匯出至【SongMgr\Backup\Phonetics.txt】檔案。";
-            sw.Close();
-            list.Clear();
-            dt.Dispose();
-        }
-
-        private void SongMaintenance_PhoneticsImport_Button_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Phonetics.txt"))
-            {
-                if (SongMaintenance_Tooltip_Label.Text == @"【SongMgr\Backup\Phonetics.txt】拼音資料備份檔案不存在!") SongMaintenance_Tooltip_Label.Text = "";
-                if (MessageBox.Show("你確定要重置並匯入拼音資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    Global.TimerStartTime = DateTime.Now;
-                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                    Common_SwitchSetUI(false);
-
-                    SongMaintenance_Tooltip_Label.Text = "正在匯入拼音資料,請稍待...";
-
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PhoneticsImportTask(false)));
-
-                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    if (dt.Rows.Count > 0)
                     {
-                        Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate()
+                        foreach (DataRow row in dt.AsEnumerable())
                         {
-                            SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 項拼音資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                            Common_SwitchSetUI(true);
-                        });
-                    });
-                }
-            }
-            else
-            {
-                SongMaintenance_Tooltip_Label.Text = @"【SongMgr\Backup\Phonetics.txt】拼音資料備份檔案不存在!";
-            }
-        }
-
-        private void SongMaintenance_PhoneticsImportTask(bool Update)
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            List<string> list = new List<string>();
-            List<string> Addlist = new List<string>();
-
-            OleDbConnection conn = new OleDbConnection();
-            OleDbCommand cmd = new OleDbCommand();
-            OleDbCommand Versioncmd = new OleDbCommand();
-
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            string TruncateSqlStr = "delete * from ktv_Phonetics";
-            cmd = new OleDbCommand(TruncateSqlStr, conn);
-            cmd.ExecuteNonQuery();
-
-            StreamReader sr;
-            if (Update) 
-            {
-                sr = new StreamReader(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt", Encoding.UTF8);
-            }
-            else
-            {
-                sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\Phonetics.txt", Encoding.UTF8);
-            }
-            
-            while (!sr.EndOfStream)
-            {
-                Addlist.Add(sr.ReadLine());
-            }
-            sr.Close();
-
-            string sqlColumnStr = "Word, Code, Spell, PenStyle, SortIdx, Strokes";
-            string sqlValuesStr = "@Word, @Code, @Spell, @PenStyle, @SortIdx, @Strokes";
-            string RemoteAddSqlStr = "insert into ktv_Phonetics ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-            cmd = new OleDbCommand(RemoteAddSqlStr, conn);
-
-            foreach (string AddStr in Addlist)
-            {
-                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
-                switch (list[0])
-                {
-                    case "ktv_Version":
-                        string VersionSqlStr = "PhoneticsDB = @PhoneticsDB";
-                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id=@Id";
-                        Versioncmd = new OleDbCommand(VersionUpdateSqlStr, conn);
-                        Versioncmd.Parameters.AddWithValue("@PhoneticsDB", list[1]);
-                        Versioncmd.Parameters.AddWithValue("@Id", "1");
-                        Versioncmd.ExecuteNonQuery();
-                        Versioncmd.Parameters.Clear();
-                        break;
-                    case "ktv_Phonetics":
-                        cmd.Parameters.AddWithValue("@Word", list[1]);
-                        cmd.Parameters.AddWithValue("@Code", list[2]);
-                        cmd.Parameters.AddWithValue("@Spell", list[3]);
-                        cmd.Parameters.AddWithValue("@PenStyle", list[4]);
-                        cmd.Parameters.AddWithValue("@SortIdx", list[5]);
-                        cmd.Parameters.AddWithValue("@Strokes", list[6]);
-                        cmd.ExecuteNonQuery();
-                        cmd.Parameters.Clear();
-                        lock (LockThis) { Global.TotalList[0]++; }
-                        break;
-                }
-
-                this.BeginInvoke((Action)delegate()
-                {
-                        
-                    SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 項拼音資料,請稍待...";
-                });
-            }
-            conn.Close();
-        }
-
-        private void SongMaintenance_NonPhoneticsWordLog_Button_Click(object sender, EventArgs e)
-        {
-            Global.TimerStartTime = DateTime.Now;
-            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-            SongMaintenance.CreateSongDataTable();
-            Common_SwitchSetUI(false);
-
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_NonPhoneticsWordLogTask()));
-
-            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-            {
-                Global.TimerEndTime = DateTime.Now;
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "總共從 " + Global.TotalList[0] + " 首歌曲,查詢到 "  + Global.TotalList[1] + " 筆無拼音資料的文字,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                    Common_SwitchSetUI(true);
-                });
-                SongMaintenance.DisposeSongDataTable();
-            });
-        }
-
-        private void SongMaintenance_NonPhoneticsWordLogTask()
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            List<string> list = new List<string>();
-            List<string> wordlist = new List<string>();
-            string MatchWord = "";
-
-            Parallel.ForEach(Global.SongDT.AsEnumerable(), (row, loopState) =>
-            {
-                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
-                MatchWord = row["Song_Singer"].ToString() + row["Song_SongName"].ToString();
-                MatchWord = Regex.Replace(MatchWord, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
-
-                if (MatchWord != "")
-                {
-                    MatchCollection CJKCharMatches = Regex.Matches(MatchWord, @"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]|[\uac00-\ud7ff])");
-                    if (CJKCharMatches.Count > 0)
-                    {
-                        foreach (Match m in CJKCharMatches)
-                        {
-                            if (wordlist.IndexOf(m.Value) < 0)
+                            if (row["Display"].ToString() != "")
                             {
-                                // 查找資料庫拼音資料
-                                if (Global.PhoneticsWordList.IndexOf(m.Value) < 0)
-                                {
-                                    if (list.IndexOf(m.Value) < 0)
-                                    {
-                                        list.Add(m.Value);
-                                        lock (LockThis) { Global.TotalList[1]++; }
-                                    }
-                                }
-                                wordlist.Add(m.Value);
+                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
                             }
                         }
                     }
-                }
-                lock (LockThis) { Global.TotalList[0]++; }
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + Global.TotalList[0] + " 首歌曲的拼音資料,請稍待...";
-                });
-            });
 
-            wordlist.Clear();
-            if (list.Count > 0)
-            {
-                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【記錄無拼音字】以下為無拼音資料的文字: " + string.Join(",", list);
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-            }
-        }
-
-        private void SongMaintenance_RebuildSongStructure_Button_Click(object sender, EventArgs e)
-        {
-            if (SongMaintenance_RebuildSongStructure_Button.Text == "瀏覽")
-            {
-                FolderBrowserDialog opd = new FolderBrowserDialog();
-                if (SongMaintenance_RebuildSongStructure_TextBox.Text != "") opd.SelectedPath = SongMaintenance_RebuildSongStructure_TextBox.Text;
-
-                if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
-                {
-                    if (Directory.GetFiles(opd.SelectedPath, "*", SearchOption.AllDirectories).Count() == 0)
+                    // 統計歌曲數量
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
+                case "移除":
+                    if (SongMaintenance_MultiSongPath_ListBox.SelectedItem != null)
                     {
-                        if (SongMaintenance_Tooltip_Label.Text == "請選擇一個空白的資料夾!") SongMaintenance_Tooltip_Label.Text = "";
-                        SongMaintenance_RebuildSongStructure_TextBox.Text = opd.SelectedPath;
-                        SongMaintenance_RebuildSongStructure_Button.Text = "重建";
-                    }
-                    else
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "請選擇一個空白的資料夾!";
-                    }
-                }
-            }
-            else
-            {
-                if (SongMaintenance_RebuildSongStructure_TextBox.Text == "")
-                {
-                    SongMaintenance_Tooltip_Label.Text = "你尚未選擇【重建資料夾】!";
-                }
-                else
-                {
-                    if (MessageBox.Show("你確定要重建歌庫結構嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        Global.TimerStartTime = DateTime.Now;
-                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                        SongMaintenance.CreateSongDataTable();
-                        Common_SwitchSetUI(false);
+                        int index = SongMaintenance_MultiSongPath_ListBox.SelectedIndex;
+                        dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
+                        dt.Rows.RemoveAt(index);
 
-                        string RebuildSongPath = SongMaintenance_RebuildSongStructure_TextBox.Text;
-                        
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RebuildSongStructureTask(RebuildSongPath, Global.SongMgrSongAddMode)));
+                        Global.SongMaintenanceMultiSongPathList = new List<string>();
 
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        foreach (DataRow row in dt.AsEnumerable())
                         {
-                            Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate()
+                            if (row["Display"].ToString() != "")
                             {
-                                SongMaintenance_Tooltip_Label.Text = "總共重建 " + Global.TotalList[0] + " 首歌曲,忽略 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成重建。";
-                                SongMaintenance_RebuildSongStructure_TextBox.Text = "";
-                                SongMaintenance_RebuildSongStructure_Button.Text = "瀏覽";
-
-                                Global.SongMgrDestFolder = RebuildSongPath;
-                                SongMgrCfg_DestFolder_TextBox.Text = RebuildSongPath;
-                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder", Global.SongMgrDestFolder);
-
-                                // 統計歌曲數量
-                                Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                                Common_SwitchSetUI(true);
-                            });
-                            SongMaintenance.DisposeSongDataTable();
-                        });
-                    }
-                }
-            }
-        }
-
-        private void SongMaintenance_RebuildSongStructureTask(string RebuildSongPath, string RebuildMode)
-        {
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-            List<string> RebuildSongFileValueList = new List<string>();
-
-            foreach (DataRow row in Global.SongDT.Rows)
-            {
-                string SongId = row["Song_Id"].ToString();
-                string SongLang = row["Song_Lang"].ToString();
-                int SongSingerType = Convert.ToInt32(row["Song_SingerType"]);
-                string SongSinger = row["Song_Singer"].ToString();
-                string SongSongName = row["Song_SongName"].ToString();
-                int SongTrack = Convert.ToInt32(row["Song_Track"]);
-                string SongSongType = row["Song_SongType"].ToString();
-                string SongFileName = row["Song_FileName"].ToString();
-                string SongPath = row["Song_Path"].ToString();
-                
-                bool HasInvalidChar = false;
-                Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
-                if (r.IsMatch(SongLang)) HasInvalidChar = true;
-                if (r.IsMatch(SongSinger)) HasInvalidChar = true;
-                if (r.IsMatch(SongSongName)) HasInvalidChar = true;
-                if (r.IsMatch(SongSongType)) HasInvalidChar = true;
-
-                if (SongSingerType < 0 | SongSingerType > 10)
-                {
-                    SongSingerType = 10;
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-
-                string SongSingerStr = SongSinger;
-                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
-                string CrtchorusSeparate;
-                string SongInfoSeparate;
-                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
-                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-
-                if (SongTrack < 1 | SongTrack > 5 )
-                {
-                    SongTrack = 1;
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "|" + SongSongName;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
-
-                // 重建歌檔
-                string SongSrcPath = Path.Combine(SongPath, SongFileName);
-                string SongExtension = Path.GetExtension(SongSrcPath);
-
-                if (SongSingerType == 3)
-                {
-                    SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
-                }
-
-                switch (Global.SongMgrFolderStructure)
-                {
-                    case "1":
-                        if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                        {
-                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
+                            }
                         }
-                        else
-                        {
-                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                        }
-                        break;
-                    case "2":
-                        SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        break;
-                }
-
-                switch (Global.SongMgrFileStructure)
-                {
-                    case "1":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                    case "2":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                    case "3":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                }
-                
-                string SongDestPath = "";
-                if (!HasInvalidChar) { SongDestPath = Path.Combine(SongPath, SongFileName); }
-                
-                bool FileIOError = false;
-                if (File.Exists(SongSrcPath) & !HasInvalidChar)
-                {
-                    if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
-                   
-                    try
-                    {
-                        switch (RebuildMode)
-                        {
-                            case "1":
-                                FileAttributes attributes = File.GetAttributes(SongSrcPath);
-                                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                                {
-                                    attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
-                                    File.SetAttributes(SongSrcPath, attributes);
-                                }
-
-                                if (File.Exists(SongDestPath)) File.Delete(SongDestPath);
-                                File.Move(SongSrcPath, SongDestPath);
-                                break;
-                            case "2":
-                                File.Copy(SongSrcPath, SongDestPath, true);
-                                break;
-                        }
-                    }
-                    catch
-                    {
-                        FileIOError = true;
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongSrcPath + " (唯讀或使用中)";
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    }
-                }
-                else
-                {
-                    FileIOError = true;
-                    if (HasInvalidChar)
-                    {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】檔案處理發生錯誤: " + SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongSongType + " (含有非法字元)";
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
                     else
                     {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲檔案不存在,已自動忽略重建檔案: " + SongId + "|" + SongSrcPath;
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                        SongMaintenance_Tooltip_Label.Text = "已無可以刪除的多重歌庫資料夾路徑!";
                     }
-                    lock (LockThis) { Global.TotalList[1]++; }
-                }
 
-                if (!FileIOError)
-                {
-                    string RebuildSongFileValue = SongId + "|" + SongSingerType + "|" + SongTrack + "|" + SongFileName + "|" + SongPath;
-                    RebuildSongFileValueList.Add(RebuildSongFileValue);
-                    lock (LockThis) { Global.TotalList[0]++; }
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "已成功將 " + Global.TotalList[0] + " 首歌曲重建至重建資料夾,請稍待...";
-                    });
-                }
+                    // 統計歌曲數量
+                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
+                    break;
             }
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Id = @SongId, Song_SingerType = @SongSingerType, Song_Track = @SongTrack, Song_FileName = @SongFileName, Song_Path = @SongPath";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in RebuildSongFileValueList)
-            {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongSingerType", valuelist[1]);
-                cmd.Parameters.AddWithValue("@SongTrack", valuelist[2]);
-                cmd.Parameters.AddWithValue("@SongFileName", valuelist[3]);
-                cmd.Parameters.AddWithValue("@SongPath", valuelist[4]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis) { Global.TotalList[3]++; }
-                }
-                catch
-                {
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】寫入重建檔案路徑至資料庫時發生錯誤: " + valuelist[0] + "|" + valuelist[3] + "|" + valuelist[4];
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    lock (LockThis)
-                    {
-                        Global.TotalList[0]--;
-                        Global.TotalList[2]++;
-                    }
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[3] + " 首歌曲的資料庫資料,請稍待...";
-                });
-            }
-            RebuildSongFileValueList.Clear();
-            conn.Close();
         }
+
+
+        #endregion
+
+
+        #region --- 歌庫版本 ---
+
 
         private void SongMaintenance_SingerImportTask()
         {
@@ -2375,232 +2828,20 @@ namespace CrazyKTV_SongMgr
             conn.Close();
         }
 
-        private void SongMaintenance_CompactAccessDB_Button_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(Global.CrazyktvDatabaseFile))
-            {
-                if (MessageBox.Show("你確定要壓縮並修復資料庫嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
-                    File.Copy(Global.CrazyktvDatabaseFile, Application.StartupPath + @"\SongMgr\Backup\" + DateTime.Now.ToLongDateString() + "_Compact_CrazySong.mdb", true);
-
-                    Common_SwitchSetUI(false);
-                    CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
-                    Common_SwitchSetUI(true);
-                }
-            }
-        }
-
-        private void SongMaintenance_RemoveEmptyDirs_Button_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("你確定要移除空資料夾嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Global.TimerStartTime = DateTime.Now;
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                Common_SwitchSetUI(false);
-
-                SongMaintenance_Tooltip_Label.Text = "正在解析空資料夾,請稍待...";
-
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RemoveEmptyDirsTask(Global.SongMgrDestFolder, false)));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                {
-                    Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        if (Global.TotalList[0] == 0)
-                        {
-                            SongMaintenance_Tooltip_Label.Text = "恭喜！在你的歌庫資料夾裡沒有發現任何空白資料夾。";
-                        }
-                        else
-                        {
-                            SongMaintenance_Tooltip_Label.Text = "總共移除 " + Global.TotalList[0] + " 個空資料夾,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                        }
-                        Common_SwitchSetUI(true);
-                    });
-                });
-            }
-        }
-
-        private void SongMaintenance_RemoveEmptyDirsTask(string dir, bool stepBack)
-        {
-            string RootDir = Global.SongMgrDestFolder;
-            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-
-            if (Directory.GetFileSystemEntries(dir).Length > 0)
-            {
-                if (!stepBack)
-                {
-                    foreach (string subdir in Directory.GetDirectories(dir))
-                    {
-                        SongMaintenance_RemoveEmptyDirsTask(subdir, false);
-                    }
-                }
-            }
-            else
-            {
-                DirectoryInfo dirinfo = new DirectoryInfo(dir);
-                if ((dirinfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    dirinfo.Attributes = dirinfo.Attributes & ~FileAttributes.ReadOnly;
-                }
-
-                try
-                {
-                    Directory.Delete(dir);
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【移除空資料夾】以下為已移除的空資料夾: " + dir;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    lock (LockThis) { Global.TotalList[0]++; }
-                }
-                catch
-                {
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【移除空資料夾】無法移除因資料夾已被占用: " + dir;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-
-                string prevDir = dir.Substring(0, dir.LastIndexOf("\\"));
-                if (RootDir.Length <= prevDir.Length) SongMaintenance_RemoveEmptyDirsTask(prevDir, true);
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "已移除掉 " + Global.TotalList[0] + " 個空資料夾,請稍待...";
-                });
-            }
-        }
 
         private void SongMaintenance_EnableDBVerUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.DBVerEnableDBVerUpdate = SongMaintenance_EnableDBVerUpdate_CheckBox.Checked.ToString();
         }
 
+
         private void SongMaintenance_EnableRebuildSingerData_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.DBVerRebuildSingerData = SongMaintenance_EnableRebuildSingerData_CheckBox.Checked.ToString();
         }
 
-        private void SongMaintenance_EnableMultiSongPath_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.SongMaintenanceEnableMultiSongPath = SongMaintenance_EnableMultiSongPath_CheckBox.Checked.ToString();
-            switch (Global.SongMaintenanceEnableMultiSongPath)
-            {
-                case "True":
-                    SongMaintenance_MultiSongPath_ListBox.Enabled = true;
-                    SongMaintenance_MultiSongPath_Button.Enabled = true;
-                    // 統計歌曲數量
-                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    break;
-                case "False":
-                    SongMaintenance_MultiSongPath_ListBox.Enabled = false;
-                    SongMaintenance_MultiSongPath_Button.Enabled = false;
-                    // 統計歌曲數量
-                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    break;
-            }
-        }
 
-        private void SongMaintenance_MultiSongPath_ListBox_Enter(object sender, EventArgs e)
-        {
-            SongMaintenance_MultiSongPath_Button.Text = "移除";
-        }
-
-        private void SongMaintenance_MultiSongPath_TextBox_Enter(object sender, EventArgs e)
-        {
-            if (SongMaintenance_MultiSongPath_TextBox.Text != "")
-            {
-                SongMaintenance_MultiSongPath_Button.Text = "加入";
-            }
-            else
-            {
-                SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
-            }
-        }
-
-        private void SongMaintenance_MultiSongPath_Button_Click(object sender, EventArgs e)
-        {
-            switch (SongMaintenance_MultiSongPath_Button.Text)
-            {
-                case "瀏覽":
-                    FolderBrowserDialog opd = new FolderBrowserDialog();
-                    if (SongMaintenance_MultiSongPath_TextBox.Text != "") opd.SelectedPath = SongMaintenance_MultiSongPath_TextBox.Text;
-
-                    if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
-                    {
-                        SongMaintenance_MultiSongPath_TextBox.Text = opd.SelectedPath + @"\";
-                        SongMaintenance_MultiSongPath_Button.Text = "加入";
-                    }
-                    break;
-                case "加入":
-                    DataTable dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
-                    if (dt == null)
-                    {
-                        dt = new DataTable();
-                        dt.Columns.Add(new DataColumn("Display", typeof(string)));
-                        dt.Columns.Add(new DataColumn("Value", typeof(int)));
-                        dt.Rows.Add(dt.NewRow());
-                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
-                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
-                    }
-                    else
-                    {
-                        dt.Rows.Add(dt.NewRow());
-                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
-                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
-                    }
-                    SongMaintenance_MultiSongPath_TextBox.Text = "";
-                    SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
-
-                    SongMaintenance_MultiSongPath_ListBox.DataSource = dt;
-                    SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
-                    SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
-
-                    Global.SongMaintenanceMultiSongPathList = new List<string>();
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        foreach (DataRow row in dt.AsEnumerable())
-                        {
-                            if (row["Display"].ToString() != "")
-                            {
-                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
-                            }
-                        }
-                    }
-                    
-                    // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    break;
-                case "移除":
-                    if (SongMaintenance_MultiSongPath_ListBox.SelectedItem != null)
-                    {
-                        int index = SongMaintenance_MultiSongPath_ListBox.SelectedIndex;
-                        dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
-                        dt.Rows.RemoveAt(index);
-
-                        Global.SongMaintenanceMultiSongPathList = new List<string>();
-
-                        foreach (DataRow row in dt.AsEnumerable())
-                        {
-                            if (row["Display"].ToString() != "")
-                            {
-                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
-                            }
-                        }
-                    }
-                    else
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "已無可以刪除的多重歌庫資料夾路徑!";
-                    }
-
-                    // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    break;
-            }
-        }
-
-
+        #endregion
 
 
     }
@@ -2613,7 +2854,7 @@ namespace CrazyKTV_SongMgr
         public static void CreateSongDataTable()
         {
             Global.SongDT = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Path, Song_SongName, Song_Singer, Song_Volume, Song_Track, Song_Lang, Song_FileName, Song_SingerType, Song_SongType from ktv_Song order by Song_Id";
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path from ktv_Song order by Song_Id";
             Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
             Global.SingerList = new List<string>();
