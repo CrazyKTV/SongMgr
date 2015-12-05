@@ -339,7 +339,6 @@
             this.SongMaintenance_CodeConv_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_CodeCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_CodeConvTo6_Button = new System.Windows.Forms.Button();
-            this.SongMaintenance_CodeConvTo5_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_Tooltip_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_SpellCorrect_GroupBox = new System.Windows.Forms.GroupBox();
@@ -3238,11 +3237,11 @@
             // 
             this.SongMaintenance_PlayCount_GroupBox.Controls.Add(this.SongMaintenance_PlayCountReset_Button);
             this.SongMaintenance_PlayCount_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_PlayCount_GroupBox.Location = new System.Drawing.Point(23, 329);
+            this.SongMaintenance_PlayCount_GroupBox.Location = new System.Drawing.Point(382, 23);
             this.SongMaintenance_PlayCount_GroupBox.Name = "SongMaintenance_PlayCount_GroupBox";
             this.SongMaintenance_PlayCount_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.SongMaintenance_PlayCount_GroupBox.Size = new System.Drawing.Size(342, 96);
-            this.SongMaintenance_PlayCount_GroupBox.TabIndex = 3;
+            this.SongMaintenance_PlayCount_GroupBox.Size = new System.Drawing.Size(593, 96);
+            this.SongMaintenance_PlayCount_GroupBox.TabIndex = 5;
             this.SongMaintenance_PlayCount_GroupBox.TabStop = false;
             this.SongMaintenance_PlayCount_GroupBox.Text = "播放次數";
             // 
@@ -4345,21 +4344,20 @@
             // 
             this.SongMaintenance_CodeConv_GroupBox.Controls.Add(this.SongMaintenance_CodeCorrect_Button);
             this.SongMaintenance_CodeConv_GroupBox.Controls.Add(this.SongMaintenance_CodeConvTo6_Button);
-            this.SongMaintenance_CodeConv_GroupBox.Controls.Add(this.SongMaintenance_CodeConvTo5_Button);
             this.SongMaintenance_CodeConv_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_CodeConv_GroupBox.Location = new System.Drawing.Point(382, 23);
+            this.SongMaintenance_CodeConv_GroupBox.Location = new System.Drawing.Point(23, 329);
             this.SongMaintenance_CodeConv_GroupBox.Margin = new System.Windows.Forms.Padding(14, 3, 3, 3);
             this.SongMaintenance_CodeConv_GroupBox.Name = "SongMaintenance_CodeConv_GroupBox";
             this.SongMaintenance_CodeConv_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.SongMaintenance_CodeConv_GroupBox.Size = new System.Drawing.Size(593, 96);
-            this.SongMaintenance_CodeConv_GroupBox.TabIndex = 5;
+            this.SongMaintenance_CodeConv_GroupBox.Size = new System.Drawing.Size(342, 96);
+            this.SongMaintenance_CodeConv_GroupBox.TabIndex = 3;
             this.SongMaintenance_CodeConv_GroupBox.TabStop = false;
             this.SongMaintenance_CodeConv_GroupBox.Text = "編碼位數轉換";
             // 
             // SongMaintenance_CodeCorrect_Button
             // 
             this.SongMaintenance_CodeCorrect_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_CodeCorrect_Button.Location = new System.Drawing.Point(338, 39);
+            this.SongMaintenance_CodeCorrect_Button.Location = new System.Drawing.Point(177, 39);
             this.SongMaintenance_CodeCorrect_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.SongMaintenance_CodeCorrect_Button.Name = "SongMaintenance_CodeCorrect_Button";
             this.SongMaintenance_CodeCorrect_Button.Size = new System.Drawing.Size(149, 32);
@@ -4371,7 +4369,7 @@
             // SongMaintenance_CodeConvTo6_Button
             // 
             this.SongMaintenance_CodeConvTo6_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_CodeConvTo6_Button.Location = new System.Drawing.Point(177, 39);
+            this.SongMaintenance_CodeConvTo6_Button.Location = new System.Drawing.Point(16, 39);
             this.SongMaintenance_CodeConvTo6_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.SongMaintenance_CodeConvTo6_Button.Name = "SongMaintenance_CodeConvTo6_Button";
             this.SongMaintenance_CodeConvTo6_Button.Size = new System.Drawing.Size(149, 32);
@@ -4379,18 +4377,6 @@
             this.SongMaintenance_CodeConvTo6_Button.Text = "轉換為 6 位數";
             this.SongMaintenance_CodeConvTo6_Button.UseVisualStyleBackColor = true;
             this.SongMaintenance_CodeConvTo6_Button.Click += new System.EventHandler(this.SongMaintenance_CodeConvTo6_Button_Click);
-            // 
-            // SongMaintenance_CodeConvTo5_Button
-            // 
-            this.SongMaintenance_CodeConvTo5_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_CodeConvTo5_Button.Location = new System.Drawing.Point(16, 39);
-            this.SongMaintenance_CodeConvTo5_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.SongMaintenance_CodeConvTo5_Button.Name = "SongMaintenance_CodeConvTo5_Button";
-            this.SongMaintenance_CodeConvTo5_Button.Size = new System.Drawing.Size(149, 32);
-            this.SongMaintenance_CodeConvTo5_Button.TabIndex = 0;
-            this.SongMaintenance_CodeConvTo5_Button.Text = "轉換為 5 位數";
-            this.SongMaintenance_CodeConvTo5_Button.UseVisualStyleBackColor = true;
-            this.SongMaintenance_CodeConvTo5_Button.Click += new System.EventHandler(this.SongMaintenance_CodeConvTo5_Button_Click);
             // 
             // SongMaintenance_Tooltip_GroupBox
             // 
@@ -5516,7 +5502,6 @@
         private System.Windows.Forms.Label SongMaintenance_Tooltip_Label;
         private System.Windows.Forms.GroupBox SongMaintenance_CodeConv_GroupBox;
         private System.Windows.Forms.Button SongMaintenance_CodeConvTo6_Button;
-        private System.Windows.Forms.Button SongMaintenance_CodeConvTo5_Button;
         private System.Windows.Forms.Button SongMaintenance_CodeCorrect_Button;
         private System.Windows.Forms.ComboBox SongQuery_ExceptionalQuery_ComboBox;
         private System.Windows.Forms.Label SongQuery_ExceptionalQuery_Label;

@@ -350,59 +350,6 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongMaintenance_CodeConvTo5_Button_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("你確定要轉換為 5 位數編碼嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Global.TimerStartTime = DateTime.Now;
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                SongMaintenance.CreateSongDataTable();
-                Common_SwitchSetUI(false);
-
-                if (Global.SongMgrMaxDigitCode != "1") SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue = 1;
-                SongMgrCfg_GetSongMgrLangCode();
-
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_CodeConvTask()));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeConvEndTask =>
-                {
-                    if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt"))
-                    {
-                        Global.SongDT = new DataTable();
-                        string SongQuerySqlStr = "select Song_Id, Song_Path, Song_SongName, Song_Singer, Song_Volume, Song_Track, Song_Lang, Song_FileName, Song_SingerType, Song_SongType from ktv_Song order by Song_Id";
-                        Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-                        var FavoriteImportTask = Task.Factory.StartNew(() => SongMaintenance_FavoriteImportTask());
-                        FavoriteImportTask.Wait();
-
-                        this.BeginInvoke((Action)delegate ()
-                        {
-                            SongQuery_GetFavoriteUserList();
-                            SongMaintenance_GetFavoriteUserList();
-                            if (Global.SongQueryQueryType == "FavoriteQuery")
-                            {
-                                Global.SongQueryQueryType = "SongQuery";
-                                SongQuery_EditMode_CheckBox.Enabled = true;
-                                SongQuery_DataGridView.DataSource = null;
-                                if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
-                                SongQuery_QueryStatus_Label.Text = "";
-                            }
-                        });
-                    }
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        Global.TimerEndTime = DateTime.Now;
-                        SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[2] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[3] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-
-                        SongDBUpdate_CheckDatabaseFile();
-                        Common_SwitchSetUI(true);
-                        SongMaintenance.DisposeSongDataTable();
-                    });
-                });
-            }
-        }
 
         private void SongMaintenance_CodeConvTo6_Button_Click(object sender, EventArgs e)
         {
