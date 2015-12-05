@@ -93,18 +93,29 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+
         private void SongMgrCfg_SongAddMode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString())
             {
                 case "1":
                 case "2":
-                case "3":
+                    SongMgrCfg_SongStructure_TabControl.Enabled = true;
+                    SongMaintenance_RebuildSongStructure_GroupBox.Enabled = true;
+                    SongMgrCfg_DestFolder_TextBox.Enabled = true;
+                    SongMgrCfg_DestFolder_Button.Enabled = true;
                     Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
-                    if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "3") { SongMgrCfg_DestFolder_Button.Enabled = false; } else { SongMgrCfg_DestFolder_Button.Enabled = true; }
+                    break;
+                case "3":
+                    SongMgrCfg_SongStructure_TabControl.Enabled = false;
+                    SongMaintenance_RebuildSongStructure_GroupBox.Enabled = false;
+                    SongMgrCfg_DestFolder_TextBox.Enabled = false;
+                    SongMgrCfg_DestFolder_Button.Enabled = false;
+                    Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
                     break;
             }
         }
+
 
         private void SongMgrCfg_CrtchorusMerge_CheckBox_CheckedChanged(object sender, EventArgs e)
         {

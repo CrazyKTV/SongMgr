@@ -153,7 +153,7 @@ namespace CrazyKTV_SongMgr
                 if (SongSingerType != "" & SongSinger != "" & SongLang != "") break;
                 string splitstr = Regex.Replace(str, @"%%|^\s*|\s*$", "");
                 
-                if(Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower()) >= 0)
+                if (Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower()) >= 0)
                 {
                     SongSinger = Global.SongAnalysisSingerList[Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower())];
                     if (SongSingerType == "") SongSingerType = Global.SongAnalysisSingerTypeList[Global.SongAnalysisSingerLowCaseList.IndexOf(splitstr.ToLower())];
