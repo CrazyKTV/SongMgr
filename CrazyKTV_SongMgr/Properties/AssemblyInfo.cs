@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
 [assembly: AssemblyTitle("CrazyKTV SongMgr")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("CrazyKTV SongMgr 是基於 CrazyKTV 卡拉OK點歌軟體的輔助工具,主要用來管理歌庫。")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CrazyKTV SongMgr")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 您可以指定所有的值，也可以依照以下的方式，使用 '*' 將組建和修訂編號
 // 指定為預設值: 
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.5.02")]
-[assembly: AssemblyFileVersion("1.3.5.02")]
+[assembly: AssemblyVersion("1.3.6.01")]
+[assembly: AssemblyFileVersion("1.3.6.01")]
