@@ -16,6 +16,15 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 || Global.CrazyktvDatabaseMaxDigitCode == "Error" || !File.Exists(Global.CrazyktvDatabaseFile) || !Directory.Exists(Global.SongMgrDestFolder)) return;
 
+            if (Global.SongMgrSongAddMode == "1")
+            {
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) >= 0)
+                {
+                    SongMgrCfg_MonitorFolders_TabPage.Hide();
+                    SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_MonitorFolders_TabPage);
+                }
+            }
+
             if (Global.SongMgrSongAddMode == "4" && Global.SongMgrEnableMonitorFolders == "True")
             {
                 Global.TimerStartTime = DateTime.Now;
