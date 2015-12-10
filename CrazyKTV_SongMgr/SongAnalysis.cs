@@ -104,7 +104,7 @@ namespace CrazyKTV_SongMgr
             Global.AllSingerDT = null;
         }
 
-        public static void SongInfoAnalysis(string file, List<string> SongLangIDList)
+        public static void SongInfoAnalysis(string file, List<string> SongLangKeyWordList, List<string> SingerTypeKeyWordList)
         {
             string SongAddStatus = "";
             string SongID = "";
@@ -134,8 +134,8 @@ namespace CrazyKTV_SongMgr
 
             string SeparateStr = "[-_](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))";
 
-            List<string> SongLangList = (List<string>) SongLangIDList;
-            List<string> SingerTypeList = new List<string>() { "男歌星", "男", "女歌星", "女", "樂團", "團體", "團", "合唱", "對唱", "外國男", "外男", "外國女", "外女", "外國樂團", "外團", "未知" };
+            List<string> SongLangList = SongLangKeyWordList;
+            List<string> SingerTypeList = SingerTypeKeyWordList;
             List<string> SongTrackList = new List<string>() { "vl", "vr", "v3", "v4", "v5", "左", "右" };
             List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
             List<string> SongSongTypeLowCaseList = SongSongTypeList.ConvertAll(str => str.ToLower());
@@ -704,10 +704,11 @@ namespace CrazyKTV_SongMgr
         public static string GetSongInfo(string SongInfoType, string SongInfoValue)
         {
             string infovalue = "";
+            List<string> list = new List<string>();
+
             switch (SongInfoType)
             {
                 case "SongLang":
-                    List<string> list = new List<string>();
                     foreach (string str in Global.CrazyktvSongLangKeyWordList)
                     {
                         list = new List<string>(str.Split(','));
@@ -723,49 +724,18 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SongSingerType":
-                    switch (SongInfoValue)
+                    foreach (string str in Global.CrazyktvSingerTypeKeyWordList)
                     {
-                        case "男歌手":
-                        case "男歌星":
-                        case "男星":
-                        case "男":
-                            infovalue = "0";
-                            break;
-                        case "女歌手":
-                        case "女歌星":
-                        case "女星":
-                        case "女":
-                            infovalue = "1";
-                            break;
-                        case "樂團":
-                        case "團體":
-                        case "團":
-                            infovalue = "2";
-                            break;
-                        case "合唱":
-                        case "對唱":
-                            infovalue = "3";
-                            break;
-                        case "外國男歌手":
-                        case "外國男歌星":
-                        case "外國男星":
-                        case "外男":
-                            infovalue = "4";
-                            break;
-                        case "外國女歌手":
-                        case "外國女歌星":
-                        case "外國女星":
-                        case "外女":
-                            infovalue = "5";
-                            break;
-                        case "外國樂團":
-                        case "外國團體":
-                        case "外團":
-                            infovalue = "6";
-                            break;
-                        case "未知":
-                            infovalue = "7";
-                            break;
+                        list = new List<string>(str.Split(','));
+                        foreach (string liststr in list)
+                        {
+                            if (SongInfoValue == liststr)
+                            {
+                                infovalue = Global.CrazyktvSingerTypeKeyWordList.IndexOf(str).ToString();
+                                break;
+                            }
+                        }
+                        if (infovalue != "") break;
                     }
                     break;
                 case "SongTrack":

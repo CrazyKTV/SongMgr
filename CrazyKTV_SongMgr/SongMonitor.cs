@@ -261,8 +261,11 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                Global.SongMonitorDT.Dispose();
-                Global.SongMonitorDT = null;
+                if (Global.SongMonitorDT != null)
+                {
+                    Global.SongMonitorDT.Dispose();
+                    Global.SongMonitorDT = null;
+                }
 
                 if (Global.SongMonitorTimer.Enabled)
                 {

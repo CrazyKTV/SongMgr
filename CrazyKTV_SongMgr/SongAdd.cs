@@ -324,7 +324,8 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = (List<string>)file;
             List<string> strlist = new List<string>();
-            List<string> SongLangIDList = new List<string>();
+            List<string> SongLangKeyWordList = new List<string>();
+            List<string> SingerTypeKeyWordList = new List<string>();
             SongAnalysis.CreateSongDataTable();
             int total = 0;
 
@@ -333,7 +334,16 @@ namespace CrazyKTV_SongMgr
                 strlist = new List<string>(str.Split(','));
                 foreach(string liststr in strlist)
                 {
-                    SongLangIDList.Add(liststr);
+                    SongLangKeyWordList.Add(liststr);
+                }
+            }
+
+            foreach (string str in Global.CrazyktvSingerTypeKeyWordList)
+            {
+                strlist = new List<string>(str.Split(','));
+                foreach (string liststr in strlist)
+                {
+                    SingerTypeKeyWordList.Add(liststr);
                 }
             }
 
@@ -345,7 +355,7 @@ namespace CrazyKTV_SongMgr
                     total++;
                 }
 
-                SongAnalysis.SongInfoAnalysis(str, SongLangIDList);
+                SongAnalysis.SongInfoAnalysis(str, SongLangKeyWordList, SingerTypeKeyWordList);
 
                 this.BeginInvoke((Action)delegate()
                 {

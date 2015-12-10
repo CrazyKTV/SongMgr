@@ -5468,7 +5468,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "MainForm";
-            this.Text = "CrazyKTV 加歌程式 v1.3.6 Debug";
+            this.Text = "CrazyKTV 加歌程式 v1.3.6";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.VisibleChanged += new System.EventHandler(this.MainForm_VisibleChanged);
