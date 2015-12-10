@@ -39,7 +39,7 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
-                    SongAdd_DragDrop_Label.Visible = true;
+                    if (Global.SongMgrSongAddMode != "4") SongAdd_DragDrop_Label.Visible = true;
                     Common_SwitchSetUI(true);
                     break;
             }
@@ -350,6 +350,11 @@ namespace CrazyKTV_SongMgr
                 this.BeginInvoke((Action)delegate()
                 {
                     SongAdd_Tooltip_Label.Text = "正在分析第 " + total + " 首歌曲...";
+                    if (Global.SongMgrSongAddMode == "4")
+                    {
+                        SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                        SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                    }
                 });
             });
 
@@ -393,13 +398,15 @@ namespace CrazyKTV_SongMgr
                 SongAdd_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                 SongAdd_DataGridView.Sort(SongAdd_DataGridView.Columns[sortindex], ListSortDirection.Ascending);
 
-                SongAdd_DataGridView.AllowDrop = true;
-                Common_SwitchSetUI(true);
-                this.Activate();
-                SongAdd_DataGridView.Focus();
+                if (Global.SongMgrSongAddMode != "4")
+                {
+                    SongAdd_DataGridView.AllowDrop = true;
+                    Common_SwitchSetUI(true);
+                    this.Activate();
+                    SongAdd_DataGridView.Focus();
+                    SongAdd_Add_Button.Enabled = SongAdd_CheckSongAddStatus();
+                }
 
-                SongAdd_Add_Button.Enabled = SongAdd_CheckSongAddStatus();
-                
                 Global.TimerEndTime = DateTime.Now;
                 SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 "  +(long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
                 SongAnalysis.DisposeSongDataTable();
@@ -438,8 +445,13 @@ namespace CrazyKTV_SongMgr
         private void SongAdd_SongAddTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            Global.SongAddDT = new DataTable();
-            Global.SongAddDT = SongAdd_DataGridView.DataSource as DataTable;
+
+            this.BeginInvoke((Action)delegate()
+            {
+                Global.SongAddDT = new DataTable();
+                Global.SongAddDT = SongAdd_DataGridView.DataSource as DataTable;
+            });
+            
             Global.SongAddValueList = new List<string>();
             Global.SongAddChorusSingerList = new List<string>();
             Global.TotalList = new List<int>() { 0, 0, 0, 0, 0 };
@@ -462,9 +474,14 @@ namespace CrazyKTV_SongMgr
             {
                 SongAddSong.StartAddSong(i);
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongAdd_Tooltip_Label.Text = "已成功加入 " + Global.TotalList[0] + " 首歌曲,忽略重複歌曲 " + Global.TotalList[1] + " 首...";
+                    if (Global.SongMgrSongAddMode == "4")
+                    {
+                        SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                        SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                    }
                 });
             }
 
@@ -597,6 +614,11 @@ namespace CrazyKTV_SongMgr
                 this.BeginInvoke((Action)delegate()
                 {
                     SongAdd_Tooltip_Label.Text = "正在將第 " + Global.TotalList[3] + " 首歌曲寫入資料庫,請稍待...";
+                    if (Global.SongMgrSongAddMode == "4")
+                    {
+                        SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                        SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                    }
                 });
             }
             Global.SongAddValueList.Clear();
@@ -679,6 +701,11 @@ namespace CrazyKTV_SongMgr
                     this.BeginInvoke((Action)delegate()
                     {
                         SongAdd_Tooltip_Label.Text = "正在檢查並加入第 " + Global.TotalList[4] + " 位合唱歌手,請稍待...";
+                        if (Global.SongMgrSongAddMode == "4")
+                        {
+                            SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                            SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                        }
                     });
                 }
                 AllSingerList.Clear();
@@ -749,8 +776,11 @@ namespace CrazyKTV_SongMgr
                     SongAdd_Add_Button.Enabled = false;
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.Enabled = true;
-                    SongAdd_DragDrop_Label.Visible = true;
-                    Common_SwitchSetUI(true);
+                    if (Global.SongMgrSongAddMode != "4")
+                    {
+                        SongAdd_DragDrop_Label.Visible = true;
+                        Common_SwitchSetUI(true);
+                    }
 
                     SongQuery_QueryType_ComboBox.SelectedValue = 1;
                     SongQuery_QueryValue_TextBox.Text = "";
@@ -885,7 +915,7 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
-                    SongAdd_DragDrop_Label.Visible = true;
+                    if (Global.SongMgrSongAddMode != "4") SongAdd_DragDrop_Label.Visible = true;
                     Common_SwitchSetUI(true);
 
                     SongQuery_QueryType_ComboBox.SelectedValue = 1;

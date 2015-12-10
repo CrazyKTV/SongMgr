@@ -99,6 +99,8 @@ namespace CrazyKTV_SongMgr
             Global.SongAddAllSongFilePathList.Clear();
             Global.SongDT.Dispose();
             Global.SongDT = null;
+            Global.SongAddDT.Dispose();
+            Global.SongAddDT = null;
             Global.SingerDT.Dispose();
             Global.SingerDT = null;
             Global.AllSingerDT.Dispose();
@@ -487,7 +489,7 @@ namespace CrazyKTV_SongMgr
                     SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
                 }
 
-                if (Global.SongMgrSongAddMode == "3")
+                if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
                 {
                     SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
                     SongFileName = Path.GetFileName(SongSrcPath);
@@ -563,7 +565,7 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     bool FileIOError = false;
-                    if (Global.SongMgrSongAddMode != "3")
+                    if (Global.SongMgrSongAddMode != "3" || Global.SongMgrSongAddMode != "4")
                     {
                         string SongDestPath = Path.Combine(SongPath, SongFileName);
 
@@ -738,7 +740,7 @@ namespace CrazyKTV_SongMgr
                     SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
                 }
 
-                if (Global.SongMgrSongAddMode == "3")
+                if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
                 {
                     SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
                     SongFileName = Path.GetFileName(SongSrcPath);
@@ -851,7 +853,7 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     bool FileIOError = false;
-                    if (Global.SongMgrSongAddMode != "3")
+                    if (Global.SongMgrSongAddMode != "3" || Global.SongMgrSongAddMode != "4")
                     {
                         string SongDestPath = Path.Combine(SongPath, SongFileName);
 

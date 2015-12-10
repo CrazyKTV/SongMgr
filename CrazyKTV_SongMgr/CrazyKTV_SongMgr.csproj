@@ -135,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonFunc.cs" />
+    <Compile Include="Debug.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MainCfg.cs">
       <SubType>Form</SubType>
@@ -174,6 +177,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SongMgrCfg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SongMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SongQuery.cs">

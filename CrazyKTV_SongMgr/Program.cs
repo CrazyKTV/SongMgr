@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -35,6 +37,8 @@ namespace CrazyKTV_SongMgr
 
     class Global
     {
+        public static bool DebugMode = false;
+
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
         public static string CrazyktvSongDBVer = "1.00";
         public static string CrazyktvSingerDBVer = "1";
@@ -60,10 +64,12 @@ namespace CrazyKTV_SongMgr
         public static string SongMgrSongTrackMode = "True";
         public static string SongMgrBackupRemoveSong = "False";
         public static string SongMgrCustomSingerTypeStructure = "1,1,1,1,1,1,1,1";
+        public static string SongMgrEnableMonitorFolders = "False";
         public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
+        public static List<string> SongMgrMonitorFoldersList = new List<string>() { "", "", "", "", "" };
 
         public static string SingerMgrDefaultSingerDataTable = "ktv_Singer";
-        
+
         public static string SongAddDefaultSongLang = "11";
         public static string SongAddDefaultSingerType = "8";
         public static string SongAddDefaultSongTrack = "1";
@@ -87,6 +93,7 @@ namespace CrazyKTV_SongMgr
         public static string DBVerRebuildSingerData = "False";
         public static string SongMaintenanceEnableMultiSongPath = "False";
 
+        public static List<int> MTotalList = new List<int>();
         public static List<int> TotalList = new List<int>();
         public static List<int> MaxIDList = new List<int>();
         public static int RemainingSongID = 9999999;
@@ -174,6 +181,31 @@ namespace CrazyKTV_SongMgr
             "外團,外國團體,外國樂團",
             "未知",
         };
+
+        public static DataTable SongMonitorDT = new DataTable();
+
+        public static FileSystemWatcher SongMonitorPath1 = new FileSystemWatcher();
+        public static FileSystemWatcher SongMonitorPath2 = new FileSystemWatcher();
+        public static FileSystemWatcher SongMonitorPath3 = new FileSystemWatcher();
+        public static FileSystemWatcher SongMonitorPath4 = new FileSystemWatcher();
+        public static FileSystemWatcher SongMonitorPath5 = new FileSystemWatcher();
+        public static FileSystemWatcher[] SongMonitorWatcher =
+        {
+            SongMonitorPath1,
+            SongMonitorPath2,
+            SongMonitorPath3,
+            SongMonitorPath4,
+            SongMonitorPath5
+        };
+
+        public static Timer SongMonitorTimer = new Timer();
+        public static DateTime SongMonitorSTime = new DateTime();
+        public static DateTime SongMonitorETime = new DateTime();
+
+        public static List<string> SongMonitorCreatedList = new List<string>();
+        public static List<string> SongMonitorDeletedList = new List<string>();
+
+
 
     }
 }

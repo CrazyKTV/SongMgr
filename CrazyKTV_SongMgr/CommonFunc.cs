@@ -867,7 +867,7 @@ namespace CrazyKTV_SongMgr
             SongQuery_QueryStatus_Label.Text = "";
 
             SongAdd_DataGridView.DataSource = null;
-            SongAdd_DragDrop_Label.Visible = true;
+            if (Global.SongMgrSongAddMode != "4") SongAdd_DragDrop_Label.Visible = true;
             SongAdd_DataGridView.AllowDrop = true;
             SongAdd_Add_Button.Text = "加入歌庫";
             SongAdd_Add_Button.Enabled = false;

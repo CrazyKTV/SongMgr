@@ -31,7 +31,10 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongTrackMode", Global.SongMgrSongTrackMode);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong", Global.SongMgrBackupRemoveSong);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders", Global.SongMgrEnableMonitorFolders);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders", string.Join(",", Global.SongMgrMonitorFoldersList));
         }
+
 
         private void SongMgrCfg_DBFile_Button_Click(object sender, EventArgs e)
         {
@@ -55,10 +58,12 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+
         private void SongMgrCfg_SupportFormat_TextBox_TextChanged(object sender, EventArgs e)
         {
             Global.SongMgrSupportFormat = SongMgrCfg_SupportFormat_TextBox.Text.ToLower();
         }
+
 
         private void SongMgrCfg_DestFolder_Button_Click(object sender, EventArgs e)
         {
@@ -100,9 +105,15 @@ namespace CrazyKTV_SongMgr
             {
                 case "1":
                 case "2":
+                    Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
+
                     SongMaintenance_RebuildSongStructure_GroupBox.Enabled = true;
                     SongMgrCfg_DestFolder_TextBox.Enabled = true;
                     SongMgrCfg_DestFolder_Button.Enabled = true;
+                    SongAdd_DupSongMode_ComboBox.Enabled = true;
+                    SongAdd_DataGridView.Visible = true;
+                    SongAdd_DragDrop_Label.Visible = true;
+                    SongMonitor_SwitchSongMonitorWatcher();
 
                     if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) < 0)
                     {
@@ -116,15 +127,22 @@ namespace CrazyKTV_SongMgr
                         SongMgrCfg_CustomStructure_TabPage.Show();
                     }
 
+                    if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) >= 0)
+                    {
+                        SongMgrCfg_MonitorFolders_TabPage.Hide();
+                        SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_MonitorFolders_TabPage);
+                    }
+
                     if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) < 0)
                     {
                         SongMaintenance_TabControl.TabPages.Insert(SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_CustomLang_TabPage) + 1, SongMaintenance_MultiSongPath_TabPage);
                         SongMaintenance_MultiSongPath_TabPage.Show();
                     }
-                    Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
                     break;
                 case "3":
                 case "4":
+                    Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
+
                     SongMaintenance_RebuildSongStructure_GroupBox.Enabled = false;
                     SongMgrCfg_DestFolder_TextBox.Enabled = false;
                     SongMgrCfg_DestFolder_Button.Enabled = false;
@@ -141,12 +159,39 @@ namespace CrazyKTV_SongMgr
                         SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_CustomStructure_TabPage);
                     }
 
+                    if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "4" && SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) < 0)
+                    {
+                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongType_TabPage) + 1, SongMgrCfg_MonitorFolders_TabPage);
+                        SongMgrCfg_MonitorFolders_TabPage.Show();
+                    }
+                    else if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "3" && SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) >= 0)
+                    {
+                        SongMgrCfg_MonitorFolders_TabPage.Hide();
+                        SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_MonitorFolders_TabPage);
+                    }
+
                     if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) >= 0)
                     {
                         SongMaintenance_MultiSongPath_TabPage.Hide();
                         SongMaintenance_TabControl.TabPages.Remove(SongMaintenance_MultiSongPath_TabPage);
                     }
-                    Global.SongMgrSongAddMode = SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString();
+
+                    if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "4")
+                    {
+                        SongAdd_DupSongMode_ComboBox.SelectedValue = 1;
+                        SongAdd_DupSongMode_ComboBox.Enabled = false;
+                        SongAdd_DataGridView.Visible = false;
+                        SongAdd_DragDrop_Label.Visible = false;
+                        SongMgrCfg_MonitorFolders_SetUI();
+                        SongMonitor_SwitchSongMonitorWatcher();
+                    }
+                    else
+                    {
+                        SongAdd_DupSongMode_ComboBox.Enabled = true;
+                        SongAdd_DataGridView.Visible = true;
+                        SongAdd_DragDrop_Label.Visible = true;
+                        SongMonitor_SwitchSongMonitorWatcher();
+                    }
                     break;
             }
         }
@@ -385,32 +430,32 @@ namespace CrazyKTV_SongMgr
             if (SongMgrCfg_Tooltip_Label.Text != "此項目必須輸入5位數的歌曲編號" & SongMgrCfg_Tooltip_Label.Text != "此項目必須輸入6位數的歌曲編號")
             {
                 TextBox[] SongMgrCfg_LangCode_TextBox =
-            {
-                SongMgrCfg_Lang1Code_TextBox,
-                SongMgrCfg_Lang2Code_TextBox,
-                SongMgrCfg_Lang3Code_TextBox,
-                SongMgrCfg_Lang4Code_TextBox,
-                SongMgrCfg_Lang5Code_TextBox,
-                SongMgrCfg_Lang6Code_TextBox,
-                SongMgrCfg_Lang7Code_TextBox,
-                SongMgrCfg_Lang8Code_TextBox,
-                SongMgrCfg_Lang9Code_TextBox,
-                SongMgrCfg_Lang10Code_TextBox
-            };
+                {
+                    SongMgrCfg_Lang1Code_TextBox,
+                    SongMgrCfg_Lang2Code_TextBox,
+                    SongMgrCfg_Lang3Code_TextBox,
+                    SongMgrCfg_Lang4Code_TextBox,
+                    SongMgrCfg_Lang5Code_TextBox,
+                    SongMgrCfg_Lang6Code_TextBox,
+                    SongMgrCfg_Lang7Code_TextBox,
+                    SongMgrCfg_Lang8Code_TextBox,
+                    SongMgrCfg_Lang9Code_TextBox,
+                    SongMgrCfg_Lang10Code_TextBox
+                };
 
                 List<string> SongMgrCfg_LangCode_TextBoxName = new List<string>()
-            {
-                SongMgrCfg_Lang1Code_TextBox.Name,
-                SongMgrCfg_Lang2Code_TextBox.Name,
-                SongMgrCfg_Lang3Code_TextBox.Name,
-                SongMgrCfg_Lang4Code_TextBox.Name,
-                SongMgrCfg_Lang5Code_TextBox.Name,
-                SongMgrCfg_Lang6Code_TextBox.Name,
-                SongMgrCfg_Lang7Code_TextBox.Name,
-                SongMgrCfg_Lang8Code_TextBox.Name,
-                SongMgrCfg_Lang9Code_TextBox.Name,
-                SongMgrCfg_Lang10Code_TextBox.Name
-            };
+                {
+                    SongMgrCfg_Lang1Code_TextBox.Name,
+                    SongMgrCfg_Lang2Code_TextBox.Name,
+                    SongMgrCfg_Lang3Code_TextBox.Name,
+                    SongMgrCfg_Lang4Code_TextBox.Name,
+                    SongMgrCfg_Lang5Code_TextBox.Name,
+                    SongMgrCfg_Lang6Code_TextBox.Name,
+                    SongMgrCfg_Lang7Code_TextBox.Name,
+                    SongMgrCfg_Lang8Code_TextBox.Name,
+                    SongMgrCfg_Lang9Code_TextBox.Name,
+                    SongMgrCfg_Lang10Code_TextBox.Name
+                };
 
                 bool ValueError = false;
                 int i = SongMgrCfg_LangCode_TextBoxName.IndexOf(((TextBox)sender).Name);
@@ -615,14 +660,135 @@ namespace CrazyKTV_SongMgr
         }
 
 
+        #region --- 監視目錄 ---
 
+
+        private void SongMgrCfg_MonitorFolders_SetUI()
+        {
+            Button[] SongMgrCfg_MonitorFolders_Button =
+            {
+                SongMgrCfg_MonitorFolders1_Button,
+                SongMgrCfg_MonitorFolders2_Button,
+                SongMgrCfg_MonitorFolders3_Button,
+                SongMgrCfg_MonitorFolders4_Button,
+                SongMgrCfg_MonitorFolders5_Button
+            };
+
+            TextBox[] SongMgrCfg_MonitorFolders_TextBox =
+            {
+                SongMgrCfg_MonitorFolders1_TextBox,
+                SongMgrCfg_MonitorFolders2_TextBox,
+                SongMgrCfg_MonitorFolders3_TextBox,
+                SongMgrCfg_MonitorFolders4_TextBox,
+                SongMgrCfg_MonitorFolders5_TextBox
+            };
+
+            for (int i = 0; i < SongMgrCfg_MonitorFolders_TextBox.Count<TextBox>(); i++)
+            {
+                SongMgrCfg_MonitorFolders_TextBox[i].Text = Global.SongMgrMonitorFoldersList[i];
+                if (SongMgrCfg_MonitorFolders_TextBox[i].Text == "")
+                {
+                    SongMgrCfg_MonitorFolders_Button[i].Text = "瀏覽";
+                }
+                else
+                {
+                    SongMgrCfg_MonitorFolders_Button[i].Text = "移除";
+                }
+            }
+        }
+
+
+        private void SongMgrCfg_MonitorFolders_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongMgrEnableMonitorFolders = SongMgrCfg_MonitorFolders_CheckBox.Checked.ToString();
+            SongMonitor_SwitchSongMonitorWatcher();
+        }
+
+
+        private void SongMgrCfg_MonitorFolders_Button_Click(object sender, EventArgs e)
+        {
+            TextBox[] SongMgrCfg_MonitorFolders_TextBox =
+            {
+                SongMgrCfg_MonitorFolders1_TextBox,
+                SongMgrCfg_MonitorFolders2_TextBox,
+                SongMgrCfg_MonitorFolders3_TextBox,
+                SongMgrCfg_MonitorFolders4_TextBox,
+                SongMgrCfg_MonitorFolders5_TextBox
+            };
+
+            int i = 0;
+            switch (((Button)sender).Name)
+            {
+                case "SongMgrCfg_MonitorFolders1_Button":
+                    i = 0;
+                    break;
+                case "SongMgrCfg_MonitorFolders2_Button":
+                    i = 1;
+                    break;
+                case "SongMgrCfg_MonitorFolders3_Button":
+                    i = 2;
+                    break;
+                case "SongMgrCfg_MonitorFolders4_Button":
+                    i = 3;
+                    break;
+                case "SongMgrCfg_MonitorFolders5_Button":
+                    i = 4;
+                    break;
+            }
+
+            switch (((Button)sender).Text)
+            {
+                case "瀏覽":
+                    FolderBrowserDialog opd = new FolderBrowserDialog();
+                    if (SongMgrCfg_MonitorFolders_TextBox[i].Text != "") opd.SelectedPath = SongMgrCfg_MonitorFolders_TextBox[i].Text;
+
+                    if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
+                    {
+                        bool AddMonitor = true;
+                        foreach (TextBox tb in SongMgrCfg_MonitorFolders_TextBox)
+                        {
+                            if (tb.Text != "" && opd.SelectedPath.Contains(tb.Text))
+                            {
+                                AddMonitor = false;
+                                SongMgrCfg_Tooltip_Label.Text = "所選擇的資料夾已在監視中!";
+                                break;
+                            }
+                        }
+
+                        if (AddMonitor)
+                        {
+                            if (SongMgrCfg_Tooltip_Label.Text == "所選擇的資料夾已在監視中!") SongMgrCfg_Tooltip_Label.Text = "";
+                            SongMgrCfg_MonitorFolders_TextBox[i].Text = opd.SelectedPath;
+                            ((Button)sender).Text = "移除";
+
+                            Global.SongMgrMonitorFoldersList = new List<string>();
+                            foreach (TextBox tb in SongMgrCfg_MonitorFolders_TextBox)
+                            {
+                                Global.SongMgrMonitorFoldersList.Add(tb.Text);
+                            }
+                        }
+                    }
+                    break;
+                case "移除":
+                    Global.SongMgrMonitorFoldersList[Global.SongMgrMonitorFoldersList.IndexOf(SongMgrCfg_MonitorFolders_TextBox[i].Text)] = "";
+                    SongMgrCfg_MonitorFolders_TextBox[i].Text = "";
+                    ((Button)sender).Text = "瀏覽";
+                    break;
+            }
+        }
+
+
+
+
+
+        #endregion
 
 
     }
-    
 
 
-    
+
+
     class SongMgrCfg
     {
         public static DataTable GetSongAddModeList()
@@ -640,7 +806,7 @@ namespace CrazyKTV_SongMgr
             list.Rows[2][0] = "不搬移及複製來源 KTV 檔案";
             list.Rows[2][1] = 3;
             list.Rows.Add(list.NewRow());
-            list.Rows[3][0] = "使用歌庫資料夾監視模式";
+            list.Rows[3][0] = "自動監視歌庫資料夾";
             list.Rows[3][1] = 4;
             return list;
         }

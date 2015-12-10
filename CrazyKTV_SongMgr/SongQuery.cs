@@ -578,7 +578,7 @@ namespace CrazyKTV_SongMgr
                         SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
                     }
 
-                    if (Global.SongMgrSongAddMode != "3")
+                    if (Global.SongMgrSongAddMode != "3" || Global.SongMgrSongAddMode != "4")
                     {
                         bool UseMultiSongPath = false;
                         string MultiSongPath = "";
