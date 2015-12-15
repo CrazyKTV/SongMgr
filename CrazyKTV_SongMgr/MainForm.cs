@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,6 +24,11 @@ namespace CrazyKTV_SongMgr
         
         private void MainForm_Load(object sender, EventArgs e)
         {
+            string CurVer = " v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileMajorPart + "." +
+                                   FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileMinorPart + "." +
+                                   FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileBuildPart;
+            this.Text += CurVer;
+
             if (CommonFunc.IsAdministrator()) this.Text += " (系統管理員)";
 
             if (!Global.DebugMode)
