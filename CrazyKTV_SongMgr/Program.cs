@@ -43,9 +43,10 @@ namespace CrazyKTV_SongMgr
         public static string CrazyktvSingerDBVer = "1";
         public static string CrazyktvPhoneticsDBVer = "1";
         public static string CrazyktvSongDBUpdateFile = Application.StartupPath + @"\SongMgr\Update\UpdateDB.xml";
-        public static bool CrazyktvDatabaseStatus = false;
-        public static string CrazyktvDatabaseMaxDigitCode = "";
         public static string CrazyktvCfgFile = Application.StartupPath + @"\CrazyKTV.cfg";
+        public static bool CrazyktvDatabaseStatus = false;
+        public static bool CrazyktvDatabaseIsOld = false;
+        public static bool CrazyktvDatabaseMaxDigitCode = true;
 
         public static string SongMgrVer = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString().Replace(".", "");
         public static string SongMgrCfgFile = Application.StartupPath + @"\CrazyKTV_SongMgr.cfg";
@@ -64,9 +65,10 @@ namespace CrazyKTV_SongMgr
         public static string SongMgrBackupRemoveSong = "False";
         public static string SongMgrCustomSingerTypeStructure = "1,1,1,1,1,1,1,1";
         public static string SongMgrEnableMonitorFolders = "False";
+        public static bool SongMgrInitializeStatus = false;
         public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
         public static List<string> SongMgrMonitorFoldersList = new List<string>() { "", "", "", "", "" };
-
+        
         public static string SingerMgrDefaultSingerDataTable = "ktv_Singer";
 
         public static string SongAddDefaultSongLang = "11";

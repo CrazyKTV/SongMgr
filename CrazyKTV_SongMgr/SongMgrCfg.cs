@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -47,14 +46,8 @@ namespace CrazyKTV_SongMgr
             {
                 Global.CrazyktvDatabaseFile = opd.FileName;
                 SongMgrCfg_DBFile_TextBox.Text = opd.FileName;
-
-                // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
-                Common_ClearDataGridView();
-
-                // 檢查資料庫檔案
-                SongDBUpdate_CheckDatabaseFile();
-
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", Global.CrazyktvDatabaseFile);
+                Common_RefreshSongMgr();
             }
         }
 
@@ -74,27 +67,8 @@ namespace CrazyKTV_SongMgr
             {
                 Global.SongMgrDestFolder = opd.SelectedPath;
                 SongMgrCfg_DestFolder_TextBox.Text = opd.SelectedPath;
-
-                if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 | !File.Exists(Global.CrazyktvDatabaseFile) | !Directory.Exists(Global.SongMgrDestFolder))
-                {
-                    if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
-                    else if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
-                    else if (Global.CrazyktvDatabaseMaxDigitCode == "Error") SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                    else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
-                    Common_SwitchDBVerErrorUI(false);
-                }
-                else
-                {
-                    // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
-                    if (SongMgrCfg_Tooltip_Label.Text == "資料庫檔案為舊版本!") SongMgrCfg_Tooltip_Label.Text = "";
-                    else if (SongMgrCfg_Tooltip_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SongMgrCfg_Tooltip_Label.Text = "";
-                    else if (SongMgrCfg_Tooltip_Label.Text == "資料庫檔案不存在!") SongMgrCfg_Tooltip_Label.Text = "";
-                    else if (SongMgrCfg_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMgrCfg_Tooltip_Label.Text = "";
-                    Common_SwitchDBVerErrorUI(true);
-                }
-
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder", Global.SongMgrDestFolder);
+                Common_RefreshSongMgr();
             }
         }
 
@@ -138,6 +112,7 @@ namespace CrazyKTV_SongMgr
                         SongMaintenance_TabControl.TabPages.Insert(SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_CustomLang_TabPage) + 1, SongMaintenance_MultiSongPath_TabPage);
                         SongMaintenance_MultiSongPath_TabPage.Show();
                     }
+                    if (Global.SongMgrInitializeStatus) Common_RefreshSongMgr();
                     break;
                 case "3":
                 case "4":
@@ -192,6 +167,7 @@ namespace CrazyKTV_SongMgr
                         SongAdd_DragDrop_Label.Visible = true;
                         SongMonitor_SwitchSongMonitorWatcher();
                     }
+                    if (Global.SongMgrInitializeStatus) Common_RefreshSongMgr();
                     break;
             }
         }

@@ -14,7 +14,7 @@ namespace CrazyKTV_SongMgr
     {
         private void SongMonitor_CheckCurSong()
         {
-            if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 || Global.CrazyktvDatabaseMaxDigitCode == "Error" || !File.Exists(Global.CrazyktvDatabaseFile) || !Directory.Exists(Global.SongMgrDestFolder)) return;
+            if (!Global.CrazyktvDatabaseStatus) return;
 
             if (Global.SongMgrSongAddMode == "1")
             {
@@ -218,7 +218,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongMonitor_SwitchSongMonitorWatcher()
         {
-            if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") < 0 || Global.CrazyktvDatabaseMaxDigitCode == "Error" || !File.Exists(Global.CrazyktvDatabaseFile) || !Directory.Exists(Global.SongMgrDestFolder)) return;
+            if (!Global.CrazyktvDatabaseStatus) return;
 
             if (Global.SongMgrSongAddMode == "4" && Global.SongMgrEnableMonitorFolders == "True")
             {

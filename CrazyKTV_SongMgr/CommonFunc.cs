@@ -910,6 +910,27 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void Common_RefreshSongMgr()
+        {
+            Global.CrazyktvDatabaseStatus = false;
+            Global.CrazyktvDatabaseIsOld = false;
+            Global.CrazyktvDatabaseMaxDigitCode = true;
+
+            // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
+            Common_ClearDataGridView();
+
+            // 檢查資料庫檔案是否為舊版資料庫
+            SongDBUpdate_CheckDatabaseFile();
+
+            // 初始化所需資料
+            Task.Factory.StartNew(() => Common_InitializeSongDataTask());
+
+            // 歌庫監視
+            SongMonitor_CheckCurSong();
+
+            MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
+        }
+
     }
 
 
