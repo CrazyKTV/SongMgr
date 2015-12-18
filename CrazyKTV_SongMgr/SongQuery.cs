@@ -444,8 +444,6 @@ namespace CrazyKTV_SongMgr
                 int i = Convert.ToInt32(row["RowIndex"]);
                 string OldSongId = row["SongId"].ToString();
                 string OldSongLang = row["SongLang"].ToString();
-                string OldSongSinger = "";
-                string OldSongSongName = "";
 
                 string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
                 string SongLang = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();

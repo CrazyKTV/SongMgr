@@ -36,7 +36,7 @@ namespace CrazyKTV_SongMgr
 
     class Global
     {
-        public static bool DebugMode = true;
+        public static bool DebugMode = false;
 
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
         public static string CrazyktvSongDBVer = "1.00";
