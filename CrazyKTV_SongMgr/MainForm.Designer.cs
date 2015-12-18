@@ -417,6 +417,7 @@
             this.SongAddResult_FailureSong_ListBox = new System.Windows.Forms.ListBox();
             this.SongLog_TabPage = new System.Windows.Forms.TabPage();
             this.SongLog_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
@@ -5384,6 +5385,7 @@
             this.SongLog_GroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.SongLog_GroupBox.Controls.Add(this.SongLog_ClearLog_Button);
             this.SongLog_GroupBox.Controls.Add(this.SongLog_ListBox);
             this.SongLog_GroupBox.Location = new System.Drawing.Point(20, 20);
             this.SongLog_GroupBox.Margin = new System.Windows.Forms.Padding(0);
@@ -5393,6 +5395,18 @@
             this.SongLog_GroupBox.TabIndex = 0;
             this.SongLog_GroupBox.TabStop = false;
             this.SongLog_GroupBox.Text = "異常操作記錄 (雙擊滑鼠左鍵可複製至剪貼簿)";
+            // 
+            // SongLog_ClearLog_Button
+            // 
+            this.SongLog_ClearLog_Button.AutoSize = true;
+            this.SongLog_ClearLog_Button.Location = new System.Drawing.Point(832, 587);
+            this.SongLog_ClearLog_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
+            this.SongLog_ClearLog_Button.Name = "SongLog_ClearLog_Button";
+            this.SongLog_ClearLog_Button.Size = new System.Drawing.Size(110, 35);
+            this.SongLog_ClearLog_Button.TabIndex = 9;
+            this.SongLog_ClearLog_Button.Text = "清除記錄";
+            this.SongLog_ClearLog_Button.UseVisualStyleBackColor = true;
+            this.SongLog_ClearLog_Button.Click += new System.EventHandler(this.SongLog_ClearLog_Button_Click);
             // 
             // SongLog_ListBox
             // 
@@ -5405,7 +5419,7 @@
             this.SongLog_ListBox.Location = new System.Drawing.Point(16, 40);
             this.SongLog_ListBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SongLog_ListBox.Name = "SongLog_ListBox";
-            this.SongLog_ListBox.Size = new System.Drawing.Size(926, 576);
+            this.SongLog_ListBox.Size = new System.Drawing.Size(926, 532);
             this.SongLog_ListBox.TabIndex = 0;
             this.SongLog_ListBox.DoubleClick += new System.EventHandler(this.Common_ListBox_DoubleClick);
             // 
@@ -5575,6 +5589,7 @@
             this.SongAddResult_FailureSong_GroupBox.ResumeLayout(false);
             this.SongLog_TabPage.ResumeLayout(false);
             this.SongLog_GroupBox.ResumeLayout(false);
+            this.SongLog_GroupBox.PerformLayout();
             this.Debug_TabPage.ResumeLayout(false);
             this.Debug_Tooltip_GroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -5967,6 +5982,7 @@
         private System.Windows.Forms.Button Debug_CreateTestFile_Button;
         private System.Windows.Forms.GroupBox Debug_Tooltip_GroupBox;
         private System.Windows.Forms.Label Debug_Tooltip_Label;
+        private System.Windows.Forms.Button SongLog_ClearLog_Button;
     }
 }
 

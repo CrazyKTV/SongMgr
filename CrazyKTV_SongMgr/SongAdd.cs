@@ -819,7 +819,6 @@ namespace CrazyKTV_SongMgr
             int count = Global.DupSongAddDT.Rows.Count;
 
             for (int i = 0; i < count; i++)
-            //Parallel.For(0, count, (i, loopState) =>
             {
                 SongAddSong.StartUpdateSong(i);
 
@@ -827,7 +826,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SongAdd_Tooltip_Label.Text = "已成功搬移 " + Global.TotalList[3] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首...";
                 });
-            }//);
+            }
 
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();

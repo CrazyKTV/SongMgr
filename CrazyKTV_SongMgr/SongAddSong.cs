@@ -605,7 +605,7 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     bool FileIOError = false;
-                    if (Global.SongMgrSongAddMode != "3" || Global.SongMgrSongAddMode != "4")
+                    if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                     {
                         string SongDestPath = Path.Combine(SongPath, SongFileName);
 
@@ -894,7 +894,7 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     bool FileIOError = false;
-                    if (Global.SongMgrSongAddMode != "3" || Global.SongMgrSongAddMode != "4")
+                    if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                     {
                         string SongDestPath = Path.Combine(SongPath, SongFileName);
 

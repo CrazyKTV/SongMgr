@@ -578,7 +578,7 @@ namespace CrazyKTV_SongMgr
                         SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
                     }
 
-                    if (Global.SongMgrSongAddMode != "3" || Global.SongMgrSongAddMode != "4")
+                    if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                     {
                         bool UseMultiSongPath = false;
                         string MultiSongPath = "";
@@ -667,35 +667,6 @@ namespace CrazyKTV_SongMgr
                                     SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
                                 }
                                 break;
-                        }
-                    }
-                    else // 不搬移不複製模式
-                    {
-                        query = from OldSongRow in Global.SongDT.AsEnumerable()
-                                where OldSongRow.Field<string>("Song_Id") == OldSongId
-                                select OldSongRow;
-
-                        if (query.Count<DataRow>() > 0)
-                        {
-                            foreach (DataRow OldSongRow in query)
-                            {
-                                OldSongSinger = OldSongRow["Song_Singer"].ToString();
-                                OldSongSongName = OldSongRow["Song_SongName"].ToString();
-                                break;
-                            }
-
-                            if (SongFileName.ContainsAny(OldSongSinger, OldSongSongName))
-                            {
-                                if (OldSongSinger != SongSingerStr || OldSongSongName != SongSongName)
-                                {
-                                    MoveFile = true;
-                                    SongFileName = Regex.Replace(SongFileName, OldSongSinger + "|" + OldSongSongName, delegate (Match match)
-                                    {
-                                        string str = (match.ToString() == OldSongSinger) ? SongSingerStr : SongSongName;
-                                        return str;
-                                    });
-                                }
-                            }
                         }
                     }
 

@@ -189,6 +189,7 @@ namespace CrazyKTV_SongMgr
                         dt.Rows.Add(row);
 
                         Common_SwitchSetUI(false);
+
                         var tasks = new List<Task>();
                         tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(dt)));
 

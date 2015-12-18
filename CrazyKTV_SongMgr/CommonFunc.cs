@@ -34,6 +34,21 @@ namespace CrazyKTV_SongMgr
     {
         private static object LockThis = new object();
 
+        #region --- 清除操作記錄 ---
+
+        private void SongLog_ClearLog_Button_Click(object sender, EventArgs e)
+        {
+            SongLog_ListBox.DataSource = null;
+            SongLog_ListBox.Items.Clear();
+            Global.SongLogDT.Rows.Clear();
+            SongLog_TabPage.Text = "操作記錄";
+            GC.Collect();
+        }
+
+        #endregion
+
+        #region --- TextBox 控制項 ---
+
         private void Common_NumericOnly_TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13 & (int)e.KeyChar != 27)
@@ -139,7 +154,11 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
-        
+
+        #endregion
+
+        #region --- ListBox 記錄複製 ---
+
         private void Common_ListBox_DoubleClick(object sender, EventArgs e)
         {
             string str = "";
@@ -167,6 +186,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- 介面切換 ---
+
         private void Common_SwitchDBVerErrorUI(bool status)
         {
             SongQuery_Query_GroupBox.Enabled = status;
@@ -193,7 +216,7 @@ namespace CrazyKTV_SongMgr
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
         }
-
+        
         private void Common_SwitchSetUI(bool status)
         {
             if (!status)
@@ -281,6 +304,8 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
+
+        #endregion
 
 
         private void Common_InitializeSongData()
