@@ -503,25 +503,18 @@ namespace CrazyKTV_SongMgr
             cmd = new OleDbCommand(SongAddSqlStr, SongAddConn);
 
             OleDbCommand singercmd = new OleDbCommand();
-            OleDbCommand allsingercmd = new OleDbCommand();
             sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
             sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
             string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-            string AllSingerAddSqlStr = "insert into ktv_AllSinger ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
             singercmd = new OleDbCommand(SingerAddSqlStr, SongAddConn);
-            allsingercmd = new OleDbCommand(AllSingerAddSqlStr, SongAddConn);
 
             List<string> valuelist = new List<string>();
             List<string> NotExistsSingerId = new List<string>();
             NotExistsSingerId = CommonFunc.GetNotExistsSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
-            List<string> NotExistsAllSingerId = new List<string>();
-            NotExistsAllSingerId = CommonFunc.GetNotExistsSingerId("ktv_AllSinger", Global.CrazyktvDatabaseFile);
             int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_Singer", Global.CrazyktvDatabaseFile) + 1;
-            int MaxAllSingerId = CommonFunc.GetMaxSingerId("ktv_AllSinger", Global.CrazyktvDatabaseFile) + 1;
             string NextSingerId = "";
             List<string> spelllist = new List<string>();
             List<string> singeraddedlist = new List<string>();
-            List<string> allsingeraddedlist = new List<string>();
 
             foreach (string str in Global.SongAddValueList)
             {
@@ -564,7 +557,6 @@ namespace CrazyKTV_SongMgr
                     }
                     cmd.Parameters.Clear();
                 });
-
 
                 var AddSingerDBTask = Task.Factory.StartNew(() =>
                 {
@@ -636,23 +628,10 @@ namespace CrazyKTV_SongMgr
             // 加入合唱歌手
             if (Global.SongAddChorusSingerList.Count > 0)
             {
-                List<string> AllSingerList = new List<string>();
-                List<string> AllSingerLowCaseList = new List<string>();
-                List<string> AllSingerTypeList = new List<string>();
-
                 List<string> SingerList = new List<string>();
                 List<string> SingerLowCaseList = new List<string>();
 
-                string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
-                Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
-
-                foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
-                {
-                    AllSingerList.Add(row["Singer_Name"].ToString());
-                    AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
-                    AllSingerTypeList.Add(row["Singer_Type"].ToString());
-                }
-
+                Global.SingerDT = new DataTable();
                 string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
                 Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
 
@@ -665,11 +644,25 @@ namespace CrazyKTV_SongMgr
                 foreach (string singer in Global.SongAddChorusSingerList)
                 {
                     string singertype = "";
+                    bool AddSinger = false;
 
-                    if (AllSingerLowCaseList.IndexOf(singer.ToLower()) >= 0)
+                    if (Global.AllSingerLowCaseList.IndexOf(singer.ToLower()) >= 0)
                     {
-                        singertype = AllSingerTypeList[AllSingerLowCaseList.IndexOf(singer.ToLower())];
-                        if (SingerLowCaseList.IndexOf(singer.ToLower()) < 0)
+                        singertype = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(singer.ToLower())];
+
+                        if (SingerList.Count > 0)
+                        {
+                            if (SingerLowCaseList.IndexOf(singer.ToLower()) < 0)
+                            {
+                                AddSinger = true;
+                            }
+                        }
+                        else
+                        {
+                            AddSinger = true;
+                        }
+
+                        if (AddSinger)
                         {
                             if (NotExistsSingerId.Count > 0)
                             {
@@ -718,9 +711,6 @@ namespace CrazyKTV_SongMgr
                         }
                     });
                 }
-                AllSingerList.Clear();
-                AllSingerLowCaseList.Clear();
-                AllSingerTypeList.Clear();
                 SingerList.Clear();
                 SingerLowCaseList.Clear();
             }
@@ -809,8 +799,8 @@ namespace CrazyKTV_SongMgr
                     Global.DupSongAddDT.Dispose();
                     Global.DupSongAddDT = null;
                 }
+                SongAddSong.DisposeSongDataTable();
             });
-            SongAddSong.DisposeSongDataTable();
         }
 
         private void SongAdd_SongUpdateTask()
@@ -894,7 +884,7 @@ namespace CrazyKTV_SongMgr
 
             if (Global.SongAddDupSongMode == "2")
             {
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     Global.TimerEndTime = DateTime.Now;
                     SongAdd_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成更新。";
@@ -1007,7 +997,7 @@ namespace CrazyKTV_SongMgr
         public static DataTable GetSongIdentificationModeList()
         {
             List<string> list = new List<string>();
-            list = new List<string>() { "智慧辨識模式", "歌手_歌名", "歌名_歌手", "歌曲編號_歌手_歌名" };
+            list = new List<string>() { "智能辨識模式", "歌手_歌名", "歌名_歌手", "歌曲編號_歌手_歌名" };
 
             DataTable dt = new DataTable();
             dt.Columns.Add(new DataColumn("Display", typeof(string)));

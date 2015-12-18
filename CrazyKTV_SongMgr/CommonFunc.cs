@@ -283,35 +283,33 @@ namespace CrazyKTV_SongMgr
         }
 
 
-        private void Common_InitializeSongDataTask()
+        private void Common_InitializeSongData()
         {
-            int MaxDigitCode;
-            if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
-
-            Global.PhoneticsWordList = new List<string>();
-            Global.PhoneticsSpellList = new List<string>();
-            Global.PhoneticsStrokesList = new List<string>();
-            Global.PhoneticsPenStyleList = new List<string>();
-
-            string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-            Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
-
-            var query = from row in Global.PhoneticsDT.AsEnumerable()
-                        where row.Field<Int16>("SortIdx") < 2
-                        select row;
-
-            foreach (DataRow row in query)
+            if (Global.CrazyktvDatabaseStatus)
             {
-                Global.PhoneticsWordList.Add(row["Word"].ToString());
-                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                Global.PhoneticsWordList = new List<string>();
+                Global.PhoneticsSpellList = new List<string>();
+                Global.PhoneticsStrokesList = new List<string>();
+                Global.PhoneticsPenStyleList = new List<string>();
+
+                Global.PhoneticsDT = new DataTable();
+                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
+
+                var query = from row in Global.PhoneticsDT.AsEnumerable()
+                            where row.Field<Int16>("SortIdx") < 2
+                            select row;
+
+                foreach (DataRow row in query)
+                {
+                    Global.PhoneticsWordList.Add(row["Word"].ToString());
+                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                }
+                Global.PhoneticsDT.Dispose();
+                Global.PhoneticsDT = null;
             }
-            Global.PhoneticsDT.Dispose();
-            Global.PhoneticsDT = null;
         }
 
 
@@ -319,25 +317,27 @@ namespace CrazyKTV_SongMgr
         {
             if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
             {
+                Global.SongStatisticsDT = new DataTable();
                 string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Path, Song_FileName from ktv_Song";
                 Global.SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
                 List<int> SongLangCount = new List<int>();
                 List<int> SongFileCount = new List<int>();
 
-                Label[] SongQuery_Statistics_Label = 
-                    {
-                        SongQuery_Statistics2_Label,
-                        SongQuery_Statistics3_Label,
-                        SongQuery_Statistics4_Label,
-                        SongQuery_Statistics5_Label,
-                        SongQuery_Statistics6_Label,
-                        SongQuery_Statistics7_Label,
-                        SongQuery_Statistics8_Label,
-                        SongQuery_Statistics9_Label,
-                        SongQuery_Statistics10_Label,
-                        SongQuery_Statistics11_Label
-                    };
+                Label[] SongQuery_Statistics_Label =
+                {
+                    SongQuery_Statistics2_Label,
+                    SongQuery_Statistics3_Label,
+                    SongQuery_Statistics4_Label,
+                    SongQuery_Statistics5_Label,
+                    SongQuery_Statistics6_Label,
+                    SongQuery_Statistics7_Label,
+                    SongQuery_Statistics8_Label,
+                    SongQuery_Statistics9_Label,
+                    SongQuery_Statistics10_Label,
+                    SongQuery_Statistics11_Label
+                };
+
 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -347,21 +347,21 @@ namespace CrazyKTV_SongMgr
                     }
                 });
 
-                Label[] SongQuery_StatisticsValue_Label = 
-                    {
-                        SongQuery_Statistics2Value_Label,
-                        SongQuery_Statistics3Value_Label,
-                        SongQuery_Statistics4Value_Label,
-                        SongQuery_Statistics5Value_Label,
-                        SongQuery_Statistics6Value_Label,
-                        SongQuery_Statistics7Value_Label,
-                        SongQuery_Statistics8Value_Label,
-                        SongQuery_Statistics9Value_Label,
-                        SongQuery_Statistics10Value_Label,
-                        SongQuery_Statistics11Value_Label,
-                        SongQuery_Statistics1Value_Label,
-                        SongQuery_Statistics12Value_Label
-                    };
+                Label[] SongQuery_StatisticsValue_Label =
+                {
+                    SongQuery_Statistics2Value_Label,
+                    SongQuery_Statistics3Value_Label,
+                    SongQuery_Statistics4Value_Label,
+                    SongQuery_Statistics5Value_Label,
+                    SongQuery_Statistics6Value_Label,
+                    SongQuery_Statistics7Value_Label,
+                    SongQuery_Statistics8Value_Label,
+                    SongQuery_Statistics9Value_Label,
+                    SongQuery_Statistics10Value_Label,
+                    SongQuery_Statistics11Value_Label,
+                    SongQuery_Statistics1Value_Label,
+                    SongQuery_Statistics12Value_Label
+                };
 
                 TextBox[] SongMaintenance_Lang_TextBox =
                 {
@@ -382,10 +382,11 @@ namespace CrazyKTV_SongMgr
                     SongQuery_StatisticsValue_Label[11].Text = "統計中...";
                 });
 
-                var task1 = Task<List<int>>.Factory.StartNew(CommonFunc.GetSongLangCount);
-                var task2 = Task<List<int>>.Factory.StartNew(CommonFunc.GetSongFileCount);
+                var tasks = new List<Task<List<int>>>();
+                tasks.Add(Task<List<int>>.Factory.StartNew(CommonFunc.GetSongLangCount));
+                tasks.Add(Task<List<int>>.Factory.StartNew(CommonFunc.GetSongFileCount));
 
-                SongLangCount = task1.Result;
+                SongLangCount = tasks[0].Result;
                 this.BeginInvoke((Action)delegate()
                 {
                     for (int i = 0; i < SongLangCount.Count; i++)
@@ -398,14 +399,17 @@ namespace CrazyKTV_SongMgr
                     }
                 });
 
-                SongFileCount = task2.Result;
+                SongFileCount = tasks[1].Result;
                 this.BeginInvoke((Action)delegate()
                 {
                     SongQuery_StatisticsValue_Label[11].Text = SongFileCount[10].ToString() + " 個";
                 });
 
-                Global.SongStatisticsDT.Dispose();
-                Global.SongStatisticsDT = null;
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.SongStatisticsDT.Dispose();
+                    Global.SongStatisticsDT = null;
+                });
             }
         }
 
@@ -459,7 +463,7 @@ namespace CrazyKTV_SongMgr
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Common_RefreshSongLang();
                             });
@@ -483,7 +487,6 @@ namespace CrazyKTV_SongMgr
             SongAdd_DefaultSongLang_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongLang_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongLang);
 
-            Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
             SongMgrCfg_SetLangLB();
             SongMaintenance_SetCustomLangControl();
         }
@@ -504,18 +507,18 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                Label[] SingerMgr_Statistics_Label = 
-                    {
-                        SingerMgr_Statistics2_Label,
-                        SingerMgr_Statistics3_Label,
-                        SingerMgr_Statistics4_Label,
-                        SingerMgr_Statistics5_Label,
-                        SingerMgr_Statistics6_Label,
-                        SingerMgr_Statistics7_Label,
-                        SingerMgr_Statistics8_Label,
-                        SingerMgr_Statistics9_Label,
-                        SingerMgr_Statistics10_Label
-                    };
+                Label[] SingerMgr_Statistics_Label =
+                {
+                    SingerMgr_Statistics2_Label,
+                    SingerMgr_Statistics3_Label,
+                    SingerMgr_Statistics4_Label,
+                    SingerMgr_Statistics5_Label,
+                    SingerMgr_Statistics6_Label,
+                    SingerMgr_Statistics7_Label,
+                    SingerMgr_Statistics8_Label,
+                    SingerMgr_Statistics9_Label,
+                    SingerMgr_Statistics10_Label
+                };
 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -525,19 +528,19 @@ namespace CrazyKTV_SongMgr
                     }
                 });
 
-                Label[] SingerMgr_StatisticsValue_Label = 
-                    {
-                        SingerMgr_Statistics2Value_Label,
-                        SingerMgr_Statistics3Value_Label,
-                        SingerMgr_Statistics4Value_Label,
-                        SingerMgr_Statistics5Value_Label,
-                        SingerMgr_Statistics6Value_Label,
-                        SingerMgr_Statistics7Value_Label,
-                        SingerMgr_Statistics8Value_Label,
-                        SingerMgr_Statistics9Value_Label,
-                        SingerMgr_Statistics10Value_Label,
-                        SingerMgr_Statistics1Value_Label
-                    };
+                Label[] SingerMgr_StatisticsValue_Label =
+                {
+                    SingerMgr_Statistics2Value_Label,
+                    SingerMgr_Statistics3Value_Label,
+                    SingerMgr_Statistics4Value_Label,
+                    SingerMgr_Statistics5Value_Label,
+                    SingerMgr_Statistics6Value_Label,
+                    SingerMgr_Statistics7Value_Label,
+                    SingerMgr_Statistics8Value_Label,
+                    SingerMgr_Statistics9Value_Label,
+                    SingerMgr_Statistics10Value_Label,
+                    SingerMgr_Statistics1Value_Label
+                };
 
                 var task = Task<List<int>>.Factory.StartNew(CommonFunc.GetSingerTypeCount);
 
@@ -923,7 +926,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Task.Factory.StartNew(() => Common_InitializeSongDataTask());
+            Common_InitializeSongData();
 
             // 歌庫監視
             SongMonitor_CheckCurSong();
@@ -1139,12 +1142,11 @@ namespace CrazyKTV_SongMgr
                 "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Application.StartupPath + @"\tempdb.mdb;Jet OLEDB:Engine Type=5"
             };
 
+            objJRO.GetType().InvokeMember("CompactDatabase", System.Reflection.BindingFlags.InvokeMethod, null, objJRO, oParams);
+
             try
             {
-                objJRO.GetType().InvokeMember("CompactDatabase", System.Reflection.BindingFlags.InvokeMethod, null, objJRO, oParams);
-
                 File.Copy(Application.StartupPath + @"\tempdb.mdb", mdwfilename, true);
-                File.Delete(Application.StartupPath + @"\tempdb.mdb");
             }
             catch
             {
@@ -1153,6 +1155,7 @@ namespace CrazyKTV_SongMgr
                 Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
             }
 
+            File.Delete(Application.StartupPath + @"\tempdb.mdb");
             System.Runtime.InteropServices.Marshal.ReleaseComObject(objJRO);
             objJRO = null;
         }

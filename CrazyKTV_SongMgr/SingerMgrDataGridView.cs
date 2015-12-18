@@ -163,7 +163,7 @@ namespace CrazyKTV_SongMgr
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Common_SwitchSetUI(true);
                                 Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());

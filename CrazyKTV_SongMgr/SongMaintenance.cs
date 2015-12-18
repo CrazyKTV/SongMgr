@@ -78,10 +78,11 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆自訂語系資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_RefreshSongLang();
+                            Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                             Common_SwitchSetUI(true);
                         });
                     });
@@ -597,7 +598,7 @@ namespace CrazyKTV_SongMgr
                         var FavoriteImportTask = Task.Factory.StartNew(() => SongMaintenance_FavoriteImportTask());
                         FavoriteImportTask.Wait();
 
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongQuery_GetFavoriteUserList();
                             SongMaintenance_GetFavoriteUserList();
@@ -612,7 +613,7 @@ namespace CrazyKTV_SongMgr
                         });
                     }
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         Global.TimerEndTime = DateTime.Now;
                         SongMaintenance_Tooltip_Label.Text = "總共轉換 " + Global.TotalList[2] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[3] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
@@ -717,7 +718,7 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_Tooltip_Label.Text = "正在配發第 " + Global.SongDT.Rows.IndexOf(row) + " 首歌曲的歌曲編號,請稍待...";
                     });
@@ -760,7 +761,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[2] + " 首歌曲的歌曲編號,請稍待...";
                 });
@@ -806,7 +807,7 @@ namespace CrazyKTV_SongMgr
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeCorrectEndTask =>
                 {
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         Global.TimerEndTime = DateTime.Now;
                         SongMaintenance_Tooltip_Label.Text = "總共校正 " + Global.TotalList[0] + " 首歌曲的歌曲編號,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
@@ -864,7 +865,7 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_Tooltip_Label.Text = "正在配發第 " + Global.SongDT.Rows.IndexOf(row) + " 首歌曲的歌曲編號,請稍待...";
                     });
@@ -907,7 +908,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的歌曲編號,請稍待...";
                 });
@@ -960,7 +961,7 @@ namespace CrazyKTV_SongMgr
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
                             Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的歌曲路徑資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                                 SongMaintenance_SrcSongPath_TextBox.Text = "";
@@ -995,7 +996,7 @@ namespace CrazyKTV_SongMgr
                     SongPath = row["Song_Path"].ToString().Replace(SrcSongPath, DestSongPath);
                     list.Add(SongPath + "|" + row["Song_Id"].ToString());
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的歌曲路徑資料,請稍待...";
                     });
@@ -1036,7 +1037,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的歌曲路徑資料,請稍待...";
                 });
@@ -1104,7 +1105,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountImportEndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 筆播放次數資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -1192,7 +1193,7 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountResetEndTask =>
                 {
                     Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_Tooltip_Label.Text = "總共重置 " + Global.TotalList[0] + " 首歌曲的播放次數,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                         Common_SwitchSetUI(true);
@@ -1212,7 +1213,7 @@ namespace CrazyKTV_SongMgr
             {
                 list.Add("0" + "|" + row["Song_Id"].ToString());
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的播放次數資料,請稍待...";
                 });
@@ -1252,7 +1253,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的播放次數資料,請稍待...";
                 });
@@ -1283,7 +1284,7 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
                     Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的歌曲字數,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                         Common_SwitchSetUI(true);
@@ -1307,7 +1308,7 @@ namespace CrazyKTV_SongMgr
 
                 list.Add(SongWordCount + "|" + row["Song_Id"].ToString());
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的字數資料,請稍待...";
                 });
@@ -1347,7 +1348,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的字數資料,請稍待...";
                 });
@@ -1373,7 +1374,7 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
                     Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         if (Global.TotalList[0] == 0)
                         {
@@ -1431,7 +1432,7 @@ namespace CrazyKTV_SongMgr
                 string prevDir = dir.Substring(0, dir.LastIndexOf("\\"));
                 if (RootDir.Length <= prevDir.Length) SongMaintenance_RemoveEmptyDirsTask(prevDir, true);
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "已移除掉 " + Global.TotalList[0] + " 個空資料夾,請稍待...";
                 });
@@ -1513,7 +1514,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 項遙控設定,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -1573,7 +1574,7 @@ namespace CrazyKTV_SongMgr
                         lock (LockThis) { Global.TotalList[0]++; }
                         break;
                 }
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 項遙控設定資料,請稍待...";
                 });
@@ -1640,7 +1641,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 項拼音資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -1718,7 +1719,7 @@ namespace CrazyKTV_SongMgr
                         break;
                 }
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
 
                     SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 項拼音資料,請稍待...";
@@ -1741,7 +1742,7 @@ namespace CrazyKTV_SongMgr
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
                 Global.TimerEndTime = DateTime.Now;
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "總共從 " + Global.TotalList[0] + " 首歌曲,查詢到 " + Global.TotalList[1] + " 筆無拼音資料的文字,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                     Common_SwitchSetUI(true);
@@ -1788,7 +1789,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 lock (LockThis) { Global.TotalList[0]++; }
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在解析第 " + Global.TotalList[0] + " 首歌曲的拼音資料,請稍待...";
                 });
@@ -1854,7 +1855,7 @@ namespace CrazyKTV_SongMgr
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
                             Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 SongMaintenance_Tooltip_Label.Text = "總共重建 " + Global.TotalList[0] + " 首歌曲,忽略 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成重建。";
                                 SongMaintenance_RebuildSongStructure_TextBox.Text = "";
@@ -2045,7 +2046,7 @@ namespace CrazyKTV_SongMgr
                     RebuildSongFileValueList.Add(RebuildSongFileValue);
                     lock (LockThis) { Global.TotalList[0]++; }
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_Tooltip_Label.Text = "已成功將 " + Global.TotalList[0] + " 首歌曲重建至重建資料夾,請稍待...";
                     });
@@ -2089,7 +2090,7 @@ namespace CrazyKTV_SongMgr
                 }
                 cmd.Parameters.Clear();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[3] + " 首歌曲的資料庫資料,請稍待...";
                 });
@@ -2643,14 +2644,10 @@ namespace CrazyKTV_SongMgr
                 case "True":
                     SongMaintenance_MultiSongPath_ListBox.Enabled = true;
                     SongMaintenance_MultiSongPath_Button.Enabled = true;
-                    // 統計歌曲數量
-                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     break;
                 case "False":
                     SongMaintenance_MultiSongPath_ListBox.Enabled = false;
                     SongMaintenance_MultiSongPath_Button.Enabled = false;
-                    // 統計歌曲數量
-                    if (Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     break;
             }
         }
@@ -2725,9 +2722,6 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
-
-                    // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     break;
                 case "移除":
                     if (SongMaintenance_MultiSongPath_ListBox.SelectedItem != null)
@@ -2750,9 +2744,6 @@ namespace CrazyKTV_SongMgr
                     {
                         SongMaintenance_Tooltip_Label.Text = "已無可以刪除的多重歌庫資料夾路徑!";
                     }
-
-                    // 統計歌曲數量
-                    Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     break;
             }
         }
@@ -2894,6 +2885,7 @@ namespace CrazyKTV_SongMgr
                 Global.PhoneticsStrokesList = new List<string>();
                 Global.PhoneticsPenStyleList = new List<string>();
 
+                Global.PhoneticsDT = new DataTable();
                 string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
                 Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
 

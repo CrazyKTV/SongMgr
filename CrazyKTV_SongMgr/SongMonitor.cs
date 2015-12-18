@@ -175,9 +175,9 @@ namespace CrazyKTV_SongMgr
             if (NewFileList.Count > 0)
             {
                 SongAdd_SongAnalysisTask(NewFileList);
-                while (Global.AllSingerDT != null)
+                while (!Global.SongAnalysisCompleted)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 }
                 SongAdd_SongAddTask();
             }
@@ -214,6 +214,9 @@ namespace CrazyKTV_SongMgr
                     }
                 });
             }
+            RemoveSongIdList.Clear();
+            FileList.Clear();
+            NewFileList.Clear();
         }
 
         private void SongMonitor_SwitchSongMonitorWatcher()
@@ -245,6 +248,12 @@ namespace CrazyKTV_SongMgr
 
                 if (EnableSongMonitor)
                 {
+                    if (Global.SongMonitorDT != null)
+                    {
+                        Global.SongMonitorDT.Dispose();
+                        Global.SongMonitorDT = null;
+                    }
+
                     Global.SongMonitorDT = new DataTable();
                     string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_FileName, Song_Path from ktv_Song order by Song_Id";
                     Global.SongMonitorDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
@@ -444,6 +453,12 @@ namespace CrazyKTV_SongMgr
                             SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
                             SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
 
+                            if (Global.SongMonitorDT != null)
+                            {
+                                Global.SongMonitorDT.Dispose();
+                                Global.SongMonitorDT = null;
+                            }
+
                             Global.SongMonitorDT = new DataTable();
                             string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_FileName, Song_Path from ktv_Song order by Song_Id";
                             Global.SongMonitorDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
@@ -494,13 +509,13 @@ namespace CrazyKTV_SongMgr
             if (Global.SongMonitorCreatedList.Count > 0)
             {
                 SongAdd_SongAnalysisTask(Global.SongMonitorCreatedList);
-                while (Global.AllSingerDT != null)
+                while (!Global.SongAnalysisCompleted)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 }
                 SongAdd_SongAddTask();
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongQuery_QueryStatus_Label.Text = "正在將變更的歌曲資料寫入操作記錄,請稍待...";
                     SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;

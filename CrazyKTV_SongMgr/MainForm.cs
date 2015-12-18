@@ -37,7 +37,6 @@ namespace CrazyKTV_SongMgr
                 MainTabControl.TabPages.Remove(Debug_TabPage);
             }
 
-
             // 歌庫版本資訊
             if (!File.Exists(Global.CrazyktvSongDBUpdateFile))
             {
@@ -46,6 +45,12 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", Global.CrazyktvSongDBVer);
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer", Global.CrazyktvSingerDBVer);
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer", Global.CrazyktvPhoneticsDBVer);
+            }
+
+            // CrazyKTV 設定
+            if (!File.Exists(Global.CrazyktvCfgFile))
+            {
+                CommonFunc.CreateConfigXmlFile(Global.CrazyktvCfgFile);
             }
 
             // 載入歌庫設定
@@ -363,7 +368,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Task.Factory.StartNew(() => Common_InitializeSongDataTask());
+            Common_InitializeSongData();
 
             // 歌庫監視
             SongMonitor_CheckCurSong();
@@ -426,96 +431,39 @@ namespace CrazyKTV_SongMgr
         // 頁籤切換處理
         private void MainTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Label[] Tooltip_Label =
+            {
+                SongQuery_QueryStatus_Label,
+                SongAdd_Tooltip_Label,
+                SingerMgr_Tooltip_Label,
+                SongMgrCfg_Tooltip_Label,
+                SongMaintenance_Tooltip_Label
+            };
+
+            int i = -1;
+
             switch (MainTabControl.SelectedTab.Name)
             {
                 case "SongQuery_TabPage":
+                    i = 0;
                     SongQuery_QueryValue_TextBox.Focus();
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.OnHalf;
-
-                    if (!Global.CrazyktvDatabaseStatus)
-                    {
-                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongQuery_QueryStatus_Label.Text = "資料庫檔案不存在!";
-                        else if (Global.CrazyktvDatabaseIsOld) SongQuery_QueryStatus_Label.Text = "資料庫檔案為舊版本!";
-                        else if (!Global.CrazyktvDatabaseMaxDigitCode) SongQuery_QueryStatus_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!Directory.Exists(Global.SongMgrDestFolder)) SongQuery_QueryStatus_Label.Text = "歌庫資料夾不存在!";
-                    }
-                    else
-                    {
-                        if (SongQuery_QueryStatus_Label.Text == "資料庫檔案不存在!") SongQuery_QueryStatus_Label.Text = "";
-                        else if (SongQuery_QueryStatus_Label.Text == "資料庫檔案為舊版本!") SongQuery_QueryStatus_Label.Text = "";
-                        else if (SongQuery_QueryStatus_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SongQuery_QueryStatus_Label.Text = "";
-                        else if (SongQuery_QueryStatus_Label.Text == "歌庫資料夾不存在!") SongQuery_QueryStatus_Label.Text = "";
-                    }
                     break;
                 case "SongAdd_TabPage":
+                    i = 1;
                     if (Global.RemainingSongID < 100)
                     {
                         SongAdd_Tooltip_Label.Text = "注意: 已有語系的歌曲編號僅剩 " + Global.RemainingSongID + " 個編號可用!";
                     }
-
-                    if (!Global.CrazyktvDatabaseStatus)
-                    {
-                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongAdd_Tooltip_Label.Text = "資料庫檔案不存在!";
-                        else if (Global.CrazyktvDatabaseIsOld) SongAdd_Tooltip_Label.Text = "資料庫檔案為舊版本!";
-                        else if (!Global.CrazyktvDatabaseMaxDigitCode) SongAdd_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!Directory.Exists(Global.SongMgrDestFolder)) SongAdd_Tooltip_Label.Text = "歌庫資料夾不存在!";
-                    }
-                    else
-                    {
-                        if (SongAdd_Tooltip_Label.Text == "資料庫檔案不存在!") SongAdd_Tooltip_Label.Text = "";
-                        else if (SongAdd_Tooltip_Label.Text == "資料庫檔案為舊版本!") SongAdd_Tooltip_Label.Text = "";
-                        else if (SongAdd_Tooltip_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SongAdd_Tooltip_Label.Text = "";
-                        else if (SongAdd_Tooltip_Label.Text == "歌庫資料夾不存在!") SongAdd_Tooltip_Label.Text = "";
-                    }
                     break;
                 case "SingerMgr_TabPage":
-                    if (!Global.CrazyktvDatabaseStatus)
-                    {
-                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SingerMgr_Tooltip_Label.Text = "資料庫檔案不存在!";
-                        else if (Global.CrazyktvDatabaseIsOld) SingerMgr_Tooltip_Label.Text = "資料庫檔案為舊版本!";
-                        else if (!Global.CrazyktvDatabaseMaxDigitCode) SingerMgr_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!Directory.Exists(Global.SongMgrDestFolder)) SingerMgr_Tooltip_Label.Text = "歌庫資料夾不存在!";
-                    }
-                    else
-                    {
-                        if (SingerMgr_Tooltip_Label.Text == "資料庫檔案不存在!") SingerMgr_Tooltip_Label.Text = "";
-                        else if (SingerMgr_Tooltip_Label.Text == "資料庫檔案為舊版本!") SingerMgr_Tooltip_Label.Text = "";
-                        else if (SingerMgr_Tooltip_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SingerMgr_Tooltip_Label.Text = "";
-                        else if (SingerMgr_Tooltip_Label.Text == "歌庫資料夾不存在!") SingerMgr_Tooltip_Label.Text = "";
-                    }
+                    i = 2;
                     break;
                 case "SongMgrCfg_TabPage":
-                    if (!Global.CrazyktvDatabaseStatus)
-                    {
-                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案不存在!";
-                        else if (Global.CrazyktvDatabaseIsOld) SongMgrCfg_Tooltip_Label.Text = "資料庫檔案為舊版本!";
-                        else if (!Global.CrazyktvDatabaseMaxDigitCode) SongMgrCfg_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMgrCfg_Tooltip_Label.Text = "歌庫資料夾不存在!";
-                    }
-                    else
-                    {
-                        if (SongMgrCfg_Tooltip_Label.Text == "資料庫檔案不存在!") SongMgrCfg_Tooltip_Label.Text = "";
-                        else if (SongMgrCfg_Tooltip_Label.Text == "資料庫檔案為舊版本!") SongMgrCfg_Tooltip_Label.Text = "";
-                        else if (SongMgrCfg_Tooltip_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SongMgrCfg_Tooltip_Label.Text = "";
-                        else if (SongMgrCfg_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMgrCfg_Tooltip_Label.Text = "";
-                    }
+                    i = 3;
                     break;
                 case "SongMaintenance_TabPage":
-                    if (!Global.CrazyktvDatabaseStatus)
-                    {
-                        if (!File.Exists(Global.CrazyktvDatabaseFile)) SongMaintenance_Tooltip_Label.Text = "資料庫檔案不存在!";
-                        else if (Global.CrazyktvDatabaseIsOld) SongMaintenance_Tooltip_Label.Text = "資料庫檔案為舊版本!";
-                        else if (!Global.CrazyktvDatabaseMaxDigitCode) SongMaintenance_Tooltip_Label.Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                        else if (!Directory.Exists(Global.SongMgrDestFolder)) SongMaintenance_Tooltip_Label.Text = "歌庫資料夾不存在!";
-                    }
-                    else
-                    {
-                        if (SongMaintenance_Tooltip_Label.Text == "資料庫檔案不存在!") SongMaintenance_Tooltip_Label.Text = "";
-                        else if (SongMaintenance_Tooltip_Label.Text == "資料庫檔案為舊版本!") SongMaintenance_Tooltip_Label.Text = "";
-                        else if (SongMaintenance_Tooltip_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") SongMaintenance_Tooltip_Label.Text = "";
-                        else if (SongMaintenance_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMaintenance_Tooltip_Label.Text = "";
-                    }
-
+                    i = 4;
                     switch (SongMaintenance_TabControl.SelectedTab.Name)
                     {
                         case "SongMaintenance_CustomLang_TabPage":
@@ -528,6 +476,24 @@ namespace CrazyKTV_SongMgr
                             break;
                     }
                     break;
+            }
+
+            if (i >= 0)
+            {
+                if (!Global.CrazyktvDatabaseStatus)
+                {
+                    if (!File.Exists(Global.CrazyktvDatabaseFile)) Tooltip_Label[i].Text = "資料庫檔案不存在!";
+                    else if (Global.CrazyktvDatabaseIsOld) Tooltip_Label[i].Text = "資料庫檔案為舊版本!";
+                    else if (!Global.CrazyktvDatabaseMaxDigitCode) Tooltip_Label[i].Text = "歌庫編碼混雜 5 及 6 位數編碼!";
+                    else if (!Directory.Exists(Global.SongMgrDestFolder)) Tooltip_Label[i].Text = "歌庫資料夾不存在!";
+                }
+                else
+                {
+                    if (SongQuery_QueryStatus_Label.Text == "資料庫檔案不存在!") Tooltip_Label[i].Text = "";
+                    else if (SongQuery_QueryStatus_Label.Text == "資料庫檔案為舊版本!") Tooltip_Label[i].Text = "";
+                    else if (SongQuery_QueryStatus_Label.Text == "歌庫編碼混雜 5 及 6 位數編碼!") Tooltip_Label[i].Text = "";
+                    else if (SongQuery_QueryStatus_Label.Text == "歌庫資料夾不存在!") Tooltip_Label[i].Text = "";
+                }
             }
         }
 

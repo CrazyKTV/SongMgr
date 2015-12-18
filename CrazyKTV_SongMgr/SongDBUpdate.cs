@@ -94,7 +94,7 @@ namespace CrazyKTV_SongMgr
                     PhoneticsDBVer = row["PhoneticsDB"].ToString();
                 }
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     SongMaintenance_DBVer1Value_Label.Text = SongDBVer.ToString("F2") + " 版";
                     SongMaintenance_DBVer2Value_Label.Text = SingerDBVer.ToString() + " 版";
@@ -141,7 +141,7 @@ namespace CrazyKTV_SongMgr
                     {
                         if (Convert.ToDouble(Global.CrazyktvSongDBVer) > SongDBVer || Convert.ToInt32(Global.CrazyktvSingerDBVer) > Convert.ToInt32(SingerDBVer) || Convert.ToInt32(Global.CrazyktvPhoneticsDBVer) > Convert.ToInt32(PhoneticsDBVer))
                         {
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 if (MessageBox.Show("你確定要更新歌庫版本嗎?", "偵測到歌庫版本更新", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
@@ -356,7 +356,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVerTooltip_Label.Text = "更新歌曲資料表失敗,已還原為原本的資料庫檔案。";
                     });
@@ -387,7 +387,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVerTooltip_Label.Text = "更新歌手資料表失敗,已還原為原本的資料庫檔案。";
                     });
@@ -412,7 +412,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVerTooltip_Label.Text = "更新拼音資料表失敗,已還原為原本的資料庫檔案。";
                     });
@@ -436,7 +436,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVerTooltip_Label.Text = "更新語系資料表失敗,已還原為原本的資料庫檔案。";
                     });
@@ -560,7 +560,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
             SongMaintenance.DisposeSongDataTable();
 
-            this.BeginInvoke((Action)delegate ()
+            this.BeginInvoke((Action)delegate()
             {
                 Global.TimerEndTime = DateTime.Now;
                 if (Global.SongLogDT.Rows.Count > 0)
@@ -637,7 +637,7 @@ namespace CrazyKTV_SongMgr
                     int MaxDigitCode;
                     if (d5code.Count<DataRow>() > d6code.Count<DataRow>()) { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         switch (MaxDigitCode)
                         {
@@ -668,7 +668,7 @@ namespace CrazyKTV_SongMgr
 
                     if (query.Count<DataRow>() > 0)
                     {
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Common_SwitchDBVerErrorUI(false);
                             SongMaintenance_CodeConvTo6_Button.Enabled = false;
@@ -679,7 +679,7 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
                             {
@@ -706,9 +706,18 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    this.BeginInvoke((Action)delegate ()
+                    // 空白資料庫
+                    this.BeginInvoke((Action)delegate()
                     {
-                        if (SongMgrDestFolder) { Common_SwitchDBVerErrorUI(true); } else { Common_SwitchDBVerErrorUI(false); }
+                        if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
+                        {
+                            Common_SwitchDBVerErrorUI(true);
+                        }
+                        else
+                        {
+                            if (SongMgrDestFolder) { Common_SwitchDBVerErrorUI(true); } else { Common_SwitchDBVerErrorUI(false); }
+                        }
+                            
                         SongMaintenance_CodeConvTo6_Button.Enabled = false;
                         SongMaintenance_CodeCorrect_Button.Enabled = false;
                         Global.CrazyktvDatabaseMaxDigitCode = true;
@@ -735,7 +744,7 @@ namespace CrazyKTV_SongMgr
                 // 取得最小歌曲剩餘編號
                 Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     // 載入我的最愛清單
                     SongQuery_GetFavoriteUserList();

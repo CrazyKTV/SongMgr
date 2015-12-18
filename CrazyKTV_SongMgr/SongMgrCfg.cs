@@ -167,6 +167,7 @@ namespace CrazyKTV_SongMgr
                         SongAdd_DragDrop_Label.Visible = true;
                         SongMonitor_SwitchSongMonitorWatcher();
                     }
+                    if (SongMgrCfg_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMgrCfg_Tooltip_Label.Text = "";
                     if (Global.SongMgrInitializeStatus) Common_RefreshSongMgr();
                     break;
             }

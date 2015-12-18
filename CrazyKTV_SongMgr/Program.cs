@@ -36,7 +36,7 @@ namespace CrazyKTV_SongMgr
 
     class Global
     {
-        public static bool DebugMode = false;
+        public static bool DebugMode = true;
 
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
         public static string CrazyktvSongDBVer = "1.00";
@@ -106,6 +106,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> CrazyktvDBTableList = new List<string>();
         public static List<string> CrazyktvDBColumnList = new List<string>();
 
+        public static bool SongAnalysisCompleted = false;
         public static List<string> SongAnalysisSingerList = new List<string>();
         public static List<string> SongAnalysisSingerLowCaseList = new List<string>();
         public static List<string> SongAnalysisSingerTypeList = new List<string>();
@@ -153,10 +154,10 @@ namespace CrazyKTV_SongMgr
 
         public static string SongQueryQueryType = "SongQuery";
         public static string SongQueryFuzzyQuery = "True";
+        public static string SongQueryFilter = "全部";
         public static bool SongQuerySynonymousQuery = true;
         public static bool SongQueryHasWideChar = false;
-        public static string SongQueryFilter = "全部";
-
+        
         public static string SongQueryDataGridViewValue = "";
         public static string SingerQueryDataGridViewValue = "";
 

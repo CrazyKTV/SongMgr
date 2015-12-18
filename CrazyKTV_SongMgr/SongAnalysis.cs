@@ -14,6 +14,7 @@ namespace CrazyKTV_SongMgr
 
         public static void CreateSongDataTable()
         {
+            Global.SongAnalysisCompleted = false;
             Global.SongAddDT = new DataTable();
             Global.SongAddDT.Columns.Add("Song_AddStatus", typeof(string));
             Global.SongAddDT.Columns.Add("Song_Id", typeof(string));
@@ -38,10 +39,11 @@ namespace CrazyKTV_SongMgr
             Global.SongAddDT.Columns.Add("Song_SrcPath", typeof(string));
             Global.SongAddDT.Columns.Add("Song_SortIndex", typeof(string));
 
-            Global.SongAnalysisSingerList  = new List<string>();
+            Global.SongAnalysisSingerList = new List<string>();
             Global.SongAnalysisSingerLowCaseList = new List<string>();
             Global.SongAnalysisSingerTypeList = new List<string>();
 
+            Global.AllSingerDT = new DataTable();
             string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
             Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
 
@@ -51,7 +53,10 @@ namespace CrazyKTV_SongMgr
                 Global.SongAnalysisSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
                 Global.SongAnalysisSingerTypeList.Add(row["Singer_Type"].ToString());
             }
+            Global.AllSingerDT.Dispose();
+            Global.AllSingerDT = null;
 
+            Global.SingerDT = new DataTable();
             string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
             Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
 
@@ -64,6 +69,8 @@ namespace CrazyKTV_SongMgr
                     Global.SongAnalysisSingerTypeList.Add(row["Singer_Type"].ToString());
                 }
             }
+            Global.SingerDT.Dispose();
+            Global.SingerDT = null;
 
             if (Global.PhoneticsWordList.Count == 0)
             {
@@ -72,6 +79,7 @@ namespace CrazyKTV_SongMgr
                 Global.PhoneticsStrokesList = new List<string>();
                 Global.PhoneticsPenStyleList = new List<string>();
 
+                Global.PhoneticsDT = new DataTable();
                 string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
                 Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
 
@@ -98,10 +106,7 @@ namespace CrazyKTV_SongMgr
             Global.SongAnalysisSingerTypeList.Clear();
             Global.SongAddDT.Dispose();
             Global.SongAddDT = null;
-            Global.SingerDT.Dispose();
-            Global.SingerDT = null;
-            Global.AllSingerDT.Dispose();
-            Global.AllSingerDT = null;
+            Global.SongAnalysisCompleted = true;
         }
 
         public static void SongInfoAnalysis(string file, List<string> SongLangKeyWordList, List<string> SingerTypeKeyWordList)
@@ -668,7 +673,24 @@ namespace CrazyKTV_SongMgr
             if (SongLang == "未知") SongAddStatus = "語系類別必須有值才能加歌!";
             if (SongAddStatus == "") { if (SongSingerType == "10") SongAddStatus = "此歌手尚未設定歌手資料!";}
 
-            CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex);
+            // 歌庫監視
+            if (Global.SongMgrSongAddMode == "4")
+            {
+                if (SongLang == "未知")
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫監視】檔案結構中須有語系類別資訊才能加歌: " + SongSrcPath;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+                else
+                {
+                    CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex);
+                }
+            }
+            else
+            {
+                CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex);
+            }
         }
 
         public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, DateTime SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex)

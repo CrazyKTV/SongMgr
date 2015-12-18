@@ -736,7 +736,7 @@ namespace CrazyKTV_SongMgr
                                         Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
                                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                        this.BeginInvoke((Action)delegate ()
+                                        this.BeginInvoke((Action)delegate()
                                         {
                                             SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
                                         });
@@ -748,7 +748,7 @@ namespace CrazyKTV_SongMgr
                                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (歌庫裡已存在該首歌曲的檔案)";
                                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                    this.BeginInvoke((Action)delegate ()
+                                    this.BeginInvoke((Action)delegate()
                                     {
                                         SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
                                     });
@@ -766,7 +766,7 @@ namespace CrazyKTV_SongMgr
                                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
                                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                    this.BeginInvoke((Action)delegate ()
+                                    this.BeginInvoke((Action)delegate()
                                     {
                                         SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
                                     });
@@ -779,7 +779,7 @@ namespace CrazyKTV_SongMgr
                             Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                             Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + SongSrcPath + " (檔案不存在)";
                             Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
                             });
