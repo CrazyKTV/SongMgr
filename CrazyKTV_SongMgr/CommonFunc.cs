@@ -211,6 +211,7 @@ namespace CrazyKTV_SongMgr
             SongMaintenance_SongPathChange_GroupBox.Enabled = status;
             SongMaintenance_Save_Button.Enabled = status;
             SingerMgr_Query_GroupBox.Enabled = status;
+            SingerMgr_OtherQuery_GroupBox.Enabled = status;
             SingerMgr_Statistics_GroupBox.Enabled = status;
             SingerMgr_SingerAdd_GroupBox.Enabled = status;
             SingerMgr_Manager_GroupBox.Enabled = status;
@@ -248,6 +249,7 @@ namespace CrazyKTV_SongMgr
             SongMaintenance_SongPathChange_GroupBox.Enabled = status;
             SongMaintenance_Save_Button.Enabled = status;
             SingerMgr_Query_GroupBox.Enabled = status;
+            SingerMgr_OtherQuery_GroupBox.Enabled = status;
             SingerMgr_Statistics_GroupBox.Enabled = status;
             SingerMgr_SingerAdd_GroupBox.Enabled = status;
             SingerMgr_Manager_GroupBox.Enabled = status;

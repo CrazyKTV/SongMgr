@@ -7,7 +7,6 @@ using Declarations.Media;
 using Declarations.Players;
 using Implementation;
 using System.Threading;
-using System.Data.OleDb;
 using System.Threading.Tasks;
 
 namespace CrazyKTV_SongMgr
@@ -138,10 +137,18 @@ namespace CrazyKTV_SongMgr
 
         void timer_Tick(object sender, EventArgs e)
         {
-            if (!m_player.IsPlaying && Player_PlayControl_Button.Text == "暫停播放")
+            if (Global.PlayerInitialized)
             {
-                timer.Stop();
-                this.Close();
+                if (!m_player.IsPlaying && Player_PlayControl_Button.Text == "暫停播放")
+                {
+                    timer.Stop();
+                    this.Close();
+                }
+            }
+            else
+            {
+                Thread.Sleep(1000);
+                Global.PlayerInitialized = true;
             }
         }
 
