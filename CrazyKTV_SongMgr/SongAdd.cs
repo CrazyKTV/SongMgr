@@ -304,6 +304,8 @@ namespace CrazyKTV_SongMgr
             List<string> strlist = new List<string>();
             List<string> SongLangKeyWordList = new List<string>();
             List<string> SingerTypeKeyWordList = new List<string>();
+            List<string> SongTrackKeyWordList = new List<string>();
+            
             SongAnalysis.CreateSongDataTable();
             int total = 0;
 
@@ -325,6 +327,15 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
+            foreach (string str in Global.CrazyktvSongTrackKeyWordList)
+            {
+                strlist = new List<string>(str.Split(','));
+                foreach (string liststr in strlist)
+                {
+                    SongTrackKeyWordList.Add(liststr);
+                }
+            }
+
             Parallel.ForEach(list, (str, loopState) =>
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -333,7 +344,7 @@ namespace CrazyKTV_SongMgr
                     total++;
                 }
 
-                SongAnalysis.SongInfoAnalysis(str, SongLangKeyWordList, SingerTypeKeyWordList);
+                SongAnalysis.SongInfoAnalysis(str, SongLangKeyWordList, SingerTypeKeyWordList, SongTrackKeyWordList);
 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -938,14 +949,7 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "男歌星", "女歌星", "樂團", "外國男", "外國女", "外國樂團", "其它", "新進歌星" };
                     break;
                 case "DefaultSongTrack":
-                    if (Global.SongMgrSongTrackMode == "True")
-                    {
-                        list = new List<string>() { "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
-                    }
-                    else
-                    {
-                        list = new List<string>() { "左聲道 / 音軌1", "右聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
-                    }
+                    list = Global.CrazyktvSongTrackWordList;
                     break;
                 case "DefaultSongType":
                     string str = "";
@@ -966,7 +970,7 @@ namespace CrazyKTV_SongMgr
             {
                 dt.Rows.Add(dt.NewRow());
                 dt.Rows[dt.Rows.Count - 1][0] = s;
-                dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                dt.Rows[dt.Rows.Count - 1][1] = (SongInfoType == "DefaultSongTrack") ? dt.Rows.Count -1 : dt.Rows.Count;
             }
             return dt;
         }

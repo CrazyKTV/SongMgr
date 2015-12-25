@@ -30,8 +30,7 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "Song_Track":
                     val = Convert.ToInt32(e.Value);
-
-                    valStr = CommonFunc.GetSongTrackStr(val - 1, 0, "null");
+                    valStr = CommonFunc.GetSongTrackStr(val, 0, "null");
                     e.Value = valStr;
                     e.FormattingApplied = true;
                     break;
@@ -273,9 +272,9 @@ namespace CrazyKTV_SongMgr
                     case "歌曲聲道":
                         GridView_ContextMenu = new ContextMenuStrip();
                         if (GridView_ContextMenu != null) GridView_ContextMenu.Dispose();
-                        GridView_ContextMenuItem = new ToolStripMenuItem[5];
+                        GridView_ContextMenuItem = new ToolStripMenuItem[6];
                         GridView_ContextMenu = new ContextMenuStrip();
-                        for (int i = 0; i < 5; i++)
+                        for (int i = 0; i < 6; i++)
                         {
                             valStr = CommonFunc.GetSongTrackStr(i, 0, "null");
                             GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
@@ -372,8 +371,7 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "歌曲聲道":
                     CellName = "Song_Track";
-                    string Value = CommonFunc.GetSongTrackStr(0, 0, sender.ToString());
-                    CellValue = Convert.ToString(int.Parse(Value) + 1);
+                    CellValue = CommonFunc.GetSongTrackStr(0, 0, sender.ToString());
                     break;
                 case "歌曲類別":
                     CellName = "Song_SongType";

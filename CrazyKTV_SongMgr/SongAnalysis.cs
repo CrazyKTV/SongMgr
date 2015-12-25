@@ -109,7 +109,7 @@ namespace CrazyKTV_SongMgr
             Global.SongAnalysisCompleted = true;
         }
 
-        public static void SongInfoAnalysis(string file, List<string> SongLangKeyWordList, List<string> SingerTypeKeyWordList)
+        public static void SongInfoAnalysis(string file, List<string> SongLangKeyWordList, List<string> SingerTypeKeyWordList, List<string> SongTrackKeyWordList)
         {
             string SongAddStatus = "";
             string SongID = "";
@@ -141,7 +141,7 @@ namespace CrazyKTV_SongMgr
 
             List<string> SongLangList = SongLangKeyWordList;
             List<string> SingerTypeList = SingerTypeKeyWordList;
-            List<string> SongTrackList = new List<string>() { "vl", "vr", "v3", "v4", "v5", "左", "右" };
+            List<string> SongTrackList = SongTrackKeyWordList;
             List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
             List<string> SongSongTypeLowCaseList = SongSongTypeList.ConvertAll(str => str.ToLower());
 
@@ -262,7 +262,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else if (SongTrackList.IndexOf(BracketStr.ToLower()) >= 0 || BracketStr.ToLower() == "l" || BracketStr.ToLower() == "r")
                                 {
-                                    SongTrack = GetSongInfo("SongTrack", BracketStr);
+                                    SongTrack = GetSongInfo("SongTrack", BracketStr.ToLower());
                                     FileNameRemoveStr += ((BracketStrlist.IndexOf(BracketStr) == 0) ? BracketStr : BracketSeparateStr + BracketStr);
                                 }
                                 else if (SongSongTypeLowCaseList.IndexOf(BracketStr.ToLower()) >= 0)
@@ -286,7 +286,7 @@ namespace CrazyKTV_SongMgr
                             }
                             else if (SongTrackList.IndexOf(MatchStr.ToLower()) >= 0 || MatchStr.ToLower() == "l" || MatchStr.ToLower() == "r")
                             {
-                                SongTrack = GetSongInfo("SongTrack", MatchStr);
+                                SongTrack = GetSongInfo("SongTrack", MatchStr.ToLower());
                                 FileNameRemoveList.Add(MatchStr);
                             }
                             else if (SongSongTypeLowCaseList.IndexOf(MatchStr.ToLower()) >= 0)
@@ -327,7 +327,7 @@ namespace CrazyKTV_SongMgr
                 {
                     if (SongTrackList.IndexOf(splitstr.ToLower()) >= 0)
                     {
-                        SongTrack = GetSongInfo("SongTrack", splitstr);
+                        SongTrack = GetSongInfo("SongTrack", splitstr.ToLower());
                         SongTrackStr = splitstr;
                     }
                 }
@@ -761,32 +761,20 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SongTrack":
-                    switch (SongInfoValue.ToLower())
+                    foreach (string str in Global.CrazyktvSongTrackKeyWordList)
                     {
-                        case "vl":
-                        case "l":
-                        case "左":
-                            if (Global.SongMgrSongTrackMode == "True") { infovalue = "2"; } else { infovalue = "1"; }
-                            break;
-                        case "vr":
-                        case "r":
-                        case "右":
-                            if (Global.SongMgrSongTrackMode == "True") { infovalue = "1"; } else { infovalue = "2"; }
-                            break;
-                        case "v3":
-                            infovalue = "3";
-                            break;
-                        case "v4":
-                            infovalue = "4";
-                            break;
-                        case "v5":
-                            infovalue = "5";
-                            break;
+                        list = new List<string>(str.Split(','));
+                        foreach (string liststr in list)
+                        {
+                            if (SongInfoValue == liststr)
+                            {
+                                infovalue = Global.CrazyktvSongTrackKeyWordList.IndexOf(str).ToString();
+                                break;
+                            }
+                        }
+                        if (infovalue != "") break;
                     }
                     break;
-                
-                    
-                    
             }
             return infovalue;
         }

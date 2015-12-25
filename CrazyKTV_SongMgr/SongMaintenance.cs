@@ -1891,14 +1891,14 @@ namespace CrazyKTV_SongMgr
                 if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
                 if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
 
-                if (SongTrack < 1 | SongTrack > 5)
+                if (SongTrack < 0 | SongTrack > 5)
                 {
-                    SongTrack = 1;
+                    SongTrack = 0;
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為1: " + SongId + "|" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為0: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
 
                 // 重建歌檔
                 string SongSrcPath = Path.Combine(SongPath, SongFileName);

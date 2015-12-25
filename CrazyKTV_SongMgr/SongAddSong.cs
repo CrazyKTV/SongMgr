@@ -522,7 +522,7 @@ namespace CrazyKTV_SongMgr
                 string SongInfoSeparate;
                 if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
                 if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack -1, 1, "null");
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
 
                 if (SongSingerType == 3)
                 {
@@ -774,7 +774,7 @@ namespace CrazyKTV_SongMgr
                 string SongInfoSeparate;
                 if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
                 if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
 
                 if (SongSingerType == 3)
                 {

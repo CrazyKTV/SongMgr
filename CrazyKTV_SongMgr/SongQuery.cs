@@ -517,7 +517,7 @@ namespace CrazyKTV_SongMgr
                 string SongInfoSeparate;
                 if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
                 if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
 
                 bool DuplicateSong = false;
                 bool MoveFile = false;
@@ -1141,7 +1141,7 @@ namespace CrazyKTV_SongMgr
                                         string SongInfoSeparate = (Global.SongMgrSongInfoSeparate == "1") ? "_" : "-";
 
                                         var MatchSongTrackQuery = from row in dt.AsEnumerable()
-                                                                  where row.Field<string>("Song_FileName").Contains(SongInfoSeparate + CommonFunc.GetSongTrackStr(row.Field<byte>("Song_Track") - 1, 1, "null"))
+                                                                  where row.Field<string>("Song_FileName").Contains(SongInfoSeparate + CommonFunc.GetSongTrackStr(row.Field<byte>("Song_Track"), 1, "null"))
                                                                   select row;
 
                                         foreach (DataRow row in MatchSongTrackQuery)
@@ -2162,20 +2162,11 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "SongTrack":
-                    if (Global.SongMgrSongTrackMode == "True")
-                    {
-                        valuelist = new List<string>() { "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
-                    }
-                    else
-                    {
-                        valuelist = new List<string>() { "左聲道 / 音軌1", "右聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
-                    }
-
-                    foreach (string value in valuelist)
+                    foreach (string value in Global.CrazyktvSongTrackWordList)
                     {
                         list.Rows.Add(list.NewRow());
                         list.Rows[list.Rows.Count - 1][0] = value;
-                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
                     }
                     break;
             }

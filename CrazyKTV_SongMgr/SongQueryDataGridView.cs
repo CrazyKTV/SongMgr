@@ -31,7 +31,7 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "Song_Track":
                     val = Convert.ToInt32(e.Value);
-                    valStr = CommonFunc.GetSongTrackStr(val - 1, 0, "null");
+                    valStr = CommonFunc.GetSongTrackStr(val, 0, "null");
                     e.Value = valStr;
                     e.FormattingApplied = true;
                     break;
@@ -430,8 +430,7 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "歌曲聲道":
                     CellName = "Song_Track";
-                    string Value = CommonFunc.GetSongTrackStr(0, 0, sender.ToString());
-                    CellValue = Convert.ToString(int.Parse(Value) + 1);
+                    CellValue = CommonFunc.GetSongTrackStr(0, 0, sender.ToString());
                     break;
                 case "歌曲類別":
                     CellName = "Song_SongType";

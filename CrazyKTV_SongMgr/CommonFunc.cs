@@ -1350,29 +1350,15 @@ namespace CrazyKTV_SongMgr
         {
             string Str;
             List<string> list = new List<string>();
-            if (SongTrack < 0) SongTrack = 0;
+            if (SongTrack < 0 || SongTrack > 5) SongTrack = 0;
 
             switch (ListType)
             {
                 case 1:
-                    if (Global.SongMgrSongTrackMode == "True")
-                    {
-                        list = new List<string>() { "VR", "VL", "V3", "V4", "V5" };
-                    }
-                    else
-                    {
-                        list = new List<string>() { "VL", "VR", "V3", "V4", "V5" };
-                    }
+                    list = Global.CrazyktvSongTrackList;
                     break;
                 default:
-                    if (Global.SongMgrSongTrackMode == "True")
-                    {
-                        list = new List<string>() { "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
-                    }
-                    else
-                    {
-                        list = new List<string>() { "左聲道 / 音軌1", "右聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
-                    }
+                    list = Global.CrazyktvSongTrackWordList;
                     break;
             }
 
@@ -1859,7 +1845,7 @@ namespace CrazyKTV_SongMgr
                 string SongInfoSeparate;
                 if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
                 if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
                 string SongSrcPath = Path.Combine(SongPath, SongFileName);
                 string SongExtension = Path.GetExtension(SongSrcPath);
 
