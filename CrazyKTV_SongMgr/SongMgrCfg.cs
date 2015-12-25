@@ -187,17 +187,39 @@ namespace CrazyKTV_SongMgr
             SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongTrack_ComboBox.SelectedValue = SelectedValue;
-            
+
             if (SongQuery_QueryType_ComboBox.SelectedValue != null)
             {
                 if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "8")
                 {
-                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack");
+                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false);
                     SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                     SongQuery_QueryValue_ComboBox.ValueMember = "Value";
                     SongQuery_QueryValue_ComboBox.SelectedValue = 1;
                 }
             }
+
+            if (SongQuery_EditMode_CheckBox.Checked)
+            {
+                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
+                SelectedValue = (SongQuery_EditSongTrack_ComboBox.Items.Count > 0) ? int.Parse(SongQuery_EditSongTrack_ComboBox.SelectedValue.ToString()) : SelectedValue = 1;
+                if (SelectedRowsCount > 1)
+                {
+                    SongQuery_EditSongTrack_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", true);
+                    SongQuery_EditSongTrack_ComboBox.DisplayMember = "Display";
+                    SongQuery_EditSongTrack_ComboBox.ValueMember = "Value";
+                    SongQuery_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongQuery_EditSongTrack_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false);
+                    SongQuery_EditSongTrack_ComboBox.DisplayMember = "Display";
+                    SongQuery_EditSongTrack_ComboBox.ValueMember = "Value";
+                    SongQuery_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
+                }
+            }
+
+
         }
 
         private void SongMgrCfg_MaxDigitCode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)

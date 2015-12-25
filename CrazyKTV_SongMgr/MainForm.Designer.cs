@@ -83,10 +83,39 @@
             this.SongQuery_Statistics3_Label = new System.Windows.Forms.Label();
             this.SongQuery_Statistics2_Label = new System.Windows.Forms.Label();
             this.SongQuery_Statistics1_Label = new System.Windows.Forms.Label();
-            this.SongQuery_DataGridView = new System.Windows.Forms.DataGridView();
             this.SongQuery_QueryStatus_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongQuery_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongQuery_QueryStatus_Label = new System.Windows.Forms.Label();
+            this.SongQuery_DataGridView = new System.Windows.Forms.DataGridView();
+            this.SongQuery_Edit_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongQuery_EditSongCreatDate_DateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.SongQuery_EditSongSrcPath_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongSrcPath_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditApplyChanges_Button = new System.Windows.Forms.Button();
+            this.SongQuery_EditSongSongType_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongSingerType_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongCreatDate_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongPlayCount_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongPlayCount_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongTrack_Button = new System.Windows.Forms.Button();
+            this.SongQuery_EditSongVolume_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongVolume_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongTrack_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_EditSongTrack_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongWordCount_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongWordCount_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongSpell_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongSpell_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongSongType_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_EditSongSongName_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongSongName_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongSingerType_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_EditSongSinger_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongSinger_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongLang_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_EditSongLang_Label = new System.Windows.Forms.Label();
+            this.SongQuery_EditSongId_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_EditSongId_Label = new System.Windows.Forms.Label();
             this.SongAdd_TabPage = new System.Windows.Forms.TabPage();
             this.SongAdd_DragDrop_Label = new System.Windows.Forms.Label();
             this.SongAdd_Add_Button = new System.Windows.Forms.Button();
@@ -428,8 +457,9 @@
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
             this.SongQuery_Query_GroupBox.SuspendLayout();
             this.SongQuery_Statistics_GroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).BeginInit();
             this.SongQuery_QueryStatus_GroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).BeginInit();
+            this.SongQuery_Edit_GroupBox.SuspendLayout();
             this.SongAdd_TabPage.SuspendLayout();
             this.SongAdd_SpecialStr_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SongAdd_DataGridView)).BeginInit();
@@ -523,8 +553,9 @@
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_OtherQuery_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Query_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Statistics_GroupBox);
-            this.SongQuery_TabPage.Controls.Add(this.SongQuery_DataGridView);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_QueryStatus_GroupBox);
+            this.SongQuery_TabPage.Controls.Add(this.SongQuery_Edit_GroupBox);
+            this.SongQuery_TabPage.Controls.Add(this.SongQuery_DataGridView);
             this.SongQuery_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -1078,46 +1109,6 @@
             this.SongQuery_Statistics1_Label.TabIndex = 0;
             this.SongQuery_Statistics1_Label.Text = "總計:";
             // 
-            // SongQuery_DataGridView
-            // 
-            this.SongQuery_DataGridView.AllowUserToAddRows = false;
-            this.SongQuery_DataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            this.SongQuery_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.SongQuery_DataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SongQuery_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.SongQuery_DataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.SongQuery_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SongQuery_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.SongQuery_DataGridView.EnableHeadersVisualStyles = false;
-            this.SongQuery_DataGridView.Location = new System.Drawing.Point(23, 365);
-            this.SongQuery_DataGridView.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
-            this.SongQuery_DataGridView.Name = "SongQuery_DataGridView";
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.SongQuery_DataGridView.RowTemplate.Height = 27;
-            this.SongQuery_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
-            this.SongQuery_DataGridView.TabIndex = 4;
-            this.SongQuery_DataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.SongQuery_DataGridView_CellBeginEdit);
-            this.SongQuery_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellDoubleClick);
-            this.SongQuery_DataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellEndEdit);
-            this.SongQuery_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.SongQuery_DataGridView_CellFormatting);
-            this.SongQuery_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseClick);
-            this.SongQuery_DataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.SongQuery_DataGridView_CellValidating);
-            this.SongQuery_DataGridView.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.SongQuery_DataGridView_EditingControlShowing);
-            this.SongQuery_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SongQuery_DataGridView_KeyDown);
-            // 
             // SongQuery_QueryStatus_GroupBox
             // 
             this.SongQuery_QueryStatus_GroupBox.Controls.Add(this.SongQuery_EditMode_CheckBox);
@@ -1135,6 +1126,7 @@
             // 
             this.SongQuery_EditMode_CheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SongQuery_EditMode_CheckBox.AutoSize = true;
+            this.SongQuery_EditMode_CheckBox.Enabled = false;
             this.SongQuery_EditMode_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_EditMode_CheckBox.Location = new System.Drawing.Point(840, 6);
             this.SongQuery_EditMode_CheckBox.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -1156,6 +1148,416 @@
             this.SongQuery_QueryStatus_Label.TabIndex = 0;
             this.SongQuery_QueryStatus_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.SongQuery_QueryStatus_Label.UseMnemonic = false;
+            // 
+            // SongQuery_DataGridView
+            // 
+            this.SongQuery_DataGridView.AllowUserToAddRows = false;
+            this.SongQuery_DataGridView.AllowUserToDeleteRows = false;
+            this.SongQuery_DataGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            this.SongQuery_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.SongQuery_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.SongQuery_DataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.SongQuery_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SongQuery_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.SongQuery_DataGridView.EnableHeadersVisualStyles = false;
+            this.SongQuery_DataGridView.Location = new System.Drawing.Point(23, 365);
+            this.SongQuery_DataGridView.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
+            this.SongQuery_DataGridView.Name = "SongQuery_DataGridView";
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.SongQuery_DataGridView.RowTemplate.Height = 27;
+            this.SongQuery_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
+            this.SongQuery_DataGridView.StandardTab = true;
+            this.SongQuery_DataGridView.TabIndex = 4;
+            this.SongQuery_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellDoubleClick);
+            this.SongQuery_DataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellEndEdit);
+            this.SongQuery_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.SongQuery_DataGridView_CellFormatting);
+            this.SongQuery_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseClick);
+            this.SongQuery_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseDown);
+            this.SongQuery_DataGridView.SelectionChanged += new System.EventHandler(this.SongQuery_DataGridView_SelectionChanged);
+            this.SongQuery_DataGridView.Sorted += new System.EventHandler(this.SongQuery_DataGridView_Sorted);
+            this.SongQuery_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SongQuery_DataGridView_KeyDown);
+            this.SongQuery_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SongQuery_DataGridView_MouseUp);
+            // 
+            // SongQuery_Edit_GroupBox
+            // 
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongCreatDate_DateTimePicker);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSrcPath_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSrcPath_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditApplyChanges_Button);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSongType_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSingerType_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongCreatDate_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongPlayCount_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongPlayCount_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongTrack_Button);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongVolume_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongVolume_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongTrack_ComboBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongTrack_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongWordCount_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongWordCount_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSpell_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSpell_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSongType_ComboBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSongName_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSongName_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSingerType_ComboBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSinger_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongSinger_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongLang_ComboBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongLang_Label);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongId_TextBox);
+            this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongId_Label);
+            this.SongQuery_Edit_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_Edit_GroupBox.Location = new System.Drawing.Point(23, 354);
+            this.SongQuery_Edit_GroupBox.Name = "SongQuery_Edit_GroupBox";
+            this.SongQuery_Edit_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.SongQuery_Edit_GroupBox.Size = new System.Drawing.Size(952, 307);
+            this.SongQuery_Edit_GroupBox.TabIndex = 5;
+            this.SongQuery_Edit_GroupBox.TabStop = false;
+            this.SongQuery_Edit_GroupBox.Text = "歌曲編輯";
+            this.SongQuery_Edit_GroupBox.Visible = false;
+            // 
+            // SongQuery_EditSongCreatDate_DateTimePicker
+            // 
+            this.SongQuery_EditSongCreatDate_DateTimePicker.CustomFormat = "yyyy/MM/dd";
+            this.SongQuery_EditSongCreatDate_DateTimePicker.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongCreatDate_DateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.SongQuery_EditSongCreatDate_DateTimePicker.Location = new System.Drawing.Point(580, 30);
+            this.SongQuery_EditSongCreatDate_DateTimePicker.Margin = new System.Windows.Forms.Padding(6, 0, 6, 6);
+            this.SongQuery_EditSongCreatDate_DateTimePicker.Name = "SongQuery_EditSongCreatDate_DateTimePicker";
+            this.SongQuery_EditSongCreatDate_DateTimePicker.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_EditSongCreatDate_DateTimePicker.TabIndex = 5;
+            this.SongQuery_EditSongCreatDate_DateTimePicker.ValueChanged += new System.EventHandler(this.SongQuery_EditSongCreatDate_DateTimePicker_ValueChanged);
+            // 
+            // SongQuery_EditSongSrcPath_TextBox
+            // 
+            this.SongQuery_EditSongSrcPath_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSrcPath_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongSrcPath_TextBox.Location = new System.Drawing.Point(110, 216);
+            this.SongQuery_EditSongSrcPath_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongSrcPath_TextBox.Name = "SongQuery_EditSongSrcPath_TextBox";
+            this.SongQuery_EditSongSrcPath_TextBox.ReadOnly = true;
+            this.SongQuery_EditSongSrcPath_TextBox.Size = new System.Drawing.Size(826, 30);
+            this.SongQuery_EditSongSrcPath_TextBox.TabIndex = 19;
+            // 
+            // SongQuery_EditSongSrcPath_Label
+            // 
+            this.SongQuery_EditSongSrcPath_Label.AutoSize = true;
+            this.SongQuery_EditSongSrcPath_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSrcPath_Label.Location = new System.Drawing.Point(16, 220);
+            this.SongQuery_EditSongSrcPath_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongSrcPath_Label.Name = "SongQuery_EditSongSrcPath_Label";
+            this.SongQuery_EditSongSrcPath_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongSrcPath_Label.TabIndex = 18;
+            this.SongQuery_EditSongSrcPath_Label.Text = "檔案路徑:";
+            // 
+            // SongQuery_EditApplyChanges_Button
+            // 
+            this.SongQuery_EditApplyChanges_Button.AutoSize = true;
+            this.SongQuery_EditApplyChanges_Button.Enabled = false;
+            this.SongQuery_EditApplyChanges_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditApplyChanges_Button.Location = new System.Drawing.Point(848, 263);
+            this.SongQuery_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 8, 6, 9);
+            this.SongQuery_EditApplyChanges_Button.Name = "SongQuery_EditApplyChanges_Button";
+            this.SongQuery_EditApplyChanges_Button.Size = new System.Drawing.Size(88, 32);
+            this.SongQuery_EditApplyChanges_Button.TabIndex = 27;
+            this.SongQuery_EditApplyChanges_Button.Text = "套用變更";
+            this.SongQuery_EditApplyChanges_Button.UseVisualStyleBackColor = true;
+            this.SongQuery_EditApplyChanges_Button.Click += new System.EventHandler(this.SongQuery_EditApplyChanges_Button_Click);
+            // 
+            // SongQuery_EditSongSongType_Label
+            // 
+            this.SongQuery_EditSongSongType_Label.AutoSize = true;
+            this.SongQuery_EditSongSongType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSongType_Label.Location = new System.Drawing.Point(700, 128);
+            this.SongQuery_EditSongSongType_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongSongType_Label.Name = "SongQuery_EditSongSongType_Label";
+            this.SongQuery_EditSongSongType_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongSongType_Label.TabIndex = 12;
+            this.SongQuery_EditSongSongType_Label.Text = "歌曲類別:";
+            // 
+            // SongQuery_EditSongSingerType_Label
+            // 
+            this.SongQuery_EditSongSingerType_Label.AutoSize = true;
+            this.SongQuery_EditSongSingerType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSingerType_Label.Location = new System.Drawing.Point(486, 82);
+            this.SongQuery_EditSongSingerType_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongSingerType_Label.Name = "SongQuery_EditSongSingerType_Label";
+            this.SongQuery_EditSongSingerType_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongSingerType_Label.TabIndex = 8;
+            this.SongQuery_EditSongSingerType_Label.Text = "歌手類別:";
+            // 
+            // SongQuery_EditSongCreatDate_Label
+            // 
+            this.SongQuery_EditSongCreatDate_Label.AutoSize = true;
+            this.SongQuery_EditSongCreatDate_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongCreatDate_Label.Location = new System.Drawing.Point(486, 36);
+            this.SongQuery_EditSongCreatDate_Label.Margin = new System.Windows.Forms.Padding(6, 6, 6, 12);
+            this.SongQuery_EditSongCreatDate_Label.Name = "SongQuery_EditSongCreatDate_Label";
+            this.SongQuery_EditSongCreatDate_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongCreatDate_Label.TabIndex = 4;
+            this.SongQuery_EditSongCreatDate_Label.Text = "加歌日期:";
+            // 
+            // SongQuery_EditSongPlayCount_TextBox
+            // 
+            this.SongQuery_EditSongPlayCount_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongPlayCount_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongPlayCount_TextBox.Location = new System.Drawing.Point(670, 262);
+            this.SongQuery_EditSongPlayCount_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongPlayCount_TextBox.MaxLength = 8;
+            this.SongQuery_EditSongPlayCount_TextBox.Name = "SongQuery_EditSongPlayCount_TextBox";
+            this.SongQuery_EditSongPlayCount_TextBox.Size = new System.Drawing.Size(90, 30);
+            this.SongQuery_EditSongPlayCount_TextBox.TabIndex = 26;
+            this.SongQuery_EditSongPlayCount_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
+            this.SongQuery_EditSongPlayCount_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.SongQuery_EditSongPlayCount_TextBox.Validated += new System.EventHandler(this.SongQuery_EditSongPlayCount_TextBox_Validated);
+            // 
+            // SongQuery_EditSongPlayCount_Label
+            // 
+            this.SongQuery_EditSongPlayCount_Label.AutoSize = true;
+            this.SongQuery_EditSongPlayCount_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongPlayCount_Label.Location = new System.Drawing.Point(576, 266);
+            this.SongQuery_EditSongPlayCount_Label.Margin = new System.Windows.Forms.Padding(24, 12, 6, 12);
+            this.SongQuery_EditSongPlayCount_Label.Name = "SongQuery_EditSongPlayCount_Label";
+            this.SongQuery_EditSongPlayCount_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongPlayCount_Label.TabIndex = 25;
+            this.SongQuery_EditSongPlayCount_Label.Text = "點播次數:";
+            // 
+            // SongQuery_EditSongTrack_Button
+            // 
+            this.SongQuery_EditSongTrack_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongTrack_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.SongQuery_EditSongTrack_Button.Location = new System.Drawing.Point(272, 262);
+            this.SongQuery_EditSongTrack_Button.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongTrack_Button.Name = "SongQuery_EditSongTrack_Button";
+            this.SongQuery_EditSongTrack_Button.Size = new System.Drawing.Size(60, 30);
+            this.SongQuery_EditSongTrack_Button.TabIndex = 22;
+            this.SongQuery_EditSongTrack_Button.Text = "預覽";
+            this.SongQuery_EditSongTrack_Button.UseVisualStyleBackColor = true;
+            this.SongQuery_EditSongTrack_Button.Click += new System.EventHandler(this.SongQuery_EditSongTrack_Button_Click);
+            // 
+            // SongQuery_EditSongVolume_TextBox
+            // 
+            this.SongQuery_EditSongVolume_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongVolume_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongVolume_TextBox.Location = new System.Drawing.Point(456, 262);
+            this.SongQuery_EditSongVolume_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongVolume_TextBox.MaxLength = 3;
+            this.SongQuery_EditSongVolume_TextBox.Name = "SongQuery_EditSongVolume_TextBox";
+            this.SongQuery_EditSongVolume_TextBox.Size = new System.Drawing.Size(90, 30);
+            this.SongQuery_EditSongVolume_TextBox.TabIndex = 24;
+            this.SongQuery_EditSongVolume_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
+            this.SongQuery_EditSongVolume_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.SongQuery_EditSongVolume_TextBox.Validated += new System.EventHandler(this.SongQuery_EditSongVolume_TextBox_Validated);
+            // 
+            // SongQuery_EditSongVolume_Label
+            // 
+            this.SongQuery_EditSongVolume_Label.AutoSize = true;
+            this.SongQuery_EditSongVolume_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongVolume_Label.Location = new System.Drawing.Point(362, 266);
+            this.SongQuery_EditSongVolume_Label.Margin = new System.Windows.Forms.Padding(24, 12, 6, 12);
+            this.SongQuery_EditSongVolume_Label.Name = "SongQuery_EditSongVolume_Label";
+            this.SongQuery_EditSongVolume_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongVolume_Label.TabIndex = 23;
+            this.SongQuery_EditSongVolume_Label.Text = "歌曲音量:";
+            // 
+            // SongQuery_EditSongTrack_ComboBox
+            // 
+            this.SongQuery_EditSongTrack_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_EditSongTrack_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongTrack_ComboBox.FormattingEnabled = true;
+            this.SongQuery_EditSongTrack_ComboBox.Location = new System.Drawing.Point(110, 262);
+            this.SongQuery_EditSongTrack_ComboBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongTrack_ComboBox.Name = "SongQuery_EditSongTrack_ComboBox";
+            this.SongQuery_EditSongTrack_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_EditSongTrack_ComboBox.TabIndex = 21;
+            this.SongQuery_EditSongTrack_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_EditSongTrack_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_EditSongTrack_Label
+            // 
+            this.SongQuery_EditSongTrack_Label.AutoSize = true;
+            this.SongQuery_EditSongTrack_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongTrack_Label.Location = new System.Drawing.Point(16, 266);
+            this.SongQuery_EditSongTrack_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongTrack_Label.Name = "SongQuery_EditSongTrack_Label";
+            this.SongQuery_EditSongTrack_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongTrack_Label.TabIndex = 20;
+            this.SongQuery_EditSongTrack_Label.Text = "歌曲聲道:";
+            // 
+            // SongQuery_EditSongWordCount_TextBox
+            // 
+            this.SongQuery_EditSongWordCount_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongWordCount_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongWordCount_TextBox.Location = new System.Drawing.Point(794, 170);
+            this.SongQuery_EditSongWordCount_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongWordCount_TextBox.Name = "SongQuery_EditSongWordCount_TextBox";
+            this.SongQuery_EditSongWordCount_TextBox.ReadOnly = true;
+            this.SongQuery_EditSongWordCount_TextBox.Size = new System.Drawing.Size(142, 30);
+            this.SongQuery_EditSongWordCount_TextBox.TabIndex = 17;
+            // 
+            // SongQuery_EditSongWordCount_Label
+            // 
+            this.SongQuery_EditSongWordCount_Label.AutoSize = true;
+            this.SongQuery_EditSongWordCount_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongWordCount_Label.Location = new System.Drawing.Point(700, 174);
+            this.SongQuery_EditSongWordCount_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongWordCount_Label.Name = "SongQuery_EditSongWordCount_Label";
+            this.SongQuery_EditSongWordCount_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongWordCount_Label.TabIndex = 16;
+            this.SongQuery_EditSongWordCount_Label.Text = "歌曲字數:";
+            // 
+            // SongQuery_EditSongSpell_TextBox
+            // 
+            this.SongQuery_EditSongSpell_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSpell_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongSpell_TextBox.Location = new System.Drawing.Point(110, 170);
+            this.SongQuery_EditSongSpell_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongSpell_TextBox.Name = "SongQuery_EditSongSpell_TextBox";
+            this.SongQuery_EditSongSpell_TextBox.ReadOnly = true;
+            this.SongQuery_EditSongSpell_TextBox.Size = new System.Drawing.Size(578, 30);
+            this.SongQuery_EditSongSpell_TextBox.TabIndex = 15;
+            // 
+            // SongQuery_EditSongSpell_Label
+            // 
+            this.SongQuery_EditSongSpell_Label.AutoSize = true;
+            this.SongQuery_EditSongSpell_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSpell_Label.Location = new System.Drawing.Point(16, 174);
+            this.SongQuery_EditSongSpell_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongSpell_Label.Name = "SongQuery_EditSongSpell_Label";
+            this.SongQuery_EditSongSpell_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongSpell_Label.TabIndex = 14;
+            this.SongQuery_EditSongSpell_Label.Text = "歌曲拼音:";
+            // 
+            // SongQuery_EditSongSongType_ComboBox
+            // 
+            this.SongQuery_EditSongSongType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_EditSongSongType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSongType_ComboBox.FormattingEnabled = true;
+            this.SongQuery_EditSongSongType_ComboBox.Location = new System.Drawing.Point(794, 124);
+            this.SongQuery_EditSongSongType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongSongType_ComboBox.Name = "SongQuery_EditSongSongType_ComboBox";
+            this.SongQuery_EditSongSongType_ComboBox.Size = new System.Drawing.Size(142, 30);
+            this.SongQuery_EditSongSongType_ComboBox.TabIndex = 13;
+            this.SongQuery_EditSongSongType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_EditSongSongType_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_EditSongSongName_TextBox
+            // 
+            this.SongQuery_EditSongSongName_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongSongName_TextBox.Location = new System.Drawing.Point(110, 124);
+            this.SongQuery_EditSongSongName_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongSongName_TextBox.MaxLength = 80;
+            this.SongQuery_EditSongSongName_TextBox.Name = "SongQuery_EditSongSongName_TextBox";
+            this.SongQuery_EditSongSongName_TextBox.Size = new System.Drawing.Size(578, 30);
+            this.SongQuery_EditSongSongName_TextBox.TabIndex = 11;
+            this.SongQuery_EditSongSongName_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_TextBox_KeyPress);
+            this.SongQuery_EditSongSongName_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.SongQuery_EditSongSongName_TextBox.Validated += new System.EventHandler(this.SongQuery_EditSongSongName_TextBox_Validated);
+            // 
+            // SongQuery_EditSongSongName_Label
+            // 
+            this.SongQuery_EditSongSongName_Label.AutoSize = true;
+            this.SongQuery_EditSongSongName_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSongName_Label.Location = new System.Drawing.Point(16, 128);
+            this.SongQuery_EditSongSongName_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongSongName_Label.Name = "SongQuery_EditSongSongName_Label";
+            this.SongQuery_EditSongSongName_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongSongName_Label.TabIndex = 10;
+            this.SongQuery_EditSongSongName_Label.Text = "歌曲名稱:";
+            // 
+            // SongQuery_EditSongSingerType_ComboBox
+            // 
+            this.SongQuery_EditSongSingerType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_EditSongSingerType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSingerType_ComboBox.FormattingEnabled = true;
+            this.SongQuery_EditSongSingerType_ComboBox.Location = new System.Drawing.Point(580, 78);
+            this.SongQuery_EditSongSingerType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongSingerType_ComboBox.Name = "SongQuery_EditSongSingerType_ComboBox";
+            this.SongQuery_EditSongSingerType_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_EditSongSingerType_ComboBox.TabIndex = 9;
+            this.SongQuery_EditSongSingerType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_EditSongSingerType_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_EditSongSinger_TextBox
+            // 
+            this.SongQuery_EditSongSinger_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongSinger_TextBox.Location = new System.Drawing.Point(110, 78);
+            this.SongQuery_EditSongSinger_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongQuery_EditSongSinger_TextBox.MaxLength = 60;
+            this.SongQuery_EditSongSinger_TextBox.Name = "SongQuery_EditSongSinger_TextBox";
+            this.SongQuery_EditSongSinger_TextBox.Size = new System.Drawing.Size(364, 30);
+            this.SongQuery_EditSongSinger_TextBox.TabIndex = 7;
+            this.SongQuery_EditSongSinger_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_TextBox_KeyPress);
+            this.SongQuery_EditSongSinger_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.SongQuery_EditSongSinger_TextBox.Validated += new System.EventHandler(this.SongQuery_EditSongSinger_TextBox_Validated);
+            // 
+            // SongQuery_EditSongSinger_Label
+            // 
+            this.SongQuery_EditSongSinger_Label.AutoSize = true;
+            this.SongQuery_EditSongSinger_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongSinger_Label.Location = new System.Drawing.Point(16, 82);
+            this.SongQuery_EditSongSinger_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.SongQuery_EditSongSinger_Label.Name = "SongQuery_EditSongSinger_Label";
+            this.SongQuery_EditSongSinger_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongSinger_Label.TabIndex = 6;
+            this.SongQuery_EditSongSinger_Label.Text = "歌手名稱:";
+            // 
+            // SongQuery_EditSongLang_ComboBox
+            // 
+            this.SongQuery_EditSongLang_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_EditSongLang_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongLang_ComboBox.FormattingEnabled = true;
+            this.SongQuery_EditSongLang_ComboBox.Location = new System.Drawing.Point(324, 32);
+            this.SongQuery_EditSongLang_ComboBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 8);
+            this.SongQuery_EditSongLang_ComboBox.Name = "SongQuery_EditSongLang_ComboBox";
+            this.SongQuery_EditSongLang_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_EditSongLang_ComboBox.TabIndex = 3;
+            this.SongQuery_EditSongLang_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_EditSongLang_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_EditSongLang_Label
+            // 
+            this.SongQuery_EditSongLang_Label.AutoSize = true;
+            this.SongQuery_EditSongLang_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongLang_Label.Location = new System.Drawing.Point(230, 36);
+            this.SongQuery_EditSongLang_Label.Margin = new System.Windows.Forms.Padding(6, 6, 6, 12);
+            this.SongQuery_EditSongLang_Label.Name = "SongQuery_EditSongLang_Label";
+            this.SongQuery_EditSongLang_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongLang_Label.TabIndex = 2;
+            this.SongQuery_EditSongLang_Label.Text = "語系類別:";
+            // 
+            // SongQuery_EditSongId_TextBox
+            // 
+            this.SongQuery_EditSongId_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongId_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongId_TextBox.Location = new System.Drawing.Point(110, 32);
+            this.SongQuery_EditSongId_TextBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 8);
+            this.SongQuery_EditSongId_TextBox.Name = "SongQuery_EditSongId_TextBox";
+            this.SongQuery_EditSongId_TextBox.ReadOnly = true;
+            this.SongQuery_EditSongId_TextBox.Size = new System.Drawing.Size(108, 30);
+            this.SongQuery_EditSongId_TextBox.TabIndex = 1;
+            // 
+            // SongQuery_EditSongId_Label
+            // 
+            this.SongQuery_EditSongId_Label.AutoSize = true;
+            this.SongQuery_EditSongId_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_EditSongId_Label.Location = new System.Drawing.Point(16, 36);
+            this.SongQuery_EditSongId_Label.Margin = new System.Windows.Forms.Padding(6, 6, 6, 12);
+            this.SongQuery_EditSongId_Label.Name = "SongQuery_EditSongId_Label";
+            this.SongQuery_EditSongId_Label.Size = new System.Drawing.Size(82, 22);
+            this.SongQuery_EditSongId_Label.TabIndex = 0;
+            this.SongQuery_EditSongId_Label.Text = "歌曲編號:";
             // 
             // SongAdd_TabPage
             // 
@@ -1374,7 +1776,7 @@
             this.SongAdd_DefaultSongVolume_TextBox.Size = new System.Drawing.Size(154, 30);
             this.SongAdd_DefaultSongVolume_TextBox.TabIndex = 9;
             this.SongAdd_DefaultSongVolume_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
-            this.SongAdd_DefaultSongVolume_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongAdd_DefaultSongVolume_TextBox_Validating);
+            this.SongAdd_DefaultSongVolume_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
             // 
             // SongAdd_DefaultSongType_ComboBox
             // 
@@ -4491,7 +4893,7 @@
             this.SongMaintenance_VolumeChange_TextBox.TabIndex = 1;
             this.SongMaintenance_VolumeChange_TextBox.Text = "100";
             this.SongMaintenance_VolumeChange_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
-            this.SongMaintenance_VolumeChange_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMaintenance_VolumeChange_TextBox_Validating);
+            this.SongMaintenance_VolumeChange_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
             // 
             // SongMaintenance_VolumeChange_Label
             // 
@@ -5494,9 +5896,11 @@
             this.SongQuery_Query_GroupBox.PerformLayout();
             this.SongQuery_Statistics_GroupBox.ResumeLayout(false);
             this.SongQuery_Statistics_GroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).EndInit();
             this.SongQuery_QueryStatus_GroupBox.ResumeLayout(false);
             this.SongQuery_QueryStatus_GroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).EndInit();
+            this.SongQuery_Edit_GroupBox.ResumeLayout(false);
+            this.SongQuery_Edit_GroupBox.PerformLayout();
             this.SongAdd_TabPage.ResumeLayout(false);
             this.SongAdd_TabPage.PerformLayout();
             this.SongAdd_SpecialStr_GroupBox.ResumeLayout(false);
@@ -5983,6 +6387,35 @@
         private System.Windows.Forms.GroupBox Debug_Tooltip_GroupBox;
         private System.Windows.Forms.Label Debug_Tooltip_Label;
         private System.Windows.Forms.Button SongLog_ClearLog_Button;
+        private System.Windows.Forms.GroupBox SongQuery_Edit_GroupBox;
+        private System.Windows.Forms.ComboBox SongQuery_EditSongLang_ComboBox;
+        private System.Windows.Forms.Label SongQuery_EditSongLang_Label;
+        private System.Windows.Forms.TextBox SongQuery_EditSongId_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongId_Label;
+        private System.Windows.Forms.ComboBox SongQuery_EditSongSingerType_ComboBox;
+        private System.Windows.Forms.TextBox SongQuery_EditSongSinger_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongSinger_Label;
+        private System.Windows.Forms.ComboBox SongQuery_EditSongSongType_ComboBox;
+        private System.Windows.Forms.TextBox SongQuery_EditSongSongName_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongSongName_Label;
+        private System.Windows.Forms.TextBox SongQuery_EditSongSpell_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongSpell_Label;
+        private System.Windows.Forms.TextBox SongQuery_EditSongWordCount_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongWordCount_Label;
+        private System.Windows.Forms.Button SongQuery_EditSongTrack_Button;
+        private System.Windows.Forms.TextBox SongQuery_EditSongVolume_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongVolume_Label;
+        private System.Windows.Forms.ComboBox SongQuery_EditSongTrack_ComboBox;
+        private System.Windows.Forms.Label SongQuery_EditSongTrack_Label;
+        private System.Windows.Forms.Label SongQuery_EditSongCreatDate_Label;
+        private System.Windows.Forms.TextBox SongQuery_EditSongPlayCount_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongPlayCount_Label;
+        private System.Windows.Forms.TextBox SongQuery_EditSongSrcPath_TextBox;
+        private System.Windows.Forms.Label SongQuery_EditSongSrcPath_Label;
+        private System.Windows.Forms.Button SongQuery_EditApplyChanges_Button;
+        private System.Windows.Forms.Label SongQuery_EditSongSongType_Label;
+        private System.Windows.Forms.Label SongQuery_EditSongSingerType_Label;
+        private System.Windows.Forms.DateTimePicker SongQuery_EditSongCreatDate_DateTimePicker;
     }
 }
 

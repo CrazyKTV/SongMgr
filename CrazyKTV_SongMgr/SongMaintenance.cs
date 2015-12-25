@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -458,29 +457,6 @@ namespace CrazyKTV_SongMgr
 
         #region --- 音量變更 ---
 
-
-        private void SongMaintenance_VolumeChange_TextBox_Validating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-            {
-                SongMaintenance_Tooltip_Label.Text = "此項目的值不能為空白!";
-                e.Cancel = true;
-            }
-            else
-            {
-                if (int.Parse(((TextBox)sender).Text) > 100)
-                {
-                    SongMaintenance_Tooltip_Label.Text = "此項目只能輸入 0 ~ 100 的值!";
-                    e.Cancel = true;
-                }
-                else
-                {
-                    SongMaintenance_Tooltip_Label.Text = "";
-                }
-            }
-        }
-
-
         private void SongMaintenance_VolumeChange_Button_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("你確定要變更音量嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -605,7 +581,6 @@ namespace CrazyKTV_SongMgr
                             if (Global.SongQueryQueryType == "FavoriteQuery")
                             {
                                 Global.SongQueryQueryType = "SongQuery";
-                                SongQuery_EditMode_CheckBox.Enabled = true;
                                 SongQuery_DataGridView.DataSource = null;
                                 if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
                                 SongQuery_QueryStatus_Label.Text = "";
@@ -1810,7 +1785,6 @@ namespace CrazyKTV_SongMgr
 
         #region --- 歌庫結構重建 ---
 
-
         private void SongMaintenance_RebuildSongStructure_Button_Click(object sender, EventArgs e)
         {
             if (SongMaintenance_RebuildSongStructure_Button.Text == "瀏覽")
@@ -2105,7 +2079,6 @@ namespace CrazyKTV_SongMgr
 
         #region --- 我的最愛 ---
 
-
         private void SongMaintenance_GetFavoriteUserList()
         {
             SongMaintenance_Favorite_ListBox.DataSource = CommonFunc.GetFavoriteUserList(1);
@@ -2204,7 +2177,6 @@ namespace CrazyKTV_SongMgr
                                 if (Global.SongQueryQueryType == "FavoriteQuery")
                                 {
                                     Global.SongQueryQueryType = "SongQuery";
-                                    SongQuery_EditMode_CheckBox.Enabled = true;
                                     SongQuery_DataGridView.DataSource = null;
                                     if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
                                     SongQuery_QueryStatus_Label.Text = "";
@@ -2293,7 +2265,6 @@ namespace CrazyKTV_SongMgr
                                 if (Global.SongQueryQueryType == "FavoriteQuery")
                                 {
                                     Global.SongQueryQueryType = "SongQuery";
-                                    SongQuery_EditMode_CheckBox.Enabled = true;
                                     SongQuery_DataGridView.DataSource = null;
                                     if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
                                     SongQuery_QueryStatus_Label.Text = "";
@@ -2319,7 +2290,7 @@ namespace CrazyKTV_SongMgr
 
             if (dt.Rows.Count > 0)
             {
-                foreach(DataRow row in dt.AsEnumerable())
+                foreach (DataRow row in dt.AsEnumerable())
                 {
                     list.Add("ktv_User," + row["User_Id"].ToString() + "," + row["User_Name"].ToString());
                 }
@@ -2391,7 +2362,6 @@ namespace CrazyKTV_SongMgr
                             if (Global.SongQueryQueryType == "FavoriteQuery")
                             {
                                 Global.SongQueryQueryType = "SongQuery";
-                                SongQuery_EditMode_CheckBox.Enabled = true;
                                 SongQuery_DataGridView.DataSource = null;
                                 if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
                                 SongQuery_QueryStatus_Label.Text = "";

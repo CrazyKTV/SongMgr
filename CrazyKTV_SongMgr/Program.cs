@@ -157,14 +157,20 @@ namespace CrazyKTV_SongMgr
         public static string SongQueryFilter = "全部";
         public static bool SongQuerySynonymousQuery = true;
         public static bool SongQueryHasWideChar = false;
-        
-        public static string SongQueryDataGridViewValue = "";
+
+        public static bool SongQueryMultiEdit;
+        public static List<bool> SongQueryMultiEditUpdateList = new List<bool>() { false, false, false, false, false, false, false, false };
+
+        public static List<string> SongQueryDataGridViewSelectList = new List<string>();
+        public static List<string> SongQueryDataGridViewRestoreSelectList = new List<string>();
         public static string SingerQueryDataGridViewValue = "";
 
         public static List<string> PlayerUpdateSongValueList = new List<string>();
         public static bool PlayerInitialized = false;
 
         public static List<List<string>> LostSongIdList = new List<List<string>>();
+
+        public static List<string> CrtchorusSeparateList = new List<string>() { "&", "+" };
 
         public static List<string> SynonymousWordList = new List<string>()
         {

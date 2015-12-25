@@ -114,7 +114,7 @@ namespace CrazyKTV_SongMgr
                 
                 if (query.Count<DataRow>() > 0)
                 {
-                    foreach(DataRow row in query)
+                    foreach (DataRow row in query)
                     {
                         SongTypeStr = row["Display"].ToString();
                     }
@@ -141,28 +141,6 @@ namespace CrazyKTV_SongMgr
             SongAdd_DefaultSongType_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongType_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongType_ComboBox.SelectedValue = i;
-        }
-
-        private void SongAdd_DefaultSongVolume_TextBox_Validating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-            {
-                SongAdd_Tooltip_Label.Text = "此項目的值不能為空白!";
-                e.Cancel = true;
-            }
-            else
-            {
-                if (int.Parse(((TextBox)sender).Text) > 100)
-                {
-                    SongAdd_Tooltip_Label.Text = "此項目只能輸入 0 ~ 100 的值!";
-                    e.Cancel = true;
-                }
-                else
-                {
-                    Global.SongAddDefaultSongVolume = ((TextBox)sender).Text;
-                    SongAdd_Tooltip_Label.Text = "";
-                }
-            }
         }
 
         private void SongAdd_SpecialStr_ListBox_Enter(object sender, EventArgs e)
@@ -332,7 +310,7 @@ namespace CrazyKTV_SongMgr
             foreach (string str in Global.CrazyktvSongLangKeyWordList)
             {
                 strlist = new List<string>(str.Split(','));
-                foreach(string liststr in strlist)
+                foreach (string liststr in strlist)
                 {
                     SongLangKeyWordList.Add(liststr);
                 }

@@ -268,7 +268,7 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                foreach(FileSystemWatcher fwatcher in Global.SongMonitorWatcher)
+                foreach (FileSystemWatcher fwatcher in Global.SongMonitorWatcher)
                 {
                     if (fwatcher.EnableRaisingEvents)
                     {

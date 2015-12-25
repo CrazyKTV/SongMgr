@@ -51,37 +51,44 @@ namespace CrazyKTV_SongMgr
 
         private void Common_NumericOnly_TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
+            Label[] Tooltip_Label =
+            {
+                SongQuery_QueryStatus_Label,
+                SongAdd_Tooltip_Label,
+                SingerMgr_Tooltip_Label,
+                SongMgrCfg_Tooltip_Label,
+                SongMaintenance_Tooltip_Label
+            };
+
+            int i = 3;
+
+            switch (((TextBox)sender).Name)
+            {
+                case "SongQuery_EditSongVolume_TextBox":
+                case "SongQuery_EditSongPlayCount_TextBox":
+                    i = 0;
+                    break;
+                case "SongAdd_DefaultSongVolume_TextBox":
+                    i = 1;
+                    break;
+                case "SongMaintenance_VolumeChange_TextBox":
+                    i = 4;
+                    break;
+                default:
+                    i = 3;
+                    break;
+            }
+
             if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13 & (int)e.KeyChar != 27)
             {
                 e.Handled = true;
-                switch (((TextBox)sender).Name)
-                {
-                    case "SongAdd_DefaultSongVolume_TextBox":
-                        SongAdd_Tooltip_Label.Text = "此項目只能輸入數字!";
-                        break;
-                    case "SongMaintenance_VolumeChange_TextBox":
-                        SongMaintenance_Tooltip_Label.Text = "此項目只能輸入數字!";
-                        break;
-                    default:
-                        SongMgrCfg_Tooltip_Label.Text = "此項目只能輸入數字!";
-                        break;
-                }
+                Tooltip_Label[i].Text = "此項目只能輸入數字!";
             }
             else
             {
-                switch (((TextBox)sender).Name)
-                {
-                    case "SongAdd_DefaultSongVolume_TextBox":
-                        if (SongAdd_Tooltip_Label.Text == "此項目只能輸入數字!") SongAdd_Tooltip_Label.Text = "";
-                        break;
-                    case "SongMaintenance_VolumeChange_TextBox":
-                        if (SongMaintenance_Tooltip_Label.Text == "此項目只能輸入數字!") SongMaintenance_Tooltip_Label.Text = "";
-                        break;
-                    default:
-                        if (SongMgrCfg_Tooltip_Label.Text == "此項目只能輸入數字!") SongMgrCfg_Tooltip_Label.Text = "";
-                        break;
-                }
+                if (Tooltip_Label[i].Text == "此項目只能輸入數字!") Tooltip_Label[i].Text = "";
             }
+
             if ((int)e.KeyChar == 13)
             {
                 SendKeys.Send("{tab}");
@@ -98,23 +105,91 @@ namespace CrazyKTV_SongMgr
 
         private void Common_IsNullOrEmpty_TextBox_Validating(object sender, CancelEventArgs e)
         {
+            Label[] Tooltip_Label =
+            {
+                SongQuery_QueryStatus_Label,
+                SongAdd_Tooltip_Label,
+                SingerMgr_Tooltip_Label,
+                SongMgrCfg_Tooltip_Label,
+                SongMaintenance_Tooltip_Label
+            };
+
+            bool MultiEdit = false;
+            int i = 4;
+
+            switch (((TextBox)sender).Name)
+            {
+                case "SongQuery_EditSongSinger_TextBox":
+                case "SongQuery_EditSongSongName_TextBox":
+                case "SongQuery_EditSongVolume_TextBox":
+                case "SongQuery_EditSongPlayCount_TextBox":
+                    i = 0;
+                    MultiEdit = true;
+                    break;
+                case "SongAdd_DefaultSongVolume_TextBox":
+                    i = 1;
+                    break;
+                default:
+                    i = 4;
+                    break;
+            }
+
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
             {
-                SongMaintenance_Tooltip_Label.Text = "此項目的值不能為空白!";
-                e.Cancel = true;
+                if (!MultiEdit)
+                {
+                    Tooltip_Label[i].Text = "此項目的值不能為空白!";
+                    e.Cancel = true;
+                }
             }
             else
             {
-                if (SongMaintenance_Tooltip_Label.Text == "此項目的值不能為空白!") SongMaintenance_Tooltip_Label.Text = "";
+                ((TextBox)sender).Text = Regex.Replace(((TextBox)sender).Text, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                if (Tooltip_Label[i].Text == "此項目的值不能為空白!") Tooltip_Label[i].Text = "";
                 Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
                 if (r.IsMatch(((TextBox)sender).Text))
                 {
                     e.Cancel = true;
-                    SongMaintenance_Tooltip_Label.Text = "此項目的值含有非法字元!";
+                    Tooltip_Label[i].Text = "此項目的值含有非法字元!";
                 }
                 else
                 {
-                    if (SongMaintenance_Tooltip_Label.Text == "此項目的值含有非法字元!") SongMaintenance_Tooltip_Label.Text = "";
+                    if (Tooltip_Label[i].Text == "此項目的值含有非法字元!") Tooltip_Label[i].Text = "";
+                }
+
+                switch (((TextBox)sender).Name)
+                {
+                    case "SongQuery_EditSongVolume_TextBox":
+                    case "SongAdd_DefaultSongVolume_TextBox":
+                    case "SongMaintenance_VolumeChange_TextBox":
+                        if (int.Parse(((TextBox)sender).Text) > 100)
+                        {
+                            Tooltip_Label[i].Text = "此項目只能輸入 0 ~ 100 的值!";
+                            e.Cancel = true;
+                        }
+                        else
+                        {
+                            Tooltip_Label[i].Text = "";
+                        }
+                        break;
+                }
+
+                switch (((TextBox)sender).Name)
+                {
+                    case "SongQuery_EditSongVolume_TextBox":
+                    case "SongQuery_EditSongPlayCount_TextBox":
+                    case "SongAdd_DefaultSongVolume_TextBox":
+                    case "SongMaintenance_VolumeChange_TextBox":
+                        if (int.Parse(((TextBox)sender).Text) > 0)
+                        {
+                            ((TextBox)sender).Text = ((TextBox)sender).Text.TrimStart('0');
+                        }
+                        else if (int.Parse(((TextBox)sender).Text) == 0)
+                        {
+                            ((TextBox)sender).Text = "0";
+                        }
+                        break;
                 }
             }
         }
@@ -195,7 +270,7 @@ namespace CrazyKTV_SongMgr
             SongQuery_Query_GroupBox.Enabled = status;
             SongQuery_OtherQuery_GroupBox.Enabled = status;
             SongQuery_Statistics_GroupBox.Enabled = status;
-            SongQuery_EditMode_CheckBox.Enabled = status;
+            SongQuery_Edit_GroupBox.Enabled = status;
             SongAdd_DefaultSongInfo_GroupBox.Enabled = status;
             SongAdd_SpecialStr_GroupBox.Enabled = status;
             SongAdd_SongAddCfg_GroupBox.Enabled = status;
@@ -232,6 +307,7 @@ namespace CrazyKTV_SongMgr
                 SongAddResult_FailureSong_ListBox.Items.Clear();
             }
 
+            SongQuery_Edit_GroupBox.Enabled = status;
             SongAdd_DefaultSongInfo_GroupBox.Enabled = status;
             SongAdd_SpecialStr_GroupBox.Enabled = status;
             SongAdd_SongAddCfg_GroupBox.Enabled = status;
@@ -508,6 +584,26 @@ namespace CrazyKTV_SongMgr
             SongQuery_QueryFilter_ComboBox.DisplayMember = "Display";
             SongQuery_QueryFilter_ComboBox.ValueMember = "Value";
             SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+
+            if (SongQuery_EditMode_CheckBox.Checked)
+            {
+                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
+                int SelectedValue = (SongQuery_EditSongLang_ComboBox.Items.Count > 0) ? int.Parse(SongQuery_EditSongLang_ComboBox.SelectedValue.ToString()) : SelectedValue = 1;
+                if (SelectedRowsCount > 1)
+                {
+                    SongQuery_EditSongLang_ComboBox.DataSource = SongQuery.GetEditSongLangList(true);
+                    SongQuery_EditSongLang_ComboBox.DisplayMember = "Display";
+                    SongQuery_EditSongLang_ComboBox.ValueMember = "Value";
+                    SongQuery_EditSongLang_ComboBox.SelectedValue = SelectedValue;
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongQuery_EditSongLang_ComboBox.DataSource = SongQuery.GetEditSongLangList(false);
+                    SongQuery_EditSongLang_ComboBox.DisplayMember = "Display";
+                    SongQuery_EditSongLang_ComboBox.ValueMember = "Value";
+                    SongQuery_EditSongLang_ComboBox.SelectedValue = SelectedValue;
+                }
+            }
 
             SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang");
             SongAdd_DefaultSongLang_ComboBox.DisplayMember = "Display";
@@ -891,7 +987,6 @@ namespace CrazyKTV_SongMgr
         {
             Global.SongQueryQueryType = "SongQuery";
             SongQuery_EditMode_CheckBox.Checked = false;
-            SongQuery_EditMode_CheckBox.Enabled = true;
             SongQuery_DataGridView.DataSource = null;
             if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
             SongQuery_QueryStatus_Label.Text = "";
@@ -1226,10 +1321,13 @@ namespace CrazyKTV_SongMgr
             switch (ListType)
             {
                 case 1:
-                    list = new List<string>() { "男歌星", "女歌星", "樂團", "合唱歌曲", "外國男", "外國女", "外國樂團", "其它", "歌星姓氏", "全部歌星", "新進歌星" };
+                    list = new List<string>() { "男歌星", "女歌星", "樂團", "合唱", "外國男", "外國女", "外國樂團", "其它", "歌星姓氏", "全部歌星", "新進歌星" };
                     break;
                 case 2:
                     list = Global.SongMgrCustomSingerTypeStructureList;
+                    break;
+                case 3:
+                    list = new List<string>() { "男歌星", "女歌星", "樂團", "合唱", "外國男", "外國女", "外國樂團", "其它", "新進歌星" };
                     break;
                 default:
                     list = new List<string>() { "男歌星", "女歌星", "樂團", "外國男", "外國女", "外國樂團", "其它", "新進歌星" };
@@ -1244,7 +1342,6 @@ namespace CrazyKTV_SongMgr
             {
                 int Value = list.IndexOf(IndexOfList);
                 Str = Value.ToString();
-
             }
             return Str;
         }
@@ -1503,6 +1600,7 @@ namespace CrazyKTV_SongMgr
             return WordCountList;
         }
 
+        #region --- 取得拼音資料 ---
 
         public static List<string> GetSongNameSpell(string SongStr)
         {
@@ -1747,6 +1845,121 @@ namespace CrazyKTV_SongMgr
             return SpellList;
         }
 
+        #endregion
+
+        #region --- 取得檔案結構 ---
+
+        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath)
+        {
+            if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
+            {
+                string SongSingerStr = SongSinger;
+                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
+                string CrtchorusSeparate;
+                string SongInfoSeparate;
+                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
+                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
+                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack - 1, 1, "null");
+                string SongSrcPath = Path.Combine(SongPath, SongFileName);
+                string SongExtension = Path.GetExtension(SongSrcPath);
+
+                if (SongSingerType == 3) SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
+
+                bool UseMultiSongPath = false;
+                string MultiSongPath = "";
+
+                if (Global.SongMaintenanceEnableMultiSongPath == "True" & SongPath.ContainsAny(Global.SongMaintenanceMultiSongPathList.ToArray()))
+                {
+                    foreach (string str in Global.SongMaintenanceMultiSongPathList)
+                    {
+                        if (SongPath.Contains(str))
+                        {
+                            MultiSongPath = str;
+                            UseMultiSongPath = true;
+                            break;
+                        }
+                    }
+                }
+
+                switch (Global.SongMgrFolderStructure)
+                {
+                    case "1":
+                        if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
+                        {
+                            if (UseMultiSongPath)
+                            {
+                                SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
+                            }
+                            else
+                            {
+                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                            }
+                        }
+                        else
+                        {
+                            if (UseMultiSongPath)
+                            {
+                                SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                            }
+                            else
+                            {
+                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                            }
+                        }
+                        break;
+                    case "2":
+                        if (UseMultiSongPath)
+                        {
+                            SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
+                        }
+                        else
+                        {
+                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                        }
+                        break;
+                }
+
+                switch (Global.SongMgrFileStructure)
+                {
+                    case "1":
+                        if (SongSongType == "")
+                        {
+                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        else
+                        {
+                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        break;
+                    case "2":
+                        if (SongSongType == "")
+                        {
+                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        else
+                        {
+                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        break;
+                    case "3":
+                        if (SongSongType == "")
+                        {
+                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        else
+                        {
+                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                        }
+                        break;
+                }
+            }
+            return Path.Combine(SongPath, SongFileName);
+        }
+
+        #endregion
+
+        #region --- 取得最愛用戶列表 ---
+
         public static DataTable GetFavoriteUserList(int ListTpye)
         {
             Global.FavoriteUserDT = new DataTable();
@@ -1819,6 +2032,10 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
+        #endregion
+
+        #region --- 設定檔案屬性 ---
+
         public static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
         {
             return attributes & ~attributesToRemove;
@@ -1830,6 +2047,10 @@ namespace CrazyKTV_SongMgr
             File.SetLastWriteTime(Path, Time);
             File.SetLastAccessTime(Path, Time);
         }
+
+        #endregion
+
+        #region --- 歌曲/歌手統計 ---
 
         public static List<int> GetSongLangCount()
         {
@@ -1870,7 +2091,7 @@ namespace CrazyKTV_SongMgr
                             select row;
                 if (query.Count<DataRow>() > 0)
                 {
-                    foreach(DataRow row in query)
+                    foreach (DataRow row in query)
                     {
                         SongFilePath = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
                         if (File.Exists(SongFilePath)) SongFileCount[Global.CrazyktvSongLangList.IndexOf(langstr)]++;
@@ -1920,6 +2141,10 @@ namespace CrazyKTV_SongMgr
             return SingerTypeCount;
         }
 
+        #endregion
+
+        #region --- 取得 Unicode 編碼 ---
+
         public static string GetWordUnicode(string word)
         {
             string Unicode = "";
@@ -1934,6 +2159,10 @@ namespace CrazyKTV_SongMgr
             }
             return Unicode;
         }
+
+        #endregion
+
+        #region --- 字寬轉換 ---
 
         public static string ConvToWide(string input)
         {
@@ -1954,6 +2183,10 @@ namespace CrazyKTV_SongMgr
             }
             return new string(c);
         }
+
+        #endregion
+
+        #region --- 取得同義字歌曲列表 ---
 
         public static List<string> GetSynonymousSongNameList(string SongQueryValue)
         {
@@ -1990,6 +2223,10 @@ namespace CrazyKTV_SongMgr
             return SynonymousSongNameList;
         }
 
+        #endregion
+
+        #region --- 下載檔案 ---
+
         public static bool DownloadFile(string File, string Url)
         {
             bool DownloadStatus = false;
@@ -2022,6 +2259,10 @@ namespace CrazyKTV_SongMgr
             return DownloadStatus;
         }
 
+        #endregion
+
+        #region --- 轉換字串為繁體中文 ---
+
         public static string ConvToTraditionalChinese(string strSource)
         {
             int LocaleSystemDefault = 0x0800;
@@ -2040,8 +2281,10 @@ namespace CrazyKTV_SongMgr
             return strDest;
         }
 
+        #endregion
 
-        // BIG5 GB2312繁簡編碼快篩 https://github.com/darkthread/CEAD 
+        #region --- BIG5 GB2312 繁簡編碼快篩 ---
+        // BIG5 GB2312 繁簡編碼快篩 https://github.com/darkthread/CEAD
         public class ChEncAutoDetector
         {
             /// <summary>
@@ -2166,6 +2409,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- 檢查管理員身份 ---
+
         public static bool IsAdministrator()
         {
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
@@ -2173,6 +2420,7 @@ namespace CrazyKTV_SongMgr
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        #endregion
 
     }
 }
