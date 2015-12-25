@@ -939,26 +939,29 @@ namespace CrazyKTV_SongMgr
 
                 try
                 {
-                    if (File.Exists(str))
+                    if (Global.SongMgrSongAddMode != "3")
                     {
-                        FileAttributes attributes = File.GetAttributes(str);
-                        if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                        if (File.Exists(str))
                         {
-                            attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
-                            File.SetAttributes(str, attributes);
-                        }
+                            FileAttributes attributes = File.GetAttributes(str);
+                            if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                            {
+                                attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                File.SetAttributes(str, attributes);
+                            }
 
-                        if (Global.SongMgrBackupRemoveSong == "True")
-                        {
-                            string SongFileName = Path.GetFileName(str);
-                            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\RemoveSong")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\RemoveSong");
-                            if (File.Exists(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName)) File.Delete(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
-                            File.Move(str, Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
-                            CommonFunc.SetFileTime(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName, DateTime.Now);
-                        }
-                        else
-                        {
-                            File.Delete(str);
+                            if (Global.SongMgrBackupRemoveSong == "True")
+                            {
+                                string SongFileName = Path.GetFileName(str);
+                                if (!Directory.Exists(Application.StartupPath + @"\SongMgr\RemoveSong")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\RemoveSong");
+                                if (File.Exists(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName)) File.Delete(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
+                                File.Move(str, Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
+                                CommonFunc.SetFileTime(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName, DateTime.Now);
+                            }
+                            else
+                            {
+                                File.Delete(str);
+                            }
                         }
                     }
 
@@ -2254,7 +2257,7 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "歌手名稱", "160", "none" };
                     break;
                 case "Song_SongName":
-                    list = new List<string>() { "歌曲名稱", "248", "none" };
+                    list = new List<string>() { "歌曲名稱", "270", "none" };
                     break;
                 case "Song_Track":
                     list = new List<string>() { "歌曲聲道", "140", "none" };

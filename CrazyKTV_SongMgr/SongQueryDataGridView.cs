@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,7 +13,6 @@ namespace CrazyKTV_SongMgr
 
     public partial class MainForm : Form
     {
-        public object KeyCode { get; private set; }
         #region --- SongQuery_DataGridView ---
 
         private void SongQuery_DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -629,7 +627,8 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "刪除資料列":
-                    if (MessageBox.Show("你確定要刪除歌庫資料及歌曲檔案嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    string MessageText = (Global.SongMgrSongAddMode != "3") ? "你確定要刪除歌曲資料及歌曲檔案嗎?" : "你確定要刪除歌曲資料嗎?";
+                    if (MessageBox.Show(MessageText, "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         List<string> SongIdlist = new List<string>();
                         List<string> SongFilelist = new List<string>();
@@ -718,7 +717,8 @@ namespace CrazyKTV_SongMgr
                 case Keys.Delete:
                     if (SongQuery_EditMode_CheckBox.Checked == true)
                     {
-                        if (MessageBox.Show("你確定要刪除歌庫資料及歌曲檔案嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        string MessageText = (Global.SongMgrSongAddMode != "3") ? "你確定要刪除歌曲資料及歌曲檔案嗎?" : "你確定要刪除歌曲資料嗎?";
+                        if (MessageBox.Show(MessageText, "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             List<string> SongIdlist = new List<string>();
                             List<string> SongFilelist = new List<string>();

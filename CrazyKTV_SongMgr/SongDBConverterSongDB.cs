@@ -157,17 +157,17 @@ namespace CrazyKTV_SongMgr
                     SongTrack = Global.SongSrcDT.Rows[i]["Song_Channel"].ToString();
                     if (SongTrack == "3")
                     {
-                        SongTrack = "1";
+                        SongTrack = "0";
                         Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌曲聲道數值為3立體聲,已自動將其數值改為1: " + SongId + "|" + SongSongName;
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌曲聲道數值為3立體聲,已自動將其數值改為0: " + SongId + "|" + SongSongName;
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
                 }
                 else
                 {
-                    SongTrack = "1";
+                    SongTrack = "0";
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌曲聲道數值為空值,已自動將其數值改為1: " + SongId + "|" + SongSongName;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌曲聲道數值為空值,已自動將其數值改為0: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
 
