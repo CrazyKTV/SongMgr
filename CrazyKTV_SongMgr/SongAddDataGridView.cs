@@ -321,11 +321,12 @@ namespace CrazyKTV_SongMgr
                 if (SongAdd_DataGridView.SelectedRows.Count > 1)
                 {
                     GridView_ContextMenu = new ContextMenuStrip();
-                    GridView_ContextMenuItem = new ToolStripMenuItem[1];
+                    int ContextMenuCount = Convert.ToInt32(SongQuery.GetContextMenuStr(0, 0, true));
+                    GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuCount];
 
-                    for (int i = 0; i < 1; i++)
+                    for (int i = 0; i < ContextMenuCount; i++)
                     {
-                        valStr = SongQuery.GetContextMenuStr(i, 0);
+                        valStr = SongQuery.GetContextMenuStr(i, 0, false);
                         GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
                         GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
                         GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_RightClick);
@@ -339,11 +340,12 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.CurrentCell = SongAdd_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
                     GridView_ContextMenu = new ContextMenuStrip();
-                    GridView_ContextMenuItem = new ToolStripMenuItem[3];
+                    int ContextMenuCount = Convert.ToInt32(SongQuery.GetContextMenuStr(0, 1, true));
+                    GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuCount];
 
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < ContextMenuCount; i++)
                     {
-                        valStr = SongQuery.GetContextMenuStr(i, 1);
+                        valStr = SongQuery.GetContextMenuStr(i, 1, false);
                         GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
                         GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
                         GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_RightClick);

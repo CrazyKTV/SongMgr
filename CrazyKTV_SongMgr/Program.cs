@@ -164,6 +164,13 @@ namespace CrazyKTV_SongMgr
         public static bool SongQueryMultiEdit;
         public static List<bool> SongQueryMultiEditUpdateList = new List<bool>() { false, false, false, false, false, false, false, false };
 
+        /// <summary>
+        /// <para>0: SongId | 1: SongLang | 2: SongSingerType | 3: SongSinger</para>
+        /// <para>4: SongSongName | 5: SongTrack | 6: SongSongType | 7: SongVolume</para> 
+        /// <para>8: SongWordCount | 9: SongPlayCount | 10: SongMB | 11: SongCreatDate</para> 
+        /// <para>12: SongFileName | 13: SongPath | 14: SongSpell | 15: SongSpellNum</para> 
+        /// <para>16: SongSongStroke | 17: SongPenStyle | 18: SongPlayState | 19: SongSrcPath</para>
+        /// </summary>
         public static List<string> SongQueryDataGridViewSelectList = new List<string>();
         public static List<string> SongQueryDataGridViewRestoreSelectList = new List<string>();
         public static string SingerQueryDataGridViewValue = "";

@@ -86,7 +86,6 @@
             this.SongQuery_QueryStatus_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongQuery_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongQuery_QueryStatus_Label = new System.Windows.Forms.Label();
-            this.SongQuery_DataGridView = new System.Windows.Forms.DataGridView();
             this.SongQuery_Edit_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongQuery_EditSongCreatDate_DateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.SongQuery_EditSongSrcPath_TextBox = new System.Windows.Forms.TextBox();
@@ -116,6 +115,7 @@
             this.SongQuery_EditSongLang_Label = new System.Windows.Forms.Label();
             this.SongQuery_EditSongId_TextBox = new System.Windows.Forms.TextBox();
             this.SongQuery_EditSongId_Label = new System.Windows.Forms.Label();
+            this.SongQuery_DataGridView = new System.Windows.Forms.DataGridView();
             this.SongAdd_TabPage = new System.Windows.Forms.TabPage();
             this.SongAdd_DragDrop_Label = new System.Windows.Forms.Label();
             this.SongAdd_Add_Button = new System.Windows.Forms.Button();
@@ -458,8 +458,8 @@
             this.SongQuery_Query_GroupBox.SuspendLayout();
             this.SongQuery_Statistics_GroupBox.SuspendLayout();
             this.SongQuery_QueryStatus_GroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).BeginInit();
             this.SongQuery_Edit_GroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).BeginInit();
             this.SongAdd_TabPage.SuspendLayout();
             this.SongAdd_SpecialStr_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SongAdd_DataGridView)).BeginInit();
@@ -554,8 +554,8 @@
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Query_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Statistics_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_QueryStatus_GroupBox);
-            this.SongQuery_TabPage.Controls.Add(this.SongQuery_Edit_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_DataGridView);
+            this.SongQuery_TabPage.Controls.Add(this.SongQuery_Edit_GroupBox);
             this.SongQuery_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -1149,46 +1149,6 @@
             this.SongQuery_QueryStatus_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.SongQuery_QueryStatus_Label.UseMnemonic = false;
             // 
-            // SongQuery_DataGridView
-            // 
-            this.SongQuery_DataGridView.AllowUserToAddRows = false;
-            this.SongQuery_DataGridView.AllowUserToDeleteRows = false;
-            this.SongQuery_DataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            this.SongQuery_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.SongQuery_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.SongQuery_DataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.SongQuery_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SongQuery_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.SongQuery_DataGridView.EnableHeadersVisualStyles = false;
-            this.SongQuery_DataGridView.Location = new System.Drawing.Point(23, 365);
-            this.SongQuery_DataGridView.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
-            this.SongQuery_DataGridView.Name = "SongQuery_DataGridView";
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.SongQuery_DataGridView.RowTemplate.Height = 27;
-            this.SongQuery_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
-            this.SongQuery_DataGridView.StandardTab = true;
-            this.SongQuery_DataGridView.TabIndex = 4;
-            this.SongQuery_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellDoubleClick);
-            this.SongQuery_DataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellEndEdit);
-            this.SongQuery_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.SongQuery_DataGridView_CellFormatting);
-            this.SongQuery_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseClick);
-            this.SongQuery_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseDown);
-            this.SongQuery_DataGridView.SelectionChanged += new System.EventHandler(this.SongQuery_DataGridView_SelectionChanged);
-            this.SongQuery_DataGridView.Sorted += new System.EventHandler(this.SongQuery_DataGridView_Sorted);
-            this.SongQuery_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SongQuery_DataGridView_KeyDown);
-            this.SongQuery_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SongQuery_DataGridView_MouseUp);
-            // 
             // SongQuery_Edit_GroupBox
             // 
             this.SongQuery_Edit_GroupBox.Controls.Add(this.SongQuery_EditSongCreatDate_DateTimePicker);
@@ -1558,6 +1518,45 @@
             this.SongQuery_EditSongId_Label.Size = new System.Drawing.Size(82, 22);
             this.SongQuery_EditSongId_Label.TabIndex = 0;
             this.SongQuery_EditSongId_Label.Text = "歌曲編號:";
+            // 
+            // SongQuery_DataGridView
+            // 
+            this.SongQuery_DataGridView.AllowUserToAddRows = false;
+            this.SongQuery_DataGridView.AllowUserToDeleteRows = false;
+            this.SongQuery_DataGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            this.SongQuery_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.SongQuery_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.SongQuery_DataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.SongQuery_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SongQuery_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.SongQuery_DataGridView.EnableHeadersVisualStyles = false;
+            this.SongQuery_DataGridView.Location = new System.Drawing.Point(23, 365);
+            this.SongQuery_DataGridView.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
+            this.SongQuery_DataGridView.Name = "SongQuery_DataGridView";
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.SongQuery_DataGridView.RowTemplate.Height = 27;
+            this.SongQuery_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
+            this.SongQuery_DataGridView.StandardTab = true;
+            this.SongQuery_DataGridView.TabIndex = 4;
+            this.SongQuery_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SongQuery_DataGridView_CellDoubleClick);
+            this.SongQuery_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.SongQuery_DataGridView_CellFormatting);
+            this.SongQuery_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseClick);
+            this.SongQuery_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongQuery_DataGridView_CellMouseDown);
+            this.SongQuery_DataGridView.SelectionChanged += new System.EventHandler(this.SongQuery_DataGridView_SelectionChanged);
+            this.SongQuery_DataGridView.Sorted += new System.EventHandler(this.SongQuery_DataGridView_Sorted);
+            this.SongQuery_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SongQuery_DataGridView_KeyDown);
+            this.SongQuery_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SongQuery_DataGridView_MouseUp);
             // 
             // SongAdd_TabPage
             // 
@@ -5800,6 +5799,7 @@
             // 
             // SongLog_ClearLog_Button
             // 
+            this.SongLog_ClearLog_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SongLog_ClearLog_Button.AutoSize = true;
             this.SongLog_ClearLog_Button.Location = new System.Drawing.Point(832, 587);
             this.SongLog_ClearLog_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
@@ -5898,9 +5898,9 @@
             this.SongQuery_Statistics_GroupBox.PerformLayout();
             this.SongQuery_QueryStatus_GroupBox.ResumeLayout(false);
             this.SongQuery_QueryStatus_GroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).EndInit();
             this.SongQuery_Edit_GroupBox.ResumeLayout(false);
             this.SongQuery_Edit_GroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).EndInit();
             this.SongAdd_TabPage.ResumeLayout(false);
             this.SongAdd_TabPage.PerformLayout();
             this.SongAdd_SpecialStr_GroupBox.ResumeLayout(false);

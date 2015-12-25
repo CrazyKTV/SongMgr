@@ -807,16 +807,6 @@ namespace CrazyKTV_SongMgr
                         {
                             this.BeginInvoke((Action)delegate()
                             {
-                                SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_SingerType"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_SongType"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_Volume"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_PlayCount"].Style.ForeColor = Color.Red;
-                                SongQuery_DataGridView.Rows[i].Cells["Song_CreatDate"].Style.ForeColor = Color.Red;
-
                                 SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value = SongDTRow.Field<string>("Song_Id");
                                 SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value = SongDTRow.Field<string>("Song_Lang");
                                 SongQuery_DataGridView.Rows[i].Cells["Song_SingerType"].Value = SongDTRow.Field<Int16>("Song_SingerType");
@@ -836,24 +826,57 @@ namespace CrazyKTV_SongMgr
                                 SongQuery_DataGridView.Rows[i].Cells["Song_SongStroke"].Value = SongDTRow.Field<Int16>("Song_SongStroke");
                                 SongQuery_DataGridView.Rows[i].Cells["Song_PenStyle"].Value = SongDTRow.Field<string>("Song_PenStyle");
                                 SongQuery_DataGridView.Rows[i].Cells["Song_PlayState"].Value = SongDTRow.Field<byte>("Song_PlayState");
+
+                                List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
+
+                                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
+                                if (SelectedRowsCount > 1)
+                                {
+                                    SongQuery_EditSongId_TextBox.Text = "";
+                                    SongQuery_EditSongLang_ComboBox.SelectedValue = 1;
+                                    SongQuery_EditSongCreatDate_DateTimePicker.Value = DateTime.Now;
+                                    SongQuery_EditSongSinger_TextBox.Text = "";
+                                    SongQuery_EditSongSingerType_ComboBox.SelectedValue = 1;
+                                    SongQuery_EditSongSongName_TextBox.Text = "";
+                                    SongQuery_EditSongSongType_ComboBox.SelectedValue = 1;
+                                    SongQuery_EditSongSpell_TextBox.Text = "";
+                                    SongQuery_EditSongWordCount_TextBox.Text = "";
+                                    SongQuery_EditSongSrcPath_TextBox.Text = "";
+                                    SongQuery_EditSongTrack_ComboBox.SelectedValue = 1;
+                                    SongQuery_EditSongVolume_TextBox.Text = "";
+                                    SongQuery_EditSongPlayCount_TextBox.Text = "";
+                                }
+                                else if (SelectedRowsCount == 1)
+                                {
+                                    foreach (string str in Global.SongQueryDataGridViewSelectList)
+                                    {
+                                        List<string> RestoreSongDataList = new List<string>(str.Split('|'));
+                                        if (RestoreSongDataList[0] == OldSongId)
+                                        {
+                                            SongQuery_EditSongId_TextBox.Text = RestoreSongDataList[0];
+                                            SongQuery_EditSongLang_ComboBox.SelectedValue = Global.CrazyktvSongLangList.IndexOf(RestoreSongDataList[1]) + 1;
+                                            SongQuery_EditSongCreatDate_DateTimePicker.Value = DateTime.Parse(RestoreSongDataList[11]);
+                                            SongQuery_EditSongSinger_TextBox.Text = RestoreSongDataList[3];
+                                            string SongSingerTypeStr = CommonFunc.GetSingerTypeStr(Convert.ToInt32(RestoreSongDataList[2]), 1, "null");
+                                            SongQuery_EditSongSingerType_ComboBox.SelectedValue = Convert.ToInt32(CommonFunc.GetSingerTypeStr(0, 3, SongSingerTypeStr)) + 1;
+                                            SongQuery_EditSongSongName_TextBox.Text = RestoreSongDataList[4];
+                                            SongQuery_EditSongSongType_ComboBox.SelectedValue = (SongSongType == "") ? 1 : SongSongTypeList.IndexOf(RestoreSongDataList[6]) + 2;
+                                            SongQuery_EditSongSpell_TextBox.Text = RestoreSongDataList[14];
+                                            SongQuery_EditSongWordCount_TextBox.Text = RestoreSongDataList[8];
+                                            SongQuery_EditSongSrcPath_TextBox.Text = RestoreSongDataList[19];
+                                            SongQuery_EditSongTrack_ComboBox.SelectedValue = RestoreSongDataList[5];
+                                            SongQuery_EditSongVolume_TextBox.Text = RestoreSongDataList[7];
+                                            SongQuery_EditSongPlayCount_TextBox.Text = RestoreSongDataList[9];
+                                            break;
+                                        }
+                                    }
+                                }
                             });
                         }
                     }
                 }
                 else
                 {
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_SingerType"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_SongType"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_Volume"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_PlayCount"].Style.ForeColor = Color.Black;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_CreatDate"].Style.ForeColor = Color.Black;
-                    });
                     string SongUpdateValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + OldSongId;
                     SongUpdateValueList.Add(SongUpdateValue);
                 }
@@ -1735,9 +1758,12 @@ namespace CrazyKTV_SongMgr
                         if (Global.SongQueryMultiEditUpdateList[0])
                         {
                             string SongLang = ((DataRowView)SongQuery_EditSongLang_ComboBox.SelectedItem)[0].ToString();
-                            string SongId = SongQuery.GetNextSongId(SongLang, true);
-                            row.Cells["Song_Id"].Value = SongId;
-                            row.Cells["Song_Lang"].Value = SongLang;
+                            if (row.Cells["Song_Lang"].Value.ToString() != SongLang)
+                            {
+                                string SongId = SongQuery.GetNextSongId(SongLang, true);
+                                row.Cells["Song_Id"].Value = SongId;
+                                row.Cells["Song_Lang"].Value = SongLang;
+                            }
                         }
 
                         if (Global.SongQueryMultiEditUpdateList[1])
@@ -2321,7 +2347,7 @@ namespace CrazyKTV_SongMgr
             return Str;
         }
 
-        public static string GetContextMenuStr(int ContextMenu, int ListType)
+        public static string GetContextMenuStr(int ContextMenu, int ListType, bool ReturnCount)
         {
             List<string> list;
 
@@ -2340,8 +2366,8 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "刪除資料列" };
                     break;
             }
-
             string Str = list[ContextMenu];
+            if (ReturnCount) Str = list.Count.ToString();
             return Str;
         }
 
