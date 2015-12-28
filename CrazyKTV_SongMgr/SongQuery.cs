@@ -15,6 +15,9 @@ namespace CrazyKTV_SongMgr
 {
     public partial class MainForm : Form
     {
+        
+        #region --- 歌曲查詢控制項事件 ---
+
         private void SongQuery_QueryType_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (SongQuery_QueryType_ComboBox.SelectedValue.ToString())
@@ -114,7 +117,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false);
                     SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                     SongQuery_QueryValue_ComboBox.ValueMember = "Value";
-                    SongQuery_QueryValue_ComboBox.SelectedValue = 1;
+                    SongQuery_QueryValue_ComboBox.SelectedValue = 0;
 
                     SongQuery_QueryValue_ComboBox.Visible = true;
                     SongQuery_QueryValue_ComboBox.Focus();
@@ -150,6 +153,10 @@ namespace CrazyKTV_SongMgr
                 SongQuery_Query_Button_Click(new Button(), new EventArgs());
             }
         }
+
+        #endregion
+
+        #region --- 歌曲查詢 ---
 
         private void SongQuery_Query_Button_Click(object sender, EventArgs e)
         {
@@ -402,55 +409,24 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
         private void SongQuery_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (SongQuery_EditMode_CheckBox.Checked == true)
             {
-                int MaxDigitCode;
-                if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
-                tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
-
                 SongQuery_DataGridView.Size = new Size(952, 270);
                 SongQuery_DataGridView.Location = new Point(23, 23);
-                SongQuery_DataGridView.ClearSelection();
+                SongQuery_DataGridView.FirstDisplayedScrollingRowIndex = SongQuery_DataGridView.SelectedRows[SongQuery_DataGridView.SelectedRows.Count - 1].Index;
                 SongQuery_Edit_GroupBox.Visible = true;
                 SongQuery_Query_GroupBox.Visible = false;
                 SongQuery_OtherQuery_GroupBox.Visible = false;
                 SongQuery_Statistics_GroupBox.Visible = false;
 
-                SongQuery_EditSongId_TextBox.Text = "";
-                SongQuery_EditSongLang_ComboBox.SelectedValue = 1;
-                SongQuery_EditSongCreatDate_DateTimePicker.Value = DateTime.Now;
-                SongQuery_EditSongSinger_TextBox.Text = "";
-                SongQuery_EditSongSingerType_ComboBox.SelectedValue = 1;
-                SongQuery_EditSongSongName_TextBox.Text = "";
-                SongQuery_EditSongSongType_ComboBox.SelectedValue = 1;
-                SongQuery_EditSongSpell_TextBox.Text = "";
-                SongQuery_EditSongWordCount_TextBox.Text = "";
-                SongQuery_EditSongSrcPath_TextBox.Text = "";
-                SongQuery_EditSongTrack_ComboBox.SelectedValue = 1;
-                SongQuery_EditSongVolume_TextBox.Text = "";
-                SongQuery_EditSongPlayCount_TextBox.Text = "";
-
-                SongQuery_EditSongId_TextBox.Enabled = false;
-                SongQuery_EditSongLang_ComboBox.Enabled = false;
-                SongQuery_EditSongCreatDate_DateTimePicker.Enabled = false;
-                SongQuery_EditSongSinger_TextBox.Enabled = false;
-                SongQuery_EditSongSingerType_ComboBox.Enabled = false;
-                SongQuery_EditSongSongName_TextBox.Enabled = false;
-                SongQuery_EditSongSongType_ComboBox.Enabled = false;
-                SongQuery_EditSongSpell_TextBox.Enabled = false;
-                SongQuery_EditSongWordCount_TextBox.Enabled = false;
-                SongQuery_EditSongSrcPath_TextBox.Enabled = false;
-                SongQuery_EditSongTrack_ComboBox.Enabled = false;
-                SongQuery_EditSongTrack_Button.Enabled = false;
-                SongQuery_EditSongVolume_TextBox.Enabled = false;
-                SongQuery_EditSongPlayCount_TextBox.Enabled = false;
-                SongQuery_EditApplyChanges_Button.Enabled = false;
-
-                SongQuery_DataGridView.EndEdit();
+                Global.SongQueryMultiEdit = false;
+                SongQuery_InitializeEditControl();
+                SongQuery_DataGridView_SelectionChanged(new object(), new EventArgs());
+                
                 SongQuery_QueryStatus_Label.Text = "已進入編輯模式...";
                 SongQuery.CreateSongDataTable();
             }
@@ -458,18 +434,19 @@ namespace CrazyKTV_SongMgr
             {
                 SongQuery_DataGridView.Size = new Size(952, 296);
                 SongQuery_DataGridView.Location = new Point(23, 365);
-                SongQuery_DataGridView.ClearSelection();
+                SongQuery_EditMode_CheckBox.Enabled = (SongQuery_DataGridView.RowCount == 0) ? false : true;
                 SongQuery_Edit_GroupBox.Visible = false;
                 SongQuery_Query_GroupBox.Visible = true;
                 SongQuery_OtherQuery_GroupBox.Visible = true;
                 SongQuery_Statistics_GroupBox.Visible = true;
 
-                SongQuery_DataGridView.EndEdit();
                 SongQuery_QueryStatus_Label.Text = "已進入檢視模式...";
                 SongQuery.DisposeSongDataTable();
             }
             SongQuery_DataGridView.Focus();
         }
+
+        #region --- SongQuery 更新歌曲 ---
 
         private void SongQuery_SongUpdate(object SongUpdateDT)
         {
@@ -948,6 +925,10 @@ namespace CrazyKTV_SongMgr
             });
         }
 
+        #endregion
+
+        #region --- SongQuery 移除歌曲 ---
+
         private List<string> SongQuery_SongRemove(object SongIdlist, object SongFilelist)
         {
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
@@ -1015,6 +996,8 @@ namespace CrazyKTV_SongMgr
             tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6)));
             return RemoveSongIdlist;
         }
+
+        #endregion
 
         private void SongQuery_SynonymousQuery_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -1475,37 +1458,6 @@ namespace CrazyKTV_SongMgr
             conn.Close();
         }
 
-        private void SongQuery_RefreshSongType()
-        {
-            if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "6")
-            {
-                SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
-                SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
-                SongQuery_QueryValue_ComboBox.ValueMember = "Value";
-                SongQuery_QueryValue_ComboBox.SelectedValue = 1;
-            }
-
-            if (SongQuery_EditMode_CheckBox.Checked)
-            {
-                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
-                int SelectedValue = (SongQuery_EditSongSongType_ComboBox.Items.Count > 0) ? int.Parse(SongQuery_EditSongSongType_ComboBox.SelectedValue.ToString()) : SelectedValue = 1;
-                if (SelectedRowsCount > 1)
-                {
-                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", true);
-                    SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
-                    SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
-                    SongQuery_EditSongSongType_ComboBox.SelectedValue = SelectedValue;
-                }
-                else if (SelectedRowsCount == 1)
-                {
-                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
-                    SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
-                    SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
-                    SongQuery_EditSongSongType_ComboBox.SelectedValue = SelectedValue;
-                }
-            }
-        }
-
         private void SongQuery_Paste_Button_Click(object sender, EventArgs e)
         {
             SongQuery_QueryValue_TextBox.Text = Clipboard.GetText();
@@ -1568,13 +1520,25 @@ namespace CrazyKTV_SongMgr
                 if (SelectedRowsCount > 1)
                 {
                     Global.SongQueryMultiEditUpdateList[2] = (SongQuery_EditSongSinger_TextBox.Text != "") ? true : false;
-                    if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray())) SongQuery_EditSongSingerType_ComboBox.SelectedValue = 5;
+                    if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
+                    {
+                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split(',')).ConvertAll(str => str.ToLower());
+                        if (list.IndexOf(SongSinger.ToLower()) < 0) SongQuery_EditSongSingerType_ComboBox.SelectedValue = 5;
+                    }
                 }
                 else if (SelectedRowsCount == 1)
                 {
                     if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
                     {
-                        SongQuery_EditSongSingerType_ComboBox.SelectedValue = 4;
+                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split(',')).ConvertAll(str => str.ToLower());
+                        if (list.IndexOf(SongSinger.ToLower()) < 0)
+                        {
+                            SongQuery_EditSongSingerType_ComboBox.SelectedValue = 4;
+                        }
+                        else
+                        {
+                            if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4") SongQuery_RefreshSongSrcPathTextBox();
+                        }
                     }
                     else
                     {
@@ -1685,14 +1649,9 @@ namespace CrazyKTV_SongMgr
 
                     string SongId = SongQuery_EditSongId_TextBox.Text;
                     string SongLang = ((DataRowView)SongQuery_EditSongLang_ComboBox.SelectedItem)[0].ToString();
-                    string SongSingerTypeStr = CommonFunc.GetSingerTypeStr(Convert.ToInt32(SongQuery_EditSongSingerType_ComboBox.SelectedValue) - 1, 3, "null");
-                    int SongSingerType = Convert.ToInt32(CommonFunc.GetSingerTypeStr(0, 1, SongSingerTypeStr));
                     string SongSinger = SongQuery_EditSongSinger_TextBox.Text;
                     string SongSongName = SongQuery_EditSongSongName_TextBox.Text;
                     string SongTrack = SongQuery_EditSongTrack_ComboBox.SelectedValue.ToString();
-                    string SongSongType = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
-                    string SongFileName = Path.GetFileName(SongQuery_EditSongSrcPath_TextBox.Text);
-                    string SongPath = Path.GetDirectoryName(SongQuery_EditSongSrcPath_TextBox.Text);
                     string SongFilePath = list[19];
 
                     List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, "0", "SongQueryEdit" };
@@ -1871,6 +1830,39 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongQuery_InitializeEditControl()
+        {
+            SongQuery_EditSongId_TextBox.Text = "";
+            SongQuery_EditSongLang_ComboBox.SelectedValue = 1;
+            SongQuery_EditSongCreatDate_DateTimePicker.Value = DateTime.Now;
+            SongQuery_EditSongSinger_TextBox.Text = "";
+            SongQuery_EditSongSingerType_ComboBox.SelectedValue = 1;
+            SongQuery_EditSongSongName_TextBox.Text = "";
+            SongQuery_EditSongSongType_ComboBox.SelectedValue = 1;
+            SongQuery_EditSongSpell_TextBox.Text = "";
+            SongQuery_EditSongWordCount_TextBox.Text = "";
+            SongQuery_EditSongSrcPath_TextBox.Text = "";
+            SongQuery_EditSongTrack_ComboBox.SelectedValue = 1;
+            SongQuery_EditSongVolume_TextBox.Text = "";
+            SongQuery_EditSongPlayCount_TextBox.Text = "";
+
+            SongQuery_EditSongId_TextBox.Enabled = false;
+            SongQuery_EditSongLang_ComboBox.Enabled = false;
+            SongQuery_EditSongCreatDate_DateTimePicker.Enabled = false;
+            SongQuery_EditSongSinger_TextBox.Enabled = false;
+            SongQuery_EditSongSingerType_ComboBox.Enabled = false;
+            SongQuery_EditSongSongName_TextBox.Enabled = false;
+            SongQuery_EditSongSongType_ComboBox.Enabled = false;
+            SongQuery_EditSongSpell_TextBox.Enabled = false;
+            SongQuery_EditSongWordCount_TextBox.Enabled = false;
+            SongQuery_EditSongSrcPath_TextBox.Enabled = false;
+            SongQuery_EditSongTrack_ComboBox.Enabled = false;
+            SongQuery_EditSongTrack_Button.Enabled = false;
+            SongQuery_EditSongVolume_TextBox.Enabled = false;
+            SongQuery_EditSongPlayCount_TextBox.Enabled = false;
+            SongQuery_EditApplyChanges_Button.Enabled = false;
+        }
+
         private void SongQuery_GetSongEditComboBoxList(bool MultiEdit)
         {
             Global.SongQueryMultiEdit = MultiEdit;
@@ -1901,8 +1893,8 @@ namespace CrazyKTV_SongMgr
             string SongSongName = SongQuery_EditSongSongName_TextBox.Text;
             int SongTrack = Convert.ToInt32(SongQuery_EditSongTrack_ComboBox.SelectedValue);
             string SongSongType = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
-            string SongFileName = Path.GetFileName(SongQuery_EditSongSrcPath_TextBox.Text);
-            string SongPath = Path.GetDirectoryName(SongQuery_EditSongSrcPath_TextBox.Text);
+            string SongFileName = SongQuery_DataGridView.CurrentRow.Cells["Song_FileName"].Value.ToString();
+            string SongPath = SongQuery_DataGridView.CurrentRow.Cells["Song_Path"].Value.ToString();
 
             SongQuery_EditSongSrcPath_TextBox.Text = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath);
         }

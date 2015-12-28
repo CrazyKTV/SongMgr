@@ -204,25 +204,25 @@ namespace CrazyKTV_SongMgr
             SongMgrCfg_CrtchorusSeparate_ComboBox.SelectedValue = int.Parse(Global.SongMgrChorusSeparate);
 
             if (list[10] != "") Global.SongAddDefaultSongLang = list[10];
-            SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang");
+            SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang", false);
             SongAdd_DefaultSongLang_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongLang_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongLang_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongLang);
 
             if (list[11] != "") Global.SongAddDefaultSingerType = list[11];
-            SongAdd_DefaultSingerType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSingerType");
+            SongAdd_DefaultSingerType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSingerType", false);
             SongAdd_DefaultSingerType_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSingerType_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSingerType_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSingerType);
 
             if (list[12] != "") Global.SongAddDefaultSongTrack = list[12];
-            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack");
+            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false);
             SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongTrack_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongTrack);
 
             if (list[13] != "") Global.SongAddDefaultSongType = list[13];
-            SongAdd_DefaultSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType");
+            SongAdd_DefaultSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false);
             SongAdd_DefaultSongType_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongType_ComboBox.ValueMember = "Value";
             SongAdd_DefaultSongType_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongType);
@@ -231,7 +231,7 @@ namespace CrazyKTV_SongMgr
             SongAdd_DefaultSongVolume_TextBox.Text = Global.SongAddDefaultSongVolume;
 
             if (list[15] != "") Global.SongAddSpecialStr = list[15];
-            SongAdd_SpecialStr_ListBox.DataSource = SongAdd.GetDefaultSongInfo("SpecialStr");
+            SongAdd_SpecialStr_ListBox.DataSource = SongAdd.GetDefaultSongInfo("SpecialStr", false);
             SongAdd_SpecialStr_ListBox.DisplayMember = "Display";
             SongAdd_SpecialStr_ListBox.ValueMember = "Value";
 
@@ -549,7 +549,7 @@ namespace CrazyKTV_SongMgr
                         SongQuery_EditSongTrack_ComboBox.SelectedValue = Global.PlayerUpdateSongValueList[2];
                         break;
                     case "SongAdd":
-                        SongAdd_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[2];
+                        SongAdd_EditSongTrack_ComboBox.SelectedValue = Global.PlayerUpdateSongValueList[2];
                         break;
                 }
                 Global.PlayerUpdateSongValueList.Clear();
@@ -562,7 +562,33 @@ namespace CrazyKTV_SongMgr
 
 
 
-       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // End
     }
 }

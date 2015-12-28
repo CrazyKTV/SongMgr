@@ -69,6 +69,8 @@ namespace CrazyKTV_SongMgr
                     i = 0;
                     break;
                 case "SongAdd_DefaultSongVolume_TextBox":
+                case "SongAdd_EditSongVolume_TextBox":
+                case "SongAdd_EditSongPlayCount_TextBox":
                     i = 1;
                     break;
                 case "SongMaintenance_VolumeChange_TextBox":
@@ -123,10 +125,15 @@ namespace CrazyKTV_SongMgr
                 case "SongQuery_EditSongSongName_TextBox":
                 case "SongQuery_EditSongVolume_TextBox":
                 case "SongQuery_EditSongPlayCount_TextBox":
+                    if (SongQuery_EditMode_CheckBox.Checked && Global.SongQueryMultiEdit) MultiEdit = true;
                     i = 0;
-                    MultiEdit = true;
                     break;
                 case "SongAdd_DefaultSongVolume_TextBox":
+                case "SongAdd_EditSongSinger_TextBox":
+                case "SongAdd_EditSongSongName_TextBox":
+                case "SongAdd_EditSongVolume_TextBox":
+                case "SongAdd_EditSongPlayCount_TextBox":
+                    if (SongAdd_Save_Button.Text == "取消加入" && Global.SongAddMultiEdit) MultiEdit = true;
                     i = 1;
                     break;
                 default:
@@ -163,6 +170,7 @@ namespace CrazyKTV_SongMgr
                     case "SongQuery_EditSongVolume_TextBox":
                     case "SongAdd_DefaultSongVolume_TextBox":
                     case "SongMaintenance_VolumeChange_TextBox":
+                    case "SongAdd_EditSongVolume_TextBox":
                         if (int.Parse(((TextBox)sender).Text) > 100)
                         {
                             Tooltip_Label[i].Text = "此項目只能輸入 0 ~ 100 的值!";
@@ -181,6 +189,8 @@ namespace CrazyKTV_SongMgr
                     case "SongQuery_EditSongPlayCount_TextBox":
                     case "SongAdd_DefaultSongVolume_TextBox":
                     case "SongMaintenance_VolumeChange_TextBox":
+                    case "SongAdd_EditSongVolume_TextBox":
+                    case "SongAdd_EditSongPlayCount_TextBox":
                         if (int.Parse(((TextBox)sender).Text) > 0)
                         {
                             ((TextBox)sender).Text = ((TextBox)sender).Text.TrimStart('0');
@@ -277,6 +287,7 @@ namespace CrazyKTV_SongMgr
             SongAdd_Save_Button.Enabled = status;
             SongAdd_DataGridView.Enabled = status;
             SongAdd_DragDrop_Label.Enabled = status;
+            SongAdd_Edit_GroupBox.Enabled = status;
             SongMaintenance_SpellCorrect_GroupBox.Enabled = status;
             SongMaintenance_CodeConv_GroupBox.Enabled = status;
             SongMaintenance_TrackExchange_GroupBox.Enabled = status;
@@ -312,6 +323,7 @@ namespace CrazyKTV_SongMgr
             SongAdd_SpecialStr_GroupBox.Enabled = status;
             SongAdd_SongAddCfg_GroupBox.Enabled = status;
             SongAdd_Save_Button.Enabled = status;
+            SongAdd_Edit_GroupBox.Enabled = status;
             SongMgrCfg_General_GroupBox.Enabled = status;
             SongMgrCfg_SongID_GroupBox.Enabled = status;
             SongMgrCfg_TabControl.Enabled = status;
@@ -390,6 +402,12 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDatabaseStatus)
             {
+                int MaxDigitCode;
+                if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
+                tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
+
                 Global.PhoneticsWordList = new List<string>();
                 Global.PhoneticsSpellList = new List<string>();
                 Global.PhoneticsStrokesList = new List<string>();
@@ -497,7 +515,7 @@ namespace CrazyKTV_SongMgr
                         SongQuery_StatisticsValue_Label[i].Text = SongLangCount[i].ToString() + " 首";
                         if (i < 10)
                         {
-                            if (SongLangCount[i] > 0) SongMaintenance_Lang_TextBox[i].Enabled = false;
+                            SongMaintenance_Lang_TextBox[i].Enabled = (SongLangCount[i] > 0) ? false : true;
                         }
                     }
                 });
@@ -578,41 +596,248 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #region --- 更新語系相關控件 ---
+
         private void Common_RefreshSongLang()
         {
+            string SongLangStr = "";
+            int SelectedValue = 1;
+            int SelectedRowsCount;
+
             SongQuery_QueryFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList();
             SongQuery_QueryFilter_ComboBox.DisplayMember = "Display";
             SongQuery_QueryFilter_ComboBox.ValueMember = "Value";
-            SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+            SongQuery_QueryFilter_ComboBox.SelectedValue = SelectedValue;
+
+            SongLangStr = ((DataRowView)SongAdd_DefaultSongLang_ComboBox.SelectedItem)[0].ToString();
+            SelectedValue = 1;
+
+            SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang", false);
+            SongAdd_DefaultSongLang_ComboBox.DisplayMember = "Display";
+            SongAdd_DefaultSongLang_ComboBox.ValueMember = "Value";
+
+            var langquery = from row in ((DataTable)SongAdd_DefaultSongLang_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongLangStr)
+                            select row;
+
+            if (langquery.Count<DataRow>() > 0)
+            {
+                foreach (DataRow row in langquery)
+                {
+                    SelectedValue = Convert.ToInt32(row["Value"]);
+                    break;
+                }
+            }
+            SongAdd_DefaultSongLang_ComboBox.SelectedValue = SelectedValue;
 
             if (SongQuery_EditMode_CheckBox.Checked)
             {
-                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
-                int SelectedValue = (SongQuery_EditSongLang_ComboBox.Items.Count > 0) ? int.Parse(SongQuery_EditSongLang_ComboBox.SelectedValue.ToString()) : SelectedValue = 1;
+                SongLangStr = ((DataRowView)SongQuery_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                SelectedValue = 1;
+                SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
+
                 if (SelectedRowsCount > 1)
                 {
                     SongQuery_EditSongLang_ComboBox.DataSource = SongQuery.GetEditSongLangList(true);
                     SongQuery_EditSongLang_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongLang_ComboBox.ValueMember = "Value";
-                    SongQuery_EditSongLang_ComboBox.SelectedValue = SelectedValue;
                 }
                 else if (SelectedRowsCount == 1)
                 {
                     SongQuery_EditSongLang_ComboBox.DataSource = SongQuery.GetEditSongLangList(false);
                     SongQuery_EditSongLang_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongLang_ComboBox.ValueMember = "Value";
-                    SongQuery_EditSongLang_ComboBox.SelectedValue = SelectedValue;
                 }
+
+                var query = from row in ((DataTable)SongQuery_EditSongLang_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongLangStr)
+                            select row;
+
+                if (query.Count<DataRow>() > 0)
+                {
+                    foreach (DataRow row in query)
+                    {
+                        SelectedValue = Convert.ToInt32(row["Value"]);
+                        break;
+                    }
+                }
+                SongQuery_EditSongLang_ComboBox.SelectedValue = SelectedValue;
             }
 
-            SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang");
-            SongAdd_DefaultSongLang_ComboBox.DisplayMember = "Display";
-            SongAdd_DefaultSongLang_ComboBox.ValueMember = "Value";
-            SongAdd_DefaultSongLang_ComboBox.SelectedValue = int.Parse(Global.SongAddDefaultSongLang);
+            if (SongAdd_Save_Button.Text == "取消加入")
+            {
+                SongLangStr = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                SelectedValue = 1;
+                SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
 
+                if (SelectedRowsCount > 1)
+                {
+                    SongAdd_EditSongLang_ComboBox.DataSource = SongAdd.GetEditSongLangList(true);
+                    SongAdd_EditSongLang_ComboBox.DisplayMember = "Display";
+                    SongAdd_EditSongLang_ComboBox.ValueMember = "Value";
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongAdd_EditSongLang_ComboBox.DataSource = SongAdd.GetEditSongLangList(false);
+                    SongAdd_EditSongLang_ComboBox.DisplayMember = "Display";
+                    SongAdd_EditSongLang_ComboBox.ValueMember = "Value";
+                }
+
+                var query = from row in ((DataTable)SongAdd_EditSongLang_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongLangStr)
+                            select row;
+
+                if (query.Count<DataRow>() > 0)
+                {
+                    foreach (DataRow row in query)
+                    {
+                        SelectedValue = Convert.ToInt32(row["Value"]);
+                        break;
+                    }
+                }
+                SongAdd_EditSongLang_ComboBox.SelectedValue = SelectedValue;
+            }
             SongMgrCfg_SetLangLB();
             SongMaintenance_SetCustomLangControl();
         }
+
+        #endregion
+
+        #region --- 更新歌曲類型相關控件 ---
+
+        private void Common_RefreshSongType()
+        {
+            string SongTypeStr = "";
+            int SelectedValue = 1;
+            int SelectedRowsCount;
+
+            if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "6")
+            {
+                SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
+                SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
+                SongQuery_QueryValue_ComboBox.ValueMember = "Value";
+                SongQuery_QueryValue_ComboBox.SelectedValue = SelectedValue;
+            }
+
+            SongTypeStr = ((DataRowView)SongAdd_DefaultSongType_ComboBox.SelectedItem)[0].ToString();
+            SelectedValue = 1;
+
+            SongAdd_DefaultSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false);
+            SongAdd_DefaultSongType_ComboBox.DisplayMember = "Display";
+            SongAdd_DefaultSongType_ComboBox.ValueMember = "Value";
+
+            var typequery = from row in ((DataTable)SongAdd_DefaultSongType_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongTypeStr)
+                            select row;
+
+            if (typequery.Count<DataRow>() > 0)
+            {
+                foreach (DataRow row in typequery)
+                {
+                    SelectedValue = Convert.ToInt32(row["Value"]);
+                    break;
+                }
+            }
+            SongAdd_DefaultSongType_ComboBox.SelectedValue = SelectedValue;
+
+            if (SongQuery_EditMode_CheckBox.Checked)
+            {
+                SongTypeStr = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
+                SelectedValue = 1;
+                SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
+
+                if (SelectedRowsCount > 1)
+                {
+                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", true);
+                    SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
+                    SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
+
+                    var query = from row in ((DataTable)SongQuery_EditSongSongType_ComboBox.DataSource).AsEnumerable()
+                                where row.Field<string>("Display").Equals(SongTypeStr)
+                                select row;
+
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        foreach (DataRow row in query)
+                        {
+                            SelectedValue = Convert.ToInt32(row["Value"]);
+                            break;
+                        }
+                    }
+                    SongQuery_EditSongSongType_ComboBox.SelectedValue = SelectedValue;
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
+                    SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
+                    SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
+
+                    var query = from row in ((DataTable)SongQuery_EditSongSongType_ComboBox.DataSource).AsEnumerable()
+                                where row.Field<string>("Display").Equals(SongTypeStr)
+                                select row;
+
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        foreach (DataRow row in query)
+                        {
+                            SelectedValue = Convert.ToInt32(row["Value"]);
+                            break;
+                        }
+                    }
+                    SongQuery_EditSongSongType_ComboBox.SelectedValue = SelectedValue;
+                }
+            }
+
+            if (SongAdd_Save_Button.Text == "取消加入")
+            {
+                SongTypeStr = ((DataRowView)SongAdd_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
+                SelectedValue = 1;
+                SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
+
+                if (SelectedRowsCount > 1)
+                {
+                    SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", true);
+                    SongAdd_EditSongSongType_ComboBox.DisplayMember = "Display";
+                    SongAdd_EditSongSongType_ComboBox.ValueMember = "Value";
+
+                    var query = from row in ((DataTable)SongAdd_EditSongSongType_ComboBox.DataSource).AsEnumerable()
+                                    where row.Field<string>("Display").Equals(SongTypeStr)
+                                    select row;
+
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        foreach (DataRow row in query)
+                        {
+                            SelectedValue = Convert.ToInt32(row["Value"]);
+                            break;
+                        }
+                    }
+                    SongAdd_EditSongSongType_ComboBox.SelectedValue = SelectedValue;
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false);
+                    SongAdd_EditSongSongType_ComboBox.DisplayMember = "Display";
+                    SongAdd_EditSongSongType_ComboBox.ValueMember = "Value";
+
+                    var query = from row in ((DataTable)SongAdd_EditSongSongType_ComboBox.DataSource).AsEnumerable()
+                                    where row.Field<string>("Display").Equals(SongTypeStr)
+                                    select row;
+
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        foreach (DataRow row in query)
+                        {
+                            SelectedValue = Convert.ToInt32(row["Value"]);
+                            break;
+                        }
+                    }
+                    SongAdd_EditSongSongType_ComboBox.SelectedValue = SelectedValue;
+                }
+            }
+        }
+
+        #endregion
 
         private void Common_GetSingerStatisticsTask()
         {
@@ -992,7 +1217,7 @@ namespace CrazyKTV_SongMgr
             SongQuery_QueryStatus_Label.Text = "";
 
             SongAdd_DataGridView.DataSource = null;
-            if (Global.SongMgrSongAddMode != "4") SongAdd_DragDrop_Label.Visible = true;
+            SongAdd_DragDrop_Label.Visible = (Global.SongMgrSongAddMode != "4") ? true : false;
             SongAdd_DataGridView.AllowDrop = true;
             SongAdd_Add_Button.Text = "加入歌庫";
             SongAdd_Add_Button.Enabled = false;

@@ -196,11 +196,9 @@ namespace CrazyKTV_SongMgr
                 Global.CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vl,l,左", "vr,r,右", "v3", "v4", "v5" };
             }
 
-            int SelectedValue = int.Parse(Global.SongAddDefaultSongTrack);
-            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack");
-            SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
-            SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
-            SongAdd_DefaultSongTrack_ComboBox.SelectedValue = SelectedValue;
+            string SongTrackStr = "";
+            int SelectedValue = 0;
+            int SelectedRowsCount;
 
             if (SongQuery_QueryType_ComboBox.SelectedValue != null)
             {
@@ -209,31 +207,98 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false);
                     SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                     SongQuery_QueryValue_ComboBox.ValueMember = "Value";
-                    SongQuery_QueryValue_ComboBox.SelectedValue = 1;
+                    SongQuery_QueryValue_ComboBox.SelectedValue = SelectedValue;
                 }
             }
 
+            SongTrackStr = ((DataRowView)SongAdd_DefaultSongTrack_ComboBox.SelectedItem)[0].ToString();
+            SelectedValue = 0;
+
+            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false);
+            SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
+            SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
+
+            var trackquery = from row in ((DataTable)SongAdd_DefaultSongTrack_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongTrackStr)
+                            select row;
+
+            if (trackquery.Count<DataRow>() > 0)
+            {
+                foreach (DataRow row in trackquery)
+                {
+                    SelectedValue = Convert.ToInt32(row["Value"]);
+                    break;
+                }
+            }
+            SongAdd_DefaultSongTrack_ComboBox.SelectedValue = SelectedValue;
+
             if (SongQuery_EditMode_CheckBox.Checked)
             {
-                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
-                SelectedValue = (SongQuery_EditSongTrack_ComboBox.Items.Count > 0) ? int.Parse(SongQuery_EditSongTrack_ComboBox.SelectedValue.ToString()) : SelectedValue = 1;
+                SongTrackStr = ((DataRowView)SongQuery_EditSongTrack_ComboBox.SelectedItem)[0].ToString();
+                SelectedValue = 0;
+                SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
+
                 if (SelectedRowsCount > 1)
                 {
                     SongQuery_EditSongTrack_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", true);
                     SongQuery_EditSongTrack_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongTrack_ComboBox.ValueMember = "Value";
-                    SongQuery_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
                 }
                 else if (SelectedRowsCount == 1)
                 {
                     SongQuery_EditSongTrack_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false);
                     SongQuery_EditSongTrack_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongTrack_ComboBox.ValueMember = "Value";
-                    SongQuery_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
                 }
+
+                var query = from row in ((DataTable)SongQuery_EditSongTrack_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongTrackStr)
+                            select row;
+
+                if (query.Count<DataRow>() > 0)
+                {
+                    foreach (DataRow row in query)
+                    {
+                        SelectedValue = Convert.ToInt32(row["Value"]);
+                        break;
+                    }
+                }
+                SongQuery_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
             }
 
+            if (SongAdd_Save_Button.Text == "取消加入")
+            {
+                SongTrackStr = ((DataRowView)SongAdd_EditSongTrack_ComboBox.SelectedItem)[0].ToString();
+                SelectedValue = 0;
+                SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
 
+                if (SelectedRowsCount > 1)
+                {
+                    SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", true);
+                    SongAdd_EditSongTrack_ComboBox.DisplayMember = "Display";
+                    SongAdd_EditSongTrack_ComboBox.ValueMember = "Value";
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false);
+                    SongAdd_EditSongTrack_ComboBox.DisplayMember = "Display";
+                    SongAdd_EditSongTrack_ComboBox.ValueMember = "Value";
+                }
+
+                var query = from row in ((DataTable)SongAdd_EditSongTrack_ComboBox.DataSource).AsEnumerable()
+                            where row.Field<string>("Display").Equals(SongTrackStr)
+                            select row;
+
+                if (query.Count<DataRow>() > 0)
+                {
+                    foreach (DataRow row in query)
+                    {
+                        SelectedValue = Convert.ToInt32(row["Value"]);
+                        break;
+                    }
+                }
+                SongAdd_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
+            }
         }
 
         private void SongMgrCfg_MaxDigitCode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -348,8 +413,7 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                         Global.SongMgrSongType = string.Join(",", list);
-                        SongQuery_RefreshSongType();
-                        SongAdd_RefreshDefaultSongType();
+                        Common_RefreshSongType();
                     }
                     else
                     {
@@ -381,8 +445,7 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
                             Global.SongMgrSongType = string.Join(",", list);
-                            SongQuery_RefreshSongType();
-                            SongAdd_RefreshDefaultSongType();
+                            Common_RefreshSongType();
                         }
                         else
                         {

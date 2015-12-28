@@ -46,439 +46,77 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongAdd_DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
-            {
-                case "歌曲音量":
-                    if (e.FormattedValue.ToString() == "")
-                    {
-                        SongAdd_Tooltip_Label.Text = "此項目的值不可為空白!";
-                        e.Cancel = true;
-                    }
-                    else if (Convert.ToInt32(e.FormattedValue) > 100)
-                    {
-                        SongAdd_Tooltip_Label.Text = "此項目只能輸入 0 ~ 100 的值!";
-                        e.Cancel = true;
-                    }
-                    break;
-                case "歌手名稱":
-                case "歌曲名稱":
-                    if (e.FormattedValue.ToString() == "")
-                    {
-                        SongAdd_Tooltip_Label.Text = "此項目的值不可為空白!";
-                        e.Cancel = true;
-                    }
-                    else
-                    {
-                        Regex r = new Regex(@"[\\/:*?<>|" + '"' + "]");
-                        if (r.IsMatch(e.FormattedValue.ToString()))
-                        {
-                            SongAdd_Tooltip_Label.Text = "此項目的值含有非法字元!";
-                            e.Cancel = true;
-                        }
-                    }
-                    break;
-            }
-        }
-
-        private void SongAdd_DataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (SongAdd_DataGridView.CurrentCell.ColumnIndex < 0) return;
-            Control parentCTL = e.Control.Parent;
-
-            switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
-            {
-                case "歌曲編號":
-                case "歌曲音量":
-                case "歌曲字數":
-                case "點播次數":
-                case "歌曲大小":
-                    e.Control.KeyPress += new KeyPressEventHandler(SongAdd_DataGridView_Keyin_Number);
-                    break;
-                case "加歌日期":
-                    DateTimePicker dtPicker = new DateTimePicker();
-                    dtPicker.Name = "dateTimePicker";
-                    dtPicker.Size = SongAdd_DataGridView.CurrentCell.Size;
-                    dtPicker.CustomFormat = "yyyy/MM/dd";
-                    dtPicker.Format = DateTimePickerFormat.Custom;
-                    dtPicker.Location = new Point(e.Control.Location.X - e.Control.Margin.Left < 0 ? 0 : e.Control.Location.X - e.Control.Margin.Left, e.Control.Location.Y - e.Control.Margin.Top < 0 ? 0 : e.Control.Location.Y - e.Control.Margin.Top);
-
-
-                    if (e.Control.Text != "")
-                    {
-                        string DateParse = DateTime.Parse(e.Control.Text).ToString("yyyy/MM/dd");
-                        dtPicker.Value = DateTime.ParseExact(DateParse, dtPicker.CustomFormat, null);
-                    }
-                    e.Control.Visible = false;
-
-                    foreach (Control tmpCTL in parentCTL.Controls)
-                    {
-                        if (tmpCTL.Name == dtPicker.Name) parentCTL.Controls.Remove(tmpCTL);
-                    }
-                    parentCTL.Controls.Add(dtPicker);
-
-                    dtPicker.CloseUp += new EventHandler(SongAdd_DataGridView_DateTimePicker_CloseUp);
-                    break;
-            }
-
-            if (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText != "加歌日期")
-            {
-                foreach (Control tmpCTL in parentCTL.Controls)
-                {
-                    if (tmpCTL.Name == "dateTimePicker") parentCTL.Controls.Remove(tmpCTL);
-                }
-            }
-        }
-
-        private void SongAdd_DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if (SongAdd_DataGridView.CurrentCell.Value.ToString() == "") return;
-            switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
-            {
-                case "歌手名稱":
-                    string SongSinger = SongAdd_DataGridView.CurrentCell.Value.ToString();
-                    if (SongSinger.ContainsAny("&", "+")) SongAdd_DataGridView.CurrentRow.Cells["Song_SingerType"].Value = "3";
-                    break;
-                case "歌曲名稱":
-                    string SongSongName = SongAdd_DataGridView.CurrentCell.Value.ToString();
-                    // 計算歌曲字數
-                    List<string> SongWordCountList = new List<string>();
-                    SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
-                    SongAdd_DataGridView.CurrentRow.Cells["Song_WordCount"].Value = SongWordCountList[0];
-
-                    // 取得歌曲拼音
-                    List<string> SongSpellList = new List<string>();
-                    SongSpellList = CommonFunc.GetSongNameSpell(SongSongName);
-                    SongAdd_DataGridView.CurrentRow.Cells["Song_Spell"].Value = SongSpellList[0];
-                    SongAdd_DataGridView.CurrentRow.Cells["Song_SpellNum"].Value = SongSpellList[1];
-                    if (SongSpellList[2] == "") SongSpellList[2] = "0";
-                    SongAdd_DataGridView.CurrentRow.Cells["Song_SongStroke"].Value = SongSpellList[2];
-                    SongAdd_DataGridView.CurrentRow.Cells["Song_PenStyle"].Value = SongSpellList[3];
-                    break;
-            }
-
-            if (SongAdd_Tooltip_Label.Text == "此項目只能輸入數字!" | SongAdd_Tooltip_Label.Text == "此項目只能輸入 0 ~ 100 的值!" | SongAdd_Tooltip_Label.Text == "此項目只能輸入數字及小數點!" | SongAdd_Tooltip_Label.Text == "此項目的值不可為空白!" | SongAdd_Tooltip_Label.Text == "此項目的值含有非法字元!") SongAdd_Tooltip_Label.Text = "";
-        }
-
-        private void SongAdd_DataGridView_Keyin_Number(object sender, KeyPressEventArgs e)
-        {
-            switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
-            {
-                case "歌曲編號":
-                case "歌曲音量":
-                case "歌曲字數":
-                case "點播次數":
-                    if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13 & (int)e.KeyChar != 27)
-                    {
-                        e.Handled = true;
-                        SongAdd_Tooltip_Label.Text = "此項目只能輸入數字!";
-                    }
-                    else
-                    {
-                        if (SongAdd_Tooltip_Label.Text == "此項目只能輸入數字!") SongAdd_Tooltip_Label.Text = "";
-                    }
-                    break;
-                case "歌曲大小":
-                    if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13 & (int)e.KeyChar != 27 & (int)e.KeyChar != 46)
-                    {
-                        e.Handled = true;
-                        SongAdd_Tooltip_Label.Text = "此項目只能輸入數字及小數點!";
-                    }
-                    else
-                    {
-                        if (SongAdd_Tooltip_Label.Text == "此項目只能輸入數字及小數點!") SongAdd_Tooltip_Label.Text = "";
-                    }
-                    break;
-            }
-
-        }
-
-        private void SongAdd_DataGridView_DateTimePicker_CloseUp(Object sender, EventArgs e)
-        {
-            string DateTimeValue = ((DateTimePicker)sender).Value.ToString("yyyy/M/d") + " " + DateTime.Now.ToString("tt hh:mm:ss");
-            int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
-
-            if (SongAdd_DataGridView.SelectedRows.Count > 1)
-            {
-                for (int i = 0; i < SelectedRowsCount; i++)
-                {
-                    SongAdd_DataGridView.SelectedRows[i].Cells["Song_CreatDate"].Value = DateTimeValue;
-                }
-            }
-            else
-            {
-                SongAdd_DataGridView.CurrentCell.Value = DateTimeValue;
-            }
-            SongAdd_DataGridView.EndEdit();
-        }
-
         private void SongAdd_DataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if ((e.RowIndex < 0) || (e.ColumnIndex < 0))
-            {
-                SongAdd_DataGridView.EndEdit();
-                return;
-            }
+            if ((e.RowIndex < 0) || (e.ColumnIndex < 0)) return;
 
-            if (e.Button == MouseButtons.Left)
-            {
-                string EditCell = SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText;
-                List<string> list = new List<string>();
-                list = new List<string>() { "歌手名稱", "歌曲名稱", "歌曲音量", "加歌日期" };
-
-                var query = from editlist in list
-                            where editlist == EditCell
-                            select editlist;
-                foreach (var q in query)
-                {
-                    SongAdd_DataGridView.BeginEdit(true);
-                }
-
-                ContextMenuStrip GridView_ContextMenu;
-                ToolStripMenuItem[] GridView_ContextMenuItem;
-                string valStr = "";
-
-                switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
-                {
-                    case "語系類別":
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        if (GridView_ContextMenu != null) GridView_ContextMenu.Dispose();
-                        GridView_ContextMenuItem = new ToolStripMenuItem[10];
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        for (int i = 0; i < 10; i++)
-                        {
-                            valStr = CommonFunc.GetSongLangStr(i, 0, "null");
-                            GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
-                            GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
-                            GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_Click);
-                        }
-                        GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
-                        break;
-                    case "歌手類別":
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        if (GridView_ContextMenu != null) GridView_ContextMenu.Dispose();
-                        GridView_ContextMenuItem = new ToolStripMenuItem[8];
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        for (int i = 0; i < 8; i++)
-                        {
-                            valStr = CommonFunc.GetSingerTypeStr(i, 0, "null");
-                            GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
-                            GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
-                            GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_Click);
-                        }
-                        GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
-                        break;
-                    case "歌曲聲道":
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        if (GridView_ContextMenu != null) GridView_ContextMenu.Dispose();
-                        GridView_ContextMenuItem = new ToolStripMenuItem[6];
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        for (int i = 0; i < 6; i++)
-                        {
-                            valStr = CommonFunc.GetSongTrackStr(i, 0, "null");
-                            GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
-                            GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
-                            GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_Click);
-                        }
-                        GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
-                        break;
-                    case "歌曲類別":
-                        GridView_ContextMenu = new ContextMenuStrip();
-                        if (GridView_ContextMenu != null) GridView_ContextMenu.Dispose();
-                        int count = SongMgrCfg_SongType_ListBox.Items.Count;
-                        GridView_ContextMenuItem = new ToolStripMenuItem[count + 1];
-                        GridView_ContextMenu = new ContextMenuStrip();
-
-                        GridView_ContextMenuItem[0] = new ToolStripMenuItem("無類別");
-                        GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[0]);
-                        GridView_ContextMenuItem[0].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_Click);
-
-                        for (int i = 0; i < count; i++)
-                        {
-                            valStr = SongQuery.GetSongTypeStr(i);
-                            GridView_ContextMenuItem[i + 1] = new ToolStripMenuItem(valStr);
-                            GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i + 1]);
-                            GridView_ContextMenuItem[i + 1].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_Click);
-                        }
-                        GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
-                        break;
-                }
-            }
-            else if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
                 ContextMenuStrip GridView_ContextMenu;
                 ToolStripMenuItem[] GridView_ContextMenuItem;
                 string valStr = "";
 
-                if (!SongAdd_DataGridView.Rows[e.RowIndex].Selected)
+                if (SongAdd_Save_Button.Text == "取消加入")
                 {
-                    SongAdd_DataGridView.ClearSelection();
-                    SongAdd_DataGridView.Rows[e.RowIndex].Selected = true;
-                    SongAdd_DataGridView.CurrentCell = SongAdd_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                }
+                    if (!SongAdd_DataGridView.Rows[e.RowIndex].Selected) SongAdd_DataGridView.CurrentCell = SongAdd_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                if (SongAdd_DataGridView.SelectedRows.Count > 1)
-                {
-                    GridView_ContextMenu = new ContextMenuStrip();
-                    int ContextMenuCount = Convert.ToInt32(SongQuery.GetContextMenuStr(0, 0, true));
-                    GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuCount];
-
-                    for (int i = 0; i < ContextMenuCount; i++)
+                    if (SongAdd_DataGridView.SelectedRows.Count > 1)
                     {
-                        valStr = SongQuery.GetContextMenuStr(i, 0, false);
-                        GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
-                        GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
-                        GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_RightClick);
-                    }
-                    GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
-                }
-                else
-                {
-                    SongAdd_DataGridView.ClearSelection();
-                    SongAdd_DataGridView.Rows[e.RowIndex].Selected = true;
-                    SongAdd_DataGridView.CurrentCell = SongAdd_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                        GridView_ContextMenu = new ContextMenuStrip();
+                        int ContextMenuCount = Convert.ToInt32(SongQuery.GetContextMenuStr(0, 0, true));
+                        GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuCount];
 
-                    GridView_ContextMenu = new ContextMenuStrip();
-                    int ContextMenuCount = Convert.ToInt32(SongQuery.GetContextMenuStr(0, 1, true));
-                    GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuCount];
-
-                    for (int i = 0; i < ContextMenuCount; i++)
-                    {
-                        valStr = SongQuery.GetContextMenuStr(i, 1, false);
-                        GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
-                        GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
-                        GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_RightClick);
-                    }
-                    GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
-                }
-            }
-        }
-
-        private void SongAdd_DataGridView_ContextMenuItem_Click(object sender, EventArgs e)
-        {
-            int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
-            string CellName = "";
-            string CellValue = "";
-
-            switch (SongAdd_DataGridView.Columns[SongAdd_DataGridView.CurrentCell.ColumnIndex].HeaderText)
-            {
-                case "語系類別":
-                    CellName = "Song_Lang";
-                    CellValue = sender.ToString();
-                    break;
-                case "歌手類別":
-                    CellName = "Song_SingerType";
-                    CellValue = CommonFunc.GetSingerTypeStr(0, 1, sender.ToString());
-                    break;
-                case "歌曲聲道":
-                    CellName = "Song_Track";
-                    CellValue = CommonFunc.GetSongTrackStr(0, 0, sender.ToString());
-                    break;
-                case "歌曲類別":
-                    CellName = "Song_SongType";
-                    if (sender.ToString() == "無類別") { CellValue = ""; } else { CellValue = sender.ToString(); }
-                    break;
-            }
-
-            if (SongAdd_DataGridView.SelectedRows.Count > 1)
-            {
-                for (int i = 0; i < SelectedRowsCount; i++)
-                {
-                    SongAdd_DataGridView.SelectedRows[i].Cells[CellName].Value = CellValue;
-                    
-                    switch (CellName)
-                    {
-                        case "Song_Lang":
-                            if (SongAdd_DataGridView.SelectedRows[i].Cells["Song_AddStatus"].Value.ToString() == "語系類別必須有值才能加歌!")
-                            {
-                                if (SongAdd_DataGridView.SelectedRows[i].Cells["Song_SingerType"].Value.ToString() == "10")
-                                {
-                                    SongAdd_DataGridView.SelectedRows[i].Cells["Song_AddStatus"].Value = "此歌手尚未設定歌手資料!";
-                                }
-                                else
-                                {
-                                    SongAdd_DataGridView.SelectedRows[i].Cells["Song_AddStatus"].Value = "";
-                                }
-                            }
-                            break;
-                        case "Song_SingerType":
-                            if (CellValue != "10" & SongAdd_DataGridView.SelectedRows[i].Cells["Song_AddStatus"].Value.ToString() == "此歌手尚未設定歌手資料!")
-                            {
-                                SongAdd_DataGridView.SelectedRows[i].Cells["Song_AddStatus"].Value = "";
-                            }
-                            break;
-                    }
-                }
-                SongAdd_DataGridView.EndEdit();
-            }
-            else
-            {
-                SongAdd_DataGridView.CurrentCell.Value = CellValue;
-                
-                switch (CellName)
-                {
-                    case "Song_Lang":
-                        if (SongAdd_DataGridView.CurrentRow.Cells["Song_AddStatus"].Value.ToString() == "語系類別必須有值才能加歌!")
+                        for (int i = 0; i < ContextMenuCount; i++)
                         {
-                            if (SongAdd_DataGridView.CurrentRow.Cells["Song_SingerType"].Value.ToString() == "10")
-                            {
-                                SongAdd_DataGridView.CurrentRow.Cells["Song_AddStatus"].Value = "此歌手尚未設定歌手資料!";
-                            }
-                            else
-                            {
-                                SongAdd_DataGridView.CurrentRow.Cells["Song_AddStatus"].Value = "";
-                            }
+                            valStr = SongQuery.GetContextMenuStr(i, 0, false);
+                            GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
+                            GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
+                            GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_RightClick);
                         }
-                        break;
-                    case "Song_SingerType":
-                        if (CellValue != "10" & SongAdd_DataGridView.CurrentRow.Cells["Song_AddStatus"].Value.ToString() == "此歌手尚未設定歌手資料!")
+                        GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
+                    }
+                    else
+                    {
+                        GridView_ContextMenu = new ContextMenuStrip();
+                        int ContextMenuCount = Convert.ToInt32(SongQuery.GetContextMenuStr(0, 1, true));
+                        GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuCount];
+
+                        for (int i = 0; i < ContextMenuCount; i++)
                         {
-                            SongAdd_DataGridView.CurrentRow.Cells["Song_AddStatus"].Value = "";
+                            valStr = SongQuery.GetContextMenuStr(i, 1, false);
+                            GridView_ContextMenuItem[i] = new ToolStripMenuItem(valStr);
+                            GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
+                            GridView_ContextMenuItem[i].Click += new EventHandler(SongAdd_DataGridView_ContextMenuItem_RightClick);
                         }
-                        break;
+                        GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
+                    }
                 }
-                SongAdd_DataGridView.EndEdit();
-            }
-            if (CellName == "Song_Lang")
-            {
-                SongAdd_Add_Button.Enabled = SongAdd_CheckSongAddStatus();
             }
         }
 
         private void SongAdd_DataGridView_ContextMenuItem_RightClick(object sender, EventArgs e)
         {
-            string SongPath = "";
-            string SongFilePath = "";
-
-            for (int i = 0; i < SongAdd_DataGridView.ColumnCount; i++)
-            {
-                switch (SongAdd_DataGridView.Columns[i].HeaderText)
-                {
-                    case "來源檔案路徑":
-                        SongPath = Path.GetDirectoryName(SongAdd_DataGridView.Rows[SongAdd_DataGridView.CurrentCell.RowIndex].Cells[i].Value.ToString());
-                        SongFilePath = SongAdd_DataGridView.Rows[SongAdd_DataGridView.CurrentCell.RowIndex].Cells[i].Value.ToString();
-                        break;
-                }
-            }
+            string file = SongAdd_DataGridView.Rows[SongAdd_DataGridView.CurrentCell.RowIndex].Cells["Song_SrcPath"].Value.ToString();
+            string SongPath = Path.GetDirectoryName(file);
+            string SongFileName = Path.GetFileName(file);
 
             switch (sender.ToString())
             {
                 case "開啟資料夾":
-                    if (!Directory.Exists(SongPath) || !File.Exists(SongFilePath))
+                    if (!Directory.Exists(SongPath) || !File.Exists(file))
                     {
                         SongAdd_Tooltip_Label.Text = "選取歌曲的資料夾或檔案不存在...";
                     }
                     else
                     {
-                        string arg = "/select, " + SongFilePath;
+                        string arg = "/select, " + file;
                         Process.Start("explorer", arg);
                     }
                     break;
                 case "播放檔案":
-                    if (!File.Exists(SongFilePath))
+                    if (!File.Exists(file))
                     {
-                        SongAdd_Tooltip_Label.Text = "【" + SongFilePath + "】檔案不存在...";
+                        SongAdd_Tooltip_Label.Text = "【" + SongFileName + "】檔案不存在...";
                     }
                     else
                     {
@@ -489,6 +127,7 @@ namespace CrazyKTV_SongMgr
                         string SongSinger = SongAdd_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
                         string SongSongName = SongAdd_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
                         string SongTrack = SongAdd_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
+                        string SongFilePath = file;
 
                         List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, i.ToString(), "SongAdd" };
 
@@ -505,33 +144,237 @@ namespace CrazyKTV_SongMgr
                         {
                             SongAdd_DataGridView.Rows.Remove(row);
                         }
+
+                        if (SongAdd_DataGridView.RowCount == 0)
+                        {
+                            SongAdd_DataGridView.DataSource = null;
+                            SongAdd_Add_Button.Enabled = false;
+                            SongAdd_InitializeEditControl();
+                            SongAdd_Tooltip_Label.Text = "已無歌曲可加入!";
+                        }
                     }
                     break;
             }
         }
 
-        private void SongAdd_DataGridView_KeyDown(object sender, KeyEventArgs e)
+        private void SongAdd_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if ((int)e.KeyCode == 46)
+            if (e.RowIndex == -1)
             {
-                if (MessageBox.Show("你確定要刪除資料嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                Global.SongAddDataGridViewRestoreSelectList = new List<string>();
+                foreach (DataGridViewRow row in SongAdd_DataGridView.SelectedRows)
                 {
+                    string SongPath = row.Cells["Song_SrcPath"].Value.ToString();
+                    Global.SongAddDataGridViewRestoreSelectList.Add(SongPath);
+                }
+            }
+        }
+
+        private void SongAdd_DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (SongAdd_Save_Button.Text == "取消加入")
+            {
+                int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
+
+                if (SelectedRowsCount > 1)
+                {
+                    Global.SongAddDataGridViewSelectList = new List<string>();
+
                     foreach (DataGridViewRow row in SongAdd_DataGridView.SelectedRows)
                     {
-                        SongAdd_DataGridView.Rows.Remove(row);
+                        string SongId = row.Cells["Song_Id"].Value.ToString();
+                        string SongLang = row.Cells["Song_Lang"].Value.ToString();
+                        int SongSingerType = Convert.ToInt32(row.Cells["Song_SingerType"].Value);
+                        string SongSinger = row.Cells["Song_Singer"].Value.ToString();
+                        string SongSongName = row.Cells["Song_SongName"].Value.ToString();
+                        int SongTrack = Convert.ToInt32(row.Cells["Song_Track"].Value);
+                        string SongSongType = row.Cells["Song_SongType"].Value.ToString();
+                        string SongVolume = row.Cells["Song_Volume"].Value.ToString();
+                        string SongWordCount = row.Cells["Song_WordCount"].Value.ToString();
+                        string SongPlayCount = row.Cells["Song_PlayCount"].Value.ToString();
+                        string SongMB = row.Cells["Song_MB"].Value.ToString();
+                        string SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
+                        string SongFileName = row.Cells["Song_FileName"].Value.ToString();
+                        string SongPath = row.Cells["Song_Path"].Value.ToString();
+                        string SongSpell = row.Cells["Song_Spell"].Value.ToString();
+                        string SongSpellNum = row.Cells["Song_SpellNum"].Value.ToString();
+                        string SongSongStroke = row.Cells["Song_SongStroke"].Value.ToString();
+                        string SongPenStyle = row.Cells["Song_PenStyle"].Value.ToString();
+                        string SongPlayState = row.Cells["Song_PlayState"].Value.ToString();
+                        string SongSrcPath = row.Cells["Song_SrcPath"].Value.ToString();
+
+                        string SelectValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongSrcPath;
+                        Global.SongAddDataGridViewSelectList.Add(SelectValue);
                     }
                 }
             }
         }
 
+        private void SongAdd_DataGridView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (SongAdd_Save_Button.Text == "取消加入")
+            {
+                if (SongAdd_DataGridView.SelectedRows.Count > 0)
+                {
+                    switch (e.KeyCode)
+                    {
+                        case Keys.Delete:
+                            if (MessageBox.Show("你確定要刪除資料嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                foreach (DataGridViewRow row in SongAdd_DataGridView.SelectedRows)
+                                {
+                                    SongAdd_DataGridView.Rows.Remove(row);
+                                }
+
+                                if (SongAdd_DataGridView.RowCount == 0)
+                                {
+                                    SongAdd_DataGridView.DataSource = null;
+                                    SongAdd_Add_Button.Enabled = false;
+                                    SongAdd_InitializeEditControl();
+                                    SongAdd_Tooltip_Label.Text = "已無歌曲可加入!";
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void SongAdd_DataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (SongAdd_DataGridView.SelectedRows.Count > 0)
+            {
+                int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
+                List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
+                if (SongAdd_Tooltip_Label.Text != "") SongAdd_Tooltip_Label.Text = "";
+                Global.SongAddDataGridViewSelectList.Clear();
+
+                if (SelectedRowsCount > 1)
+                {
+                    Global.SongAddMultiEditUpdateList = new List<bool>() { false, false, false, false, false, false, false, false };
+
+                    if (!Global.SongAddMultiEdit)
+                    {
+                        SongAdd_Edit_GroupBox.Text = "批次編輯";
+                        SongAdd_GetSongEditComboBoxList(true);
+
+                        SongAdd_EditSongId_TextBox.Enabled = false;
+                        SongAdd_EditSongLang_ComboBox.Enabled = true;
+                        SongAdd_EditSongCreatDate_DateTimePicker.Enabled = true;
+                        SongAdd_EditSongSinger_TextBox.Enabled = true;
+                        SongAdd_EditSongSingerType_ComboBox.Enabled = true;
+                        SongAdd_EditSongSongName_TextBox.Enabled = false;
+                        SongAdd_EditSongSongType_ComboBox.Enabled = true;
+                        SongAdd_EditSongSpell_TextBox.Enabled = false;
+                        SongAdd_EditSongWordCount_TextBox.Enabled = false;
+                        SongAdd_EditSongSrcPath_TextBox.Enabled = false;
+                        SongAdd_EditSongTrack_ComboBox.Enabled = true;
+                        SongAdd_EditSongTrack_Button.Enabled = false;
+                        SongAdd_EditSongVolume_TextBox.Enabled = true;
+                        SongAdd_EditSongPlayCount_TextBox.Enabled = false;
+                        SongAdd_EditApplyChanges_Button.Enabled = true;
+
+                        SongAdd_EditSongId_TextBox.Text = "";
+                        SongAdd_EditSongLang_ComboBox.SelectedValue = 1;
+                        SongAdd_EditSongCreatDate_DateTimePicker.Value = DateTime.Now;
+                        SongAdd_EditSongSinger_TextBox.Text = "";
+                        SongAdd_EditSongSingerType_ComboBox.SelectedValue = 1;
+                        SongAdd_EditSongSongName_TextBox.Text = "";
+                        SongAdd_EditSongSongType_ComboBox.SelectedValue = 1;
+                        SongAdd_EditSongSpell_TextBox.Text = "";
+                        SongAdd_EditSongWordCount_TextBox.Text = "";
+                        SongAdd_EditSongSrcPath_TextBox.Text = "";
+                        SongAdd_EditSongTrack_ComboBox.SelectedValue = 1;
+                        SongAdd_EditSongVolume_TextBox.Text = "";
+                        SongAdd_EditSongPlayCount_TextBox.Text = "";
+                    }
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    SongAdd_Edit_GroupBox.Text = "單曲編輯";
+                    SongAdd_GetSongEditComboBoxList(false);
+
+                    SongAdd_EditSongId_TextBox.Enabled = false;
+                    SongAdd_EditSongLang_ComboBox.Enabled = true;
+                    SongAdd_EditSongCreatDate_DateTimePicker.Enabled = true;
+                    SongAdd_EditSongSinger_TextBox.Enabled = true;
+                    SongAdd_EditSongSingerType_ComboBox.Enabled = true;
+                    SongAdd_EditSongSongName_TextBox.Enabled = true;
+                    SongAdd_EditSongSongType_ComboBox.Enabled = true;
+                    SongAdd_EditSongSpell_TextBox.Enabled = true;
+                    SongAdd_EditSongWordCount_TextBox.Enabled = true;
+                    SongAdd_EditSongSrcPath_TextBox.Enabled = true;
+                    SongAdd_EditSongTrack_ComboBox.Enabled = true;
+                    SongAdd_EditSongTrack_Button.Enabled = true;
+                    SongAdd_EditSongVolume_TextBox.Enabled = true;
+                    SongAdd_EditSongPlayCount_TextBox.Enabled = false;
+                    SongAdd_EditApplyChanges_Button.Enabled = true;
+
+                    string SongId = SongAdd_DataGridView.SelectedRows[0].Cells["Song_Id"].Value.ToString();
+                    string SongLang = SongAdd_DataGridView.SelectedRows[0].Cells["Song_Lang"].Value.ToString();
+                    int SongSingerType = Convert.ToInt32(SongAdd_DataGridView.SelectedRows[0].Cells["Song_SingerType"].Value);
+                    string SongSinger = SongAdd_DataGridView.SelectedRows[0].Cells["Song_Singer"].Value.ToString();
+                    string SongSongName = SongAdd_DataGridView.SelectedRows[0].Cells["Song_SongName"].Value.ToString();
+                    int SongTrack = Convert.ToInt32(SongAdd_DataGridView.SelectedRows[0].Cells["Song_Track"].Value);
+                    string SongSongType = SongAdd_DataGridView.SelectedRows[0].Cells["Song_SongType"].Value.ToString();
+                    string SongVolume = SongAdd_DataGridView.SelectedRows[0].Cells["Song_Volume"].Value.ToString();
+                    string SongWordCount = SongAdd_DataGridView.SelectedRows[0].Cells["Song_WordCount"].Value.ToString();
+                    string SongPlayCount = SongAdd_DataGridView.SelectedRows[0].Cells["Song_PlayCount"].Value.ToString();
+                    string SongMB = SongAdd_DataGridView.SelectedRows[0].Cells["Song_MB"].Value.ToString();
+                    string SongCreatDate = SongAdd_DataGridView.SelectedRows[0].Cells["Song_CreatDate"].Value.ToString();
+                    string SongFileName = SongAdd_DataGridView.SelectedRows[0].Cells["Song_FileName"].Value.ToString();
+                    string SongPath = SongAdd_DataGridView.SelectedRows[0].Cells["Song_Path"].Value.ToString();
+                    string SongSpell = SongAdd_DataGridView.SelectedRows[0].Cells["Song_Spell"].Value.ToString();
+                    string SongSpellNum = SongAdd_DataGridView.SelectedRows[0].Cells["Song_SpellNum"].Value.ToString();
+                    string SongSongStroke = SongAdd_DataGridView.SelectedRows[0].Cells["Song_SongStroke"].Value.ToString();
+                    string SongPenStyle = SongAdd_DataGridView.SelectedRows[0].Cells["Song_PenStyle"].Value.ToString();
+                    string SongPlayState = SongAdd_DataGridView.SelectedRows[0].Cells["Song_PlayState"].Value.ToString();
+                    string SongSrcPath = SongAdd_DataGridView.SelectedRows[0].Cells["Song_SrcPath"].Value.ToString();
+
+                    SongAdd_EditSongId_TextBox.Text = SongId;
+                    SongAdd_EditSongLang_ComboBox.SelectedValue = (SongLang == "未知") ? 11 : Global.CrazyktvSongLangList.IndexOf(SongLang) + 1;
+                    SongAdd_EditSongCreatDate_DateTimePicker.Value = DateTime.Parse(SongCreatDate);
+                    SongAdd_EditSongSinger_TextBox.Text = SongSinger;
+                    string SongSingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 1, "null");
+                    SongAdd_EditSongSingerType_ComboBox.SelectedValue = Convert.ToInt32(CommonFunc.GetSingerTypeStr(0, 3, SongSingerTypeStr)) + 1;
+                    SongAdd_EditSongSongName_TextBox.Text = SongSongName;
+                    SongAdd_EditSongSongType_ComboBox.SelectedValue = (SongSongType == "") ? 1 : SongSongTypeList.IndexOf(SongSongType) + 2;
+                    SongAdd_EditSongSpell_TextBox.Text = SongSpell;
+                    SongAdd_EditSongWordCount_TextBox.Text = SongWordCount;
+                    SongAdd_EditSongSrcPath_TextBox.Text = SongSrcPath;
+                    SongAdd_EditSongTrack_ComboBox.SelectedValue = SongTrack;
+                    SongAdd_EditSongVolume_TextBox.Text = SongVolume;
+                    SongAdd_EditSongPlayCount_TextBox.Text = "";
+
+                    Global.SongAddDataGridViewSelectList = new List<string>();
+                    string SelectValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongSrcPath;
+                    Global.SongAddDataGridViewSelectList.Add(SelectValue);
+                }
+            }
+        }
+
+        private void SongAdd_DataGridView_Sorted(object sender, EventArgs e)
+        {
+            if (Global.SongAddDataGridViewRestoreSelectList.Count > 0)
+            {
+                SongAdd_DataGridView.ClearSelection();
+                foreach (string str in Global.SongAddDataGridViewRestoreSelectList)
+                {
+                    var query = from row in SongAdd_DataGridView.Rows.Cast<DataGridViewRow>()
+                                where row.Cells["Song_SrcPath"].Value.Equals(str)
+                                select row;
+
+                    foreach (DataGridViewRow row in query)
+                    {
+                        row.Selected = true;
+                    }
+                    SongAdd_DataGridView.CurrentCell = SongAdd_DataGridView.SelectedRows[SongAdd_DataGridView.SelectedRows.Count - 1].Cells[0];
+                }
+                Global.SongAddDataGridViewRestoreSelectList.Clear();
+            }
+        }
 
         #endregion
 
     }
-
-    class SongAddDataGridView
-    {
-
-    }
-
 }
