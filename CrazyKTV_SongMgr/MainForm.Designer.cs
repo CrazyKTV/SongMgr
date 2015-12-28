@@ -1590,7 +1590,6 @@
             // 
             // SongAdd_TabPage
             // 
-            this.SongAdd_TabPage.Controls.Add(this.SongAdd_Edit_GroupBox);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_DragDrop_Label);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_Add_Button);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_SpecialStr_GroupBox);
@@ -1599,6 +1598,7 @@
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_DefaultSongInfo_GroupBox);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_SongAddCfg_GroupBox);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_DataGridView);
+            this.SongAdd_TabPage.Controls.Add(this.SongAdd_Edit_GroupBox);
             this.SongAdd_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongAdd_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongAdd_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -1982,9 +1982,6 @@
             // SongAdd_DragDrop_Label
             // 
             this.SongAdd_DragDrop_Label.AllowDrop = true;
-            this.SongAdd_DragDrop_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.SongAdd_DragDrop_Label.BackColor = System.Drawing.SystemColors.Control;
             this.SongAdd_DragDrop_Label.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongAdd_DragDrop_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
@@ -6283,6 +6280,8 @@
             this.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1024, 768);
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "MainForm";
             this.Text = "CrazyKTV 加歌程式";
