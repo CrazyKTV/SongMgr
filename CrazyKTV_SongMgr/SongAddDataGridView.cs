@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -170,7 +169,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongAdd_DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        private void SongAdd_DataGridView_MouseUp(object sender, MouseEventArgs e)
         {
             if (SongAdd_Save_Button.Text == "取消加入")
             {

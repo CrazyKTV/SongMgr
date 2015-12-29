@@ -136,6 +136,9 @@ namespace CrazyKTV_SongMgr
                     if (SongAdd_Save_Button.Text == "取消加入" && Global.SongAddMultiEdit) MultiEdit = true;
                     i = 1;
                     break;
+                case "SingerMgr_EditSingerName_TextBox":
+                    i = 2;
+                    break;
                 default:
                     i = 4;
                     break;
@@ -302,6 +305,7 @@ namespace CrazyKTV_SongMgr
             SingerMgr_SingerAdd_GroupBox.Enabled = status;
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
+            SingerMgr_Edit_GroupBox.Enabled = status;
         }
         
         private void Common_SwitchSetUI(bool status)
@@ -342,6 +346,7 @@ namespace CrazyKTV_SongMgr
             SingerMgr_SingerAdd_GroupBox.Enabled = status;
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
+            SingerMgr_Edit_GroupBox.Enabled = status;
 
             if (Global.SongLogDT.Rows.Count > 0)
             {
@@ -841,7 +846,7 @@ namespace CrazyKTV_SongMgr
 
         private void Common_GetSingerStatisticsTask()
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
+            if (Global.CrazyktvDatabaseStatus)
             {
                 SingerMgr.CreateSongDataTable();
                 List<int> SingerTypeCount = new List<int>();
@@ -2334,20 +2339,14 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            foreach (int SingerTypeValue in SingerTypeList)
+            Parallel.ForEach(SingerTypeList, (SingerTypeValue, loopState) =>
             {
-                var query = from row in (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.SingerDT.AsEnumerable() : Global.AllSingerDT.AsEnumerable()
-                            where row.Field<string>("Singer_Type").Equals(SingerTypeValue.ToString())
-                            select row;
-                if (query.Count<DataRow>() > 0)
-                {
-                    SingerTypeCount[SingerTypeList.IndexOf(SingerTypeValue)] = query.Count<DataRow>();
-                    SingerTypeCount[9] += query.Count<DataRow>();
-                }
-                else
-                {
-                    SingerTypeCount[SingerTypeList.IndexOf(SingerTypeValue)] = 0;
-                }
+                SingerTypeCount[SingerTypeList.IndexOf(SingerTypeValue)] = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.SingerTypeList.Count(x => x == SingerTypeValue.ToString()) : Global.AllSingerTypeList.Count(x => x == SingerTypeValue.ToString());
+            });
+
+            for (int i = 0; i < SingerTypeCount.Count - 1; i++)
+            {
+                SingerTypeCount[9] += SingerTypeCount[i];
             }
             return SingerTypeCount;
         }

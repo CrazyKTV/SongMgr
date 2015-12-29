@@ -15,8 +15,8 @@ namespace CrazyKTV_SongMgr
 {
     public partial class MainForm : Form
     {
-        
-        #region --- 歌曲查詢控制項事件 ---
+
+        #region --- SongQuery 控制項事件 ---
 
         private void SongQuery_QueryType_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -411,6 +411,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SongQuery 編輯模式切換 ---
+
         private void SongQuery_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (SongQuery_EditMode_CheckBox.Checked == true)
@@ -445,6 +447,8 @@ namespace CrazyKTV_SongMgr
             }
             SongQuery_DataGridView.Focus();
         }
+
+        #endregion
 
         #region --- SongQuery 更新歌曲 ---
 

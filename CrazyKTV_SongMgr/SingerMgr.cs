@@ -162,6 +162,8 @@ namespace CrazyKTV_SongMgr
                         DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, "");
                         if (dt.Rows.Count == 0)
                         {
+                            if (SingerMgr_EditMode_CheckBox.Checked) SingerMgr_EditMode_CheckBox.Checked = false;
+                            SingerMgr_EditMode_CheckBox.Enabled = false;
                             SingerMgr_Tooltip_Label.Text = "查無歌手,請重新查詢...";
                         }
                         else
@@ -193,11 +195,22 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
 
-                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SingerMgr_QueryValue_TextBox.Text + "』的歌手。";
+                                if (dt.Rows.Count == 0)
+                                {
+                                    if (SingerMgr_EditMode_CheckBox.Checked) SingerMgr_EditMode_CheckBox.Checked = false;
+                                    SingerMgr_EditMode_CheckBox.Enabled = false;
+                                    SingerMgr_Tooltip_Label.Text = "查無歌手,請重新查詢...";
+                                }
+                                else
+                                {
+                                    SingerMgr_EditMode_CheckBox.Enabled = true;
+                                    SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SingerMgr_QueryValue_TextBox.Text + "』的歌手。";
+                                }
                             }
                             else
                             {
-                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SingerMgr_QueryType_ComboBox.Text + "』的歌手。";
+                                SingerMgr_EditMode_CheckBox.Enabled = true;
+                                SingerMgr_Tooltip_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆歌手類別為『" + SingerMgr_QueryType_ComboBox.Text + "』的歌手。";
                             }
 
                             SingerMgr_DataGridView.DataSource = dt;
@@ -218,7 +231,6 @@ namespace CrazyKTV_SongMgr
                                 }
 
                                 SingerMgr_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
-                                SingerMgr_DataGridView.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
                             }
 
                             SingerMgr_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
@@ -236,6 +248,38 @@ namespace CrazyKTV_SongMgr
             });
         }
 
+        #region --- SingerMgr 編輯模式切換 ---
+
+        private void SingerMgr_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SingerMgr_EditMode_CheckBox.Checked)
+            {
+                SingerMgr_Edit_GroupBox.Visible = true;
+                SingerMgr_SingerAdd_GroupBox.Visible = false;
+                SingerMgr_Manager_GroupBox.Visible = false;
+
+                Global.SingerMgrMultiEdit = false;
+                SingerMgr_InitializeEditControl();
+                SingerMgr_DataGridView_SelectionChanged(new object(), new EventArgs());
+
+                SingerMgr_Tooltip_Label.Text = "已進入編輯模式...";
+                SingerMgr.CreateSongDataTable();
+            }
+            else
+            {
+                SingerMgr_EditMode_CheckBox.Enabled = (SingerMgr_DataGridView.RowCount == 0) ? false : true;
+                SingerMgr_Edit_GroupBox.Visible = false;
+                SingerMgr_SingerAdd_GroupBox.Visible = true;
+                SingerMgr_Manager_GroupBox.Visible = true;
+
+                SingerMgr_Tooltip_Label.Text = "已進入檢視模式...";
+                SingerMgr.DisposeSongDataTable();
+            }
+            SingerMgr_DataGridView.Focus();
+        }
+
+        #endregion
+
         private void SingerMgr_SingerUpdateTask(object SingerUpdateDT)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -246,6 +290,7 @@ namespace CrazyKTV_SongMgr
             foreach (DataRow row in dt.Rows)
             {
                 int i = Convert.ToInt32(row["RowIndex"]);
+                string OldSingerId = row["SingerId"].ToString();
                 string OldSingerName = row["SingerName"].ToString();
 
                 string SingerId = SingerMgr_DataGridView.Rows[i].Cells["Singer_Id"].Value.ToString();
@@ -255,22 +300,8 @@ namespace CrazyKTV_SongMgr
                 string SingerStrokes = SingerMgr_DataGridView.Rows[i].Cells["Singer_Strokes"].Value.ToString();
                 string SingerSpellNum = SingerMgr_DataGridView.Rows[i].Cells["Singer_SpellNum"].Value.ToString();
                 string SingerPenStyle = SingerMgr_DataGridView.Rows[i].Cells["Singer_PenStyle"].Value.ToString();
-                string SingerDTSingerId = "";
 
-                var query = from SingerDTRow in (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.AllSingerDT.AsEnumerable() : Global.SingerDT.AsEnumerable()
-                                  where SingerDTRow.Field<string>("Singer_Name").ToLower().Equals(OldSingerName.ToLower())
-                                  select SingerDTRow;
-
-                if (query.Count<DataRow>() > 0)
-                {
-                    foreach (DataRow dtrow in query)
-                    {
-                        SingerDTSingerId = dtrow["Singer_Id"].ToString();
-                        break;
-                    }
-                }
-
-                string UpdateValue = SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle + "|" + SingerDTSingerId;
+                string UpdateValue = SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle;
                 UpdateValueList.Add(UpdateValue);
             }
             
@@ -308,7 +339,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】更新" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "全部") + "歌手資料表時發生錯誤: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】更新" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "預設") + "歌手資料表時發生錯誤: " + str;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
 
                     this.BeginInvoke((Action)delegate()
@@ -317,36 +348,6 @@ namespace CrazyKTV_SongMgr
                     });
                 }
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.Clear();
-
-                if (valuelist[7] != "")
-                {
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerId", valuelist[7]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerName", valuelist[1]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerType", valuelist[2]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerSpell", valuelist[3]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerStrokes", valuelist[4]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerSpellNum", valuelist[5]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@SingerPenStyle", valuelist[6]);
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.AddWithValue("@OldSingerId", valuelist[7]);
-
-                    try
-                    {
-                        SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].ExecuteNonQuery();
-                    }
-                    catch
-                    {
-                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】更新" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "全部" : "歌庫") + "歌手資料表時發生錯誤: " + str;
-                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-
-                        this.BeginInvoke((Action)delegate()
-                        {
-                            SingerMgr_Tooltip_Label.Text = "修改歌手資料有誤,請回報操作記錄裡的內容!";
-                        });
-                    }
-                    SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 0].Parameters.Clear();
-                }
-                
             }
             conn.Close();
 
@@ -407,15 +408,13 @@ namespace CrazyKTV_SongMgr
             string SingerName = (string)SingerAddName;
             string SingerType = Global.CrazyktvSingerTypeList.IndexOf((string)SingerAddType).ToString();
 
-            var query = from row in (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.SingerDT.AsEnumerable() : Global.AllSingerDT.AsEnumerable()
-                        where row.Field<string>("Singer_Name").ToLower().Equals(SingerName.ToLower())
-                        select row;
+            int SingerExists = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.SingerLowCaseList.IndexOf(SingerName.ToLower()) : Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower());
 
-            if (query.Count<DataRow>() > 0)
+            if (SingerExists >= 0)
             {
                 this.BeginInvoke((Action)delegate()
                 {
-                    SingerMgr_Tooltip_Label.Text = "歌手【" + SingerName + "】已在" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "全部") + "歌手資料庫中...";
+                    SingerMgr_Tooltip_Label.Text = "歌手【" + SingerName + "】已在" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "預設") + "歌手資料庫中...";
                 });
             }
             else
@@ -425,14 +424,7 @@ namespace CrazyKTV_SongMgr
                 NotExistsAllSingerId = CommonFunc.GetNotExistsSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", Global.CrazyktvDatabaseFile);
 
                 string SingerId = "";
-                if (NotExistsAllSingerId.Count > 0)
-                {
-                    SingerId = NotExistsAllSingerId[0];
-                }
-                else
-                {
-                    SingerId = MaxAllSingerId.ToString();
-                }
+                SingerId = (NotExistsAllSingerId.Count > 0) ? NotExistsAllSingerId[0] : MaxAllSingerId.ToString();
 
                 List<string> spelllist = new List<string>();
                 spelllist = CommonFunc.GetSongNameSpell(SingerName);
@@ -458,7 +450,7 @@ namespace CrazyKTV_SongMgr
                     singercmd.ExecuteNonQuery();
                     this.BeginInvoke((Action)delegate()
                     {
-                        SingerMgr_Tooltip_Label.Text = "已成功將歌手【" + SingerName + "】加入至" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "全部") + "歌手資料表。";
+                        SingerMgr_Tooltip_Label.Text = "已成功將歌手【" + SingerName + "】加入至" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "預設") + "歌手資料表。";
                     });
                 }
                 catch
@@ -638,7 +630,7 @@ namespace CrazyKTV_SongMgr
                 Global.TimerEndTime = DateTime.Now;
                 this.BeginInvoke((Action)delegate()
                 {
-                    SingerMgr_Tooltip_Label.Text = "總共從歌庫歌曲解析出 " + Global.TotalList[0] + " 位歌手,查詢到 " + Global.TotalList[1] + " 筆無資料的歌庫歌手,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                    SingerMgr_Tooltip_Label.Text = "總共從歌庫歌曲解析出 " + Global.TotalList[0] + " 筆歌手資料,查詢到 " + Global.TotalList[1] + " 筆歌手無資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                     Common_SwitchSetUI(true);
                 });
                 SingerMgr.DisposeSongDataTable();
@@ -677,11 +669,7 @@ namespace CrazyKTV_SongMgr
                                 if (Singerlist.IndexOf(SpecialSingerName) < 0)
                                 {
                                     // 查找資料庫預設歌手資料表
-                                    var query = from srow in Global.AllSingerDT.AsEnumerable()
-                                                where srow.Field<string>("Singer_Name").ToLower().Equals(SpecialSingerName.ToLower())
-                                                select srow;
-
-                                    if (query.Count<DataRow>() == 0)
+                                    if (Global.AllSingerLowCaseList.IndexOf(SpecialSingerName.ToLower()) < 0)
                                     {
                                         if (list.IndexOf(SpecialSingerName) < 0)
                                         {
@@ -705,11 +693,7 @@ namespace CrazyKTV_SongMgr
                                 if (Singerlist.IndexOf(ChorusSingerName) < 0)
                                 {
                                     // 查找資料庫預設歌手資料表
-                                    var query = from srow in Global.AllSingerDT.AsEnumerable()
-                                                where srow.Field<string>("Singer_Name").ToLower().Equals(ChorusSingerName.ToLower())
-                                                select srow;
-                                    
-                                    if (query.Count<DataRow>() == 0)
+                                    if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
                                     {
                                         if (list.IndexOf(ChorusSingerName) < 0)
                                         {
@@ -725,17 +709,10 @@ namespace CrazyKTV_SongMgr
                         {
                             if (Singerlist.IndexOf(SingerName) < 0)
                             {
-                                var query = from srow in Global.AllSingerDT.AsEnumerable()
-                                            where srow.Field<string>("Singer_Name").ToLower().Equals(SingerName.ToLower())
-                                            select srow;
-
-                                if (query.Count<DataRow>() == 0)
+                                if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
                                 {
-                                    if (list.IndexOf(SingerName) < 0)
-                                    {
-                                        list.Add(SingerName);
-                                        lock (LockThis) { Global.TotalList[1]++; }
-                                    }
+                                    list.Add(SingerName);
+                                    lock (LockThis) { Global.TotalList[1]++; }
                                 }
                                 Singerlist.Add(SingerName);
                             }
@@ -745,11 +722,7 @@ namespace CrazyKTV_SongMgr
                     {
                         if (Singerlist.IndexOf(SingerName) < 0)
                         {
-                            var query = from srow in Global.AllSingerDT.AsEnumerable()
-                                        where srow.Field<string>("Singer_Name").ToLower().Equals(SingerName.ToLower())
-                                        select srow;
-                            
-                            if (query.Count<DataRow>() == 0)
+                            if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
                             {
                                 if (list.IndexOf(SingerName) < 0)
                                 {
@@ -797,6 +770,143 @@ namespace CrazyKTV_SongMgr
         {
             SingerMgr_SingerAddName_TextBox.Text = "";
         }
+
+        #region --- 歌手編輯 ---
+
+        private void SingerMgr_EditSingerType_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SingerMgr_EditMode_CheckBox.Checked == true)
+            {
+                if (SingerMgr_EditSingerType_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
+                {
+                    if (Global.SingerMgrDataGridViewSelectList.Count <= 0) return;
+                    int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
+
+                    if (SelectedRowsCount > 1)
+                    {
+                        Global.SingerMgrMultiEditUpdateList[0] = (SingerMgr_EditSingerType_ComboBox.Text != "不變更") ? true : false;
+                    }
+                }
+            }
+        }
+
+        private void SingerMgr_EditSingerName_TextBox_Validated(object sender, EventArgs e)
+        {
+            if (SingerMgr_EditMode_CheckBox.Checked == true)
+            {
+                if (Global.SingerMgrDataGridViewSelectList.Count <= 0) return;
+                int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
+
+                if (SelectedRowsCount == 1)
+                {
+                    string SingerName = SingerMgr_EditSingerName_TextBox.Text;
+                    // 取得歌手拼音
+                    List<string> SingerSpellList = new List<string>();
+                    SingerSpellList = CommonFunc.GetSongNameSpell(SingerName);
+                    SingerMgr_EditSingerSpell_TextBox.Text = SingerSpellList[0];
+                }
+            }
+        }
+
+        private void SingerMgr_EditApplyChanges_Button_Click(object sender, EventArgs e)
+        {
+            if (SingerMgr_EditMode_CheckBox.Checked == true)
+            {
+                if (Global.SingerMgrDataGridViewSelectList.Count <= 0) return;
+                int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("RowIndex", typeof(int));
+                dt.Columns.Add("SingerId", typeof(string));
+                dt.Columns.Add("SingerName", typeof(string));
+
+                if (SelectedRowsCount > 1)
+                {
+                    foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
+                    {
+                        DataRow dtrow = dt.NewRow();
+                        dtrow["RowIndex"] = row.Index;
+                        dtrow["SingerId"] = row.Cells["Singer_Id"].Value.ToString();
+                        dtrow["SingerName"] = row.Cells["Singer_Name"].Value.ToString();
+                        dt.Rows.Add(dtrow);
+
+                        if (Global.SingerMgrMultiEditUpdateList[0])
+                        {
+                            string SingerTypeStr = ((DataRowView)SingerMgr_EditSingerType_ComboBox.SelectedItem)[0].ToString();
+                            string SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
+                            row.Cells["Singer_Type"].Value = SingerType;
+                        }
+                    }
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
+                    {
+                        DataRow dtrow = dt.NewRow();
+                        dtrow["RowIndex"] = row.Index;
+                        dtrow["SingerId"] = row.Cells["Singer_Id"].Value.ToString();
+                        dtrow["SingerName"] = row.Cells["Singer_Name"].Value.ToString();
+                        dt.Rows.Add(dtrow);
+
+                        string SingerTypeStr = ((DataRowView)SingerMgr_EditSingerType_ComboBox.SelectedItem)[0].ToString();
+                        string SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
+                        row.Cells["Singer_Type"].Value = SingerType;
+
+                        string SingerName = SingerMgr_EditSingerName_TextBox.Text;
+                        row.Cells["Singer_Name"].Value = SingerName;
+                        
+                        // 取得歌手拼音
+                        List<string> SingerSpellList = new List<string>();
+                        SingerSpellList = CommonFunc.GetSongNameSpell(SingerName);
+
+                        row.Cells["Singer_Spell"].Value = SingerSpellList[0];
+                        row.Cells["Singer_SpellNum"].Value = SingerSpellList[1];
+                        row.Cells["Singer_Strokes"].Value = SingerSpellList[2];
+                        row.Cells["Singer_PenStyle"].Value = SingerSpellList[3];
+                    }
+                }
+                Common_SwitchSetUI(false);
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(dt)));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Common_SwitchSetUI(true);
+                        Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+                    });
+                    SingerMgr.DisposeSongDataTable();
+                    dt.Dispose();
+                });
+            }
+        }
+
+        private void SingerMgr_InitializeEditControl()
+        {
+            SingerMgr_EditSingerId_TextBox.Text = "";
+            SingerMgr_EditSingerType_ComboBox.SelectedValue = 1;
+            SingerMgr_EditSingerName_TextBox.Text = "";
+            SingerMgr_EditSingerSpell_TextBox.Text = "";
+
+            SingerMgr_EditSingerId_TextBox.Enabled = false;
+            SingerMgr_EditSingerType_ComboBox.Enabled = false;
+            SingerMgr_EditSingerName_TextBox.Enabled = false;
+            SingerMgr_EditSingerSpell_TextBox.Enabled = false;
+            SingerMgr_EditApplyChanges_Button.Enabled = false;
+        }
+
+        private void SingerMgr_GetSingerEditComboBoxList(bool MultiEdit)
+        {
+            Global.SingerMgrMultiEdit = MultiEdit;
+            SingerMgr_EditSingerType_ComboBox.DataSource = SingerMgr.GetSingerTypeList(MultiEdit);
+            SingerMgr_EditSingerType_ComboBox.DisplayMember = "Display";
+            SingerMgr_EditSingerType_ComboBox.ValueMember = "Value";
+        }
+
+
+        #endregion
+
     }
 
     class SingerMgr
@@ -816,6 +926,8 @@ namespace CrazyKTV_SongMgr
                 Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
                 Global.SingerTypeList.Add(row["Singer_Type"].ToString());
             }
+            Global.SingerDT.Dispose();
+            Global.SingerDT = null;
 
             Global.AllSingerList = new List<string>();
             Global.AllSingerLowCaseList = new List<string>();
@@ -830,6 +942,8 @@ namespace CrazyKTV_SongMgr
                 Global.AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
                 Global.AllSingerTypeList.Add(row["Singer_Type"].ToString());
             }
+            Global.AllSingerDT.Dispose();
+            Global.AllSingerDT = null;
 
             if (Global.PhoneticsWordList.Count == 0)
             {
@@ -865,15 +979,11 @@ namespace CrazyKTV_SongMgr
             Global.AllSingerList.Clear();
             Global.AllSingerLowCaseList.Clear();
             Global.AllSingerTypeList.Clear();
-            Global.SingerDT.Dispose();
-            Global.SingerDT = null;
-            Global.AllSingerDT.Dispose();
-            Global.AllSingerDT = null;
         }
 
         public static DataTable GetDefaultSingerDataTableList()
         {
-            List<string> SingerDTlist = new List<string>() { "歌庫歌手", "全部歌手" };
+            List<string> SingerDTlist = new List<string>() { "歌庫歌手", "預設歌手" };
             DataTable list = new DataTable();
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
@@ -887,11 +997,18 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
-        public static DataTable GetSingerTypeList()
+        public static DataTable GetSingerTypeList(bool MultiEdit)
         {
             DataTable list = new DataTable();
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            if (MultiEdit)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = "不變更";
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
 
             foreach (string str in Global.CrazyktvSingerTypeList)
             {

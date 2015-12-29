@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -406,13 +405,13 @@ namespace CrazyKTV_SongMgr
             SongQuery_ExceptionalQuery_ComboBox.SelectedValue = 1;
 
             // 歌手管理 - 載入下拉選單清單及設定
-            SingerMgr_QueryType_ComboBox.DataSource = SingerMgr.GetSingerTypeList();
+            SingerMgr_QueryType_ComboBox.DataSource = SingerMgr.GetSingerTypeList(false);
             SingerMgr_QueryType_ComboBox.DisplayMember = "Display";
             SingerMgr_QueryType_ComboBox.ValueMember = "Value";
             SingerMgr_QueryType_ComboBox.SelectedValue = 1;
             SingerMgr_QueryValue_TextBox.ImeMode = ImeMode.OnHalf;
 
-            SingerMgr_SingerAddType_ComboBox.DataSource = SingerMgr.GetSingerTypeList();
+            SingerMgr_SingerAddType_ComboBox.DataSource = SingerMgr.GetSingerTypeList(false);
             SingerMgr_SingerAddType_ComboBox.DisplayMember = "Display";
             SingerMgr_SingerAddType_ComboBox.ValueMember = "Value";
             SingerMgr_SingerAddType_ComboBox.SelectedValue = 1;
@@ -555,6 +554,31 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
