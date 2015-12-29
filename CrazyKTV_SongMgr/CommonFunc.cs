@@ -576,7 +576,7 @@ namespace CrazyKTV_SongMgr
                     SingerMgr_Statistics10_Label
                 };
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     for (int i = 0; i < SingerMgr_Statistics_Label.Count<Label>(); i++)
                     {
@@ -601,7 +601,7 @@ namespace CrazyKTV_SongMgr
                 var task = Task<List<int>>.Factory.StartNew(CommonFunc.GetSingerTypeCount);
 
                 SingerTypeCount = task.Result;
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     for (int i = 0; i < SingerTypeCount.Count; i++)
                     {
@@ -1000,10 +1000,22 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                        switch (TooltipName)
                         {
-                            SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
-                            SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                            case "SongMaintenance":
+                                if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                                {
+                                    SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                    SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                }
+                                break;
+                            case "SingerMgr":
+                                if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                                {
+                                    SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                    SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                }
+                                break;
                         }
 
                         if (NotExistsSingerId.Count > 0)
@@ -1083,52 +1095,95 @@ namespace CrazyKTV_SongMgr
                 }
                 Addlist.Clear();
 
-                Global.SingerList = new List<string>();
-                Global.SingerLowCaseList = new List<string>();
-                Global.SingerTypeList = new List<string>();
-
-                Global.SingerDT = new DataTable();
-                string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
-                Global.SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, "");
-
-                foreach (DataRow row in Global.SingerDT.AsEnumerable())
+                switch (TooltipName)
                 {
-                    Global.SingerList.Add(row["Singer_Name"].ToString());
-                    Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
-                    Global.SingerTypeList.Add(row["Singer_Type"].ToString());
+                    case "SongMaintenance":
+                        Global.SingerList = new List<string>();
+                        Global.SingerLowCaseList = new List<string>();
+                        Global.SingerTypeList = new List<string>();
+                        break;
+                    case "SingerMgr":
+                        SingerMgr.SingerList = new List<string>();
+                        SingerMgr.SingerLowCaseList = new List<string>();
+                        SingerMgr.SingerTypeList = new List<string>();
+                        break;
+                }
+
+                string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
+                using (DataTable SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, ""))
+                {
+                    foreach (DataRow row in SingerDT.AsEnumerable())
+                    {
+                        switch (TooltipName)
+                        {
+                            case "SongMaintenance":
+                                Global.SingerList.Add(row["Singer_Name"].ToString());
+                                Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                                Global.SingerTypeList.Add(row["Singer_Type"].ToString());
+                                break;
+                            case "SingerMgr":
+                                SingerMgr.SingerList.Add(row["Singer_Name"].ToString());
+                                SingerMgr.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                                SingerMgr.SingerTypeList.Add(row["Singer_Type"].ToString());
+                                break;
+                        }
+                    }
                 }
 
                 Addlist = new List<string>();
+
                 // 判斷是否要加入合唱歌手資料至歌庫歌手資料庫
+                
                 foreach (string ChorusSinger in ChorusSingerList)
                 {
                     string ChorusSingerName = Regex.Replace(ChorusSinger, @"^\s*|\s*$", ""); //去除頭尾空白
-                    // 查找資料庫歌庫歌手資料表
-                    if (Global.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                    bool AddChorusSinger = false;
+
+                    // 查找資料庫歌手資料表
+                    switch (TooltipName)
                     {
-                        // 查找資料庫預設歌手資料表
-                        if(Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
-                        {
-                            SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
-                            SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
-
-                            if (NotExistsSingerId.Count > 0)
+                        case "SongMaintenance":
+                            if (Global.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
                             {
-                                SingerId = NotExistsSingerId[0];
-                                NotExistsSingerId.RemoveAt(0);
+                                if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
+                                {
+                                    SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                    SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                    AddChorusSinger = true;
+                                }
                             }
-                            else
+                            break;
+                        case "SingerMgr":
+                            if (SingerMgr.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
                             {
-                                SingerId = MaxSingerId.ToString();
-                                MaxSingerId++;
+                                if (SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
+                                {
+                                    SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                    SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                    AddChorusSinger = true;
+                                }
                             }
-
-                            spelllist = new List<string>();
-                            spelllist = CommonFunc.GetSongNameSpell(SingerName);
-                            Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
-                        }
+                            break;
                     }
-                    
+
+                    if (AddChorusSinger)
+                    {
+                        if (NotExistsSingerId.Count > 0)
+                        {
+                            SingerId = NotExistsSingerId[0];
+                            NotExistsSingerId.RemoveAt(0);
+                        }
+                        else
+                        {
+                            SingerId = MaxSingerId.ToString();
+                            MaxSingerId++;
+                        }
+
+                        spelllist = new List<string>();
+                        spelllist = CommonFunc.GetSongNameSpell(SingerName);
+                        Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
+                    }
+
                     this.BeginInvoke((Action)delegate()
                     {
                         switch (TooltipName)
@@ -2383,7 +2438,7 @@ namespace CrazyKTV_SongMgr
 
             Parallel.ForEach(SingerTypeList, (SingerTypeValue, loopState) =>
             {
-                SingerTypeCount[SingerTypeList.IndexOf(SingerTypeValue)] = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.SingerTypeList.Count(x => x == SingerTypeValue.ToString()) : Global.AllSingerTypeList.Count(x => x == SingerTypeValue.ToString());
+                SingerTypeCount[SingerTypeList.IndexOf(SingerTypeValue)] = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? SingerMgr.SingerTypeList.Count(x => x == SingerTypeValue.ToString()) : SingerMgr.AllSingerTypeList.Count(x => x == SingerTypeValue.ToString());
             });
 
             for (int i = 0; i < SingerTypeCount.Count - 1; i++)

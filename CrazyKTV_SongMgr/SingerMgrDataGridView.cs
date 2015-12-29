@@ -110,6 +110,7 @@ namespace CrazyKTV_SongMgr
                             SingerMgr_DataGridView.Rows.Remove(row);
                         }
 
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                         Common_SwitchSetUI(false);
                         var tasks = new List<Task>();
                         tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(SingerIdlist)));
@@ -120,6 +121,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 Common_SwitchSetUI(true);
                                 Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+                                SingerMgr_Tooltip_Label.Text = "已成功移除 " + Global.TotalList[0] + " 位歌手資料。";
                             });
                         });
                     }
@@ -197,16 +199,18 @@ namespace CrazyKTV_SongMgr
                                     SingerMgr_DataGridView.Rows.Remove(row);
                                 }
 
+                                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                                 Common_SwitchSetUI(false);
                                 var tasks = new List<Task>();
                                 tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(SingerIdlist)));
 
                                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                                 {
-                                    this.BeginInvoke((Action)delegate ()
+                                    this.BeginInvoke((Action)delegate()
                                     {
                                         Common_SwitchSetUI(true);
                                         Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+                                        SingerMgr_Tooltip_Label.Text = "已成功移除 " + Global.TotalList[0] + " 位歌手資料。";
                                     });
                                 });
                             }
@@ -218,10 +222,18 @@ namespace CrazyKTV_SongMgr
 
         private void SingerMgr_DataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            if (SingerMgr_DataGridView.SelectedRows.Count > 0)
+            if (SingerMgr_Tooltip_Label.Text != "" && SingerMgr.ClearTooltipLabel)
+            {
+                SingerMgr_Tooltip_Label.Text = "";
+            }
+            else
+            {
+                SingerMgr.ClearTooltipLabel = true;
+            }
+
+            if (SingerMgr_EditMode_CheckBox.Checked == true)
             {
                 int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
-                if (SingerMgr_Tooltip_Label.Text != "") SingerMgr_Tooltip_Label.Text = "";
                 Global.SingerMgrDataGridViewSelectList.Clear();
 
                 if (SelectedRowsCount > 1)

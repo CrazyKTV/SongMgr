@@ -1716,6 +1716,8 @@ namespace CrazyKTV_SongMgr
                 dt.Columns.Add("SongId", typeof(string));
                 dt.Columns.Add("SongLang", typeof(string));
 
+                Common_SwitchSetUI(false);
+
                 if (SelectedRowsCount > 1)
                 {
                     foreach (DataGridViewRow row in SongQuery_DataGridView.SelectedRows)
@@ -1826,13 +1828,12 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                Common_SwitchSetUI(false);
                 var tasks = new List<Task>();
                 tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(dt)));
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         Common_SwitchSetUI(true);
                     });

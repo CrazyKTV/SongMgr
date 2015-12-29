@@ -192,8 +192,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> SingerMgrDataGridViewSelectList = new List<string>();
         public static List<string> SingerMgrDataGridViewRestoreSelectList = new List<string>();
 
-        public static string SingerQueryDataGridViewValue = "";
-
         public static List<string> PlayerUpdateSongValueList = new List<string>();
         public static bool PlayerInitialized = false;
 

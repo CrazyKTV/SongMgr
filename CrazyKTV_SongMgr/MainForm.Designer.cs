@@ -2399,8 +2399,8 @@
             // SingerMgr_TabPage
             // 
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Edit_GroupBox);
-            this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_OtherQuery_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Manager_GroupBox);
+            this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_OtherQuery_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Statistics_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Tooltip_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_DataGridView);
