@@ -125,6 +125,14 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongQuery_QueryFilter_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SongQuery_QueryFilter_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                Global.SongQueryFilter = SongQuery_QueryFilter_ComboBox.Text;
+            }
+        }
+
         private void SongQuery_QueryValue_TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             switch (SongQuery_QueryType_ComboBox.SelectedValue.ToString())
@@ -154,9 +162,36 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongQuery_Paste_Button_Click(object sender, EventArgs e)
+        {
+            SongQuery_QueryValue_TextBox.Text = Clipboard.GetText();
+        }
+
+        private void SongQuery_Clear_Button_Click(object sender, EventArgs e)
+        {
+            SongQuery_QueryValue_TextBox.Text = "";
+        }
+
+        private void SongQuery_SynonymousQuery_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongQuerySynonymousQuery = SongQuery_SynonymousQuery_CheckBox.Checked;
+        }
+
+        private void SongQuery_FuzzyQuery_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SongQuery_FuzzyQuery_CheckBox.Checked == true)
+            {
+                Global.SongQueryFuzzyQuery = "True";
+            }
+            else
+            {
+                Global.SongQueryFuzzyQuery = "False";
+            }
+        }
+
         #endregion
 
-        #region --- 歌曲查詢 ---
+        #region --- SongQuery 查詢歌曲 ---
 
         private void SongQuery_Query_Button_Click(object sender, EventArgs e)
         {
@@ -1003,22 +1038,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        private void SongQuery_SynonymousQuery_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.SongQuerySynonymousQuery = SongQuery_SynonymousQuery_CheckBox.Checked;
-        }
-
-        private void SongQuery_FuzzyQuery_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (SongQuery_FuzzyQuery_CheckBox.Checked == true)
-            {
-                Global.SongQueryFuzzyQuery = "True";
-            }
-            else
-            {
-                Global.SongQueryFuzzyQuery = "False";
-            }
-        }
+        #region --- SongQuery 異常查詢 --
 
         private void SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1228,13 +1248,9 @@ namespace CrazyKTV_SongMgr
             });
         }
 
-        private void SongQuery_QueryFilter_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (SongQuery_QueryFilter_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
-            {
-                Global.SongQueryFilter = SongQuery_QueryFilter_ComboBox.Text;
-            }
-        }
+        #endregion
+
+        #region --- SongQuery 我的最愛 ---
 
         private void SongQuery_GetFavoriteUserList()
         {
@@ -1462,17 +1478,9 @@ namespace CrazyKTV_SongMgr
             conn.Close();
         }
 
-        private void SongQuery_Paste_Button_Click(object sender, EventArgs e)
-        {
-            SongQuery_QueryValue_TextBox.Text = Clipboard.GetText();
-        }
+        #endregion
 
-        private void SongQuery_Clear_Button_Click(object sender, EventArgs e)
-        {
-            SongQuery_QueryValue_TextBox.Text = "";
-        }
-
-        #region --- 歌曲編輯 ---
+        #region --- SongQuery 歌曲編輯 ---
 
         private void SongQuery_EditSongLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1908,10 +1916,6 @@ namespace CrazyKTV_SongMgr
 
 
         #endregion
-
-
-
-
 
     }
 

@@ -464,6 +464,8 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #region --- SingerMgr 匯入/匯出歌手資料 ---
+
         private void SingerMgr_SingerExport_Button_Click(object sender, EventArgs e)
         {
             List<string> list = new List<string>();
@@ -471,7 +473,7 @@ namespace CrazyKTV_SongMgr
             DataTable dt = new DataTable();
 
             string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
-            SingerQuerySqlStr = "select " + sqlColumnStr + " from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger");
+            SingerQuerySqlStr = "select " + sqlColumnStr + " from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " order by Singer_Type, Singer_Name";
             dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, "");
 
             if (dt.Rows.Count > 0)
@@ -493,6 +495,7 @@ namespace CrazyKTV_SongMgr
             sw.Close();
             list.Clear();
             dt.Dispose();
+            dt = null;
         }
 
         private void SingerMgr_SingerImport_Button_Click(object sender, EventArgs e)
@@ -558,6 +561,9 @@ namespace CrazyKTV_SongMgr
             foreach (string AddStr in Addlist)
             {
                 list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
+
+                list[1] = (Addlist.IndexOf(AddStr) + 1).ToString();
+
                 switch (list[0])
                 {
                     case "ktv_Singer":
@@ -585,6 +591,8 @@ namespace CrazyKTV_SongMgr
             }
             conn.Close();
         }
+
+        #endregion
 
         private void SingerMgr_RebuildSingerData_Button_Click(object sender, EventArgs e)
         {
