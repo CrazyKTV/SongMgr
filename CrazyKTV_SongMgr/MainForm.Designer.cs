@@ -3001,6 +3001,7 @@
             this.SingerMgr_DataGridView.Size = new System.Drawing.Size(468, 296);
             this.SingerMgr_DataGridView.StandardTab = true;
             this.SingerMgr_DataGridView.TabIndex = 2;
+            this.SingerMgr_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SingerMgr_DataGridView_CellDoubleClick);
             this.SingerMgr_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.SingerMgr_DataGridView_CellFormatting);
             this.SingerMgr_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SingerMgr_DataGridView_CellMouseClick);
             this.SingerMgr_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SingerMgr_DataGridView_CellMouseDown);

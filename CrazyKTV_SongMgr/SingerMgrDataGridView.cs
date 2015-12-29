@@ -90,6 +90,15 @@ namespace CrazyKTV_SongMgr
         {
             switch (sender.ToString())
             {
+                case "查詢歌曲":
+                    string SingerName = SingerMgr_DataGridView.SelectedRows[0].Cells["Singer_Name"].Value.ToString();
+                    SongQuery_QueryType_ComboBox.SelectedValue = 2;
+                    SongQuery_QueryValue_TextBox.Text = SingerName;
+                    SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+                    SongQuery_EditMode_CheckBox.Checked = false;
+                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
+                    break;
                 case "移除歌手":
                     if (MessageBox.Show("你確定要移除歌手嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
@@ -116,6 +125,17 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
             }
+        }
+
+        private void SingerMgr_DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string SingerName = SingerMgr_DataGridView.SelectedRows[0].Cells["Singer_Name"].Value.ToString();
+            SongQuery_QueryType_ComboBox.SelectedValue = 2;
+            SongQuery_QueryValue_TextBox.Text = SingerName;
+            SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+            SongQuery_EditMode_CheckBox.Checked = false;
+            SongQuery_Query_Button_Click(new Button(), new EventArgs());
+            MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
         }
 
         private void SingerMgr_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)

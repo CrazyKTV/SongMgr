@@ -34,7 +34,7 @@ namespace CrazyKTV_SongMgr
     {
         private static object LockThis = new object();
 
-        #region --- 清除操作記錄 ---
+        #region --- SongLog 清除操作記錄 ---
 
         private void SongLog_ClearLog_Button_Click(object sender, EventArgs e)
         {
@@ -47,7 +47,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- TextBox 控制項 ---
+        #region --- Common TextBox 控制項共用事件 ---
 
         private void Common_NumericOnly_TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -245,7 +245,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- ListBox 記錄複製 ---
+        #region --- Common ListBox 記錄複製 ---
 
         private void Common_ListBox_DoubleClick(object sender, EventArgs e)
         {
@@ -276,7 +276,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 介面切換 ---
+        #region --- Common 介面鎖定切換 ---
 
         private void Common_SwitchDBVerErrorUI(bool status)
         {
@@ -402,6 +402,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Common 初始化歌曲資料 ---
 
         private void Common_InitializeSongData()
         {
@@ -438,6 +439,9 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- Common 取得歌曲統計資料 ---
 
         private void Common_GetSongStatisticsTask()
         {
@@ -539,9 +543,82 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- Common 取得歌手統計資料 ---
+
+        private void Common_GetSingerStatisticsTask()
+        {
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                SingerMgr.CreateSongDataTable();
+                List<int> SingerTypeCount = new List<int>();
+                List<string> SingerTypeList = new List<string>();
+
+                foreach (string str in Global.CrazyktvSingerTypeList)
+                {
+                    if (str != "未使用")
+                    {
+                        SingerTypeList.Add(str);
+                    }
+                }
+
+                Label[] SingerMgr_Statistics_Label =
+                {
+                    SingerMgr_Statistics2_Label,
+                    SingerMgr_Statistics3_Label,
+                    SingerMgr_Statistics4_Label,
+                    SingerMgr_Statistics5_Label,
+                    SingerMgr_Statistics6_Label,
+                    SingerMgr_Statistics7_Label,
+                    SingerMgr_Statistics8_Label,
+                    SingerMgr_Statistics9_Label,
+                    SingerMgr_Statistics10_Label
+                };
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    for (int i = 0; i < SingerMgr_Statistics_Label.Count<Label>(); i++)
+                    {
+                        SingerMgr_Statistics_Label[i].Text = SingerTypeList[i] + ":";
+                    }
+                });
+
+                Label[] SingerMgr_StatisticsValue_Label =
+                {
+                    SingerMgr_Statistics2Value_Label,
+                    SingerMgr_Statistics3Value_Label,
+                    SingerMgr_Statistics4Value_Label,
+                    SingerMgr_Statistics5Value_Label,
+                    SingerMgr_Statistics6Value_Label,
+                    SingerMgr_Statistics7Value_Label,
+                    SingerMgr_Statistics8Value_Label,
+                    SingerMgr_Statistics9Value_Label,
+                    SingerMgr_Statistics10Value_Label,
+                    SingerMgr_Statistics1Value_Label
+                };
+
+                var task = Task<List<int>>.Factory.StartNew(CommonFunc.GetSingerTypeCount);
+
+                SingerTypeCount = task.Result;
+                this.BeginInvoke((Action)delegate ()
+                {
+                    for (int i = 0; i < SingerTypeCount.Count; i++)
+                    {
+                        SingerMgr_StatisticsValue_Label[i].Text = SingerTypeCount[i].ToString() + " 位";
+                    }
+                });
+                SingerMgr.DisposeSongDataTable();
+            }
+        }
+
+        #endregion
+
+        #region --- Common 檢查資料庫語系資料 ---
+
         private void Common_CheckSongLang()
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
+            if (Global.CrazyktvDatabaseStatus)
             {
                 bool UpdateLang = false;
 
@@ -601,7 +678,9 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        #region --- 更新語系相關控件 ---
+        #endregion
+
+        #region --- Common 更新語系相關控件 ---
 
         private void Common_RefreshSongLang()
         {
@@ -708,7 +787,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 更新歌曲類型相關控件 ---
+        #region --- Common 更新歌曲類型相關控件 ---
 
         private void Common_RefreshSongType()
         {
@@ -844,70 +923,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        private void Common_GetSingerStatisticsTask()
-        {
-            if (Global.CrazyktvDatabaseStatus)
-            {
-                SingerMgr.CreateSongDataTable();
-                List<int> SingerTypeCount = new List<int>();
-                List<string> SingerTypeList = new List<string>();
-
-                foreach (string str in Global.CrazyktvSingerTypeList)
-                {
-                    if (str != "未使用")
-                    {
-                        SingerTypeList.Add(str);
-                    }
-                }
-
-                Label[] SingerMgr_Statistics_Label =
-                {
-                    SingerMgr_Statistics2_Label,
-                    SingerMgr_Statistics3_Label,
-                    SingerMgr_Statistics4_Label,
-                    SingerMgr_Statistics5_Label,
-                    SingerMgr_Statistics6_Label,
-                    SingerMgr_Statistics7_Label,
-                    SingerMgr_Statistics8_Label,
-                    SingerMgr_Statistics9_Label,
-                    SingerMgr_Statistics10_Label
-                };
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    for (int i = 0; i < SingerMgr_Statistics_Label.Count<Label>(); i++)
-                    {
-                        SingerMgr_Statistics_Label[i].Text = SingerTypeList[i] + ":";
-                    }
-                });
-
-                Label[] SingerMgr_StatisticsValue_Label =
-                {
-                    SingerMgr_Statistics2Value_Label,
-                    SingerMgr_Statistics3Value_Label,
-                    SingerMgr_Statistics4Value_Label,
-                    SingerMgr_Statistics5Value_Label,
-                    SingerMgr_Statistics6Value_Label,
-                    SingerMgr_Statistics7Value_Label,
-                    SingerMgr_Statistics8Value_Label,
-                    SingerMgr_Statistics9Value_Label,
-                    SingerMgr_Statistics10Value_Label,
-                    SingerMgr_Statistics1Value_Label
-                };
-
-                var task = Task<List<int>>.Factory.StartNew(CommonFunc.GetSingerTypeCount);
-
-                SingerTypeCount = task.Result;
-                this.BeginInvoke((Action)delegate()
-                {
-                    for (int i = 0; i < SingerTypeCount.Count; i++)
-                    {
-                        SingerMgr_StatisticsValue_Label[i].Text = SingerTypeCount[i].ToString() + " 位";
-                    }
-                });
-                SingerMgr.DisposeSongDataTable();
-            }
-        }
+        #region --- Common 重建歌庫歌手 ---
 
         private void Common_RebuildSingerDataTask(string TooltipName)
         {
@@ -1169,6 +1185,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- Common 檢查移除歌曲備份期限 ---
+
         private void Common_CheckBackupRemoveSongTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -1180,7 +1200,6 @@ namespace CrazyKTV_SongMgr
                     List<string> SupportFormat = new List<string>();
                     SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
                     
-
                     DirectoryInfo dir = new DirectoryInfo(Application.StartupPath + @"\SongMgr\RemoveSong");
                     FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
 
@@ -1213,6 +1232,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- Common 清除所有列表資料 ---
+
         private void Common_ClearDataGridView()
         {
             Global.SongQueryQueryType = "SongQuery";
@@ -1233,6 +1256,10 @@ namespace CrazyKTV_SongMgr
             SingerMgr_Tooltip_Label.Text = "";
             GC.Collect();
         }
+
+        #endregion
+
+        #region --- Common 檢查 SongMgr 版本 ---
 
         private void Common_CheckSongMgrVer()
         {
@@ -1264,6 +1291,8 @@ namespace CrazyKTV_SongMgr
                 File.Delete(WebUpdaterTempFile);
             }
         }
+
+        #endregion
 
         private void Common_RefreshSongMgr()
         {
@@ -1641,6 +1670,8 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #region --- CommonFunc 取得歌曲最大編號及缺號 ---
+
         public static void GetMaxSongId(int DigitCode)
         {
             Global.MaxIDList = new List<int>();
@@ -1677,31 +1708,6 @@ namespace CrazyKTV_SongMgr
             }
             dt.Dispose();
             dt = null;
-        }
-
-        public static int GetMaxSingerId(string TableName, string DatabaseFile)
-        {
-            int i = 0;
-            DataTable dt = new DataTable();
-            string SongQuerySqlStr = "select Singer_Id from " + TableName + " order by Singer_Id";
-            dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SongQuerySqlStr, "");
-
-            if (dt.Rows.Count != 0)
-            {
-                var query = from row in dt.AsEnumerable()
-                            where row.Field<Int32>("Singer_Id") > 0
-                            orderby row.Field<Int32>("Singer_Id") descending
-                            select row;
-
-                foreach (DataRow row in query)
-                {
-                    i = Convert.ToInt32(row["Singer_Id"]);
-                    break;
-                }
-            }
-
-            dt.Dispose();
-            return i;
         }
 
         public static void GetNotExistsSongId(int DigitCode)
@@ -1761,6 +1767,36 @@ namespace CrazyKTV_SongMgr
             dt.Dispose();
         }
 
+        #endregion
+
+        #region --- CommonFunc 取得歌手最大編號及缺號 ---
+
+        public static int GetMaxSingerId(string TableName, string DatabaseFile)
+        {
+            int i = 0;
+            DataTable dt = new DataTable();
+            string SongQuerySqlStr = "select Singer_Id from " + TableName + " order by Singer_Id";
+            dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SongQuerySqlStr, "");
+
+            if (dt.Rows.Count != 0)
+            {
+                var query = from row in dt.AsEnumerable()
+                            where row.Field<Int32>("Singer_Id") > 0
+                            orderby row.Field<Int32>("Singer_Id") descending
+                            select row;
+
+                foreach (DataRow row in query)
+                {
+                    i = Convert.ToInt32(row["Singer_Id"]);
+                    break;
+                }
+            }
+
+            dt.Dispose();
+            dt = null;
+            return i;
+        }
+
         public static List<string> GetNotExistsSingerId(string TableName, string DatabaseFile)
         {
             List<string> list = new List<string>();
@@ -1801,6 +1837,10 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
+        #endregion
+
+        #region --- CommonFunc 取得字數資料 ---
+
         public static List<string> GetSongWordCount(string SongStr)
         {
             List<string> WordCountList = new List<string>() { "0", "False" };
@@ -1816,7 +1856,9 @@ namespace CrazyKTV_SongMgr
             return WordCountList;
         }
 
-        #region --- 取得拼音資料 ---
+        #endregion
+
+        #region --- CommonFunc 取得拼音資料 ---
 
         public static List<string> GetSongNameSpell(string SongStr)
         {
@@ -2063,7 +2105,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 取得檔案結構 ---
+        #region --- CommonFunc 取得檔案結構 ---
 
         public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath)
         {
@@ -2174,7 +2216,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 取得最愛用戶列表 ---
+        #region --- CommonFunc 取得最愛用戶列表 ---
 
         public static DataTable GetFavoriteUserList(int ListTpye)
         {
@@ -2250,7 +2292,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 設定檔案屬性 ---
+        #region --- CommonFunc 設定檔案屬性 ---
 
         public static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
         {
@@ -2266,7 +2308,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 歌曲/歌手統計 ---
+        #region --- CommonFunc 歌曲/歌手統計 ---
 
         public static List<int> GetSongLangCount()
         {
@@ -2353,7 +2395,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 取得 Unicode 編碼 ---
+        #region --- CommonFunc 取得 Unicode 編碼 ---
 
         public static string GetWordUnicode(string word)
         {
@@ -2372,7 +2414,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 字寬轉換 ---
+        #region --- CommonFunc 字寬轉換 ---
 
         public static string ConvToWide(string input)
         {
@@ -2396,7 +2438,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 取得同義字歌曲列表 ---
+        #region --- CommonFunc 取得同義字歌曲列表 ---
 
         public static List<string> GetSynonymousSongNameList(string SongQueryValue)
         {
@@ -2435,7 +2477,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 下載檔案 ---
+        #region --- CommonFunc 下載檔案 ---
 
         public static bool DownloadFile(string File, string Url)
         {
@@ -2471,7 +2513,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 轉換字串為繁體中文 ---
+        #region --- CommonFunc 轉換字串為繁體中文 ---
 
         public static string ConvToTraditionalChinese(string strSource)
         {
@@ -2493,7 +2535,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- BIG5 GB2312 繁簡編碼快篩 ---
+        #region --- CommonFunc 繁簡編碼快篩 ---
         // BIG5 GB2312 繁簡編碼快篩 https://github.com/darkthread/CEAD
         public class ChEncAutoDetector
         {
@@ -2621,7 +2663,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- 檢查管理員身份 ---
+        #region --- CommonFunc 檢查管理員身份 ---
 
         public static bool IsAdministrator()
         {

@@ -34,11 +34,17 @@ namespace CrazyKTV_SongMgr
                 case "取消更新":
                     SongAdd_Add_Button.Text = "加入歌庫";
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_Add_Button.Enabled = false;
-                    SongAdd_Tooltip_Label.Text = "已取消更新重複歌曲!";
+                    SongAdd_DataGridView.Size = new Size(952, 296);
+                    SongAdd_DataGridView.Location = new Point(23, 365);
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
+                    SongAdd_Edit_GroupBox.Visible = false;
+                    SongAdd_SongAddCfg_GroupBox.Visible = true;
+                    SongAdd_SpecialStr_GroupBox.Visible = true;
+                    SongAdd_DefaultSongInfo_GroupBox.Visible = true;
+                    SongAdd_Add_Button.Enabled = false;
+                    SongAdd_Tooltip_Label.Text = "已取消更新重複歌曲!";
                     SongAdd_DragDrop_Label.Visible = (Global.SongMgrSongAddMode != "4") ? true : false;
                     Common_SwitchSetUI(true);
                     break;
@@ -58,7 +64,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DragDrop_Label.Visible = (Global.SongMgrSongAddMode != "4") ? true : false;
                     break;
             }
-
         }
 
         private void SongAdd_DefaultSongInfo_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -738,6 +743,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
                     SongQuery_QueryType_ComboBox.SelectedValue = 4;
                     SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    SongQuery_EditMode_CheckBox.Checked = false;
 
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
                     Common_RefreshSongType();
@@ -747,18 +753,23 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode));
                     Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
-                    SongAdd_Add_Button.Enabled = false;
+                    SongAdd_Save_Button.Text = "儲存設定";
+                    SongAdd_DataGridView.Size = new Size(952, 296);
+                    SongAdd_DataGridView.Location = new Point(23, 365);
                     SongAdd_DataGridView.DataSource = null;
+                    SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
+                    SongAdd_Edit_GroupBox.Visible = false;
+                    SongAdd_SongAddCfg_GroupBox.Visible = true;
+                    SongAdd_SpecialStr_GroupBox.Visible = true;
+                    SongAdd_DefaultSongInfo_GroupBox.Visible = true;
+                    SongAdd_Add_Button.Enabled = false;
 
                     if (Global.SongMgrSongAddMode != "4")
                     {
                         SongAdd_DragDrop_Label.Visible = true;
                         Common_SwitchSetUI(true);
                     }
-
-                    SongQuery_QueryType_ComboBox.SelectedValue = 1;
-                    SongQuery_QueryValue_TextBox.Text = "";
                     MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
                 }
                 else
@@ -875,6 +886,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
                     SongQuery_QueryType_ComboBox.SelectedValue = 4;
                     SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    SongQuery_EditMode_CheckBox.Checked = false;
 
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
                     Common_RefreshSongType();
@@ -889,15 +901,19 @@ namespace CrazyKTV_SongMgr
 
                     SongAdd_Add_Button.Text = "加入歌庫";
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_Add_Button.Enabled = false;
+                    SongAdd_DataGridView.Size = new Size(952, 296);
+                    SongAdd_DataGridView.Location = new Point(23, 365);
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
+                    SongAdd_Edit_GroupBox.Visible = false;
+                    SongAdd_SongAddCfg_GroupBox.Visible = true;
+                    SongAdd_SpecialStr_GroupBox.Visible = true;
+                    SongAdd_DefaultSongInfo_GroupBox.Visible = true;
+                    SongAdd_Add_Button.Enabled = false;
                     SongAdd_DragDrop_Label.Visible = (Global.SongMgrSongAddMode != "4") ? true : false;
                     Common_SwitchSetUI(true);
 
-                    SongQuery_QueryType_ComboBox.SelectedValue = 1;
-                    SongQuery_QueryValue_TextBox.Text = "";
                     MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
                 });
                 Global.DupSongAddDT.Dispose();
@@ -915,7 +931,7 @@ namespace CrazyKTV_SongMgr
             Global.SongAddEnableConvToTC = SongAdd_EnableConvToTC_CheckBox.Checked.ToString();
         }
 
-        #region --- 歌曲編輯 ---
+        #region --- SongAdd 歌曲編輯 ---
 
         private void SongAdd_EditSongLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1202,6 +1218,17 @@ namespace CrazyKTV_SongMgr
                         row.Cells["Song_Volume"].Value = SongAdd_EditSongVolume_TextBox.Text;
                     }
                 }
+                bool EnabledButton = true;
+
+                foreach (DataGridViewRow row in SongAdd_DataGridView.Rows)
+                {
+                    if (row.Cells["Song_AddStatus"].Value.ToString() == "語系類別必須有值才能加歌!")
+                    {
+                        EnabledButton = false;
+                        break;
+                    }
+                }
+                SongAdd_Add_Button.Enabled = (EnabledButton) ? true : false;
             }
         }
 

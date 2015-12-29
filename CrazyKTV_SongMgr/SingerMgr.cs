@@ -91,6 +91,8 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #region --- SingerMgr 查詢歌手 ---
+
         private void SingerMgr_QueryTask(object QueryType)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -248,6 +250,8 @@ namespace CrazyKTV_SongMgr
             });
         }
 
+        #endregion
+
         #region --- SingerMgr 編輯模式切換 ---
 
         private void SingerMgr_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -279,6 +283,8 @@ namespace CrazyKTV_SongMgr
         }
 
         #endregion
+
+        #region --- SingerMgr 更新歌手 ---
 
         private void SingerMgr_SingerUpdateTask(object SingerUpdateDT)
         {
@@ -357,6 +363,10 @@ namespace CrazyKTV_SongMgr
             });
         }
 
+        #endregion
+
+        #region --- SingerMgr 移除歌手 ---
+
         private void SingerMgr_SingerRemoveTask(object SingerIdlist)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -373,6 +383,10 @@ namespace CrazyKTV_SongMgr
             }
             conn.Close();
         }
+
+        #endregion
+
+        #region --- SingerMgr 新增歌手 ---
 
         private void SingerMgr_SingerAdd_Button_Click(object sender, EventArgs e)
         {
@@ -463,6 +477,8 @@ namespace CrazyKTV_SongMgr
                 conn.Close();
             }
         }
+
+        #endregion
 
         #region --- SingerMgr 匯入/匯出歌手資料 ---
 
@@ -594,6 +610,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SingerMgr 重建歌庫歌手 ---
+
         private void SingerMgr_RebuildSingerData_Button_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("你確定要重建歌庫歌手資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -620,6 +638,10 @@ namespace CrazyKTV_SongMgr
                 });
             }
         }
+
+        #endregion
+
+        #region --- SingerMgr 記錄無資料歌手 ---
 
         private void SingerMgr_NonSingerDataLog_Button_Click(object sender, EventArgs e)
         {
@@ -758,6 +780,8 @@ namespace CrazyKTV_SongMgr
                 Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
             }
         }
+
+        #endregion
 
         private void SingerMgr_QueryPaste_Button_Click(object sender, EventArgs e)
         {
