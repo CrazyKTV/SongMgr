@@ -178,7 +178,6 @@
             this.SingerMgr_TabPage = new System.Windows.Forms.TabPage();
             this.SingerMgr_Edit_GroupBox = new System.Windows.Forms.GroupBox();
             this.SingerMgr_EditSingerImg_Label = new System.Windows.Forms.Label();
-            this.SingerMgr_EditSingerImg_PictureBox = new System.Windows.Forms.PictureBox();
             this.SingerMgr_EditApplyChanges_Button = new System.Windows.Forms.Button();
             this.SingerMgr_EditSingerSpell_TextBox = new System.Windows.Forms.TextBox();
             this.SingerMgr_EditSingerSpell_Label = new System.Windows.Forms.Label();
@@ -494,6 +493,7 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
+            this.SingerMgr_EditSingerImg_Panel = new System.Windows.Forms.Panel();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -511,7 +511,6 @@
             this.SongAdd_Edit_GroupBox.SuspendLayout();
             this.SingerMgr_TabPage.SuspendLayout();
             this.SingerMgr_Edit_GroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SingerMgr_EditSingerImg_PictureBox)).BeginInit();
             this.SingerMgr_OtherQuery_GroupBox.SuspendLayout();
             this.SingerMgr_Manager_GroupBox.SuspendLayout();
             this.SingerMgr_Statistics_GroupBox.SuspendLayout();
@@ -2418,8 +2417,8 @@
             // 
             // SingerMgr_Edit_GroupBox
             // 
+            this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerImg_Panel);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerImg_Label);
-            this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerImg_PictureBox);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditApplyChanges_Button);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerSpell_TextBox);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerSpell_Label);
@@ -2451,16 +2450,6 @@
             this.SingerMgr_EditSingerImg_Label.TabIndex = 8;
             this.SingerMgr_EditSingerImg_Label.Text = "歌手圖片:";
             // 
-            // SingerMgr_EditSingerImg_PictureBox
-            // 
-            this.SingerMgr_EditSingerImg_PictureBox.Location = new System.Drawing.Point(110, 170);
-            this.SingerMgr_EditSingerImg_PictureBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.SingerMgr_EditSingerImg_PictureBox.Name = "SingerMgr_EditSingerImg_PictureBox";
-            this.SingerMgr_EditSingerImg_PictureBox.Size = new System.Drawing.Size(114, 114);
-            this.SingerMgr_EditSingerImg_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.SingerMgr_EditSingerImg_PictureBox.TabIndex = 28;
-            this.SingerMgr_EditSingerImg_PictureBox.TabStop = false;
-            // 
             // SingerMgr_EditApplyChanges_Button
             // 
             this.SingerMgr_EditApplyChanges_Button.AutoSize = true;
@@ -2470,7 +2459,7 @@
             this.SingerMgr_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 8, 6, 12);
             this.SingerMgr_EditApplyChanges_Button.Name = "SingerMgr_EditApplyChanges_Button";
             this.SingerMgr_EditApplyChanges_Button.Size = new System.Drawing.Size(88, 32);
-            this.SingerMgr_EditApplyChanges_Button.TabIndex = 9;
+            this.SingerMgr_EditApplyChanges_Button.TabIndex = 10;
             this.SingerMgr_EditApplyChanges_Button.Text = "套用變更";
             this.SingerMgr_EditApplyChanges_Button.UseVisualStyleBackColor = true;
             this.SingerMgr_EditApplyChanges_Button.Click += new System.EventHandler(this.SingerMgr_EditApplyChanges_Button_Click);
@@ -6456,6 +6445,19 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
+            // SingerMgr_EditSingerImg_Panel
+            // 
+            this.SingerMgr_EditSingerImg_Panel.AllowDrop = true;
+            this.SingerMgr_EditSingerImg_Panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SingerMgr_EditSingerImg_Panel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SingerMgr_EditSingerImg_Panel.Location = new System.Drawing.Point(110, 170);
+            this.SingerMgr_EditSingerImg_Panel.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SingerMgr_EditSingerImg_Panel.Name = "SingerMgr_EditSingerImg_Panel";
+            this.SingerMgr_EditSingerImg_Panel.Size = new System.Drawing.Size(114, 114);
+            this.SingerMgr_EditSingerImg_Panel.TabIndex = 9;
+            this.SingerMgr_EditSingerImg_Panel.DragDrop += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragDrop);
+            this.SingerMgr_EditSingerImg_Panel.DragEnter += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragEnter);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -6502,7 +6504,6 @@
             this.SingerMgr_TabPage.ResumeLayout(false);
             this.SingerMgr_Edit_GroupBox.ResumeLayout(false);
             this.SingerMgr_Edit_GroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SingerMgr_EditSingerImg_PictureBox)).EndInit();
             this.SingerMgr_OtherQuery_GroupBox.ResumeLayout(false);
             this.SingerMgr_OtherQuery_GroupBox.PerformLayout();
             this.SingerMgr_Manager_GroupBox.ResumeLayout(false);
@@ -7047,9 +7048,9 @@
         private System.Windows.Forms.Label SingerMgr_EditSingerType_Label;
         private System.Windows.Forms.TextBox SingerMgr_EditSingerId_TextBox;
         private System.Windows.Forms.Label SingerMgr_EditSingerId_Label;
-        private System.Windows.Forms.PictureBox SingerMgr_EditSingerImg_PictureBox;
         private System.Windows.Forms.Label SingerMgr_EditSingerImg_Label;
         private System.Windows.Forms.CheckBox SingerMgr_EditMode_CheckBox;
+        private System.Windows.Forms.Panel SingerMgr_EditSingerImg_Panel;
     }
 }
 

@@ -218,8 +218,7 @@ namespace CrazyKTV_SongMgr
             if (SongAdd_Tooltip_Label.Text == "要加入的歌曲檔案數量大於最小歌曲剩餘編號!") SongAdd_Tooltip_Label.Text = "";
 
             string[] drop = (string[])e.Data.GetData(DataFormats.FileDrop);
-            List<string> SupportFormat = new List<string>();
-            SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
+            List<string> SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
             List<string> list = new List<string>();
 
             SongAdd_DataGridView.DataSource = null;

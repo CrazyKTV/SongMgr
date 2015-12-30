@@ -281,9 +281,38 @@ namespace CrazyKTV_SongMgr
                     SingerMgr_EditSingerType_ComboBox.SelectedValue = Convert.ToInt32(CommonFunc.GetSingerTypeStr(0, 3, SongSingerTypeStr)) + 1; ;
                     SingerMgr_EditSingerName_TextBox.Text = SingerName;
                     SingerMgr_EditSingerSpell_TextBox.Text = SingerSpell;
-                    if (File.Exists(Application.StartupPath + @"\Web\singerimg\" + SingerName + ".jpg"))
+
+                    string ImageFile = "";
+                    List<string> SupportFormat = new List<string>() { ".bmp", ".gif", ".jpg", ".png" };
+                    foreach (string FileExt in SupportFormat)
                     {
-                        SingerMgr_EditSingerImg_PictureBox.Image = Image.FromFile(Application.StartupPath + @"\Web\singerimg\" + SingerName + ".jpg");
+                        if (File.Exists(Application.StartupPath + @"\Web\singerimg\" + SingerName + FileExt))
+                        {
+                            SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
+                            ImageFile = Application.StartupPath + @"\Web\singerimg\" + SingerName + FileExt;
+                        }
+                    }
+
+                    if (ImageFile == "")
+                    {
+                        if (File.Exists(Application.StartupPath + @"\Web\images\singertype_default.png"))
+                        {
+                            SingerMgr_EditSingerImg_Panel.BackColor = Color.ForestGreen;
+                            ImageFile = Application.StartupPath + @"\Web\images\singertype_default.png";
+                        }
+                        else
+                        {
+                            SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
+                            SingerMgr_EditSingerImg_Panel.BackgroundImage = null;
+                        }
+                    }
+
+                    if (ImageFile !="")
+                    {
+                        Image img = Image.FromFile(ImageFile);
+                        Bitmap bmp = new Bitmap(img);
+                        img.Dispose();
+                        SingerMgr_EditSingerImg_Panel.BackgroundImage = bmp;
                     }
 
                     Global.SingerMgrDataGridViewSelectList = new List<string>();

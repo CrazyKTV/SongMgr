@@ -968,6 +968,7 @@ namespace CrazyKTV_SongMgr
                     });
                     SingerMgr.DisposeSongDataTable();
                     dt.Dispose();
+                    dt = null;
                 });
             }
         }
@@ -994,6 +995,150 @@ namespace CrazyKTV_SongMgr
             SingerMgr_EditSingerType_ComboBox.ValueMember = "Value";
         }
 
+
+        #endregion
+
+        #region --- 歌手圖片 ---
+
+        private void SingerMgr_EditSingerImg_Panel_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void SingerMgr_EditSingerImg_Panel_DragDrop(object sender, DragEventArgs e)
+        {
+            if (SingerMgr_Tooltip_Label.Text != "") SingerMgr_Tooltip_Label.Text = "";
+            string[] drop = (string[])e.Data.GetData(DataFormats.FileDrop);
+            List<string> SupportFormat = new List<string>() { ".bmp", ".gif", ".jpg", ".png" };
+
+            if (drop.Count<string>() > 1 || Directory.Exists(drop[0]))
+            {
+                SingerMgr_Tooltip_Label.Text = "一次僅能拖曳一個圖檔!";
+            }
+            else
+            {
+                if (SingerMgr_Tooltip_Label.Text == "一次僅能拖曳一個圖檔!") SingerMgr_Tooltip_Label.Text = "";
+                foreach (string item in drop)
+                {
+                    if (File.Exists(item))
+                    {
+                        FileInfo f = new FileInfo(item);
+                        if (f.Extension.ToLower().ContainsAny(SupportFormat.ToArray()))
+                        {
+                            string SingerName = SingerMgr_EditSingerName_TextBox.Text;
+                            if (!Directory.Exists(Application.StartupPath + @"\Web\singerimg")) Directory.CreateDirectory(Application.StartupPath + @"\Web\singerimg");
+                            string FilePath = Application.StartupPath + @"\Web\singerimg\" + SingerName + f.Extension.ToLower();
+                            if (FilePath != item) SingerMgr_EditSingerImg_Panel.BackgroundImage.Dispose();
+
+                            if (File.Exists(FilePath))
+                            {
+                                if (FilePath == item)
+                                {
+                                    SingerMgr_Tooltip_Label.Text = "拖曳的檔案與現用圖檔相同!";
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        FileAttributes attributes = File.GetAttributes(FilePath);
+                                        if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                                        {
+                                            attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                            File.SetAttributes(FilePath, attributes);
+                                        }
+                                        File.Delete(FilePath);
+
+                                        if (item.ContainsAll(Path.GetTempPath(), ".bmp"))
+                                        {
+                                            FilePath = Application.StartupPath + @"\Web\singerimg\" + SingerName + ".jpg";
+                                            Image tempimg = Image.FromFile(item);
+                                            tempimg.Save(FilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                            tempimg.Dispose();
+                                        }
+                                        else
+                                        {
+                                            File.Copy(item, FilePath, true);
+                                        }
+                                        Image img = Image.FromFile(FilePath);
+                                        Bitmap bmp = new Bitmap(img);
+                                        img.Dispose();
+                                        SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
+                                        SingerMgr_EditSingerImg_Panel.BackgroundImage = bmp;
+                                        SingerMgr_Tooltip_Label.Text = "已成功加入歌手圖片!";
+                                    }
+                                    catch
+                                    {
+                                        SingerMgr_Tooltip_Label.Text = "歌手圖檔無法變更!";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (item.ContainsAll(Path.GetTempPath(), ".bmp"))
+                                {
+                                    FilePath = Application.StartupPath + @"\Web\singerimg\" + SingerName + ".jpg";
+                                    Image tempimg = Image.FromFile(item);
+                                    tempimg.Save(FilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                    tempimg.Dispose();
+                                }
+                                else
+                                {
+                                    File.Copy(item, FilePath, true);
+                                }
+                                Image img = Image.FromFile(FilePath);
+                                Bitmap bmp = new Bitmap(img);
+                                img.Dispose();
+                                SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
+                                SingerMgr_EditSingerImg_Panel.BackgroundImage = bmp;
+                                SingerMgr_Tooltip_Label.Text = "已成功加入歌手圖片!";
+                            }
+                        }
+                        else
+                        {
+                            SingerMgr_Tooltip_Label.Text = "拖曳的檔案不是圖檔!";
+                        }
+                    }
+                }
+
+
+            }
+
+            /*
+            if (drop.Count<string>() > 1);
+            foreach (string item in drop)
+            {
+                if (item.Contains(Global.SongMgrDestFolder) && Global.SongMgrSongAddMode != "3")
+                {
+                    SongAdd_Tooltip_Label.Text = "要加入的歌曲檔案或資料夾不可與歌庫資料夾同目錄!";
+                    break;
+                }
+                else if (Directory.Exists(item))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(item);
+                    FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
+                    foreach (FileInfo f in Files)
+                    {
+                        list.Add(f.FullName);
+                    }
+                }
+                else if (File.Exists(item))
+                {
+                    FileInfo f = new FileInfo(item);
+                    foreach (string s in SupportFormat)
+                    {
+                        if (f.Extension.ToLower() == s) list.Add(item);
+                    }
+                }
+            }
+            */
+        }
 
         #endregion
 
