@@ -332,6 +332,7 @@ namespace CrazyKTV_SongMgr
             {
                 Global.SingerMgrDefaultSingerDataTable = "ktv_Singer";
                 SingerMgr_DefaultSingerDataTable_ComboBox.SelectedValue = 1;
+                SingerMgr_DefaultSingerDataTable_ComboBox.Enabled = false;
             }
 
             if (list[32] != "") Global.DBVerEnableDBVerUpdate = list[32];
@@ -566,6 +567,10 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
 
 
 

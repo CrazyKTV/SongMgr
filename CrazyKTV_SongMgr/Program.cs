@@ -36,9 +36,10 @@ namespace CrazyKTV_SongMgr
 
     class Global
     {
-        public static bool DebugMode = false;
+        public static bool DebugMode = true;
 
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
+        public static string CrazyktvSongMgrDatabaseFile = Application.StartupPath + @"\SongMgr\CrazySongMgr.mdb";
         public static string CrazyktvSongDBVer = "1.00";
         public static string CrazyktvSingerDBVer = "1";
         public static string CrazyktvPhoneticsDBVer = "1";
@@ -107,8 +108,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> CrazyktvSongTrackList = new List<string>() { "V0", "VR", "VL", "V3", "V4", "V5" };
         public static List<string> CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
         public static List<string> CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
-        public static List<string> CrazyktvDBTableList = new List<string>();
-        public static List<string> CrazyktvDBColumnList = new List<string>();
 
         public static bool SongAnalysisCompleted = false;
         public static List<string> SongAnalysisSingerList = new List<string>();

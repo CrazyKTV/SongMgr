@@ -81,7 +81,7 @@ namespace CrazyKTV_SongMgr
                 List<string> list = new List<string>();
                 list = CommonFunc.GetOleDbTableList(opd.FileName, "");
 
-                if (list.IndexOf("ktv_AllSinger") >= 0)
+                if (list.IndexOf("ktv_Version") >= 0)
                 {
                     if (SongDBConverter_Tooltip_Label.Text == "你選取的目的資料庫不是新版的 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
                 }
@@ -384,20 +384,14 @@ namespace CrazyKTV_SongMgr
 
             // 加入歌手
             OleDbCommand singercmd = new OleDbCommand();
-            OleDbCommand allsingercmd = new OleDbCommand();
             sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
             sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
             string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-            string AllSingerAddSqlStr = "insert into ktv_AllSinger ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
             singercmd = new OleDbCommand(SingerAddSqlStr, conn);
-            allsingercmd = new OleDbCommand(AllSingerAddSqlStr, conn);
 
             List<string> NotExistsSingerId = new List<string>();
             NotExistsSingerId = CommonFunc.GetNotExistsSingerId("ktv_Singer", SongDestDBFile);
-            List<string> NotExistsAllSingerId = new List<string>();
-            NotExistsAllSingerId = CommonFunc.GetNotExistsSingerId("ktv_AllSinger", SongDestDBFile);
             int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_Singer", SongDestDBFile) + 1;
-            int MaxAllSingerId = CommonFunc.GetMaxSingerId("ktv_AllSinger", SongDestDBFile) + 1;
             string NextSingerId = "";
             List<string> spelllist = new List<string>();
 
@@ -410,50 +404,6 @@ namespace CrazyKTV_SongMgr
             {
                 for (int i = 0; i < count; i++)
                 {
-                    var query = from row in Global.AllSingerDT.AsEnumerable()
-                                where row.Field<string>("Singer_Name").ToLower().Equals(dt.Rows[i].Field<string>("Song_Singer").ToLower())
-                                select row;
-
-                    if (query.Count<DataRow>() < 1)
-                    {
-                        if (NotExistsAllSingerId.Count > 0)
-                        {
-                            NextSingerId = NotExistsAllSingerId[0];
-                            NotExistsAllSingerId.RemoveAt(0);
-                        }
-                        else
-                        {
-                            NextSingerId = MaxAllSingerId.ToString();
-                            MaxAllSingerId++;
-                        }
-
-                        valuelist = new List<string>();
-                        valuelist.Add(dt.Rows[i].Field<string>("Song_Singer"));
-                        valuelist.Add(dt.Rows[i].Field<Int16>("Song_SingerType").ToString());
-                        spelllist = new List<string>();
-                        spelllist = CommonFunc.GetSongNameSpell(valuelist[0]);
-
-                        allsingercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
-                        allsingercmd.Parameters.AddWithValue("@SingerName", valuelist[0]);
-                        allsingercmd.Parameters.AddWithValue("@SingerType", valuelist[1]);
-                        allsingercmd.Parameters.AddWithValue("@SingerSpell", spelllist[0]);
-                        allsingercmd.Parameters.AddWithValue("@SingerStrokes", spelllist[2]);
-                        allsingercmd.Parameters.AddWithValue("@SingerSpellNum", spelllist[1]);
-                        allsingercmd.Parameters.AddWithValue("@SingerPenStyle", spelllist[3]);
-
-                        try
-                        {
-                            allsingercmd.ExecuteNonQuery();
-                        }
-                        catch
-                        {
-                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】加入歌手至 ktv_AllSinger 時發生錯誤: " + valuelist[0];
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        }
-                        allsingercmd.Parameters.Clear();
-                    }
-
                     if (NotExistsSingerId.Count > 0)
                     {
                         NextSingerId = NotExistsSingerId[0];

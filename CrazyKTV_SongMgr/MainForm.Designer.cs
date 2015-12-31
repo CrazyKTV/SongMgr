@@ -492,6 +492,7 @@
             this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
+            this.Debug_CreateCashboxTable_Button = new System.Windows.Forms.Button();
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
@@ -6428,6 +6429,7 @@
             // 
             // Debug_TabPage
             // 
+            this.Debug_TabPage.Controls.Add(this.Debug_CreateCashboxTable_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_Tooltip_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateTestFile_Button);
             this.Debug_TabPage.Location = new System.Drawing.Point(4, 34);
@@ -6436,6 +6438,18 @@
             this.Debug_TabPage.TabIndex = 10;
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Debug_CreateCashboxTable_Button
+            // 
+            this.Debug_CreateCashboxTable_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CreateCashboxTable_Button.Location = new System.Drawing.Point(415, 326);
+            this.Debug_CreateCashboxTable_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CreateCashboxTable_Button.Name = "Debug_CreateCashboxTable_Button";
+            this.Debug_CreateCashboxTable_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CreateCashboxTable_Button.TabIndex = 9;
+            this.Debug_CreateCashboxTable_Button.Text = "建立錢櫃資料";
+            this.Debug_CreateCashboxTable_Button.UseVisualStyleBackColor = true;
+            this.Debug_CreateCashboxTable_Button.Click += new System.EventHandler(this.Debug_CreateCashboxTable_Button_Click);
             // 
             // Debug_Tooltip_GroupBox
             // 
@@ -6464,7 +6478,7 @@
             // Debug_CreateTestFile_Button
             // 
             this.Debug_CreateTestFile_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_CreateTestFile_Button.Location = new System.Drawing.Point(415, 326);
+            this.Debug_CreateTestFile_Button.Location = new System.Drawing.Point(770, 96);
             this.Debug_CreateTestFile_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_CreateTestFile_Button.Name = "Debug_CreateTestFile_Button";
             this.Debug_CreateTestFile_Button.Size = new System.Drawing.Size(169, 32);
@@ -7067,6 +7081,7 @@
         private System.Windows.Forms.CheckBox SingerMgr_EditMode_CheckBox;
         private System.Windows.Forms.Panel SingerMgr_EditSingerImg_Panel;
         private System.Windows.Forms.CheckBox SingerMgr_EditSyncSongSinger_CheckBox;
+        private System.Windows.Forms.Button Debug_CreateCashboxTable_Button;
     }
 }
 

@@ -233,7 +233,7 @@ namespace CrazyKTV_SongMgr
                             list.Add(str);
                         }
 
-                        OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+                        OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
                         OleDbCommand cmd = new OleDbCommand();
                         string sqlColumnStr = "Singer_Spell = @SingerSpell, Singer_Strokes = @SingerStrokes, Singer_SpellNum = @SingerSpellNum, Singer_PenStyle = @SingerPenStyle";
                         string SongUpdateSqlStr = "update ktv_AllSinger set " + sqlColumnStr + " where Singer_Id = @SingerId";
@@ -2735,7 +2735,7 @@ namespace CrazyKTV_SongMgr
             OleDbCommand Versioncmd = new OleDbCommand();
             OleDbCommand allsingercmd = new OleDbCommand();
 
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
             string TruncateSqlStr = "delete * from ktv_AllSinger";
             allsingercmd = new OleDbCommand(TruncateSqlStr, conn);
             allsingercmd.ExecuteNonQuery();
@@ -2839,7 +2839,7 @@ namespace CrazyKTV_SongMgr
 
             Global.AllSingerDT = new DataTable();
             string SongAllSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_AllSinger";
-            Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+            Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongAllSingerQuerySqlStr, "");
 
             foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
             {

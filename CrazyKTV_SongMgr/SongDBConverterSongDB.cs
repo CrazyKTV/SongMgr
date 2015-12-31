@@ -29,8 +29,8 @@ namespace CrazyKTV_SongMgr
                     break;
             }
 
-            string SongAllSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_AllSinger";
-            Global.AllSingerDT = CommonFunc.GetOleDbDataTable(SongDestDBFile, SongAllSingerQuerySqlStr, "");
+            string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
+            Global.SingerDT = CommonFunc.GetOleDbDataTable(SongDestDBFile, SongSingerQuerySqlStr, "");
 
             if (Global.PhoneticsWordList.Count == 0)
             {

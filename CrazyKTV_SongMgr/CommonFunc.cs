@@ -446,7 +446,7 @@ namespace CrazyKTV_SongMgr
 
         private void Common_GetSongStatisticsTask()
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
+            if (Global.CrazyktvDatabaseStatus)
             {
                 Global.SongStatisticsDT = new DataTable();
                 string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Path, Song_FileName from ktv_Song";
@@ -1535,24 +1535,22 @@ namespace CrazyKTV_SongMgr
 
             if (File.Exists(Database))
             {
-                OleDbConnection conn = new OleDbConnection();
-                conn = CommonFunc.OleDbOpenConn(Database, Password);
-                DataTable dt = conn.GetSchema("Tables");
-
-                if (dt.Rows.Count > 0)
+                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Database, Password))
                 {
-                    Global.CrazyktvDBTableList = new List<string>();
-                    foreach (DataRow row in dt.AsEnumerable())
+                    using (DataTable dt = conn.GetSchema("Tables"))
                     {
-                        if (row["TABLE_TYPE"].ToString() == "TABLE")
+                        if (dt.Rows.Count > 0)
                         {
-                            list.Add(row["TABLE_NAME"].ToString());
+                            foreach (DataRow row in dt.AsEnumerable())
+                            {
+                                if (row["TABLE_TYPE"].ToString() == "TABLE")
+                                {
+                                    list.Add(row["TABLE_NAME"].ToString());
+                                }
+                            }
                         }
                     }
                 }
-                conn.Close();
-                dt.Dispose();
-                dt = null;
             }
             return list;
         }
@@ -1703,7 +1701,7 @@ namespace CrazyKTV_SongMgr
 
         public static void GetRemainingSongId(int DigitCode)
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
+            if (Global.CrazyktvDatabaseStatus)
             {
                 List<string> StartIdlist = new List<string>();
                 StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
@@ -2293,7 +2291,7 @@ namespace CrazyKTV_SongMgr
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            if (File.Exists(Global.CrazyktvDatabaseFile) & Global.CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
+            if (Global.CrazyktvDatabaseStatus)
             {
                 DataTable dt = new DataTable();
                 string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";

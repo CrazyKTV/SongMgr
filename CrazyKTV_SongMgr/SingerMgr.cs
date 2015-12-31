@@ -187,11 +187,12 @@ namespace CrazyKTV_SongMgr
                 SingerQuerySqlStr = "select " + sqlColumnStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where Singer_Type = '" + SingerType + "' order by Singer_Name";
             }
 
-            if (File.Exists(Global.CrazyktvDatabaseFile))
+            if (Global.CrazyktvDatabaseStatus)
             {
                 try
                 {
-                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, ""))
+                    string DatabaseFile = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile;
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SingerQuerySqlStr, ""))
                     {
                         if (dt.Rows.Count == 0)
                         {
@@ -363,6 +364,10 @@ namespace CrazyKTV_SongMgr
             
             OleDbConnection conn = new OleDbConnection();
             conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+
+            OleDbConnection singerconn = new OleDbConnection();
+            singerconn = CommonFunc.OleDbOpenConn((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, "");
+
             string sqlColumnStr = "Singer_Id = @SingerId, Singer_Name = @SingerName, Singer_Type = @SingerType, Singer_Spell = @SingerSpell, Singer_Strokes = @SingerStrokes, Singer_SpellNum = @SingerSpellNum, Singer_PenStyle = @SingerPenStyle";
             string AllSingerUpdateSqlStr = "update ktv_AllSinger set " + sqlColumnStr + " where Singer_Id = @OldSingerId";
             string SingerUpdateSqlStr = "update ktv_Singer set " + sqlColumnStr + " where Singer_Id = @OldSingerId";
@@ -379,8 +384,8 @@ namespace CrazyKTV_SongMgr
 
             OleDbCommand[] SingerUpdateCmds = 
             {
-                new OleDbCommand(SingerUpdateSqlStr, conn),
-                new OleDbCommand(AllSingerUpdateSqlStr, conn),
+                new OleDbCommand(SingerUpdateSqlStr, singerconn),
+                new OleDbCommand(AllSingerUpdateSqlStr, singerconn),
                 new OleDbCommand(SongSingerUpdateSqlStr, conn)
             };
 
@@ -573,7 +578,7 @@ namespace CrazyKTV_SongMgr
 
                                         this.BeginInvoke((Action)delegate()
                                         {
-                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
                                         });
                                     }
                                     catch
@@ -585,7 +590,7 @@ namespace CrazyKTV_SongMgr
 
                                         this.BeginInvoke((Action)delegate()
                                         {
-                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
                                         });
                                     }
                                     SingerUpdateCmds[2].Parameters.Clear();
@@ -682,7 +687,7 @@ namespace CrazyKTV_SongMgr
 
                                         this.BeginInvoke((Action)delegate ()
                                         {
-                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
                                         });
                                     }
                                     catch
@@ -694,7 +699,7 @@ namespace CrazyKTV_SongMgr
 
                                         this.BeginInvoke((Action)delegate()
                                         {
-                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
                                         });
                                     }
                                     SingerUpdateCmds[2].Parameters.Clear();
@@ -723,14 +728,14 @@ namespace CrazyKTV_SongMgr
                     {
                         this.BeginInvoke((Action)delegate()
                         {
-                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
                         });
                     }
                     else
                     {
                         this.BeginInvoke((Action)delegate()
                         {
-                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位...";
                         });
                     }
                 }
@@ -739,6 +744,7 @@ namespace CrazyKTV_SongMgr
             }
             UpdateValueList.Clear();
             conn.Close();
+            singerconn.Close();
 
             this.BeginInvoke((Action)delegate()
             {
@@ -753,7 +759,9 @@ namespace CrazyKTV_SongMgr
         private void SingerMgr_SingerRemoveTask(object SingerIdlist)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            OleDbConnection conn = new OleDbConnection();
+            conn = CommonFunc.OleDbOpenConn((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, "");
+            
             OleDbCommand cmd = new OleDbCommand();
             string SingerRemoveSqlStr = "delete from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " where Singer_Id = @SingerId";
             cmd = new OleDbCommand(SingerRemoveSqlStr, conn);
@@ -827,9 +835,9 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                int MaxAllSingerId = CommonFunc.GetMaxSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", Global.CrazyktvDatabaseFile) + 1;
+                int MaxAllSingerId = CommonFunc.GetMaxSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile) + 1;
                 List<string> NotExistsAllSingerId = new List<string>();
-                NotExistsAllSingerId = CommonFunc.GetNotExistsSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", Global.CrazyktvDatabaseFile);
+                NotExistsAllSingerId = CommonFunc.GetNotExistsSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile);
 
                 string SingerId = "";
                 SingerId = (NotExistsAllSingerId.Count > 0) ? NotExistsAllSingerId[0] : MaxAllSingerId.ToString();
@@ -837,7 +845,7 @@ namespace CrazyKTV_SongMgr
                 List<string> spelllist = new List<string>();
                 spelllist = CommonFunc.GetSongNameSpell(SingerName);
 
-                OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+                OleDbConnection conn = CommonFunc.OleDbOpenConn((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, "");
                 OleDbCommand singercmd = new OleDbCommand();
 
                 string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
@@ -884,7 +892,7 @@ namespace CrazyKTV_SongMgr
 
             string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
             SingerQuerySqlStr = "select " + sqlColumnStr + " from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " order by Singer_Type, Singer_Name";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, "");
+            dt = CommonFunc.GetOleDbDataTable((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, SingerQuerySqlStr, "");
 
             if (dt.Rows.Count > 0)
             {
@@ -951,7 +959,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = new OleDbConnection();
             OleDbCommand singercmd = new OleDbCommand();
 
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            conn = CommonFunc.OleDbOpenConn((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, "");
             string TruncateSqlStr = "delete * from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger");
             singercmd = new OleDbCommand(TruncateSqlStr, conn);
             singercmd.ExecuteNonQuery();
@@ -1502,7 +1510,7 @@ namespace CrazyKTV_SongMgr
             AllSingerTypeList = new List<string>();
 
             string SongAllSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_AllSinger";
-            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, ""))
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongAllSingerQuerySqlStr, ""))
             {
                 foreach (DataRow row in dt.AsEnumerable())
                 {

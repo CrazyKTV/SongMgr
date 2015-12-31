@@ -54,7 +54,7 @@ namespace CrazyKTV_SongMgr
 
             Global.AllSingerDT = new DataTable();
             string SongAllSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_AllSinger";
-            Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongAllSingerQuerySqlStr, "");
+            Global.AllSingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongAllSingerQuerySqlStr, "");
 
             foreach (DataRow row in Global.AllSingerDT.AsEnumerable())
             {
