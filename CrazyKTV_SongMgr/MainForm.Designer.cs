@@ -2449,7 +2449,7 @@
             this.SingerMgr_EditSyncSongSinger_CheckBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_EditSyncSongSinger_CheckBox.Name = "SingerMgr_EditSyncSongSinger_CheckBox";
             this.SingerMgr_EditSyncSongSinger_CheckBox.Size = new System.Drawing.Size(219, 26);
-            this.SingerMgr_EditSyncSongSinger_CheckBox.TabIndex = 11;
+            this.SingerMgr_EditSyncSongSinger_CheckBox.TabIndex = 10;
             this.SingerMgr_EditSyncSongSinger_CheckBox.Text = "同步更新歌曲的歌手資料";
             this.SingerMgr_EditSyncSongSinger_CheckBox.UseVisualStyleBackColor = true;
             this.SingerMgr_EditSyncSongSinger_CheckBox.CheckedChanged += new System.EventHandler(this.SingerMgr_EditSyncSongSinger_CheckBox_CheckedChanged);
@@ -2487,7 +2487,7 @@
             this.SingerMgr_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 8, 6, 12);
             this.SingerMgr_EditApplyChanges_Button.Name = "SingerMgr_EditApplyChanges_Button";
             this.SingerMgr_EditApplyChanges_Button.Size = new System.Drawing.Size(88, 32);
-            this.SingerMgr_EditApplyChanges_Button.TabIndex = 10;
+            this.SingerMgr_EditApplyChanges_Button.TabIndex = 11;
             this.SingerMgr_EditApplyChanges_Button.Text = "套用變更";
             this.SingerMgr_EditApplyChanges_Button.UseVisualStyleBackColor = true;
             this.SingerMgr_EditApplyChanges_Button.Click += new System.EventHandler(this.SingerMgr_EditApplyChanges_Button_Click);

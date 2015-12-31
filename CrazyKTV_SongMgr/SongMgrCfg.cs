@@ -87,7 +87,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DupSongMode_ComboBox.Enabled = true;
                     SongAdd_DataGridView.Visible = true;
                     SongAdd_DragDrop_Label.Visible = true;
-                    SongMonitor_SwitchSongMonitorWatcher();
 
                     if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) < 0)
                     {
@@ -112,7 +111,12 @@ namespace CrazyKTV_SongMgr
                         SongMaintenance_TabControl.TabPages.Insert(SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_CustomLang_TabPage) + 1, SongMaintenance_MultiSongPath_TabPage);
                         SongMaintenance_MultiSongPath_TabPage.Show();
                     }
-                    if (Global.SongMgrInitializeStatus) Common_RefreshSongMgr();
+
+                    if (Global.SongMgrInitializeStatus)
+                    {
+                        SongMonitor_SwitchSongMonitorWatcher();
+                        Common_RefreshSongMgr();
+                    }
                     break;
                 case "3":
                 case "4":
@@ -158,17 +162,20 @@ namespace CrazyKTV_SongMgr
                         SongAdd_DataGridView.Visible = false;
                         SongAdd_DragDrop_Label.Visible = false;
                         SongMgrCfg_MonitorFolders_SetUI();
-                        SongMonitor_SwitchSongMonitorWatcher();
                     }
                     else
                     {
                         SongAdd_DupSongMode_ComboBox.Enabled = true;
                         SongAdd_DataGridView.Visible = true;
                         SongAdd_DragDrop_Label.Visible = true;
-                        SongMonitor_SwitchSongMonitorWatcher();
                     }
                     if (SongMgrCfg_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMgrCfg_Tooltip_Label.Text = "";
-                    if (Global.SongMgrInitializeStatus) Common_RefreshSongMgr();
+
+                    if (Global.SongMgrInitializeStatus)
+                    {
+                        SongMonitor_SwitchSongMonitorWatcher();
+                        Common_RefreshSongMgr();
+                    }
                     break;
             }
         }
@@ -777,7 +784,7 @@ namespace CrazyKTV_SongMgr
         private void SongMgrCfg_MonitorFolders_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.SongMgrEnableMonitorFolders = SongMgrCfg_MonitorFolders_CheckBox.Checked.ToString();
-            SongMonitor_SwitchSongMonitorWatcher();
+            if (Global.SongMgrInitializeStatus) SongMonitor_SwitchSongMonitorWatcher();
         }
 
 

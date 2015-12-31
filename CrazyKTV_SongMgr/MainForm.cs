@@ -324,7 +324,15 @@ namespace CrazyKTV_SongMgr
             SingerMgr_DefaultSingerDataTable_ComboBox.DataSource = SingerMgr.GetDefaultSingerDataTableList();
             SingerMgr_DefaultSingerDataTable_ComboBox.DisplayMember = "Display";
             SingerMgr_DefaultSingerDataTable_ComboBox.ValueMember = "Value";
-            SingerMgr_DefaultSingerDataTable_ComboBox.SelectedValue = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 2;
+            if (Global.DebugMode)
+            {
+                SingerMgr_DefaultSingerDataTable_ComboBox.SelectedValue = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 2;
+            }
+            else
+            {
+                Global.SingerMgrDefaultSingerDataTable = "ktv_Singer";
+                SingerMgr_DefaultSingerDataTable_ComboBox.SelectedValue = 1;
+            }
 
             if (list[32] != "") Global.DBVerEnableDBVerUpdate = list[32];
             SongMaintenance_EnableDBVerUpdate_CheckBox.Checked = bool.Parse(Global.DBVerEnableDBVerUpdate);

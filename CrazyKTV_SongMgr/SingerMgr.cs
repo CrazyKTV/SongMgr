@@ -55,13 +55,19 @@ namespace CrazyKTV_SongMgr
             {
                 case "1":
                     Global.SingerMgrDefaultSingerDataTable = "ktv_Singer";
+                    SingerMgr_DataGridView.DataSource = null;
+                    SingerMgr_EditMode_CheckBox.Checked = false;
+                    SingerMgr_EditMode_CheckBox.Enabled = false;
+                    Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
                     break;
                 case "2":
                     Global.SingerMgrDefaultSingerDataTable = "ktv_AllSinger";
+                    SingerMgr_DataGridView.DataSource = null;
+                    SingerMgr_EditMode_CheckBox.Checked = false;
+                    SingerMgr_EditMode_CheckBox.Enabled = false;
+                    Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
                     break;
             }
-            SingerMgr_DataGridView.DataSource = null;
-            Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
         }
 
         private void SingerMgr_Query_Button_Click(object sender, EventArgs e)
@@ -1551,7 +1557,16 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetDefaultSingerDataTableList()
         {
-            List<string> SingerDTlist = new List<string>() { "歌庫歌手", "預設歌手" };
+            List<string> SingerDTlist;
+            if (Global.DebugMode)
+            {
+                SingerDTlist = new List<string>() { "歌庫歌手", "預設歌手" };
+            }
+            else
+            {
+                SingerDTlist = new List<string>() { "歌庫歌手" };
+            }
+            
             DataTable list = new DataTable();
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
