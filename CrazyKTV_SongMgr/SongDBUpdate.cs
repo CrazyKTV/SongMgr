@@ -490,7 +490,7 @@ namespace CrazyKTV_SongMgr
             else
             {
                 conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-                SongDBVerUpdatecmdSqlStr = "update ktv_Version set SongDB = @SongDB where Id=@Id";
+                SongDBVerUpdatecmdSqlStr = "update ktv_Version set SongDB = @SongDB where Id = @Id";
                 SongDBVerUpdatecmd = new OleDbCommand(SongDBVerUpdatecmdSqlStr, conn);
                 SongDBVerUpdatecmd.Parameters.AddWithValue("@SongDB", Global.CrazyktvSongDBVer);
                 SongDBVerUpdatecmd.Parameters.AddWithValue("@Id", "1");

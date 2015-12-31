@@ -174,7 +174,7 @@ namespace CrazyKTV_SongMgr
                         OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
                         OleDbCommand cmd = new OleDbCommand();
                         string sqlColumnStr = "Singer_Spell = @SingerSpell, Singer_Strokes = @SingerStrokes, Singer_SpellNum = @SingerSpellNum, Singer_PenStyle = @SingerPenStyle";
-                        string SongUpdateSqlStr = "update ktv_Singer set " + sqlColumnStr + " where Singer_Id=@SingerId";
+                        string SongUpdateSqlStr = "update ktv_Singer set " + sqlColumnStr + " where Singer_Id = @SingerId";
                         cmd = new OleDbCommand(SongUpdateSqlStr, conn);
                         List<string> valuelist = new List<string>();
 
@@ -236,7 +236,7 @@ namespace CrazyKTV_SongMgr
                         OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
                         OleDbCommand cmd = new OleDbCommand();
                         string sqlColumnStr = "Singer_Spell = @SingerSpell, Singer_Strokes = @SingerStrokes, Singer_SpellNum = @SingerSpellNum, Singer_PenStyle = @SingerPenStyle";
-                        string SongUpdateSqlStr = "update ktv_AllSinger set " + sqlColumnStr + " where Singer_Id=@SingerId";
+                        string SongUpdateSqlStr = "update ktv_AllSinger set " + sqlColumnStr + " where Singer_Id = @SingerId";
                         cmd = new OleDbCommand(SongUpdateSqlStr, conn);
                         List<string> valuelist = new List<string>();
 
@@ -302,7 +302,7 @@ namespace CrazyKTV_SongMgr
                         OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
                         OleDbCommand cmd = new OleDbCommand();
                         string sqlColumnStr = "Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle";
-                        string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+                        string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
                         cmd = new OleDbCommand(SongUpdateSqlStr, conn);
                         List<string> valuelist = new List<string>();
 
@@ -411,7 +411,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_Track = @SongTrack";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -501,7 +501,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_Volume = @SongVolume";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -703,7 +703,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_Id = @SongId";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@OldSongId and Song_SongName = @SongSongName and Song_Lang = @SongLang";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId and Song_SongName = @SongSongName and Song_Lang = @SongLang";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -850,7 +850,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_Id = @SongId";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@OldSongId and Song_SongName = @SongSongName and Song_Lang = @SongLang";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId and Song_SongName = @SongSongName and Song_Lang = @SongLang";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -981,7 +981,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_Path = @SongPath";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -1115,7 +1115,7 @@ namespace CrazyKTV_SongMgr
             sr.Close();
 
             string sqlColumnStr = "Song_PlayCount = @SongPlayCount";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
 
             foreach (string AddStr in Addlist)
@@ -1197,7 +1197,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_PlayCount = @SongPlayCount";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -1292,7 +1292,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_WordCount = @SongWordCount";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -1674,7 +1674,7 @@ namespace CrazyKTV_SongMgr
                 {
                     case "ktv_Version":
                         string VersionSqlStr = "PhoneticsDB = @PhoneticsDB";
-                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id=@Id";
+                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id = @Id";
                         Versioncmd = new OleDbCommand(VersionUpdateSqlStr, conn);
                         Versioncmd.Parameters.AddWithValue("@PhoneticsDB", list[1]);
                         Versioncmd.Parameters.AddWithValue("@Id", "1");
@@ -2030,7 +2030,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Song_Id = @SongId, Song_SingerType = @SongSingerType, Song_Track = @SongTrack, Song_FileName = @SongFileName, Song_Path = @SongPath";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id=@SongId";
+            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
 
             List<string> valuelist = new List<string>();
@@ -2223,7 +2223,7 @@ namespace CrazyKTV_SongMgr
                             if (UserId != "")
                             {
                                 conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-                                string UserRemoveSqlStr = "delete from ktv_User where User_Id=@UserId and User_Name=@UserName";
+                                string UserRemoveSqlStr = "delete from ktv_User where User_Id = @UserId and User_Name = @UserName";
                                 cmd = new OleDbCommand(UserRemoveSqlStr, conn);
 
                                 cmd.Parameters.AddWithValue("@UserId", UserId);
@@ -2248,7 +2248,7 @@ namespace CrazyKTV_SongMgr
                                     }
 
 
-                                    string FavoriteRemoveSqlStr = "delete from ktv_Favorite where User_Id=@UserId and Song_Id=@SongId";
+                                    string FavoriteRemoveSqlStr = "delete from ktv_Favorite where User_Id = @UserId and Song_Id = @SongId";
                                     cmd = new OleDbCommand(FavoriteRemoveSqlStr, conn);
 
                                     foreach (string SongId in list)
@@ -2567,7 +2567,7 @@ namespace CrazyKTV_SongMgr
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Langauage_Name = @LangauageName, Langauage_KeyWord = @LangauageKeyWord";
-            string SongUpdateSqlStr = "update ktv_Langauage set " + sqlColumnStr + " where Langauage_Id=@LangauageId";
+            string SongUpdateSqlStr = "update ktv_Langauage set " + sqlColumnStr + " where Langauage_Id = @LangauageId";
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
 
             foreach (string str in Global.CrazyktvSongLangList)
@@ -2759,7 +2759,7 @@ namespace CrazyKTV_SongMgr
                 {
                     case "ktv_Version":
                         string VersionSqlStr = "SingerDB = @SingerDB";
-                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id=@Id";
+                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id = @Id";
                         Versioncmd = new OleDbCommand(VersionUpdateSqlStr, conn);
 
                         Versioncmd.Parameters.AddWithValue("@SingerDB", list[1]);

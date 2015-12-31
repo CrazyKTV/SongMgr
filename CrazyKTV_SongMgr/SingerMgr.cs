@@ -351,20 +351,31 @@ namespace CrazyKTV_SongMgr
                 string SingerSpellNum = SingerMgr_DataGridView.Rows[i].Cells["Singer_SpellNum"].Value.ToString();
                 string SingerPenStyle = SingerMgr_DataGridView.Rows[i].Cells["Singer_PenStyle"].Value.ToString();
 
-                string UpdateValue = SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle;
+                string UpdateValue = SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle + "|" + OldSingerId + "|" + OldSingerName;
                 UpdateValueList.Add(UpdateValue);
             }
             
             OleDbConnection conn = new OleDbConnection();
             conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             string sqlColumnStr = "Singer_Id = @SingerId, Singer_Name = @SingerName, Singer_Type = @SingerType, Singer_Spell = @SingerSpell, Singer_Strokes = @SingerStrokes, Singer_SpellNum = @SingerSpellNum, Singer_PenStyle = @SingerPenStyle";
-            string AllSingerUpdateSqlStr = "update ktv_AllSinger set " + sqlColumnStr + " where Singer_Id=@OldSingerId";
-            string SingerUpdateSqlStr = "update ktv_Singer set " + sqlColumnStr + " where Singer_Id=@OldSingerId";
+            string AllSingerUpdateSqlStr = "update ktv_AllSinger set " + sqlColumnStr + " where Singer_Id = @OldSingerId";
+            string SingerUpdateSqlStr = "update ktv_Singer set " + sqlColumnStr + " where Singer_Id = @OldSingerId";
+
+            string SongSingerUpdateSqlStr = "";
+            if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
+            {
+                SongSingerUpdateSqlStr = "update ktv_Song set Song_Singer = @SongSinger, Song_SingerType = @SongSingerType, Song_FileName = @SongFileName, Song_Path = @SongPath where Song_Id = @SongId";
+            }
+            else
+            {
+                SongSingerUpdateSqlStr = "update ktv_Song set Song_Singer = @SongSinger, Song_SingerType = @SongSingerType where Song_Id = @SongId";
+            }
 
             OleDbCommand[] SingerUpdateCmds = 
             {
                 new OleDbCommand(SingerUpdateSqlStr, conn),
-                new OleDbCommand(AllSingerUpdateSqlStr, conn)
+                new OleDbCommand(AllSingerUpdateSqlStr, conn),
+                new OleDbCommand(SongSingerUpdateSqlStr, conn)
             };
 
             List<string> valuelist = new List<string>();
@@ -380,28 +391,347 @@ namespace CrazyKTV_SongMgr
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@SingerStrokes", valuelist[4]);
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@SingerSpellNum", valuelist[5]);
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@SingerPenStyle", valuelist[6]);
-                SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@OldSingerId", valuelist[0]);
+                SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.AddWithValue("@OldSingerId", valuelist[7]);
 
                 try
                 {
                     SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].ExecuteNonQuery();
                     lock (LockThis) { Global.TotalList[0]++; }
+
+                    if (Global.SingerMgrSyncSongSinger == "True")
+                    {
+                        if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
+                        {
+                            string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
+                            string SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Singer = '" + valuelist[8] + "' or InStr(1,LCase(Song_Singer),LCase('&" + valuelist[8] + "'),0) <>0 or InStr(1,LCase(Song_Singer),LCase('" + valuelist[8] + "&'),0) <>0";
+                            List<string> SyncValuelist = new List<string>();
+
+                            using (DataTable SyncDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+                            {
+                                if (SyncDT.Rows.Count > 0)
+                                {
+                                    foreach (DataRow row in SyncDT.AsEnumerable())
+                                    {
+                                        string SongId = row["Song_Id"].ToString();
+                                        string SongLang = row["Song_Lang"].ToString();
+                                        string OldSongSinger = row["Song_Singer"].ToString();
+                                        string OldSongSingerType = row["Song_SingerType"].ToString();
+                                        string SongSongName = row["Song_SongName"].ToString();
+                                        string SongSongType = row["Song_SongType"].ToString();
+                                        int SongTrack = Convert.ToInt32(row["Song_Track"].ToString());
+                                        string OldSongFileName = row["Song_FileName"].ToString();
+                                        string OldSongPath = row["Song_Path"].ToString();
+                                        string SongSrcPath = Path.Combine(OldSongPath, OldSongFileName);
+
+                                        string SingerName = valuelist[1];
+                                        string SongSinger = "";
+                                        int SongSingerType = Convert.ToInt32(valuelist[2]);
+
+                                        if (OldSongSinger == valuelist[8])
+                                        {
+                                            if (OldSongSingerType != "3")
+                                            {
+                                                SongSinger = SingerName;
+                                            }
+                                            else
+                                            {
+                                                SongSinger = SingerName;
+                                                MatchCollection matches = Regex.Matches(SongSongName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                                                if (matches.Count > 0)
+                                                {
+                                                    foreach (Match match in matches)
+                                                    {
+                                                        if (match.Value.ContainsAny("合唱", "對唱"))
+                                                        {
+                                                            SongSingerType = 3;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (OldSongSingerType == "3")
+                                            {
+                                                Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                                if (r.IsMatch(OldSongSinger))
+                                                {
+                                                    string[] singers = Regex.Split(OldSongSinger, "&", RegexOptions.None);
+                                                    foreach (string singer in singers)
+                                                    {
+                                                        if (singer == valuelist[8])
+                                                        {
+                                                            SongSinger = Regex.Replace(OldSongSinger, singer, SingerName);
+                                                            SongSingerType = 3;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, OldSongFileName, OldSongPath);
+                                        string SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
+                                        string SongFileName = Path.GetFileName(SongDestPath);
+
+                                        bool MoveError = false;
+                                        if (File.Exists(SongSrcPath))
+                                        {
+                                            if (!Directory.Exists(SongPath)) Directory.CreateDirectory(SongPath);
+
+                                            if (File.Exists(SongDestPath))
+                                            {
+                                                if (SongSrcPath.ToLower() == SongDestPath.ToLower())
+                                                {
+                                                    try
+                                                    {
+                                                        FileAttributes attributes = File.GetAttributes(SongSrcPath);
+                                                        if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                                                        {
+                                                            attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                                            File.SetAttributes(SongSrcPath, attributes);
+                                                        }
+
+                                                        File.Move(SongSrcPath, SongPath + "Temp_" + SongFileName);
+                                                        File.Move(SongPath + "Temp_" + SongFileName, SongDestPath);
+                                                    }
+                                                    catch
+                                                    {
+                                                        MoveError = true;
+                                                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
+                                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    MoveError = true;
+                                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】異動檔案時發生錯誤: " + SongSrcPath + " (歌庫裡已存在該首歌曲的檔案)";
+                                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                try
+                                                {
+                                                    File.Move(SongSrcPath, SongDestPath);
+                                                }
+                                                catch
+                                                {
+                                                    MoveError = true;
+                                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】異動檔案時發生錯誤: " + SongSrcPath + " (檔案唯讀或正在使用)";
+                                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MoveError = true;
+                                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】異動檔案時發生錯誤: " + SongSrcPath + " (檔案不存在)";
+                                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                        }
+
+                                        if (!MoveError)
+                                        {
+                                            string SyncValue = SongSinger + "|" + SongSingerType + "|" + SongFileName + "|" + SongPath + "|" + SongId;
+                                            SyncValuelist.Add(SyncValue);
+                                        }
+                                        else
+                                        {
+                                            lock (LockThis) { Global.TotalList[3]++; }
+                                        }
+                                    } 
+                                }
+                            }
+
+                            if (SyncValuelist.Count > 0)
+                            {
+                                List<string> synclist = new List<string>();
+
+                                foreach (string syncstr in SyncValuelist)
+                                {
+                                    synclist = new List<string>(syncstr.Split('|'));
+
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongSinger", synclist[0]);
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongSingerType", synclist[1]);
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongFileName", synclist[2]);
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongPath", synclist[3]);
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongId", synclist[4]);
+
+                                    try
+                                    {
+                                        SingerUpdateCmds[2].ExecuteNonQuery();
+                                        lock (LockThis) { Global.TotalList[2]++; }
+
+                                        this.BeginInvoke((Action)delegate()
+                                        {
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                        });
+                                    }
+                                    catch
+                                    {
+                                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】同步歌曲的歌手資料時發生錯誤: " + syncstr;
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                        lock (LockThis) { Global.TotalList[3]++; }
+
+                                        this.BeginInvoke((Action)delegate()
+                                        {
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                        });
+                                    }
+                                    SingerUpdateCmds[2].Parameters.Clear();
+                                    synclist.Clear();
+                                }
+                            }
+                            SyncValuelist.Clear();
+                        }
+                        else // 不搬移模式
+                        {
+                            string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
+                            string SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Singer = '" + valuelist[8] + "' or InStr(1,LCase(Song_Singer),LCase('&" + valuelist[8] + "'),0) <>0 or InStr(1,LCase(Song_Singer),LCase('" + valuelist[8] + "&'),0) <>0";
+                            List<string> SyncValuelist = new List<string>();
+
+                            using (DataTable SyncDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+                            {
+                                if (SyncDT.Rows.Count > 0)
+                                {
+                                    foreach (DataRow row in SyncDT.AsEnumerable())
+                                    {
+                                        string SongId = row["Song_Id"].ToString();
+                                        string OldSongSinger = row["Song_Singer"].ToString();
+                                        string OldSongSingerType = row["Song_SingerType"].ToString();
+                                        string SongSongName = row["Song_SongName"].ToString();
+                                        string SingerName = valuelist[1];
+                                        string SongSingerType = valuelist[2];
+                                        string SongSinger = "";
+
+                                        if (OldSongSinger == valuelist[8])
+                                        {
+                                            if (OldSongSingerType != "3")
+                                            {
+                                                SongSinger = SingerName;
+                                            }
+                                            else
+                                            {
+                                                SongSinger = SingerName;
+                                                MatchCollection matches = Regex.Matches(SongSongName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                                                if (matches.Count > 0)
+                                                {
+                                                    foreach (Match match in matches)
+                                                    {
+                                                        if (match.Value.ContainsAny("合唱", "對唱"))
+                                                        {
+                                                            SongSingerType = "3";
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            string SyncValue = SongSinger + "|" + SongSingerType + "|" + SongId;
+                                            SyncValuelist.Add(SyncValue);
+                                        }
+                                        else
+                                        {
+                                            if (OldSongSingerType == "3")
+                                            {
+                                                Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                                if (r.IsMatch(OldSongSinger))
+                                                {
+                                                    string[] singers = Regex.Split(OldSongSinger, "&", RegexOptions.None);
+                                                    foreach (string singer in singers)
+                                                    {
+                                                        if (singer == valuelist[8])
+                                                        {
+                                                            SongSinger = Regex.Replace(OldSongSinger, singer, SingerName);
+                                                            SongSingerType = "3";
+                                                            string SyncValue = SongSinger + "|" + SongSingerType + "|" + SongId;
+                                                            SyncValuelist.Add(SyncValue);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (SyncValuelist.Count > 0)
+                            {
+                                List<string> synclist = new List<string>();
+
+                                foreach (string syncstr in SyncValuelist)
+                                {
+                                    synclist = new List<string>(syncstr.Split('|'));
+
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongSinger", synclist[0]);
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongSingerType", synclist[1]);
+                                    SingerUpdateCmds[2].Parameters.AddWithValue("@SongId", synclist[2]);
+
+                                    try
+                                    {
+                                        SingerUpdateCmds[2].ExecuteNonQuery();
+                                        lock (LockThis) { Global.TotalList[2]++; }
+
+                                        this.BeginInvoke((Action)delegate ()
+                                        {
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                        });
+                                    }
+                                    catch
+                                    {
+                                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】同步歌曲的歌手資料時發生錯誤: " + str;
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                        lock (LockThis) { Global.TotalList[3]++; }
+
+                                        this.BeginInvoke((Action)delegate()
+                                        {
+                                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                                        });
+                                    }
+                                    SingerUpdateCmds[2].Parameters.Clear();
+                                    synclist.Clear();
+                                }
+                            }
+                            SyncValuelist.Clear();
+                        }
+                    }
+                    else
+                    {
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
+                        });
+                    }
                 }
                 catch
                 {
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】更新" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "預設") + "歌手資料表時發生錯誤: " + str;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-
                     lock (LockThis) { Global.TotalList[1]++; }
 
-                    this.BeginInvoke((Action)delegate()
+                    if (Global.SingerMgrSyncSongSinger == "True")
                     {
-                        SingerMgr_Tooltip_Label.Text = "修改歌手資料有誤,請查看操作記錄裡的內容!";
-                    });
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                        });
+                    }
+                    else
+                    {
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
+                        });
+                    }
                 }
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.Clear();
+                valuelist.Clear();
             }
+            UpdateValueList.Clear();
             conn.Close();
 
             this.BeginInvoke((Action)delegate()
@@ -419,7 +749,7 @@ namespace CrazyKTV_SongMgr
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
-            string SingerRemoveSqlStr = "delete from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " where Singer_Id=@SingerId";
+            string SingerRemoveSqlStr = "delete from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " where Singer_Id = @SingerId";
             cmd = new OleDbCommand(SingerRemoveSqlStr, conn);
 
             foreach (string str in (List<string>)SingerIdlist)
@@ -879,6 +1209,12 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SingerMgr_EditSyncSongSinger_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SingerMgrSyncSongSinger = SingerMgr_EditSyncSongSinger_CheckBox.Checked.ToString();
+            if (Global.SongMgrInitializeStatus) CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger", Global.SingerMgrSyncSongSinger);
+        }
+
         private void SingerMgr_EditApplyChanges_Button_Click(object sender, EventArgs e)
         {
             if (SingerMgr_EditMode_CheckBox.Checked == true)
@@ -893,10 +1229,10 @@ namespace CrazyKTV_SongMgr
 
                 Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                 SingerMgr.CreateSongDataTable();
-                Common_SwitchSetUI(false);
 
                 if (SelectedRowsCount > 1)
                 {
+                    Common_SwitchSetUI(false);
                     foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
                     {
                         DataRow dtrow = dt.NewRow();
@@ -932,13 +1268,13 @@ namespace CrazyKTV_SongMgr
                             if (SingerId != ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? SingerMgr.SingerIdList[SingerExists] : SingerMgr.AllSingerIdList[SingerExists]))
                             {
                                 SingerMgr_Tooltip_Label.Text = "歌手【" + SingerName + "】已在" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "預設") + "歌手資料庫裡!";
-                                Common_SwitchSetUI(true);
                                 dt.Dispose();
                                 dt = null;
                                 return;
                             }
                         }
 
+                        Common_SwitchSetUI(false);
                         string SingerTypeStr = ((DataRowView)SingerMgr_EditSingerType_ComboBox.SelectedItem)[0].ToString();
                         string SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
                         row.Cells["Singer_Type"].Value = SingerType;
@@ -964,7 +1300,15 @@ namespace CrazyKTV_SongMgr
                     {
                         Common_SwitchSetUI(true);
                         Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
-                        SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
+
+                        if (Global.SingerMgrSyncSongSinger == "True")
+                        {
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                        }
+                        else
+                        {
+                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
+                        }
                     });
                     SingerMgr.DisposeSongDataTable();
                     dt.Dispose();
@@ -1106,38 +1450,7 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
-
-
             }
-
-            /*
-            if (drop.Count<string>() > 1);
-            foreach (string item in drop)
-            {
-                if (item.Contains(Global.SongMgrDestFolder) && Global.SongMgrSongAddMode != "3")
-                {
-                    SongAdd_Tooltip_Label.Text = "要加入的歌曲檔案或資料夾不可與歌庫資料夾同目錄!";
-                    break;
-                }
-                else if (Directory.Exists(item))
-                {
-                    DirectoryInfo dir = new DirectoryInfo(item);
-                    FileInfo[] Files = dir.GetFiles("*", SearchOption.AllDirectories).Where(p => SupportFormat.Contains(p.Extension.ToLower())).ToArray();
-                    foreach (FileInfo f in Files)
-                    {
-                        list.Add(f.FullName);
-                    }
-                }
-                else if (File.Exists(item))
-                {
-                    FileInfo f = new FileInfo(item);
-                    foreach (string s in SupportFormat)
-                    {
-                        if (f.Extension.ToLower() == s) list.Add(item);
-                    }
-                }
-            }
-            */
         }
 
         #endregion

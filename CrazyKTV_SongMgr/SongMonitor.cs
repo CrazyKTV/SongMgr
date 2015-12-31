@@ -96,7 +96,7 @@ namespace CrazyKTV_SongMgr
 
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
-            string SongRemoveSqlStr = "delete from ktv_Song where Song_Id=@SongId";
+            string SongRemoveSqlStr = "delete from ktv_Song where Song_Id = @SongId";
             cmd = new OleDbCommand(SongRemoveSqlStr, conn);
 
             if (RemoveSongIdList.Count > 0)
@@ -479,7 +479,7 @@ namespace CrazyKTV_SongMgr
             {
                 OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
                 OleDbCommand cmd = new OleDbCommand();
-                string SongRemoveSqlStr = "delete from ktv_Song where Song_Id=@SongId";
+                string SongRemoveSqlStr = "delete from ktv_Song where Song_Id = @SongId";
                 cmd = new OleDbCommand(SongRemoveSqlStr, conn);
 
                 foreach (string str in Global.SongMonitorDeletedList)

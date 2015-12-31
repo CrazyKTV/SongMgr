@@ -68,8 +68,9 @@ namespace CrazyKTV_SongMgr
         public static bool SongMgrInitializeStatus = false;
         public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
         public static List<string> SongMgrMonitorFoldersList = new List<string>() { "", "", "", "", "" };
-        
+
         public static string SingerMgrDefaultSingerDataTable = "ktv_Singer";
+        public static string SingerMgrSyncSongSinger = "True";
 
         public static string SongAddDefaultSongLang = "11";
         public static string SongAddDefaultSingerType = "8";

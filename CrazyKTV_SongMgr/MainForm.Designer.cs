@@ -177,6 +177,8 @@
             this.SongAdd_EditSongId_Label = new System.Windows.Forms.Label();
             this.SingerMgr_TabPage = new System.Windows.Forms.TabPage();
             this.SingerMgr_Edit_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SingerMgr_EditSyncSongSinger_CheckBox = new System.Windows.Forms.CheckBox();
+            this.SingerMgr_EditSingerImg_Panel = new System.Windows.Forms.Panel();
             this.SingerMgr_EditSingerImg_Label = new System.Windows.Forms.Label();
             this.SingerMgr_EditApplyChanges_Button = new System.Windows.Forms.Button();
             this.SingerMgr_EditSingerSpell_TextBox = new System.Windows.Forms.TextBox();
@@ -187,14 +189,14 @@
             this.SingerMgr_EditSingerType_Label = new System.Windows.Forms.Label();
             this.SingerMgr_EditSingerId_TextBox = new System.Windows.Forms.TextBox();
             this.SingerMgr_EditSingerId_Label = new System.Windows.Forms.Label();
-            this.SingerMgr_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
-            this.SingerMgr_QueryType_Label = new System.Windows.Forms.Label();
-            this.SingerMgr_QueryType_ComboBox = new System.Windows.Forms.ComboBox();
             this.SingerMgr_Manager_GroupBox = new System.Windows.Forms.GroupBox();
             this.SingerMgr_NonSingerDataLog_Button = new System.Windows.Forms.Button();
             this.SingerMgr_RebuildSingerData_Button = new System.Windows.Forms.Button();
             this.SingerMgr_SingerExport_Button = new System.Windows.Forms.Button();
             this.SingerMgr_SingerImport_Button = new System.Windows.Forms.Button();
+            this.SingerMgr_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SingerMgr_QueryType_Label = new System.Windows.Forms.Label();
+            this.SingerMgr_QueryType_ComboBox = new System.Windows.Forms.ComboBox();
             this.SingerMgr_Statistics_GroupBox = new System.Windows.Forms.GroupBox();
             this.SingerMgr_Statistics10Value_Label = new System.Windows.Forms.Label();
             this.SingerMgr_Statistics10_Label = new System.Windows.Forms.Label();
@@ -493,7 +495,6 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
-            this.SingerMgr_EditSingerImg_Panel = new System.Windows.Forms.Panel();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -511,8 +512,8 @@
             this.SongAdd_Edit_GroupBox.SuspendLayout();
             this.SingerMgr_TabPage.SuspendLayout();
             this.SingerMgr_Edit_GroupBox.SuspendLayout();
-            this.SingerMgr_OtherQuery_GroupBox.SuspendLayout();
             this.SingerMgr_Manager_GroupBox.SuspendLayout();
+            this.SingerMgr_OtherQuery_GroupBox.SuspendLayout();
             this.SingerMgr_Statistics_GroupBox.SuspendLayout();
             this.SingerMgr_Tooltip_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SingerMgr_DataGridView)).BeginInit();
@@ -2417,6 +2418,7 @@
             // 
             // SingerMgr_Edit_GroupBox
             // 
+            this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSyncSongSinger_CheckBox);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerImg_Panel);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerImg_Label);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditApplyChanges_Button);
@@ -2438,6 +2440,32 @@
             this.SingerMgr_Edit_GroupBox.TabStop = false;
             this.SingerMgr_Edit_GroupBox.Text = "歌手編輯";
             this.SingerMgr_Edit_GroupBox.Visible = false;
+            // 
+            // SingerMgr_EditSyncSongSinger_CheckBox
+            // 
+            this.SingerMgr_EditSyncSongSinger_CheckBox.AutoSize = true;
+            this.SingerMgr_EditSyncSongSinger_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_EditSyncSongSinger_CheckBox.Location = new System.Drawing.Point(236, 172);
+            this.SingerMgr_EditSyncSongSinger_CheckBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.SingerMgr_EditSyncSongSinger_CheckBox.Name = "SingerMgr_EditSyncSongSinger_CheckBox";
+            this.SingerMgr_EditSyncSongSinger_CheckBox.Size = new System.Drawing.Size(219, 26);
+            this.SingerMgr_EditSyncSongSinger_CheckBox.TabIndex = 11;
+            this.SingerMgr_EditSyncSongSinger_CheckBox.Text = "同步更新歌曲的歌手資料";
+            this.SingerMgr_EditSyncSongSinger_CheckBox.UseVisualStyleBackColor = true;
+            this.SingerMgr_EditSyncSongSinger_CheckBox.CheckedChanged += new System.EventHandler(this.SingerMgr_EditSyncSongSinger_CheckBox_CheckedChanged);
+            // 
+            // SingerMgr_EditSingerImg_Panel
+            // 
+            this.SingerMgr_EditSingerImg_Panel.AllowDrop = true;
+            this.SingerMgr_EditSingerImg_Panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SingerMgr_EditSingerImg_Panel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SingerMgr_EditSingerImg_Panel.Location = new System.Drawing.Point(110, 170);
+            this.SingerMgr_EditSingerImg_Panel.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SingerMgr_EditSingerImg_Panel.Name = "SingerMgr_EditSingerImg_Panel";
+            this.SingerMgr_EditSingerImg_Panel.Size = new System.Drawing.Size(114, 114);
+            this.SingerMgr_EditSingerImg_Panel.TabIndex = 9;
+            this.SingerMgr_EditSingerImg_Panel.DragDrop += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragDrop);
+            this.SingerMgr_EditSingerImg_Panel.DragEnter += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragEnter);
             // 
             // SingerMgr_EditSingerImg_Label
             // 
@@ -2556,43 +2584,6 @@
             this.SingerMgr_EditSingerId_Label.TabIndex = 0;
             this.SingerMgr_EditSingerId_Label.Text = "歌手編號:";
             // 
-            // SingerMgr_OtherQuery_GroupBox
-            // 
-            this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_Label);
-            this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_ComboBox);
-            this.SingerMgr_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_OtherQuery_GroupBox.Location = new System.Drawing.Point(23, 174);
-            this.SingerMgr_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
-            this.SingerMgr_OtherQuery_GroupBox.Name = "SingerMgr_OtherQuery_GroupBox";
-            this.SingerMgr_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.SingerMgr_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 119);
-            this.SingerMgr_OtherQuery_GroupBox.TabIndex = 1;
-            this.SingerMgr_OtherQuery_GroupBox.TabStop = false;
-            this.SingerMgr_OtherQuery_GroupBox.Text = "其它查詢";
-            // 
-            // SingerMgr_QueryType_Label
-            // 
-            this.SingerMgr_QueryType_Label.AutoSize = true;
-            this.SingerMgr_QueryType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_QueryType_Label.Location = new System.Drawing.Point(16, 40);
-            this.SingerMgr_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 23);
-            this.SingerMgr_QueryType_Label.Name = "SingerMgr_QueryType_Label";
-            this.SingerMgr_QueryType_Label.Size = new System.Drawing.Size(82, 22);
-            this.SingerMgr_QueryType_Label.TabIndex = 0;
-            this.SingerMgr_QueryType_Label.Text = "類別查詢:";
-            // 
-            // SingerMgr_QueryType_ComboBox
-            // 
-            this.SingerMgr_QueryType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SingerMgr_QueryType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_QueryType_ComboBox.FormattingEnabled = true;
-            this.SingerMgr_QueryType_ComboBox.Location = new System.Drawing.Point(110, 36);
-            this.SingerMgr_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 19);
-            this.SingerMgr_QueryType_ComboBox.Name = "SingerMgr_QueryType_ComboBox";
-            this.SingerMgr_QueryType_ComboBox.Size = new System.Drawing.Size(198, 30);
-            this.SingerMgr_QueryType_ComboBox.TabIndex = 1;
-            this.SingerMgr_QueryType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SingerMgr_QueryType_ComboBox_SelectedIndexChanged);
-            // 
             // SingerMgr_Manager_GroupBox
             // 
             this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_NonSingerDataLog_Button);
@@ -2656,6 +2647,43 @@
             this.SingerMgr_SingerImport_Button.Text = "匯入歌手資料";
             this.SingerMgr_SingerImport_Button.UseVisualStyleBackColor = true;
             this.SingerMgr_SingerImport_Button.Click += new System.EventHandler(this.SingerMgr_SingerImport_Button_Click);
+            // 
+            // SingerMgr_OtherQuery_GroupBox
+            // 
+            this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_Label);
+            this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_ComboBox);
+            this.SingerMgr_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_OtherQuery_GroupBox.Location = new System.Drawing.Point(23, 174);
+            this.SingerMgr_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.SingerMgr_OtherQuery_GroupBox.Name = "SingerMgr_OtherQuery_GroupBox";
+            this.SingerMgr_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.SingerMgr_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 119);
+            this.SingerMgr_OtherQuery_GroupBox.TabIndex = 1;
+            this.SingerMgr_OtherQuery_GroupBox.TabStop = false;
+            this.SingerMgr_OtherQuery_GroupBox.Text = "其它查詢";
+            // 
+            // SingerMgr_QueryType_Label
+            // 
+            this.SingerMgr_QueryType_Label.AutoSize = true;
+            this.SingerMgr_QueryType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_QueryType_Label.Location = new System.Drawing.Point(16, 40);
+            this.SingerMgr_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 23);
+            this.SingerMgr_QueryType_Label.Name = "SingerMgr_QueryType_Label";
+            this.SingerMgr_QueryType_Label.Size = new System.Drawing.Size(82, 22);
+            this.SingerMgr_QueryType_Label.TabIndex = 0;
+            this.SingerMgr_QueryType_Label.Text = "類別查詢:";
+            // 
+            // SingerMgr_QueryType_ComboBox
+            // 
+            this.SingerMgr_QueryType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SingerMgr_QueryType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_QueryType_ComboBox.FormattingEnabled = true;
+            this.SingerMgr_QueryType_ComboBox.Location = new System.Drawing.Point(110, 36);
+            this.SingerMgr_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 19);
+            this.SingerMgr_QueryType_ComboBox.Name = "SingerMgr_QueryType_ComboBox";
+            this.SingerMgr_QueryType_ComboBox.Size = new System.Drawing.Size(198, 30);
+            this.SingerMgr_QueryType_ComboBox.TabIndex = 1;
+            this.SingerMgr_QueryType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SingerMgr_QueryType_ComboBox_SelectedIndexChanged);
             // 
             // SingerMgr_Statistics_GroupBox
             // 
@@ -6445,19 +6473,6 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
-            // SingerMgr_EditSingerImg_Panel
-            // 
-            this.SingerMgr_EditSingerImg_Panel.AllowDrop = true;
-            this.SingerMgr_EditSingerImg_Panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SingerMgr_EditSingerImg_Panel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.SingerMgr_EditSingerImg_Panel.Location = new System.Drawing.Point(110, 170);
-            this.SingerMgr_EditSingerImg_Panel.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.SingerMgr_EditSingerImg_Panel.Name = "SingerMgr_EditSingerImg_Panel";
-            this.SingerMgr_EditSingerImg_Panel.Size = new System.Drawing.Size(114, 114);
-            this.SingerMgr_EditSingerImg_Panel.TabIndex = 9;
-            this.SingerMgr_EditSingerImg_Panel.DragDrop += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragDrop);
-            this.SingerMgr_EditSingerImg_Panel.DragEnter += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragEnter);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -6504,9 +6519,9 @@
             this.SingerMgr_TabPage.ResumeLayout(false);
             this.SingerMgr_Edit_GroupBox.ResumeLayout(false);
             this.SingerMgr_Edit_GroupBox.PerformLayout();
+            this.SingerMgr_Manager_GroupBox.ResumeLayout(false);
             this.SingerMgr_OtherQuery_GroupBox.ResumeLayout(false);
             this.SingerMgr_OtherQuery_GroupBox.PerformLayout();
-            this.SingerMgr_Manager_GroupBox.ResumeLayout(false);
             this.SingerMgr_Statistics_GroupBox.ResumeLayout(false);
             this.SingerMgr_Statistics_GroupBox.PerformLayout();
             this.SingerMgr_Tooltip_GroupBox.ResumeLayout(false);
@@ -7051,6 +7066,7 @@
         private System.Windows.Forms.Label SingerMgr_EditSingerImg_Label;
         private System.Windows.Forms.CheckBox SingerMgr_EditMode_CheckBox;
         private System.Windows.Forms.Panel SingerMgr_EditSingerImg_Panel;
+        private System.Windows.Forms.CheckBox SingerMgr_EditSyncSongSinger_CheckBox;
     }
 }
 
