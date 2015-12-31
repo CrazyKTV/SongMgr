@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -1294,20 +1295,32 @@ namespace CrazyKTV_SongMgr
         private void Common_ClearDataGridView()
         {
             Global.SongQueryQueryType = "SongQuery";
-            SongQuery_EditMode_CheckBox.Checked = false;
             SongQuery_DataGridView.DataSource = null;
             if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+            SongQuery_EditMode_CheckBox.Checked = false;
+            SongQuery_EditMode_CheckBox.Enabled = false;
             SongQuery_QueryStatus_Label.Text = "";
 
             SongAdd_DataGridView.DataSource = null;
-            SongAdd_DragDrop_Label.Visible = (Global.SongMgrSongAddMode != "4") ? true : false;
-            SongAdd_DataGridView.AllowDrop = true;
             SongAdd_Add_Button.Text = "加入歌庫";
-            SongAdd_Add_Button.Enabled = false;
             SongAdd_Save_Button.Text = "儲存設定";
+            SongAdd_DataGridView.Size = new Size(952, 296);
+            SongAdd_DataGridView.Location = new Point(23, 365);
+            SongAdd_DataGridView.DataSource = null;
+            SongAdd_DataGridView.AllowDrop = true;
+            SongAdd_DataGridView.Enabled = true;
+            SongAdd_Edit_GroupBox.Visible = false;
+            SongAdd_SongAddCfg_GroupBox.Visible = true;
+            SongAdd_SpecialStr_GroupBox.Visible = true;
+            SongAdd_DefaultSongInfo_GroupBox.Visible = true;
+            SongAdd_Add_Button.Enabled = false;
             SongAdd_Tooltip_Label.Text = "";
+            SongAdd_DragDrop_Label.Visible = (Global.SongMgrSongAddMode != "4") ? true : false;
+
 
             SingerMgr_DataGridView.DataSource = null;
+            SingerMgr_EditMode_CheckBox.Checked = false;
+            SingerMgr_EditMode_CheckBox.Enabled = false;
             SingerMgr_Tooltip_Label.Text = "";
             GC.Collect();
         }

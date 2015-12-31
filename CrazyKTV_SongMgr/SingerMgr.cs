@@ -1547,6 +1547,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SingerMgr 取得下拉選單列表 ---
+
         public static DataTable GetDefaultSingerDataTableList()
         {
             List<string> SingerDTlist = new List<string>() { "歌庫歌手", "預設歌手" };
@@ -1588,6 +1590,10 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
+        #endregion
+
+        #region --- SingerMgr 歌手列表欄位設定 ---
+
         public static List<string> GetDataGridViewColumnSet(string ColumnName)
         {
             List<string> list = new List<string>();
@@ -1620,6 +1626,7 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
+        #endregion
 
 
 
