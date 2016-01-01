@@ -2724,7 +2724,6 @@ namespace CrazyKTV_SongMgr
 
         #region --- 歌庫版本 ---
 
-
         private void SongMaintenance_SingerImportTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
