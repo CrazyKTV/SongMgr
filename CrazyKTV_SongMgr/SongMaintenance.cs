@@ -1773,9 +1773,12 @@ namespace CrazyKTV_SongMgr
             wordlist.Clear();
             if (list.Count > 0)
             {
-                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【記錄無拼音字】以下為無拼音資料的文字: " + string.Join(",", list);
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                foreach (string str in list)
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【記錄無拼音字】未在拼音資料表的文字: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
             }
         }
 

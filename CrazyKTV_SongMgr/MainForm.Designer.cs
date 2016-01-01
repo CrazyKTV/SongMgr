@@ -492,6 +492,8 @@
             this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
+            this.Debug_Cashbox_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Debug_CashboxNonSingerDataLog_Button = new System.Windows.Forms.Button();
             this.Debug_CreateCashboxTable_Button = new System.Windows.Forms.Button();
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
@@ -569,6 +571,7 @@
             this.SongLog_TabPage.SuspendLayout();
             this.SongLog_GroupBox.SuspendLayout();
             this.Debug_TabPage.SuspendLayout();
+            this.Debug_Cashbox_GroupBox.SuspendLayout();
             this.Debug_Tooltip_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -6429,7 +6432,7 @@
             // 
             // Debug_TabPage
             // 
-            this.Debug_TabPage.Controls.Add(this.Debug_CreateCashboxTable_Button);
+            this.Debug_TabPage.Controls.Add(this.Debug_Cashbox_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_Tooltip_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateTestFile_Button);
             this.Debug_TabPage.Location = new System.Drawing.Point(4, 34);
@@ -6439,10 +6442,33 @@
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
             // 
+            // Debug_Cashbox_GroupBox
+            // 
+            this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxNonSingerDataLog_Button);
+            this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CreateCashboxTable_Button);
+            this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(384, 271);
+            this.Debug_Cashbox_GroupBox.Name = "Debug_Cashbox_GroupBox";
+            this.Debug_Cashbox_GroupBox.Size = new System.Drawing.Size(436, 271);
+            this.Debug_Cashbox_GroupBox.TabIndex = 10;
+            this.Debug_Cashbox_GroupBox.TabStop = false;
+            this.Debug_Cashbox_GroupBox.Text = "錢櫃相關";
+            // 
+            // Debug_CashboxNonSingerDataLog_Button
+            // 
+            this.Debug_CashboxNonSingerDataLog_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CashboxNonSingerDataLog_Button.Location = new System.Drawing.Point(9, 89);
+            this.Debug_CashboxNonSingerDataLog_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CashboxNonSingerDataLog_Button.Name = "Debug_CashboxNonSingerDataLog_Button";
+            this.Debug_CashboxNonSingerDataLog_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CashboxNonSingerDataLog_Button.TabIndex = 10;
+            this.Debug_CashboxNonSingerDataLog_Button.Text = "記錄無資料歌手";
+            this.Debug_CashboxNonSingerDataLog_Button.UseVisualStyleBackColor = true;
+            this.Debug_CashboxNonSingerDataLog_Button.Click += new System.EventHandler(this.Debug_CashboxNonSingerDataLog_Button_Click);
+            // 
             // Debug_CreateCashboxTable_Button
             // 
             this.Debug_CreateCashboxTable_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_CreateCashboxTable_Button.Location = new System.Drawing.Point(415, 326);
+            this.Debug_CreateCashboxTable_Button.Location = new System.Drawing.Point(9, 39);
             this.Debug_CreateCashboxTable_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_CreateCashboxTable_Button.Name = "Debug_CreateCashboxTable_Button";
             this.Debug_CreateCashboxTable_Button.Size = new System.Drawing.Size(169, 32);
@@ -6617,6 +6643,7 @@
             this.SongLog_GroupBox.ResumeLayout(false);
             this.SongLog_GroupBox.PerformLayout();
             this.Debug_TabPage.ResumeLayout(false);
+            this.Debug_Cashbox_GroupBox.ResumeLayout(false);
             this.Debug_Tooltip_GroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -7082,6 +7109,8 @@
         private System.Windows.Forms.Panel SingerMgr_EditSingerImg_Panel;
         private System.Windows.Forms.CheckBox SingerMgr_EditSyncSongSinger_CheckBox;
         private System.Windows.Forms.Button Debug_CreateCashboxTable_Button;
+        private System.Windows.Forms.GroupBox Debug_Cashbox_GroupBox;
+        private System.Windows.Forms.Button Debug_CashboxNonSingerDataLog_Button;
     }
 }
 

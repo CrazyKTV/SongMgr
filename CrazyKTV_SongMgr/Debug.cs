@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -235,10 +236,149 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Debug 記錄錢櫃無資料歌手 ---
 
+        private void Debug_CashboxNonSingerDataLog_Button_Click(object sender, EventArgs e)
+        {
+            Global.TimerStartTime = DateTime.Now;
+            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+            SongMaintenance.CreateSongDataTable();
+            Common_SwitchSetUI(false);
 
+            Debug_Tooltip_Label.Text = "正在解析錢櫃歌庫歌手資料,請稍待...";
 
+            var tasks = new List<Task>();
+            tasks.Add(Task.Factory.StartNew(() => Debug_CashboxNonSingerDataLogTask()));
 
+            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+            {
+                Global.TimerEndTime = DateTime.Now;
+                this.BeginInvoke((Action)delegate ()
+                {
+                    Debug_Tooltip_Label.Text = "總共從錢櫃歌庫解析出 " + Global.TotalList[0] + " 筆歌手資料,查詢到 " + Global.TotalList[1] + " 筆歌手無資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                    Common_SwitchSetUI(true);
+                });
+                SongMaintenance.DisposeSongDataTable();
+            });
+        }
+
+        private void Debug_CashboxNonSingerDataLogTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            List<string> Singerlist = new List<string>();
+            List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+
+            DataTable dt = new DataTable();
+            string SingerQuerySqlStr = "SELECT First(Song_Singer) AS Song_Singer, Count(Song_Singer) AS Song_SingerCount FROM ktv_Cashbox GROUP BY Song_Singer HAVING (Count(Song_Singer)>0) ORDER BY First(Song_Singer)";
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SingerQuerySqlStr, "");
+
+            if (dt.Rows.Count > 0)
+            {
+                string SingerName = "";
+
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    SingerName = row["Song_Singer"].ToString();
+
+                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                    if (r.IsMatch(SingerName))
+                    {
+                        // 處理合唱歌曲中的特殊歌手名稱
+                        foreach (string SpecialSingerName in SpecialStrlist)
+                        {
+                            Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                            if (SpecialStrRegex.IsMatch(SingerName))
+                            {
+                                if (Singerlist.IndexOf(SpecialSingerName) < 0)
+                                {
+                                    // 查找資料庫預設歌手資料表
+                                    if (Global.AllSingerLowCaseList.IndexOf(SpecialSingerName.ToLower()) < 0)
+                                    {
+                                        if (list.IndexOf(SpecialSingerName) < 0)
+                                        {
+                                            list.Add(SpecialSingerName);
+                                            lock (LockThis) { Global.TotalList[1]++; }
+                                        }
+                                    }
+                                    Singerlist.Add(SpecialSingerName);
+                                    SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                }
+                            }
+                        }
+
+                        if (r.IsMatch(SingerName))
+                        {
+                            string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
+                            foreach (string str in singers)
+                            {
+                                string ChorusSingerName = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                if (Singerlist.IndexOf(ChorusSingerName) < 0)
+                                {
+                                    // 查找資料庫預設歌手資料表
+                                    if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                                    {
+                                        if (list.IndexOf(ChorusSingerName) < 0)
+                                        {
+                                            list.Add(ChorusSingerName);
+                                            lock (LockThis) { Global.TotalList[1]++; }
+                                        }
+                                    }
+                                    Singerlist.Add(ChorusSingerName);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Singerlist.IndexOf(SingerName) < 0)
+                            {
+                                if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                {
+                                    list.Add(SingerName);
+                                    lock (LockThis) { Global.TotalList[1]++; }
+                                }
+                                Singerlist.Add(SingerName);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Singerlist.IndexOf(SingerName) < 0)
+                        {
+                            if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                            {
+                                if (list.IndexOf(SingerName) < 0)
+                                {
+                                    list.Add(SingerName);
+                                    lock (LockThis) { Global.TotalList[1]++; }
+                                }
+                            }
+                            Singerlist.Add(SingerName);
+                        }
+                    }
+                    lock (LockThis) { Global.TotalList[0]++; }
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Debug_Tooltip_Label.Text = "已解析到 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                    });
+                }
+            }
+            Singerlist.Clear();
+            dt.Dispose();
+            dt = null;
+
+            if (list.Count > 0)
+            {
+                foreach (string str in list)
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【記錄無資料歌手】未在預設歌手資料表的歌手: " + str;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+            }
+        }
+
+        #endregion
 
 
 
