@@ -109,6 +109,8 @@ namespace CrazyKTV_SongMgr
         public static List<string> CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
         public static List<string> CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
 
+        public static DateTime CashboxUpdDate = DateTime.Parse("2016/01/01");
+
         public static bool SongAnalysisCompleted = false;
         public static List<string> SongAnalysisSingerList = new List<string>();
         public static List<string> SongAnalysisSingerLowCaseList = new List<string>();

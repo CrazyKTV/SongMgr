@@ -2732,12 +2732,14 @@ namespace CrazyKTV_SongMgr
             List<string> Addlist = new List<string>();
 
             OleDbConnection conn = new OleDbConnection();
+            OleDbConnection singerconn = new OleDbConnection();
             OleDbCommand Versioncmd = new OleDbCommand();
             OleDbCommand allsingercmd = new OleDbCommand();
 
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            singerconn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
             string TruncateSqlStr = "delete * from ktv_AllSinger";
-            allsingercmd = new OleDbCommand(TruncateSqlStr, conn);
+            allsingercmd = new OleDbCommand(TruncateSqlStr, singerconn);
             allsingercmd.ExecuteNonQuery();
 
             StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Update\UpdateSingerDB.txt", Encoding.UTF8);
@@ -2750,7 +2752,7 @@ namespace CrazyKTV_SongMgr
             string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
             string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
             string AllSingerAddSqlStr = "insert into ktv_AllSinger ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-            allsingercmd = new OleDbCommand(AllSingerAddSqlStr, conn);
+            allsingercmd = new OleDbCommand(AllSingerAddSqlStr, singerconn);
 
             foreach (string AddStr in Addlist)
             {
@@ -2787,6 +2789,7 @@ namespace CrazyKTV_SongMgr
                 });
             }
             conn.Close();
+            singerconn.Close();
         }
 
 
