@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -445,6 +442,11 @@ namespace CrazyKTV_SongMgr
             Cashbox_QueryFilter_ComboBox.ValueMember = "Value";
             Cashbox_QueryFilter_ComboBox.SelectedValue = 1;
 
+            Cashbox_OtherQuery_ComboBox.DataSource = Cashbox.GetOtherQueryList();
+            Cashbox_OtherQuery_ComboBox.DisplayMember = "Display";
+            Cashbox_OtherQuery_ComboBox.ValueMember = "Value";
+            Cashbox_OtherQuery_ComboBox.SelectedValue = 1;
+
             Cashbox_FuzzyQuery_CheckBox.Checked = Global.CashboxFuzzyQuery;
             Cashbox_SynonymousQuery_CheckBox.Checked = Global.CashboxSynonymousQuery;
 
@@ -591,6 +593,8 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
 
 
 

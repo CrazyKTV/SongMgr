@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -337,11 +339,205 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Cashbox 其它查詢 ---
+
+        private void Cashbox_OtherQuery_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Global.CrazyktvDatabaseStatus && Cashbox_OtherQuery_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                Cashbox_Query_Button.Enabled = false;
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                Cashbox_DataGridView.DataSource = null;
+                Cashbox_QueryStatus_Label.Text = "";
+                GC.Collect();
+
+                string SongQueryType = "None";
+                string SongQueryValue = "";
+                string SongQueryStatusText = "";
+
+                switch (Cashbox_OtherQuery_ComboBox.SelectedValue.ToString())
+                {
+                    case "1":
+                        SongQueryType = "NonSong";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = Cashbox_OtherQuery_ComboBox.Text;
+                        Cashbox_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
+
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Common_SwitchSetUI(true);
+                                Cashbox_Query_Button.Enabled = true;
+                            });
+                            Cashbox.DisposeSongDataTable();
+                        });
+                        break;
+                }
+            }
+        }
+
+        private void Cashbox_OtherQueryTask(string SongQueryType, string SongQueryValue, string SongQueryStatusText)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (SongQueryValue == "")
+                {
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        Cashbox_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
+                    });
+                }
+                else
+                {
+                    DataTable dt = new DataTable();
+                    try
+                    {
+                        switch (SongQueryType)
+                        {
+                            case "NonSong":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    Parallel.ForEach(Global.CashboxSongLangList, (langstr, loopState) =>
+                                    {
+                                        var query = from row in dt.AsEnumerable()
+                                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() > 0)
+                                        {
+                                            foreach (DataRow row in query)
+                                            {
+                                                string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+
+                                                if (Cashbox.SongDataList.IndexOf(SongData) >= 0)
+                                                {
+                                                    lock (LockThis)
+                                                    {
+                                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                    }
+
+                                                    this.BeginInvoke((Action)delegate ()
+                                                    {
+                                                        Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
+                                }
+                                break;
+                        }
+
+                        if (dt.Rows.Count == 0)
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Cashbox_EditMode_CheckBox.Enabled = false;
+                                Cashbox_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
+                            });
+                        }
+                        else
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Cashbox_EditMode_CheckBox.Enabled = true;
+                                Cashbox_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
+
+                                Cashbox_DataGridView.DataSource = dt;
+
+                                for (int i = 0; i < Cashbox_DataGridView.ColumnCount; i++)
+                                {
+                                    List<string> DataGridViewColumnName = Cashbox.GetDataGridViewColumnSet(Cashbox_DataGridView.Columns[i].Name);
+                                    Cashbox_DataGridView.Columns[i].HeaderText = DataGridViewColumnName[0];
+
+                                    if (DataGridViewColumnName[1].ToString() == "0")
+                                    {
+                                        Cashbox_DataGridView.Columns[i].Visible = false;
+                                    }
+
+                                    if (DataGridViewColumnName[2].ToString() != "none")
+                                    {
+                                        ((DataGridViewTextBoxColumn)Cashbox_DataGridView.Columns[i]).MaxInputLength = int.Parse(DataGridViewColumnName[2]);
+                                    }
+                                    Cashbox_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
+                                }
+                                Cashbox_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
+                                Cashbox_DataGridView.Focus();
+
+                                dt.Dispose();
+                                dt = null;
+                            });
+                        }
+                    }
+                    catch
+                    {
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            Cashbox_EditMode_CheckBox.Enabled = false;
+                            Cashbox_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
+                        });
+                    }
+                }
+            }
+        }
+
+        #endregion
+
     }
 
 
     class Cashbox
     {
+        /// <summary>
+        /// [Song_Lang] [Song_Singer] [Song_SongName]
+        /// </summary>
+        public static List<string> SongDataList;
+
+        #region --- Cashbox 建立資料表 ---
+
+        public static void CreateSongDataTable()
+        {
+            SongDataList = new List<string>();
+
+            string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Song";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
+                }
+            }
+        }
+
+        public static void DisposeSongDataTable()
+        {
+            SongDataList.Clear();
+            GC.Collect();
+        }
+
+        #endregion
 
         #region --- Cashbox 歌曲查詢下拉清單 ---
 
@@ -374,6 +570,24 @@ namespace CrazyKTV_SongMgr
                 list.Rows[0][1] = 1;
 
                 foreach (string str in Global.CashboxSongLangList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
+            }
+        }
+
+        public static DataTable GetOtherQueryList()
+        {
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+                List<string> ItemList = new List<string>() { "錢櫃缺歌" };
+
+                foreach (string str in ItemList)
                 {
                     list.Rows.Add(list.NewRow());
                     list.Rows[list.Rows.Count - 1][0] = str;
@@ -494,6 +708,9 @@ namespace CrazyKTV_SongMgr
                     {
                         SongQuerySqlStr = "select top " + QueryValue + sqlCommonStr + "from ktv_Cashbox order by Song_CreatDate desc, Cashbox_Id desc";
                     }
+                    break;
+                case "NonSong":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox" + SongQueryOrderStr;
                     break;
             }
 

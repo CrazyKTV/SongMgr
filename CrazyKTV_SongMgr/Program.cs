@@ -246,6 +246,7 @@ namespace CrazyKTV_SongMgr
         
         public static List<string> CashboxSongLangList = new List<string>() { "國語", "台語", "粵語", "日語", "英語", "客語", "韓語", "兒歌", "其它" };
         public static DateTime CashboxUpdDate = DateTime.Parse("2016/01/01");
+        public static DataTable CashboxDT = new DataTable();
         public static bool CashboxFuzzyQuery = true;
         public static string CashboxQueryFilter = "全部";
         public static bool CashboxSynonymousQuery = true;

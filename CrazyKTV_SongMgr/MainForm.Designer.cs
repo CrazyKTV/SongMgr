@@ -434,6 +434,11 @@
             this.SongMaintenance_SongSpellCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SingerSpellCorrect_Button = new System.Windows.Forms.Button();
             this.Cashbox_TabPage = new System.Windows.Forms.TabPage();
+            this.Cashbox_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Cashbox_DateQuery_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_DateQuery_Label = new System.Windows.Forms.Label();
+            this.Cashbox_OtherQuery_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_OtherQuery_Label = new System.Windows.Forms.Label();
             this.Cashbox_DataGridView = new System.Windows.Forms.DataGridView();
             this.Cashbox_QueryStatus_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
@@ -575,6 +580,7 @@
             this.SongMaintenance_Tooltip_GroupBox.SuspendLayout();
             this.SongMaintenance_SpellCorrect_GroupBox.SuspendLayout();
             this.Cashbox_TabPage.SuspendLayout();
+            this.Cashbox_OtherQuery_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).BeginInit();
             this.Cashbox_QueryStatus_GroupBox.SuspendLayout();
             this.Cashbox_Query_GroupBox.SuspendLayout();
@@ -5671,6 +5677,7 @@
             // 
             // Cashbox_TabPage
             // 
+            this.Cashbox_TabPage.Controls.Add(this.Cashbox_OtherQuery_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_DataGridView);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_QueryStatus_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_Maintenance_GroupBox);
@@ -5683,6 +5690,66 @@
             this.Cashbox_TabPage.TabIndex = 11;
             this.Cashbox_TabPage.Text = "錢櫃資料";
             this.Cashbox_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Cashbox_OtherQuery_GroupBox
+            // 
+            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_DateQuery_ComboBox);
+            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_DateQuery_Label);
+            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_OtherQuery_ComboBox);
+            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_OtherQuery_Label);
+            this.Cashbox_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_OtherQuery_GroupBox.Location = new System.Drawing.Point(23, 209);
+            this.Cashbox_OtherQuery_GroupBox.Name = "Cashbox_OtherQuery_GroupBox";
+            this.Cashbox_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.Cashbox_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 82);
+            this.Cashbox_OtherQuery_GroupBox.TabIndex = 6;
+            this.Cashbox_OtherQuery_GroupBox.TabStop = false;
+            this.Cashbox_OtherQuery_GroupBox.Text = "其它查詢";
+            // 
+            // Cashbox_DateQuery_ComboBox
+            // 
+            this.Cashbox_DateQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_DateQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DateQuery_ComboBox.FormattingEnabled = true;
+            this.Cashbox_DateQuery_ComboBox.Location = new System.Drawing.Point(307, 35);
+            this.Cashbox_DateQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
+            this.Cashbox_DateQuery_ComboBox.Name = "Cashbox_DateQuery_ComboBox";
+            this.Cashbox_DateQuery_ComboBox.Size = new System.Drawing.Size(145, 30);
+            this.Cashbox_DateQuery_ComboBox.TabIndex = 3;
+            // 
+            // Cashbox_DateQuery_Label
+            // 
+            this.Cashbox_DateQuery_Label.AutoSize = true;
+            this.Cashbox_DateQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DateQuery_Label.Location = new System.Drawing.Point(247, 39);
+            this.Cashbox_DateQuery_Label.Margin = new System.Windows.Forms.Padding(10, 9, 6, 18);
+            this.Cashbox_DateQuery_Label.Name = "Cashbox_DateQuery_Label";
+            this.Cashbox_DateQuery_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_DateQuery_Label.TabIndex = 2;
+            this.Cashbox_DateQuery_Label.Text = "日期:";
+            // 
+            // Cashbox_OtherQuery_ComboBox
+            // 
+            this.Cashbox_OtherQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_OtherQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_OtherQuery_ComboBox.FormattingEnabled = true;
+            this.Cashbox_OtherQuery_ComboBox.Location = new System.Drawing.Point(76, 35);
+            this.Cashbox_OtherQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
+            this.Cashbox_OtherQuery_ComboBox.Name = "Cashbox_OtherQuery_ComboBox";
+            this.Cashbox_OtherQuery_ComboBox.Size = new System.Drawing.Size(155, 30);
+            this.Cashbox_OtherQuery_ComboBox.TabIndex = 1;
+            this.Cashbox_OtherQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_OtherQuery_ComboBox_SelectedIndexChanged);
+            // 
+            // Cashbox_OtherQuery_Label
+            // 
+            this.Cashbox_OtherQuery_Label.AutoSize = true;
+            this.Cashbox_OtherQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_OtherQuery_Label.Location = new System.Drawing.Point(16, 39);
+            this.Cashbox_OtherQuery_Label.Margin = new System.Windows.Forms.Padding(6, 9, 6, 18);
+            this.Cashbox_OtherQuery_Label.Name = "Cashbox_OtherQuery_Label";
+            this.Cashbox_OtherQuery_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_OtherQuery_Label.TabIndex = 0;
+            this.Cashbox_OtherQuery_Label.Text = "類型:";
             // 
             // Cashbox_DataGridView
             // 
@@ -6910,6 +6977,8 @@
             this.SongMaintenance_Tooltip_GroupBox.ResumeLayout(false);
             this.SongMaintenance_SpellCorrect_GroupBox.ResumeLayout(false);
             this.Cashbox_TabPage.ResumeLayout(false);
+            this.Cashbox_OtherQuery_GroupBox.ResumeLayout(false);
+            this.Cashbox_OtherQuery_GroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).EndInit();
             this.Cashbox_QueryStatus_GroupBox.ResumeLayout(false);
             this.Cashbox_QueryStatus_GroupBox.PerformLayout();
@@ -7428,6 +7497,11 @@
         private System.Windows.Forms.TextBox Cashbox_QueryValue_TextBox;
         private System.Windows.Forms.ComboBox Cashbox_QueryValue_ComboBox;
         private System.Windows.Forms.ComboBox SongQuery_QueryValue_ComboBox;
+        private System.Windows.Forms.GroupBox Cashbox_OtherQuery_GroupBox;
+        private System.Windows.Forms.ComboBox Cashbox_DateQuery_ComboBox;
+        private System.Windows.Forms.Label Cashbox_DateQuery_Label;
+        private System.Windows.Forms.ComboBox Cashbox_OtherQuery_ComboBox;
+        private System.Windows.Forms.Label Cashbox_OtherQuery_Label;
     }
 }
 
