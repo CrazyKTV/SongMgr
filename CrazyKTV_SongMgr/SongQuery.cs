@@ -204,7 +204,7 @@ namespace CrazyKTV_SongMgr
             string SongQueryStatusText = "";
             string SongQueryValue = "";
 
-            if (File.Exists(Global.CrazyktvDatabaseFile))
+            if (Global.CrazyktvDatabaseStatus)
             {
                 string SongQueryType = "None";
                 switch (SongQuery_QueryType_ComboBox.SelectedValue.ToString())
@@ -1957,6 +1957,141 @@ namespace CrazyKTV_SongMgr
 
         }
 
+        #region --- SongQuery 歌曲查詢下拉清單 ---
+
+        public static DataTable GetSongQueryTypeList()
+        {
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道" };
+
+            foreach (string str in ItemList)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = str;
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+            return list;
+        }
+
+        public static DataTable GetSongQueryValueList(string ValueType, bool MultiEdit)
+        {
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            List<string> valuelist = new List<string>();
+
+            if (MultiEdit)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = "不變更";
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+
+            switch (ValueType)
+            {
+                case "SongType":
+                    string str = "";
+                    if (Global.SongMgrSongType != "") { str = "無類別," + Global.SongMgrSongType; } else { str = "無類別"; }
+                    valuelist = new List<string>(str.Split(','));
+                    foreach (string value in valuelist)
+                    {
+                        list.Rows.Add(list.NewRow());
+                        list.Rows[list.Rows.Count - 1][0] = value;
+                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                    }
+                    break;
+                case "SingerType":
+                    foreach (string SingerTypeStr in Global.CrazyktvSingerTypeList)
+                    {
+                        if (SingerTypeStr != "未使用")
+                        {
+                            list.Rows.Add(list.NewRow());
+                            list.Rows[list.Rows.Count - 1][0] = SingerTypeStr;
+                            list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                        }
+                    }
+                    break;
+                case "SongTrack":
+                    foreach (string value in Global.CrazyktvSongTrackWordList)
+                    {
+                        list.Rows.Add(list.NewRow());
+                        list.Rows[list.Rows.Count - 1][0] = value;
+                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
+                    }
+                    break;
+            }
+            return list;
+        }
+
+        public static DataTable GetSongQueryFilterList()
+        {
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+            list.Rows.Add(list.NewRow());
+            list.Rows[0][0] = "全部";
+            list.Rows[0][1] = 1;
+
+            foreach (string str in Global.CrazyktvSongLangList)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = str;
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+            return list;
+        }
+
+        public static DataTable GetSongQueryExceptionalList()
+        {
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)" };
+
+            foreach (string str in ItemList)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = str;
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+            return list;
+        }
+
+        #endregion
+
+        #region --- SongQuery 歌曲編輯下拉清單 ---
+
+        public static DataTable GetEditSongLangList(bool MultiEdit)
+        {
+            DataTable list = new DataTable();
+            list.Columns.Add(new DataColumn("Display", typeof(string)));
+            list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+            if (MultiEdit)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = "不變更";
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+
+            foreach (string str in Global.CrazyktvSongLangList)
+            {
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = str;
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+            }
+            return list;
+        }
+
+        #endregion
+
+        #region --- SongQuery 取得 SQL 查詢字串 ---
+
         public static string GetSongQuerySqlStr(string QueryType, string QueryValue)
         {
             string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
@@ -2135,134 +2270,9 @@ namespace CrazyKTV_SongMgr
             return SongQuerySqlStr;
         }
 
-        public static DataTable GetSongQueryTypeList()
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道" };
-
-            foreach (string str in ItemList)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
-            return list;
-        }
-
-        public static DataTable GetSongQueryValueList(string ValueType, bool MultiEdit)
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            List<string> valuelist = new List<string>();
-
-            if (MultiEdit)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = "不變更";
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
-
-            switch (ValueType)
-            {
-                case "SongType":
-                    string str = "";
-                    if (Global.SongMgrSongType != "") { str = "無類別," + Global.SongMgrSongType; } else { str = "無類別"; }
-                    valuelist = new List<string>(str.Split(','));
-                    foreach (string value in valuelist)
-                    {
-                        list.Rows.Add(list.NewRow());
-                        list.Rows[list.Rows.Count - 1][0] = value;
-                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-                    }
-                    break;
-                case "SingerType":
-                    foreach (string SingerTypeStr in Global.CrazyktvSingerTypeList)
-                    {
-                        if (SingerTypeStr != "未使用")
-                        {
-                            list.Rows.Add(list.NewRow());
-                            list.Rows[list.Rows.Count - 1][0] = SingerTypeStr;
-                            list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-                        }
-                    }
-                    break;
-                case "SongTrack":
-                    foreach (string value in Global.CrazyktvSongTrackWordList)
-                    {
-                        list.Rows.Add(list.NewRow());
-                        list.Rows[list.Rows.Count - 1][0] = value;
-                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
-                    }
-                    break;
-            }
-            return list;
-        }
-
-        public static DataTable GetSongQueryFilterList()
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-            list.Rows.Add(list.NewRow());
-            list.Rows[0][0] = "全部";
-            list.Rows[0][1] = 1;
-            
-            foreach (string str in Global.CrazyktvSongLangList)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
-            return list;
-        }
-
-        public static DataTable GetSongQueryExceptionalList()
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)" };
-
-            foreach (string str in ItemList)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
-            return list;
-        }
-
-        #region --- 歌曲編輯下拉清單 ---
-
-        public static DataTable GetEditSongLangList(bool MultiEdit)
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            if (MultiEdit)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = "不變更";
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
-
-            foreach (string str in Global.CrazyktvSongLangList)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
-            return list;
-        }
-
         #endregion
+
+        #region --- SongQuery 歌曲列表欄位設定 ---
 
         public static List<string> GetDataGridViewColumnSet(string ColumnName)
         {
@@ -2340,6 +2350,8 @@ namespace CrazyKTV_SongMgr
             }
             return list;
         }
+
+        #endregion
 
         public static string GetSongTypeStr(int SongType)
         {

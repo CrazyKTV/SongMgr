@@ -138,6 +138,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cashbox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashboxDataGridView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="CommonFunc.cs" />
     <Compile Include="Debug.cs">
       <SubType>Form</SubType>

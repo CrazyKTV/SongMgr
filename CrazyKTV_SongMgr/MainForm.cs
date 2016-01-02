@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,8 +20,9 @@ namespace CrazyKTV_SongMgr
             SongQuery_DataGridView.MakeDoubleBuffered(true);
             SongAdd_DataGridView.MakeDoubleBuffered(true);
             SingerMgr_DataGridView.MakeDoubleBuffered(true);
+            Cashbox_DataGridView.MakeDoubleBuffered(true);
 
-            
+
         }
 
         
@@ -430,6 +434,20 @@ namespace CrazyKTV_SongMgr
             SingerMgr_SingerAddType_ComboBox.SelectedValue = 1;
             SingerMgr_SingerAddName_TextBox.ImeMode = ImeMode.OnHalf;
 
+            // 錢櫃資料 - 載入下拉選單清單及設定
+            Cashbox_QueryType_ComboBox.DataSource = Cashbox.GetQueryTypeList();
+            Cashbox_QueryType_ComboBox.DisplayMember = "Display";
+            Cashbox_QueryType_ComboBox.ValueMember = "Value";
+            Cashbox_QueryType_ComboBox.SelectedValue = 1;
+
+            Cashbox_QueryFilter_ComboBox.DataSource = Cashbox.GetQueryFilterList();
+            Cashbox_QueryFilter_ComboBox.DisplayMember = "Display";
+            Cashbox_QueryFilter_ComboBox.ValueMember = "Value";
+            Cashbox_QueryFilter_ComboBox.SelectedValue = 1;
+
+            Cashbox_FuzzyQuery_CheckBox.Checked = Global.CashboxFuzzyQuery;
+            Cashbox_SynonymousQuery_CheckBox.Checked = Global.CashboxSynonymousQuery;
+
             // 歌庫轉換 - 載入下拉選單清單
             SongDBConverter_SrcDBType_ComboBox.DataSource = SongDBConverter.GetSrcDBTypeList();
             SongDBConverter_SrcDBType_ComboBox.DisplayMember = "Display";
@@ -462,7 +480,8 @@ namespace CrazyKTV_SongMgr
                 SongAdd_Tooltip_Label,
                 SingerMgr_Tooltip_Label,
                 SongMgrCfg_Tooltip_Label,
-                SongMaintenance_Tooltip_Label
+                SongMaintenance_Tooltip_Label,
+                Cashbox_QueryStatus_Label
             };
 
             int i = -1;
@@ -500,6 +519,11 @@ namespace CrazyKTV_SongMgr
                             SongMaintenance_Save_Button.Enabled = false;
                             break;
                     }
+                    break;
+                case "Cashbox_TabPage":
+                    i = 5;
+                    Cashbox_QueryValue_TextBox.Focus();
+                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.OnHalf;
                     break;
             }
 
@@ -567,6 +591,9 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
 
 
 
