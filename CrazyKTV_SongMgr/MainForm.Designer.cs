@@ -5716,6 +5716,7 @@
             this.Cashbox_DateQuery_ComboBox.Name = "Cashbox_DateQuery_ComboBox";
             this.Cashbox_DateQuery_ComboBox.Size = new System.Drawing.Size(145, 30);
             this.Cashbox_DateQuery_ComboBox.TabIndex = 3;
+            this.Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
             // 
             // Cashbox_DateQuery_Label
             // 

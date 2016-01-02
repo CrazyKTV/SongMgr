@@ -447,6 +447,11 @@ namespace CrazyKTV_SongMgr
             Cashbox_OtherQuery_ComboBox.ValueMember = "Value";
             Cashbox_OtherQuery_ComboBox.SelectedValue = 1;
 
+            Cashbox_DateQuery_ComboBox.DataSource = Cashbox.GetDateQueryList();
+            Cashbox_DateQuery_ComboBox.DisplayMember = "Display";
+            Cashbox_DateQuery_ComboBox.ValueMember = "Value";
+            Cashbox_DateQuery_ComboBox.SelectedValue = 1;
+
             Cashbox_FuzzyQuery_CheckBox.Checked = Global.CashboxFuzzyQuery;
             Cashbox_SynonymousQuery_CheckBox.Checked = Global.CashboxSynonymousQuery;
 
@@ -593,6 +598,8 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
 
 
 

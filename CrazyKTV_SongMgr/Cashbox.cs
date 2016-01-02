@@ -382,6 +382,39 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void Cashbox_DateQuery_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Global.CrazyktvDatabaseStatus && Cashbox_DateQuery_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                Cashbox_Query_Button.Enabled = false;
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                Cashbox_DataGridView.DataSource = null;
+                Cashbox_QueryStatus_Label.Text = "";
+                GC.Collect();
+
+                string SongQueryType = "SongDate";
+                string SongQueryValue = DateTime.Parse(Cashbox_DateQuery_ComboBox.Text).ToShortDateString();
+                string SongQueryStatusText = Cashbox_DateQuery_ComboBox.Text;
+
+                Cashbox_QueryStatus_Label.Text = "正在查詢更新日期為『" + SongQueryStatusText + "』的歌曲,請稍待...";
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        Common_SwitchSetUI(true);
+                        Cashbox_Query_Button.Enabled = true;
+                    });
+                    Cashbox.DisposeSongDataTable();
+                });
+            }
+        }
+
         private void Cashbox_OtherQueryTask(string SongQueryType, string SongQueryValue, string SongQueryStatusText)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -448,6 +481,9 @@ namespace CrazyKTV_SongMgr
                                     RemoveRowsIdxlist.Clear();
                                 }
                                 break;
+                            default:
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                break;
                         }
 
                         if (dt.Rows.Count == 0)
@@ -463,8 +499,20 @@ namespace CrazyKTV_SongMgr
                             this.BeginInvoke((Action)delegate ()
                             {
                                 Cashbox_EditMode_CheckBox.Enabled = true;
-                                Cashbox_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
 
+                                switch (SongQueryType)
+                                {
+                                    case "NonSong":
+                                        Cashbox_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆歌庫所沒有的錢櫃歌曲。";
+                                        break;
+                                    case "SongDate":
+                                        Cashbox_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆更新日期為『" + SongQueryStatusText + "』的歌曲。";
+                                        break;
+                                    default:
+                                        Cashbox_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
+                                        break;
+                                }
+                                
                                 Cashbox_DataGridView.DataSource = dt;
 
                                 for (int i = 0; i < Cashbox_DataGridView.ColumnCount; i++)
@@ -555,6 +603,7 @@ namespace CrazyKTV_SongMgr
                     list.Rows[list.Rows.Count - 1][0] = str;
                     list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
                 }
+                ItemList.Clear();
                 return list;
             }
         }
@@ -593,6 +642,43 @@ namespace CrazyKTV_SongMgr
                     list.Rows[list.Rows.Count - 1][0] = str;
                     list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
                 }
+                ItemList.Clear();
+                return list;
+            }
+        }
+
+        public static DataTable GetDateQueryList()
+        {
+
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+                List<string> ItemList = new List<string>();
+
+                string QuerySqlStr = "SELECT First(Song_CreatDate) AS Song_CreatDate, Count(Song_CreatDate) AS Song_CreatDateCount FROM ktv_Cashbox GROUP BY Song_CreatDate HAVING (Count(Song_CreatDate)>0) ORDER BY First(Song_CreatDate)";
+                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, QuerySqlStr, ""))
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            string DateItem = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd");
+                            if (ItemList.IndexOf(DateItem) < 0)
+                            {
+                                ItemList.Add(DateItem);
+                            }
+                        }
+                    }
+                }
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
                 return list;
             }
         }
@@ -711,6 +797,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "NonSong":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox" + SongQueryOrderStr;
+                    break;
+                case "SongDate":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where Song_CreatDate like '%" + QueryValue + "%' order by Song_Lang, Song_Singer";
                     break;
             }
 
