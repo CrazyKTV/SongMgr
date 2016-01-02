@@ -1561,7 +1561,7 @@ namespace CrazyKTV_SongMgr
             List<string> list = new List<string>();
 
             OleDbConnection conn = new OleDbConnection();
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            conn = CommonFunc.OleDbOpenConn(Database, Password);
             DataTable dt = new DataTable();
 
             OleDbCommand cmd = new OleDbCommand("select * from " + TableName, conn);

@@ -121,7 +121,7 @@ namespace CrazyKTV_SongMgr
         {
             OleDbConnection clearconn = new OleDbConnection();
             clearconn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
-            //OleDbCommand clearcmd = new OleDbCommand("create table ktv_Cashbox (Cashbox_Id TEXT(20) NOT NULL PRIMARY KEY, Song_Lang TEXT(60) WITH COMPRESSION, Song_SongName TEXT(80) WITH COMPRESSION, Song_Singer TEXT(60) WITH COMPRESSION)", clearconn);
+            //OleDbCommand clearcmd = new OleDbCommand("create table ktv_Cashbox (Cashbox_Id TEXT(20) NOT NULL PRIMARY KEY, Song_Lang TEXT(60) WITH COMPRESSION, Song_SongName TEXT(80) WITH COMPRESSION, Song_Singer TEXT(60) WITH COMPRESSION, Song_CreatDate DATETIME)", clearconn);
             OleDbCommand clearcmd = new OleDbCommand("delete * from ktv_Cashbox", clearconn);
             clearcmd.ExecuteNonQuery();
             clearconn.Close();
@@ -198,10 +198,12 @@ namespace CrazyKTV_SongMgr
             using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
             {
                 OleDbCommand cmd = new OleDbCommand();
-                string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_SongName, Song_Singer";
-                string sqlValuesStr = "@CashboxId, @SongLang, @SongSongName, @SongSinger";
+                string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_SongName, Song_Singer, Song_CreatDate";
+                string sqlValuesStr = "@CashboxId, @SongLang, @SongSongName, @SongSinger, @SongCreatDate";
                 string AddSqlStr = "insert into ktv_Cashbox ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
                 cmd = new OleDbCommand(AddSqlStr, conn);
+
+                string SongCreatDate = DateTime.Now.ToString();
 
                 foreach (string SongData in SongDataList)
                 {
@@ -211,6 +213,7 @@ namespace CrazyKTV_SongMgr
                     cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
                     cmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
                     cmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                    cmd.Parameters.AddWithValue("@SongCreatDate", SongCreatDate);
 
                     try
                     {
@@ -307,7 +310,8 @@ namespace CrazyKTV_SongMgr
                             }
                         }
 
-                        if (r.IsMatch(SingerName))
+                        MatchCollection matches = Regex.Matches(SingerName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                        if (r.IsMatch(SingerName) && matches.Count == 0)
                         {
                             string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
                             foreach (string str in singers)
