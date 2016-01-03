@@ -408,6 +408,8 @@
             this.SongMaintenance_MultiSongPath_ListBox = new System.Windows.Forms.ListBox();
             this.SongMaintenance_EnableMultiSongPath_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_DBVer_TabPage = new System.Windows.Forms.TabPage();
+            this.SongMaintenance_DBVer4Value_Label = new System.Windows.Forms.Label();
+            this.SongMaintenance_DBVer4_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_DBVerUpdate_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_EnableRebuildSingerData_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_EnableDBVerUpdate_CheckBox = new System.Windows.Forms.CheckBox();
@@ -444,6 +446,8 @@
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
             this.Cashbox_Maintenance_GroupBox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.Cashbox_Query_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_Clear_Button = new System.Windows.Forms.Button();
@@ -520,6 +524,7 @@
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
             this.Debug_Cashbox_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Debug_CashboxExport_Button = new System.Windows.Forms.Button();
             this.Debug_CashboxNonSingerDataLog_Button = new System.Windows.Forms.Button();
             this.Debug_CreateCashboxTable_Button = new System.Windows.Forms.Button();
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
@@ -583,6 +588,7 @@
             this.Cashbox_OtherQuery_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).BeginInit();
             this.Cashbox_QueryStatus_GroupBox.SuspendLayout();
+            this.Cashbox_Maintenance_GroupBox.SuspendLayout();
             this.Cashbox_Query_GroupBox.SuspendLayout();
             this.MainCfg_TabPage.SuspendLayout();
             this.MainCfg_Tooltip_GroupBox.SuspendLayout();
@@ -5352,6 +5358,8 @@
             // 
             // SongMaintenance_DBVer_TabPage
             // 
+            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer4Value_Label);
+            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer4_Label);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVerUpdate_GroupBox);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVerTooltip_GroupBox);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer3Value_Label);
@@ -5367,6 +5375,29 @@
             this.SongMaintenance_DBVer_TabPage.TabIndex = 3;
             this.SongMaintenance_DBVer_TabPage.Text = "歌庫版本";
             this.SongMaintenance_DBVer_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // SongMaintenance_DBVer4Value_Label
+            // 
+            this.SongMaintenance_DBVer4Value_Label.AutoSize = true;
+            this.SongMaintenance_DBVer4Value_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_DBVer4Value_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.SongMaintenance_DBVer4Value_Label.Location = new System.Drawing.Point(127, 178);
+            this.SongMaintenance_DBVer4Value_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.SongMaintenance_DBVer4Value_Label.Name = "SongMaintenance_DBVer4Value_Label";
+            this.SongMaintenance_DBVer4Value_Label.Size = new System.Drawing.Size(41, 22);
+            this.SongMaintenance_DBVer4Value_Label.TabIndex = 34;
+            this.SongMaintenance_DBVer4Value_Label.Text = "0 版";
+            // 
+            // SongMaintenance_DBVer4_Label
+            // 
+            this.SongMaintenance_DBVer4_Label.AutoSize = true;
+            this.SongMaintenance_DBVer4_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_DBVer4_Label.Location = new System.Drawing.Point(16, 178);
+            this.SongMaintenance_DBVer4_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.SongMaintenance_DBVer4_Label.Name = "SongMaintenance_DBVer4_Label";
+            this.SongMaintenance_DBVer4_Label.Size = new System.Drawing.Size(99, 22);
+            this.SongMaintenance_DBVer4_Label.TabIndex = 33;
+            this.SongMaintenance_DBVer4_Label.Text = "錢櫃資料庫:";
             // 
             // SongMaintenance_DBVerUpdate_GroupBox
             // 
@@ -5825,6 +5856,8 @@
             // 
             // Cashbox_Maintenance_GroupBox
             // 
+            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.label1);
+            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.label2);
             this.Cashbox_Maintenance_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Cashbox_Maintenance_GroupBox.Location = new System.Drawing.Point(507, 23);
             this.Cashbox_Maintenance_GroupBox.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
@@ -5834,6 +5867,29 @@
             this.Cashbox_Maintenance_GroupBox.TabIndex = 3;
             this.Cashbox_Maintenance_GroupBox.TabStop = false;
             this.Cashbox_Maintenance_GroupBox.Text = "資料維護";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label1.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.label1.Location = new System.Drawing.Point(144, 44);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 22);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "0 版";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label2.Location = new System.Drawing.Point(16, 44);
+            this.label2.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(116, 22);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "上次更新日期:";
             // 
             // Cashbox_Query_GroupBox
             // 
@@ -6804,6 +6860,7 @@
             // 
             // Debug_Cashbox_GroupBox
             // 
+            this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxExport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxNonSingerDataLog_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CreateCashboxTable_Button);
             this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(384, 271);
@@ -6812,6 +6869,18 @@
             this.Debug_Cashbox_GroupBox.TabIndex = 10;
             this.Debug_Cashbox_GroupBox.TabStop = false;
             this.Debug_Cashbox_GroupBox.Text = "錢櫃相關";
+            // 
+            // Debug_CashboxExport_Button
+            // 
+            this.Debug_CashboxExport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CashboxExport_Button.Location = new System.Drawing.Point(9, 139);
+            this.Debug_CashboxExport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CashboxExport_Button.Name = "Debug_CashboxExport_Button";
+            this.Debug_CashboxExport_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CashboxExport_Button.TabIndex = 11;
+            this.Debug_CashboxExport_Button.Text = "匯出錢櫃資料";
+            this.Debug_CashboxExport_Button.UseVisualStyleBackColor = true;
+            this.Debug_CashboxExport_Button.Click += new System.EventHandler(this.Debug_CashboxExport_Button_Click);
             // 
             // Debug_CashboxNonSingerDataLog_Button
             // 
@@ -6983,6 +7052,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).EndInit();
             this.Cashbox_QueryStatus_GroupBox.ResumeLayout(false);
             this.Cashbox_QueryStatus_GroupBox.PerformLayout();
+            this.Cashbox_Maintenance_GroupBox.ResumeLayout(false);
+            this.Cashbox_Maintenance_GroupBox.PerformLayout();
             this.Cashbox_Query_GroupBox.ResumeLayout(false);
             this.Cashbox_Query_GroupBox.PerformLayout();
             this.MainCfg_TabPage.ResumeLayout(false);
@@ -7503,6 +7574,11 @@
         private System.Windows.Forms.Label Cashbox_DateQuery_Label;
         private System.Windows.Forms.ComboBox Cashbox_OtherQuery_ComboBox;
         private System.Windows.Forms.Label Cashbox_OtherQuery_Label;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label SongMaintenance_DBVer4Value_Label;
+        private System.Windows.Forms.Label SongMaintenance_DBVer4_Label;
+        private System.Windows.Forms.Button Debug_CashboxExport_Button;
     }
 }
 

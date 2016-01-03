@@ -43,6 +43,7 @@ namespace CrazyKTV_SongMgr
         public static string CrazyktvSongDBVer = "1.00";
         public static string CrazyktvSingerDBVer = "1";
         public static string CrazyktvPhoneticsDBVer = "1";
+        public static string CrazyktvCashboxDBVer = "1";
         public static string CrazyktvSongDBUpdateFile = Application.StartupPath + @"\SongMgr\Update\UpdateDB.xml";
         public static string CrazyktvCfgFile = Application.StartupPath + @"\CrazyKTV.cfg";
         public static bool CrazyktvDatabaseStatus = false;

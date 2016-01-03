@@ -103,6 +103,7 @@ namespace CrazyKTV_SongMgr
             double SongDBVer = 1.00;
             string SingerDBVer = "0";
             string PhoneticsDBVer = "0";
+            string CashboxDBVer = "0";
 
             string VersionQuerySqlStr = "select * from ktv_Version";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, VersionQuerySqlStr, ""))
@@ -114,13 +115,15 @@ namespace CrazyKTV_SongMgr
                         SongDBVer = Convert.ToDouble(row["SongDB"]);
                         SingerDBVer = row["SingerDB"].ToString();
                         PhoneticsDBVer = row["PhoneticsDB"].ToString();
+                        CashboxDBVer = row["CashboxDB"].ToString();
                     }
 
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVer1Value_Label.Text = SongDBVer.ToString("F2") + " 版";
                         SongMaintenance_DBVer2Value_Label.Text = SingerDBVer.ToString() + " 版";
                         SongMaintenance_DBVer3Value_Label.Text = PhoneticsDBVer.ToString() + " 版";
+                        SongMaintenance_DBVer4Value_Label.Text = CashboxDBVer.ToString() + " 版";
                     });
 
                     if (Global.DBVerEnableDBVerUpdate == "True")
@@ -132,9 +135,11 @@ namespace CrazyKTV_SongMgr
                             Global.CrazyktvSongDBVer = CommonFunc.LoadConfigXmlFile(Application.StartupPath + @"\SongMgr\Update\UpdateDB.tmp", "SongDBVer");
                             Global.CrazyktvSingerDBVer = CommonFunc.LoadConfigXmlFile(Application.StartupPath + @"\SongMgr\Update\UpdateDB.tmp", "SingerDBVer");
                             Global.CrazyktvPhoneticsDBVer = CommonFunc.LoadConfigXmlFile(Application.StartupPath + @"\SongMgr\Update\UpdateDB.tmp", "PhoneticsDBVer");
+                            Global.CrazyktvCashboxDBVer = CommonFunc.LoadConfigXmlFile(Application.StartupPath + @"\SongMgr\Update\UpdateDB.tmp", "CashboxDBVer");
                             CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", Global.CrazyktvSongDBVer);
                             CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer", Global.CrazyktvSingerDBVer);
                             CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer", Global.CrazyktvPhoneticsDBVer);
+                            CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "CashboxDBVer", Global.CrazyktvCashboxDBVer);
 
                             if (Convert.ToInt32(Global.CrazyktvSingerDBVer) > Convert.ToInt32(SingerDBVer))
                             {
@@ -151,19 +156,28 @@ namespace CrazyKTV_SongMgr
                                     File.Copy(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.tmp", Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt", true);
                                 }
                             }
+
+                            if (Convert.ToInt32(Global.CrazyktvCashboxDBVer) > Convert.ToInt32(CashboxDBVer))
+                            {
+                                if (CommonFunc.DownloadFile(Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.tmp", "https://raw.githubusercontent.com/KenLuoTW/CrazyKTVSongMgr/master/CrazyKTV_SongMgr/SongMgr/Update/UpdateCashboxDB.txt"))
+                                {
+                                    File.Copy(Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.tmp", Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.txt", true);
+                                }
+                            }
                         }
                         File.Delete(Application.StartupPath + @"\SongMgr\Update\UpdateDB.tmp");
                         File.Delete(Application.StartupPath + @"\SongMgr\Update\UpdateSingerDB.tmp");
                         File.Delete(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.tmp");
+                        File.Delete(Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.tmp");
                     }
 
                     if (Global.DBVerEnableDBVerUpdate == "True")
                     {
-                        if (File.Exists(Global.CrazyktvDatabaseFile) & File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdateSingerDB.txt") & File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt"))
+                        if (File.Exists(Global.CrazyktvDatabaseFile) && File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdateSingerDB.txt") && File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdatePhoneticsDB.txt") && File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.txt"))
                         {
-                            if (Convert.ToDouble(Global.CrazyktvSongDBVer) > SongDBVer || Convert.ToInt32(Global.CrazyktvSingerDBVer) > Convert.ToInt32(SingerDBVer) || Convert.ToInt32(Global.CrazyktvPhoneticsDBVer) > Convert.ToInt32(PhoneticsDBVer))
+                            if (Convert.ToDouble(Global.CrazyktvSongDBVer) > SongDBVer || Convert.ToInt32(Global.CrazyktvSingerDBVer) > Convert.ToInt32(SingerDBVer) || Convert.ToInt32(Global.CrazyktvPhoneticsDBVer) > Convert.ToInt32(PhoneticsDBVer) || Convert.ToInt32(Global.CrazyktvCashboxDBVer) > Convert.ToInt32(CashboxDBVer))
                             {
-                                this.BeginInvoke((Action)delegate ()
+                                this.BeginInvoke((Action)delegate()
                                 {
                                     if (MessageBox.Show("你確定要更新歌庫版本嗎?", "偵測到歌庫版本更新", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                     {
@@ -171,7 +185,6 @@ namespace CrazyKTV_SongMgr
                                         MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
                                         SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                                         SongMaintenance_DBVerTooltip_Label.Text = "開始進行歌庫版本更新...";
-
 
                                         var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("UpdateVersion"));
                                     }
@@ -589,6 +602,7 @@ namespace CrazyKTV_SongMgr
 
             string SingerDBVer = "0";
             string PhoneticsDBVer = "0";
+            string CashboxDBVer = "0";
             string VersionQuerySqlStr = "select * from ktv_Version";
             DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, VersionQuerySqlStr, "");
 
@@ -596,6 +610,7 @@ namespace CrazyKTV_SongMgr
             {
                 SingerDBVer = row["SingerDB"].ToString();
                 PhoneticsDBVer = row["PhoneticsDB"].ToString();
+                CashboxDBVer = row["CashboxDB"].ToString();
             }
             dt.Dispose();
             dt = null;
@@ -619,6 +634,16 @@ namespace CrazyKTV_SongMgr
                     Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                     var SingerImportTask = Task.Factory.StartNew(() => SongMaintenance_SingerImportTask());
                     SingerImportTask.Wait();
+                }
+            }
+
+            if (File.Exists(Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.txt"))
+            {
+                if (Convert.ToInt32(Global.CrazyktvCashboxDBVer) > Convert.ToInt32(CashboxDBVer))
+                {
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    var CashboxImportTask = Task.Factory.StartNew(() => SongMaintenance_CashboxImportTask());
+                    CashboxImportTask.Wait();
                 }
             }
 
@@ -660,6 +685,7 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_DBVer1Value_Label.Text = Global.CrazyktvSongDBVer + " 版";
                 SongMaintenance_DBVer2Value_Label.Text = Global.CrazyktvSingerDBVer + " 版";
                 SongMaintenance_DBVer3Value_Label.Text = Global.CrazyktvPhoneticsDBVer + " 版";
+                SongMaintenance_DBVer4Value_Label.Text = Global.CrazyktvCashboxDBVer + " 版";
 
                 SongMaintenance_DBVerTooltip_Label.Text = "";
                 SongMaintenance_Tooltip_Label.Text = "已完成歌庫版本更新,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";

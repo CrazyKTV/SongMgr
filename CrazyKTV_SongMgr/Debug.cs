@@ -384,6 +384,39 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Debug 滙出錢櫃資料 ---
+
+        private void Debug_CashboxExport_Button_Click(object sender, EventArgs e)
+        {
+            List<string> list = new List<string>();
+            list.Add("ktv_Version|1");
+
+            string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate";
+            string CashboxQuerySqlStr = "select " + sqlColumnStr + " from ktv_Cashbox order by Cashbox_Id";
+
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, CashboxQuerySqlStr, ""))
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        list.Add("ktv_Cashbox|" + row["Cashbox_Id"].ToString() + "|" + row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString() + "|" + row["Song_CreatDate"].ToString());
+                    }
+                }
+
+                if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+                StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\UpdateCashboxDB.txt");
+                foreach (string str in list)
+                {
+                    sw.WriteLine(str);
+                }
+                Debug_Tooltip_Label.Text = @"已將錢櫃資料匯出至【SongMgr\Backup\UpdateCashboxDB.txt】檔案。";
+                sw.Close();
+                list.Clear();
+            }
+        }
+
+        #endregion
 
 
     }

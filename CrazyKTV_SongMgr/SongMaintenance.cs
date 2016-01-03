@@ -2727,6 +2727,17 @@ namespace CrazyKTV_SongMgr
 
         #region --- 歌庫版本 ---
 
+        private void SongMaintenance_EnableDBVerUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.DBVerEnableDBVerUpdate = SongMaintenance_EnableDBVerUpdate_CheckBox.Checked.ToString();
+        }
+
+
+        private void SongMaintenance_EnableRebuildSingerData_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.DBVerRebuildSingerData = SongMaintenance_EnableRebuildSingerData_CheckBox.Checked.ToString();
+        }
+
         private void SongMaintenance_SingerImportTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -2794,18 +2805,70 @@ namespace CrazyKTV_SongMgr
             singerconn.Close();
         }
 
-
-        private void SongMaintenance_EnableDBVerUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
+        private void SongMaintenance_CashboxImportTask()
         {
-            Global.DBVerEnableDBVerUpdate = SongMaintenance_EnableDBVerUpdate_CheckBox.Checked.ToString();
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> list = new List<string>();
+            List<string> Addlist = new List<string>();
+
+            OleDbConnection conn = new OleDbConnection();
+            OleDbConnection Cashboxconn = new OleDbConnection();
+            OleDbCommand Versioncmd = new OleDbCommand();
+            OleDbCommand Cashboxcmd = new OleDbCommand();
+
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            Cashboxconn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
+            string TruncateSqlStr = "delete * from ktv_Cashbox";
+            Cashboxcmd = new OleDbCommand(TruncateSqlStr, Cashboxconn);
+            Cashboxcmd.ExecuteNonQuery();
+
+            StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Update\UpdateCashboxDB.txt", Encoding.UTF8);
+            while (!sr.EndOfStream)
+            {
+                Addlist.Add(sr.ReadLine());
+            }
+            sr.Close();
+
+            string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate";
+            string sqlValuesStr = "@CashboxId, @SongLang, @SongSinger, @SongSongName, @SongCreatDate";
+            string CashboxAddSqlStr = "insert into ktv_Cashbox ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+            Cashboxcmd = new OleDbCommand(CashboxAddSqlStr, Cashboxconn);
+
+            foreach (string AddStr in Addlist)
+            {
+                list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
+
+                switch (list[0])
+                {
+                    case "ktv_Version":
+                        string VersionSqlStr = "CashboxDB = @CashboxDB";
+                        string VersionUpdateSqlStr = "update ktv_Version set " + VersionSqlStr + " where Id = @Id";
+                        Versioncmd = new OleDbCommand(VersionUpdateSqlStr, conn);
+
+                        Versioncmd.Parameters.AddWithValue("@CashboxDB", list[1]);
+                        Versioncmd.Parameters.AddWithValue("@Id", "1");
+                        Versioncmd.ExecuteNonQuery();
+                        Versioncmd.Parameters.Clear();
+                        break;
+                    case "ktv_Cashbox":
+                        Cashboxcmd.Parameters.AddWithValue("@CashboxId", list[1]);
+                        Cashboxcmd.Parameters.AddWithValue("@SongLang", list[2]);
+                        Cashboxcmd.Parameters.AddWithValue("@SongSinger", list[3]);
+                        Cashboxcmd.Parameters.AddWithValue("@SongSongName", list[4]);
+                        Cashboxcmd.Parameters.AddWithValue("@SongCreatDate", list[5]);
+                        Cashboxcmd.ExecuteNonQuery();
+                        Cashboxcmd.Parameters.Clear();
+                        lock (LockThis) { Global.TotalList[0]++; }
+                        break;
+                }
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[0] + " 首錢櫃資料,請稍待...";
+                });
+            }
+            conn.Close();
+            Cashboxconn.Close();
         }
-
-
-        private void SongMaintenance_EnableRebuildSingerData_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.DBVerRebuildSingerData = SongMaintenance_EnableRebuildSingerData_CheckBox.Checked.ToString();
-        }
-
 
         #endregion
 
