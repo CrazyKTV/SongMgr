@@ -446,8 +446,8 @@
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
             this.Cashbox_Maintenance_GroupBox = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.Cashbox_UpdDateValue_Label = new System.Windows.Forms.Label();
+            this.Cashbox_UpdDate_Label = new System.Windows.Forms.Label();
             this.Cashbox_Query_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_Clear_Button = new System.Windows.Forms.Button();
@@ -5856,8 +5856,8 @@
             // 
             // Cashbox_Maintenance_GroupBox
             // 
-            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.label1);
-            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.label2);
+            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_UpdDateValue_Label);
+            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_UpdDate_Label);
             this.Cashbox_Maintenance_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Cashbox_Maintenance_GroupBox.Location = new System.Drawing.Point(507, 23);
             this.Cashbox_Maintenance_GroupBox.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
@@ -5868,28 +5868,28 @@
             this.Cashbox_Maintenance_GroupBox.TabStop = false;
             this.Cashbox_Maintenance_GroupBox.Text = "資料維護";
             // 
-            // label1
+            // Cashbox_UpdDateValue_Label
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label1.Location = new System.Drawing.Point(144, 44);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 22);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "0 版";
+            this.Cashbox_UpdDateValue_Label.AutoSize = true;
+            this.Cashbox_UpdDateValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDateValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.Cashbox_UpdDateValue_Label.Location = new System.Drawing.Point(144, 44);
+            this.Cashbox_UpdDateValue_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.Cashbox_UpdDateValue_Label.Name = "Cashbox_UpdDateValue_Label";
+            this.Cashbox_UpdDateValue_Label.Size = new System.Drawing.Size(121, 22);
+            this.Cashbox_UpdDateValue_Label.TabIndex = 5;
+            this.Cashbox_UpdDateValue_Label.Text = "2016年1月3日";
             // 
-            // label2
+            // Cashbox_UpdDate_Label
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label2.Location = new System.Drawing.Point(16, 44);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 22);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "上次更新日期:";
+            this.Cashbox_UpdDate_Label.AutoSize = true;
+            this.Cashbox_UpdDate_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDate_Label.Location = new System.Drawing.Point(16, 44);
+            this.Cashbox_UpdDate_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.Cashbox_UpdDate_Label.Name = "Cashbox_UpdDate_Label";
+            this.Cashbox_UpdDate_Label.Size = new System.Drawing.Size(116, 22);
+            this.Cashbox_UpdDate_Label.TabIndex = 4;
+            this.Cashbox_UpdDate_Label.Text = "上次更新日期:";
             // 
             // Cashbox_Query_GroupBox
             // 
@@ -7574,8 +7574,8 @@
         private System.Windows.Forms.Label Cashbox_DateQuery_Label;
         private System.Windows.Forms.ComboBox Cashbox_OtherQuery_ComboBox;
         private System.Windows.Forms.Label Cashbox_OtherQuery_Label;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label Cashbox_UpdDateValue_Label;
+        private System.Windows.Forms.Label Cashbox_UpdDate_Label;
         private System.Windows.Forms.Label SongMaintenance_DBVer4Value_Label;
         private System.Windows.Forms.Label SongMaintenance_DBVer4_Label;
         private System.Windows.Forms.Button Debug_CashboxExport_Button;

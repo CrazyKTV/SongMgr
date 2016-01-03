@@ -390,6 +390,7 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
             list.Add("ktv_Version|1");
+            list.Add("ktv_UpdDate|" + DateTime.Now);
 
             string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate";
             string CashboxQuerySqlStr = "select " + sqlColumnStr + " from ktv_Cashbox order by Cashbox_Id";

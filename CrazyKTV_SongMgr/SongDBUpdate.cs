@@ -104,6 +104,7 @@ namespace CrazyKTV_SongMgr
             string SingerDBVer = "0";
             string PhoneticsDBVer = "0";
             string CashboxDBVer = "0";
+            string CashboxUpdDate = "";
 
             string VersionQuerySqlStr = "select * from ktv_Version";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, VersionQuerySqlStr, ""))
@@ -116,6 +117,7 @@ namespace CrazyKTV_SongMgr
                         SingerDBVer = row["SingerDB"].ToString();
                         PhoneticsDBVer = row["PhoneticsDB"].ToString();
                         CashboxDBVer = row["CashboxDB"].ToString();
+                        CashboxUpdDate = row["CashboxUpdDate"].ToString();
                     }
 
                     this.BeginInvoke((Action)delegate()
@@ -124,6 +126,7 @@ namespace CrazyKTV_SongMgr
                         SongMaintenance_DBVer2Value_Label.Text = SingerDBVer.ToString() + " 版";
                         SongMaintenance_DBVer3Value_Label.Text = PhoneticsDBVer.ToString() + " 版";
                         SongMaintenance_DBVer4Value_Label.Text = CashboxDBVer.ToString() + " 版";
+                        Cashbox_UpdDateValue_Label.Text = DateTime.Parse(CashboxUpdDate).ToLongDateString();
                     });
 
                     if (Global.DBVerEnableDBVerUpdate == "True")
@@ -603,6 +606,7 @@ namespace CrazyKTV_SongMgr
             string SingerDBVer = "0";
             string PhoneticsDBVer = "0";
             string CashboxDBVer = "0";
+            string CashboxUpdDate = "";
             string VersionQuerySqlStr = "select * from ktv_Version";
             DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, VersionQuerySqlStr, "");
 
@@ -611,6 +615,7 @@ namespace CrazyKTV_SongMgr
                 SingerDBVer = row["SingerDB"].ToString();
                 PhoneticsDBVer = row["PhoneticsDB"].ToString();
                 CashboxDBVer = row["CashboxDB"].ToString();
+                CashboxUpdDate = row["CashboxUpdDate"].ToString();
             }
             dt.Dispose();
             dt = null;
@@ -686,8 +691,8 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_DBVer2Value_Label.Text = Global.CrazyktvSingerDBVer + " 版";
                 SongMaintenance_DBVer3Value_Label.Text = Global.CrazyktvPhoneticsDBVer + " 版";
                 SongMaintenance_DBVer4Value_Label.Text = Global.CrazyktvCashboxDBVer + " 版";
+                Cashbox_UpdDateValue_Label.Text = DateTime.Parse(CashboxUpdDate).ToLongDateString();
 
-                SongMaintenance_DBVerTooltip_Label.Text = "";
                 SongMaintenance_Tooltip_Label.Text = "已完成歌庫版本更新,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
             });
             SongDBUpdate_UpdateFinish();

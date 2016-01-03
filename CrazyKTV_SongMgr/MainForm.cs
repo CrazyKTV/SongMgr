@@ -46,6 +46,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", Global.CrazyktvSongDBVer);
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer", Global.CrazyktvSingerDBVer);
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer", Global.CrazyktvPhoneticsDBVer);
+                CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "CashboxDBVer", Global.CrazyktvCashboxDBVer);
             }
 
             // CrazyKTV 設定
@@ -147,7 +148,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger"),
+                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "CashboxDBVer")
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -375,6 +377,8 @@ namespace CrazyKTV_SongMgr
 
             if (list[44] != "") Global.SingerMgrSyncSongSinger = list[44];
             SingerMgr_EditSyncSongSinger_CheckBox.Checked = bool.Parse(Global.SingerMgrSyncSongSinger);
+
+            if (list[45] != "") Global.CrazyktvCashboxDBVer = list[45];
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();

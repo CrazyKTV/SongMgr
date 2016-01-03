@@ -2850,6 +2850,16 @@ namespace CrazyKTV_SongMgr
                         Versioncmd.ExecuteNonQuery();
                         Versioncmd.Parameters.Clear();
                         break;
+                    case "ktv_UpdDate":
+                        string CashboxUpdDateSqlStr = "CashboxUpdDate = @CashboxUpdDate";
+                        string CashboxUpdDateUpdateSqlStr = "update ktv_Version set " + CashboxUpdDateSqlStr + " where Id = @Id";
+                        Versioncmd = new OleDbCommand(CashboxUpdDateUpdateSqlStr, conn);
+
+                        Versioncmd.Parameters.AddWithValue("@CashboxUpdDate", list[1]);
+                        Versioncmd.Parameters.AddWithValue("@Id", "1");
+                        Versioncmd.ExecuteNonQuery();
+                        Versioncmd.Parameters.Clear();
+                        break;
                     case "ktv_Cashbox":
                         Cashboxcmd.Parameters.AddWithValue("@CashboxId", list[1]);
                         Cashboxcmd.Parameters.AddWithValue("@SongLang", list[2]);
