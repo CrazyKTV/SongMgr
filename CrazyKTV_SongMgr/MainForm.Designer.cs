@@ -524,6 +524,7 @@
             this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
+            this.Debug_CreateDataColumn_Button = new System.Windows.Forms.Button();
             this.Debug_Cashbox_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_CashboxExport_Button = new System.Windows.Forms.Button();
             this.Debug_CashboxNonSingerDataLog_Button = new System.Windows.Forms.Button();
@@ -6860,6 +6861,7 @@
             // 
             // Debug_TabPage
             // 
+            this.Debug_TabPage.Controls.Add(this.Debug_CreateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_Cashbox_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_Tooltip_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateTestFile_Button);
@@ -6871,6 +6873,18 @@
             this.Debug_TabPage.TabIndex = 10;
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Debug_CreateDataColumn_Button
+            // 
+            this.Debug_CreateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CreateDataColumn_Button.Location = new System.Drawing.Point(441, 164);
+            this.Debug_CreateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CreateDataColumn_Button.Name = "Debug_CreateDataColumn_Button";
+            this.Debug_CreateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CreateDataColumn_Button.TabIndex = 11;
+            this.Debug_CreateDataColumn_Button.Text = "建立資料欄位";
+            this.Debug_CreateDataColumn_Button.UseVisualStyleBackColor = true;
+            this.Debug_CreateDataColumn_Button.Click += new System.EventHandler(this.Debug_CreateDataColumn_Button_Click);
             // 
             // Debug_Cashbox_GroupBox
             // 
@@ -7594,6 +7608,7 @@
         private System.Windows.Forms.Label SongMaintenance_DBVer4_Label;
         private System.Windows.Forms.Button Debug_CashboxExport_Button;
         private System.Windows.Forms.Button Cashbox_UpdDate_Button;
+        private System.Windows.Forms.Button Debug_CreateDataColumn_Button;
     }
 }
 

@@ -282,9 +282,9 @@ namespace CrazyKTV_SongMgr
                         {
                             OleDbCommand[] cmds =
                             {
-                            new OleDbCommand("alter table ktv_Version add column CashboxDB INTEGER", conn),
-                            new OleDbCommand("update ktv_Version set CashboxDB = 1 where Id = 1", conn)
-                        };
+                                new OleDbCommand("alter table ktv_Version add column CashboxDB INTEGER", conn),
+                                new OleDbCommand("update ktv_Version set CashboxDB = 1 where Id = 1", conn)
+                            };
 
                             foreach (OleDbCommand cmd in cmds)
                             {
@@ -307,9 +307,9 @@ namespace CrazyKTV_SongMgr
                         {
                             OleDbCommand[] cmds =
                             {
-                            new OleDbCommand("alter table ktv_Version add column CashboxUpdDate DATETIME", conn),
-                            new OleDbCommand("update ktv_Version set CashboxUpdDate = '" + Global.CashboxUpdDate + "' where Id = 1", conn)
-                        };
+                                new OleDbCommand("alter table ktv_Version add column CashboxUpdDate DATETIME", conn),
+                                new OleDbCommand("update ktv_Version set CashboxUpdDate = '" + Global.CashboxUpdDate + "' where Id = 1", conn)
+                            };
 
                             foreach (OleDbCommand cmd in cmds)
                             {

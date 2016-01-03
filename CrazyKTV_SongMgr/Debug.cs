@@ -420,6 +420,96 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Debug 建立欄位資料 ---
+
+        private void Debug_CreateDataColumn_Button_Click(object sender, EventArgs e)
+        {
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要建立資料欄位嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在建立資料欄位,請稍待...";
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Debug_CreateDataColumnTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            Debug_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆新欄位資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+        }
+
+        private void Debug_CreateDataColumnTask()
+        {
+            string DatabaseFile = Global.CrazyktvSongMgrDatabaseFile;
+            string TableName = "ktv_AllSinger";
+            string ColumnName = "Singer_Group";
+            string ColumnType = " TEXT(10)";
+            string WhereColumn = "Singer_Id";
+
+            List<string> WhereValueList = new List<string>();
+            string QuerySqlStr = "select * from " + TableName;
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, QuerySqlStr, ""))
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        WhereValueList.Add(row[WhereColumn].ToString());
+                    }
+                }
+            }
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(DatabaseFile, ""))
+            {
+                OleDbCommand[] cmds =
+                {
+                    new OleDbCommand("alter table " + TableName +" add column " + ColumnName + ColumnType, conn),
+                    new OleDbCommand("update " + TableName +" set " + ColumnName + " = 0 where " + WhereColumn +" = @WhereValue", conn)
+                };
+                cmds[0].ExecuteNonQuery();
+
+                if (WhereValueList.Count > 0)
+                {
+                    foreach (string value in WhereValueList)
+                    {
+                        cmds[1].Parameters.AddWithValue("@WhereValue", value);
+
+                        try
+                        {
+                            cmds[1].ExecuteNonQuery();
+                            Global.TotalList[0]++;
+                            this.BeginInvoke((Action)delegate()
+                            {
+                                Debug_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[0] + " 筆新欄位資料,請稍待...";
+                            });
+                        }
+                        catch
+                        {
+                            Global.TotalList[1]++;
+                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "更新欄位資料時發生未知的錯誤: " + value;
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                        }
+                        cmds[1].Parameters.Clear();
+                    }
+                }
+            }
+            WhereValueList.Clear();
+        }
+
+        #endregion
+
 
     }
 
