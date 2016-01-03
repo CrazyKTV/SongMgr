@@ -609,6 +609,41 @@ namespace CrazyKTV_SongMgr
         }
 
 
+        private void Cashbox_ApplyCashboxId_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要套用錢櫃編號嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                Cashbox_QueryStatus_Label.Text = "正在重新分配歌曲編號,請稍待...";
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => Cashbox_ApplyCashboxIdTask()));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 位歌庫歌手及 " + Global.TotalList[1] + " 位預設歌手的拼音資料,失敗 " + Global.TotalList[2] + " 位,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    Cashbox.DisposeSongDataTable();
+                });
+            }
+        }
+
+        private void Cashbox_ApplyCashboxIdTask()
+        {
+
+        }
+
+
+
+
 
 
 

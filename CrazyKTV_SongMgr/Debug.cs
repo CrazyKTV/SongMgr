@@ -15,7 +15,6 @@ namespace CrazyKTV_SongMgr
     public partial class MainForm : Form
     {
 
-
         #region --- Debug 建立測試歌庫 ---
 
         private void Debug_CreateTestFile_Button_Click(object sender, EventArgs e)

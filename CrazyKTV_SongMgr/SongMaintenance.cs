@@ -604,53 +604,7 @@ namespace CrazyKTV_SongMgr
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
-            List<string> Favoritelist = new List<string>();
-            string SongQuerySqlStr = "";
-            DataTable dt = new DataTable();
-
-            SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-            if (dt.Rows.Count > 0)
-            {
-                foreach (DataRow row in dt.AsEnumerable())
-                {
-                    Favoritelist.Add("ktv_User," + row["User_Id"].ToString() + "," + row["User_Name"].ToString());
-                }
-            }
-
-            SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-            if (dt.Rows.Count > 0)
-            {
-                foreach (DataRow row in dt.AsEnumerable())
-                {
-                    var query = from QueryRow in Global.SongDT.AsEnumerable()
-                                where QueryRow.Field<string>("Song_Id").Equals(row["Song_Id"].ToString())
-                                select QueryRow;
-
-                    if (query.Count<DataRow>() > 0)
-                    {
-                        foreach (DataRow songrow in query)
-                        {
-                            Favoritelist.Add("ktv_Favorite," + row["User_Id"].ToString() + "," + songrow["Song_Lang"].ToString() + "," + songrow["Song_Singer"].ToString() + "," + songrow["Song_SongName"].ToString());
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
-            StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt");
-            foreach (string str in Favoritelist)
-            {
-                sw.WriteLine(str);
-            }
-
-            sw.Close();
-            dt.Dispose();
-            dt = null;
+            SongMaintenance_FavoriteExportTask();
 
             string MaxDigitCode = "";
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = "D5"; } else { MaxDigitCode = "D6"; }
@@ -1041,7 +995,7 @@ namespace CrazyKTV_SongMgr
                     {
                         if (Convert.ToInt32(row["Song_PlayCount"].ToString()) > 0)
                         {
-                            list.Add("ktv_Song," + row["Song_Lang"].ToString() + "," + row["Song_Singer"].ToString() + "," + row["Song_SongName"].ToString() + "," + row["Song_PlayCount"].ToString());
+                            list.Add("ktv_Song|" + row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString() + "|" + row["Song_PlayCount"].ToString());
                         }
                     }
                 }
@@ -1120,7 +1074,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string AddStr in Addlist)
             {
-                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
+                list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
                 switch (list[0])
                 {
                     case "ktv_Song":
@@ -1148,6 +1102,10 @@ namespace CrazyKTV_SongMgr
                         }
                         break;
                 }
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 首歌曲的播放次數資料,請稍待...";
+                });
             }
             conn.Close();
         }
@@ -1230,7 +1188,7 @@ namespace CrazyKTV_SongMgr
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的播放次數資料,請稍待...";
+                    SongMaintenance_Tooltip_Label.Text = "正在重置第 " + Global.TotalList[0] + " 首歌曲的播放次數資料,請稍待...";
                 });
             }
             conn.Close();
@@ -2284,38 +2242,54 @@ namespace CrazyKTV_SongMgr
         private void SongMaintenance_FavoriteExport_Button_Click(object sender, EventArgs e)
         {
             SongMaintenance.CreateSongDataTable();
-            List<string> list = new List<string>();
-            string SongQuerySqlStr = "";
-            DataTable dt = new DataTable();
 
-            SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+            var tasks = new List<Task>();
+            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_FavoriteExportTask()));
 
-            if (dt.Rows.Count > 0)
+            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
-                foreach (DataRow row in dt.AsEnumerable())
+                this.BeginInvoke((Action)delegate()
                 {
-                    list.Add("ktv_User," + row["User_Id"].ToString() + "," + row["User_Name"].ToString());
+                    SongMaintenance_Tooltip_Label.Text = @"已將我的最愛資料匯出至【SongMgr\Backup\Favorite.txt】檔案。";
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            });
+        }
+
+        public static void SongMaintenance_FavoriteExportTask()
+        {
+            List<string> list = new List<string>();
+
+            string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        list.Add("ktv_User|" + row["User_Id"].ToString() + "|" + row["User_Name"].ToString());
+                    }
                 }
             }
 
             SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-            if (dt.Rows.Count > 0)
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
-                foreach (DataRow row in dt.AsEnumerable())
+                if (dt.Rows.Count > 0)
                 {
-                    var query = from QueryRow in Global.SongDT.AsEnumerable()
-                                where QueryRow.Field<string>("Song_Id").Equals(row["Song_Id"].ToString())
-                                select QueryRow;
-
-                    if (query.Count<DataRow>() > 0)
+                    foreach (DataRow row in dt.AsEnumerable())
                     {
-                        foreach (DataRow songrow in query)
+                        var query = from QueryRow in Global.SongDT.AsEnumerable()
+                                    where QueryRow.Field<string>("Song_Id").Equals(row["Song_Id"].ToString())
+                                    select QueryRow;
+
+                        if (query.Count<DataRow>() > 0)
                         {
-                            list.Add("ktv_Favorite," + row["User_Id"].ToString() + "," + songrow["Song_Lang"].ToString() + "," + songrow["Song_Singer"].ToString() + "," + songrow["Song_SongName"].ToString());
-                            break;
+                            foreach (DataRow songrow in query)
+                            {
+                                list.Add("ktv_Favorite|" + row["User_Id"].ToString() + "|" + songrow["Song_Lang"].ToString() + "|" + songrow["Song_Singer"].ToString() + "|" + songrow["Song_SongName"].ToString());
+                                break;
+                            }
                         }
                     }
                 }
@@ -2327,13 +2301,8 @@ namespace CrazyKTV_SongMgr
             {
                 sw.WriteLine(str);
             }
-
-            SongMaintenance_Tooltip_Label.Text = @"已將我的最愛資料匯出至【SongMgr\Backup\Favorite.txt】檔案。";
             sw.Close();
-            dt.Dispose();
-            SongMaintenance.DisposeSongDataTable();
         }
-
 
         private void SongMaintenance_FavoriteImport_Button_Click(object sender, EventArgs e)
         {
@@ -2422,7 +2391,7 @@ namespace CrazyKTV_SongMgr
 
             foreach (string AddStr in Addlist)
             {
-                list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
+                list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
                 switch (list[0])
                 {
                     case "ktv_User":
