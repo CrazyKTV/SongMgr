@@ -2851,6 +2851,7 @@ namespace CrazyKTV_SongMgr
                         Versioncmd.Parameters.Clear();
                         break;
                     case "ktv_UpdDate":
+                        Global.CashboxUpdDate = DateTime.Parse(list[1]);
                         string CashboxUpdDateSqlStr = "CashboxUpdDate = @CashboxUpdDate";
                         string CashboxUpdDateUpdateSqlStr = "update ktv_Version set " + CashboxUpdDateSqlStr + " where Id = @Id";
                         Versioncmd = new OleDbCommand(CashboxUpdDateUpdateSqlStr, conn);
