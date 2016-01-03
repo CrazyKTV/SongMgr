@@ -1,9 +1,10 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -553,6 +554,225 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Cashbox 更新歌曲資料 ---
+
+        private void Cashbox_UpdDate_Button_Click(object sender, EventArgs e)
+        {
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Common_SwitchSetUI(false);
+
+                Cashbox_QueryStatus_Label.Text = "正在更新錢櫃資料,請稍待...";
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => Cashbox_UpdDateTask()));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        if (Cashbox_QueryStatus_Label.Text != "系統時間錯誤!" && Cashbox_QueryStatus_Label.Text != "僅支援更新2016年後的錢櫃歌曲!")
+                        {
+                            Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        }
+                        Common_SwitchSetUI(true);
+                    });
+                });
+            }
+        }
+
+        private void Cashbox_UpdDateTask()
+        {
+            DateTime DateValidDate = DateTime.Parse("2016/01/01");
+            DateTime DateStartDate = Global.CashboxUpdDate;
+            DateTime DateEndDate = DateTime.Now;
+            int DaysCount = (DateEndDate - DateStartDate).Days + 1;
+
+            if (DateTime.Compare(DateEndDate, DateStartDate) < 0)
+            {
+                this.BeginInvoke((Action)delegate ()
+                {
+                    Cashbox_QueryStatus_Label.Text = "系統時間錯誤!";
+                });
+                return;
+            }
+
+            if (DateTime.Compare(DateStartDate, DateValidDate) < 0 || DateTime.Compare(DateEndDate, DateValidDate) < 0)
+            {
+                this.BeginInvoke((Action)delegate ()
+                {
+                    Cashbox_QueryStatus_Label.Text = "僅支援更新2016年後的錢櫃歌曲!";
+                });
+                return;
+            }
+
+            List<string> SongIdList = new List<string>();
+            string CashboxQuerySqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox order by Cashbox_Id";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, CashboxQuerySqlStr, ""))
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    SongIdList.Add(row["Cashbox_Id"].ToString());
+                }
+            }
+
+            List<string> SongDataList = new List<string>();
+            HtmlWeb hw = new HtmlWeb();
+            HtmlAgilityPack.HtmlDocument doc;
+            HtmlNode table;
+            HtmlNodeCollection child;
+
+            for (int i = 0; i < DaysCount; i++)
+            {
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + DateStartDate.AddDays(i).ToString("yyyy/MM/dd"));
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    Cashbox_QueryStatus_Label.Text = "正在分析第 " + (i + 1) + " / " + DaysCount + " 天的更新歌曲,請稍待...";
+                });
+
+                foreach (HtmlNode childnode in child)
+                {
+                    List<string> list = new List<string>();
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (list.Count < 4)
+                        {
+                            list.Add(data);
+                        }
+                    }
+
+                    if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
+                    {
+                        list.Add(DateStartDate.AddDays(i).ToString());
+                        if (list[1] == "") list[1] = "其它";
+                        list[3] = Regex.Replace(list[3], "、", "&");
+
+                        if (SongIdList.IndexOf(list[0]) < 0)
+                        {
+                            SongIdList.Add(list[0]);
+                            list.Add("AddSong");
+                        }
+                        else
+                        {
+                            list.Add("UpdSong");
+                        }
+                        SongDataList.Add(string.Join("|", list));
+                    }
+                    list.Clear();
+                }
+            }
+            SongIdList.Clear();
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+            {
+                string sqlAddStr = "Cashbox_Id, Song_Lang, Song_SongName, Song_Singer, Song_CreatDate";
+                string sqlValuesStr = "@CashboxId, @SongLang, @SongSongName, @SongSinger, @SongCreatDate";
+                string AddSqlStr = "insert into ktv_Cashbox ( " + sqlAddStr + " ) values ( " + sqlValuesStr + " )";
+                string sqlUpdStr = "Cashbox_Id = @CashboxId, Song_Lang = @SongLang, Song_SongName = @SongSongName, Song_Singer = @SongSinger, Song_CreatDate = @SongCreatDate";
+                string UpdSqlStr = "update ktv_Cashbox set " + sqlUpdStr + " where Cashbox_Id = @OldCashboxId";
+
+                OleDbCommand AddCmd = new OleDbCommand(AddSqlStr, conn);
+                OleDbCommand UpdCmd = new OleDbCommand(UpdSqlStr, conn);
+
+                foreach (string SongData in SongDataList)
+                {
+                    List<string> valuelist = new List<string>(SongData.Split('|'));
+
+                    switch (valuelist[5])
+                    {
+                        case "AddSong":
+                            AddCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
+                            AddCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
+                            AddCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
+                            AddCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                            AddCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
+
+                            try
+                            {
+                                AddCmd.ExecuteNonQuery();
+                                Global.TotalList[0]++;
+                                this.BeginInvoke((Action)delegate ()
+                                {
+                                    Cashbox_QueryStatus_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
+                                });
+                            }
+                            catch
+                            {
+                                Global.TotalList[1]++;
+                                Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌曲時發生未知的錯誤: " + SongData;
+                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                            }
+                            AddCmd.Parameters.Clear();
+                            break;
+                        case "UpdSong":
+                            UpdCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
+                            UpdCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
+                            UpdCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
+                            UpdCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                            UpdCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
+                            UpdCmd.Parameters.AddWithValue("@OldCashboxId", valuelist[0]);
+
+                            try
+                            {
+                                UpdCmd.ExecuteNonQuery();
+                                Global.TotalList[0]++;
+                                this.BeginInvoke((Action)delegate ()
+                                {
+                                    Cashbox_QueryStatus_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
+                                });
+                            }
+                            catch
+                            {
+                                Global.TotalList[1]++;
+                                Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入歌曲時發生未知的錯誤: " + SongData;
+                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                            }
+                            UpdCmd.Parameters.Clear();
+                            break;
+                    }
+                }
+            }
+            SongDataList.Clear();
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+            {
+                Global.CashboxUpdDate = DateEndDate;
+                string CashboxUpdDateSqlStr = "CashboxUpdDate = @CashboxUpdDate";
+                string CashboxUpdDateUpdateSqlStr = "update ktv_Version set " + CashboxUpdDateSqlStr + " where Id = @Id";
+                OleDbCommand Versioncmd = new OleDbCommand(CashboxUpdDateUpdateSqlStr, conn);
+
+                Versioncmd.Parameters.AddWithValue("@CashboxUpdDate", DateEndDate.ToString());
+                Versioncmd.Parameters.AddWithValue("@Id", "1");
+                Versioncmd.ExecuteNonQuery();
+                Versioncmd.Parameters.Clear();
+            }
+
+            this.BeginInvoke((Action)delegate ()
+            {
+                Cashbox_UpdDateValue_Label.Text = Global.CashboxUpdDate.ToLongDateString();
+                Cashbox_UpdDate_Button.Enabled = false;
+
+                Cashbox_DateQuery_ComboBox.SelectedIndexChanged -= new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+                Cashbox_DateQuery_ComboBox.DataSource = Cashbox.GetDateQueryList();
+                Cashbox_DateQuery_ComboBox.DisplayMember = "Display";
+                Cashbox_DateQuery_ComboBox.ValueMember = "Value";
+                Cashbox_DateQuery_ComboBox.SelectedValue = 1;
+                Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+            });
+        }
+
+        #endregion
+
     }
 
 
@@ -656,7 +876,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
                 List<string> ItemList = new List<string>();
 
-                string QuerySqlStr = "SELECT First(Song_CreatDate) AS Song_CreatDate, Count(Song_CreatDate) AS Song_CreatDateCount FROM ktv_Cashbox GROUP BY Song_CreatDate HAVING (Count(Song_CreatDate)>0) ORDER BY First(Song_CreatDate)";
+                string QuerySqlStr = "SELECT First(Song_CreatDate) AS Song_CreatDate, Count(Song_CreatDate) AS Song_CreatDateCount FROM ktv_Cashbox GROUP BY Song_CreatDate HAVING (Count(Song_CreatDate)>0) ORDER BY First(Song_CreatDate) desc";
                 using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, QuerySqlStr, ""))
                 {
                     if (dt.Rows.Count > 0)

@@ -446,6 +446,7 @@
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
             this.Cashbox_Maintenance_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Cashbox_UpdDate_Button = new System.Windows.Forms.Button();
             this.Cashbox_UpdDateValue_Label = new System.Windows.Forms.Label();
             this.Cashbox_UpdDate_Label = new System.Windows.Forms.Label();
             this.Cashbox_Query_GroupBox = new System.Windows.Forms.GroupBox();
@@ -5385,7 +5386,7 @@
             this.SongMaintenance_DBVer4Value_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
             this.SongMaintenance_DBVer4Value_Label.Name = "SongMaintenance_DBVer4Value_Label";
             this.SongMaintenance_DBVer4Value_Label.Size = new System.Drawing.Size(41, 22);
-            this.SongMaintenance_DBVer4Value_Label.TabIndex = 34;
+            this.SongMaintenance_DBVer4Value_Label.TabIndex = 7;
             this.SongMaintenance_DBVer4Value_Label.Text = "0 版";
             // 
             // SongMaintenance_DBVer4_Label
@@ -5396,7 +5397,7 @@
             this.SongMaintenance_DBVer4_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
             this.SongMaintenance_DBVer4_Label.Name = "SongMaintenance_DBVer4_Label";
             this.SongMaintenance_DBVer4_Label.Size = new System.Drawing.Size(99, 22);
-            this.SongMaintenance_DBVer4_Label.TabIndex = 33;
+            this.SongMaintenance_DBVer4_Label.TabIndex = 6;
             this.SongMaintenance_DBVer4_Label.Text = "錢櫃資料庫:";
             // 
             // SongMaintenance_DBVerUpdate_GroupBox
@@ -5408,7 +5409,7 @@
             this.SongMaintenance_DBVerUpdate_GroupBox.Name = "SongMaintenance_DBVerUpdate_GroupBox";
             this.SongMaintenance_DBVerUpdate_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.SongMaintenance_DBVerUpdate_GroupBox.Size = new System.Drawing.Size(556, 130);
-            this.SongMaintenance_DBVerUpdate_GroupBox.TabIndex = 6;
+            this.SongMaintenance_DBVerUpdate_GroupBox.TabIndex = 8;
             this.SongMaintenance_DBVerUpdate_GroupBox.TabStop = false;
             this.SongMaintenance_DBVerUpdate_GroupBox.Text = "版本更新";
             // 
@@ -5856,6 +5857,7 @@
             // 
             // Cashbox_Maintenance_GroupBox
             // 
+            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_UpdDate_Button);
             this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_UpdDateValue_Label);
             this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_UpdDate_Label);
             this.Cashbox_Maintenance_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5867,6 +5869,18 @@
             this.Cashbox_Maintenance_GroupBox.TabIndex = 3;
             this.Cashbox_Maintenance_GroupBox.TabStop = false;
             this.Cashbox_Maintenance_GroupBox.Text = "資料維護";
+            // 
+            // Cashbox_UpdDate_Button
+            // 
+            this.Cashbox_UpdDate_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDate_Button.Location = new System.Drawing.Point(303, 39);
+            this.Cashbox_UpdDate_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Cashbox_UpdDate_Button.Name = "Cashbox_UpdDate_Button";
+            this.Cashbox_UpdDate_Button.Size = new System.Drawing.Size(149, 32);
+            this.Cashbox_UpdDate_Button.TabIndex = 6;
+            this.Cashbox_UpdDate_Button.Text = "立即更新";
+            this.Cashbox_UpdDate_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_UpdDate_Button.Click += new System.EventHandler(this.Cashbox_UpdDate_Button_Click);
             // 
             // Cashbox_UpdDateValue_Label
             // 
@@ -7579,6 +7593,7 @@
         private System.Windows.Forms.Label SongMaintenance_DBVer4Value_Label;
         private System.Windows.Forms.Label SongMaintenance_DBVer4_Label;
         private System.Windows.Forms.Button Debug_CashboxExport_Button;
+        private System.Windows.Forms.Button Cashbox_UpdDate_Button;
     }
 }
 

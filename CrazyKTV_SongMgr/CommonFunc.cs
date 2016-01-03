@@ -1586,14 +1586,14 @@ namespace CrazyKTV_SongMgr
             oParams = new object[]
             {
                 connectionString,
-                "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Application.StartupPath + @"\tempdb.mdb;Jet OLEDB:Engine Type=5"
+                "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + mdwfilename + ".tmp;Jet OLEDB:Engine Type=5"
             };
 
             objJRO.GetType().InvokeMember("CompactDatabase", System.Reflection.BindingFlags.InvokeMethod, null, objJRO, oParams);
 
             try
             {
-                File.Copy(Application.StartupPath + @"\tempdb.mdb", mdwfilename, true);
+                File.Copy(mdwfilename + ".tmp", mdwfilename, true);
             }
             catch
             {
@@ -1601,10 +1601,12 @@ namespace CrazyKTV_SongMgr
                 Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【壓縮並修復資料庫】無法完成資料庫壓縮並修復,因資料庫已由其它使用者開啟。";
                 Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
             }
-
-            File.Delete(Application.StartupPath + @"\tempdb.mdb");
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(objJRO);
-            objJRO = null;
+            finally
+            {
+                File.Delete(mdwfilename + ".tmp");
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(objJRO);
+                objJRO = null;
+            }
         }
 
         public static bool IsSongId(String str)

@@ -478,7 +478,12 @@ namespace CrazyKTV_SongMgr
         {
             if (File.Exists(Global.CrazyktvDatabaseFile))
             {
-                CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
+                try
+                {
+                    CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
+                    CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvSongMgrDatabaseFile + ";", Global.CrazyktvSongMgrDatabaseFile);
+                }
+                catch { }
             }
         }
 
@@ -687,6 +692,8 @@ namespace CrazyKTV_SongMgr
 
 
 
+
+            
         // End
-    }
+        }
 }

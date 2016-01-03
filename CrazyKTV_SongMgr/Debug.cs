@@ -194,6 +194,7 @@ namespace CrazyKTV_SongMgr
                     list.Clear();
                 }
             }
+            SongIdList.Clear();
 
             using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
             {
@@ -234,7 +235,7 @@ namespace CrazyKTV_SongMgr
                     cmd.Parameters.Clear();
                 }
             }
-            CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvSongMgrDatabaseFile + ";", Global.CrazyktvSongMgrDatabaseFile);
+            SongDataList.Clear();
         }
 
         #endregion
