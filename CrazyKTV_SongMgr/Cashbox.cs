@@ -482,6 +482,38 @@ namespace CrazyKTV_SongMgr
                                     RemoveRowsIdxlist.Clear();
                                 }
                                 break;
+                            case "SongDate":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                string DateStr = DateTime.Parse(SongQueryValue).ToString("yyyy/MM/dd");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    var query = from row in dt.AsEnumerable()
+                                                where !row.Field<DateTime>("Song_CreatDate").ToString("yyyy/MM/dd").Equals(DateStr)
+                                                select row;
+
+                                    if (query.Count<DataRow>() > 0)
+                                    {
+                                        foreach (DataRow row in query)
+                                        {
+                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                        }
+                                    }
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
+                                }
+                                break;
                             default:
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
                                 break;
