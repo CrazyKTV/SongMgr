@@ -534,6 +534,7 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
+            this.Debug_UpdateDataColumn_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -6891,6 +6892,7 @@
             // 
             // Debug_TabPage
             // 
+            this.Debug_TabPage.Controls.Add(this.Debug_UpdateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_Cashbox_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_Tooltip_GroupBox);
@@ -6999,6 +7001,18 @@
             this.Debug_CreateTestFile_Button.Text = "建立測試歌庫";
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
+            // 
+            // Debug_UpdateDataColumn_Button
+            // 
+            this.Debug_UpdateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 168);
+            this.Debug_UpdateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_UpdateDataColumn_Button.Name = "Debug_UpdateDataColumn_Button";
+            this.Debug_UpdateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_UpdateDataColumn_Button.TabIndex = 12;
+            this.Debug_UpdateDataColumn_Button.Text = "更新資料欄位";
+            this.Debug_UpdateDataColumn_Button.UseVisualStyleBackColor = true;
+            this.Debug_UpdateDataColumn_Button.Click += new System.EventHandler(this.Debug_UpdateDataColumn_Button_Click);
             // 
             // MainForm
             // 
@@ -7642,6 +7656,7 @@
         private System.Windows.Forms.Button Debug_CreateDataColumn_Button;
         private System.Windows.Forms.Button Cashbox_ApplyCashboxId_Button;
         private System.Windows.Forms.GroupBox Cashbox_UpdDate_GroupBox;
+        private System.Windows.Forms.Button Debug_UpdateDataColumn_Button;
     }
 }
 

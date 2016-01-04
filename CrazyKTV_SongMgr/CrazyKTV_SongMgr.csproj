@@ -33,8 +33,8 @@
     <ProductName>CrazyKTV 加歌程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
     <SuiteName>CrazyKTV 加歌程式</SuiteName>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.3.7.02</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.3.8.00</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
@@ -1252,7 +1252,7 @@
   <Target Name="AfterBuild">
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)$(OutDir)nVLC.dll"  "$(ProjectDir)$(OutDir)SongMgr\Libs"  /y
-del  "$(ProjectDir)$(OutDir)nVLC.dll"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

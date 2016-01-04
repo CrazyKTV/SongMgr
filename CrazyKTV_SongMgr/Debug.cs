@@ -509,6 +509,94 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Debug 更新欄位資料 ---
+
+        private void Debug_UpdateDataColumn_Button_Click(object sender, EventArgs e)
+        {
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要更新資料欄位嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在更新資料欄位,請稍待...";
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Debug_UpdateDataColumnTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            Debug_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆欄位資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
+        private void Debug_UpdateDataColumnTask()
+        {
+            string DatabaseFile = Global.CrazyktvSongMgrDatabaseFile;
+            string TableName = "ktv_Cashbox";
+            string ColumnName = "Song_CreatDate";
+            string ColumnValue = DateTime.Parse("2016/01/01").ToString();
+            string WhereColumn = "Cashbox_Id";
+
+            List<string> WhereValueList = new List<string>();
+            string QuerySqlStr = "select * from " + TableName;
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, QuerySqlStr, ""))
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        WhereValueList.Add(row[WhereColumn].ToString());
+                    }
+                }
+            }
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(DatabaseFile, ""))
+            {
+                OleDbCommand[] cmds =
+                {
+                    new OleDbCommand("update " + TableName +" set " + ColumnName + " = '" + ColumnValue +"' where " + WhereColumn +" = @WhereValue", conn)
+                };
+
+                if (WhereValueList.Count > 0)
+                {
+                    foreach (string value in WhereValueList)
+                    {
+                        cmds[0].Parameters.AddWithValue("@WhereValue", value);
+
+                        try
+                        {
+                            cmds[0].ExecuteNonQuery();
+                            Global.TotalList[0]++;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Debug_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[0] + " 筆欄位資料,請稍待...";
+                            });
+                        }
+                        catch
+                        {
+                            Global.TotalList[1]++;
+                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "更新欄位資料時發生未知的錯誤: " + value;
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                        }
+                        cmds[0].Parameters.Clear();
+                    }
+                }
+            }
+            WhereValueList.Clear();
+        }
+
+        #endregion
 
     }
 
