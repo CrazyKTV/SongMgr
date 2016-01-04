@@ -368,38 +368,25 @@ namespace CrazyKTV_SongMgr
                         SongQueryValue = "NA";
                         SongQueryStatusText = Cashbox_OtherQuery_ComboBox.Text;
                         Cashbox_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
-
-                        tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
-
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                        {
-                            this.BeginInvoke((Action)delegate ()
-                            {
-                                Common_SwitchSetUI(true);
-                                Cashbox_Query_Button.Enabled = true;
-                            });
-                            Cashbox.DisposeSongDataTable();
-                        });
                         break;
                     case "2":
                         SongQueryType = "DuplicateSong";
                         SongQueryValue = "NA";
                         SongQueryStatusText = Cashbox_OtherQuery_ComboBox.Text;
                         Cashbox_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
-
-                        tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
-
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                        {
-                            this.BeginInvoke((Action)delegate ()
-                            {
-                                Common_SwitchSetUI(true);
-                                Cashbox_Query_Button.Enabled = true;
-                            });
-                            Cashbox.DisposeSongDataTable();
-                        });
                         break;
                 }
+                tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Common_SwitchSetUI(true);
+                        Cashbox_Query_Button.Enabled = true;
+                    });
+                    Cashbox.DisposeSongDataTable();
+                });
             }
         }
 
@@ -426,7 +413,7 @@ namespace CrazyKTV_SongMgr
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         Common_SwitchSetUI(true);
                         Cashbox_Query_Button.Enabled = true;
@@ -444,7 +431,7 @@ namespace CrazyKTV_SongMgr
             {
                 if (SongQueryValue == "")
                 {
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         Cashbox_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
                     });
@@ -541,7 +528,7 @@ namespace CrazyKTV_SongMgr
 
                         if (dt.Rows.Count == 0)
                         {
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Cashbox_EditMode_CheckBox.Enabled = false;
                                 Cashbox_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
@@ -549,7 +536,7 @@ namespace CrazyKTV_SongMgr
                         }
                         else
                         {
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Cashbox_EditMode_CheckBox.Enabled = true;
 
@@ -594,7 +581,7 @@ namespace CrazyKTV_SongMgr
                     }
                     catch
                     {
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Cashbox_EditMode_CheckBox.Enabled = false;
                             Cashbox_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
@@ -624,7 +611,7 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
                     Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         if (Cashbox_QueryStatus_Label.Text != "系統時間錯誤!" && Cashbox_QueryStatus_Label.Text != "僅支援更新2016年後的錢櫃歌曲!")
                         {
@@ -645,7 +632,7 @@ namespace CrazyKTV_SongMgr
 
             if (DateTime.Compare(DateEndDate, DateStartDate) < 0)
             {
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     Cashbox_QueryStatus_Label.Text = "系統時間錯誤!";
                 });
@@ -654,7 +641,7 @@ namespace CrazyKTV_SongMgr
 
             if (DateTime.Compare(DateStartDate, DateValidDate) < 0 || DateTime.Compare(DateEndDate, DateValidDate) < 0)
             {
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     Cashbox_QueryStatus_Label.Text = "僅支援更新2016年後的錢櫃歌曲!";
                 });
@@ -683,7 +670,7 @@ namespace CrazyKTV_SongMgr
                 table = doc.DocumentNode.SelectSingleNode("//table[2]");
                 child = table.SelectNodes("tr");
 
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     Cashbox_QueryStatus_Label.Text = "正在分析第 " + (i + 1) + " / " + DaysCount + " 天的更新歌曲,請稍待...";
                 });
@@ -752,7 +739,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 AddCmd.ExecuteNonQuery();
                                 Global.TotalList[0]++;
-                                this.BeginInvoke((Action)delegate ()
+                                this.BeginInvoke((Action)delegate()
                                 {
                                     Cashbox_QueryStatus_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
                                 });
@@ -778,7 +765,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 UpdCmd.ExecuteNonQuery();
                                 Global.TotalList[0]++;
-                                this.BeginInvoke((Action)delegate ()
+                                this.BeginInvoke((Action)delegate()
                                 {
                                     Cashbox_QueryStatus_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
                                 });
@@ -811,7 +798,7 @@ namespace CrazyKTV_SongMgr
                 Versioncmd.Parameters.Clear();
             }
 
-            this.BeginInvoke((Action)delegate ()
+            this.BeginInvoke((Action)delegate()
             {
                 Cashbox_UpdDateValue_Label.Text = Global.CashboxUpdDate.ToLongDateString();
                 Cashbox_UpdDate_Button.Enabled = false;

@@ -272,7 +272,7 @@ namespace CrazyKTV_SongMgr
                         catch
                         {
                             UpdateError = true;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 SongMaintenance_DBVerTooltip_Label.Text = "加入 CashboxDB 欄位失敗,已還原為原本的資料庫檔案。";
                             });
@@ -297,7 +297,7 @@ namespace CrazyKTV_SongMgr
                         catch
                         {
                             UpdateError = true;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 SongMaintenance_DBVerTooltip_Label.Text = "加入 CashboxUpdDate 欄位,已還原為原本的資料庫檔案。";
                             });
@@ -462,7 +462,7 @@ namespace CrazyKTV_SongMgr
                     catch
                     {
                         UpdateError = true;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_DBVerTooltip_Label.Text = "更新歌曲資料表失敗,已還原為原本的資料庫檔案。";
                         });
@@ -489,7 +489,7 @@ namespace CrazyKTV_SongMgr
                     catch
                     {
                         UpdateError = true;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_DBVerTooltip_Label.Text = "更新歌手資料表失敗,已還原為原本的資料庫檔案。";
                         });
@@ -514,7 +514,7 @@ namespace CrazyKTV_SongMgr
                     catch
                     {
                         UpdateError = true;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_DBVerTooltip_Label.Text = "更新拼音資料表失敗,已還原為原本的資料庫檔案。";
                         });
@@ -538,7 +538,7 @@ namespace CrazyKTV_SongMgr
                     catch
                     {
                         UpdateError = true;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             SongMaintenance_DBVerTooltip_Label.Text = "更新語系資料表失敗,已還原為原本的資料庫檔案。";
                         });

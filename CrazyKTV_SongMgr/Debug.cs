@@ -106,7 +106,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Debug_Tooltip_Label.Text = "總共建立 " + Global.TotalList[0] + " / " + Global.TotalList[1] + " 筆資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -256,7 +256,7 @@ namespace CrazyKTV_SongMgr
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
                 Global.TimerEndTime = DateTime.Now;
-                this.BeginInvoke((Action)delegate ()
+                this.BeginInvoke((Action)delegate()
                 {
                     Debug_Tooltip_Label.Text = "總共從錢櫃歌庫解析出 " + Global.TotalList[0] + " 筆歌手資料,查詢到 " + Global.TotalList[1] + " 筆歌手無資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                     Common_SwitchSetUI(true);
@@ -438,7 +438,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Debug_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆新欄位資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);

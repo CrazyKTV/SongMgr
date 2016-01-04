@@ -685,7 +685,7 @@ namespace CrazyKTV_SongMgr
                                         SingerUpdateCmds[2].ExecuteNonQuery();
                                         lock (LockThis) { Global.TotalList[2]++; }
 
-                                        this.BeginInvoke((Action)delegate ()
+                                        this.BeginInvoke((Action)delegate()
                                         {
                                             SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
                                         });

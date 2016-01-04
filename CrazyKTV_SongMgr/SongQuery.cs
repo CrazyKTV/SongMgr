@@ -206,77 +206,113 @@ namespace CrazyKTV_SongMgr
 
         private void SongQuery_Query_Button_Click(object sender, EventArgs e)
         {
-            Global.SongQueryQueryType = "SongQuery";
-            SongQuery_DataGridView.DataSource = null;
-            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
-            GC.Collect();
-
-            string SongQueryStatusText = "";
-            string SongQueryValue = "";
-
             if (Global.CrazyktvDatabaseStatus)
             {
+                Global.SongQueryQueryType = "SongQuery";
+
+                SongQuery_Query_Button.Enabled = false;
+                Common_SwitchSetUI(false);
+
+                SongQuery_DataGridView.DataSource = null;
+                if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                SongQuery_QueryStatus_Label.Text = "";
+                GC.Collect();
+
                 string SongQueryType = "None";
+                string SongQueryValue = "";
+                string SongQueryStatusText = "";
+
+                var tasks = new List<Task>();
+
                 switch (SongQuery_QueryType_ComboBox.SelectedValue.ToString())
                 {
                     case "1":
                         SongQueryType = "SongName";
-                        SongQueryStatusText = SongQuery_QueryValue_TextBox.Text;
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = SongQuery_QueryValue_TextBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢歌曲名稱為『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "2":
                         SongQueryType = "SingerName";
-                        SongQueryStatusText = SongQuery_QueryValue_TextBox.Text;
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = SongQuery_QueryValue_TextBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢歌手名稱為『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "3":
                         SongQueryType = "SongID";
-                        SongQueryStatusText = "歌曲編號中包含 " + SongQuery_QueryValue_TextBox.Text;
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = "歌曲編號中包含 " + SongQuery_QueryValue_TextBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "4":
                         SongQueryType = "NewSong";
-                        SongQueryStatusText = "新進歌曲";
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = "新進歌曲";
+                        SongQuery_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
                         break;
                     case "5":
                         SongQueryType = "ChorusSong";
-                        SongQueryStatusText = "合唱歌曲";
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = "合唱歌曲";
+                        SongQuery_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
                         break;
                     case "6":
                         SongQueryType = "SongType";
-                        SongQueryStatusText = "歌曲類別為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQueryValue = SongQuery_QueryValue_ComboBox.Text;
+                        SongQueryStatusText = "歌曲類別為" + SongQuery_QueryValue_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "7":
                         SongQueryType = "SingerType";
-                        SongQueryStatusText = "歌手類別為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQueryValue = Global.CrazyktvSingerTypeList.IndexOf(SongQuery_QueryValue_ComboBox.Text).ToString();
+                        SongQueryStatusText = "歌手類別為" + SongQuery_QueryValue_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "8":
                         SongQueryType = "SongTrack";
-                        SongQueryStatusText = "歌曲聲道為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQueryValue = SongQuery_QueryValue_ComboBox.SelectedValue.ToString();
+                        SongQueryStatusText = "歌曲聲道為" + SongQuery_QueryValue_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "9":
                         SongQueryType = "CashboxId";
-                        SongQueryStatusText = "使用錢櫃編號";
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = "使用錢櫃編號";
+                        SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                 }
+                tasks.Add(Task.Factory.StartNew(() => SongQuery_QueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
 
-                SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Common_SwitchSetUI(true);
+                        SongQuery_Query_Button.Enabled = true;
+                    });
+                });
+            }
+        }
 
+
+        private void SongQuery_QueryTask(string SongQueryType, string SongQueryValue, string SongQueryStatusText)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
                 if (SongQueryValue == "")
                 {
-                    SongQuery_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongQuery_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
+                    });
                 }
                 else
                 {
+                    DataTable dt = new DataTable();
                     try
                     {
-                        DataTable dt = new DataTable();
                         switch (SongQueryType)
                         {
                             case "SongName":
@@ -366,24 +402,48 @@ namespace CrazyKTV_SongMgr
                                 {
                                     string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
 
-                                    foreach (DataRow row in CashboxDT.AsEnumerable())
+                                    Parallel.ForEach(Global.CashboxSongLangList, (langstr, loopState) =>
                                     {
-                                        string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
-                                        CashboxIdList.Add(CashboxId);
-                                    }
+                                        var query = from row in CashboxDT.AsEnumerable()
+                                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() > 0)
+                                        {
+                                            foreach (DataRow row in query)
+                                            {
+                                                string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
+                                                lock (LockThis) { CashboxIdList.Add(CashboxId); }
+                                            }
+                                        }
+                                    });
                                 }
+
+                                CashboxIdList.Sort();
 
                                 if (dt.Rows.Count > 0)
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
 
-                                    foreach (DataRow row in dt.AsEnumerable())
+                                    Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
                                     {
-                                        if (CashboxIdList.IndexOf(row["Song_Id"].ToString()) < 0)
+                                        var query = from row in dt.AsEnumerable()
+                                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() > 0)
                                         {
-                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                            foreach (DataRow row in query)
+                                            {
+                                                if (CashboxIdList.IndexOf(row["Song_Id"].ToString()) < 0)
+                                                {
+                                                    lock (LockThis) { RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row)); }
+                                                }
+                                            }
                                         }
-                                    }
+                                    });
+
+                                    RemoveRowsIdxlist.Sort();
 
                                     if (RemoveRowsIdxlist.Count > 0)
                                     {
@@ -401,16 +461,20 @@ namespace CrazyKTV_SongMgr
 
                         if (dt.Rows.Count == 0)
                         {
-                            SongQuery_EditMode_CheckBox.Enabled = false;
-                            SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
+                            this.BeginInvoke((Action)delegate()
+                            {
+                                SongQuery_EditMode_CheckBox.Enabled = false;
+                                SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
+                            });
                         }
                         else
                         {
-                            if (SongQueryType == "SingerName" & Global.SongQueryFuzzyQuery == "False")
+                            if (SongQueryType == "SingerName" && Global.SongQueryFuzzyQuery == "False")
                             {
                                 var query = from row in dt.AsEnumerable()
-                                            where row.Field<string>("Song_Singer") != SongQuery_QueryValue_TextBox.Text
+                                            where row.Field<string>("Song_Singer") != SongQueryValue
                                             select row;
+
                                 if (query.Count<DataRow>() > 0)
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
@@ -429,7 +493,7 @@ namespace CrazyKTV_SongMgr
                                             if (RemoveThisRow == "True") RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
                                         }
                                     }
-                                    
+
                                     if (RemoveRowsIdxlist.Count > 0)
                                     {
                                         for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
@@ -442,62 +506,75 @@ namespace CrazyKTV_SongMgr
 
                             if (dt.Rows.Count == 0)
                             {
-                                SongQuery_EditMode_CheckBox.Enabled = false;
-                                SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
+                                this.BeginInvoke((Action)delegate()
+                                {
+                                    SongQuery_EditMode_CheckBox.Enabled = false;
+                                    SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
+                                });
                             }
                             else
                             {
-                                SongQuery_EditMode_CheckBox.Enabled = true;
-                                SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
-
-                                SongQuery_DataGridView.DataSource = dt;
-
-                                for (int i = 0; i < SongQuery_DataGridView.ColumnCount; i++)
+                                this.BeginInvoke((Action)delegate()
                                 {
-                                    List<string> DataGridViewColumnName = SongQuery.GetDataGridViewColumnSet(SongQuery_DataGridView.Columns[i].Name);
-                                    SongQuery_DataGridView.Columns[i].HeaderText = DataGridViewColumnName[0];
+                                    SongQuery_EditMode_CheckBox.Enabled = true;
+                                    SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
 
-                                    if (DataGridViewColumnName[1].ToString() == "0")
+                                    SongQuery_DataGridView.DataSource = dt;
+
+                                    for (int i = 0; i < SongQuery_DataGridView.ColumnCount; i++)
                                     {
-                                        SongQuery_DataGridView.Columns[i].Visible = false;
+                                        List<string> DataGridViewColumnName = SongQuery.GetDataGridViewColumnSet(SongQuery_DataGridView.Columns[i].Name);
+                                        SongQuery_DataGridView.Columns[i].HeaderText = DataGridViewColumnName[0];
+
+                                        if (DataGridViewColumnName[1].ToString() == "0")
+                                        {
+                                            SongQuery_DataGridView.Columns[i].Visible = false;
+                                        }
+
+                                        if (DataGridViewColumnName[2].ToString() != "none")
+                                        {
+                                            ((DataGridViewTextBoxColumn)SongQuery_DataGridView.Columns[i]).MaxInputLength = int.Parse(DataGridViewColumnName[2]);
+                                        }
+
+                                        SongQuery_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                                     }
 
-                                    if (DataGridViewColumnName[2].ToString() != "none")
+                                    string SongFullPath = "";
+                                    int SongFullPathIndex = SongQuery_DataGridView.ColumnCount - 1;
+                                    SongQuery_DataGridView.Columns.Add("Song_FullPath", "檔案路徑");
+
+                                    SongQuery_DataGridView.Columns["Song_FullPath"].Width = 640;
+                                    SongQuery_DataGridView.Columns["Song_FullPath"].MinimumWidth = 640;
+                                    SongQuery_DataGridView.Columns["Song_FullPath"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+                                    for (int i = 0; i < SongQuery_DataGridView.Rows.Count; i++)
                                     {
-                                        ((DataGridViewTextBoxColumn)SongQuery_DataGridView.Columns[i]).MaxInputLength = int.Parse(DataGridViewColumnName[2]);
+                                        SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
+                                        SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                     }
+                                    SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
+                                    SongQuery_DataGridView.Focus();
 
-                                    SongQuery_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
-                                }
-
-                                string SongFullPath = "";
-                                int SongFullPathIndex = SongQuery_DataGridView.ColumnCount - 1;
-                                SongQuery_DataGridView.Columns.Add("Song_FullPath", "檔案路徑");
-
-                                SongQuery_DataGridView.Columns["Song_FullPath"].Width = 640;
-                                SongQuery_DataGridView.Columns["Song_FullPath"].MinimumWidth = 640;
-                                SongQuery_DataGridView.Columns["Song_FullPath"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                                for (int i = 0; i < SongQuery_DataGridView.Rows.Count; i++)
-                                {
-                                    SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
-                                    SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
-                                }
-
-                                SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
-                                SongQuery_DataGridView.Focus();
+                                    dt.Dispose();
+                                    dt = null;
+                                });
                             }
                         }
-                        dt.Dispose();
-                        dt = null;
                     }
                     catch
                     {
-                        SongQuery_EditMode_CheckBox.Enabled = false;
-                        SongQuery_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            SongQuery_EditMode_CheckBox.Enabled = false;
+                            SongQuery_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
+                        });
                     }
                 }
             }
         }
+
+
+
 
         #endregion
 
