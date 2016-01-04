@@ -2374,7 +2374,14 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "CashboxId":
-                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
+                    if (Global.SongQueryFilter != "全部")
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Lang = '" + Global.SongQueryFilter + "'" + SongQueryOrderStr;
+                    }
+                    else
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song" + SongQueryOrderStr;
+                    }
                     break;
                 case "FileNotExists":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
