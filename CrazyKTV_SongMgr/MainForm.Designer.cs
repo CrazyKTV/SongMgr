@@ -436,6 +436,10 @@
             this.SongMaintenance_SongSpellCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SingerSpellCorrect_Button = new System.Windows.Forms.Button();
             this.Cashbox_TabPage = new System.Windows.Forms.TabPage();
+            this.Cashbox_UpdDate_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Cashbox_UpdDate_Label = new System.Windows.Forms.Label();
+            this.Cashbox_UpdDate_Button = new System.Windows.Forms.Button();
+            this.Cashbox_UpdDateValue_Label = new System.Windows.Forms.Label();
             this.Cashbox_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_DateQuery_ComboBox = new System.Windows.Forms.ComboBox();
             this.Cashbox_DateQuery_Label = new System.Windows.Forms.Label();
@@ -447,9 +451,6 @@
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
             this.Cashbox_Maintenance_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_ApplyCashboxId_Button = new System.Windows.Forms.Button();
-            this.Cashbox_UpdDate_Button = new System.Windows.Forms.Button();
-            this.Cashbox_UpdDateValue_Label = new System.Windows.Forms.Label();
-            this.Cashbox_UpdDate_Label = new System.Windows.Forms.Label();
             this.Cashbox_Query_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_Clear_Button = new System.Windows.Forms.Button();
@@ -533,7 +534,6 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
-            this.Cashbox_UpdDate_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -589,6 +589,7 @@
             this.SongMaintenance_Tooltip_GroupBox.SuspendLayout();
             this.SongMaintenance_SpellCorrect_GroupBox.SuspendLayout();
             this.Cashbox_TabPage.SuspendLayout();
+            this.Cashbox_UpdDate_GroupBox.SuspendLayout();
             this.Cashbox_OtherQuery_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).BeginInit();
             this.Cashbox_QueryStatus_GroupBox.SuspendLayout();
@@ -615,7 +616,6 @@
             this.Debug_TabPage.SuspendLayout();
             this.Debug_Cashbox_GroupBox.SuspendLayout();
             this.Debug_Tooltip_GroupBox.SuspendLayout();
-            this.Cashbox_UpdDate_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -5728,6 +5728,56 @@
             this.Cashbox_TabPage.Text = "錢櫃資料";
             this.Cashbox_TabPage.UseVisualStyleBackColor = true;
             // 
+            // Cashbox_UpdDate_GroupBox
+            // 
+            this.Cashbox_UpdDate_GroupBox.Controls.Add(this.Cashbox_UpdDate_Label);
+            this.Cashbox_UpdDate_GroupBox.Controls.Add(this.Cashbox_UpdDate_Button);
+            this.Cashbox_UpdDate_GroupBox.Controls.Add(this.Cashbox_UpdDateValue_Label);
+            this.Cashbox_UpdDate_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDate_GroupBox.Location = new System.Drawing.Point(507, 23);
+            this.Cashbox_UpdDate_GroupBox.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+            this.Cashbox_UpdDate_GroupBox.Name = "Cashbox_UpdDate_GroupBox";
+            this.Cashbox_UpdDate_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.Cashbox_UpdDate_GroupBox.Size = new System.Drawing.Size(468, 96);
+            this.Cashbox_UpdDate_GroupBox.TabIndex = 7;
+            this.Cashbox_UpdDate_GroupBox.TabStop = false;
+            this.Cashbox_UpdDate_GroupBox.Text = "資料更新";
+            // 
+            // Cashbox_UpdDate_Label
+            // 
+            this.Cashbox_UpdDate_Label.AutoSize = true;
+            this.Cashbox_UpdDate_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDate_Label.Location = new System.Drawing.Point(16, 44);
+            this.Cashbox_UpdDate_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.Cashbox_UpdDate_Label.Name = "Cashbox_UpdDate_Label";
+            this.Cashbox_UpdDate_Label.Size = new System.Drawing.Size(116, 22);
+            this.Cashbox_UpdDate_Label.TabIndex = 4;
+            this.Cashbox_UpdDate_Label.Text = "上次更新日期:";
+            // 
+            // Cashbox_UpdDate_Button
+            // 
+            this.Cashbox_UpdDate_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDate_Button.Location = new System.Drawing.Point(303, 39);
+            this.Cashbox_UpdDate_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Cashbox_UpdDate_Button.Name = "Cashbox_UpdDate_Button";
+            this.Cashbox_UpdDate_Button.Size = new System.Drawing.Size(149, 32);
+            this.Cashbox_UpdDate_Button.TabIndex = 6;
+            this.Cashbox_UpdDate_Button.Text = "立即更新";
+            this.Cashbox_UpdDate_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_UpdDate_Button.Click += new System.EventHandler(this.Cashbox_UpdDate_Button_Click);
+            // 
+            // Cashbox_UpdDateValue_Label
+            // 
+            this.Cashbox_UpdDateValue_Label.AutoSize = true;
+            this.Cashbox_UpdDateValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_UpdDateValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.Cashbox_UpdDateValue_Label.Location = new System.Drawing.Point(144, 44);
+            this.Cashbox_UpdDateValue_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.Cashbox_UpdDateValue_Label.Name = "Cashbox_UpdDateValue_Label";
+            this.Cashbox_UpdDateValue_Label.Size = new System.Drawing.Size(121, 22);
+            this.Cashbox_UpdDateValue_Label.TabIndex = 5;
+            this.Cashbox_UpdDateValue_Label.Text = "2016年1月3日";
+            // 
             // Cashbox_OtherQuery_GroupBox
             // 
             this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_DateQuery_ComboBox);
@@ -5847,6 +5897,7 @@
             this.Cashbox_EditMode_CheckBox.TabIndex = 1;
             this.Cashbox_EditMode_CheckBox.Text = "編輯模式";
             this.Cashbox_EditMode_CheckBox.UseVisualStyleBackColor = true;
+            this.Cashbox_EditMode_CheckBox.Visible = false;
             // 
             // Cashbox_QueryStatus_Label
             // 
@@ -5884,41 +5935,6 @@
             this.Cashbox_ApplyCashboxId_Button.Text = "套用錢櫃編號";
             this.Cashbox_ApplyCashboxId_Button.UseVisualStyleBackColor = true;
             this.Cashbox_ApplyCashboxId_Button.Click += new System.EventHandler(this.Cashbox_ApplyCashboxId_Button_Click);
-            // 
-            // Cashbox_UpdDate_Button
-            // 
-            this.Cashbox_UpdDate_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_UpdDate_Button.Location = new System.Drawing.Point(303, 39);
-            this.Cashbox_UpdDate_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.Cashbox_UpdDate_Button.Name = "Cashbox_UpdDate_Button";
-            this.Cashbox_UpdDate_Button.Size = new System.Drawing.Size(149, 32);
-            this.Cashbox_UpdDate_Button.TabIndex = 6;
-            this.Cashbox_UpdDate_Button.Text = "立即更新";
-            this.Cashbox_UpdDate_Button.UseVisualStyleBackColor = true;
-            this.Cashbox_UpdDate_Button.Click += new System.EventHandler(this.Cashbox_UpdDate_Button_Click);
-            // 
-            // Cashbox_UpdDateValue_Label
-            // 
-            this.Cashbox_UpdDateValue_Label.AutoSize = true;
-            this.Cashbox_UpdDateValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_UpdDateValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.Cashbox_UpdDateValue_Label.Location = new System.Drawing.Point(144, 44);
-            this.Cashbox_UpdDateValue_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.Cashbox_UpdDateValue_Label.Name = "Cashbox_UpdDateValue_Label";
-            this.Cashbox_UpdDateValue_Label.Size = new System.Drawing.Size(121, 22);
-            this.Cashbox_UpdDateValue_Label.TabIndex = 5;
-            this.Cashbox_UpdDateValue_Label.Text = "2016年1月3日";
-            // 
-            // Cashbox_UpdDate_Label
-            // 
-            this.Cashbox_UpdDate_Label.AutoSize = true;
-            this.Cashbox_UpdDate_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_UpdDate_Label.Location = new System.Drawing.Point(16, 44);
-            this.Cashbox_UpdDate_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.Cashbox_UpdDate_Label.Name = "Cashbox_UpdDate_Label";
-            this.Cashbox_UpdDate_Label.Size = new System.Drawing.Size(116, 22);
-            this.Cashbox_UpdDate_Label.TabIndex = 4;
-            this.Cashbox_UpdDate_Label.Text = "上次更新日期:";
             // 
             // Cashbox_Query_GroupBox
             // 
@@ -6984,21 +7000,6 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
-            // Cashbox_UpdDate_GroupBox
-            // 
-            this.Cashbox_UpdDate_GroupBox.Controls.Add(this.Cashbox_UpdDate_Label);
-            this.Cashbox_UpdDate_GroupBox.Controls.Add(this.Cashbox_UpdDate_Button);
-            this.Cashbox_UpdDate_GroupBox.Controls.Add(this.Cashbox_UpdDateValue_Label);
-            this.Cashbox_UpdDate_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_UpdDate_GroupBox.Location = new System.Drawing.Point(507, 23);
-            this.Cashbox_UpdDate_GroupBox.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-            this.Cashbox_UpdDate_GroupBox.Name = "Cashbox_UpdDate_GroupBox";
-            this.Cashbox_UpdDate_GroupBox.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.Cashbox_UpdDate_GroupBox.Size = new System.Drawing.Size(468, 96);
-            this.Cashbox_UpdDate_GroupBox.TabIndex = 7;
-            this.Cashbox_UpdDate_GroupBox.TabStop = false;
-            this.Cashbox_UpdDate_GroupBox.Text = "資料更新";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -7104,6 +7105,8 @@
             this.SongMaintenance_Tooltip_GroupBox.ResumeLayout(false);
             this.SongMaintenance_SpellCorrect_GroupBox.ResumeLayout(false);
             this.Cashbox_TabPage.ResumeLayout(false);
+            this.Cashbox_UpdDate_GroupBox.ResumeLayout(false);
+            this.Cashbox_UpdDate_GroupBox.PerformLayout();
             this.Cashbox_OtherQuery_GroupBox.ResumeLayout(false);
             this.Cashbox_OtherQuery_GroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).EndInit();
@@ -7140,8 +7143,6 @@
             this.Debug_TabPage.ResumeLayout(false);
             this.Debug_Cashbox_GroupBox.ResumeLayout(false);
             this.Debug_Tooltip_GroupBox.ResumeLayout(false);
-            this.Cashbox_UpdDate_GroupBox.ResumeLayout(false);
-            this.Cashbox_UpdDate_GroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }

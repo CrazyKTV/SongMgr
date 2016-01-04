@@ -307,6 +307,10 @@ namespace CrazyKTV_SongMgr
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
             SingerMgr_Edit_GroupBox.Enabled = status;
+            Cashbox_Query_GroupBox.Enabled = status;
+            Cashbox_OtherQuery_GroupBox.Enabled = status;
+            Cashbox_UpdDate_GroupBox.Enabled = status;
+            Cashbox_Maintenance_GroupBox.Enabled = status;
         }
         
         private void Common_SwitchSetUI(bool status)
@@ -323,6 +327,9 @@ namespace CrazyKTV_SongMgr
                 SongAddResult_FailureSong_ListBox.Items.Clear();
             }
 
+            SongQuery_Query_GroupBox.Enabled = status;
+            SongQuery_OtherQuery_GroupBox.Enabled = status;
+            SongQuery_Statistics_GroupBox.Enabled = status;
             SongQuery_Edit_GroupBox.Enabled = status;
             SongAdd_DefaultSongInfo_GroupBox.Enabled = status;
             SongAdd_SpecialStr_GroupBox.Enabled = status;
@@ -348,6 +355,10 @@ namespace CrazyKTV_SongMgr
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
             SingerMgr_Edit_GroupBox.Enabled = status;
+            Cashbox_Query_GroupBox.Enabled = status;
+            Cashbox_OtherQuery_GroupBox.Enabled = status;
+            Cashbox_UpdDate_GroupBox.Enabled = status;
+            Cashbox_Maintenance_GroupBox.Enabled = status;
 
             if (Global.SongLogDT.Rows.Count > 0)
             {

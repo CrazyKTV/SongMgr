@@ -37,6 +37,10 @@ namespace CrazyKTV_SongMgr
                 Debug_TabPage.Hide();
                 MainTabControl.TabPages.Remove(Debug_TabPage);
             }
+            else
+            {
+                Cashbox_EditMode_CheckBox.Visible = true;
+            }
 
             // 歌庫版本資訊
             if (!File.Exists(Global.CrazyktvSongDBUpdateFile))
