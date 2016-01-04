@@ -68,13 +68,6 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到使用舊版歌庫,開始進行更新...";
                 var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("AddktvVersion"));
             }
-            else if (CrazyKTVDatabaseFile && TB_ktv_AllSinger)
-            {
-                MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
-                SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
-                SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
-                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("RemovektvAllSinger"));
-            }
             else if (CrazyKTVDatabaseFile && !Col_Langauage_KeyWord)
             {
                 MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
@@ -95,6 +88,13 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
                 var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("AddCol_Cashbox"));
+            }
+            else if (CrazyKTVDatabaseFile && TB_ktv_AllSinger)
+            {
+                MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
+                SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
+                SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
+                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("RemovektvAllSinger"));
             }
         }
 
@@ -252,28 +252,6 @@ namespace CrazyKTV_SongMgr
                         });
                     }
                     break;
-                case "RemovektvAllSinger": // 移除 ktv_AllSinger 資料表
-                    try
-                    {
-                        OleDbCommand[] cmds =
-                        {
-                            new OleDbCommand("drop table ktv_AllSinger", conn),
-                        };
-
-                        foreach (OleDbCommand cmd in cmds)
-                        {
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                    catch
-                    {
-                        UpdateError = true;
-                        this.BeginInvoke((Action)delegate()
-                        {
-                            SongMaintenance_DBVerTooltip_Label.Text = "移除 ktv_AllSinger 資料表失敗,已還原為原本的資料庫檔案。";
-                        });
-                    }
-                    break;
                 case "AddCol_Cashbox": // 加入 Cashbox 相關欄位
                     List<string> ktvVersionColumnList = new List<string>(CommonFunc.GetOleDbColumnList(Global.CrazyktvDatabaseFile, "", "ktv_Version"));
                     if (ktvVersionColumnList.IndexOf("CashboxDB") < 0)
@@ -326,6 +304,32 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                     break;
+            }
+
+            // 移除 ktv_AllSinger 資料表
+            List<string> CrazyktvDBTableList = new List<string>(CommonFunc.GetOleDbTableList(Global.CrazyktvDatabaseFile, ""));
+            if (CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0)
+            {
+                try
+                {
+                    OleDbCommand[] cmds =
+                    {
+                        new OleDbCommand("drop table ktv_AllSinger", conn),
+                    };
+
+                    foreach (OleDbCommand cmd in cmds)
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    UpdateError = true;
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongMaintenance_DBVerTooltip_Label.Text = "移除 ktv_AllSinger 資料表失敗,已還原為原本的資料庫檔案。";
+                    });
+                }
             }
 
             if (!UpdateError)

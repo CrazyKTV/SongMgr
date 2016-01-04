@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -455,14 +456,14 @@ namespace CrazyKTV_SongMgr
                                             {
                                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
 
-                                                if (Cashbox.SongDataList.IndexOf(SongData) >= 0)
+                                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0)
                                                 {
                                                     lock (LockThis)
                                                     {
                                                         RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
                                                     }
 
-                                                    this.BeginInvoke((Action)delegate ()
+                                                    this.BeginInvoke((Action)delegate()
                                                     {
                                                         Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
                                                     });
@@ -713,10 +714,11 @@ namespace CrazyKTV_SongMgr
 
                 OleDbCommand AddCmd = new OleDbCommand(AddSqlStr, conn);
                 OleDbCommand UpdCmd = new OleDbCommand(UpdSqlStr, conn);
+                List<string> valuelist;
 
                 foreach (string SongData in SongDataList)
                 {
-                    List<string> valuelist = new List<string>(SongData.Split('|'));
+                    valuelist = new List<string>(SongData.Split('|'));
 
                     switch (valuelist[5])
                     {
@@ -772,6 +774,7 @@ namespace CrazyKTV_SongMgr
                             UpdCmd.Parameters.Clear();
                             break;
                     }
+                    valuelist.Clear();
                 }
             }
             SongDataList.Clear();
@@ -805,35 +808,249 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Cashbox 套用錢櫃編號 ---
+
+        private void Cashbox_ApplyCashboxId_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要套用錢櫃編號嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                Cashbox_QueryStatus_Label.Text = "正在重新分配歌曲編號,請稍待...";
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => Cashbox_ApplyCashboxIdTask()));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Cashbox_QueryStatus_Label.Text = "總共變更 " + Global.TotalList[0] + " 首歌曲為錢櫃編號,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    Cashbox.DisposeSongDataTable();
+                });
+            }
+        }
+
+        private void Cashbox_ApplyCashboxIdTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                List<string> FavoriteList = new List<string>();
+
+                string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
+                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            FavoriteList.Add("ktv_User|" + row["User_Id"].ToString() + "|" + row["User_Name"].ToString());
+                        }
+                    }
+                }
+
+                SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
+                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            if (Cashbox.SongIdList.IndexOf(row["Song_Id"].ToString()) >= 0)
+                            {
+                                int i = Cashbox.SongIdList.IndexOf(row["Song_Id"].ToString());
+                                List<string> list = new List<string>(Regex.Split(Cashbox.SongDataList[i], @"\|", RegexOptions.None));
+
+                                FavoriteList.Add("ktv_Favorite|" + row["User_Id"].ToString() + "|" + list[0] + "|" + list[1] + "|" + list[2]);
+                            }
+                        }
+                    }
+                }
+
+                if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+                StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt");
+                foreach (string str in FavoriteList)
+                {
+                    sw.WriteLine(str);
+                }
+                sw.Close();
+                FavoriteList.Clear();
+
+                List<string> ReNewList = new List<string>();
+                List<string> ReOldList = new List<string>();
+
+                string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+                CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
+                CommonFunc.GetNotExistsSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
+
+                string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
+                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                {
+                    Parallel.ForEach(Global.CashboxSongLangList, (langstr, loopState) =>
+                    {
+                        var query = from row in CashboxDT.AsEnumerable()
+                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
+                        {
+                            foreach (DataRow row in query)
+                            {
+                                string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
+                                string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+
+                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0)
+                                {
+                                    lock (LockThis) { Global.TotalList[2]++; }
+
+                                    if (CashboxId != Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)])
+                                    {
+                                        List<string> list = new List<string>(Cashbox.SongDataList[Cashbox.SongDataLowCaseList.IndexOf(SongData)].Split('|'));
+                                        if (Cashbox.SongIdList.IndexOf(CashboxId) >= 0)
+                                        {
+                                            lock (LockThis) { ReOldList.Add(CashboxId + "|" + Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)] + "|" + list[0]); }
+                                        }
+                                        else
+                                        {
+                                            lock (LockThis) { ReNewList.Add(CashboxId + "|" + Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)] + "|" + list[0]); }
+                                        }
+                                        list.Clear();
+                                    }
+
+                                    this.BeginInvoke((Action)delegate()
+                                    {
+                                        Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + Global.TotalList[2] + " 首錢櫃歌曲...";
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+
+                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                {
+                    OleDbCommand cmd = new OleDbCommand();
+                    string UpdateSqlStr = "update ktv_Song set Song_Id = @SongId where Song_Id = @OldSongId";
+                    cmd = new OleDbCommand(UpdateSqlStr, conn);
+
+                    List<string> valuelist;
+                    foreach (string str in  ReOldList)
+                    {
+                        valuelist = new List<string>(str.Split('|'));
+                        string NextSongId = Cashbox.GetNextSongId(valuelist[2]);
+                        try
+                        {
+                            cmd.Parameters.AddWithValue("@SongId", NextSongId);
+                            cmd.Parameters.AddWithValue("@OldSongId", valuelist[0]);
+                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
+
+                            cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+                            cmd.Parameters.AddWithValue("@OldSongId", valuelist[1]);
+                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
+
+                            Global.TotalList[0]++;
+                        }
+                        catch
+                        {
+                            Global.TotalList[1]++;
+                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "分配編號時發生未知的錯誤: " + str;
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                        }
+                        finally
+                        {
+                            cmd.Parameters.Clear();
+                        }
+
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Cashbox_QueryStatus_Label.Text = "已成功將 " + Global.TotalList[0] + " 首歌曲變更為錢櫃編號,失敗 " + Global.TotalList[1] + " 首...";
+                        });
+                        valuelist.Clear();
+                    }
+                    ReOldList.Clear();
+
+                    foreach (string str in ReNewList)
+                    {
+                        valuelist = new List<string>(str.Split('|'));
+
+                        cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+                        cmd.Parameters.AddWithValue("@OldSongId", valuelist[1]);
+
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            Global.TotalList[0]++;
+                        }
+                        catch
+                        {
+                            Global.TotalList[1]++;
+                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "分配編號時發生未知的錯誤: " + str;
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                        }
+                        cmd.Parameters.Clear();
+
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Cashbox_QueryStatus_Label.Text = "已成功將 " + Global.TotalList[0] + " 首歌曲變更錢櫃編號,失敗 " + Global.TotalList[1] + " 首...";
+                        });
+                        valuelist.Clear();
+                    }
+                    ReNewList.Clear();
+                }
+            }
+        }
+
+        #endregion
+
     }
 
 
     class Cashbox
     {
+        public static List<string> SongIdList;
         /// <summary>
         /// [Song_Lang] [Song_Singer] [Song_SongName]
         /// </summary>
         public static List<string> SongDataList;
+        public static List<string> SongDataLowCaseList;
 
         #region --- Cashbox 建立資料表 ---
 
         public static void CreateSongDataTable()
         {
+            SongIdList = new List<string>();
             SongDataList = new List<string>();
+            SongDataLowCaseList = new List<string>();
 
-            string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Song";
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName from ktv_Song";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
                 foreach (DataRow row in dt.AsEnumerable())
                 {
-                    SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
+                    SongIdList.Add(row["Song_Id"].ToString());
+                    SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString());
+                    SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
                 }
             }
         }
 
         public static void DisposeSongDataTable()
         {
+            SongIdList.Clear();
             SongDataList.Clear();
+            SongDataLowCaseList.Clear();
             GC.Collect();
         }
 
@@ -1090,7 +1307,26 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        public static string GetNextSongId(string SongLang)
+        {
+            string NewSongID = "";
 
+            // 查詢歌曲編號有無斷號
+            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+            {
+                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
+            }
+
+            // 若無斷號查詢各語系下個歌曲編號
+            if (NewSongID == "")
+            {
+                string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+                Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)]++;
+                NewSongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
+            }
+            return NewSongID;
+        }
 
 
     }
