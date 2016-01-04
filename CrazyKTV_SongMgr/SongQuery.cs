@@ -122,6 +122,17 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Visible = true;
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
+                case "9":
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.Text = "*";
+                    SongQuery_QueryValue_TextBox.Enabled = false;
+                    SongQuery_QueryValue_ComboBox.Visible = false;
+                    SongQuery_QueryValue_TextBox.Visible = true;
+                    SongQuery_Paste_Button.Enabled = false;
+                    SongQuery_Clear_Button.Enabled = false;
+                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    SongQuery_DataGridView.Focus();
+                    break;
             }
         }
 
@@ -200,7 +211,6 @@ namespace CrazyKTV_SongMgr
             if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
             GC.Collect();
 
-            SongQuery_QueryStatus_Label.Text = "";
             string SongQueryStatusText = "";
             string SongQueryValue = "";
 
@@ -249,7 +259,14 @@ namespace CrazyKTV_SongMgr
                         SongQueryStatusText = "歌曲聲道為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQueryValue = SongQuery_QueryValue_ComboBox.SelectedValue.ToString();
                         break;
+                    case "9":
+                        SongQueryType = "CashboxId";
+                        SongQueryStatusText = "使用錢櫃編號";
+                        SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        break;
                 }
+
+                SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
 
                 if (SongQueryValue == "")
                 {
@@ -335,6 +352,44 @@ namespace CrazyKTV_SongMgr
                                             {
                                                 dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
                                             }
+                                        }
+                                    }
+                                }
+                                break;
+                            case "CashboxId":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                List<string> CashboxIdList = new List<string>();
+
+                                string CashboxSqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox order by Cashbox_Id";
+                                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, CashboxSqlStr, ""))
+                                {
+                                    string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
+
+                                    foreach (DataRow row in CashboxDT.AsEnumerable())
+                                    {
+                                        string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
+                                        CashboxIdList.Add(CashboxId);
+                                    }
+                                }
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    foreach (DataRow row in dt.AsEnumerable())
+                                    {
+                                        if (CashboxIdList.IndexOf(row["Song_Id"].ToString()) < 0)
+                                        {
+                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                        }
+                                    }
+
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
                                         }
                                     }
                                 }
@@ -1965,7 +2020,7 @@ namespace CrazyKTV_SongMgr
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道" };
+            List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道", "錢櫃編號" };
 
             foreach (string str in ItemList)
             {
@@ -2240,6 +2295,9 @@ namespace CrazyKTV_SongMgr
                     {
                         SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Track = " + QueryValue + SongQueryOrderStr;
                     }
+                    break;
+                case "CashboxId":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
                     break;
                 case "FileNotExists":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";

@@ -838,7 +838,7 @@ namespace CrazyKTV_SongMgr
                 Cashbox.CreateSongDataTable();
                 Common_SwitchSetUI(false);
 
-                Cashbox_QueryStatus_Label.Text = "正在重新分配歌曲編號,請稍待...";
+                Cashbox_QueryStatus_Label.Text = "正在解析錢櫃歌曲編號,請稍待...";
 
                 var tasks = new List<Task>();
                 tasks.Add(Task.Factory.StartNew(() => Cashbox_ApplyCashboxIdTask()));
@@ -953,6 +953,9 @@ namespace CrazyKTV_SongMgr
                         }
                     });
                 }
+
+                ReOldList.Sort();
+                ReNewList.Sort();
 
                 using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
                 {
