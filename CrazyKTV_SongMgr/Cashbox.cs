@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1067,6 +1068,69 @@ namespace CrazyKTV_SongMgr
                         valuelist.Clear();
                     }
                     ReNewList.Clear();
+                }
+
+                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                {
+                    OleDbCommand Ucmd = new OleDbCommand();
+                    OleDbCommand Fcmd = new OleDbCommand();
+
+                    string TruncateSqlStr = "";
+
+                    TruncateSqlStr = "delete * from ktv_User";
+                    Ucmd = new OleDbCommand(TruncateSqlStr, conn);
+                    Ucmd.ExecuteNonQuery();
+
+                    TruncateSqlStr = "delete * from ktv_Favorite";
+                    Fcmd = new OleDbCommand(TruncateSqlStr, conn);
+                    Fcmd.ExecuteNonQuery();
+
+                    List<string> Addlist = new List<string>();
+                    StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt", Encoding.UTF8);
+                    while (!sr.EndOfStream)
+                    {
+                        Addlist.Add(sr.ReadLine());
+                    }
+                    sr.Close();
+
+                    string UserColumnStr = "User_Id, User_Name";
+                    string UserValuesStr = "@UserId, @UserName";
+                    string UserAddSqlStr = "insert into ktv_User ( " + UserColumnStr + " ) values ( " + UserValuesStr + " )";
+                    Ucmd = new OleDbCommand(UserAddSqlStr, conn);
+
+                    string FavoriteColumnStr = "User_Id, Song_Id";
+                    string FavoriteValuesStr = "@UserId, @SongId";
+                    string FavoriteAddSqlStr = "insert into ktv_Favorite ( " + FavoriteColumnStr + " ) values ( " + FavoriteValuesStr + " )";
+                    Fcmd = new OleDbCommand(FavoriteAddSqlStr, conn);
+
+                    List<string> list = new List<string>();
+                    foreach (string AddStr in Addlist)
+                    {
+                        list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
+                        switch (list[0])
+                        {
+                            case "ktv_User":
+                                Ucmd.Parameters.AddWithValue("@UserId", list[1]);
+                                Ucmd.Parameters.AddWithValue("@UserName", list[2]);
+                                Ucmd.ExecuteNonQuery();
+                                Ucmd.Parameters.Clear();
+                                break;
+                            case "ktv_Favorite":
+                                string SongData = list[2] + "|" + list[3].ToLower() + "|" + list[4].ToLower();
+
+                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) > 0)
+                                {
+                                    string SongId = Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)];
+                                    Fcmd.Parameters.AddWithValue("@UserId", list[1]);
+                                    Fcmd.Parameters.AddWithValue("@SongId", SongId);
+                                    Fcmd.ExecuteNonQuery();
+                                    Fcmd.Parameters.Clear();
+                                }
+                                break;
+                        }
+                        list.Clear();
+                    }
+                    Addlist.Clear();
                 }
             }
         }
