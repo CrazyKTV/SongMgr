@@ -359,6 +359,8 @@ namespace CrazyKTV_SongMgr
                 string SongQueryValue = "";
                 string SongQueryStatusText = "";
 
+                var tasks = new List<Task>();
+
                 switch (Cashbox_OtherQuery_ComboBox.SelectedValue.ToString())
                 {
                     case "1":
@@ -367,7 +369,24 @@ namespace CrazyKTV_SongMgr
                         SongQueryStatusText = Cashbox_OtherQuery_ComboBox.Text;
                         Cashbox_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
 
-                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Common_SwitchSetUI(true);
+                                Cashbox_Query_Button.Enabled = true;
+                            });
+                            Cashbox.DisposeSongDataTable();
+                        });
+                        break;
+                    case "2":
+                        SongQueryType = "DuplicateSong";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = Cashbox_OtherQuery_ComboBox.Text;
+                        Cashbox_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
+
                         tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
@@ -1103,7 +1122,7 @@ namespace CrazyKTV_SongMgr
             {
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
-                List<string> ItemList = new List<string>() { "錢櫃缺歌" };
+                List<string> ItemList = new List<string>() { "錢櫃缺歌", "重複歌曲" };
 
                 foreach (string str in ItemList)
                 {
@@ -1267,6 +1286,9 @@ namespace CrazyKTV_SongMgr
                 case "NonSong":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox" + SongQueryOrderStr;
                     break;
+                case "DuplicateSong":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where (((Song_SongName) In (select Song_SongName from ktv_Cashbox As Tmp group by Song_SongName, Song_Lang, Song_Singer HAVING Count(*)>1 and Song_SongName = ktv_Cashbox.Song_SongName and Song_Lang = ktv_Cashbox.Song_Lang and Song_Singer = ktv_Cashbox.Song_Singer))) order by Song_SongName";
+                    break;
                 case "SongDate":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where Song_CreatDate like '%" + QueryValue + "%' order by Song_Lang, Song_Singer";
                     break;
@@ -1307,6 +1329,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Cashbox 取得下個歌曲編號 ---
+
         public static string GetNextSongId(string SongLang)
         {
             string NewSongID = "";
@@ -1328,6 +1352,7 @@ namespace CrazyKTV_SongMgr
             return NewSongID;
         }
 
+        #endregion
 
     }
 }
