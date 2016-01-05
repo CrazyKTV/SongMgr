@@ -1932,7 +1932,7 @@ namespace CrazyKTV_SongMgr
 
                         if (Global.SongQueryMultiEditUpdateList[1])
                         {
-                            string SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/M/d") + " " + DateTime.Now.ToString("tt hh:mm:ss");
+                            string SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString();
                             row.Cells["Song_CreatDate"].Value = SongCreatDate;
                         }
 
@@ -1987,7 +1987,7 @@ namespace CrazyKTV_SongMgr
                         row.Cells["Song_Id"].Value = SongQuery_EditSongId_TextBox.Text;
                         row.Cells["Song_Lang"].Value = ((DataRowView)SongQuery_EditSongLang_ComboBox.SelectedItem)[0].ToString();
 
-                        string SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/M/d") + " " + DateTime.Now.ToString("tt hh:mm:ss");
+                        string SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString();
                         row.Cells["Song_CreatDate"].Value = SongCreatDate;
                         row.Cells["Song_Singer"].Value = SongQuery_EditSongSinger_TextBox.Text;
 

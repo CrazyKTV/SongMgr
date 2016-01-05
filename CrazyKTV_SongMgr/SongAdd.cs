@@ -1140,7 +1140,7 @@ namespace CrazyKTV_SongMgr
 
                         if (Global.SongAddMultiEditUpdateList[1])
                         {
-                            string SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/M/d") + " " + DateTime.Now.ToString("tt hh:mm:ss");
+                            string SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
                             row.Cells["Song_CreatDate"].Value = SongCreatDate;
                         }
 
@@ -1186,7 +1186,7 @@ namespace CrazyKTV_SongMgr
                         row.Cells["Song_Lang"].Value = SongLang;
                         row.Cells["Song_AddStatus"].Value = (SongLang == "未知") ? "語系類別必須有值才能加歌!" : "";
 
-                        string SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/M/d") + " " + DateTime.Now.ToString("tt hh:mm:ss");
+                        string SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
                         row.Cells["Song_CreatDate"].Value = SongCreatDate;
                         row.Cells["Song_Singer"].Value = SongAdd_EditSongSinger_TextBox.Text;
 
