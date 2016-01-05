@@ -1142,14 +1142,12 @@ namespace CrazyKTV_SongMgr
 
     class Cashbox
     {
+        
+        #region --- Cashbox 建立資料表 ---
+
         public static List<string> SongIdList;
-        /// <summary>
-        /// [Song_Lang] [Song_Singer] [Song_SongName]
-        /// </summary>
         public static List<string> SongDataList;
         public static List<string> SongDataLowCaseList;
-
-        #region --- Cashbox 建立資料表 ---
 
         public static void CreateSongDataTable()
         {
@@ -1157,7 +1155,7 @@ namespace CrazyKTV_SongMgr
             SongDataList = new List<string>();
             SongDataLowCaseList = new List<string>();
 
-            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName from ktv_Song";
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName from ktv_Song order by Song_Id";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
                 foreach (DataRow row in dt.AsEnumerable())

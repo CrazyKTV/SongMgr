@@ -599,7 +599,6 @@ namespace CrazyKTV_SongMgr
                 SongQuery_DataGridView_SelectionChanged(new object(), new EventArgs());
                 
                 SongQuery_QueryStatus_Label.Text = "已進入編輯模式...";
-                SongQuery.CreateSongDataTable();
             }
             else
             {
@@ -612,7 +611,6 @@ namespace CrazyKTV_SongMgr
                 SongQuery_Statistics_GroupBox.Visible = true;
 
                 SongQuery_QueryStatus_Label.Text = "已進入檢視模式...";
-                SongQuery.DisposeSongDataTable();
             }
             SongQuery_DataGridView.Focus();
         }
@@ -621,21 +619,16 @@ namespace CrazyKTV_SongMgr
 
         #region --- SongQuery 更新歌曲 ---
 
-        private void SongQuery_SongUpdate(object SongUpdateDT)
+        private void SongQuery_SongUpdate(DataTable SongUpdateDT)
         {
-            DataTable dt = new DataTable();
-            dt = (DataTable)SongUpdateDT;
             List<string> SongUpdateValueList = new List<string>();
-
-            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState from ktv_Song order by Song_Id";
-            Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
             this.BeginInvoke((Action)delegate()
             {
                 SongQuery_QueryStatus_Label.Text = "";
             });
 
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in SongUpdateDT.Rows)
             {
                 int i = Convert.ToInt32(row["RowIndex"]);
                 string OldSongId = row["SongId"].ToString();
@@ -673,80 +666,113 @@ namespace CrazyKTV_SongMgr
                 bool MoveFile = false;
                 bool MoveError = false;
 
-                List<string> ChorusSingerList = new List<string>() { "未有合唱歌手資料" };
-
-                var query = from DupSongRow in Global.SongDT.AsEnumerable()
-                            where DupSongRow.Field<string>("Song_Id") != OldSongId &&
-                                  DupSongRow.Field<string>("Song_Lang").Equals(SongLang) &&
-                                  DupSongRow.Field<string>("Song_Singer").ToLower().Equals(SongSinger.ToLower()) &&
-                                  DupSongRow.Field<string>("Song_SongName").ToLower().Equals(SongSongName.ToLower())
-                            select DupSongRow;
-
-                if (query.Count<DataRow>() == 0 && SongSingerType == 3)
+                // 同義字
+                List<string> SynonymousSongNameList = new List<string>();
+                List<string> SynonymousSongNameLowCaseList = new List<string>();
+                if (Global.SongQuerySynonymousQuery)
                 {
+                    SynonymousSongNameList = CommonFunc.GetSynonymousSongNameList(SongSongName);
+                    SynonymousSongNameLowCaseList = SynonymousSongNameList.ConvertAll(str => str.ToLower());
+                }
+                
+                // 重複歌曲判斷
+                string DupSongData = "";
+                string SongData = SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower() + "|" + SongSongType;
+
+                if (SongQuery.SongDataLowCaseList.IndexOf(SongData) >= 0)
+                {
+                    if (SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] != OldSongId)
+                    {
+                        DupSongData = SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] + "|" + SongQuery.SongDataList[SongQuery.SongDataLowCaseList.IndexOf(SongData)];
+                        DuplicateSong = true;
+                    }
+                }
+
+                if (!DuplicateSong && Global.SongQuerySynonymousQuery)
+                {
+                    if (SynonymousSongNameList.Count > 0)
+                    {
+                        foreach (string SynonymousSongName in SynonymousSongNameLowCaseList)
+                        {
+                            SongData = SongLang + "|" + SongSinger.ToLower() + "|" + SynonymousSongName + "|" + SongSongType;
+                            if (SongQuery.SongDataLowCaseList.IndexOf(SongData) >= 0)
+                            {
+                                if (SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] != OldSongId)
+                                {
+                                    DupSongData = SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] + "|" + SongQuery.SongDataList[SongQuery.SongDataLowCaseList.IndexOf(SongData)];
+                                    DuplicateSong = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!DuplicateSong && SongSingerType == 3)
+                {
+                    List<string> ChorusSingerList = new List<string>();
+
                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                     if (r.Matches(SongSinger).Count > 0)
                     {
                         ChorusSingerList = new List<string>(Regex.Split(SongSinger.ToLower(), "&", RegexOptions.None));
                     }
 
-                    query = from DupSongRow in Global.SongDT.AsEnumerable()
-                                where DupSongRow.Field<string>("Song_Id") != OldSongId &&
-                                      DupSongRow.Field<string>("Song_Lang").Equals(SongLang) &&
-                                      DupSongRow.Field<string>("Song_Singer").ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
-                                      DupSongRow.Field<string>("Song_Singer").Length.Equals(SongSinger.Length) &&
-                                      DupSongRow.Field<string>("Song_SongName").ToLower().Equals(SongSongName.ToLower())
-                                select DupSongRow;
-                }
-
-                if (query.Count<DataRow>() == 0 && Global.SongQuerySynonymousQuery)
-                {
-                    List<string> SynonymousSongNameList = new List<string>();
-                    SynonymousSongNameList = CommonFunc.GetSynonymousSongNameList(SongSongName);
-                    List<string> SynonymousSongNameLowCaseList = SynonymousSongNameList.ConvertAll(str => str.ToLower());
-
-                    if (SynonymousSongNameList.Count > 0)
+                    if (ChorusSingerList.Count > 0)
                     {
-                        query = from DupSongRow in Global.SongDT.AsEnumerable()
-                                where DupSongRow.Field<string>("Song_Id") != OldSongId &&
-                                      DupSongRow.Field<string>("Song_Lang").Equals(SongLang) &&
-                                      DupSongRow.Field<string>("Song_Singer").ToLower().Equals(SongSinger.ToLower()) &&
-                                      DupSongRow.Field<string>("Song_SongName").ToLower().ContainsAny(SynonymousSongNameLowCaseList.ToArray())
-                                select DupSongRow;
-                    }
-                }
+                        var query = from DupSongRow in SongQuery.SongDataDT.AsEnumerable()
+                                    where DupSongRow["Song_Id"].ToString() != OldSongId &&
+                                          DupSongRow["Song_Lang"].ToString() == SongLang &&
+                                          DupSongRow["Song_Singer"].ToString().ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
+                                          DupSongRow["Song_Singer"].ToString().Length.Equals(SongSinger.Length) &&
+                                          DupSongRow["Song_SongName"].ToString().ToLower().Equals(SongSongName.ToLower()) &&
+                                          DupSongRow["Song_SongType"].ToString() == SongSongType
+                                    select DupSongRow;
 
-                if (query.Count<DataRow>() > 0)
-                {
-                    foreach (DataRow DupSongRow in query)
-                    {
-                        if (DupSongRow["Song_SongType"] == null)
+                        if (query.Count<DataRow>() > 0)
                         {
-                            if (SongSongType == "")
+                            foreach (DataRow DupSongRow in query)
                             {
+                                DupSongData = DupSongRow["Song_Id"].ToString() + "|" + DupSongRow["Song_Lang"].ToString() + "|" + DupSongRow["Song_Singer"].ToString() + "|" + DupSongRow["Song_SongName"].ToString() + "|" + SongSongType;
                                 DuplicateSong = true;
                             }
                         }
-                        else
+
+                        if (!DuplicateSong && Global.SongQuerySynonymousQuery)
                         {
-                            if (DupSongRow["Song_SongType"].ToString() == SongSongType)
+                            if (SynonymousSongNameList.Count > 0)
                             {
-                                DuplicateSong = true;
+                                query = from DupSongRow in SongQuery.SongDataDT.AsEnumerable()
+                                        where DupSongRow["Song_Id"].ToString() != OldSongId &&
+                                              DupSongRow["Song_Lang"].ToString() == SongLang &&
+                                              DupSongRow["Song_Singer"].ToString().ToLower().ContainsAll(ChorusSingerList.ToArray()) &&
+                                              DupSongRow["Song_Singer"].ToString().Length.Equals(SongSinger.Length) &&
+                                              DupSongRow.Field<string>("Song_SongName").ToLower().ContainsAny(SynonymousSongNameLowCaseList.ToArray()) &&
+                                              DupSongRow["Song_SongType"].ToString() == SongSongType
+                                        select DupSongRow;
+
+                                if (query.Count<DataRow>() > 0)
+                                {
+                                    foreach (DataRow DupSongRow in query)
+                                    {
+                                        DupSongData = DupSongRow["Song_Id"].ToString() + "|" + DupSongRow["Song_Lang"].ToString() + "|" + DupSongRow["Song_Singer"].ToString() + "|" + DupSongRow["Song_SongName"].ToString() + "|" + SongSongType;
+                                        DuplicateSong = true;
+                                    }
+                                }
                             }
                         }
-                        
-                        if (DuplicateSong)
-                        {
-                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】已有重複歌曲: " + DupSongRow["Song_Id"].ToString() + "|" + DupSongRow["Song_Lang"].ToString() + "|" + DupSongRow["Song_Singer"].ToString() + "|" + DupSongRow["Song_SongName"].ToString() + "|" + SongSongType;
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                            this.BeginInvoke((Action)delegate()
-                            {
-                                SongQuery_QueryStatus_Label.Text = "已復原變更,因有重複歌曲,請參考操作記錄裡的內容!";
-                            });
-                            break;
-                        } 
                     }
+                }
+
+                if (DuplicateSong)
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】已有重複歌曲: " + DupSongData;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongQuery_QueryStatus_Label.Text = "已復原變更,因有重複歌曲,請參考操作記錄裡的內容!";
+                    });
                 }
 
                 if (!DuplicateSong)
@@ -947,7 +973,7 @@ namespace CrazyKTV_SongMgr
                         Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)]--;
                     }
 
-                    var SongDTQuery = from SongDTRow in Global.SongDT.AsEnumerable()
+                    var SongDTQuery = from SongDTRow in SongQuery.SongDataDT.AsEnumerable()
                                       where SongDTRow.Field<string>("Song_Id").Equals(OldSongId)
                                       select SongDTRow;
 
@@ -1082,8 +1108,8 @@ namespace CrazyKTV_SongMgr
                 cmd.Parameters.Clear();
             }
             conn.Close();
-            Global.SongDT.Dispose();
-            Global.SongDT = null;
+            SongUpdateDT.Dispose();
+            SongUpdateDT = null;
 
             int MaxDigitCode;
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
@@ -1880,6 +1906,7 @@ namespace CrazyKTV_SongMgr
                 dt.Columns.Add("SongId", typeof(string));
                 dt.Columns.Add("SongLang", typeof(string));
 
+                SongQuery.CreateSongDataTable();
                 Common_SwitchSetUI(false);
 
                 if (SelectedRowsCount > 1)
@@ -2001,6 +2028,7 @@ namespace CrazyKTV_SongMgr
                     {
                         Common_SwitchSetUI(true);
                     });
+                    SongQuery.DisposeSongDataTable();
                     dt.Dispose();
                     dt = null;
                 });
@@ -2088,38 +2116,57 @@ namespace CrazyKTV_SongMgr
 
     class SongQuery
     {
+
+        #region --- SongQuery 建立資料表 ---
+
+        public static DataTable SongDataDT;
+        public static List<string> SongIdList;
+        public static List<string> SongDataList;
+        public static List<string> SongDataLowCaseList;
+        public static List<string> FavoriteSongIdList;
+
         public static void CreateSongDataTable()
         {
-            if (Global.PhoneticsWordList.Count == 0 )
+            SongIdList = new List<string>();
+            SongDataList = new List<string>();
+            SongDataLowCaseList = new List<string>();
+
+            string SongDataSqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState from ktv_Song order by Song_Id";
+            SongDataDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongDataSqlStr, "");
+
+            foreach (DataRow row in SongDataDT.AsEnumerable())
             {
-                Global.PhoneticsWordList = new List<string>();
-                Global.PhoneticsSpellList = new List<string>();
-                Global.PhoneticsStrokesList = new List<string>();
-                Global.PhoneticsPenStyleList = new List<string>();
+                SongIdList.Add(row["Song_Id"].ToString());
+                SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString() + "|" + row["Song_SongType"].ToString());
+                SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower() + "|" + row["Song_SongType"].ToString());
+            }
 
-                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
-
-                var query = from row in Global.PhoneticsDT.AsEnumerable()
-                            where row.Field<Int16>("SortIdx") < 2
-                            select row;
-
-                foreach (DataRow row in query)
+            FavoriteSongIdList = new List<string>();
+            string FavoriteSqlStr = "select User_Id, Song_Id from ktv_Favorite";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, FavoriteSqlStr, ""))
+            {
+                foreach (DataRow row in dt.AsEnumerable())
                 {
-                    Global.PhoneticsWordList.Add(row["Word"].ToString());
-                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                    if (FavoriteSongIdList.IndexOf(row["Song_Id"].ToString()) < 0)
+                    {
+                        FavoriteSongIdList.Add(row["Song_Id"].ToString());
+                    }
                 }
-                Global.PhoneticsDT.Dispose();
-                Global.PhoneticsDT = null;
             }
         }
 
         public static void DisposeSongDataTable()
         {
-
+            SongDataDT.Dispose();
+            SongDataDT = null;
+            SongIdList.Clear();
+            SongDataList.Clear();
+            SongDataLowCaseList.Clear();
+            FavoriteSongIdList.Clear();
+            GC.Collect();
         }
+
+        #endregion
 
         #region --- SongQuery 歌曲查詢下拉清單 ---
 
