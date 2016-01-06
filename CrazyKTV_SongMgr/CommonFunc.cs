@@ -284,6 +284,7 @@ namespace CrazyKTV_SongMgr
             SongQuery_Query_GroupBox.Enabled = status;
             SongQuery_OtherQuery_GroupBox.Enabled = status;
             SongQuery_Statistics_GroupBox.Enabled = status;
+            SongQuery_DataGridView.Enabled = status;
             SongQuery_Edit_GroupBox.Enabled = status;
             SongAdd_DefaultSongInfo_GroupBox.Enabled = status;
             SongAdd_SpecialStr_GroupBox.Enabled = status;
@@ -330,11 +331,14 @@ namespace CrazyKTV_SongMgr
             SongQuery_Query_GroupBox.Enabled = status;
             SongQuery_OtherQuery_GroupBox.Enabled = status;
             SongQuery_Statistics_GroupBox.Enabled = status;
+            SongQuery_DataGridView.Enabled = status;
             SongQuery_Edit_GroupBox.Enabled = status;
             SongAdd_DefaultSongInfo_GroupBox.Enabled = status;
             SongAdd_SpecialStr_GroupBox.Enabled = status;
             SongAdd_SongAddCfg_GroupBox.Enabled = status;
             SongAdd_Save_Button.Enabled = status;
+            SongAdd_DataGridView.Enabled = status;
+            SongAdd_DragDrop_Label.Enabled = status;
             SongAdd_Edit_GroupBox.Enabled = status;
             SongMgrCfg_General_GroupBox.Enabled = status;
             SongMgrCfg_SongID_GroupBox.Enabled = status;
