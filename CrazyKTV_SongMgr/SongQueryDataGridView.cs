@@ -13,7 +13,8 @@ namespace CrazyKTV_SongMgr
 
     public partial class MainForm : Form
     {
-        #region --- SongQuery_DataGridView ---
+        
+        #region --- SongQuery 列表欄位格式 ---
 
         private void SongQuery_DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -45,6 +46,10 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+        #endregion
+
+        #region --- SongQuery 列表滑鼠點擊事件 ---
 
         private void SongQuery_DataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -210,6 +215,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SongQuery 列表滑鼠右鍵功能表點擊事件 ---
+
         private void SongQuery_DataGridView_ContextMenuItem_RightClick(object sender, EventArgs e)
         {
             string SongPath = SongQuery_DataGridView.Rows[SongQuery_DataGridView.CurrentCell.RowIndex].Cells["Song_Path"].Value.ToString();
@@ -346,6 +355,10 @@ namespace CrazyKTV_SongMgr
             Task.Factory.StartNew(() => SongQuery_FavoriteAdd(SongIdlist, UserId));
         }
 
+        #endregion
+
+        #region --- SongQuery 列表滑鼠雙擊事件 ---
+
         private void SongQuery_DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (SongQuery_EditMode_CheckBox.Checked == false)
@@ -372,6 +385,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SongQuery 列表滑鼠雙擊事件 ---
+
         private void SongQuery_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex == -1)
@@ -384,6 +401,10 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
+
+        #endregion
+
+        #region --- SongQuery 列表滑鼠點擊狀態事件 ---
 
         private void SongQuery_DataGridView_MouseUp(object sender, MouseEventArgs e)
         {
@@ -424,6 +445,8 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
+
+        #endregion
 
         private void SongQuery_DataGridView_KeyDown(object sender, KeyEventArgs e)
         {
@@ -615,7 +638,7 @@ namespace CrazyKTV_SongMgr
         }
 
 
-        #endregion
+        
 
     }
 }

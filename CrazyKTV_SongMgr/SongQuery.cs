@@ -596,8 +596,11 @@ namespace CrazyKTV_SongMgr
 
                 Global.SongQueryMultiEdit = false;
                 SongQuery_InitializeEditControl();
+
+                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
                 SongQuery_DataGridView_SelectionChanged(new object(), new EventArgs());
-                
+                if (SelectedRowsCount > 1) SongQuery_DataGridView_MouseUp(new object(), null);
+
                 SongQuery_QueryStatus_Label.Text = "已進入編輯模式...";
             }
             else
