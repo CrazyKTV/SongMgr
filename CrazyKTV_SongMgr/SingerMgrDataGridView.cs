@@ -11,6 +11,9 @@ namespace CrazyKTV_SongMgr
 {
     public partial class MainForm : Form
     {
+
+        #region --- SingerMgr 列表欄位格式 ---
+
         private void SingerMgr_DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             int val;
@@ -25,6 +28,10 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+        #endregion
+
+        #region --- SingerMgr 列表滑鼠點擊事件 ---
 
         private void SingerMgr_DataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -86,6 +93,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SingerMgr 列表滑鼠右鍵功能表點擊事件 ---
+
         private void SingerMgr_DataGridView_ContextMenuItem_RightClick(object sender, EventArgs e)
         {
             switch (sender.ToString())
@@ -129,6 +140,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SingerMgr 列表滑鼠雙擊事件 ---
+
         private void SingerMgr_DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             string SingerName = SingerMgr_DataGridView.SelectedRows[0].Cells["Singer_Name"].Value.ToString();
@@ -139,6 +154,10 @@ namespace CrazyKTV_SongMgr
             SongQuery_Query_Button_Click(new Button(), new EventArgs());
             MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
         }
+
+        #endregion
+
+        #region --- SingerMgr 列表滑鼠點擊狀態事件 ---
 
         private void SingerMgr_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -180,6 +199,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SingerMgr 列表鍵盤點擊狀態事件 ---
+
         private void SingerMgr_DataGridView_KeyDown(object sender, KeyEventArgs e)
         {
             if (SingerMgr_EditMode_CheckBox.Checked == true)
@@ -220,6 +243,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SingerMgr 列表選取項目變更事件 ---
+
         private void SingerMgr_DataGridView_SelectionChanged(object sender, EventArgs e)
         {
             if (SingerMgr_Tooltip_Label.Text != "" && SingerMgr.ClearTooltipLabel)
@@ -255,6 +282,10 @@ namespace CrazyKTV_SongMgr
                         SingerMgr_EditSingerType_ComboBox.SelectedValue = 1;
                         SingerMgr_EditSingerName_TextBox.Text = "";
                         SingerMgr_EditSingerSpell_TextBox.Text = "";
+
+                        SingerMgr_EditSingerImg_Panel.Enabled = false;
+                        SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
+                        SingerMgr_EditSingerImg_Panel.BackgroundImage = null;
                     }
                 }
                 else if (SelectedRowsCount == 1)
@@ -282,6 +313,7 @@ namespace CrazyKTV_SongMgr
                     SingerMgr_EditSingerName_TextBox.Text = SingerName;
                     SingerMgr_EditSingerSpell_TextBox.Text = SingerSpell;
 
+                    SingerMgr_EditSingerImg_Panel.Enabled = true;
                     string ImageFile = "";
                     List<string> SupportFormat = new List<string>() { ".bmp", ".gif", ".jpg", ".png" };
                     foreach (string FileExt in SupportFormat)
@@ -322,6 +354,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SongQuery 列表排序事件 ---
+
         private void SingerMgr_DataGridView_Sorted(object sender, EventArgs e)
         {
             if (Global.SingerMgrDataGridViewRestoreSelectList.Count > 0)
@@ -343,12 +379,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
 
-    }
-
-
-
-    class SingerMgrDataGridView
-    {
     }
 }

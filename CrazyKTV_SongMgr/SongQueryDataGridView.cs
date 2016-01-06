@@ -387,7 +387,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- SongQuery 列表滑鼠雙擊事件 ---
+        #region --- SongQuery 列表滑鼠點擊狀態事件 ---
 
         private void SongQuery_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -401,10 +401,6 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
-
-        #endregion
-
-        #region --- SongQuery 列表滑鼠點擊狀態事件 ---
 
         private void SongQuery_DataGridView_MouseUp(object sender, MouseEventArgs e)
         {
@@ -447,6 +443,8 @@ namespace CrazyKTV_SongMgr
         }
 
         #endregion
+
+        #region --- SongQuery 列表鍵盤點擊狀態事件 ---
 
         private void SongQuery_DataGridView_KeyDown(object sender, KeyEventArgs e)
         {
@@ -499,6 +497,10 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
+
+        #endregion
+
+        #region --- SongQuery 列表選取項目變更事件 ---
 
         private void SongQuery_DataGridView_SelectionChanged(object sender, EventArgs e)
         {
@@ -613,6 +615,10 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SongQuery 列表排序事件 ---
+
         private void SongQuery_DataGridView_Sorted(object sender, EventArgs e)
         {
             SongQuery_DataGridView.ClearSelection();
@@ -637,8 +643,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-
-        
+        #endregion
 
     }
 }
