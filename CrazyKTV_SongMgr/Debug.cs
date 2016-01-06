@@ -528,7 +528,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Debug_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆欄位資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -577,7 +577,7 @@ namespace CrazyKTV_SongMgr
                         {
                             cmds[0].ExecuteNonQuery();
                             Global.TotalList[0]++;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Debug_Tooltip_Label.Text = "正在更新第 " + Global.TotalList[0] + " 筆欄位資料,請稍待...";
                             });

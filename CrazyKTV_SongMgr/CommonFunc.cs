@@ -1377,6 +1377,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Common 重整 SongMgr 資料 ---
+
         private void Common_RefreshSongMgr()
         {
             Global.CrazyktvDatabaseStatus = false;
@@ -1398,12 +1400,17 @@ namespace CrazyKTV_SongMgr
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
         }
 
+        #endregion
+
     }
 
 
     class CommonFunc
     {
         private static object LockThis = new object();
+
+        #region --- CommonFunc 讀寫設定檔 ---
+
         public static void CreateConfigXmlFile(string ConfigFile)
         {
             XDocument xmldoc = new XDocument
@@ -1480,6 +1487,10 @@ namespace CrazyKTV_SongMgr
             xmldoc.Save(ConfigFile);
         }
 
+        #endregion
+
+        #region --- CommonFunc 讀取版本更新檔 ---
+
         public static List<string> LoadVersionXmlFile(string VersionFile, string FileName)
         {
             List<string> Value = new List<string>();
@@ -1505,6 +1516,10 @@ namespace CrazyKTV_SongMgr
             return Value;
         }
 
+        #endregion
+
+        #region --- CommonFunc 讀取資料庫 ---
+
         public static OleDbConnection OleDbOpenConn(string Database, string Password)
         {
             string cnstr = "";
@@ -1516,32 +1531,37 @@ namespace CrazyKTV_SongMgr
             {
                 cnstr = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Database + ";");
             }
-            OleDbConnection icn = new OleDbConnection();
-            icn.ConnectionString = cnstr;
-            if (icn.State == ConnectionState.Open) icn.Close();
+            OleDbConnection conn = new OleDbConnection();
+            conn.ConnectionString = cnstr;
+            if (conn.State == ConnectionState.Open) conn.Close();
             try
             {
-                icn.Open();
+                conn.Open();
             }
             catch
             {
                 
             }
-            return icn;
+            return conn;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
         public static DataTable GetOleDbDataTable(string Database, string OleDbString, string Password)
         {
-            DataTable myDataTable = new DataTable();
-            OleDbConnection icn = OleDbOpenConn(Database, Password);
-            OleDbDataAdapter da = new OleDbDataAdapter(OleDbString, icn);
-            DataSet ds = new DataSet();
-            ds.Clear();
-            da.Fill(ds);
-            myDataTable = ds.Tables[0];
-            if (icn.State == ConnectionState.Open) icn.Close();
-            return myDataTable;
+            using (OleDbConnection conn = OleDbOpenConn(Database, Password))
+            {
+                using (OleDbDataAdapter da = new OleDbDataAdapter(OleDbString, conn))
+                {
+                    using (DataSet ds = new DataSet())
+                    {
+                        da.Fill(ds);
+                        using (DataTable dt = ds.Tables[0])
+                        {
+                            return dt;
+                        }
+                    }
+                }
+            }
         }
 
         public static List<string> GetOleDbTableList(string Database, string Password)
@@ -1550,7 +1570,7 @@ namespace CrazyKTV_SongMgr
 
             if (File.Exists(Database))
             {
-                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Database, Password))
+                using (OleDbConnection conn = OleDbOpenConn(Database, Password))
                 {
                     using (DataTable dt = conn.GetSchema("Tables"))
                     {
@@ -1575,23 +1595,28 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
 
-            OleDbConnection conn = new OleDbConnection();
-            conn = CommonFunc.OleDbOpenConn(Database, Password);
-            DataTable dt = new DataTable();
-
-            OleDbCommand cmd = new OleDbCommand("select * from " + TableName, conn);
-            OleDbDataReader Reader = cmd.ExecuteReader();
-            dt = Reader.GetSchemaTable();
-            Reader.Close();
-
-            foreach (DataRow row in dt.AsEnumerable())
+            using (OleDbConnection conn = OleDbOpenConn(Database, Password))
             {
-                list.Add(row["ColumnName"].ToString());
+                using (OleDbCommand cmd = new OleDbCommand("select * from " + TableName, conn))
+                {
+                    using (OleDbDataReader Reader = cmd.ExecuteReader())
+                    {
+                        using (DataTable dt = Reader.GetSchemaTable())
+                        {
+                            foreach (DataRow row in dt.AsEnumerable())
+                            {
+                                list.Add(row["ColumnName"].ToString());
+                            }
+                        }
+                    }
+                }
             }
-            dt.Dispose();
-            dt = null;
             return list;
         }
+
+        #endregion
+
+        #region --- CommonFunc 壓縮資料庫 ---
 
         public static void CompactAccessDB(string connectionString, string mdwfilename)
         {
@@ -1624,11 +1649,19 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- CommonFunc 判斷是否為歌曲編號 ---
+
         public static bool IsSongId(String str)
         {
             Regex r = new Regex(@"^(?:\d{5})?$|^(?:\d{6})?$");
             return r.IsMatch(str);
         }
+
+        #endregion
+
+        #region --- CommonFunc 取得歌曲語系字串 ---
 
         public static string GetSongLangStr(int SongLang, int ListType, string IndexOfList)
         {
@@ -1653,6 +1686,10 @@ namespace CrazyKTV_SongMgr
             }
             return Str;
         }
+
+        #endregion
+
+        #region --- CommonFunc 取得歌手類別字串 ---
 
         public static string GetSingerTypeStr(int SingerType, int ListType, string IndexOfList)
         {
@@ -1688,6 +1725,10 @@ namespace CrazyKTV_SongMgr
             return Str;
         }
 
+        #endregion
+
+        #region --- CommonFunc 取得歌曲聲道字串 ---
+
         public static string GetSongTrackStr(int SongTrack, int ListType, string IndexOfList)
         {
             string Str;
@@ -1715,6 +1756,10 @@ namespace CrazyKTV_SongMgr
             }
             return Str;
         }
+
+        #endregion
+
+        #region --- CommonFunc 取得剩餘的歌曲編號 ---
 
         public static void GetRemainingSongId(int DigitCode)
         {
@@ -1752,6 +1797,8 @@ namespace CrazyKTV_SongMgr
                 dt.Dispose();
             }
         }
+
+        #endregion
 
         #region --- CommonFunc 取得歌曲最大編號及缺號 ---
 

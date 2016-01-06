@@ -276,6 +276,7 @@ namespace CrazyKTV_SongMgr
                             SongFilelist.Add(row.Cells["Song_FullPath"].Value.ToString());
                         }
 
+                        SongQuery.CreateSongDataTable();
                         Common_SwitchSetUI(false);
 
                         var task = Task<List<string>>.Factory.StartNew(() => SongQuery_SongRemove(SongIdlist, SongFilelist));
@@ -297,7 +298,7 @@ namespace CrazyKTV_SongMgr
                             SongQuery_InitializeEditControl();
                             SongQuery_QueryStatus_Label.Text = "已無歌曲可編輯!";
                         }
-
+                        SongQuery.DisposeSongDataTable();
                         Common_SwitchSetUI(true);
                     }
                     break;
@@ -468,6 +469,7 @@ namespace CrazyKTV_SongMgr
                                     SongFilelist.Add(row.Cells["Song_FullPath"].Value.ToString());
                                 }
 
+                                SongQuery.CreateSongDataTable();
                                 Common_SwitchSetUI(false);
 
                                 var task = Task<List<string>>.Factory.StartNew(() => SongQuery_SongRemove(SongIdlist, SongFilelist));
@@ -489,7 +491,7 @@ namespace CrazyKTV_SongMgr
                                     SongQuery_InitializeEditControl();
                                     SongQuery_QueryStatus_Label.Text = "已無歌曲可編輯!";
                                 }
-
+                                SongQuery.DisposeSongDataTable();
                                 Common_SwitchSetUI(true);
                             }
                             break;

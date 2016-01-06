@@ -1024,11 +1024,6 @@ namespace CrazyKTV_SongMgr
                                 SongQuery_DataGridView.Rows[i].Cells["Song_PenStyle"].Value = RestoreSongDataList[17];
                                 SongQuery_DataGridView.Rows[i].Cells["Song_PlayState"].Value = RestoreSongDataList[18];
 
-                                Console.WriteLine(RestoreSongDataList[16]);
-                                Console.WriteLine(RestoreSongDataList[17]);
-                                Console.WriteLine(RestoreSongDataList[18]);
-                                Console.WriteLine(RestoreSongDataList[19]);
-
                                 List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
 
                                 int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
@@ -1077,56 +1072,72 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in SongUpdateValueList)
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
             {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
-                cmd.Parameters.AddWithValue("@SongSingerType", valuelist[2]);
-                cmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
-                cmd.Parameters.AddWithValue("@SongSongName", valuelist[4]);
-                cmd.Parameters.AddWithValue("@SongTrack", valuelist[5]);
-                cmd.Parameters.AddWithValue("@SongSongType", valuelist[6]);
-                cmd.Parameters.AddWithValue("@SongVolume", valuelist[7]);
-                cmd.Parameters.AddWithValue("@SongWordCount", valuelist[8]);
-                cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[9]);
-                cmd.Parameters.AddWithValue("@SongMB", valuelist[10]);
-                cmd.Parameters.AddWithValue("@SongCreatDate", valuelist[11]);
-                cmd.Parameters.AddWithValue("@SongFileName", valuelist[12]);
-                cmd.Parameters.AddWithValue("@SongPath", valuelist[13]);
-                cmd.Parameters.AddWithValue("@SongSpell", valuelist[14]);
-                cmd.Parameters.AddWithValue("@SongSpellNum", valuelist[15]);
-                cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
-                cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
-                cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
-                cmd.Parameters.AddWithValue("@OldSongId", valuelist[19]);
-
-                try
+                string sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState";
+                string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId";
+                using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
                 {
-                    cmd.ExecuteNonQuery();
-                }
-                catch
-                {
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】更新資料庫時發生錯誤: " + str;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    List<string> valuelist;
 
-                    this.BeginInvoke((Action)delegate()
+                    foreach (string str in SongUpdateValueList)
                     {
-                        SongQuery_QueryStatus_Label.Text = "修改歌曲資料有誤,請回報操作記錄裡的內容!";
-                    });
+                        valuelist = new List<string>(str.Split('|'));
+
+                        cmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+                        cmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
+                        cmd.Parameters.AddWithValue("@SongSingerType", valuelist[2]);
+                        cmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                        cmd.Parameters.AddWithValue("@SongSongName", valuelist[4]);
+                        cmd.Parameters.AddWithValue("@SongTrack", valuelist[5]);
+                        cmd.Parameters.AddWithValue("@SongSongType", valuelist[6]);
+                        cmd.Parameters.AddWithValue("@SongVolume", valuelist[7]);
+                        cmd.Parameters.AddWithValue("@SongWordCount", valuelist[8]);
+                        cmd.Parameters.AddWithValue("@SongPlayCount", valuelist[9]);
+                        cmd.Parameters.AddWithValue("@SongMB", valuelist[10]);
+                        cmd.Parameters.AddWithValue("@SongCreatDate", valuelist[11]);
+                        cmd.Parameters.AddWithValue("@SongFileName", valuelist[12]);
+                        cmd.Parameters.AddWithValue("@SongPath", valuelist[13]);
+                        cmd.Parameters.AddWithValue("@SongSpell", valuelist[14]);
+                        cmd.Parameters.AddWithValue("@SongSpellNum", valuelist[15]);
+                        cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
+                        cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
+                        cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
+                        cmd.Parameters.AddWithValue("@OldSongId", valuelist[19]);
+
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch
+                        {
+                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】更新資料庫時發生錯誤: " + str;
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+
+                            this.BeginInvoke((Action)delegate()
+                            {
+                                SongQuery_QueryStatus_Label.Text = "修改歌曲資料有誤,請回報操作記錄裡的內容!";
+                            });
+                        }
+                        cmd.Parameters.Clear();
+
+                        if (SongQuery.FavoriteSongIdList.IndexOf(valuelist[19]) >= 0)
+                        {
+                            string FavoriteUpdSqlStr = "update ktv_Favorite set Song_Id = @SongId where Song_Id = @OldSongId";
+
+                            using (OleDbCommand Fcmd = new OleDbCommand(FavoriteUpdSqlStr, conn))
+                            {
+                                Fcmd.Parameters.AddWithValue("@SongId", valuelist[0]);
+                                Fcmd.Parameters.AddWithValue("@OldSongId", valuelist[19]);
+                                Fcmd.ExecuteNonQuery();
+                                Fcmd.Parameters.Clear();
+                            }
+                        }
+                        valuelist.Clear();
+                    }
                 }
-                cmd.Parameters.Clear();
             }
-            conn.Close();
             SongUpdateDT.Dispose();
             SongUpdateDT = null;
 
@@ -1145,7 +1156,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    SongQuery_QueryStatus_Label.Text = "已成功更新所有歌曲資料!";
+                    SongQuery_QueryStatus_Label.Text = (Global.SongMgrSongAddMode != "3") ? "已成功更新所選歌曲資料及檔案!" : "已成功更新所選歌曲資料!";
                 }
             });
         }
@@ -1154,63 +1165,85 @@ namespace CrazyKTV_SongMgr
 
         #region --- SongQuery 移除歌曲 ---
 
-        private List<string> SongQuery_SongRemove(object SongIdlist, object SongFilelist)
+        private List<string> SongQuery_SongRemove(List<string> SongIdlist, List<string> SongFilelist)
         {
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string SongRemoveSqlStr = "delete from ktv_Song where Song_Id = @SongId";
-            cmd = new OleDbCommand(SongRemoveSqlStr, conn);
-
             List<string> RemoveSongIdlist = new List<string>();
-            foreach (string str in (List<string>)SongFilelist)
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
             {
-                int i = ((List<string>)SongFilelist).IndexOf(str);
-
-                try
+                string SongRemoveSqlStr = "delete from ktv_Song where Song_Id = @SongId";
+                using (OleDbCommand cmd = new OleDbCommand(SongRemoveSqlStr, conn))
                 {
-                    if (Global.SongMgrSongAddMode != "3")
+                    foreach (string str in SongFilelist)
                     {
-                        if (File.Exists(str))
-                        {
-                            FileAttributes attributes = File.GetAttributes(str);
-                            if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                            {
-                                attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
-                                File.SetAttributes(str, attributes);
-                            }
+                        int i = SongFilelist.IndexOf(str);
+                        bool RemoveError = false;
 
-                            if (Global.SongMgrBackupRemoveSong == "True")
+                        if (Global.SongMgrSongAddMode != "3")
+                        {
+                            if (File.Exists(str))
                             {
-                                string SongFileName = Path.GetFileName(str);
-                                if (!Directory.Exists(Application.StartupPath + @"\SongMgr\RemoveSong")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\RemoveSong");
-                                if (File.Exists(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName)) File.Delete(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
-                                File.Move(str, Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
-                                CommonFunc.SetFileTime(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName, DateTime.Now);
-                            }
-                            else
-                            {
-                                File.Delete(str);
+                                try
+                                {
+                                    FileAttributes attributes = File.GetAttributes(str);
+                                    if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                                    {
+                                        attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                                        File.SetAttributes(str, attributes);
+                                    }
+
+                                    if (Global.SongMgrBackupRemoveSong == "True")
+                                    {
+                                        string SongFileName = Path.GetFileName(str);
+                                        if (!Directory.Exists(Application.StartupPath + @"\SongMgr\RemoveSong")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\RemoveSong");
+                                        if (File.Exists(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName)) File.Delete(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
+                                        File.Move(str, Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
+                                        CommonFunc.SetFileTime(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName, DateTime.Now);
+                                    }
+                                    else
+                                    {
+                                        File.Delete(str);
+                                    }
+                                }
+                                catch
+                                {
+                                    RemoveError = true;
+                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + str + " (唯讀或使用中)";
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                    this.BeginInvoke((Action)delegate()
+                                    {
+                                        SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
+                                    });
+                                }
                             }
                         }
-                    }
 
-                    cmd.Parameters.AddWithValue("@SongId", ((List<string>)SongIdlist)[i]);
-                    cmd.ExecuteNonQuery();
-                    cmd.Parameters.Clear();
-                    RemoveSongIdlist.Add(((List<string>)SongIdlist)[i]);
-                }
-                catch
-                {
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】異動檔案時發生錯誤: " + str + " (唯讀或使用中)";
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongQuery_QueryStatus_Label.Text = "異動檔案時發生錯誤,請參考操作記錄裡的內容!";
-                    });
+                        if (!RemoveError)
+                        {
+                            cmd.Parameters.AddWithValue("@SongId", SongIdlist[i]);
+                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
+                            RemoveSongIdlist.Add(SongIdlist[i]);
+
+                            if (SongQuery.FavoriteSongIdList.IndexOf(SongIdlist[i]) >= 0)
+                            {
+                                string FavoriteRemoveSqlStr = "delete from ktv_Favorite where Song_Id = @SongId";
+                                using (OleDbCommand Fcmd = new OleDbCommand(FavoriteRemoveSqlStr, conn))
+                                {
+                                    Fcmd.Parameters.AddWithValue("@SongId", SongIdlist[i]);
+                                    Fcmd.ExecuteNonQuery();
+                                    Fcmd.Parameters.Clear();
+                                }
+                            }
+
+                            this.BeginInvoke((Action)delegate()
+                            {
+                                SongQuery_QueryStatus_Label.Text = (Global.SongMgrSongAddMode != "3") ? "已成功移除所選歌曲資料及檔案!" : "已成功移除所選歌曲資料!";
+                            });
+                        }
+                    }
                 }
             }
-            conn.Close();
 
             int MaxDigitCode;
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
@@ -2196,105 +2229,115 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetSongQueryTypeList()
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道", "錢櫃編號" };
-
-            foreach (string str in ItemList)
+            using (DataTable list = new DataTable())
             {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道", "錢櫃編號" };
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
             }
-            return list;
         }
 
         public static DataTable GetSongQueryValueList(string ValueType, bool MultiEdit)
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            List<string> valuelist = new List<string>();
-
-            if (MultiEdit)
+            using (DataTable list = new DataTable())
             {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = "不變更";
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            switch (ValueType)
-            {
-                case "SongType":
-                    string str = "";
-                    if (Global.SongMgrSongType != "") { str = "無類別," + Global.SongMgrSongType; } else { str = "無類別"; }
-                    valuelist = new List<string>(str.Split(','));
-                    foreach (string value in valuelist)
-                    {
-                        list.Rows.Add(list.NewRow());
-                        list.Rows[list.Rows.Count - 1][0] = value;
-                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-                    }
-                    break;
-                case "SingerType":
-                    foreach (string SingerTypeStr in Global.CrazyktvSingerTypeList)
-                    {
-                        if (SingerTypeStr != "未使用")
+                if (MultiEdit)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = "不變更";
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+
+                switch (ValueType)
+                {
+                    case "SongType":
+                        string str = "";
+                        if (Global.SongMgrSongType != "") { str = "無類別," + Global.SongMgrSongType; } else { str = "無類別"; }
+
+                        List<string> valuelist = new List<string>(str.Split(','));
+                        foreach (string value in valuelist)
                         {
                             list.Rows.Add(list.NewRow());
-                            list.Rows[list.Rows.Count - 1][0] = SingerTypeStr;
+                            list.Rows[list.Rows.Count - 1][0] = value;
                             list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
                         }
-                    }
-                    break;
-                case "SongTrack":
-                    foreach (string value in Global.CrazyktvSongTrackWordList)
-                    {
-                        list.Rows.Add(list.NewRow());
-                        list.Rows[list.Rows.Count - 1][0] = value;
-                        list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
-                    }
-                    break;
+                        valuelist.Clear();
+                        break;
+                    case "SingerType":
+                        foreach (string SingerTypeStr in Global.CrazyktvSingerTypeList)
+                        {
+                            if (SingerTypeStr != "未使用")
+                            {
+                                list.Rows.Add(list.NewRow());
+                                list.Rows[list.Rows.Count - 1][0] = SingerTypeStr;
+                                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                            }
+                        }
+                        break;
+                    case "SongTrack":
+                        foreach (string value in Global.CrazyktvSongTrackWordList)
+                        {
+                            list.Rows.Add(list.NewRow());
+                            list.Rows[list.Rows.Count - 1][0] = value;
+                            list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
+                        }
+                        break;
+                }
+                return list;
             }
-            return list;
         }
 
         public static DataTable GetSongQueryFilterList()
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-            list.Rows.Add(list.NewRow());
-            list.Rows[0][0] = "全部";
-            list.Rows[0][1] = 1;
-
-            foreach (string str in Global.CrazyktvSongLangList)
+            using (DataTable list = new DataTable())
             {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
                 list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                list.Rows[0][0] = "全部";
+                list.Rows[0][1] = 1;
+
+                foreach (string str in Global.CrazyktvSongLangList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
             }
-            return list;
         }
 
         public static DataTable GetSongQueryExceptionalList()
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)" };
-
-            foreach (string str in ItemList)
+            using (DataTable list = new DataTable())
             {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)" };
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
             }
-            return list;
         }
 
         #endregion
@@ -2303,24 +2346,26 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetEditSongLangList(bool MultiEdit)
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            if (MultiEdit)
+            using (DataTable list = new DataTable())
             {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = "不變更";
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            foreach (string str in Global.CrazyktvSongLangList)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                if (MultiEdit)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = "不變更";
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+
+                foreach (string str in Global.CrazyktvSongLangList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
             }
-            return list;
         }
 
         #endregion
@@ -2598,12 +2643,19 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SongQuery 取得歌曲類別字串 ---
+
         public static string GetSongTypeStr(int SongType)
         {
             List<string> list = new List<string>(Global.SongMgrSongType.Split(','));
             string Str = list[SongType];
+            list.Clear();
             return Str;
         }
+
+        #endregion
+
+        #region --- SongQuery 取得右鍵功能表字串 ---
 
         public static string GetContextMenuStr(int ContextMenu, int ListType, bool ReturnCount)
         {
@@ -2626,8 +2678,13 @@ namespace CrazyKTV_SongMgr
             }
             string Str = list[ContextMenu];
             if (ReturnCount) Str = list.Count.ToString();
+            list.Clear();
             return Str;
         }
+
+        #endregion
+
+        #region --- SongQuery 取得下個歌曲編號 ---
 
         public static string GetNextSongId(string SongLang, bool UpdateIdList)
         {
@@ -2650,6 +2707,8 @@ namespace CrazyKTV_SongMgr
             }
             return NewSongID;
         }
+
+        #endregion
 
     }
 }
