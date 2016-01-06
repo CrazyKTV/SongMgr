@@ -66,27 +66,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongAdd_DefaultSongInfo_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (((ComboBox)sender).SelectedValue.ToString() != "System.Data.DataRowView")
-            {
-                switch (((ComboBox)sender).Name)
-                {
-                    case "SongAdd_DefaultSongLang_ComboBox":
-                        Global.SongAddDefaultSongLang = ((ComboBox)sender).SelectedValue.ToString();
-                        break;
-                    case "SongAdd_DefaultSingerType_ComboBox":
-                        Global.SongAddDefaultSingerType = ((ComboBox)sender).SelectedValue.ToString();
-                        break;
-                    case "SongAdd_DefaultSongTrack_ComboBox":
-                        Global.SongAddDefaultSongTrack = ((ComboBox)sender).SelectedValue.ToString();
-                        break;
-                    case "SongAdd_DefaultSongType_ComboBox":
-                        Global.SongAddDefaultSongType = ((ComboBox)sender).SelectedValue.ToString();
-                        break;
-                }
-            }
-        }
+        #region --- SongAdd 控制項事件 ---
 
         private void SongAdd_SongIdentificationMode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -103,7 +83,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongAdd_DupSongMode_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch(SongAdd_DupSongMode_ComboBox.SelectedValue.ToString())
+            switch (SongAdd_DupSongMode_ComboBox.SelectedValue.ToString())
             {
                 case "1":
                 case "2":
@@ -116,6 +96,16 @@ namespace CrazyKTV_SongMgr
         private void SongAdd_EngSongNameFormat_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.SongAddEngSongNameFormat = SongAdd_EngSongNameFormat_CheckBox.Checked.ToString();
+        }
+
+        private void SongAdd_UseCustomSongID_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongAddUseCustomSongID = SongAdd_UseCustomSongID_CheckBox.Checked.ToString();
+        }
+
+        private void SongAdd_EnableConvToTC_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongAddEnableConvToTC = SongAdd_EnableConvToTC_CheckBox.Checked.ToString();
         }
 
         private void SongAdd_SpecialStr_ListBox_Enter(object sender, EventArgs e)
@@ -199,6 +189,32 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongAdd_DefaultSongInfo_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ComboBox)sender).SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                switch (((ComboBox)sender).Name)
+                {
+                    case "SongAdd_DefaultSongLang_ComboBox":
+                        Global.SongAddDefaultSongLang = ((ComboBox)sender).SelectedValue.ToString();
+                        break;
+                    case "SongAdd_DefaultSingerType_ComboBox":
+                        Global.SongAddDefaultSingerType = ((ComboBox)sender).SelectedValue.ToString();
+                        break;
+                    case "SongAdd_DefaultSongTrack_ComboBox":
+                        Global.SongAddDefaultSongTrack = ((ComboBox)sender).SelectedValue.ToString();
+                        break;
+                    case "SongAdd_DefaultSongType_ComboBox":
+                        Global.SongAddDefaultSongType = ((ComboBox)sender).SelectedValue.ToString();
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region --- SongAdd 分析歌曲 ---
+
         private void SongAdd_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -269,6 +285,7 @@ namespace CrazyKTV_SongMgr
                         SongAdd_SpecialStr_GroupBox.Visible = false;
                         SongAdd_DefaultSongInfo_GroupBox.Visible = false;
                         SongAdd_Save_Button.Text = "取消加入";
+                        SongAdd_InitializeEditControl();
                         Common_SwitchSetUI(false);
 
                         var tasks = new List<Task>();
@@ -281,7 +298,6 @@ namespace CrazyKTV_SongMgr
                                 this.BeginInvoke((Action)delegate()
                                 {
                                     SongAdd_DataGridView.SelectionChanged += new EventHandler(SongAdd_DataGridView_SelectionChanged);
-                                    SongAdd_InitializeEditControl();
                                     SongAdd_DataGridView_SelectionChanged(new object(), new EventArgs());
                                 });
                             }
@@ -357,9 +373,9 @@ namespace CrazyKTV_SongMgr
             this.BeginInvoke((Action)delegate()
             {
                 int sortindex = 0;
-                Global.SongAddDT.DefaultView.Sort = "Song_Singer, Song_SongName";
-                Global.SongAddDT = Global.SongAddDT.DefaultView.ToTable();
-                SongAdd_DataGridView.DataSource = Global.SongAddDT;
+                SongAnalysis.SongAnalysisDT.DefaultView.Sort = "Song_Singer, Song_SongName";
+                SongAnalysis.SongAnalysisDT = SongAnalysis.SongAnalysisDT.DefaultView.ToTable();
+                SongAdd_DataGridView.DataSource = SongAnalysis.SongAnalysisDT;
                 
                 for (int i = 0; i < SongAdd_DataGridView.ColumnCount; i++)
                 {
@@ -405,6 +421,8 @@ namespace CrazyKTV_SongMgr
                 SongAnalysis.DisposeSongDataTable();
             });
         }
+
+        #endregion
 
         private bool SongAdd_CheckSongAddStatus()
         {
@@ -920,15 +938,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongAdd_UseCustomSongID_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.SongAddUseCustomSongID = SongAdd_UseCustomSongID_CheckBox.Checked.ToString();
-        }
 
-        private void SongAdd_EnableConvToTC_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.SongAddEnableConvToTC = SongAdd_EnableConvToTC_CheckBox.Checked.ToString();
-        }
 
         #region --- SongAdd 歌曲編輯 ---
 

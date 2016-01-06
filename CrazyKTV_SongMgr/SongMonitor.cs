@@ -175,7 +175,7 @@ namespace CrazyKTV_SongMgr
             if (NewFileList.Count > 0)
             {
                 SongAdd_SongAnalysisTask(NewFileList);
-                while (!Global.SongAnalysisCompleted)
+                while (!SongAnalysis.SongAnalysisCompleted)
                 {
                     Thread.Sleep(500);
                 }
@@ -509,7 +509,7 @@ namespace CrazyKTV_SongMgr
             if (Global.SongMonitorCreatedList.Count > 0)
             {
                 SongAdd_SongAnalysisTask(Global.SongMonitorCreatedList);
-                while (!Global.SongAnalysisCompleted)
+                while (!SongAnalysis.SongAnalysisCompleted)
                 {
                     Thread.Sleep(500);
                 }

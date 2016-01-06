@@ -686,9 +686,9 @@ namespace CrazyKTV_SongMgr
 
                     if (SongQuery.SongDataLowCaseList.IndexOf(SongData) >= 0)
                     {
-                        if (SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] != OldSongId)
+                        if (SongQuery.SongDataIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] != OldSongId)
                         {
-                            DupSongData = SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] + "|" + SongQuery.SongDataList[SongQuery.SongDataLowCaseList.IndexOf(SongData)];
+                            DupSongData = SongQuery.SongDataIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] + "|" + SongQuery.SongDataList[SongQuery.SongDataLowCaseList.IndexOf(SongData)];
                             DuplicateSongStatus = true;
                         }
                     }
@@ -703,9 +703,9 @@ namespace CrazyKTV_SongMgr
                                     SongData = SongLang + "|" + SongSinger.ToLower() + "|" + SynonymousSongName + "|" + SongSongType.ToLower();
                                     if (SongQuery.SongDataLowCaseList.IndexOf(SongData) >= 0)
                                     {
-                                        if (SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] != OldSongId)
+                                        if (SongQuery.SongDataIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] != OldSongId)
                                         {
-                                            DupSongData = SongQuery.SongIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] + "|" + SongQuery.SongDataList[SongQuery.SongDataLowCaseList.IndexOf(SongData)];
+                                            DupSongData = SongQuery.SongDataIdList[SongQuery.SongDataLowCaseList.IndexOf(SongData)] + "|" + SongQuery.SongDataList[SongQuery.SongDataLowCaseList.IndexOf(SongData)];
                                             DuplicateSongStatus = true;
                                             break;
                                         }
@@ -753,9 +753,9 @@ namespace CrazyKTV_SongMgr
                         if (SongQuery.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
                         {
                             int ChorusSongDataIndex = SongQuery.SongDataLowCaseList.IndexOf(SongQuery.SongDataLowCaseList.Find(ChorusSongData => ChorusSongData.ContainsAll(ChorusSongDatalist.ToArray())));
-                            if (SongQuery.SongIdList[ChorusSongDataIndex] != OldSongId)
+                            if (SongQuery.SongDataIdList[ChorusSongDataIndex] != OldSongId)
                             {
-                                DupSongData = SongQuery.SongIdList[ChorusSongDataIndex] + "|" + SongQuery.SongDataList[ChorusSongDataIndex];
+                                DupSongData = SongQuery.SongDataIdList[ChorusSongDataIndex] + "|" + SongQuery.SongDataList[ChorusSongDataIndex];
                                 DuplicateSongStatus = true;
                             }
                         }
@@ -771,9 +771,9 @@ namespace CrazyKTV_SongMgr
                                         if (SongQuery.SongDataLowCaseList.Find(ChorusSongData => ChorusSongData.ContainsAll(ChorusSongDatalist.ToArray())) != null)
                                         {
                                             int ChorusSongDataIndex = SongQuery.SongDataLowCaseList.IndexOf(SongQuery.SongDataLowCaseList.Find(ChorusSongData => ChorusSongData.ContainsAll(ChorusSongDatalist.ToArray())));
-                                            if (SongQuery.SongIdList[ChorusSongDataIndex] != OldSongId)
+                                            if (SongQuery.SongDataIdList[ChorusSongDataIndex] != OldSongId)
                                             {
-                                                DupSongData = SongQuery.SongIdList[ChorusSongDataIndex] + "|" + SongQuery.SongDataList[ChorusSongDataIndex];
+                                                DupSongData = SongQuery.SongDataIdList[ChorusSongDataIndex] + "|" + SongQuery.SongDataList[ChorusSongDataIndex];
                                                 DuplicateSongStatus = true;
                                                 break;
                                             }
@@ -1122,7 +1122,7 @@ namespace CrazyKTV_SongMgr
                         }
                         cmd.Parameters.Clear();
 
-                        if (SongQuery.FavoriteSongIdList.IndexOf(valuelist[19]) >= 0)
+                        if (SongQuery.FavoriteDataIdList.IndexOf(valuelist[19]) >= 0)
                         {
                             string FavoriteUpdSqlStr = "update ktv_Favorite set Song_Id = @SongId where Song_Id = @OldSongId";
 
@@ -1225,7 +1225,7 @@ namespace CrazyKTV_SongMgr
                             cmd.Parameters.Clear();
                             RemoveSongIdlist.Add(SongIdlist[i]);
 
-                            if (SongQuery.FavoriteSongIdList.IndexOf(SongIdlist[i]) >= 0)
+                            if (SongQuery.FavoriteDataIdList.IndexOf(SongIdlist[i]) >= 0)
                             {
                                 string FavoriteRemoveSqlStr = "delete from ktv_Favorite where Song_Id = @SongId";
                                 using (OleDbCommand Fcmd = new OleDbCommand(FavoriteRemoveSqlStr, conn))
@@ -2178,14 +2178,14 @@ namespace CrazyKTV_SongMgr
 
         #region --- SongQuery 建立資料表 ---
 
-        public static List<string> SongIdList;
+        public static List<string> SongDataIdList;
         public static List<string> SongDataList;
         public static List<string> SongDataLowCaseList;
-        public static List<string> FavoriteSongIdList;
+        public static List<string> FavoriteDataIdList;
 
         public static void CreateSongDataTable()
         {
-            SongIdList = new List<string>();
+            SongDataIdList = new List<string>();
             SongDataList = new List<string>();
             SongDataLowCaseList = new List<string>();
 
@@ -2194,21 +2194,21 @@ namespace CrazyKTV_SongMgr
             {
                 foreach (DataRow row in dt.AsEnumerable())
                 {
-                    SongIdList.Add(row["Song_Id"].ToString());
+                    SongDataIdList.Add(row["Song_Id"].ToString());
                     SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString() + "|" + row["Song_SongType"].ToString());
                     SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower() + "|" + row["Song_SongType"].ToString().ToLower());
                 }
             }
 
-            FavoriteSongIdList = new List<string>();
+            FavoriteDataIdList = new List<string>();
             string FavoriteSqlStr = "select User_Id, Song_Id from ktv_Favorite";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, FavoriteSqlStr, ""))
             {
                 foreach (DataRow row in dt.AsEnumerable())
                 {
-                    if (FavoriteSongIdList.IndexOf(row["Song_Id"].ToString()) < 0)
+                    if (FavoriteDataIdList.IndexOf(row["Song_Id"].ToString()) < 0)
                     {
-                        FavoriteSongIdList.Add(row["Song_Id"].ToString());
+                        FavoriteDataIdList.Add(row["Song_Id"].ToString());
                     }
                 }
             }
@@ -2216,10 +2216,10 @@ namespace CrazyKTV_SongMgr
 
         public static void DisposeSongDataTable()
         {
-            SongIdList.Clear();
+            SongDataIdList.Clear();
             SongDataList.Clear();
             SongDataLowCaseList.Clear();
-            FavoriteSongIdList.Clear();
+            FavoriteDataIdList.Clear();
             GC.Collect();
         }
 

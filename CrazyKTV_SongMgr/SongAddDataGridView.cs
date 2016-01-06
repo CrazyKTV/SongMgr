@@ -245,7 +245,16 @@ namespace CrazyKTV_SongMgr
             {
                 int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
                 List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
-                if (SongAdd_Tooltip_Label.Text != "") SongAdd_Tooltip_Label.Text = "";
+
+                if (SongAnalysis.SongAnalysisCompleted)
+                {
+                    SongAnalysis.SongAnalysisCompleted = false;
+                }
+                else
+                {
+                    if (SongAdd_Tooltip_Label.Text != "") SongAdd_Tooltip_Label.Text = "";
+                }
+
                 Global.SongAddDataGridViewSelectList.Clear();
 
                 if (SelectedRowsCount > 1)

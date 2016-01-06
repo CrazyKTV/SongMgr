@@ -110,11 +110,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
         public static List<string> CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
 
-        public static bool SongAnalysisCompleted = false;
-        public static List<string> SongAnalysisSingerList = new List<string>();
-        public static List<string> SongAnalysisSingerLowCaseList = new List<string>();
-        public static List<string> SongAnalysisSingerTypeList = new List<string>();
-
         public static List<string> SingerList = new List<string>();
         public static List<string> SingerLowCaseList = new List<string>();
         public static List<string> SingerTypeList = new List<string>();
@@ -129,9 +124,6 @@ namespace CrazyKTV_SongMgr
 
         public static List<string> SongAddValueList = new List<string>();
         public static List<string> SongAddChorusSingerList = new List<string>();
-        public static List<string> SongAddAllSongIDList = new List<string>();
-        public static List<string> SongAddAllSongInfoList = new List<string>();
-        public static List<string> SongAddAllSongFilePathList = new List<string>();
 
         public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
         public static List<string> SongDBConvValueList = new List<string>();
