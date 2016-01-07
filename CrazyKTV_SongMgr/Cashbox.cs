@@ -1392,7 +1392,7 @@ namespace CrazyKTV_SongMgr
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where (((Song_SongName) In (select Song_SongName from ktv_Cashbox As Tmp group by Song_SongName, Song_Lang, Song_Singer HAVING Count(*)>1 and Song_SongName = ktv_Cashbox.Song_SongName and Song_Lang = ktv_Cashbox.Song_Lang and Song_Singer = ktv_Cashbox.Song_Singer))) order by Song_SongName";
                     break;
                 case "SongDate":
-                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where Song_CreatDate like '%" + QueryValue + "%' order by Song_Lang, Song_Singer";
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where Song_CreatDate like '%" + QueryValue + "%' order by Cashbox_Id";
                     break;
             }
 
