@@ -211,6 +211,11 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongAdd_DefaultSongVolume_TextBox_Validated(object sender, EventArgs e)
+        {
+            Global.SongAddDefaultSongVolume = SongAdd_DefaultSongVolume_TextBox.Text;
+        }
+
         #endregion
 
         #region --- SongAdd 分析歌曲 ---

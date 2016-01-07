@@ -90,6 +90,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SongAnalysis 分析歌曲 ---
+
         public static void SongInfoAnalysis(string file, List<string> SongLangKeyWordList, List<string> SingerTypeKeyWordList, List<string> SongTrackKeyWordList)
         {
             string SongAddStatus = "";
@@ -645,7 +647,7 @@ namespace CrazyKTV_SongMgr
             // 套用預設歌手類別
             if (SongSingerType == "")
             {
-                string str = CommonFunc.GetSingerTypeStr(int.Parse(Global.SongAddDefaultSingerType) - 1, 0, "null");
+                string str = CommonFunc.GetSingerTypeStr(int.Parse(Global.SongAddDefaultSingerType) - 1, 3, "null");
                 SongSingerType = CommonFunc.GetSingerTypeStr(0, 1, str);
             }
 
@@ -751,6 +753,9 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SongAnalysis 取得歌曲資訊 ---
 
         public static string GetSongInfo(string SongInfoType, string SongInfoValue)
         {
@@ -805,7 +810,11 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
             }
+            list.Clear();
             return infovalue;
         }
+
+        #endregion
+
     }
 }

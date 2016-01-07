@@ -526,6 +526,7 @@
             this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
+            this.Debug_UpdateDataColumn_Button = new System.Windows.Forms.Button();
             this.Debug_CreateDataColumn_Button = new System.Windows.Forms.Button();
             this.Debug_Cashbox_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_CashboxExport_Button = new System.Windows.Forms.Button();
@@ -534,7 +535,6 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
-            this.Debug_UpdateDataColumn_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -1826,6 +1826,7 @@
             this.SongAdd_DefaultSongVolume_TextBox.TabIndex = 9;
             this.SongAdd_DefaultSongVolume_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongAdd_DefaultSongVolume_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.SongAdd_DefaultSongVolume_TextBox.Validated += new System.EventHandler(this.SongAdd_DefaultSongVolume_TextBox_Validated);
             // 
             // SongAdd_DefaultSongType_ComboBox
             // 
@@ -6906,6 +6907,18 @@
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
             // 
+            // Debug_UpdateDataColumn_Button
+            // 
+            this.Debug_UpdateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 168);
+            this.Debug_UpdateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_UpdateDataColumn_Button.Name = "Debug_UpdateDataColumn_Button";
+            this.Debug_UpdateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_UpdateDataColumn_Button.TabIndex = 12;
+            this.Debug_UpdateDataColumn_Button.Text = "更新資料欄位";
+            this.Debug_UpdateDataColumn_Button.UseVisualStyleBackColor = true;
+            this.Debug_UpdateDataColumn_Button.Click += new System.EventHandler(this.Debug_UpdateDataColumn_Button_Click);
+            // 
             // Debug_CreateDataColumn_Button
             // 
             this.Debug_CreateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -7001,18 +7014,6 @@
             this.Debug_CreateTestFile_Button.Text = "建立測試歌庫";
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
-            // 
-            // Debug_UpdateDataColumn_Button
-            // 
-            this.Debug_UpdateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 168);
-            this.Debug_UpdateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.Debug_UpdateDataColumn_Button.Name = "Debug_UpdateDataColumn_Button";
-            this.Debug_UpdateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
-            this.Debug_UpdateDataColumn_Button.TabIndex = 12;
-            this.Debug_UpdateDataColumn_Button.Text = "更新資料欄位";
-            this.Debug_UpdateDataColumn_Button.UseVisualStyleBackColor = true;
-            this.Debug_UpdateDataColumn_Button.Click += new System.EventHandler(this.Debug_UpdateDataColumn_Button_Click);
             // 
             // MainForm
             // 
