@@ -407,8 +407,46 @@ namespace CrazyKTV_SongMgr
                                 }
                                 SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                 break;
-                            default:
+                            case 2:
                                 if (SongSinger == "")
+                                {
+                                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                    if (r.IsMatch(list[0])) SongSingerType = "3";
+                                    SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
+                                    SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                }
+                                else
+                                {
+                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", ""))
+                                    {
+                                        SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
+                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                        if (r.IsMatch(list[0])) SongSingerType = "3";
+
+                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                        {
+                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                        }
+                                        SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                    }
+                                    else
+                                    {
+                                        SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                        if (r.IsMatch(list[1])) SongSingerType = "3";
+
+                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                        {
+                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                        }
+                                        SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
+                                    }
+                                }
+                                break;
+                            default:
+                                if (SongSinger == "") //未找到歌手
                                 {
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
@@ -416,58 +454,77 @@ namespace CrazyKTV_SongMgr
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                         if (r.IsMatch(list[1])) SongSingerType = "3";
                                         SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                        SongSongName = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
                                     }
                                     else
                                     {
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                         if (r.IsMatch(list[0])) SongSingerType = "3";
                                         SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
+                                        SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                     }
                                 }
-                                else
+                                else // 已找到歌手
                                 {
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
                                         SongID = list[0];
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[1]))
+                                        if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", ""))
                                         {
-                                            SongSingerType = "3";
                                             SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[0]))
-                                        {
-                                            SongSingerType = "3";
-                                            SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
-                                        }
-                                    }
-                                }
-                                if (string.Compare(SongSinger, list[1], true) == 0)
-                                {
-                                    if (CommonFunc.IsSongId(list[0]))
-                                    {
-                                        SongID = list[0];
-                                        if (list.Count > 2)
-                                        {
+                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                            if (r.IsMatch(list[1])) SongSingerType = "3";
+
+                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                            {
+                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            }
                                             SongSongName = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
                                         }
                                         else
                                         {
+                                            SongSinger = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
+                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                            if (r.IsMatch(list[2])) SongSingerType = "3";
+
+                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                            {
+                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            }
+                                            SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                        }
+                                    }
+                                    else // List[0] 不是歌曲編號
+                                    {
+                                        if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", ""))
+                                        {
+                                            SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
+                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                            if (r.IsMatch(list[0])) SongSingerType = "3";
+
+                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                            {
+                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            }
+                                            SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                        }
+                                        else
+                                        {
+                                            SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
+                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                            if (r.IsMatch(list[1])) SongSingerType = "3";
+
+                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                            {
+                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            }
                                             SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                         }
                                     }
-                                    else
-                                    {
-                                        SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
-                                    }
-                                }
-                                else
-                                {
-                                    SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                 }
                                 break;
                         }
