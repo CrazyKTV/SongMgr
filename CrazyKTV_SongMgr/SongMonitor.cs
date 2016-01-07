@@ -188,8 +188,14 @@ namespace CrazyKTV_SongMgr
                     this.BeginInvoke((Action)delegate()
                     {
                         SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                        SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                        SongQuery_QueryType_ComboBox.SelectedValue = 1;
+                        if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
+                        {
+                            SongQuery_QueryType_ComboBox.SelectedValue = 4;
+                        }
+                        else
+                        {
+                            SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                        }
                     });
 
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
@@ -536,8 +542,14 @@ namespace CrazyKTV_SongMgr
                 this.BeginInvoke((Action)delegate()
                 {
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                    SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                    SongQuery_QueryType_ComboBox.SelectedValue = 1;
+                    if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
+                    {
+                        SongQuery_QueryType_ComboBox.SelectedValue = 4;
+                    }
+                    else
+                    {
+                        SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    }
                 });
 
                 Task.Factory.StartNew(() => Common_GetSongStatisticsTask());

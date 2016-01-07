@@ -588,7 +588,6 @@ namespace CrazyKTV_SongMgr
             {
                 SongQuery_DataGridView.Size = new Size(952, 270);
                 SongQuery_DataGridView.Location = new Point(23, 23);
-                SongQuery_DataGridView.FirstDisplayedScrollingRowIndex = SongQuery_DataGridView.SelectedRows[SongQuery_DataGridView.SelectedRows.Count - 1].Index;
                 SongQuery_Edit_GroupBox.Visible = true;
                 SongQuery_Query_GroupBox.Visible = false;
                 SongQuery_OtherQuery_GroupBox.Visible = false;

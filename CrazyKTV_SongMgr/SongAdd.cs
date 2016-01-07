@@ -316,9 +316,8 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongAdd_SongAnalysisTask(object file)
+        private void SongAdd_SongAnalysisTask(List<string> filelist)
         {
-            List<string> list = (List<string>)file;
             List<string> strlist = new List<string>();
             List<string> SongLangKeyWordList = new List<string>();
             List<string> SingerTypeKeyWordList = new List<string>();
@@ -334,6 +333,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SongLangKeyWordList.Add(liststr);
                 }
+                strlist.Clear();
             }
 
             foreach (string str in Global.CrazyktvSingerTypeKeyWordList)
@@ -343,6 +343,7 @@ namespace CrazyKTV_SongMgr
                 {
                     SingerTypeKeyWordList.Add(liststr);
                 }
+                strlist.Clear();
             }
 
             foreach (string str in Global.CrazyktvSongTrackKeyWordList)
@@ -352,9 +353,10 @@ namespace CrazyKTV_SongMgr
                 {
                     SongTrackKeyWordList.Add(liststr);
                 }
+                strlist.Clear();
             }
 
-            Parallel.ForEach(list, (str, loopState) =>
+            Parallel.ForEach(filelist, (str, loopState) =>
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                 lock(LockThis)
@@ -423,23 +425,29 @@ namespace CrazyKTV_SongMgr
 
                 Global.TimerEndTime = DateTime.Now;
                 SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 "  +(long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
+
+                SongLangKeyWordList.Clear();
+                SingerTypeKeyWordList.Clear();
+                SongTrackKeyWordList.Clear();
                 SongAnalysis.DisposeSongDataTable();
             });
         }
 
-        #endregion
-
         private bool SongAdd_CheckSongAddStatus()
         {
-            DataTable dt = new DataTable();
-            dt = SongAdd_DataGridView.DataSource as DataTable;
+            using (DataTable dt = SongAdd_DataGridView.DataSource as DataTable)
+            {
+                var query = from row in dt.AsEnumerable()
+                            where row.Field<string>("Song_Lang").Equals("未知")
+                            select row;
 
-            var query = from row in dt.AsEnumerable()
-                        where row.Field<string>("Song_Lang").Equals("未知")
-                        select row;
-            if (query.Count<DataRow>() > 0) { return false; } else { return true; }
+                if (query.Count<DataRow>() > 0) { return false; } else { return true; }
+            }
         }
 
+        #endregion
+
+        #region --- SongAdd 加入/更新歌曲按鈕點擊事件 ---
 
         private void SongAdd_Add_Button_Click(object sender, EventArgs e)
         {
@@ -458,14 +466,18 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        #endregion
+
+        #region --- SongAdd 加入歌曲 ---
+
         private void SongAdd_SongAddTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
             this.BeginInvoke((Action)delegate()
             {
-                Global.SongAddDT = new DataTable();
-                Global.SongAddDT = SongAdd_DataGridView.DataSource as DataTable;
+                SongAddSong.SongAddDT = new DataTable();
+                SongAddSong.SongAddDT = SongAdd_DataGridView.DataSource as DataTable;
             });
             
             Global.SongAddValueList = new List<string>();
@@ -473,12 +485,10 @@ namespace CrazyKTV_SongMgr
             Global.TotalList = new List<int>() { 0, 0, 0, 0, 0 };
             SongAddSong.CreateSongDataTable();
 
-            int MaxDigitCode;
-            if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-            CommonFunc.GetMaxSongId(MaxDigitCode);
-            CommonFunc.GetNotExistsSongId(MaxDigitCode);
+            CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
+            CommonFunc.GetNotExistsSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
 
-            int count = Global.SongAddDT.Rows.Count;
+            int count = SongAddSong.SongAddDT.Rows.Count;
 
             for (int i = 0; i < count; i++)
             {
@@ -646,9 +656,9 @@ namespace CrazyKTV_SongMgr
                     string singertype = "";
                     bool AddSinger = false;
 
-                    if (Global.AllSingerLowCaseList.IndexOf(singer.ToLower()) >= 0)
+                    if (SongAddSong.AllSingerDataLowCaseList.IndexOf(singer.ToLower()) >= 0)
                     {
-                        singertype = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(singer.ToLower())];
+                        singertype = SongAddSong.AllSingerDataTypeList[SongAddSong.AllSingerDataLowCaseList.IndexOf(singer.ToLower())];
 
                         if (SingerList.Count > 0)
                         {
@@ -722,16 +732,16 @@ namespace CrazyKTV_SongMgr
             switch (Global.SongAddDupSongMode)
             {
                 case "1":
-                    Global.DupSongAddDT.Dispose();
-                    Global.DupSongAddDT = null;
+                    SongAddSong.DupSongAddDT.Dispose();
+                    SongAddSong.DupSongAddDT = null;
                     break;
                 case "2":
-                    if (Global.DupSongAddDT.Rows.Count > 0) UpdateDupSong = true;
+                    if (SongAddSong.DupSongAddDT.Rows.Count > 0) UpdateDupSong = true;
                     break;
                 case "3":
                     SongAdd_SongUpdateTask();
-                    Global.DupSongAddDT.Dispose();
-                    Global.DupSongAddDT = null;
+                    SongAddSong.DupSongAddDT.Dispose();
+                    SongAddSong.DupSongAddDT = null;
                     break;
             }
 
@@ -763,16 +773,23 @@ namespace CrazyKTV_SongMgr
                     SongMgrCfg_SongType_ListBox.ValueMember = "Value";
 
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                    SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                    SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
+                    {
+                        SongQuery_QueryType_ComboBox.SelectedValue = 4;
+                    }
+                    else
+                    {
+                        SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    }
+
                     SongQuery_EditMode_CheckBox.Checked = false;
 
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
                     Common_RefreshSongType();
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
-                    Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode));
-                    Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode));
+                    Task.Factory.StartNew(() => CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
+                    Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
                     Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                     SongAdd_Save_Button.Text = "儲存設定";
@@ -801,15 +818,17 @@ namespace CrazyKTV_SongMgr
                     SongAdd_Save_Button.Text = "取消更新";
                     SongAdd_Add_Button.Enabled = true;
                     SongAdd_Save_Button.Enabled = true;
-                    SongAdd_DataGridView.DataSource = Global.DupSongAddDT;
+                    SongAdd_DataGridView.DataSource = SongAddSong.DupSongAddDT;
                     SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.Enabled = true;
-                    Global.DupSongAddDT.Dispose();
-                    Global.DupSongAddDT = null;
+                    SongAddSong.DupSongAddDT.Dispose();
+                    SongAddSong.DupSongAddDT = null;
                 }
                 SongAddSong.DisposeSongDataTable();
             });
         }
+
+        #endregion
 
         private void SongAdd_SongUpdateTask()
         {
@@ -818,13 +837,13 @@ namespace CrazyKTV_SongMgr
 
             if (Global.SongAddDupSongMode == "2")
             {
-                Global.DupSongAddDT = new DataTable();
-                Global.DupSongAddDT = SongAdd_DataGridView.DataSource as DataTable;
+                SongAddSong.DupSongAddDT = new DataTable();
+                SongAddSong.DupSongAddDT = SongAdd_DataGridView.DataSource as DataTable;
             }
 
             Global.SongAddValueList = new List<string>();
 
-            int count = Global.DupSongAddDT.Rows.Count;
+            int count = SongAddSong.DupSongAddDT.Rows.Count;
 
             for (int i = 0; i < count; i++)
             {
@@ -906,8 +925,15 @@ namespace CrazyKTV_SongMgr
                     SongMgrCfg_SongType_ListBox.ValueMember = "Value";
 
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                    SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                    SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
+                    {
+                        SongQuery_QueryType_ComboBox.SelectedValue = 4;
+                    }
+                    else
+                    {
+                        SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
+                    }
+
                     SongQuery_EditMode_CheckBox.Checked = false;
 
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
@@ -938,8 +964,8 @@ namespace CrazyKTV_SongMgr
 
                     MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
                 });
-                Global.DupSongAddDT.Dispose();
-                Global.DupSongAddDT = null;
+                SongAddSong.DupSongAddDT.Dispose();
+                SongAddSong.DupSongAddDT = null;
             }
         }
 

@@ -36,7 +36,7 @@ namespace CrazyKTV_SongMgr
 
     class Global
     {
-        public static bool DebugMode = false;
+        public static bool DebugMode = true;
 
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
         public static string CrazyktvSongMgrDatabaseFile = Application.StartupPath + @"\SongMgr\CrazySongMgr.mdb";
@@ -130,15 +130,13 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongDBConvJetktvLangList = new List<string>();
         public static List<string> SongDBConvJetktvPathList = new List<string>();
 
-
         public static DataTable SongDT = new DataTable();
-        public static DataTable SongAddDT = new DataTable();
+        //public static DataTable SongAddDT = new DataTable();
         public static DataTable SingerDT = new DataTable();
         public static DataTable AllSingerDT = new DataTable();
         public static DataTable PhoneticsDT = new DataTable();
         public static DataTable DuplicateSongDT = new DataTable();
         public static DataTable FailureSongDT = new DataTable();
-        public static DataTable DupSongAddDT = new DataTable();
         public static DataTable SongSrcDT = new DataTable();
         public static DataTable SingerSrcDT = new DataTable();
         public static DataTable SongLogDT = new DataTable();
