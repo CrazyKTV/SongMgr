@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -482,6 +481,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
+                // 自訂編號
                 if (UseCustomSongID)
                 {
                     if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
@@ -504,7 +504,7 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
-                else
+                else //自動分配編號
                 {
                     SongID = "";
 
@@ -737,44 +737,49 @@ namespace CrazyKTV_SongMgr
 
             // 移除原有歌曲
             bool DeleteError = false;
-            string oldfile = Path.Combine(SongPath, SongFileName);
-            if (File.Exists(oldfile) && oldfile != SongSrcPath)
-            {
-                FileAttributes attributes = File.GetAttributes(oldfile);
-                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
-                    File.SetAttributes(oldfile, attributes);
-                }
 
-                try
+            if (Global.SongMgrSongAddMode != "3")
+            {
+                string oldfile = Path.Combine(SongPath, SongFileName);
+
+                if (File.Exists(oldfile) && oldfile != SongSrcPath)
                 {
-                    if (Global.SongMgrBackupRemoveSong == "True")
+                    FileAttributes attributes = File.GetAttributes(oldfile);
+                    if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                     {
-                        if (!Directory.Exists(Application.StartupPath + @"\SongMgr\RemoveSong")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\RemoveSong");
-                        if (File.Exists(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName)) File.Delete(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
-                        File.Move(oldfile, Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
-                        CommonFunc.SetFileTime(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName, DateTime.Now);
+                        attributes = CommonFunc.RemoveAttribute(attributes, FileAttributes.ReadOnly);
+                        File.SetAttributes(oldfile, attributes);
                     }
-                    else
+
+                    try
                     {
-                        File.Delete(oldfile);
+                        if (Global.SongMgrBackupRemoveSong == "True")
+                        {
+                            if (!Directory.Exists(Application.StartupPath + @"\SongMgr\RemoveSong")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\RemoveSong");
+                            if (File.Exists(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName)) File.Delete(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
+                            File.Move(oldfile, Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName);
+                            CommonFunc.SetFileTime(Application.StartupPath + @"\SongMgr\RemoveSong\" + SongFileName, DateTime.Now);
+                        }
+                        else
+                        {
+                            File.Delete(oldfile);
+                        }
+                    }
+                    catch
+                    {
+                        DeleteError = true;
+                        lock (LockThis) { Global.TotalList[2]++; }
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【加歌頁面】重複歌曲原有檔案是唯讀檔或正在使用中: " + oldfile;
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
                 }
-                catch
+                else
                 {
-                    DeleteError = true;
-                    lock (LockThis) { Global.TotalList[2]++; }
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【加歌頁面】重複歌曲原有檔案是唯讀檔或正在使用中: " + oldfile;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【加歌頁面】重複歌曲原有檔案不存在或為同檔案,已自動忽略移除原有檔案: " + oldfile;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
-            }
-            else
-            {
-                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【加歌頁面】重複歌曲原有檔案不存在或為同檔案,已自動忽略移除原有檔案: " + oldfile;
-                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
             }
 
             if (!DeleteError)
@@ -888,7 +893,6 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-
                 if (SongSinger.Length > 60)
                 {
                     Global.TotalList[2]++;
@@ -987,6 +991,8 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SongAddSong 取得未使用的編號 ---
+
         public static void GetUnUsedSongId(string MaxSongID, string SongLang)
         {
             string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
@@ -1005,6 +1011,8 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
+
+        #endregion
 
     }
 }
