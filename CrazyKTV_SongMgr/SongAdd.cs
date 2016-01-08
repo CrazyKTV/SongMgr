@@ -1423,57 +1423,62 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        #endregion
-
-
-
         public static DataTable GetDupSongModeList()
         {
-            List<string> list = new List<string>();
-            list = new List<string>() { "自動忽略重複歌曲", "手動處理重複歌曲", "檔案容量較大時自動取代" };
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add(new DataColumn("Display", typeof(string)));
-            dt.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            foreach (string s in list)
+            using (DataTable dt = new DataTable())
             {
-                dt.Rows.Add(dt.NewRow());
-                dt.Rows[dt.Rows.Count - 1][0] = s;
-                dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                dt.Columns.Add(new DataColumn("Display", typeof(string)));
+                dt.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> list = new List<string>();
+                list = new List<string>() { "自動忽略重複歌曲", "手動處理重複歌曲", "檔案容量較大時自動取代" };
+
+                foreach (string s in list)
+                {
+                    dt.Rows.Add(dt.NewRow());
+                    dt.Rows[dt.Rows.Count - 1][0] = s;
+                    dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                }
+                list.Clear();
+                return dt;
             }
-            return dt;
         }
+
+        #endregion
 
         #region --- 歌曲編輯下拉清單 ---
 
         public static DataTable GetEditSongLangList(bool MultiEdit)
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            if (MultiEdit)
+            using (DataTable list = new DataTable())
             {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = "不變更";
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-            foreach (string str in Global.CrazyktvSongLangList)
-            {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = str;
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            }
+                if (MultiEdit)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = "不變更";
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
 
-            list.Rows.Add(list.NewRow());
-            list.Rows[list.Rows.Count - 1][0] = "未知";
-            list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-            return list;
+                foreach (string str in Global.CrazyktvSongLangList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+
+                list.Rows.Add(list.NewRow());
+                list.Rows[list.Rows.Count - 1][0] = "未知";
+                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                return list;
+            }
         }
 
         #endregion
+
+        #region --- SongAdd 歌曲列表欄位設定 ---
 
         public static List<string> GetDataGridViewColumnSet(string ColumnName)
         {
@@ -1551,15 +1556,8 @@ namespace CrazyKTV_SongMgr
             }
             return list;
         }
-
-
-
-
-
-
+        
+        #endregion
 
     }
-
-
-
 }
