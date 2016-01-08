@@ -812,7 +812,7 @@ namespace CrazyKTV_SongMgr
                     }
                     MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongQuery_TabPage);
                 }
-                else
+                else // 手動處理重歌曲
                 {
                     SongAdd_Tooltip_Label.Text = "總共加入 " + Global.TotalList[0] + " 首歌曲,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成加歌。";
                     SongAdd_Add_Button.Text = "更新歌庫";
@@ -822,6 +822,7 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.DataSource = SongAddSong.DupSongAddDT;
                     SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.Enabled = true;
+
                     SongAddSong.DupSongAddDT.Dispose();
                     SongAddSong.DupSongAddDT = null;
                 }

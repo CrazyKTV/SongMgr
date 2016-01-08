@@ -55,7 +55,7 @@ namespace CrazyKTV_SongMgr
                 ToolStripMenuItem[] GridView_ContextMenuItem;
                 string valStr = "";
 
-                if (SongAdd_Save_Button.Text == "取消加入")
+                if (SongAdd_Save_Button.Text == "取消加入" || SongAdd_Save_Button.Text == "取消更新")
                 {
                     if (!SongAdd_DataGridView.Rows[e.RowIndex].Selected) SongAdd_DataGridView.CurrentCell = SongAdd_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
@@ -171,7 +171,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongAdd_DataGridView_MouseUp(object sender, MouseEventArgs e)
         {
-            if (SongAdd_Save_Button.Text == "取消加入")
+            if (SongAdd_Save_Button.Text == "取消加入" || SongAdd_Save_Button.Text == "取消更新")
             {
                 int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
 
@@ -211,7 +211,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongAdd_DataGridView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (SongAdd_Save_Button.Text == "取消加入")
+            if (SongAdd_Save_Button.Text == "取消加入" || SongAdd_Save_Button.Text == "取消更新")
             {
                 if (SongAdd_DataGridView.SelectedRows.Count > 0)
                 {
