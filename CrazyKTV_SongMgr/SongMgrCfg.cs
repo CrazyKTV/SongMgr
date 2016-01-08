@@ -391,52 +391,26 @@ namespace CrazyKTV_SongMgr
 
         private void SongMgrCfg_SongType_Button_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
             switch (SongMgrCfg_SongType_Button.Text)
             {
                 case "加入":
                     if (SongMgrCfg_SongType_TextBox.Text != "")
                     {
-                        if (SongMgrCfg_Tooltip_Label.Text == "尚未輸入要加入的歌曲類別名稱!") SongMgrCfg_Tooltip_Label.Text = "";
-                        dt = (DataTable)SongMgrCfg_SongType_ListBox.DataSource;
-                        dt.Rows.Add(dt.NewRow());
-                        dt.Rows[dt.Rows.Count - 1][0] = SongMgrCfg_SongType_TextBox.Text;
-                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
-                        SongMgrCfg_SongType_TextBox.Text = "";
-                        
-                        List<string> list = new List<string>();
+                        SongMgrCfg_Tooltip_Label.Text = "";
 
-                        foreach (DataRow row in dt.Rows)
+                        if (SongMgrCfg_SongType_TextBox.Text == "無類別")
                         {
-                            foreach (DataColumn column in dt.Columns)
-                            {
-                                if (row[column] != null)
-                                {
-                                    if (column.ColumnName == "Display")
-                                    {
-                                        list.Add(row[column].ToString());
-                                    }
-                                }
-                            }
+                            SongMgrCfg_Tooltip_Label.Text = "此為加歌程式內部所使用的歌曲類別名稱!";
                         }
-                        Global.SongMgrSongType = string.Join(",", list);
-                        Common_RefreshSongType();
-                    }
-                    else
-                    {
-                        SongMgrCfg_Tooltip_Label.Text = "尚未輸入要加入的歌曲類別名稱!";
-                    }
-                    break;
-                case "移除":
-                    if (SongMgrCfg_SongType_ListBox.SelectedItem != null)
-                    {
-                        if (SongAdd_DefaultSongType_ComboBox.Text != SongMgrCfg_SongType_ListBox.Text)
+                        else
                         {
-                            int index = int.Parse(SongMgrCfg_SongType_ListBox.SelectedIndex.ToString());
-                            dt = (DataTable)SongMgrCfg_SongType_ListBox.DataSource;
-                            dt.Rows.RemoveAt(index);
-
                             List<string> list = new List<string>();
+
+                            DataTable dt = (DataTable)SongMgrCfg_SongType_ListBox.DataSource;
+                            dt.Rows.Add(dt.NewRow());
+                            dt.Rows[dt.Rows.Count - 1][0] = SongMgrCfg_SongType_TextBox.Text;
+                            dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                            SongMgrCfg_SongType_TextBox.Text = "";
 
                             foreach (DataRow row in dt.Rows)
                             {
@@ -451,8 +425,47 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
                             }
+
                             Global.SongMgrSongType = string.Join(",", list);
+                            list.Clear();
                             Common_RefreshSongType();
+                            SongMgrCfg_Tooltip_Label.Text = "已成功加入新的歌曲類別名稱!";
+                        }
+                    }
+                    else
+                    {
+                        SongMgrCfg_Tooltip_Label.Text = "尚未輸入要加入的歌曲類別名稱!";
+                    }
+                    break;
+                case "移除":
+                    if (SongMgrCfg_SongType_ListBox.SelectedItem != null)
+                    {
+                        if (SongAdd_DefaultSongType_ComboBox.Text != SongMgrCfg_SongType_ListBox.Text)
+                        {
+                            List<string> list = new List<string>();
+                            int index = int.Parse(SongMgrCfg_SongType_ListBox.SelectedIndex.ToString());
+
+                            DataTable dt = (DataTable)SongMgrCfg_SongType_ListBox.DataSource;
+                            dt.Rows.RemoveAt(index);
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                foreach (DataColumn column in dt.Columns)
+                                {
+                                    if (row[column] != null)
+                                    {
+                                        if (column.ColumnName == "Display")
+                                        {
+                                            list.Add(row[column].ToString());
+                                        }
+                                    }
+                                }
+                            }
+
+                            Global.SongMgrSongType = string.Join(",", list);
+                            list.Clear();
+                            Common_RefreshSongType();
+                            SongMgrCfg_Tooltip_Label.Text = "已成功移除所選取的歌曲類別名稱!";
                         }
                         else
                         {
