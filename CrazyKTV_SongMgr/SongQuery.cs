@@ -2008,7 +2008,7 @@ namespace CrazyKTV_SongMgr
                         if (Global.SongQueryMultiEditUpdateList[4])
                         {
                             string SongSongType = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
-                            row.Cells["Song_SongType"].Value = SongSongType;
+                            row.Cells["Song_SongType"].Value = (SongSongType != "無類別") ? SongSongType : "";
                         }
 
                         if (Global.SongQueryMultiEditUpdateList[5])
@@ -2045,6 +2045,7 @@ namespace CrazyKTV_SongMgr
 
                         string SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString();
                         row.Cells["Song_CreatDate"].Value = SongCreatDate;
+
                         row.Cells["Song_Singer"].Value = SongQuery_EditSongSinger_TextBox.Text;
 
                         string SongSingerTypeStr = ((DataRowView)SongQuery_EditSongSingerType_ComboBox.SelectedItem)[0].ToString();
@@ -2053,7 +2054,9 @@ namespace CrazyKTV_SongMgr
 
                         string SongSongName = SongQuery_EditSongSongName_TextBox.Text;
                         row.Cells["Song_SongName"].Value = SongSongName;
-                        row.Cells["Song_SongType"].Value = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
+
+                        string SongSongType = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
+                        row.Cells["Song_SongType"].Value = (SongSongType != "無類別") ? SongSongType : "";
 
                         // 計算歌曲字數
                         List<string> SongWordCountList = new List<string>();
@@ -2157,7 +2160,7 @@ namespace CrazyKTV_SongMgr
             string SongFileName = SongQuery_DataGridView.CurrentRow.Cells["Song_FileName"].Value.ToString();
             string SongPath = SongQuery_DataGridView.CurrentRow.Cells["Song_Path"].Value.ToString();
 
-            SongQuery_EditSongSrcPath_TextBox.Text = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath);
+            SongQuery_EditSongSrcPath_TextBox.Text = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, (SongSongType != "無類別") ? SongSongType : "", SongFileName, SongPath);
         }
 
 

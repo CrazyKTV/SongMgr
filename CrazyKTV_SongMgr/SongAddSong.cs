@@ -15,7 +15,6 @@ namespace CrazyKTV_SongMgr
         #region --- SongAddSong 建立資料表 ---
 
         public static DataTable SongAddDT;
-        public static DataTable DupSongAddDT;
         public static List<string> SongDataIdList;
         public static List<string> SongDataList;
         public static List<string> SongDataLowCaseList;
@@ -26,6 +25,10 @@ namespace CrazyKTV_SongMgr
         public static List<string> AllSingerDataList;
         public static List<string> AllSingerDataLowCaseList;
         public static List<string> AllSingerDataTypeList;
+
+        public static DataTable DupSongAddDT;
+        public static List<string> SongAddValueList;
+        public static List<string> ChorusSingerList;
 
         public static void CreateSongDataTable()
         {
@@ -385,9 +388,9 @@ namespace CrazyKTV_SongMgr
                         Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
                         if (SpecialStrRegex.IsMatch(SingerName))
                         {
-                            if (Global.SongAddChorusSingerList.IndexOf(SpecialSingerName) < 0)
+                            if (ChorusSingerList.IndexOf(SpecialSingerName) < 0)
                             {
-                                Global.SongAddChorusSingerList.Add(SpecialSingerName);
+                                ChorusSingerList.Add(SpecialSingerName);
                             }
                             SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
                         }
@@ -400,17 +403,17 @@ namespace CrazyKTV_SongMgr
                         foreach (string str in singers)
                         {
                             string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                            if (Global.SongAddChorusSingerList.IndexOf(SingerStr) < 0)
+                            if (ChorusSingerList.IndexOf(SingerStr) < 0)
                             {
-                                Global.SongAddChorusSingerList.Add(SingerStr);
+                                ChorusSingerList.Add(SingerStr);
                             }
                         }
                     }
                     else
                     {
-                        if (Global.SongAddChorusSingerList.IndexOf(SingerName) < 0)
+                        if (ChorusSingerList.IndexOf(SingerName) < 0)
                         {
-                            Global.SongAddChorusSingerList.Add(SingerName);
+                            ChorusSingerList.Add(SingerName);
                         }
                     }
                 }
@@ -684,7 +687,7 @@ namespace CrazyKTV_SongMgr
                     if (!FileIOError)
                     {
                         string SongAddValue = SongID + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
-                        Global.SongAddValueList.Add(SongAddValue);
+                        SongAddSong.SongAddValueList.Add(SongAddValue);
 
                         lock (LockThis)
                         {
@@ -982,7 +985,7 @@ namespace CrazyKTV_SongMgr
                     if (!FileIOError)
                     {
                         string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState;
-                        Global.SongAddValueList.Add(SongAddValue);
+                        SongAddSong.SongAddValueList.Add(SongAddValue);
                         lock (LockThis) { Global.TotalList[3]++; }
                     }
                 }
