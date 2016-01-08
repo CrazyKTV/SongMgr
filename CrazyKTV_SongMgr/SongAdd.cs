@@ -34,8 +34,8 @@ namespace CrazyKTV_SongMgr
                 case "取消更新":
                     SongAdd_Add_Button.Text = "加入歌庫";
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(952, 296);
-                    SongAdd_DataGridView.Location = new Point(23, 365);
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -50,8 +50,8 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "取消加入":
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(952, 296);
-                    SongAdd_DataGridView.Location = new Point(23, 365);
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -280,8 +280,8 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        SongAdd_DataGridView.Size = new Size(952, 270);
-                        SongAdd_DataGridView.Location = new Point(23, 23);
+                        SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
+                        SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
                         SongAdd_DataGridView.AllowDrop = false;
                         SongAdd_DataGridView.SelectionChanged -= new EventHandler(SongAdd_DataGridView_SelectionChanged);
                         SongAdd_DragDrop_Label.Visible = false;
@@ -793,8 +793,8 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(952, 296);
-                    SongAdd_DataGridView.Location = new Point(23, 365);
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -952,8 +952,8 @@ namespace CrazyKTV_SongMgr
 
                     SongAdd_Add_Button.Text = "加入歌庫";
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(952, 296);
-                    SongAdd_DataGridView.Location = new Point(23, 365);
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;

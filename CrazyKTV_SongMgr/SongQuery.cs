@@ -594,8 +594,8 @@ namespace CrazyKTV_SongMgr
         {
             if (SongQuery_EditMode_CheckBox.Checked == true)
             {
-                SongQuery_DataGridView.Size = new Size(952, 270);
-                SongQuery_DataGridView.Location = new Point(23, 23);
+                SongQuery_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
+                SongQuery_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
                 SongQuery_Edit_GroupBox.Visible = true;
                 SongQuery_Query_GroupBox.Visible = false;
                 SongQuery_OtherQuery_GroupBox.Visible = false;
@@ -612,8 +612,8 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                SongQuery_DataGridView.Size = new Size(952, 296);
-                SongQuery_DataGridView.Location = new Point(23, 365);
+                SongQuery_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+                SongQuery_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                 SongQuery_EditMode_CheckBox.Enabled = (SongQuery_DataGridView.RowCount == 0) ? false : true;
                 SongQuery_Edit_GroupBox.Visible = false;
                 SongQuery_Query_GroupBox.Visible = true;

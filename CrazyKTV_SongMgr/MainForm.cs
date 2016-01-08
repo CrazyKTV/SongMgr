@@ -42,6 +42,8 @@ namespace CrazyKTV_SongMgr
                 Cashbox_EditMode_CheckBox.Visible = true;
             }
 
+            Global.DPIScalingFactor = Common_GetDPIScalingFactor();
+
             // 歌庫版本資訊
             if (!File.Exists(Global.CrazyktvSongDBUpdateFile))
             {

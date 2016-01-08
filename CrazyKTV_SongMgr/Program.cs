@@ -37,6 +37,7 @@ namespace CrazyKTV_SongMgr
     class Global
     {
         public static bool DebugMode = false;
+        public static float DPIScalingFactor = 1;
 
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
         public static string CrazyktvSongMgrDatabaseFile = Application.StartupPath + @"\SongMgr\CrazySongMgr.mdb";

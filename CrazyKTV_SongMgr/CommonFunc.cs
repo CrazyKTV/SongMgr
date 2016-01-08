@@ -1319,8 +1319,8 @@ namespace CrazyKTV_SongMgr
             SongAdd_DataGridView.DataSource = null;
             SongAdd_Add_Button.Text = "加入歌庫";
             SongAdd_Save_Button.Text = "儲存設定";
-            SongAdd_DataGridView.Size = new Size(952, 296);
-            SongAdd_DataGridView.Location = new Point(23, 365);
+            SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+            SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
             SongAdd_DataGridView.DataSource = null;
             SongAdd_DataGridView.AllowDrop = true;
             SongAdd_DataGridView.Enabled = true;
@@ -1398,6 +1398,21 @@ namespace CrazyKTV_SongMgr
             SongMonitor_CheckCurSong();
 
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
+        }
+
+        #endregion
+
+        #region --- Common 取得 DPI 大小 ---
+
+        private float Common_GetDPIScalingFactor()
+        {
+            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                float DpiX = graphics.DpiX;
+                float DpiY = graphics.DpiY;
+                float ScalingFactor = (DpiX == 96) ? (float)1 : (DpiX == 120) ? (float)1.25 : (float)1.5;
+                return ScalingFactor;
+            }
         }
 
         #endregion
