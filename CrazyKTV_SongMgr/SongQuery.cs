@@ -519,7 +519,15 @@ namespace CrazyKTV_SongMgr
                                 this.BeginInvoke((Action)delegate()
                                 {
                                     SongQuery_EditMode_CheckBox.Enabled = (dt.Rows.Count > 0) ? true : false;
-                                    SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
+
+                                    if(!SongQuery.QueryStatusLabel)
+                                    {
+                                        SongQuery.QueryStatusLabel = true;
+                                    }
+                                    else
+                                    {
+                                        SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的歌曲。";
+                                    }
 
                                     SongQuery_DataGridView.DataSource = dt;
 
@@ -2175,6 +2183,7 @@ namespace CrazyKTV_SongMgr
 
     class SongQuery
     {
+        public static bool QueryStatusLabel = true;
 
         #region --- SongQuery 建立資料表 ---
 

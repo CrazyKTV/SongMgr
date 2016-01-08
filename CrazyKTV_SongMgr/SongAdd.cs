@@ -768,11 +768,12 @@ namespace CrazyKTV_SongMgr
                     {
                         CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", Global.SongMgrSongType);
                     }
-                    
                     SongMgrCfg_SongType_ListBox.DataSource = SongMgrCfg.GetSongTypeList();
                     SongMgrCfg_SongType_ListBox.DisplayMember = "Display";
                     SongMgrCfg_SongType_ListBox.ValueMember = "Value";
+                    Common_RefreshSongType();
 
+                    SongQuery.QueryStatusLabel = false;
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
                     if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
                     {
@@ -782,11 +783,9 @@ namespace CrazyKTV_SongMgr
                     {
                         SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
                     }
-
                     SongQuery_EditMode_CheckBox.Checked = false;
-
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
-                    Common_RefreshSongType();
+                    
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
                     Task.Factory.StartNew(() => CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
@@ -924,11 +923,12 @@ namespace CrazyKTV_SongMgr
                     {
                         CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", Global.SongMgrSongType);
                     }
-
                     SongMgrCfg_SongType_ListBox.DataSource = SongMgrCfg.GetSongTypeList();
                     SongMgrCfg_SongType_ListBox.DisplayMember = "Display";
                     SongMgrCfg_SongType_ListBox.ValueMember = "Value";
+                    Common_RefreshSongType();
 
+                    SongQuery.QueryStatusLabel = false;
                     SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
                     if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
                     {
@@ -938,11 +938,9 @@ namespace CrazyKTV_SongMgr
                     {
                         SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
                     }
-
                     SongQuery_EditMode_CheckBox.Checked = false;
-
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
-                    Common_RefreshSongType();
+                    
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
 
