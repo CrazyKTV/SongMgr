@@ -648,8 +648,8 @@
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Query_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Statistics_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_QueryStatus_GroupBox);
-            this.SongQuery_TabPage.Controls.Add(this.SongQuery_DataGridView);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Edit_GroupBox);
+            this.SongQuery_TabPage.Controls.Add(this.SongQuery_DataGridView);
             this.SongQuery_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -1360,12 +1360,12 @@
             this.SongQuery_EditApplyChanges_Button.AutoSize = true;
             this.SongQuery_EditApplyChanges_Button.Enabled = false;
             this.SongQuery_EditApplyChanges_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_EditApplyChanges_Button.Location = new System.Drawing.Point(848, 261);
+            this.SongQuery_EditApplyChanges_Button.Location = new System.Drawing.Point(824, 261);
             this.SongQuery_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 7, 6, 8);
             this.SongQuery_EditApplyChanges_Button.Name = "SongQuery_EditApplyChanges_Button";
-            this.SongQuery_EditApplyChanges_Button.Size = new System.Drawing.Size(88, 32);
+            this.SongQuery_EditApplyChanges_Button.Size = new System.Drawing.Size(112, 32);
             this.SongQuery_EditApplyChanges_Button.TabIndex = 27;
-            this.SongQuery_EditApplyChanges_Button.Text = "套用變更";
+            this.SongQuery_EditApplyChanges_Button.Text = "套用變更(&A)";
             this.SongQuery_EditApplyChanges_Button.UseVisualStyleBackColor = true;
             this.SongQuery_EditApplyChanges_Button.Click += new System.EventHandler(this.SongQuery_EditApplyChanges_Button_Click);
             // 
@@ -1653,6 +1653,7 @@
             // 
             // SongAdd_TabPage
             // 
+            this.SongAdd_TabPage.Controls.Add(this.SongAdd_Edit_GroupBox);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_DragDrop_Label);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_Add_Button);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_SpecialStr_GroupBox);
@@ -1661,7 +1662,6 @@
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_DefaultSongInfo_GroupBox);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_SongAddCfg_GroupBox);
             this.SongAdd_TabPage.Controls.Add(this.SongAdd_DataGridView);
-            this.SongAdd_TabPage.Controls.Add(this.SongAdd_Edit_GroupBox);
             this.SongAdd_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongAdd_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongAdd_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -2153,12 +2153,12 @@
             this.SongAdd_EditApplyChanges_Button.AutoSize = true;
             this.SongAdd_EditApplyChanges_Button.Enabled = false;
             this.SongAdd_EditApplyChanges_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EditApplyChanges_Button.Location = new System.Drawing.Point(848, 261);
+            this.SongAdd_EditApplyChanges_Button.Location = new System.Drawing.Point(824, 261);
             this.SongAdd_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 7, 6, 8);
             this.SongAdd_EditApplyChanges_Button.Name = "SongAdd_EditApplyChanges_Button";
-            this.SongAdd_EditApplyChanges_Button.Size = new System.Drawing.Size(88, 32);
+            this.SongAdd_EditApplyChanges_Button.Size = new System.Drawing.Size(112, 32);
             this.SongAdd_EditApplyChanges_Button.TabIndex = 27;
-            this.SongAdd_EditApplyChanges_Button.Text = "套用變更";
+            this.SongAdd_EditApplyChanges_Button.Text = "套用變更(&A)";
             this.SongAdd_EditApplyChanges_Button.UseVisualStyleBackColor = true;
             this.SongAdd_EditApplyChanges_Button.Click += new System.EventHandler(this.SongAdd_EditApplyChanges_Button_Click);
             // 
@@ -2531,12 +2531,12 @@
             this.SingerMgr_EditApplyChanges_Button.AutoSize = true;
             this.SingerMgr_EditApplyChanges_Button.Enabled = false;
             this.SingerMgr_EditApplyChanges_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_EditApplyChanges_Button.Location = new System.Drawing.Point(364, 253);
+            this.SingerMgr_EditApplyChanges_Button.Location = new System.Drawing.Point(340, 253);
             this.SingerMgr_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 8, 6, 12);
             this.SingerMgr_EditApplyChanges_Button.Name = "SingerMgr_EditApplyChanges_Button";
-            this.SingerMgr_EditApplyChanges_Button.Size = new System.Drawing.Size(88, 32);
+            this.SingerMgr_EditApplyChanges_Button.Size = new System.Drawing.Size(112, 32);
             this.SingerMgr_EditApplyChanges_Button.TabIndex = 11;
-            this.SingerMgr_EditApplyChanges_Button.Text = "套用變更";
+            this.SingerMgr_EditApplyChanges_Button.Text = "套用變更(&A)";
             this.SingerMgr_EditApplyChanges_Button.UseVisualStyleBackColor = true;
             this.SingerMgr_EditApplyChanges_Button.Click += new System.EventHandler(this.SingerMgr_EditApplyChanges_Button_Click);
             // 
