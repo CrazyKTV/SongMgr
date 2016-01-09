@@ -1480,6 +1480,9 @@ namespace CrazyKTV_SongMgr
     class SingerMgr
     {
         public static bool ClearTooltipLabel = true;
+
+        #region --- SingerMgr 建立資料表 ---
+
         public static List<string> SingerIdList;
         public static List<string> SingerList;
         public static List<string> SingerLowCaseList;
@@ -1488,8 +1491,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> AllSingerList;
         public static List<string> AllSingerLowCaseList;
         public static List<string> AllSingerTypeList;
-
-        #region --- SingerMgr 建立資料表 ---
 
         public static void CreateSongDataTable()
         {
@@ -1524,30 +1525,6 @@ namespace CrazyKTV_SongMgr
                     AllSingerList.Add(row["Singer_Name"].ToString());
                     AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
                     AllSingerTypeList.Add(row["Singer_Type"].ToString());
-                }
-            }
-
-            if (Global.PhoneticsWordList.Count == 0)
-            {
-                Global.PhoneticsWordList = new List<string>();
-                Global.PhoneticsSpellList = new List<string>();
-                Global.PhoneticsStrokesList = new List<string>();
-                Global.PhoneticsPenStyleList = new List<string>();
-
-                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
-                {
-                    var query = from row in dt.AsEnumerable()
-                                where row.Field<Int16>("SortIdx") < 2
-                                select row;
-
-                    foreach (DataRow row in query)
-                    {
-                        Global.PhoneticsWordList.Add(row["Word"].ToString());
-                        Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                        Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                        Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
-                    }
                 }
             }
         }

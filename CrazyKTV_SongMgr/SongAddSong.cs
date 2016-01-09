@@ -127,6 +127,7 @@ namespace CrazyKTV_SongMgr
 
             SongAddDT.Dispose();
             SongAddDT = null;
+            GC.Collect();
         }
 
         #endregion
@@ -336,7 +337,7 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                string SongID = SongAddDT.Rows[i].Field<string>("Song_Id"); ;
+                string SongId = SongAddDT.Rows[i].Field<string>("Song_Id"); ;
                 string SongLang = SongAddDT.Rows[i].Field<string>("Song_Lang");
                 int SongSingerType = SongAddDT.Rows[i].Field<int>("Song_SingerType");
                 string SongSinger = SongAddDT.Rows[i].Field<string>("Song_Singer");
@@ -431,7 +432,7 @@ namespace CrazyKTV_SongMgr
                 bool UseCustomSongID = false;
                 if (Global.SongAddUseCustomSongID == "True")
                 {
-                    if (SongID != "")
+                    if (SongId != "")
                     {
                         List<string> StartIdlist = new List<string>();
                         StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
@@ -439,20 +440,20 @@ namespace CrazyKTV_SongMgr
                         switch (Global.SongMgrMaxDigitCode)
                         {
                             case "1":
-                                if (SongID.Length == 5 && SongDataIdList.IndexOf(SongID) < 0)
+                                if (SongId.Length == 5 && SongDataIdList.IndexOf(SongId) < 0)
                                 {
                                     if (Global.CrazyktvSongLangList.IndexOf(SongLang) < 9)
                                     {
-                                        if (Convert.ToInt32(SongID) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
-                                        Convert.ToInt32(SongID) < Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang) + 1]))
+                                        if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
+                                        Convert.ToInt32(SongId) < Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang) + 1]))
                                         {
                                             UseCustomSongID = true;
                                         }
                                     }
                                     else
                                     {
-                                        if (Convert.ToInt32(SongID) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
-                                        Convert.ToInt32(SongID) < 100000)
+                                        if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
+                                        Convert.ToInt32(SongId) < 100000)
                                         {
                                             UseCustomSongID = true;
                                         }
@@ -460,20 +461,20 @@ namespace CrazyKTV_SongMgr
                                 }
                                 break;
                             case "2":
-                                if (SongID.Length == 6 && SongDataIdList.IndexOf(SongID) < 0)
+                                if (SongId.Length == 6 && SongDataIdList.IndexOf(SongId) < 0)
                                 {
                                     if (Global.CrazyktvSongLangList.IndexOf(SongLang) < 9)
                                     {
-                                        if (Convert.ToInt32(SongID) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
-                                        Convert.ToInt32(SongID) < Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang) + 1]))
+                                        if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
+                                        Convert.ToInt32(SongId) < Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang) + 1]))
                                         {
                                             UseCustomSongID = true;
                                         }
                                     }
                                     else
                                     {
-                                        if (Convert.ToInt32(SongID) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
-                                        Convert.ToInt32(SongID) < 1000000)
+                                        if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
+                                        Convert.ToInt32(SongId) < 1000000)
                                         {
                                             UseCustomSongID = true;
                                         }
@@ -489,114 +490,52 @@ namespace CrazyKTV_SongMgr
                 {
                     if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
                     {
-                        if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongID) >= 0)
+                        if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongId) >= 0)
                         {
                             lock (LockThis)
                             {
-                                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongID);
+                                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
                             }
                         }
                     }
 
-                    if (Convert.ToInt32(SongID) > Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)])
+                    if (Convert.ToInt32(SongId) > Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)])
                     {
                         lock (LockThis)
                         {
-                            Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)] = Convert.ToInt32(SongID);
-                            GetUnUsedSongId(SongID, SongLang);
+                            Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)] = Convert.ToInt32(SongId);
+                            GetUnUsedSongId(SongId, SongLang);
                         }
                     }
                 }
                 else //自動分配編號
                 {
-                    SongID = "";
+                    SongId = "";
 
                     // 查詢歌曲編號有無斷號
                     if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
                     {
-                        SongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
-                        Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongID);
+                        SongId = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                        Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
                     }
                     
                     // 若無斷號查詢各語系下個歌曲編號
-                    if (SongID == "")
+                    if (SongId == "")
                     {
                         string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
                         Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)]++;
-                        SongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
+                        SongId = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
                     }
                 }
 
-                string SongSingerStr = SongSinger;
-                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
-                string CrtchorusSeparate;
-                string SongInfoSeparate;
-                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
-                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
+                SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
+                SongFileName = Path.GetFileName(SongSrcPath);
 
-                if (SongSingerType == 3)
+                if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                 {
-                    SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
-                }
-
-                if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
-                {
-                    SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
-                    SongFileName = Path.GetFileName(SongSrcPath);
-                }
-                else
-                {
-                    switch (Global.SongMgrFolderStructure)
-                    {
-                        case "1":
-                            if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                            {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                            }
-                            else
-                            {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                            }
-                            break;
-                        case "2":
-                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                            break;
-                    }
-
-                    switch (Global.SongMgrFileStructure)
-                    {
-                        case "1":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                        case "2":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                        case "3":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongID + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongID + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                    }
+                    string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath);
+                    SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
+                    SongFileName = Path.GetFileName(SongDestPath);
                 }
 
                 if (SongSinger.Length > 60)
@@ -686,12 +625,12 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError)
                     {
-                        string SongAddValue = SongID + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
+                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
                         SongAddSong.SongAddValueList.Add(SongAddValue);
 
                         lock (LockThis)
                         {
-                            SongDataIdList.Add(SongID);
+                            SongDataIdList.Add(SongId);
                             Global.TotalList[0]++;
                         }
                     }
@@ -788,112 +727,15 @@ namespace CrazyKTV_SongMgr
             if (!DeleteError)
             {
                 lock (LockThis) { Global.TotalList[4]++; }
-                string SongSingerStr = SongSinger;
-                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
-                string CrtchorusSeparate;
-                string SongInfoSeparate;
-                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
-                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
 
-                if (SongSingerType == 3)
+                SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
+                SongFileName = Path.GetFileName(SongSrcPath);
+
+                if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                 {
-                    SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
-                }
-
-                if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
-                {
-                    SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
-                    SongFileName = Path.GetFileName(SongSrcPath);
-                }
-                else
-                {
-                    bool UseMultiSongPath = false;
-                    string MultiSongPath = "";
-                    if (Global.SongMaintenanceEnableMultiSongPath == "True" & SongPath.ContainsAny(Global.SongMaintenanceMultiSongPathList.ToArray()))
-                    {
-                        foreach (string str in Global.SongMaintenanceMultiSongPathList)
-                        {
-                            if (SongPath.Contains(str))
-                            {
-                                MultiSongPath = str;
-                                UseMultiSongPath = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    switch (Global.SongMgrFolderStructure)
-                    {
-                        case "1":
-                            if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                            {
-                                if (UseMultiSongPath)
-                                {
-                                    SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
-                                }
-                                else
-                                {
-                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                                }
-                            }
-                            else
-                            {
-                                if (UseMultiSongPath)
-                                {
-                                    SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                                }
-                                else
-                                {
-                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                                }
-                            }
-                            break;
-                        case "2":
-                            if (UseMultiSongPath)
-                            {
-                                SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
-                            }
-                            else
-                            {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                            }
-                            break;
-                    }
-
-                    switch (Global.SongMgrFileStructure)
-                    {
-                        case "1":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                        case "2":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                        case "3":
-                            if (SongSongType == "")
-                            {
-                                SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            else
-                            {
-                                SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                            }
-                            break;
-                    }
+                    string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath);
+                    SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
+                    SongFileName = Path.GetFileName(SongDestPath);
                 }
 
                 if (SongSinger.Length > 60)

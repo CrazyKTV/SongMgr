@@ -471,7 +471,14 @@ namespace CrazyKTV_SongMgr
             SongDBConverter_SetRtfText("資料庫類型: ", "請選擇你要轉換的點歌軟體資料庫類型。" + Environment.NewLine);
             SongDBConverter_SetRtfText("目的資料庫: ", "請選擇本工具所附的 CrazySongEmpty.mdb 空白資料庫檔案。" + Environment.NewLine);
 
-            MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
+            if (!Global.CrazyktvDatabaseStatus)
+            {
+                MainTabControl.SelectedIndex = 3;
+            }
+            else
+            {
+                MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
+            }
             Global.SongMgrInitializeStatus = true;
         }
 

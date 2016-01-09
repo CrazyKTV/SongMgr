@@ -651,6 +651,18 @@ namespace CrazyKTV_SongMgr
                     SongMgrCfg_CrtchorusMerge_CheckBox.Enabled = false;
                     Global.SongMgrFolderStructure = SongMgrCfg_FolderStructure_ComboBox.SelectedValue.ToString();
                     break;
+                case "3":
+                    SongMgrCfg_CrtchorusMerge_CheckBox.Enabled = false;
+                    Global.SongMgrFolderStructure = SongMgrCfg_FolderStructure_ComboBox.SelectedValue.ToString();
+                    break;
+            }
+
+            if (SongMgrCfg_FolderStructure_ComboBox.Focused && SongMgrCfg_FolderStructure_ComboBox.Text != "System.Data.DataRowView")
+            {
+                SongMgrCfg_FileStructure_ComboBox.DataSource = SongMgrCfg.GetFileStructureList();
+                SongMgrCfg_FileStructure_ComboBox.DisplayMember = "Display";
+                SongMgrCfg_FileStructure_ComboBox.ValueMember = "Value";
+                SongMgrCfg_FileStructure_ComboBox.SelectedValue = 1;
             }
         }
 
@@ -979,40 +991,52 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetFolderStructureList()
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-            list.Rows.Add(list.NewRow());
-            list.Rows[0][0] = @"\語系\歌手類別\歌手";
-            list.Rows[0][1] = 1;
-            list.Rows.Add(list.NewRow());
-            list.Rows[1][0] = @"\語系\歌手類別";
-            list.Rows[1][1] = 2;
-            return list;
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> ItemList = new List<string>() { @"\語系\歌手類別\歌手", @"\語系\歌手類別", @"\語系" };
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
+            }
         }
 
         public static DataTable GetFileStructureList()
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-            
-            switch(Global.SongMgrFolderStructure)
+            using (DataTable list = new DataTable())
             {
-                case "1":
-                case "2":
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> ItemList = null;
+                switch (Global.SongMgrFolderStructure)
+                {
+                    case "1":
+                    case "2":
+                        ItemList = new List<string>() { "歌手_歌名", "歌名_歌手", "歌曲編號_歌手_歌名" };
+                        break;
+                    case "3":
+                        ItemList = new List<string>() { "歌手類別_歌手_歌名", "歌曲編號_歌手類別_歌手_歌名" };
+                        break;
+                }
+
+                foreach (string str in ItemList)
+                {
                     list.Rows.Add(list.NewRow());
-                    list.Rows[0][0] = "歌手_歌名";
-                    list.Rows[0][1] = 1;
-                    list.Rows.Add(list.NewRow());
-                    list.Rows[1][0] = "歌名_歌手";
-                    list.Rows[1][1] = 2;
-                    list.Rows.Add(list.NewRow());
-                    list.Rows[2][0] = "歌曲編號_歌手_歌名";
-                    list.Rows[2][1] = 3;
-                    break;
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
             }
-            return list;
         }
 
         public static DataTable GetCustomSingerTypeStructureList(int ComboBoxIndex)

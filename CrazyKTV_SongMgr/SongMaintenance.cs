@@ -1845,13 +1845,6 @@ namespace CrazyKTV_SongMgr
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
 
-                string SongSingerStr = SongSinger;
-                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
-                string CrtchorusSeparate;
-                string SongInfoSeparate;
-                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
-                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-
                 if (SongTrack < 0 | SongTrack > 5)
                 {
                     SongTrack = 0;
@@ -1859,70 +1852,17 @@ namespace CrazyKTV_SongMgr
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構重建】此首歌曲聲道數值錯誤,已自動將其數值改為0: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                 }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
 
                 // 重建歌檔
                 string SongSrcPath = Path.Combine(SongPath, SongFileName);
-                string SongExtension = Path.GetExtension(SongSrcPath);
-
-                if (SongSingerType == 3)
-                {
-                    SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
-                }
-
-                switch (Global.SongMgrFolderStructure)
-                {
-                    case "1":
-                        if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                        {
-                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        }
-                        else
-                        {
-                            SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                        }
-                        break;
-                    case "2":
-                        SongPath = RebuildSongPath + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        break;
-                }
-
-                switch (Global.SongMgrFileStructure)
-                {
-                    case "1":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                    case "2":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                    case "3":
-                        if (SongSongType == "")
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        break;
-                }
-
                 string SongDestPath = "";
-                if (!HasInvalidChar) { SongDestPath = Path.Combine(SongPath, SongFileName); }
+
+                if (!HasInvalidChar)
+                {
+                    SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath); ;
+                    SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
+                    SongFileName = Path.GetFileName(SongDestPath);
+                }
 
                 bool FileIOError = false;
                 if (File.Exists(SongSrcPath) & !HasInvalidChar)
@@ -2895,32 +2835,6 @@ namespace CrazyKTV_SongMgr
                 Global.AllSingerList.Add(row["Singer_Name"].ToString());
                 Global.AllSingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
                 Global.AllSingerTypeList.Add(row["Singer_Type"].ToString());
-            }
-
-            if (Global.PhoneticsWordList.Count == 0)
-            {
-                Global.PhoneticsWordList = new List<string>();
-                Global.PhoneticsSpellList = new List<string>();
-                Global.PhoneticsStrokesList = new List<string>();
-                Global.PhoneticsPenStyleList = new List<string>();
-
-                Global.PhoneticsDT = new DataTable();
-                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
-
-                var query = from row in Global.PhoneticsDT.AsEnumerable()
-                            where row.Field<Int16>("SortIdx") < 2
-                            select row;
-
-                foreach (DataRow row in query)
-                {
-                    Global.PhoneticsWordList.Add(row["Word"].ToString());
-                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
-                }
-                Global.PhoneticsDT.Dispose();
-                Global.PhoneticsDT = null;
             }
         }
 

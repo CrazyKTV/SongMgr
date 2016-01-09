@@ -435,23 +435,22 @@ namespace CrazyKTV_SongMgr
                 Global.PhoneticsStrokesList = new List<string>();
                 Global.PhoneticsPenStyleList = new List<string>();
 
-                Global.PhoneticsDT = new DataTable();
                 string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
 
-                var query = from row in Global.PhoneticsDT.AsEnumerable()
-                            where row.Field<Int16>("SortIdx") < 2
-                            select row;
-
-                foreach (DataRow row in query)
+                using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
                 {
-                    Global.PhoneticsWordList.Add(row["Word"].ToString());
-                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                    var query = from row in PhoneticsDT.AsEnumerable()
+                                where row.Field<Int16>("SortIdx") < 2
+                                select row;
+
+                    foreach (DataRow row in query)
+                    {
+                        Global.PhoneticsWordList.Add(row["Word"].ToString());
+                        Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                        Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                        Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                    }
                 }
-                Global.PhoneticsDT.Dispose();
-                Global.PhoneticsDT = null;
             }
         }
 
@@ -463,10 +462,6 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDatabaseStatus)
             {
-                Global.SongStatisticsDT = new DataTable();
-                string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Path, Song_FileName from ktv_Song";
-                Global.SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
                 List<int> SongLangCount = new List<int>();
                 List<int> SongFileCount = new List<int>();
 
@@ -483,7 +478,6 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Statistics10_Label,
                     SongQuery_Statistics11_Label
                 };
-
 
                 this.BeginInvoke((Action)delegate()
                 {
@@ -528,34 +522,34 @@ namespace CrazyKTV_SongMgr
                     SongQuery_StatisticsValue_Label[11].Text = "統計中...";
                 });
 
-                var tasks = new List<Task<List<int>>>();
-                tasks.Add(Task<List<int>>.Factory.StartNew(CommonFunc.GetSongLangCount));
-                tasks.Add(Task<List<int>>.Factory.StartNew(CommonFunc.GetSongFileCount));
-
-                SongLangCount = tasks[0].Result;
-                this.BeginInvoke((Action)delegate()
+                string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Path, Song_FileName from ktv_Song";
+                using (DataTable SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
-                    for (int i = 0; i < SongLangCount.Count; i++)
+                    var tasks = new List<Task<List<int>>>();
+                    tasks.Add(Task<List<int>>.Factory.StartNew(() => CommonFunc.GetSongLangCount(SongStatisticsDT)));
+                    tasks.Add(Task<List<int>>.Factory.StartNew(() => CommonFunc.GetSongFileCount(SongStatisticsDT)));
+
+                    SongLangCount = tasks[0].Result;
+                    this.BeginInvoke((Action)delegate()
                     {
-                        SongQuery_StatisticsValue_Label[i].Text = SongLangCount[i].ToString() + " 首";
-                        if (i < 10)
+                        for (int i = 0; i < SongLangCount.Count; i++)
                         {
-                            SongMaintenance_Lang_TextBox[i].Enabled = (SongLangCount[i] > 0) ? false : true;
+                            SongQuery_StatisticsValue_Label[i].Text = SongLangCount[i].ToString() + " 首";
+                            if (i < 10)
+                            {
+                                SongMaintenance_Lang_TextBox[i].Enabled = (SongLangCount[i] > 0) ? false : true;
+                            }
                         }
-                    }
-                });
+                        SongLangCount.Clear();
+                    });
 
-                SongFileCount = tasks[1].Result;
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongQuery_StatisticsValue_Label[11].Text = SongFileCount[10].ToString() + " 個";
-                });
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
-                {
-                    Global.SongStatisticsDT.Dispose();
-                    Global.SongStatisticsDT = null;
-                });
+                    SongFileCount = tasks[1].Result;
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongQuery_StatisticsValue_Label[11].Text = SongFileCount[10].ToString() + " 個";
+                        SongFileCount.Clear();
+                    });
+                }
             }
         }
 
@@ -598,6 +592,7 @@ namespace CrazyKTV_SongMgr
                     {
                         SingerMgr_Statistics_Label[i].Text = SingerTypeList[i] + ":";
                     }
+                    SingerTypeList.Clear();
                 });
 
                 Label[] SingerMgr_StatisticsValue_Label =
@@ -623,8 +618,9 @@ namespace CrazyKTV_SongMgr
                     {
                         SingerMgr_StatisticsValue_Label[i].Text = SingerTypeCount[i].ToString() + " 位";
                     }
+                    SingerTypeCount.Clear();
+                    SingerMgr.DisposeSongDataTable();
                 });
-                SingerMgr.DisposeSongDataTable();
             }
         }
 
@@ -641,56 +637,54 @@ namespace CrazyKTV_SongMgr
                 List<string> LangNamelist = new List<string>();
                 List<string> LangKeyWordlist = new List<string>();
 
-                DataTable dt = new DataTable();
                 string SongQuerySqlStr = "select Langauage_Id, Langauage_Name, Langauage_KeyWord from ktv_Langauage";
-                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-                if (dt.Rows.Count != 0)
+                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
-                    foreach (DataRow row in dt.AsEnumerable())
+                    if (dt.Rows.Count > 0)
                     {
-                        int i = Convert.ToInt32(row["Langauage_Id"]);
-                        if (i < 10)
+                        foreach (DataRow row in dt.AsEnumerable())
                         {
-                            if (row["Langauage_Name"].ToString() != Global.CrazyktvSongLangList[i]) UpdateLang = true;
-                            LangNamelist.Add(row["Langauage_Name"].ToString());
+                            int i = Convert.ToInt32(row["Langauage_Id"]);
+                            if (i < 10)
+                            {
+                                if (row["Langauage_Name"].ToString() != Global.CrazyktvSongLangList[i]) UpdateLang = true;
+                                LangNamelist.Add(row["Langauage_Name"].ToString());
 
-                            if (row["Langauage_KeyWord"].ToString() == "") 
-                            {
-                                UpdateLang = true;
-                                LangKeyWordlist.Add(Global.CrazyktvSongLangKeyWordList[i]);
-                            }
-                            else
-                            {
-                                if (row["Langauage_KeyWord"].ToString() != Global.CrazyktvSongLangKeyWordList[i]) UpdateLang = true;
-                                LangKeyWordlist.Add(row["Langauage_KeyWord"].ToString());
+                                if (row["Langauage_KeyWord"].ToString() == "")
+                                {
+                                    UpdateLang = true;
+                                    LangKeyWordlist.Add(Global.CrazyktvSongLangKeyWordList[i]);
+                                }
+                                else
+                                {
+                                    if (row["Langauage_KeyWord"].ToString() != Global.CrazyktvSongLangKeyWordList[i]) UpdateLang = true;
+                                    LangKeyWordlist.Add(row["Langauage_KeyWord"].ToString());
+                                }
                             }
                         }
-                    }
 
-                    if (UpdateLang)
-                    {
-                        Global.CrazyktvSongLangList = LangNamelist;
-                        Global.CrazyktvSongLangKeyWordList = LangKeyWordlist;
-                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-
-                        CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
-                        CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
-
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
-
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        if (UpdateLang)
                         {
-                            this.BeginInvoke((Action)delegate()
+                            Global.CrazyktvSongLangList = LangNamelist;
+                            Global.CrazyktvSongLangKeyWordList = LangKeyWordlist;
+                            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+
+                            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
+                            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
+
+                            var tasks = new List<Task>();
+                            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
+
+                            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                             {
-                                Common_RefreshSongLang();
+                                this.BeginInvoke((Action)delegate()
+                                {
+                                    Common_RefreshSongLang();
+                                });
                             });
-                        });
+                        }
                     }
                 }
-                dt.Dispose();
-                dt = null;
             }
         }
 
@@ -1299,6 +1293,8 @@ namespace CrazyKTV_SongMgr
                             Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                         }
                     }
+                    RemoveFileList.Clear();
+                    SupportFormat.Clear();
                 }
             }
         }
@@ -1785,31 +1781,30 @@ namespace CrazyKTV_SongMgr
                 StartIdlist.Add((DigitCode == 5) ? "100000" : "1000000");
                 int RemainingSongId;
 
-                DataTable dt = new DataTable();
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
-                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-                if (dt.Rows.Count != 0)
+                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
-                    int i;
-                    foreach (string str in Global.CrazyktvSongLangList)
+                    if (dt.Rows.Count > 0)
                     {
-                        var query = from row in dt.AsEnumerable()
-                                    where row.Field<string>("Song_Lang").Equals(str) &&
-                                          row.Field<string>("Song_Id").Length == DigitCode
-                                    orderby row.Field<string>("Song_Id") descending
-                                    select row;
-
-                        foreach (DataRow row in query)
+                        int i;
+                        foreach (string str in Global.CrazyktvSongLangList)
                         {
-                            i = Global.CrazyktvSongLangList.IndexOf(str);
-                            RemainingSongId = Convert.ToInt32(StartIdlist[i + 1]) - Convert.ToInt32(row["Song_Id"]) - 1;
-                            if (RemainingSongId < Global.RemainingSongID) Global.RemainingSongID = RemainingSongId;
-                            break;
+                            var query = from row in dt.AsEnumerable()
+                                        where row.Field<string>("Song_Lang").Equals(str) &&
+                                              row.Field<string>("Song_Id").Length == DigitCode
+                                        orderby row.Field<string>("Song_Id") descending
+                                        select row;
+
+                            foreach (DataRow row in query)
+                            {
+                                i = Global.CrazyktvSongLangList.IndexOf(str);
+                                RemainingSongId = Convert.ToInt32(StartIdlist[i + 1]) - Convert.ToInt32(row["Song_Id"]) - 1;
+                                if (RemainingSongId < Global.RemainingSongID) Global.RemainingSongID = RemainingSongId;
+                                break;
+                            }
                         }
                     }
                 }
-                dt.Dispose();
             }
         }
 
@@ -2018,232 +2013,233 @@ namespace CrazyKTV_SongMgr
                 Global.PhoneticsPenStyleList = new List<string>();
 
                 string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, "");
 
-                var query = from row in Global.PhoneticsDT.AsEnumerable()
-                            where row.Field<Int16>("SortIdx") < 2
-                            select row;
-
-                foreach (DataRow row in query)
+                using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
                 {
-                    Global.PhoneticsWordList.Add(row["Word"].ToString());
-                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                    var query = from row in PhoneticsDT.AsEnumerable()
+                                where row.Field<Int16>("SortIdx") < 2
+                                select row;
+
+                    foreach (DataRow row in query)
+                    {
+                        Global.PhoneticsWordList.Add(row["Word"].ToString());
+                        Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                        Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                        Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                    }
                 }
-                Global.PhoneticsDT.Dispose();
-                Global.PhoneticsDT = null;
             }
 
-            List<string> list = new List<string>();
-            DataTable dt = new DataTable();
-            dt.Columns.Add("SortIndex", typeof(string));
-            dt.Columns.Add("Spell", typeof(string));
-            dt.Columns.Add("SpellNum", typeof(string));
-            dt.Columns.Add("Stroke", typeof(string));
-            dt.Columns.Add("PenStyle", typeof(string));
-
-            SongStr = Regex.Replace(SongStr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""); // 排除解析括號字串
-            SongStr = Regex.Replace(SongStr, @"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])", @" $1 "); // 以空格隔開中英字串
-            SongStr = Regex.Replace(SongStr, @"^\s*|\s*$", ""); //去除頭尾空白
-
-            if (SongStr != "")
+            using (DataTable dt = new DataTable())
             {
-                list = new List<string>(Regex.Split(SongStr, @"[\s]+", RegexOptions.None));
-                foreach (string str in list)
-                {
-                    DataRow dtrow = dt.NewRow();
-                    dtrow["SortIndex"] = list.IndexOf(str);
+                dt.Columns.Add("SortIndex", typeof(string));
+                dt.Columns.Add("Spell", typeof(string));
+                dt.Columns.Add("SpellNum", typeof(string));
+                dt.Columns.Add("Stroke", typeof(string));
+                dt.Columns.Add("PenStyle", typeof(string));
 
-                    Regex r = new Regex("^[A-Za-z0-9]");
-                    if (r.IsMatch(str))
+                SongStr = Regex.Replace(SongStr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""); // 排除解析括號字串
+                SongStr = Regex.Replace(SongStr, @"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])", @" $1 "); // 以空格隔開中英字串
+                SongStr = Regex.Replace(SongStr, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                if (SongStr != "")
+                {
+                    List<string> list = new List<string>(Regex.Split(SongStr, @"[\s]+", RegexOptions.None));
+                    foreach (string str in list)
                     {
-                        r = new Regex("^[A-Za-z]");
+                        DataRow dtrow = dt.NewRow();
+                        dtrow["SortIndex"] = list.IndexOf(str);
+
+                        Regex r = new Regex("^[A-Za-z0-9]");
                         if (r.IsMatch(str))
                         {
-                            dtrow["Spell"] = str.Substring(0, 1).ToUpper(); // 拼音
-                            switch (str.Substring(0, 1).ToUpper())
+                            r = new Regex("^[A-Za-z]");
+                            if (r.IsMatch(str))
                             {
-                                case "A":
-                                case "B":
-                                case "C":
-                                    dtrow["SpellNum"] = "2"; // 手機輸入
-                                    break;
-                                case "D":
-                                case "E":
-                                case "F":
-                                    dtrow["SpellNum"] = "3";
-                                    break;
-                                case "G":
-                                case "H":
-                                case "I":
-                                    dtrow["SpellNum"] = "4";
-                                    break;
-                                case "J":
-                                case "K":
-                                case "L":
-                                    dtrow["SpellNum"] = "5";
-                                    break;
-                                case "M":
-                                case "N":
-                                case "O":
-                                    dtrow["SpellNum"] = "6";
-                                    break;
-                                case "P":
-                                case "Q":
-                                case "R":
-                                case "S":
-                                    dtrow["SpellNum"] = "7";
-                                    break;
-                                case "T":
-                                case "U":
-                                case "V":
-                                    dtrow["SpellNum"] = "8";
-                                    break;
-                                case "W":
-                                case "X":
-                                case "Y":
-                                case "Z":
-                                    dtrow["SpellNum"] = "9";
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            r = new Regex(@"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])");
-                            if (r.IsMatch(SongStr))
-                            {
-                                for (int i = 0; i < str.Length; i++)
+                                dtrow["Spell"] = str.Substring(0, 1).ToUpper(); // 拼音
+                                switch (str.Substring(0, 1).ToUpper())
                                 {
-                                    switch (str.Substring(i, 1))
-                                    {
-                                        case "0":
-                                        case "6":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄌ"; // 拼音
-                                            break;
-                                        case "1":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄧ";
-                                            break;
-                                        case "2":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄦ";
-                                            break;
-                                        case "3":
-                                        case "4":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄙ";
-                                            break;
-                                        case "5":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄨ";
-                                            break;
-                                        case "7":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄑ";
-                                            break;
-                                        case "8":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄅ";
-                                            break;
-                                        case "9":
-                                            dtrow["Spell"] = dtrow["Spell"] + "ㄐ";
-                                            break;
-                                    }
-                                    dtrow["SpellNum"] = dtrow["SpellNum"] + str.Substring(i, 1); // 手機輸入
+                                    case "A":
+                                    case "B":
+                                    case "C":
+                                        dtrow["SpellNum"] = "2"; // 手機輸入
+                                        break;
+                                    case "D":
+                                    case "E":
+                                    case "F":
+                                        dtrow["SpellNum"] = "3";
+                                        break;
+                                    case "G":
+                                    case "H":
+                                    case "I":
+                                        dtrow["SpellNum"] = "4";
+                                        break;
+                                    case "J":
+                                    case "K":
+                                    case "L":
+                                        dtrow["SpellNum"] = "5";
+                                        break;
+                                    case "M":
+                                    case "N":
+                                    case "O":
+                                        dtrow["SpellNum"] = "6";
+                                        break;
+                                    case "P":
+                                    case "Q":
+                                    case "R":
+                                    case "S":
+                                        dtrow["SpellNum"] = "7";
+                                        break;
+                                    case "T":
+                                    case "U":
+                                    case "V":
+                                        dtrow["SpellNum"] = "8";
+                                        break;
+                                    case "W":
+                                    case "X":
+                                    case "Y":
+                                    case "Z":
+                                        dtrow["SpellNum"] = "9";
+                                        break;
                                 }
                             }
                             else
                             {
-                                for (int i = 0; i < str.Length; i++)
+                                r = new Regex(@"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])");
+                                if (r.IsMatch(SongStr))
                                 {
-                                    dtrow["Spell"] = dtrow["Spell"] + str.Substring(i, 1); // 拼音
-                                    dtrow["SpellNum"] = dtrow["SpellNum"] + str.Substring(i, 1); // 手機輸入
+                                    for (int i = 0; i < str.Length; i++)
+                                    {
+                                        switch (str.Substring(i, 1))
+                                        {
+                                            case "0":
+                                            case "6":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄌ"; // 拼音
+                                                break;
+                                            case "1":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄧ";
+                                                break;
+                                            case "2":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄦ";
+                                                break;
+                                            case "3":
+                                            case "4":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄙ";
+                                                break;
+                                            case "5":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄨ";
+                                                break;
+                                            case "7":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄑ";
+                                                break;
+                                            case "8":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄅ";
+                                                break;
+                                            case "9":
+                                                dtrow["Spell"] = dtrow["Spell"] + "ㄐ";
+                                                break;
+                                        }
+                                        dtrow["SpellNum"] = dtrow["SpellNum"] + str.Substring(i, 1); // 手機輸入
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < str.Length; i++)
+                                    {
+                                        dtrow["Spell"] = dtrow["Spell"] + str.Substring(i, 1); // 拼音
+                                        dtrow["SpellNum"] = dtrow["SpellNum"] + str.Substring(i, 1); // 手機輸入
+                                    }
                                 }
                             }
+
+                            if (list.IndexOf(str) == 0) dtrow["Stroke"] = "1"; // 筆劃
+                            dtrow["PenStyle"] = ""; // 筆形順序
                         }
-                        
-                        if (list.IndexOf(str) == 0) dtrow["Stroke"] = "1"; // 筆劃
-                        dtrow["PenStyle"] = ""; // 筆形順序
-                    }
-                    else
-                    {
-                        if (Global.PhoneticsWordList.IndexOf(str) >= 0)
+                        else
                         {
-                            dtrow["Spell"] = Global.PhoneticsSpellList[Global.PhoneticsWordList.IndexOf(str)]; // 拼音
-
-                            switch (dtrow["Spell"].ToString())
+                            if (Global.PhoneticsWordList.IndexOf(str) >= 0)
                             {
-                                case "ㄅ":
-                                case "ㄆ":
-                                case "ㄇ":
-                                case "ㄈ":
-                                    dtrow["SpellNum"] = "1"; // 手機輸入
-                                    break;
-                                case "ㄉ":
-                                case "ㄊ":
-                                case "ㄋ":
-                                case "ㄌ":
-                                    dtrow["SpellNum"] = "2";
-                                    break;
-                                case "ㄍ":
-                                case "ㄎ":
-                                case "ㄏ":
-                                    dtrow["SpellNum"] = "3";
-                                    break;
-                                case "ㄐ":
-                                case "ㄑ":
-                                case "ㄒ":
-                                    dtrow["SpellNum"] = "4";
-                                    break;
-                                case "ㄓ":
-                                case "ㄔ":
-                                case "ㄕ":
-                                case "ㄖ":
-                                    dtrow["SpellNum"] = "5";
-                                    break;
-                                case "ㄗ":
-                                case "ㄘ":
-                                case "ㄙ":
-                                    dtrow["SpellNum"] = "6";
-                                    break;
-                                case "ㄚ":
-                                case "ㄛ":
-                                case "ㄜ":
-                                case "ㄝ":
-                                    dtrow["SpellNum"] = "7";
-                                    break;
-                                case "ㄞ":
-                                case "ㄟ":
-                                case "ㄠ":
-                                case "ㄡ":
-                                    dtrow["SpellNum"] = "8";
-                                    break;
-                                case "ㄢ":
-                                case "ㄣ":
-                                case "ㄤ":
-                                case "ㄥ":
-                                case "ㄦ":
-                                    dtrow["SpellNum"] = "9";
-                                    break;
-                                case "ㄧ":
-                                case "ㄨ":
-                                case "ㄩ":
-                                    dtrow["SpellNum"] = "0";
-                                    break;
-                            }
+                                dtrow["Spell"] = Global.PhoneticsSpellList[Global.PhoneticsWordList.IndexOf(str)]; // 拼音
 
-                            if (list.IndexOf(str) == 0) dtrow["Stroke"] = Global.PhoneticsStrokesList[Global.PhoneticsWordList.IndexOf(str)]; // 筆劃
-                            dtrow["PenStyle"] = Global.PhoneticsPenStyleList[Global.PhoneticsWordList.IndexOf(str)]; // 筆形順序
+                                switch (dtrow["Spell"].ToString())
+                                {
+                                    case "ㄅ":
+                                    case "ㄆ":
+                                    case "ㄇ":
+                                    case "ㄈ":
+                                        dtrow["SpellNum"] = "1"; // 手機輸入
+                                        break;
+                                    case "ㄉ":
+                                    case "ㄊ":
+                                    case "ㄋ":
+                                    case "ㄌ":
+                                        dtrow["SpellNum"] = "2";
+                                        break;
+                                    case "ㄍ":
+                                    case "ㄎ":
+                                    case "ㄏ":
+                                        dtrow["SpellNum"] = "3";
+                                        break;
+                                    case "ㄐ":
+                                    case "ㄑ":
+                                    case "ㄒ":
+                                        dtrow["SpellNum"] = "4";
+                                        break;
+                                    case "ㄓ":
+                                    case "ㄔ":
+                                    case "ㄕ":
+                                    case "ㄖ":
+                                        dtrow["SpellNum"] = "5";
+                                        break;
+                                    case "ㄗ":
+                                    case "ㄘ":
+                                    case "ㄙ":
+                                        dtrow["SpellNum"] = "6";
+                                        break;
+                                    case "ㄚ":
+                                    case "ㄛ":
+                                    case "ㄜ":
+                                    case "ㄝ":
+                                        dtrow["SpellNum"] = "7";
+                                        break;
+                                    case "ㄞ":
+                                    case "ㄟ":
+                                    case "ㄠ":
+                                    case "ㄡ":
+                                        dtrow["SpellNum"] = "8";
+                                        break;
+                                    case "ㄢ":
+                                    case "ㄣ":
+                                    case "ㄤ":
+                                    case "ㄥ":
+                                    case "ㄦ":
+                                        dtrow["SpellNum"] = "9";
+                                        break;
+                                    case "ㄧ":
+                                    case "ㄨ":
+                                    case "ㄩ":
+                                        dtrow["SpellNum"] = "0";
+                                        break;
+                                }
+
+                                if (list.IndexOf(str) == 0) dtrow["Stroke"] = Global.PhoneticsStrokesList[Global.PhoneticsWordList.IndexOf(str)]; // 筆劃
+                                dtrow["PenStyle"] = Global.PhoneticsPenStyleList[Global.PhoneticsWordList.IndexOf(str)]; // 筆形順序
+                            }
                         }
+                        dt.Rows.Add(dtrow);
                     }
-                    dt.Rows.Add(dtrow);
+                    list.Clear();
+                }
+
+                dt.DefaultView.Sort = "SortIndex DESC";
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    SpellList[0] = SpellList[0] + row["Spell"].ToString();
+                    SpellList[1] = SpellList[1] + row["SpellNum"].ToString();
+                    if (row["Stroke"].ToString() != "") SpellList[2] = row["Stroke"].ToString();
+                    SpellList[3] = SpellList[3] + row["PenStyle"].ToString();
                 }
             }
-            
-            dt.DefaultView.Sort = "SortIndex DESC";
-            foreach (DataRow row in dt.AsEnumerable())
-            {
-                SpellList[0] = SpellList[0] + row["Spell"].ToString();
-                SpellList[1] = SpellList[1] + row["SpellNum"].ToString();
-                if (row["Stroke"].ToString() != "") SpellList[2] = row["Stroke"].ToString();
-                SpellList[3] = SpellList[3] + row["PenStyle"].ToString();
-            }
-
             if (SpellList[2] == "") SpellList[2] = "0";
             return SpellList;
         }
@@ -2320,38 +2316,86 @@ namespace CrazyKTV_SongMgr
                             SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                         }
                         break;
+                    case "3":
+                        if (UseMultiSongPath)
+                        {
+                            SongPath = MultiSongPath + SongLang + @"\";
+                        }
+                        else
+                        {
+                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\";
+                        }
+                        break;
                 }
 
                 switch (Global.SongMgrFileStructure)
                 {
                     case "1":
-                        if (SongSongType == "")
+                        switch (Global.SongMgrFolderStructure)
                         {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                            case "1":
+                            case "2":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
+                            case "3":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SingerTypeStr + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SingerTypeStr + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
                         }
                         break;
                     case "2":
-                        if (SongSongType == "")
+                        switch (Global.SongMgrFolderStructure)
                         {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                            case "1":
+                            case "2":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
+                            case "3":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongId + SongInfoSeparate + SingerTypeStr + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongId + SongInfoSeparate + SingerTypeStr + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
                         }
                         break;
                     case "3":
-                        if (SongSongType == "")
+                        switch (Global.SongMgrFolderStructure)
                         {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                        }
-                        else
-                        {
-                            SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                            case "1":
+                            case "2":
+                                if (SongSongType == "")
+                                {
+                                    SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                else
+                                {
+                                    SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
+                                }
+                                break;
                         }
                         break;
                 }
@@ -2455,13 +2499,13 @@ namespace CrazyKTV_SongMgr
 
         #region --- CommonFunc 歌曲/歌手統計 ---
 
-        public static List<int> GetSongLangCount()
+        public static List<int> GetSongLangCount(DataTable SongStatisticsDT)
         {
             List<int> SongLangCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
             Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
             {
-                var query = from row in Global.SongStatisticsDT.AsEnumerable()
+                var query = from row in SongStatisticsDT.AsEnumerable()
                             where row.Field<string>("Song_Lang").Equals(langstr)
                             select row;
                 if (query.Count<DataRow>() > 0)
@@ -2482,14 +2526,14 @@ namespace CrazyKTV_SongMgr
         }
 
 
-        public static List<int> GetSongFileCount()
+        public static List<int> GetSongFileCount(DataTable SongStatisticsDT)
         {
             List<int> SongFileCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             string SongFilePath = "";
 
             Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
             {
-                var query = from row in Global.SongStatisticsDT.AsEnumerable()
+                var query = from row in SongStatisticsDT.AsEnumerable()
                             where row.Field<string>("Song_Lang").Equals(langstr)
                             select row;
                 if (query.Count<DataRow>() > 0)

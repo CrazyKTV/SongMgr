@@ -31,31 +31,6 @@ namespace CrazyKTV_SongMgr
 
             string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
             Global.SingerDT = CommonFunc.GetOleDbDataTable(SongDestDBFile, SongSingerQuerySqlStr, "");
-
-            if (Global.PhoneticsWordList.Count == 0)
-            {
-                Global.PhoneticsWordList = new List<string>();
-                Global.PhoneticsSpellList = new List<string>();
-                Global.PhoneticsStrokesList = new List<string>();
-                Global.PhoneticsPenStyleList = new List<string>();
-
-                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-                Global.PhoneticsDT = CommonFunc.GetOleDbDataTable(SongDestDBFile, SongPhoneticsQuerySqlStr, "");
-
-                var query = from row in Global.PhoneticsDT.AsEnumerable()
-                            where row.Field<Int16>("SortIdx") < 2
-                            select row;
-
-                foreach (DataRow row in query)
-                {
-                    Global.PhoneticsWordList.Add(row["Word"].ToString());
-                    Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                    Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                    Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
-                }
-                Global.PhoneticsDT.Dispose();
-                Global.PhoneticsDT = null;
-            }
         }
 
         public static void DisposeSongDataTable()

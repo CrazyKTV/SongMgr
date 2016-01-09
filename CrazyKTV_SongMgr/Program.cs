@@ -130,13 +130,11 @@ namespace CrazyKTV_SongMgr
         public static DataTable SongDT = new DataTable();
         public static DataTable SingerDT = new DataTable();
         public static DataTable AllSingerDT = new DataTable();
-        public static DataTable PhoneticsDT = new DataTable();
         public static DataTable DuplicateSongDT = new DataTable();
         public static DataTable FailureSongDT = new DataTable();
         public static DataTable SongSrcDT = new DataTable();
         public static DataTable SingerSrcDT = new DataTable();
         public static DataTable SongLogDT = new DataTable();
-        public static DataTable SongStatisticsDT = new DataTable();
         public static DataTable FavoriteUserDT = new DataTable();
 
         public static DateTime TimerStartTime = new DateTime();
@@ -229,8 +227,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongMonitorCreatedList = new List<string>();
         public static List<string> SongMonitorDeletedList = new List<string>();
 
-
-        
         public static List<string> CashboxSongLangList = new List<string>() { "國語", "台語", "粵語", "日語", "英語", "客語", "韓語", "兒歌", "其它" };
         public static DateTime CashboxUpdDate = DateTime.Parse("2016/01/01");
         public static DataTable CashboxDT = new DataTable();

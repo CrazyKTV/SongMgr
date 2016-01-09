@@ -664,17 +664,8 @@ namespace CrazyKTV_SongMgr
                 string SongPenStyle = SongQuery_DataGridView.Rows[i].Cells["Song_PenStyle"].Value.ToString();
                 string SongPlayState = SongQuery_DataGridView.Rows[i].Cells["Song_PlayState"].Value.ToString();
 
-                string SongSingerStr = SongSinger;
-                string SingerTypeStr = CommonFunc.GetSingerTypeStr(SongSingerType, 2, "null");
-                string CrtchorusSeparate;
-                string SongInfoSeparate;
-                if (Global.SongMgrChorusSeparate == "1") { CrtchorusSeparate = "&"; } else { CrtchorusSeparate = "+"; }
-                if (Global.SongMgrSongInfoSeparate == "1") { SongInfoSeparate = "_"; } else { SongInfoSeparate = "-"; }
-                string SongTrackStr = CommonFunc.GetSongTrackStr(SongTrack, 1, "null");
-
                 string DupSongData = "";
                 bool DuplicateSongStatus = false;
-                bool MoveFile = false;
                 bool MoveError = false;
 
                 // 重複歌曲判斷
@@ -808,117 +799,19 @@ namespace CrazyKTV_SongMgr
 
                 if (!DuplicateSongStatus)
                 {
-                    // 更改欄位數值並搬移檔案
-                    string SongSrcPath = Path.Combine(SongPath, SongFileName);
-                    string SongExtension = Path.GetExtension(SongSrcPath);
-
-                    if (SongSingerType == 3)
-                    {
-                        SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
-                    }
-
                     if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                     {
-                        bool UseMultiSongPath = false;
-                        string MultiSongPath = "";
-                        MoveFile = true;
+                        string SongSrcPath = Path.Combine(SongPath, SongFileName);
+                        string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath);
+                        SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
+                        SongFileName = Path.GetFileName(SongDestPath);
 
-                        if (Global.SongMaintenanceEnableMultiSongPath == "True" & SongPath.ContainsAny(Global.SongMaintenanceMultiSongPathList.ToArray()))
+                        this.BeginInvoke((Action)delegate()
                         {
-                            foreach (string str in Global.SongMaintenanceMultiSongPathList)
-                            {
-                                if (SongPath.Contains(str))
-                                {
-                                    MultiSongPath = str;
-                                    UseMultiSongPath = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        switch (Global.SongMgrFolderStructure)
-                        {
-                            case "1":
-                                if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
-                                {
-                                    if (UseMultiSongPath)
-                                    {
-                                        SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
-                                    }
-                                    else
-                                    {
-                                        SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                                    }
-                                }
-                                else
-                                {
-                                    if (UseMultiSongPath)
-                                    {
-                                        SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                                    }
-                                    else
-                                    {
-                                        SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
-                                    }
-                                }
-                                break;
-                            case "2":
-                                if (UseMultiSongPath)
-                                {
-                                    SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
-                                }
-                                else
-                                {
-                                    SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                                }
-                                break;
-                        }
-
-                        switch (Global.SongMgrFileStructure)
-                        {
-                            case "1":
-                                if (SongSongType == "")
-                                {
-                                    SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                                }
-                                else
-                                {
-                                    SongFileName = SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                                }
-                                break;
-                            case "2":
-                                if (SongSongType == "")
-                                {
-                                    SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongTrackStr + SongExtension;
-                                }
-                                else
-                                {
-                                    SongFileName = SongSongName + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                                }
-                                break;
-                            case "3":
-                                if (SongSongType == "")
-                                {
-                                    SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongTrackStr + SongExtension;
-                                }
-                                else
-                                {
-                                    SongFileName = SongId + SongInfoSeparate + SongSingerStr + SongInfoSeparate + SongSongName + SongInfoSeparate + SongSongType + SongInfoSeparate + SongTrackStr + SongExtension;
-                                }
-                                break;
-                        }
-                    }
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value = SongPath;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value = SongFileName;
-                        SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongPath + SongFileName;
-                    });
-
-                    if (MoveFile)
-                    {
-                        string SongDestPath = Path.Combine(SongPath, SongFileName);
+                            SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value = SongPath;
+                            SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value = SongFileName;
+                            SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongPath + SongFileName;
+                        });
 
                         if (File.Exists(SongSrcPath))
                         {
