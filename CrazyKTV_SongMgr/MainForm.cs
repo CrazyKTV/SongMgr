@@ -32,15 +32,12 @@ namespace CrazyKTV_SongMgr
 
             if (CommonFunc.IsAdministrator()) this.Text += " (系統管理員)";
 
-            if (!Global.DebugMode)
-            {
+            #if DEBUG
+                Cashbox_EditMode_CheckBox.Visible = true;
+            #else
                 Debug_TabPage.Hide();
                 MainTabControl.TabPages.Remove(Debug_TabPage);
-            }
-            else
-            {
-                Cashbox_EditMode_CheckBox.Visible = true;
-            }
+            #endif
 
             Global.DPIScalingFactor = Common_GetDPIScalingFactor();
 
@@ -333,16 +330,14 @@ namespace CrazyKTV_SongMgr
             SingerMgr_DefaultSingerDataTable_ComboBox.DataSource = SingerMgr.GetDefaultSingerDataTableList();
             SingerMgr_DefaultSingerDataTable_ComboBox.DisplayMember = "Display";
             SingerMgr_DefaultSingerDataTable_ComboBox.ValueMember = "Value";
-            if (Global.DebugMode)
-            {
+
+            #if DEBUG
                 SingerMgr_DefaultSingerDataTable_ComboBox.SelectedValue = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 1 : 2;
-            }
-            else
-            {
+            #else
                 Global.SingerMgrDefaultSingerDataTable = "ktv_Singer";
                 SingerMgr_DefaultSingerDataTable_ComboBox.SelectedValue = 1;
                 SingerMgr_DefaultSingerDataTable_ComboBox.Enabled = false;
-            }
+            #endif
 
             if (list[32] != "") Global.DBVerEnableDBVerUpdate = list[32];
             SongMaintenance_EnableDBVerUpdate_CheckBox.Checked = bool.Parse(Global.DBVerEnableDBVerUpdate);

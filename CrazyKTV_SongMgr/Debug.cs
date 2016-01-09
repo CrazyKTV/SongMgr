@@ -19,6 +19,7 @@ namespace CrazyKTV_SongMgr
 
         private void Debug_CreateTestFile_Button_Click(object sender, EventArgs e)
         {
+            #if DEBUG
             if (Global.CrazyktvDatabaseStatus)
             {
                 if (MessageBox.Show("請先變更資料庫裡的歌曲路徑!", "注意", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -42,8 +43,10 @@ namespace CrazyKTV_SongMgr
                     });
                 }
             }
+            #endif
         }
 
+        #if DEBUG
         private void Debug_CreateTestFileTask()
         {
             DataTable dt = new DataTable();
@@ -84,6 +87,7 @@ namespace CrazyKTV_SongMgr
             dt.Dispose();
             dt = null;
         }
+        #endif
 
         #endregion
 
@@ -91,6 +95,7 @@ namespace CrazyKTV_SongMgr
 
         private void Debug_CreateCashboxTable_Button_Click(object sender, EventArgs e)
         {
+            #if DEBUG
             if (Global.CrazyktvDatabaseStatus)
             {
                 if (MessageBox.Show("你確定要建立錢櫃資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -114,8 +119,10 @@ namespace CrazyKTV_SongMgr
                     });
                 }
             }
+            #endif
         }
 
+        #if DEBUG
         private void Debug_CreateCashboxTableTask()
         {
             OleDbConnection clearconn = new OleDbConnection();
@@ -236,6 +243,7 @@ namespace CrazyKTV_SongMgr
             }
             SongDataList.Clear();
         }
+        #endif
 
         #endregion
 
@@ -243,6 +251,7 @@ namespace CrazyKTV_SongMgr
 
         private void Debug_CashboxNonSingerDataLog_Button_Click(object sender, EventArgs e)
         {
+            #if DEBUG
             Global.TimerStartTime = DateTime.Now;
             Global.TotalList = new List<int>() { 0, 0, 0, 0 };
             SongMaintenance.CreateSongDataTable();
@@ -263,8 +272,10 @@ namespace CrazyKTV_SongMgr
                 });
                 SongMaintenance.DisposeSongDataTable();
             });
+            #endif
         }
 
+        #if DEBUG
         private void Debug_CashboxNonSingerDataLogTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -381,6 +392,7 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
+        #endif
 
         #endregion
 
@@ -388,6 +400,7 @@ namespace CrazyKTV_SongMgr
 
         private void Debug_CashboxExport_Button_Click(object sender, EventArgs e)
         {
+            #if DEBUG
             List<string> list = new List<string>();
             list.Add("ktv_Version|1");
             list.Add("ktv_UpdDate|" + DateTime.Now);
@@ -415,6 +428,7 @@ namespace CrazyKTV_SongMgr
                 sw.Close();
                 list.Clear();
             }
+            #endif
         }
 
         #endregion
@@ -423,6 +437,7 @@ namespace CrazyKTV_SongMgr
 
         private void Debug_CreateDataColumn_Button_Click(object sender, EventArgs e)
         {
+            #if DEBUG
             if (Global.CrazyktvDatabaseStatus)
             {
                 if (MessageBox.Show("你確定要建立資料欄位嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -446,8 +461,10 @@ namespace CrazyKTV_SongMgr
                     });
                 }
             }
+            #endif
         }
 
+        #if DEBUG
         private void Debug_CreateDataColumnTask()
         {
             string DatabaseFile = Global.CrazyktvSongMgrDatabaseFile;
@@ -506,13 +523,15 @@ namespace CrazyKTV_SongMgr
             }
             WhereValueList.Clear();
         }
-
+        #endif
+        
         #endregion
 
         #region --- Debug 更新欄位資料 ---
 
         private void Debug_UpdateDataColumn_Button_Click(object sender, EventArgs e)
         {
+            #if DEBUG
             if (Global.CrazyktvDatabaseStatus)
             {
                 if (MessageBox.Show("你確定要更新資料欄位嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -536,8 +555,10 @@ namespace CrazyKTV_SongMgr
                     });
                 }
             }
+            #endif
         }
 
+        #if DEBUG
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
         private void Debug_UpdateDataColumnTask()
         {
@@ -595,16 +616,9 @@ namespace CrazyKTV_SongMgr
             }
             WhereValueList.Clear();
         }
-
+        #endif
+        
         #endregion
 
-    }
-
-
-
-
-
-    class Debug
-    {
     }
 }

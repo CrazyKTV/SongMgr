@@ -1572,15 +1572,13 @@ namespace CrazyKTV_SongMgr
         public static DataTable GetDefaultSingerDataTableList()
         {
             List<string> SingerDTlist;
-            if (Global.DebugMode)
-            {
+
+            #if DEBUG
                 SingerDTlist = new List<string>() { "歌庫歌手", "預設歌手" };
-            }
-            else
-            {
+            #else
                 SingerDTlist = new List<string>() { "歌庫歌手" };
-            }
-            
+            #endif
+
             DataTable list = new DataTable();
             list.Columns.Add(new DataColumn("Display", typeof(string)));
             list.Columns.Add(new DataColumn("Value", typeof(int)));
