@@ -2512,6 +2512,7 @@ namespace CrazyKTV_SongMgr
 
             if (File.Exists(Application.StartupPath + @"\SongMgr\Custom.lang"))
             {
+                if (!Directory.Exists(Application.StartupPath + @"\Lang")) Directory.CreateDirectory(Application.StartupPath + @"\Lang");
                 File.Copy(Application.StartupPath + @"\SongMgr\Custom.lang", Application.StartupPath + @"\Lang\Custom.lang", true);
 
                 if (File.Exists(Application.StartupPath + @"\Lang\Custom.lang"))
