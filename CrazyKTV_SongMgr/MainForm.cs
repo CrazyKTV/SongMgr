@@ -436,6 +436,11 @@ namespace CrazyKTV_SongMgr
             SingerMgr_SingerAddType_ComboBox.SelectedValue = 1;
             SingerMgr_SingerAddName_TextBox.ImeMode = ImeMode.OnHalf;
 
+            SingerMgr_SingerLastName_ComboBox.DataSource = SingerMgr.GetSingerLastNameList();
+            SingerMgr_SingerLastName_ComboBox.DisplayMember = "Display";
+            SingerMgr_SingerLastName_ComboBox.ValueMember = "Value";
+            SingerMgr_SingerLastName_ComboBox.SelectedValue = 1;
+
             // 錢櫃資料 - 載入下拉選單清單及設定
             Cashbox_QueryType_ComboBox.DataSource = Cashbox.GetQueryTypeList();
             Cashbox_QueryType_ComboBox.DisplayMember = "Display";
@@ -615,6 +620,11 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
 
 
 

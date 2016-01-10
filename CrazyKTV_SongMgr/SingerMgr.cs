@@ -118,6 +118,19 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SingerMgr_SingerLastName_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (SingerMgr_SingerLastName_ComboBox.SelectedValue.ToString())
+            {
+                case "1":
+                    Global.SingerMgrLastNameSortMethod = "1";
+                    break;
+                case "2":
+                    Global.SingerMgrLastNameSortMethod = "2";
+                    break;
+            }
+        }
+
         #endregion
 
         #region --- SingerMgr 查詢歌手 ---
@@ -1047,6 +1060,176 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- SingerMgr 重建歌星姓氏 ---
+
+        private void SingerMgr_SingerLastName_Button_Click(object sender, EventArgs e)
+        {
+            Global.TimerStartTime = DateTime.Now;
+            Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+            SingerMgr.CreateSongDataTable();
+            Common_SwitchSetUI(false);
+
+            SingerMgr_Tooltip_Label.Text = "正在重建歌星姓氏,請稍待...";
+
+            var tasks = new List<Task>();
+            tasks.Add(Task.Factory.StartNew(() => SingerMgr_RebuildSingerLastNameTask()));
+
+            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+            {
+                Global.TimerEndTime = DateTime.Now;
+                this.BeginInvoke((Action)delegate()
+                {
+                    SingerMgr_Tooltip_Label.Text = "總共從歌庫歌曲解析出 " + Global.TotalList[0] + " 筆歌星姓氏,寫入 " + Global.TotalList[1] + " 列歌星姓氏資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                    Common_SwitchSetUI(true);
+                });
+                SingerMgr.DisposeSongDataTable();
+            });
+        }
+
+        private void SingerMgr_RebuildSingerLastNameTask()
+        {
+            string SingerQuerySqlStr = "SELECT First(Song_Singer) AS Song_Singer, First(Song_SingerType) AS Song_SingerType, Count(Song_Singer) AS Song_SingerCount FROM ktv_Song GROUP BY Song_Singer HAVING (((First(Song_SingerType))<>10) AND ((Count(Song_Singer))>0)) ORDER BY First(Song_SingerType), First(Song_Singer)";
+            using (DataTable SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, ""))
+            {
+                if (SingerDT.Rows.Count > 0)
+                {
+                    List<string> SortItemList = new List<string>();
+
+                    if (Global.SingerMgrLastNameSortMethod == "2")
+                    {
+                        string Bopomofo = "";
+                        for (byte b = (byte)0x05; b <= (byte)0x29; b++)
+                        {
+                            Bopomofo = Encoding.Unicode.GetString(new byte[] { b, 0x31 });
+                            SortItemList.Add(Bopomofo);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i <= 40; i++)
+                        {
+                            SortItemList.Add(i.ToString());
+                        }
+                    }
+
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Columns.Add(new DataColumn("SingerSortItem", typeof(string)));
+                        dt.Columns.Add(new DataColumn("SingerLastName", typeof(string)));
+
+                        foreach (string SortItem in SortItemList)
+                        {
+                            dt.Rows.Add(dt.NewRow());
+                            dt.Rows[dt.Rows.Count - 1][0] = SortItem;
+                        }
+
+                        string SingerLastName = "";
+                        int SingerLastNameIndex;
+                        List<string> SingerLastNameList = new List<string>();
+                        List<string> SingerLastNameSpellList = new List<string>();
+
+                        Regex r = new Regex(@"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d])");
+
+                        foreach (DataRow row in SingerDT.AsEnumerable())
+                        {
+                            SingerLastName = row["Song_Singer"].ToString().Substring(0, 1);
+                            if (r.IsMatch(SingerLastName))
+                            {
+                                if (SingerLastNameList.IndexOf(SingerLastName) < 0)
+                                {
+                                    SingerLastNameList.Add(SingerLastName);
+                                    SingerLastNameSpellList = CommonFunc.GetSongNameSpell(SingerLastName);
+                                    SingerLastNameIndex = SortItemList.IndexOf((Global.SingerMgrLastNameSortMethod == "2") ? SingerLastNameSpellList[0] : SingerLastNameSpellList[2]);
+                                    if (SingerLastNameIndex >= 0) dt.Rows[SingerLastNameIndex][1] += SingerLastName;
+
+                                    Global.TotalList[0]++;
+                                    this.BeginInvoke((Action)delegate()
+                                    {
+                                        SingerMgr_Tooltip_Label.Text = "已從歌庫歌曲解析出 " + Global.TotalList[0] + " 筆歌星姓氏,請稍待...";
+                                    });
+                                }
+                            }
+                            SingerLastNameSpellList.Clear();
+                        }
+                        SingerLastNameList.Clear();
+
+                        List<string> RebuildList = new List<string>();
+                        RebuildList.Add("英文|ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ");
+                        RebuildList.Add("數字|１２３４５６７８９０");
+
+                        var query = from row in dt.AsEnumerable()
+                                    where row["SingerLastName"].ToString() != ""
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
+                        {
+                            foreach (DataRow row in query)
+                            {
+                                SingerLastName = row["SingerLastName"].ToString();
+                                if (SingerLastName.Length > 26)
+                                {
+                                    MatchCollection CJKCharMatches = Regex.Matches(SingerLastName, @"([\u2E80-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]|[\uac00-\ud7ff]){26}");
+                                    if (CJKCharMatches.Count > 0)
+                                    {
+                                        foreach (Match m in CJKCharMatches)
+                                        {
+                                            RebuildList.Add(row["SingerSortItem"].ToString() + ((Global.SingerMgrLastNameSortMethod == "1") ? "劃" : "") + "|" + m.Value);
+                                            SingerLastName = Regex.Replace(SingerLastName, m.Value, "");
+                                        }
+                                        if (SingerLastName != "") RebuildList.Add(row["SingerSortItem"].ToString() + ((Global.SingerMgrLastNameSortMethod == "1") ? "劃" : "") + "|" + SingerLastName);
+                                    }
+                                    SingerLastNameList.Clear();
+                                }
+                                else
+                                {
+                                    RebuildList.Add(row["SingerSortItem"].ToString() + ((Global.SingerMgrLastNameSortMethod == "1") ? "劃" : "") + "|" + SingerLastName);
+                                }
+                            }
+                        }
+
+                        using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                        {
+                            string TruncateSqlStr = "delete * from ktv_SingerName";
+                            using (OleDbCommand cmd = new OleDbCommand(TruncateSqlStr, conn))
+                            {
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            string sqlColumnStr = "SingerName_Id, SingerName_Num, SingerName_Name";
+                            string sqlValuesStr = "@SingerNameId, @SingerNameNum, @SingerNameName";
+                            string SingerNameAddSqlStr = "insert into ktv_SingerName ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+
+                            using (OleDbCommand cmd = new OleDbCommand(SingerNameAddSqlStr, conn))
+                            {
+                                List<string> list;
+                                foreach (string RebuildStr in RebuildList)
+                                {
+                                    list = new List<string>(RebuildStr.Split('|'));
+
+                                    cmd.Parameters.AddWithValue("@SingerNameId", RebuildList.IndexOf(RebuildStr) + 1);
+                                    cmd.Parameters.AddWithValue("@SingerNameNum", list[0]);
+                                    cmd.Parameters.AddWithValue("@SingerNameName", list[1]);
+                                    cmd.ExecuteNonQuery();
+                                    cmd.Parameters.Clear();
+                                    list.Clear();
+
+                                    Global.TotalList[1]++;
+                                    this.BeginInvoke((Action)delegate()
+                                    {
+                                        SingerMgr_Tooltip_Label.Text = "已寫入 " + Global.TotalList[1] + " 列歌星姓氏資料,請稍待...";
+                                    });
+                                }
+                            }
+                        }
+                        RebuildList.Clear();
+                    }
+                    SortItemList.Clear();
+                }
+            }
+        }
+
+        #endregion
+
         #region --- 歌手編輯 ---
 
         private void SingerMgr_EditSingerType_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1447,6 +1630,25 @@ namespace CrazyKTV_SongMgr
                 }
             }
             return list;
+        }
+
+        public static DataTable GetSingerLastNameList()
+        {
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> Itemlist = new List<string>() { "以姓氏筆劃排序", "以姓氏注音排序" };
+
+                foreach (string str in Itemlist)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
+            }
         }
 
         #endregion

@@ -224,6 +224,8 @@
             this.SingerMgr_SingerAddName_TextBox = new System.Windows.Forms.TextBox();
             this.SingerMgr_SingerAddName_Label = new System.Windows.Forms.Label();
             this.SingerMgr_Manager_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SingerMgr_SingerLastName_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SingerMgr_SingerLastName_Label = new System.Windows.Forms.Label();
             this.SingerMgr_RebuildSingerData_Button = new System.Windows.Forms.Button();
             this.SingerMgr_SingerExport_Button = new System.Windows.Forms.Button();
             this.SingerMgr_SingerImport_Button = new System.Windows.Forms.Button();
@@ -536,6 +538,7 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
+            this.SingerMgr_SingerLastName_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -3050,6 +3053,9 @@
             // 
             // SingerMgr_Manager_GroupBox
             // 
+            this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerLastName_Button);
+            this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerLastName_ComboBox);
+            this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerLastName_Label);
             this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_RebuildSingerData_Button);
             this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerExport_Button);
             this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerImport_Button);
@@ -3063,13 +3069,36 @@
             this.SingerMgr_Manager_GroupBox.TabStop = false;
             this.SingerMgr_Manager_GroupBox.Text = "歌手管理";
             // 
+            // SingerMgr_SingerLastName_ComboBox
+            // 
+            this.SingerMgr_SingerLastName_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SingerMgr_SingerLastName_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_SingerLastName_ComboBox.FormattingEnabled = true;
+            this.SingerMgr_SingerLastName_ComboBox.Location = new System.Drawing.Point(110, 91);
+            this.SingerMgr_SingerLastName_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 8, 18);
+            this.SingerMgr_SingerLastName_ComboBox.Name = "SingerMgr_SingerLastName_ComboBox";
+            this.SingerMgr_SingerLastName_ComboBox.Size = new System.Drawing.Size(192, 30);
+            this.SingerMgr_SingerLastName_ComboBox.TabIndex = 4;
+            this.SingerMgr_SingerLastName_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SingerMgr_SingerLastName_ComboBox_SelectedIndexChanged);
+            // 
+            // SingerMgr_SingerLastName_Label
+            // 
+            this.SingerMgr_SingerLastName_Label.AutoSize = true;
+            this.SingerMgr_SingerLastName_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_SingerLastName_Label.Location = new System.Drawing.Point(16, 95);
+            this.SingerMgr_SingerLastName_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 22);
+            this.SingerMgr_SingerLastName_Label.Name = "SingerMgr_SingerLastName_Label";
+            this.SingerMgr_SingerLastName_Label.Size = new System.Drawing.Size(82, 22);
+            this.SingerMgr_SingerLastName_Label.TabIndex = 3;
+            this.SingerMgr_SingerLastName_Label.Text = "歌星姓氏:";
+            // 
             // SingerMgr_RebuildSingerData_Button
             // 
             this.SingerMgr_RebuildSingerData_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_RebuildSingerData_Button.Location = new System.Drawing.Point(16, 89);
-            this.SingerMgr_RebuildSingerData_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SingerMgr_RebuildSingerData_Button.Location = new System.Drawing.Point(316, 39);
+            this.SingerMgr_RebuildSingerData_Button.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_RebuildSingerData_Button.Name = "SingerMgr_RebuildSingerData_Button";
-            this.SingerMgr_RebuildSingerData_Button.Size = new System.Drawing.Size(148, 32);
+            this.SingerMgr_RebuildSingerData_Button.Size = new System.Drawing.Size(136, 32);
             this.SingerMgr_RebuildSingerData_Button.TabIndex = 2;
             this.SingerMgr_RebuildSingerData_Button.Text = "重建歌庫歌手";
             this.SingerMgr_RebuildSingerData_Button.UseVisualStyleBackColor = true;
@@ -3078,10 +3107,10 @@
             // SingerMgr_SingerExport_Button
             // 
             this.SingerMgr_SingerExport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_SingerExport_Button.Location = new System.Drawing.Point(175, 39);
-            this.SingerMgr_SingerExport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SingerMgr_SingerExport_Button.Location = new System.Drawing.Point(166, 39);
+            this.SingerMgr_SingerExport_Button.Margin = new System.Windows.Forms.Padding(8, 10, 8, 10);
             this.SingerMgr_SingerExport_Button.Name = "SingerMgr_SingerExport_Button";
-            this.SingerMgr_SingerExport_Button.Size = new System.Drawing.Size(148, 32);
+            this.SingerMgr_SingerExport_Button.Size = new System.Drawing.Size(136, 32);
             this.SingerMgr_SingerExport_Button.TabIndex = 1;
             this.SingerMgr_SingerExport_Button.Text = "匯出歌手資料";
             this.SingerMgr_SingerExport_Button.UseVisualStyleBackColor = true;
@@ -3091,9 +3120,9 @@
             // 
             this.SingerMgr_SingerImport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_SingerImport_Button.Location = new System.Drawing.Point(16, 39);
-            this.SingerMgr_SingerImport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SingerMgr_SingerImport_Button.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_SingerImport_Button.Name = "SingerMgr_SingerImport_Button";
-            this.SingerMgr_SingerImport_Button.Size = new System.Drawing.Size(148, 32);
+            this.SingerMgr_SingerImport_Button.Size = new System.Drawing.Size(136, 32);
             this.SingerMgr_SingerImport_Button.TabIndex = 0;
             this.SingerMgr_SingerImport_Button.Text = "匯入歌手資料";
             this.SingerMgr_SingerImport_Button.UseVisualStyleBackColor = true;
@@ -7034,6 +7063,18 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
+            // SingerMgr_SingerLastName_Button
+            // 
+            this.SingerMgr_SingerLastName_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_SingerLastName_Button.Location = new System.Drawing.Point(316, 90);
+            this.SingerMgr_SingerLastName_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 18);
+            this.SingerMgr_SingerLastName_Button.Name = "SingerMgr_SingerLastName_Button";
+            this.SingerMgr_SingerLastName_Button.Size = new System.Drawing.Size(136, 32);
+            this.SingerMgr_SingerLastName_Button.TabIndex = 5;
+            this.SingerMgr_SingerLastName_Button.Text = "重建歌星姓氏";
+            this.SingerMgr_SingerLastName_Button.UseVisualStyleBackColor = true;
+            this.SingerMgr_SingerLastName_Button.Click += new System.EventHandler(this.SingerMgr_SingerLastName_Button_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -7089,6 +7130,7 @@
             this.SingerMgr_SingerAdd_GroupBox.ResumeLayout(false);
             this.SingerMgr_SingerAdd_GroupBox.PerformLayout();
             this.SingerMgr_Manager_GroupBox.ResumeLayout(false);
+            this.SingerMgr_Manager_GroupBox.PerformLayout();
             this.SingerMgr_Edit_GroupBox.ResumeLayout(false);
             this.SingerMgr_Edit_GroupBox.PerformLayout();
             this.SongMgrCfg_TabPage.ResumeLayout(false);
@@ -7673,6 +7715,9 @@
         private System.Windows.Forms.GroupBox MainCfg_Report_GroupBox;
         private System.Windows.Forms.Button MainCfg_NonSingerDataLog_Button;
         private System.Windows.Forms.Button MainCfg_NonPhoneticsWordLog_Button;
+        private System.Windows.Forms.ComboBox SingerMgr_SingerLastName_ComboBox;
+        private System.Windows.Forms.Label SingerMgr_SingerLastName_Label;
+        private System.Windows.Forms.Button SingerMgr_SingerLastName_Button;
     }
 }
 

@@ -73,6 +73,7 @@ namespace CrazyKTV_SongMgr
 
         public static string SingerMgrDefaultSingerDataTable = "ktv_Singer";
         public static string SingerMgrSyncSongSinger = "True";
+        public static string SingerMgrLastNameSortMethod = "1";
 
         public static string SongAddDefaultSongLang = "11";
         public static string SongAddDefaultSingerType = "8";
