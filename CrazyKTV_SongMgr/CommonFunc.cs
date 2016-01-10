@@ -1781,28 +1781,35 @@ namespace CrazyKTV_SongMgr
                 List<string> StartIdlist = new List<string>();
                 StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
                 StartIdlist.Add((DigitCode == 5) ? "100000" : "1000000");
-                int RemainingSongId;
 
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
                 using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
                     if (dt.Rows.Count > 0)
                     {
-                        int i;
-                        foreach (string str in Global.CrazyktvSongLangList)
+                        int StartId;
+                        int EndId;
+                        int TotalId;
+                        int RemainingSongId;
+
+                        foreach (string StartIdStr in StartIdlist)
                         {
+                            if (StartIdStr == ((DigitCode == 5) ? "100000" : "1000000")) break;
+
+                            StartId = Convert.ToInt32(StartIdStr);
+                            EndId = Convert.ToInt32(StartIdlist[StartIdlist.IndexOf(StartIdStr) + 1]) - 1;
+                            TotalId = EndId - StartId;
+
                             var query = from row in dt.AsEnumerable()
-                                        where row.Field<string>("Song_Lang").Equals(str) &&
+                                        where Convert.ToInt32(row.Field<string>("Song_Id")) >= StartId &&
+                                              Convert.ToInt32(row.Field<string>("Song_Id")) <= EndId &&
                                               row.Field<string>("Song_Id").Length == DigitCode
-                                        orderby row.Field<string>("Song_Id") descending
                                         select row;
 
-                            foreach (DataRow row in query)
+                            if (query.Count<DataRow>() > 0)
                             {
-                                i = Global.CrazyktvSongLangList.IndexOf(str);
-                                RemainingSongId = Convert.ToInt32(StartIdlist[i + 1]) - Convert.ToInt32(row["Song_Id"]) - 1;
+                                RemainingSongId = TotalId - query.Count<DataRow>();
                                 if (RemainingSongId < Global.RemainingSongID) Global.RemainingSongID = RemainingSongId;
-                                break;
                             }
                         }
                     }
