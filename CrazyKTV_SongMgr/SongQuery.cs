@@ -802,7 +802,7 @@ namespace CrazyKTV_SongMgr
                     if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                     {
                         string SongSrcPath = Path.Combine(SongPath, SongFileName);
-                        string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath);
+                        string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "");
                         SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                         SongFileName = Path.GetFileName(SongDestPath);
 
@@ -2061,7 +2061,7 @@ namespace CrazyKTV_SongMgr
             string SongFileName = SongQuery_DataGridView.CurrentRow.Cells["Song_FileName"].Value.ToString();
             string SongPath = SongQuery_DataGridView.CurrentRow.Cells["Song_Path"].Value.ToString();
 
-            SongQuery_EditSongSrcPath_TextBox.Text = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, (SongSongType != "無類別") ? SongSongType : "", SongFileName, SongPath);
+            SongQuery_EditSongSrcPath_TextBox.Text = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, (SongSongType != "無類別") ? SongSongType : "", SongFileName, SongPath, false, "");
         }
 
 

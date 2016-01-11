@@ -2257,7 +2257,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- CommonFunc 取得檔案結構 ---
 
-        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath)
+        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath, bool RebuildSongStructure, string RebuildSongPath)
         {
             if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
             {
@@ -2294,45 +2294,45 @@ namespace CrazyKTV_SongMgr
                     case "1":
                         if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
                         {
-                            if (UseMultiSongPath)
+                            if (UseMultiSongPath && !RebuildSongStructure)
                             {
                                 SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
                             }
                             else
                             {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                             }
                         }
                         else
                         {
-                            if (UseMultiSongPath)
+                            if (UseMultiSongPath && !RebuildSongStructure)
                             {
                                 SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
                             }
                             else
                             {
-                                SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
                             }
                         }
                         break;
                     case "2":
-                        if (UseMultiSongPath)
+                        if (UseMultiSongPath && !RebuildSongStructure)
                         {
                             SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
                         }
                         else
                         {
-                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                            SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                         }
                         break;
                     case "3":
-                        if (UseMultiSongPath)
+                        if (UseMultiSongPath && !RebuildSongStructure)
                         {
                             SongPath = MultiSongPath + SongLang + @"\";
                         }
                         else
                         {
-                            SongPath = Global.SongMgrDestFolder + @"\" + SongLang + @"\";
+                            SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\";
                         }
                         break;
                 }
