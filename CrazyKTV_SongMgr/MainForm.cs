@@ -481,7 +481,7 @@ namespace CrazyKTV_SongMgr
 
             if (!Global.CrazyktvDatabaseStatus)
             {
-                MainTabControl.SelectedIndex = 3;
+                if (!Global.CrazyktvDatabaseIsOld) MainTabControl.SelectedIndex = 3;
             }
             else
             {

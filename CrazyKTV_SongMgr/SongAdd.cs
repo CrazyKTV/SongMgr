@@ -773,17 +773,7 @@ namespace CrazyKTV_SongMgr
                     SongMgrCfg_SongType_ListBox.ValueMember = "Value";
                     Common_RefreshSongType();
 
-                    SongQuery.QueryStatusLabel = false;
-                    SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                    if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
-                    {
-                        SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                    }
-                    else
-                    {
-                        SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
-                    }
-                    SongQuery_EditMode_CheckBox.Checked = false;
+                    Common_QueryAddSong(100);
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
                     
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
@@ -854,7 +844,7 @@ namespace CrazyKTV_SongMgr
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    SongAdd_Tooltip_Label.Text = "已成功搬移 " + Global.TotalList[3] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首...";
+                    SongAdd_Tooltip_Label.Text = "已成功處理 " + Global.TotalList[3] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首...";
                 });
             }
 
@@ -928,17 +918,7 @@ namespace CrazyKTV_SongMgr
                     SongMgrCfg_SongType_ListBox.ValueMember = "Value";
                     Common_RefreshSongType();
 
-                    SongQuery.QueryStatusLabel = false;
-                    SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
-                    if (SongQuery_QueryType_ComboBox.SelectedIndex != 3)
-                    {
-                        SongQuery_QueryType_ComboBox.SelectedValue = 4;
-                    }
-                    else
-                    {
-                        SongQuery_QueryType_ComboBox_SelectedIndexChanged(new ComboBox(), new EventArgs());
-                    }
-                    SongQuery_EditMode_CheckBox.Checked = false;
+                    Common_QueryAddSong(100);
                     SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
                     
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
