@@ -388,7 +388,7 @@ namespace CrazyKTV_SongMgr
                 {
                     foreach (string RemoveStr in FileNameRemoveList)
                     {
-                        str = str.Replace(RemoveStr, "");
+                        str = Regex.Replace(str, @"([\{\(\[｛（［【](.+)?)" + RemoveStr + @"([】］）｝\]\)\}])", "", RegexOptions.IgnoreCase);
                         str = Regex.Replace(str, @"[\{\(\[｛（［【]" + @"[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
                     }
                 }
