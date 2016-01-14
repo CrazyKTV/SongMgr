@@ -511,19 +511,71 @@ namespace CrazyKTV_SongMgr
                                         {
                                             foreach (DataRow row in query)
                                             {
-                                                string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+                                                string SongData = "";
 
-                                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0)
+                                                if (row["Song_Singer"].ToString().Contains("&")) //合唱歌曲
                                                 {
-                                                    lock (LockThis)
+                                                    List<string> ChorusSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
+
+                                                    // 處理合唱歌曲中的特殊歌手名稱
+                                                    string ChorusSongSingerName = row["Song_Singer"].ToString().ToLower();
+                                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+
+                                                    foreach (string SpecialSingerName in SpecialStrlist)
                                                     {
-                                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                        Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                                                        if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                                                        {
+                                                            if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
+                                                            ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                                        }
+                                                    }
+                                                    SpecialStrlist.Clear();
+
+                                                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                                    if (r.IsMatch(ChorusSongSingerName))
+                                                    {
+                                                        string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
+                                                        foreach (string str in singers)
+                                                        {
+                                                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                                            if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (ChorusSongDatalist.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSongDatalist.Add(ChorusSongSingerName.ToLower());
                                                     }
 
-                                                    this.BeginInvoke((Action)delegate()
+                                                    if (Cashbox.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
                                                     {
-                                                        Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
-                                                    });
+                                                        lock (LockThis)
+                                                        {
+                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                        }
+
+                                                        this.BeginInvoke((Action)delegate()
+                                                        {
+                                                            Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
+                                                        });
+                                                    }
+                                                }
+                                                else // 不是合唱歌曲
+                                                {
+                                                    SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+
+                                                    if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0)
+                                                    {
+                                                        lock (LockThis)
+                                                        {
+                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                        }
+
+                                                        this.BeginInvoke((Action)delegate()
+                                                        {
+                                                            Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
+                                                        });
+                                                    }
                                                 }
                                             }
                                         }
