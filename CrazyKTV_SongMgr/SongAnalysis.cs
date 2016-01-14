@@ -172,6 +172,9 @@ namespace CrazyKTV_SongMgr
             }
             list.Clear();
 
+            // 去除檔案開頭的編號
+            FileStr = Regex.Replace(FileStr, @"^(\d{2}|\d{1})\.", "", RegexOptions.IgnoreCase);
+
             // 歌手-歌名(語系-類別-聲道) 名稱處理
             MatchCollection BracketMatches = Regex.Matches(FileStr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
             if (BracketMatches.Count > 0)
