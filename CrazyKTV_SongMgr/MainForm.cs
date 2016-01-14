@@ -556,6 +556,7 @@ namespace CrazyKTV_SongMgr
                     i = 5;
                     Cashbox_QueryValue_TextBox.Focus();
                     Cashbox_QueryValue_TextBox.ImeMode = ImeMode.OnHalf;
+                    Cashbox_UpdDate_Button.Enabled = ((DateTime.Now - Global.CashboxUpdDate).Hours <= 0) ? false : true;
                     break;
             }
 
