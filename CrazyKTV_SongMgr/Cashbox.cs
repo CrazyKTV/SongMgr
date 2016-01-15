@@ -720,6 +720,7 @@ namespace CrazyKTV_SongMgr
                         {
                             Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                         }
+                        Common_InitializeSongData(false, false, true);
                         Common_SwitchSetUI(true);
                     });
                 });

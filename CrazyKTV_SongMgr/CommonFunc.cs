@@ -422,35 +422,57 @@ namespace CrazyKTV_SongMgr
 
         #region --- Common 初始化歌曲資料 ---
 
-        private void Common_InitializeSongData()
+        private void Common_InitializeSongData(bool InitSongId, bool InitPhonetics, bool InitCashbox)
         {
             if (Global.CrazyktvDatabaseStatus)
             {
-                int MaxDigitCode;
-                if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
-                tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
-
-                Global.PhoneticsWordList = new List<string>();
-                Global.PhoneticsSpellList = new List<string>();
-                Global.PhoneticsStrokesList = new List<string>();
-                Global.PhoneticsPenStyleList = new List<string>();
-
-                string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-
-                using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
+                if (InitSongId)
                 {
-                    var query = from row in PhoneticsDT.AsEnumerable()
-                                where row.Field<Int16>("SortIdx") < 2
-                                select row;
+                    int MaxDigitCode;
+                    if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
+                    tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
+                }
 
-                    foreach (DataRow row in query)
+                if (InitPhonetics)
+                {
+                    Global.PhoneticsWordList = new List<string>();
+                    Global.PhoneticsSpellList = new List<string>();
+                    Global.PhoneticsStrokesList = new List<string>();
+                    Global.PhoneticsPenStyleList = new List<string>();
+
+                    string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+
+                    using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
                     {
-                        Global.PhoneticsWordList.Add(row["Word"].ToString());
-                        Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                        Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                        Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                        var query = from row in PhoneticsDT.AsEnumerable()
+                                    where row.Field<Int16>("SortIdx") < 2
+                                    select row;
+
+                        foreach (DataRow row in query)
+                        {
+                            Global.PhoneticsWordList.Add(row["Word"].ToString());
+                            Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                            Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                            Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                        }
+                    }
+                }
+
+                if (InitCashbox)
+                {
+                    Global.CashboxSongDataLangList = new List<string>();
+                    Global.CashboxSongDataLowCaseList = new List<string>();
+
+                    string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Cashbox order by Song_Lang";
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    {
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            Global.CashboxSongDataLangList.Add(row["Song_Lang"].ToString());
+                            Global.CashboxSongDataLowCaseList.Add(row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
+                        }
                     }
                 }
             }
@@ -1390,7 +1412,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Common_InitializeSongData();
+            Common_InitializeSongData(true, true, true);
 
             // 歌庫監視
             SongMonitor_CheckCurSong();

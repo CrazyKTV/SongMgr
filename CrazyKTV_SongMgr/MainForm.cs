@@ -402,7 +402,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Common_InitializeSongData();
+            Common_InitializeSongData(true, true, true);
 
             // 歌庫監視
             SongMonitor_CheckCurSong();

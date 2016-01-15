@@ -335,12 +335,6 @@ namespace CrazyKTV_SongMgr
             SongSongTypeList.Clear();
             SongSongTypeLowCaseList.Clear();
 
-            // 套用預設語系類別
-            if (SongLang == "")
-            {
-                SongLang = CommonFunc.GetSongLangStr(int.Parse(Global.SongAddDefaultSongLang) - 1, 0, "null");
-            }
-
             // 套用預設歌曲聲道
             if (SongTrack == "")
             {
@@ -716,6 +710,63 @@ namespace CrazyKTV_SongMgr
             {
                 Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                 if (r.IsMatch(SongSinger)) SongSinger = Regex.Replace(SongSinger, "[&+]", "&", RegexOptions.IgnoreCase);
+            }
+
+            // 套用預設語系類別
+            if (SongLang == "")
+            {
+                SongLang = CommonFunc.GetSongLangStr(int.Parse(Global.SongAddDefaultSongLang) - 1, 0, "null");
+
+                string SongData = SongSinger.ToLower() + "|" + SongSongName.ToLower();
+
+                if (SongSinger.Contains("&")) //合唱歌曲
+                {
+                    List<string> ChorusSongDatalist = new List<string>() { SongSongName.ToLower() };
+
+                    // 處理合唱歌曲中的特殊歌手名稱
+                    string ChorusSongSingerName = SongSinger.ToLower();
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+
+                    foreach (string SpecialSingerName in SpecialStrlist)
+                    {
+                        Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                        if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                        {
+                            if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
+                            ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                        }
+                    }
+                    SpecialStrlist.Clear();
+
+                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                    if (r.IsMatch(ChorusSongSingerName))
+                    {
+                        string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
+                        foreach (string str in singers)
+                        {
+                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                            if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
+                        }
+                    }
+                    else
+                    {
+                        if (ChorusSongDatalist.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSongDatalist.Add(ChorusSongSingerName.ToLower());
+                    }
+
+                    if (Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
+                    {
+                        SongData = Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray()));
+                    }
+                }
+
+                if (Global.CashboxSongDataLowCaseList.IndexOf(SongData) >= 0)
+                {
+                    string CashboxSongDataLang = Global.CashboxSongDataLangList[Global.CashboxSongDataLowCaseList.IndexOf(SongData)];
+                    if (Global.CrazyktvSongLangList.IndexOf(CashboxSongDataLang) >= 0)
+                    {
+                        SongLang = Global.CrazyktvSongLangList[Global.CrazyktvSongLangList.IndexOf(CashboxSongDataLang)];
+                    }
+                }
             }
 
             // 計算歌曲字數
