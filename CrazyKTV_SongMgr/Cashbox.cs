@@ -798,7 +798,7 @@ namespace CrazyKTV_SongMgr
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    Cashbox_QueryStatus_Label.Text = "正在分析第 " + (sDateList.IndexOf(sdate) + 1) + " / " + DaysCount + " 天的更新歌曲,請稍待...";
+                    Cashbox_QueryStatus_Label.Text = "正在分析第 " + (sDateList.IndexOf(sdate) + 1) + " / " + sDateList.Count + " 天的更新歌曲,請稍待...";
                 });
 
                 foreach (HtmlNode childnode in child)

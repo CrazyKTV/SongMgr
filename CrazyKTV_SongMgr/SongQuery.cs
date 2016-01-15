@@ -208,6 +208,8 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDatabaseStatus)
             {
+                SongQuery_QueryType_ComboBox.SelectedIndexChanged -= new EventHandler(SongQuery_QueryType_ComboBox_SelectedIndexChanged);
+
                 Global.SongQueryQueryType = "SongQuery";
 
                 SongQuery_Query_Button.Enabled = false;
@@ -287,6 +289,7 @@ namespace CrazyKTV_SongMgr
                 {
                     this.BeginInvoke((Action)delegate()
                     {
+                        SongQuery_QueryType_ComboBox.SelectedIndexChanged += new EventHandler(SongQuery_QueryType_ComboBox_SelectedIndexChanged);
                         Common_SwitchSetUI(true);
                         SongQuery_Query_Button.Enabled = true;
                     });
@@ -1161,6 +1164,8 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDatabaseStatus && SongQuery_ExceptionalQuery_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
             {
+                SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged -= new EventHandler(SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
+
                 Global.SongQueryQueryType = "SongQuery";
 
                 SongQuery_Query_Button.Enabled = false;
@@ -1228,6 +1233,7 @@ namespace CrazyKTV_SongMgr
                 {
                     this.BeginInvoke((Action)delegate()
                     {
+                        SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new EventHandler(SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
                         Common_SwitchSetUI(true);
                         SongQuery_Query_Button.Enabled = true;
                     });
