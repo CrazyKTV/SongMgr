@@ -728,10 +728,15 @@ namespace CrazyKTV_SongMgr
 
         private void Cashbox_UpdDateTask()
         {
+            DateTime DatePrevUpdDate = new DateTime();
+            this.BeginInvoke((Action)delegate()
+            {
+                DatePrevUpdDate = DateTime.Parse(((DataTable)Cashbox_DateQuery_ComboBox.DataSource).Rows[0][0].ToString());
+            });
+
             DateTime DateValidDate = DateTime.Parse("2016/01/01");
             DateTime DateStartDate = Global.CashboxUpdDate;
             DateTime DateEndDate = DateTime.Now;
-            int DaysCount = (DateEndDate - DateStartDate).Days + 1;
 
             if (DateTime.Compare(DateEndDate, DateStartDate) < 0)
             {
@@ -767,15 +772,33 @@ namespace CrazyKTV_SongMgr
             HtmlNode table;
             HtmlNodeCollection child;
 
-            for (int i = 0; i < DaysCount; i++)
+            List<string> sDateList = new List<string>();
+
+            int DaysCount = (DateEndDate - DateStartDate).Days;
+            int PrevUpdDaysCount = (DateStartDate - DatePrevUpdDate).Days;
+
+            for (int i = 1; i <= PrevUpdDaysCount; i++)
             {
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + DateStartDate.AddDays(i).ToString("yyyy/MM/dd"));
+                if (DatePrevUpdDate.AddDays(i).DayOfWeek == DayOfWeek.Thursday)
+                {
+                    if (DateTime.Compare(DatePrevUpdDate, DateValidDate) >= 0) sDateList.Add(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
+                }
+            }
+
+            for (int i = 0; i <= DaysCount; i++)
+            {
+                if (sDateList.IndexOf(DateStartDate.AddDays(i).ToString("yyyy/MM/dd")) < 0) sDateList.Add(DateStartDate.AddDays(i).ToString("yyyy/MM/dd"));
+            }
+
+            foreach (string sdate in sDateList)
+            {
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + sdate);
                 table = doc.DocumentNode.SelectSingleNode("//table[2]");
                 child = table.SelectNodes("tr");
 
                 this.BeginInvoke((Action)delegate()
                 {
-                    Cashbox_QueryStatus_Label.Text = "正在分析第 " + (i + 1) + " / " + DaysCount + " 天的更新歌曲,請稍待...";
+                    Cashbox_QueryStatus_Label.Text = "正在分析第 " + (sDateList.IndexOf(sdate) + 1) + " / " + DaysCount + " 天的更新歌曲,請稍待...";
                 });
 
                 foreach (HtmlNode childnode in child)
@@ -793,7 +816,7 @@ namespace CrazyKTV_SongMgr
 
                     if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
                     {
-                        list.Add(DateStartDate.AddDays(i).ToString());
+                        list.Add(sdate);
                         if (list[1] == "") list[1] = "其它";
                         list[3] = Regex.Replace(list[3], "、", "&");
 
@@ -1291,7 +1314,6 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetDateQueryList()
         {
-
             using (DataTable list = new DataTable())
             {
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
@@ -1504,6 +1526,24 @@ namespace CrazyKTV_SongMgr
                 NewSongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
             }
             return NewSongID;
+        }
+
+        #endregion
+
+        #region --- Cashbox 取得更新按鈕啟用狀態 ---
+
+        public static bool GetUpdDateButtonEnableStatus()
+        {
+            bool EnableStatus = false;
+            if ((DateTime.Now - Global.CashboxUpdDate).Hours > 0)
+            {
+                EnableStatus = true;
+            }
+            else
+            {
+                if ((DateTime.Now - Global.CashboxUpdDate).Days > 0) EnableStatus = true;
+            }
+            return EnableStatus;
         }
 
         #endregion
