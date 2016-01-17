@@ -114,7 +114,8 @@ namespace CrazyKTV_SongMgr
                 SongAdd_Tooltip_Label,
                 SingerMgr_Tooltip_Label,
                 SongMgrCfg_Tooltip_Label,
-                SongMaintenance_Tooltip_Label
+                SongMaintenance_Tooltip_Label,
+                Cashbox_QueryStatus_Label
             };
 
             bool MultiEdit = false;
@@ -139,6 +140,11 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "SingerMgr_EditSingerName_TextBox":
                     i = 2;
+                    break;
+                case "Cashbox_EditSongSinger_TextBox":
+                case "Cashbox_EditSongSongName_TextBox":
+                    if (Cashbox_EditMode_CheckBox.Checked && Global.CashboxMultiEdit) MultiEdit = true;
+                    i = 5;
                     break;
                 default:
                     i = 4;
@@ -312,6 +318,8 @@ namespace CrazyKTV_SongMgr
             Cashbox_OtherQuery_GroupBox.Enabled = status;
             Cashbox_UpdDate_GroupBox.Enabled = status;
             Cashbox_Maintenance_GroupBox.Enabled = status;
+            Cashbox_DataGridView.Enabled = status;
+            Cashbox_Edit_GroupBox.Enabled = status;
             MainCfg_Report_GroupBox.Enabled = status;
         }
         
@@ -364,6 +372,8 @@ namespace CrazyKTV_SongMgr
             Cashbox_OtherQuery_GroupBox.Enabled = status;
             Cashbox_UpdDate_GroupBox.Enabled = status;
             Cashbox_Maintenance_GroupBox.Enabled = status;
+            Cashbox_DataGridView.Enabled = status;
+            Cashbox_Edit_GroupBox.Enabled = status;
             MainCfg_Report_GroupBox.Enabled = status;
 
             if (Global.SongLogDT.Rows.Count > 0)

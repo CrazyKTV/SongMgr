@@ -181,6 +181,15 @@ namespace CrazyKTV_SongMgr
         public static List<string> SingerMgrDataGridViewSelectList = new List<string>();
         public static List<string> SingerMgrDataGridViewRestoreSelectList = new List<string>();
 
+        public static bool CashboxMultiEdit;
+        public static List<bool> CashboxMultiEditUpdateList = new List<bool>() { false, false, false, false, false, false, false, false };
+
+        /// <summary>
+        /// <para>0: SongId | 1: SongLang | 2: SongSinger | 3: SongSongName | 4: SongCreatDate</para>
+        /// </summary>
+        public static List<string> CashboxDataGridViewSelectList = new List<string>();
+        public static List<string> CashboxDataGridViewRestoreSelectList = new List<string>();
+
         public static List<string> PlayerUpdateSongValueList = new List<string>();
         public static bool PlayerInitialized = false;
 

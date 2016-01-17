@@ -224,6 +224,7 @@
             this.SingerMgr_SingerAddName_TextBox = new System.Windows.Forms.TextBox();
             this.SingerMgr_SingerAddName_Label = new System.Windows.Forms.Label();
             this.SingerMgr_Manager_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SingerMgr_SingerLastName_Button = new System.Windows.Forms.Button();
             this.SingerMgr_SingerLastName_ComboBox = new System.Windows.Forms.ComboBox();
             this.SingerMgr_SingerLastName_Label = new System.Windows.Forms.Label();
             this.SingerMgr_RebuildSingerData_Button = new System.Windows.Forms.Button();
@@ -445,7 +446,6 @@
             this.Cashbox_DateQuery_Label = new System.Windows.Forms.Label();
             this.Cashbox_OtherQuery_ComboBox = new System.Windows.Forms.ComboBox();
             this.Cashbox_OtherQuery_Label = new System.Windows.Forms.Label();
-            this.Cashbox_DataGridView = new System.Windows.Forms.DataGridView();
             this.Cashbox_QueryStatus_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
@@ -464,6 +464,19 @@
             this.Cashbox_QueryType_ComboBox = new System.Windows.Forms.ComboBox();
             this.Cashbox_QueryValue_TextBox = new System.Windows.Forms.TextBox();
             this.Cashbox_QueryValue_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_Edit_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Cashbox_EditSongCreatDate_DateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.Cashbox_EditApplyChanges_Button = new System.Windows.Forms.Button();
+            this.Cashbox_EditSongCreatDate_Label = new System.Windows.Forms.Label();
+            this.Cashbox_EditSongSongName_TextBox = new System.Windows.Forms.TextBox();
+            this.Cashbox_EditSongSongName_Label = new System.Windows.Forms.Label();
+            this.Cashbox_EditSongSinger_TextBox = new System.Windows.Forms.TextBox();
+            this.Cashbox_EditSongSinger_Label = new System.Windows.Forms.Label();
+            this.Cashbox_EditSongLang_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_EditSongLang_Label = new System.Windows.Forms.Label();
+            this.Cashbox_EditSongId_TextBox = new System.Windows.Forms.TextBox();
+            this.Cashbox_EditSongId_Label = new System.Windows.Forms.Label();
+            this.Cashbox_DataGridView = new System.Windows.Forms.DataGridView();
             this.MainCfg_TabPage = new System.Windows.Forms.TabPage();
             this.MainCfg_Save_Button = new System.Windows.Forms.Button();
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
@@ -538,7 +551,6 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
-            this.SingerMgr_SingerLastName_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
@@ -596,10 +608,11 @@
             this.Cashbox_TabPage.SuspendLayout();
             this.Cashbox_UpdDate_GroupBox.SuspendLayout();
             this.Cashbox_OtherQuery_GroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).BeginInit();
             this.Cashbox_QueryStatus_GroupBox.SuspendLayout();
             this.Cashbox_Maintenance_GroupBox.SuspendLayout();
             this.Cashbox_Query_GroupBox.SuspendLayout();
+            this.Cashbox_Edit_GroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).BeginInit();
             this.MainCfg_TabPage.SuspendLayout();
             this.MainCfg_Tooltip_GroupBox.SuspendLayout();
             this.MainCfg_General_ＧroupBox.SuspendLayout();
@@ -3068,6 +3081,18 @@
             this.SingerMgr_Manager_GroupBox.TabIndex = 5;
             this.SingerMgr_Manager_GroupBox.TabStop = false;
             this.SingerMgr_Manager_GroupBox.Text = "歌手管理";
+            // 
+            // SingerMgr_SingerLastName_Button
+            // 
+            this.SingerMgr_SingerLastName_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_SingerLastName_Button.Location = new System.Drawing.Point(316, 90);
+            this.SingerMgr_SingerLastName_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 18);
+            this.SingerMgr_SingerLastName_Button.Name = "SingerMgr_SingerLastName_Button";
+            this.SingerMgr_SingerLastName_Button.Size = new System.Drawing.Size(136, 32);
+            this.SingerMgr_SingerLastName_Button.TabIndex = 5;
+            this.SingerMgr_SingerLastName_Button.Text = "重建歌星姓氏";
+            this.SingerMgr_SingerLastName_Button.UseVisualStyleBackColor = true;
+            this.SingerMgr_SingerLastName_Button.Click += new System.EventHandler(this.SingerMgr_SingerLastName_Button_Click);
             // 
             // SingerMgr_SingerLastName_ComboBox
             // 
@@ -5722,10 +5747,11 @@
             // 
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_UpdDate_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_OtherQuery_GroupBox);
-            this.Cashbox_TabPage.Controls.Add(this.Cashbox_DataGridView);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_QueryStatus_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_Maintenance_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_Query_GroupBox);
+            this.Cashbox_TabPage.Controls.Add(this.Cashbox_Edit_GroupBox);
+            this.Cashbox_TabPage.Controls.Add(this.Cashbox_DataGridView);
             this.Cashbox_TabPage.Location = new System.Drawing.Point(4, 34);
             this.Cashbox_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.Cashbox_TabPage.Name = "Cashbox_TabPage";
@@ -5847,38 +5873,6 @@
             this.Cashbox_OtherQuery_Label.TabIndex = 0;
             this.Cashbox_OtherQuery_Label.Text = "類型:";
             // 
-            // Cashbox_DataGridView
-            // 
-            this.Cashbox_DataGridView.AllowUserToAddRows = false;
-            this.Cashbox_DataGridView.AllowUserToDeleteRows = false;
-            this.Cashbox_DataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            this.Cashbox_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
-            this.Cashbox_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Cashbox_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
-            this.Cashbox_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Cashbox_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.Cashbox_DataGridView.EnableHeadersVisualStyles = false;
-            this.Cashbox_DataGridView.Location = new System.Drawing.Point(22, 365);
-            this.Cashbox_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
-            this.Cashbox_DataGridView.Name = "Cashbox_DataGridView";
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle12;
-            this.Cashbox_DataGridView.RowTemplate.Height = 27;
-            this.Cashbox_DataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Cashbox_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Cashbox_DataGridView.Size = new System.Drawing.Size(952, 296);
-            this.Cashbox_DataGridView.StandardTab = true;
-            this.Cashbox_DataGridView.TabIndex = 5;
-            this.Cashbox_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Cashbox_DataGridView_CellFormatting);
-            // 
             // Cashbox_QueryStatus_GroupBox
             // 
             this.Cashbox_QueryStatus_GroupBox.Controls.Add(this.Cashbox_EditMode_CheckBox);
@@ -5906,6 +5900,7 @@
             this.Cashbox_EditMode_CheckBox.Text = "編輯模式";
             this.Cashbox_EditMode_CheckBox.UseVisualStyleBackColor = true;
             this.Cashbox_EditMode_CheckBox.Visible = false;
+            this.Cashbox_EditMode_CheckBox.CheckedChanged += new System.EventHandler(this.Cashbox_EditMode_CheckBox_CheckedChanged);
             // 
             // Cashbox_QueryStatus_Label
             // 
@@ -6111,6 +6106,195 @@
             this.Cashbox_QueryValue_ComboBox.Size = new System.Drawing.Size(232, 30);
             this.Cashbox_QueryValue_ComboBox.TabIndex = 6;
             this.Cashbox_QueryValue_ComboBox.Visible = false;
+            // 
+            // Cashbox_Edit_GroupBox
+            // 
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongCreatDate_DateTimePicker);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditApplyChanges_Button);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongCreatDate_Label);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongSongName_TextBox);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongSongName_Label);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongSinger_TextBox);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongSinger_Label);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongLang_ComboBox);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongLang_Label);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongId_TextBox);
+            this.Cashbox_Edit_GroupBox.Controls.Add(this.Cashbox_EditSongId_Label);
+            this.Cashbox_Edit_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_Edit_GroupBox.Location = new System.Drawing.Point(22, 354);
+            this.Cashbox_Edit_GroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.Cashbox_Edit_GroupBox.Name = "Cashbox_Edit_GroupBox";
+            this.Cashbox_Edit_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.Cashbox_Edit_GroupBox.Size = new System.Drawing.Size(952, 308);
+            this.Cashbox_Edit_GroupBox.TabIndex = 8;
+            this.Cashbox_Edit_GroupBox.TabStop = false;
+            this.Cashbox_Edit_GroupBox.Text = "歌曲編輯";
+            this.Cashbox_Edit_GroupBox.Visible = false;
+            // 
+            // Cashbox_EditSongCreatDate_DateTimePicker
+            // 
+            this.Cashbox_EditSongCreatDate_DateTimePicker.CustomFormat = "yyyy/MM/dd";
+            this.Cashbox_EditSongCreatDate_DateTimePicker.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongCreatDate_DateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.Cashbox_EditSongCreatDate_DateTimePicker.Location = new System.Drawing.Point(580, 32);
+            this.Cashbox_EditSongCreatDate_DateTimePicker.Margin = new System.Windows.Forms.Padding(6, 2, 6, 8);
+            this.Cashbox_EditSongCreatDate_DateTimePicker.Name = "Cashbox_EditSongCreatDate_DateTimePicker";
+            this.Cashbox_EditSongCreatDate_DateTimePicker.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_EditSongCreatDate_DateTimePicker.TabIndex = 5;
+            this.Cashbox_EditSongCreatDate_DateTimePicker.ValueChanged += new System.EventHandler(this.Cashbox_EditSongCreatDate_DateTimePicker_ValueChanged);
+            // 
+            // Cashbox_EditApplyChanges_Button
+            // 
+            this.Cashbox_EditApplyChanges_Button.AutoSize = true;
+            this.Cashbox_EditApplyChanges_Button.Enabled = false;
+            this.Cashbox_EditApplyChanges_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditApplyChanges_Button.Location = new System.Drawing.Point(817, 260);
+            this.Cashbox_EditApplyChanges_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 8);
+            this.Cashbox_EditApplyChanges_Button.Name = "Cashbox_EditApplyChanges_Button";
+            this.Cashbox_EditApplyChanges_Button.Size = new System.Drawing.Size(120, 35);
+            this.Cashbox_EditApplyChanges_Button.TabIndex = 10;
+            this.Cashbox_EditApplyChanges_Button.Text = "套用變更(&A)";
+            this.Cashbox_EditApplyChanges_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_EditApplyChanges_Button.Click += new System.EventHandler(this.Cashbox_EditApplyChanges_Button_Click);
+            // 
+            // Cashbox_EditSongCreatDate_Label
+            // 
+            this.Cashbox_EditSongCreatDate_Label.AutoSize = true;
+            this.Cashbox_EditSongCreatDate_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongCreatDate_Label.Location = new System.Drawing.Point(486, 36);
+            this.Cashbox_EditSongCreatDate_Label.Margin = new System.Windows.Forms.Padding(6, 6, 6, 12);
+            this.Cashbox_EditSongCreatDate_Label.Name = "Cashbox_EditSongCreatDate_Label";
+            this.Cashbox_EditSongCreatDate_Label.Size = new System.Drawing.Size(82, 22);
+            this.Cashbox_EditSongCreatDate_Label.TabIndex = 4;
+            this.Cashbox_EditSongCreatDate_Label.Text = "加歌日期:";
+            // 
+            // Cashbox_EditSongSongName_TextBox
+            // 
+            this.Cashbox_EditSongSongName_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Cashbox_EditSongSongName_TextBox.Location = new System.Drawing.Point(110, 124);
+            this.Cashbox_EditSongSongName_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.Cashbox_EditSongSongName_TextBox.MaxLength = 80;
+            this.Cashbox_EditSongSongName_TextBox.Name = "Cashbox_EditSongSongName_TextBox";
+            this.Cashbox_EditSongSongName_TextBox.Size = new System.Drawing.Size(578, 30);
+            this.Cashbox_EditSongSongName_TextBox.TabIndex = 9;
+            this.Cashbox_EditSongSongName_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_TextBox_KeyPress);
+            this.Cashbox_EditSongSongName_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            // 
+            // Cashbox_EditSongSongName_Label
+            // 
+            this.Cashbox_EditSongSongName_Label.AutoSize = true;
+            this.Cashbox_EditSongSongName_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongSongName_Label.Location = new System.Drawing.Point(16, 128);
+            this.Cashbox_EditSongSongName_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.Cashbox_EditSongSongName_Label.Name = "Cashbox_EditSongSongName_Label";
+            this.Cashbox_EditSongSongName_Label.Size = new System.Drawing.Size(82, 22);
+            this.Cashbox_EditSongSongName_Label.TabIndex = 8;
+            this.Cashbox_EditSongSongName_Label.Text = "歌曲名稱:";
+            // 
+            // Cashbox_EditSongSinger_TextBox
+            // 
+            this.Cashbox_EditSongSinger_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Cashbox_EditSongSinger_TextBox.Location = new System.Drawing.Point(110, 78);
+            this.Cashbox_EditSongSinger_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.Cashbox_EditSongSinger_TextBox.MaxLength = 60;
+            this.Cashbox_EditSongSinger_TextBox.Name = "Cashbox_EditSongSinger_TextBox";
+            this.Cashbox_EditSongSinger_TextBox.Size = new System.Drawing.Size(364, 30);
+            this.Cashbox_EditSongSinger_TextBox.TabIndex = 7;
+            this.Cashbox_EditSongSinger_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_TextBox_KeyPress);
+            this.Cashbox_EditSongSinger_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.Cashbox_EditSongSinger_TextBox.Validated += new System.EventHandler(this.Cashbox_EditSongSinger_TextBox_Validated);
+            // 
+            // Cashbox_EditSongSinger_Label
+            // 
+            this.Cashbox_EditSongSinger_Label.AutoSize = true;
+            this.Cashbox_EditSongSinger_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongSinger_Label.Location = new System.Drawing.Point(16, 82);
+            this.Cashbox_EditSongSinger_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 12);
+            this.Cashbox_EditSongSinger_Label.Name = "Cashbox_EditSongSinger_Label";
+            this.Cashbox_EditSongSinger_Label.Size = new System.Drawing.Size(82, 22);
+            this.Cashbox_EditSongSinger_Label.TabIndex = 6;
+            this.Cashbox_EditSongSinger_Label.Text = "歌手名稱:";
+            // 
+            // Cashbox_EditSongLang_ComboBox
+            // 
+            this.Cashbox_EditSongLang_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_EditSongLang_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongLang_ComboBox.FormattingEnabled = true;
+            this.Cashbox_EditSongLang_ComboBox.Location = new System.Drawing.Point(324, 32);
+            this.Cashbox_EditSongLang_ComboBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 8);
+            this.Cashbox_EditSongLang_ComboBox.Name = "Cashbox_EditSongLang_ComboBox";
+            this.Cashbox_EditSongLang_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_EditSongLang_ComboBox.TabIndex = 3;
+            this.Cashbox_EditSongLang_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_EditSongLang_ComboBox_SelectedIndexChanged);
+            // 
+            // Cashbox_EditSongLang_Label
+            // 
+            this.Cashbox_EditSongLang_Label.AutoSize = true;
+            this.Cashbox_EditSongLang_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongLang_Label.Location = new System.Drawing.Point(230, 36);
+            this.Cashbox_EditSongLang_Label.Margin = new System.Windows.Forms.Padding(6, 6, 6, 12);
+            this.Cashbox_EditSongLang_Label.Name = "Cashbox_EditSongLang_Label";
+            this.Cashbox_EditSongLang_Label.Size = new System.Drawing.Size(82, 22);
+            this.Cashbox_EditSongLang_Label.TabIndex = 2;
+            this.Cashbox_EditSongLang_Label.Text = "語系類別:";
+            // 
+            // Cashbox_EditSongId_TextBox
+            // 
+            this.Cashbox_EditSongId_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongId_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Cashbox_EditSongId_TextBox.Location = new System.Drawing.Point(110, 32);
+            this.Cashbox_EditSongId_TextBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 8);
+            this.Cashbox_EditSongId_TextBox.Name = "Cashbox_EditSongId_TextBox";
+            this.Cashbox_EditSongId_TextBox.ReadOnly = true;
+            this.Cashbox_EditSongId_TextBox.Size = new System.Drawing.Size(108, 30);
+            this.Cashbox_EditSongId_TextBox.TabIndex = 1;
+            // 
+            // Cashbox_EditSongId_Label
+            // 
+            this.Cashbox_EditSongId_Label.AutoSize = true;
+            this.Cashbox_EditSongId_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_EditSongId_Label.Location = new System.Drawing.Point(16, 36);
+            this.Cashbox_EditSongId_Label.Margin = new System.Windows.Forms.Padding(6, 6, 6, 12);
+            this.Cashbox_EditSongId_Label.Name = "Cashbox_EditSongId_Label";
+            this.Cashbox_EditSongId_Label.Size = new System.Drawing.Size(82, 22);
+            this.Cashbox_EditSongId_Label.TabIndex = 0;
+            this.Cashbox_EditSongId_Label.Text = "歌曲編號:";
+            // 
+            // Cashbox_DataGridView
+            // 
+            this.Cashbox_DataGridView.AllowUserToAddRows = false;
+            this.Cashbox_DataGridView.AllowUserToDeleteRows = false;
+            this.Cashbox_DataGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            this.Cashbox_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            this.Cashbox_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Cashbox_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.Cashbox_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Cashbox_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.Cashbox_DataGridView.EnableHeadersVisualStyles = false;
+            this.Cashbox_DataGridView.Location = new System.Drawing.Point(22, 365);
+            this.Cashbox_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
+            this.Cashbox_DataGridView.Name = "Cashbox_DataGridView";
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            this.Cashbox_DataGridView.RowTemplate.Height = 27;
+            this.Cashbox_DataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.Cashbox_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.Cashbox_DataGridView.Size = new System.Drawing.Size(952, 296);
+            this.Cashbox_DataGridView.StandardTab = true;
+            this.Cashbox_DataGridView.TabIndex = 5;
+            this.Cashbox_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Cashbox_DataGridView_CellFormatting);
+            this.Cashbox_DataGridView.SelectionChanged += new System.EventHandler(this.Cashbox_DataGridView_SelectionChanged);
+            this.Cashbox_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cashbox_DataGridView_MouseUp);
             // 
             // MainCfg_TabPage
             // 
@@ -7063,18 +7247,6 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
-            // SingerMgr_SingerLastName_Button
-            // 
-            this.SingerMgr_SingerLastName_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_SingerLastName_Button.Location = new System.Drawing.Point(316, 90);
-            this.SingerMgr_SingerLastName_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 18);
-            this.SingerMgr_SingerLastName_Button.Name = "SingerMgr_SingerLastName_Button";
-            this.SingerMgr_SingerLastName_Button.Size = new System.Drawing.Size(136, 32);
-            this.SingerMgr_SingerLastName_Button.TabIndex = 5;
-            this.SingerMgr_SingerLastName_Button.Text = "重建歌星姓氏";
-            this.SingerMgr_SingerLastName_Button.UseVisualStyleBackColor = true;
-            this.SingerMgr_SingerLastName_Button.Click += new System.EventHandler(this.SingerMgr_SingerLastName_Button_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -7182,12 +7354,14 @@
             this.Cashbox_UpdDate_GroupBox.PerformLayout();
             this.Cashbox_OtherQuery_GroupBox.ResumeLayout(false);
             this.Cashbox_OtherQuery_GroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).EndInit();
             this.Cashbox_QueryStatus_GroupBox.ResumeLayout(false);
             this.Cashbox_QueryStatus_GroupBox.PerformLayout();
             this.Cashbox_Maintenance_GroupBox.ResumeLayout(false);
             this.Cashbox_Query_GroupBox.ResumeLayout(false);
             this.Cashbox_Query_GroupBox.PerformLayout();
+            this.Cashbox_Edit_GroupBox.ResumeLayout(false);
+            this.Cashbox_Edit_GroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).EndInit();
             this.MainCfg_TabPage.ResumeLayout(false);
             this.MainCfg_Tooltip_GroupBox.ResumeLayout(false);
             this.MainCfg_General_ＧroupBox.ResumeLayout(false);
@@ -7718,6 +7892,18 @@
         private System.Windows.Forms.ComboBox SingerMgr_SingerLastName_ComboBox;
         private System.Windows.Forms.Label SingerMgr_SingerLastName_Label;
         private System.Windows.Forms.Button SingerMgr_SingerLastName_Button;
+        private System.Windows.Forms.GroupBox Cashbox_Edit_GroupBox;
+        private System.Windows.Forms.DateTimePicker Cashbox_EditSongCreatDate_DateTimePicker;
+        private System.Windows.Forms.Button Cashbox_EditApplyChanges_Button;
+        private System.Windows.Forms.Label Cashbox_EditSongCreatDate_Label;
+        private System.Windows.Forms.TextBox Cashbox_EditSongSongName_TextBox;
+        private System.Windows.Forms.Label Cashbox_EditSongSongName_Label;
+        private System.Windows.Forms.TextBox Cashbox_EditSongSinger_TextBox;
+        private System.Windows.Forms.Label Cashbox_EditSongSinger_Label;
+        private System.Windows.Forms.ComboBox Cashbox_EditSongLang_ComboBox;
+        private System.Windows.Forms.Label Cashbox_EditSongLang_Label;
+        private System.Windows.Forms.TextBox Cashbox_EditSongId_TextBox;
+        private System.Windows.Forms.Label Cashbox_EditSongId_Label;
     }
 }
 

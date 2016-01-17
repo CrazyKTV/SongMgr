@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -50,8 +51,8 @@ namespace CrazyKTV_SongMgr
         private void Debug_CreateTestFileTask()
         {
             DataTable dt = new DataTable();
-            string SongQuerySqlStr = "select Song_Lang, Song_FileName, Song_Path from ktv_Song order by Song_Id";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
+            string SqlStr = "select Song_Lang, Song_FileName, Song_Path from ktv_Song order by Song_Id";
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SqlStr, "");
 
             Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
             {
@@ -617,8 +618,287 @@ namespace CrazyKTV_SongMgr
             WhereValueList.Clear();
         }
         #endif
-        
+
         #endregion
+
+        #region --- Debug 錢櫃資料編輯 ---
+
+        private void Cashbox_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Cashbox_EditMode_CheckBox.Checked == true)
+            {
+                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
+                Cashbox_Edit_GroupBox.Visible = true;
+                Cashbox_Query_GroupBox.Visible = false;
+                Cashbox_OtherQuery_GroupBox.Visible = false;
+                Cashbox_UpdDate_GroupBox.Visible = false;
+                Cashbox_Maintenance_GroupBox.Visible = false;
+
+                Global.CashboxMultiEdit = false;
+                Cashbox_InitializeEditControl();
+
+                int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
+                Cashbox_DataGridView_SelectionChanged(new object(), new EventArgs());
+                if (SelectedRowsCount > 1) Cashbox_DataGridView_MouseUp(new object(), null);
+
+                Cashbox_QueryStatus_Label.Text = "已進入編輯模式...";
+            }
+            else
+            {
+                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
+                Cashbox_EditMode_CheckBox.Enabled = (Cashbox_DataGridView.RowCount == 0) ? false : true;
+                Cashbox_Edit_GroupBox.Visible = false;
+                Cashbox_Query_GroupBox.Visible = true;
+                Cashbox_OtherQuery_GroupBox.Visible = true;
+                Cashbox_UpdDate_GroupBox.Visible = true;
+                Cashbox_Maintenance_GroupBox.Visible = true;
+
+                Cashbox_QueryStatus_Label.Text = "已進入檢視模式...";
+            }
+            Cashbox_DataGridView.Focus();
+            #endif
+        }
+
+        private void Cashbox_EditSongLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Cashbox_EditMode_CheckBox.Checked == true)
+            {
+                if (Cashbox_EditSongLang_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
+                {
+                    if (Global.CashboxDataGridViewSelectList.Count <= 0) return;
+                    int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
+
+                    if (SelectedRowsCount > 1)
+                    {
+                        Global.CashboxMultiEditUpdateList[0] = (Cashbox_EditSongLang_ComboBox.Text != "不變更") ? true : false;
+                    }
+                }
+            }
+            #endif
+        }
+
+        private void Cashbox_EditSongCreatDate_DateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Cashbox_EditMode_CheckBox.Checked == true)
+            {
+                if (Global.CashboxDataGridViewSelectList.Count <= 0) return;
+                int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
+
+                if (SelectedRowsCount > 1)
+                {
+                    Global.CashboxMultiEditUpdateList[1] = true;
+                }
+            }
+            #endif
+        }
+
+        private void Cashbox_EditSongSinger_TextBox_Validated(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Cashbox_EditMode_CheckBox.Checked == true)
+            {
+                if (Global.CashboxDataGridViewSelectList.Count <= 0) return;
+                int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
+                string SongSinger = Cashbox_EditSongSinger_TextBox.Text;
+
+                if (SelectedRowsCount > 1)
+                {
+                    Global.CashboxMultiEditUpdateList[2] = (Cashbox_EditSongSinger_TextBox.Text != "") ? true : false;
+                }
+            }
+            #endif
+        }
+
+        private void Cashbox_EditApplyChanges_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Cashbox_EditMode_CheckBox.Checked == true)
+            {
+                if (Global.CashboxDataGridViewSelectList.Count <= 0) return;
+                int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
+
+                List<string> UpdateList = new List<string>();
+
+                Common_SwitchSetUI(false);
+
+                if (SelectedRowsCount > 1)
+                {
+                    foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
+                    {
+                        if (Global.CashboxMultiEditUpdateList[0])
+                        {
+                            string SongLang = ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                            if (row.Cells["Song_Lang"].Value.ToString() != SongLang)
+                            {
+                                row.Cells["Song_Lang"].Value = SongLang;
+                            }
+                        }
+
+                        if (Global.CashboxMultiEditUpdateList[1])
+                        {
+                            string SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString();
+                            row.Cells["Song_CreatDate"].Value = SongCreatDate;
+                        }
+
+                        if (Global.CashboxMultiEditUpdateList[2])
+                        {
+                            string SongSinger = Cashbox_EditSongSinger_TextBox.Text;
+                            row.Cells["Song_Singer"].Value = SongSinger;
+                        }
+
+                        UpdateList.Add(row.Cells["Cashbox_Id"].Value.ToString() + "|" + row.Cells["Song_Lang"].Value.ToString() + "|" + row.Cells["Song_SongName"].Value.ToString() + "|" + row.Cells["Song_Singer"].Value.ToString() + "|" + row.Cells["Song_CreatDate"].Value.ToString());
+                    }
+                }
+                else if (SelectedRowsCount == 1)
+                {
+                    foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
+                    {
+                        row.Cells["Song_Lang"].Value = ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+
+                        string SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString();
+                        row.Cells["Song_CreatDate"].Value = SongCreatDate;
+
+                        row.Cells["Song_Singer"].Value = Cashbox_EditSongSinger_TextBox.Text;
+
+                        string SongSongName = Cashbox_EditSongSongName_TextBox.Text;
+                        row.Cells["Song_SongName"].Value = SongSongName;
+
+                        UpdateList.Add(row.Cells["Cashbox_Id"].Value.ToString() + "|" + row.Cells["Song_Lang"].Value.ToString() + "|" + row.Cells["Song_SongName"].Value.ToString() + "|" + row.Cells["Song_Singer"].Value.ToString() + "|" + row.Cells["Song_CreatDate"].Value.ToString());
+                    }
+                }
+
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox_QueryStatus_Label.Text = "正在更新錢櫃資料,請稍待...";
+
+                var tasks = new List<Task>();
+                tasks.Add(Task.Factory.StartNew(() => Cashbox_SongUpdate(UpdateList)));
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆。";
+                        Common_SwitchSetUI(true);
+                    });
+                    UpdateList.Clear();
+                });
+            }
+            #endif
+        }
+
+        private void Cashbox_SongUpdate(List<string> UpdateList)
+        {
+            #if DEBUG
+            if (UpdateList.Count <= 0) return;
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+            {
+                string sqlUpdStr = "Cashbox_Id = @CashboxId, Song_Lang = @SongLang, Song_SongName = @SongSongName, Song_Singer = @SongSinger, Song_CreatDate = @SongCreatDate";
+                string UpdSqlStr = "update ktv_Cashbox set " + sqlUpdStr + " where Cashbox_Id = @OldCashboxId";
+
+                OleDbCommand UpdCmd = new OleDbCommand(UpdSqlStr, conn);
+                List<string> valuelist;
+
+                foreach (string SongData in UpdateList)
+                {
+                    valuelist = new List<string>(SongData.Split('|'));
+
+                    UpdCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
+                    UpdCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
+                    UpdCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
+                    UpdCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                    UpdCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
+                    UpdCmd.Parameters.AddWithValue("@OldCashboxId", valuelist[0]);
+
+                    try
+                    {
+                        UpdCmd.ExecuteNonQuery();
+                        Global.TotalList[0]++;
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Cashbox_QueryStatus_Label.Text = "正在更新第 " + Global.TotalList[0] + " 首歌曲,請稍待...";
+                        });
+                    }
+                    catch
+                    {
+                        Global.TotalList[1]++;
+                        Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                        Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "更新資料時發生未知的錯誤: " + SongData;
+                        Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                    }
+                    UpdCmd.Parameters.Clear();
+                    valuelist.Clear();
+                }
+            }
+            #endif
+        }
+
+        private void Cashbox_InitializeEditControl()
+        {
+            #if DEBUG
+            Cashbox_EditSongId_TextBox.Text = "";
+            Cashbox_EditSongLang_ComboBox.SelectedValue = 1;
+            Cashbox_EditSongCreatDate_DateTimePicker.Value = DateTime.Now;
+            Cashbox_EditSongSinger_TextBox.Text = "";
+            Cashbox_EditSongSongName_TextBox.Text = "";
+
+            Cashbox_EditSongId_TextBox.Enabled = false;
+            Cashbox_EditSongLang_ComboBox.Enabled = false;
+            Cashbox_EditSongCreatDate_DateTimePicker.Enabled = false;
+            Cashbox_EditSongSinger_TextBox.Enabled = false;
+            Cashbox_EditSongSongName_TextBox.Enabled = false;
+            Cashbox_EditApplyChanges_Button.Enabled = false;
+            #endif
+        }
+
+        private void Cashbox_GetSongEditComboBoxList(bool MultiEdit)
+        {
+            #if DEBUG
+            Global.CashboxMultiEdit = MultiEdit;
+            Cashbox_EditSongLang_ComboBox.DataSource = Debug.GetEditSongLangList(MultiEdit);
+            Cashbox_EditSongLang_ComboBox.DisplayMember = "Display";
+            Cashbox_EditSongLang_ComboBox.ValueMember = "Value";
+            #endif
+        }
+
+        #endregion
+
+    }
+
+
+    class Debug
+    {
+        public static DataTable GetEditSongLangList(bool MultiEdit)
+        {
+            #if DEBUG
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                if (MultiEdit)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = "不變更";
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+
+                foreach (string str in Global.CashboxSongLangList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
+            }
+            #endif
+        }
+
+
 
     }
 }
