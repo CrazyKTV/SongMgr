@@ -1040,7 +1040,7 @@ namespace CrazyKTV_SongMgr
                                 string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
 
-                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0)
+                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0)
                                 {
                                     lock (LockThis) { Global.TotalList[2]++; }
 
