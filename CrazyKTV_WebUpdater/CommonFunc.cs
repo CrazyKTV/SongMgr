@@ -110,6 +110,7 @@ namespace CrazyKTV_WebUpdater
             catch
             {
                 MessageBox.Show("【" + Path.GetFileName(VersionFile) + "】設定檔內容有錯誤,請刪除後再執行。");
+                Application.Exit();
             }
             return VerValueListList;
         }
