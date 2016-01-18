@@ -76,7 +76,6 @@
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.progressBar2);
             this.Controls.Add(this.progressBar1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
