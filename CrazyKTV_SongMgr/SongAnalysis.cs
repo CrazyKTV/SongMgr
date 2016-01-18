@@ -718,8 +718,18 @@ namespace CrazyKTV_SongMgr
                 SongLang = CommonFunc.GetSongLangStr(int.Parse(Global.SongAddDefaultSongLang) - 1, 0, "null");
 
                 string SongData = SongSinger.ToLower() + "|" + SongSongName.ToLower();
+                int SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(SongData) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(SongData) : -1;
 
-                if (SongSinger.Contains("&")) //合唱歌曲
+                if (SongDataIndex < 0  && !SongSinger.Contains("&"))
+                {
+                    List<string> SongDataList = new List<string>() { SongSinger.ToLower(), SongSongName.ToLower() };
+                    if (Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(SongDataList.ToArray())) != null)
+                    {
+                        SongDataIndex = Global.CashboxSongDataLowCaseList.IndexOf(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(SongDataList.ToArray())));
+                    }
+                    SongDataList.Clear();
+                }
+                else //合唱歌曲
                 {
                     List<string> ChorusSongDatalist = new List<string>() { SongSongName.ToLower() };
 
@@ -755,13 +765,13 @@ namespace CrazyKTV_SongMgr
 
                     if (Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
                     {
-                        SongData = Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray()));
+                        SongDataIndex = Global.CashboxSongDataLowCaseList.IndexOf(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())));
                     }
                 }
 
-                if (Global.CashboxSongDataLowCaseList.IndexOf(SongData) >= 0)
+                if (SongDataIndex >= 0)
                 {
-                    string CashboxSongDataLang = Global.CashboxSongDataLangList[Global.CashboxSongDataLowCaseList.IndexOf(SongData)];
+                    string CashboxSongDataLang = Global.CashboxSongDataLangList[SongDataIndex];
                     if (Global.CrazyktvSongLangList.IndexOf(CashboxSongDataLang) >= 0)
                     {
                         SongLang = Global.CrazyktvSongLangList[Global.CrazyktvSongLangList.IndexOf(CashboxSongDataLang)];
