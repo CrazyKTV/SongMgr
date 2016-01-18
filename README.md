@@ -6,7 +6,7 @@ CrazyKTV 加歌程式是基於 CrazyKTV 卡拉OK點歌軟體的歌庫管理工�
 ## 功能特色
 * 在操作上衍生了原本 GodLiu 加歌程式的使用習慣,讓舊用戶無需學習即能輕易上手。
 * 可以自訂加歌時所限定的影音檔格式,無需擔心自訂格式或未來新穎影音格式的支援。
-* 擁有『自動搬移/自動複製/不搬移不複製/歌庫監視』4種加歌模式,以滿足用戶的需求。
+* 擁有『自動搬移/自動複製/不搬移不複製/歌庫監視』4種加歌模式,充分滿足用戶的需求。
 * 歌曲編號支援5碼及6碼編碼位數,不會產生歌曲編號不夠用的問題。
 * 支援加入自訂的歌曲類別,用以注釋歌曲或分類不同版本的同一首歌。
 * 加歌速度在目前 CrazyKTV 相關加歌程式中最快。
@@ -33,7 +33,7 @@ Windows 8 內建 .NET 4.0 版本,你也可以升級為 [Microsoft .NET Framework
 Windows 10 內建 .NET 4.6 版本,你也可以升級為 [Microsoft .NET Framework 4.6.1](https://www.microsoft.com/zh-TW/download/details.aspx?id=49981) 版本。
 
 ## 下載與使用
-* 下載位址: [CrazyKTV_WebUpdater.exe](https://github.com/KenLuoTW/CrazyKTVSongMgr/releases/download/v1.3.3/CrazyKTV_WebUpdater.exe)
+* 下載位址: [CrazyKTV_WebUpdater.exe](https://github.com/KenLuoTW/CrazyKTVSongMgr/raw/master/CrazyKTV_WebUpdater/ReleaseFile/CrazyKTV_WebUpdater.exe)
 
 **使用說明:**
 
