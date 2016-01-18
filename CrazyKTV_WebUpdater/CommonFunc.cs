@@ -50,6 +50,7 @@ namespace CrazyKTV_WebUpdater
                 {
                     Value.Add(childNode.Element("Ver").Value);
                     Value.Add(childNode.Element("Url").Value);
+                    Value.Add(childNode.Element("Path").Value);
                     Value.Add(childNode.Element("Desc").Value);
                 }
             }
@@ -60,7 +61,7 @@ namespace CrazyKTV_WebUpdater
             return Value;
         }
 
-        public static void SaveVersionXmlFile(string VersionFile, string FileName, string FileVer, string FileUrl, string FileDesc)
+        public static void SaveVersionXmlFile(string VersionFile, string FileName, string FileVer, string FileUrl, string FilePath, string FileDesc)
         {
             XDocument xmldoc = XDocument.Load(VersionFile);
             XElement rootElement = xmldoc.XPathSelectElement("Configeruation");
@@ -75,12 +76,13 @@ namespace CrazyKTV_WebUpdater
                 {
                     childNode.Element("Ver").Value = FileVer;
                     childNode.Element("Url").Value = FileUrl;
+                    childNode.Element("Path").Value = FilePath;
                     childNode.Element("Desc").Value = FileDesc;
                 }
             }
             else
             {
-                XElement AddNode = new XElement("File", new XAttribute("Name", FileName), new XElement("Ver", FileVer), new XElement("Url", FileUrl), new XElement("Desc", FileDesc));
+                XElement AddNode = new XElement("File", new XAttribute("Name", FileName), new XElement("Ver", FileVer), new XElement("Url", FileUrl), new XElement("Path", FilePath), new XElement("Desc", FileDesc));
                 rootElement.Add(AddNode);
             }
             xmldoc.Save(VersionFile);
@@ -100,6 +102,7 @@ namespace CrazyKTV_WebUpdater
                     list.Add(childNode.Attribute("Name").Value);
                     list.Add(childNode.Element("Ver").Value);
                     list.Add(childNode.Element("Url").Value);
+                    list.Add(childNode.Element("Path").Value);
                     list.Add(childNode.Element("Desc").Value);
                     VerValueListList.Add(list);
                 }

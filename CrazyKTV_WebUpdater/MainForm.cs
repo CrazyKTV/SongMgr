@@ -21,7 +21,7 @@ namespace CrazyKTV_WebUpdater
             if (!File.Exists(Global.WebUpdaterFile))
             {
                 CommonFunc.CreateVersionXmlFile(Global.WebUpdaterFile);
-                CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, "VersionInfo", "20150831001", "", "版本日期及資訊");
+                CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, "VersionInfo", "20150831001", "", "", "版本日期及資訊");
                 RebuildFile = true;
             }
             Global.LocaleVerList = CommonFunc.ScanVersionXmlFile(Global.WebUpdaterFile);
@@ -98,11 +98,26 @@ namespace CrazyKTV_WebUpdater
                         {
                             label1.Text = "正在下載 " + list[0] + " 更新檔案...";
                         });
-                        CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, list[0], list[1], list[2], list[3]);
+                        CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, list[0], list[1], list[2], list[3], list[4]);
                         if (list[0] != "VersionInfo")
                         {
-                            if (list[0] == "CrazySong.mdb" && File.Exists(Application.StartupPath + @"\CrazySong.mdb")) list[0] = "CrazySongEmpty.mdb";
-                            DownloadFile(list[0], list[2], true);
+                            if (list[0] == "CrazySong.mdb" && File.Exists(Application.StartupPath + @"\CrazySong.mdb"))
+                            {
+                                list[0] = "CrazySongEmpty.mdb";
+                            }
+                            else
+                            {
+                                if (list[3] == "")
+                                {
+                                    DownloadFile(list[0], list[2], true);
+                                }
+                                else
+                                {
+                                    string FilePath = Application.StartupPath + @"\" + list[3];
+                                    if (!Directory.Exists(FilePath)) Directory.CreateDirectory(FilePath);
+                                    DownloadFile(FilePath + @"\" + list[0], list[2], true);
+                                }
+                            }
                         }
                         else
                         {
@@ -112,15 +127,31 @@ namespace CrazyKTV_WebUpdater
                 }
                 else
                 {
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         label1.Text = "正在下載 " + list[0] + " 更新檔案...";
                     });
-                    CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, list[0], list[1], list[2], list[3]);
+
+                    CommonFunc.SaveVersionXmlFile(Global.WebUpdaterFile, list[0], list[1], list[2], list[3], list[4]);
                     if (list[0] != "VersionInfo")
                     {
-                        if (list[0] == "CrazySong.mdb" && File.Exists(Application.StartupPath + @"\CrazySong.mdb")) list[0] = "CrazySongEmpty.mdb";
-                        DownloadFile(list[0], list[2], true);
+                        if (list[0] == "CrazySong.mdb" && File.Exists(Application.StartupPath + @"\CrazySong.mdb"))
+                        {
+                            list[0] = "CrazySongEmpty.mdb";
+                        }
+                        else
+                        {
+                            if (list[3] == "")
+                            {
+                                DownloadFile(list[0], list[2], true);
+                            }
+                            else
+                            {
+                                string FilePath = Application.StartupPath + @"\" + list[3];
+                                if (!Directory.Exists(FilePath)) Directory.CreateDirectory(FilePath);
+                                DownloadFile(FilePath + @"\" + list[0], list[2], true);
+                            }
+                        }
                     }
                 }
             }
