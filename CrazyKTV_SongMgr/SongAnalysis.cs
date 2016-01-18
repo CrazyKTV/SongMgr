@@ -722,12 +722,7 @@ namespace CrazyKTV_SongMgr
 
                 if (SongDataIndex < 0  && !SongSinger.Contains("&"))
                 {
-                    List<string> SongDataList = new List<string>() { SongSinger.ToLower(), SongSongName.ToLower() };
-                    if (Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(SongDataList.ToArray())) != null)
-                    {
-                        SongDataIndex = Global.CashboxSongDataLowCaseList.IndexOf(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(SongDataList.ToArray())));
-                    }
-                    SongDataList.Clear();
+                    SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(SongData) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(SongData) : -1;
                 }
                 else //合唱歌曲
                 {
@@ -767,6 +762,7 @@ namespace CrazyKTV_SongMgr
                     {
                         SongDataIndex = Global.CashboxSongDataLowCaseList.IndexOf(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())));
                     }
+                    ChorusSongDatalist.Clear();
                 }
 
                 if (SongDataIndex >= 0)

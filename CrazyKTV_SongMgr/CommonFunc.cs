@@ -474,6 +474,7 @@ namespace CrazyKTV_SongMgr
                 {
                     Global.CashboxSongDataLangList = new List<string>();
                     Global.CashboxSongDataLowCaseList = new List<string>();
+                    Global.CashboxSongDataNonBracketStrList = new List<string>();
 
                     string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Cashbox order by Song_Lang";
                     using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
@@ -482,6 +483,7 @@ namespace CrazyKTV_SongMgr
                         {
                             Global.CashboxSongDataLangList.Add(row["Song_Lang"].ToString());
                             Global.CashboxSongDataLowCaseList.Add(row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
+                            Global.CashboxSongDataNonBracketStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""));
                         }
                     }
                 }

@@ -125,6 +125,7 @@ namespace CrazyKTV_SongMgr
 
         public static List<string> CashboxSongDataLangList = new List<string>();
         public static List<string> CashboxSongDataLowCaseList = new List<string>();
+        public static List<string> CashboxSongDataNonBracketStrList = new List<string>();
 
         public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
         public static List<string> SongDBConvValueList = new List<string>();
