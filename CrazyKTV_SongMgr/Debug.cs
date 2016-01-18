@@ -833,6 +833,7 @@ namespace CrazyKTV_SongMgr
                     UpdCmd.Parameters.Clear();
                     valuelist.Clear();
                 }
+                Common_InitializeSongData(false, false, true);
             }
             #endif
         }
