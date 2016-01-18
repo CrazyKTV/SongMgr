@@ -5930,7 +5930,7 @@
             // Cashbox_ApplyCashboxId_Button
             // 
             this.Cashbox_ApplyCashboxId_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_ApplyCashboxId_Button.Location = new System.Drawing.Point(16, 39);
+            this.Cashbox_ApplyCashboxId_Button.Location = new System.Drawing.Point(302, 39);
             this.Cashbox_ApplyCashboxId_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Cashbox_ApplyCashboxId_Button.Name = "Cashbox_ApplyCashboxId_Button";
             this.Cashbox_ApplyCashboxId_Button.Size = new System.Drawing.Size(149, 32);
