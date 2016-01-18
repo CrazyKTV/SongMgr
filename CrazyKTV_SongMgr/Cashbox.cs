@@ -511,9 +511,21 @@ namespace CrazyKTV_SongMgr
                                         {
                                             foreach (DataRow row in query)
                                             {
-                                                string SongData = "";
+                                                string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
 
-                                                if (row["Song_Singer"].ToString().Contains("&")) //合唱歌曲
+                                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0)
+                                                {
+                                                    lock (LockThis)
+                                                    {
+                                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                    }
+
+                                                    this.BeginInvoke((Action)delegate()
+                                                    {
+                                                        Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
+                                                    });
+                                                }
+                                                else if (row["Song_Singer"].ToString().Contains("&")) //合唱歌曲
                                                 {
                                                     List<string> ChorusSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
 
@@ -549,33 +561,22 @@ namespace CrazyKTV_SongMgr
 
                                                     if (Cashbox.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
                                                     {
-                                                        lock (LockThis)
+                                                        List<string> list = new List<string>(Cashbox.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())).Split('|'));
+                                                        if (list[2] == row["Song_SongName"].ToString().ToLower())
                                                         {
-                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                            lock (LockThis)
+                                                            {
+                                                                RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                            }
+
+                                                            this.BeginInvoke((Action)delegate()
+                                                            {
+                                                                Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
+                                                            });
                                                         }
-
-                                                        this.BeginInvoke((Action)delegate()
-                                                        {
-                                                            Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
-                                                        });
+                                                        list.Clear();
                                                     }
-                                                }
-                                                else // 不是合唱歌曲
-                                                {
-                                                    SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
-
-                                                    if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0)
-                                                    {
-                                                        lock (LockThis)
-                                                        {
-                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                                        }
-
-                                                        this.BeginInvoke((Action)delegate()
-                                                        {
-                                                            Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + RemoveRowsIdxlist.Count + " 首錢櫃歌曲...";
-                                                        });
-                                                    }
+                                                    ChorusSongDatalist.Clear();
                                                 }
                                             }
                                         }
@@ -1039,21 +1040,72 @@ namespace CrazyKTV_SongMgr
                             {
                                 string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+                                int SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(SongData) : -1;
 
-                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0)
+                                if (SongDataIndex < 0 && !row["Song_Singer"].ToString().ToLower().Contains("&"))
+                                {
+                                    SongDataIndex = (Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0) ? Cashbox.SongDataNonBracketStrList.IndexOf(SongData) : -1;
+                                }
+                                else if (row["Song_Singer"].ToString().ToLower().Contains("&"))  //合唱歌曲
+                                {
+                                    List<string> ChorusSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
+
+                                    // 處理合唱歌曲中的特殊歌手名稱
+                                    string ChorusSongSingerName = row["Song_Singer"].ToString().ToLower();
+                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+
+                                    foreach (string SpecialSingerName in SpecialStrlist)
+                                    {
+                                        Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                                        if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                                        {
+                                            if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
+                                            ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                        }
+                                    }
+                                    SpecialStrlist.Clear();
+
+                                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                    if (r.IsMatch(ChorusSongSingerName))
+                                    {
+                                        string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
+                                        foreach (string str in singers)
+                                        {
+                                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                            if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (ChorusSongDatalist.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSongDatalist.Add(ChorusSongSingerName.ToLower());
+                                    }
+
+                                    if (Cashbox.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
+                                    {
+                                        List<string> list = new List<string>(Cashbox.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())).Split('|'));
+                                        if (list[2] == row["Song_SongName"].ToString().ToLower())
+                                        {
+                                            SongDataIndex = Cashbox.SongDataLowCaseList.IndexOf(Cashbox.SongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())));
+                                        }
+                                        list.Clear();
+                                    }
+                                    ChorusSongDatalist.Clear();
+                                }
+
+                                if (SongDataIndex >= 0)
                                 {
                                     lock (LockThis) { Global.TotalList[2]++; }
 
-                                    if (CashboxId != Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)])
+                                    if (CashboxId != Cashbox.SongIdList[SongDataIndex])
                                     {
-                                        List<string> list = new List<string>(Cashbox.SongDataList[Cashbox.SongDataLowCaseList.IndexOf(SongData)].Split('|'));
+                                        List<string> list = new List<string>(Cashbox.SongDataList[SongDataIndex].Split('|'));
                                         if (Cashbox.SongIdList.IndexOf(CashboxId) >= 0)
                                         {
-                                            lock (LockThis) { ReOldList.Add(CashboxId + "|" + Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)] + "|" + list[0]); }
+                                            lock (LockThis) { ReOldList.Add(CashboxId + "|" + Cashbox.SongIdList[SongDataIndex] + "|" + list[0]); }
                                         }
                                         else
                                         {
-                                            lock (LockThis) { ReNewList.Add(CashboxId + "|" + Cashbox.SongIdList[Cashbox.SongDataLowCaseList.IndexOf(SongData)] + "|" + list[0]); }
+                                            lock (LockThis) { ReNewList.Add(CashboxId + "|" + Cashbox.SongIdList[SongDataIndex] + "|" + list[0]); }
                                         }
                                         list.Clear();
                                     }
@@ -1078,7 +1130,7 @@ namespace CrazyKTV_SongMgr
                     cmd = new OleDbCommand(UpdateSqlStr, conn);
 
                     List<string> valuelist;
-                    foreach (string str in  ReOldList)
+                    foreach (string str in ReOldList)
                     {
                         valuelist = new List<string>(str.Split('|'));
                         string NextSongId = Cashbox.GetNextSongId(valuelist[2]);
