@@ -414,7 +414,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else
                                 {
-                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", ""))
+                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                     {
                                         SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
@@ -466,7 +466,7 @@ namespace CrazyKTV_SongMgr
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
                                         SongID = list[0];
-                                        if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", ""))
+                                        if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", "").ToLower())
                                         {
                                             SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                             Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
@@ -495,7 +495,7 @@ namespace CrazyKTV_SongMgr
                                     }
                                     else // List[0] 不是歌曲編號
                                     {
-                                        if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", ""))
+                                        if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                         {
                                             SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                             Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
@@ -559,7 +559,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else
                                 {
-                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", ""))
+                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                     {
                                         SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
@@ -611,7 +611,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else
                                 {
-                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", ""))
+                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                     {
                                         SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
@@ -654,7 +654,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else
                                 {
-                                    if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", ""))
+                                    if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", "").ToLower())
                                     {
                                         SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                         Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");

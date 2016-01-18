@@ -53,7 +53,6 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-
         #region --- Cashbox 列表選取項目變更事件 ---
 
         private void Cashbox_DataGridView_SelectionChanged(object sender, EventArgs e)
@@ -121,7 +120,6 @@ namespace CrazyKTV_SongMgr
         }
 
         #endregion
-
 
     }
 }

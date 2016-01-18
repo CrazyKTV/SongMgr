@@ -895,6 +895,8 @@ namespace CrazyKTV_SongMgr
                 }
                 return list;
             }
+            #else
+            return null;
             #endif
         }
 
