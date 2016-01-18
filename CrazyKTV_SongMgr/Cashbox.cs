@@ -512,8 +512,9 @@ namespace CrazyKTV_SongMgr
                                             foreach (DataRow row in query)
                                             {
                                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+                                                string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
 
-                                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0)
+                                                if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataLowCaseList.IndexOf(SongDataNonBracket) >= 0)
                                                 {
                                                     lock (LockThis)
                                                     {
@@ -1040,11 +1041,13 @@ namespace CrazyKTV_SongMgr
                             {
                                 string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
+                                string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
+
                                 int SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(SongData) : -1;
 
                                 if (SongDataIndex < 0 && !row["Song_Singer"].ToString().ToLower().Contains("&"))
                                 {
-                                    SongDataIndex = (Cashbox.SongDataNonBracketStrList.IndexOf(SongData) >= 0) ? Cashbox.SongDataNonBracketStrList.IndexOf(SongData) : -1;
+                                    SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(SongDataNonBracket) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(SongDataNonBracket) : -1;
                                 }
                                 else if (row["Song_Singer"].ToString().ToLower().Contains("&"))  //合唱歌曲
                                 {
@@ -1276,14 +1279,12 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongIdList;
         public static List<string> SongDataList;
         public static List<string> SongDataLowCaseList;
-        public static List<string> SongDataNonBracketStrList;
 
         public static void CreateSongDataTable()
         {
             SongIdList = new List<string>();
             SongDataList = new List<string>();
             SongDataLowCaseList = new List<string>();
-            SongDataNonBracketStrList = new List<string>();
 
             string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName from ktv_Song order by Song_Id";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
@@ -1293,7 +1294,6 @@ namespace CrazyKTV_SongMgr
                     SongIdList.Add(row["Song_Id"].ToString());
                     SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString());
                     SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
-                    SongDataNonBracketStrList.Add(row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""));
                 }
             }
         }
@@ -1303,7 +1303,6 @@ namespace CrazyKTV_SongMgr
             SongIdList.Clear();
             SongDataList.Clear();
             SongDataLowCaseList.Clear();
-            SongDataNonBracketStrList.Clear();
             GC.Collect();
         }
 
