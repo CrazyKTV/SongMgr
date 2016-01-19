@@ -120,45 +120,7 @@ namespace CrazyKTV_SongMgr
             string SongTrackStr = "";
             string SongSongTypeStr = "";
 
-            bool ChorusSong = false;
-
-            string SeparateStr = "[-_](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))";
-            string DirStr = Path.GetDirectoryName(file);
-
             List<string> list = new List<string>();
-            list = new List<string>(Regex.Split(DirStr, @"\\", RegexOptions.None));
-
-            foreach (string str in list)
-            {
-                if (SongSingerType != "" && SongSinger != "" && SongLang != "") break;
-                string splitstr = Regex.Replace(str, @"%%|^\s*|\s*$", "");
-
-                // 查看資料夾名稱中有無歌手
-                if (SingerDataLowCaseList.IndexOf(splitstr.ToLower()) >= 0 && Global.SongAddSongIdentificationMode == "1")
-                {
-                    SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
-                    SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
-                }
-
-                // 查看資料夾名稱中有無語系類別
-                if (SongLangKeyWordList.IndexOf(splitstr) >= 0)
-                {
-                    SongLang = GetSongInfo("SongLang", splitstr);
-                    SongLangStr = splitstr;
-                }
-
-                // 查看資料夾名稱中有無歌手類別
-                if (SingerTypeKeyWordList.IndexOf(splitstr) >= 0)
-                {
-                    if (SongSingerType == "" || GetSongInfo("SongSingerType", splitstr) == "3")
-                    {
-                        SongSingerType = GetSongInfo("SongSingerType", splitstr);
-                        SongSingerTypeStr = splitstr;
-                        if (SongSingerType == "3") ChorusSong = true;
-                    }
-                }
-            }
-            list.Clear();
 
             // 從檔案名稱查找歌曲資訊
             string FileStr = Path.GetFileNameWithoutExtension(file);
@@ -188,31 +150,13 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            string FileStrOpti = FileStr;
-            if (SongSingerType != "")
-            {
-                FileStrOpti = Regex.Replace(FileStrOpti, "^" + SongSingerType + "[_-]|[_-]" + SongSingerType + "[_-]|[_-]" + SongSingerType + "$", "_", RegexOptions.IgnoreCase);
-                FileStrOpti = Regex.Replace(FileStrOpti, "^[_]|[_]$", "", RegexOptions.IgnoreCase);
-            }
-
-            if (SongSinger != "")
-            {
-                FileStrOpti = Regex.Replace(FileStrOpti, "^" + SongSinger + "[_-]|[_-]" + SongSinger + "[_-]|[_-]" + SongSinger + "$", "_", RegexOptions.IgnoreCase);
-                FileStrOpti = Regex.Replace(FileStrOpti, "^[_]|[_]$", "", RegexOptions.IgnoreCase);
-            }
-
-            if (SongLang != "")
-            {
-                FileStrOpti = Regex.Replace(FileStrOpti, "^" + SongLang + "[_-]|[_-]" + SongLang + "[_-]|[_-]" + SongLang + "$", "_", RegexOptions.IgnoreCase);
-                FileStrOpti = Regex.Replace(FileStrOpti, "^[_]|[_]$", "", RegexOptions.IgnoreCase);
-            }
-
-            string FileNameRemoveStr = "";
-            List<string> FileNameRemoveList = new List<string>();
             List<string> SongSongTypeList = new List<string>(Global.SongMgrSongType.Split(','));
             List<string> SongSongTypeLowCaseList = SongSongTypeList.ConvertAll(str => str.ToLower());
+            List<string> FileNameRemoveList = new List<string>();
 
-            list = new List<string>(Regex.Split(FileStrOpti, SeparateStr, RegexOptions.None));
+            string SeparateStr = "[-_](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))";
+            list = new List<string>(Regex.Split(FileStr, SeparateStr, RegexOptions.None));
+
             foreach (string str in list)
             {
                 if (SongSingerType != "" && SongSinger != "" && SongLang != "" && SongTrack != "" && SongSongType != "") break;
@@ -224,22 +168,30 @@ namespace CrazyKTV_SongMgr
                     if (SingerDataLowCaseList.IndexOf(splitstr.ToLower()) >= 0)
                     {
                         SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
-                        if (SongSingerType == "" || !ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
+                        if (SongSingerType == "") SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
                     }
+                }
+
+                // 查看檔案名稱中有無歌手類別
+                if (SingerTypeKeyWordList.IndexOf(splitstr) >= 0)
+                {
+                    SongSingerType = GetSongInfo("SongSingerType", splitstr);
+                    SongSingerTypeStr = splitstr;
                 }
 
                 // 括號字串處理
                 MatchCollection matches = Regex.Matches(splitstr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
                 if (matches.Count > 0)
                 {
-                    foreach (Match match in matches)
+                    foreach (Match match in matches) // 比對括號內字串
                     {
                         string MatchStr = Regex.Replace(match.Value, @"^[\{\(\[｛（［【]|[】］）｝\]\)\}]$", "", RegexOptions.IgnoreCase);
-                        if (MatchStr.ContainsAny("_", "-"))
+                        if (MatchStr.ContainsAny("_", "-")) // 括號字串有分隔符號
                         {
                             List<string> BracketStrlist = new List<string>(Regex.Split(MatchStr, SeparateStr, RegexOptions.None));
+                            string FileNameRemoveStr = "";
                             string BracketSeparateStr = (MatchStr.Contains("_")) ? "_" : "-";
-
+                            
                             foreach (string BracketStr in BracketStrlist)
                             {
                                 if (SongLangKeyWordList.IndexOf(BracketStr) >= 0)
@@ -260,12 +212,11 @@ namespace CrazyKTV_SongMgr
                                 else if (BracketStr.ContainsAny("合唱", "對唱"))
                                 {
                                     SongSingerType = "3";
-                                    ChorusSong = true;
                                 }
                             }
                             if (FileNameRemoveStr != "") FileNameRemoveList.Add(FileNameRemoveStr);
                         }
-                        else
+                        else // 括號字串無分隔符號
                         {
                             if (SongLangKeyWordList.IndexOf(MatchStr) >= 0)
                             {
@@ -285,7 +236,6 @@ namespace CrazyKTV_SongMgr
                             else if (MatchStr.ContainsAny("合唱", "對唱"))
                             {
                                 SongSingerType = "3";
-                                ChorusSong = true;
                             }
                         }
                     }
@@ -298,17 +248,6 @@ namespace CrazyKTV_SongMgr
                     {
                         SongLang = GetSongInfo("SongLang", splitstr);
                         SongLangStr = splitstr;
-                    }
-                }
-
-                // 查看檔案名稱中有無歌手類別
-                if (SingerTypeKeyWordList.IndexOf(splitstr) >= 0)
-                {
-                    if (SongSingerType == "" || GetSongInfo("SongSingerType", splitstr) == "3")
-                    {
-                        SongSingerType = GetSongInfo("SongSingerType", splitstr);
-                        SongSingerTypeStr = splitstr;
-                        if (SongSingerType == "3") ChorusSong = true;
                     }
                 }
 
@@ -334,6 +273,49 @@ namespace CrazyKTV_SongMgr
             }
             SongSongTypeList.Clear();
             SongSongTypeLowCaseList.Clear();
+            list.Clear();
+
+            string DirStr = Path.GetDirectoryName(file);
+
+            if (SongSingerType == "" || SongSinger == "" || SongLang == "")
+            {
+                list = new List<string>(Regex.Split(DirStr, @"\\", RegexOptions.None));
+
+                foreach (string str in list)
+                {
+                    if (SongSingerType != "" && SongSinger != "" && SongLang != "") break;
+                    string splitstr = Regex.Replace(str, @"%%|^\s*|\s*$", "");
+
+                    // 查看資料夾名稱中有無歌手
+                    if (SongSinger == "")
+                    {
+                        if (SingerDataLowCaseList.IndexOf(splitstr.ToLower()) >= 0 && Global.SongAddSongIdentificationMode == "1")
+                        {
+                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
+                            if (SongSingerType == "") SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
+                        }
+                    }
+
+                    // 查看資料夾名稱中有無歌手類別
+                    if (SongSingerType == "")
+                    {
+                        if (SingerTypeKeyWordList.IndexOf(splitstr) >= 0)
+                        {
+                            SongSingerType = GetSongInfo("SongSingerType", splitstr);
+                        }
+                    }
+
+                    // 查看資料夾名稱中有無語系類別
+                    if (SongLang == "")
+                    {
+                        if (SongLangKeyWordList.IndexOf(splitstr) >= 0)
+                        {
+                            SongLang = GetSongInfo("SongLang", splitstr);
+                        }
+                    }
+                }
+                list.Clear();
+            }
 
             // 套用預設歌曲聲道
             if (SongTrack == "")
@@ -393,7 +375,7 @@ namespace CrazyKTV_SongMgr
                 switch (Global.SongAddSongIdentificationMode)
                 {
                     case "1":
-                        switch (list.Count)
+                        switch (list.Count) // 智能辨識模式
                         {
                             case 1:
                                 if (SongSinger == "")
@@ -405,45 +387,27 @@ namespace CrazyKTV_SongMgr
                                 SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                 break;
                             case 2:
-                                if (SongSinger == "")
+                                if (SongSinger == "") // 未找到歌手
                                 {
                                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                     if (r.IsMatch(list[0])) SongSingerType = "3";
                                     SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                     SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                 }
-                                else
+                                else // 已找到歌手
                                 {
-                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
+                                    if (SongSinger.ToLower() == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                     {
-                                        SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[0])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                     }
                                     else
                                     {
-                                        SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[1])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                     }
                                 }
                                 break;
                             default:
-                                if (SongSinger == "") //未找到歌手
+                                if (SongSinger == "") // 未找到歌手
                                 {
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
@@ -466,59 +430,23 @@ namespace CrazyKTV_SongMgr
                                     if (CommonFunc.IsSongId(list[0]))
                                     {
                                         SongID = list[0];
-                                        if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", "").ToLower())
+                                        if (SongSinger.ToLower() == Regex.Replace(list[1], @"%%|^\s*|\s*$", "").ToLower())
                                         {
-                                            SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                            if (r.IsMatch(list[1])) SongSingerType = "3";
-
-                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                            {
-                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            }
                                             SongSongName = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
                                         }
                                         else
                                         {
-                                            SongSinger = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
-                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                            if (r.IsMatch(list[2])) SongSingerType = "3";
-
-                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                            {
-                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            }
                                             SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                         }
                                     }
                                     else // List[0] 不是歌曲編號
                                     {
-                                        if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
+                                        if (SongSinger.ToLower() == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                         {
-                                            SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
-                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                            if (r.IsMatch(list[0])) SongSingerType = "3";
-
-                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                            {
-                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            }
                                             SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                         }
                                         else
                                         {
-                                            SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                            if (r.IsMatch(list[1])) SongSingerType = "3";
-
-                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                            {
-                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                                if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            }
                                             SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                         }
                                     }
@@ -528,7 +456,7 @@ namespace CrazyKTV_SongMgr
                         break;
                     case "2":
                     case "3":
-                        switch (list.Count)
+                        switch (list.Count) // 歌手_歌名 & 歌名_歌手
                         {
                             case 1:
                                 if (SongSinger == "")
@@ -540,7 +468,7 @@ namespace CrazyKTV_SongMgr
                                 SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                 break;
                             default:
-                                if (SongSinger == "")
+                                if (SongSinger == "") // 未找到歌手
                                 {
                                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                     switch (Global.SongAddSongIdentificationMode)
@@ -557,32 +485,14 @@ namespace CrazyKTV_SongMgr
                                             break;
                                     }
                                 }
-                                else
+                                else // 已找到歌手
                                 {
-                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
+                                    if (SongSinger.ToLower() == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                     {
-                                        SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[0])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                     }
                                     else
                                     {
-                                        SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[1])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                     }
                                 }
@@ -611,30 +521,12 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else
                                 {
-                                    if (SongSinger == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
+                                    if (SongSinger.ToLower() == Regex.Replace(list[0], @"%%|^\s*|\s*$", "").ToLower())
                                     {
-                                        SongSinger = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[0])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                     }
                                     else
                                     {
-                                        SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[1])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                     }
                                 }
@@ -654,30 +546,12 @@ namespace CrazyKTV_SongMgr
                                 }
                                 else
                                 {
-                                    if (SongSinger == Regex.Replace(list[1], @"%%|^\s*|\s*$", "").ToLower())
+                                    if (SongSinger.ToLower() == Regex.Replace(list[1], @"%%|^\s*|\s*$", "").ToLower())
                                     {
-                                        SongSinger = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[1])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
                                     }
                                     else
                                     {
-                                        SongSinger = Regex.Replace(list[2], @"%%|^\s*|\s*$", "");
-                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                        if (r.IsMatch(list[2])) SongSingerType = "3";
-
-                                        if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
-                                        {
-                                            SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                            if (!ChorusSong) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
-                                        }
                                         SongSongName = Regex.Replace(list[1], @"%%|^\s*|\s*$", "");
                                     }
                                 }
