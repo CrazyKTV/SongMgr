@@ -542,6 +542,9 @@
             this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
+            this.Debug_Singer_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Debug_NewSingerImport_Button = new System.Windows.Forms.Button();
+            this.Debug_NewSingerExport_Button = new System.Windows.Forms.Button();
             this.Debug_UpdateDataColumn_Button = new System.Windows.Forms.Button();
             this.Debug_CreateDataColumn_Button = new System.Windows.Forms.Button();
             this.Debug_Cashbox_GroupBox = new System.Windows.Forms.GroupBox();
@@ -633,6 +636,7 @@
             this.SongLog_TabPage.SuspendLayout();
             this.SongLog_GroupBox.SuspendLayout();
             this.Debug_TabPage.SuspendLayout();
+            this.Debug_Singer_GroupBox.SuspendLayout();
             this.Debug_Cashbox_GroupBox.SuspendLayout();
             this.Debug_Tooltip_GroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -7123,6 +7127,7 @@
             // 
             // Debug_TabPage
             // 
+            this.Debug_TabPage.Controls.Add(this.Debug_Singer_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_UpdateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_Cashbox_GroupBox);
@@ -7136,6 +7141,41 @@
             this.Debug_TabPage.TabIndex = 10;
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Debug_Singer_GroupBox
+            // 
+            this.Debug_Singer_GroupBox.Controls.Add(this.Debug_NewSingerImport_Button);
+            this.Debug_Singer_GroupBox.Controls.Add(this.Debug_NewSingerExport_Button);
+            this.Debug_Singer_GroupBox.Location = new System.Drawing.Point(265, 152);
+            this.Debug_Singer_GroupBox.Name = "Debug_Singer_GroupBox";
+            this.Debug_Singer_GroupBox.Size = new System.Drawing.Size(436, 193);
+            this.Debug_Singer_GroupBox.TabIndex = 13;
+            this.Debug_Singer_GroupBox.TabStop = false;
+            this.Debug_Singer_GroupBox.Text = "歌手相關";
+            // 
+            // Debug_NewSingerImport_Button
+            // 
+            this.Debug_NewSingerImport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_NewSingerImport_Button.Location = new System.Drawing.Point(190, 39);
+            this.Debug_NewSingerImport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_NewSingerImport_Button.Name = "Debug_NewSingerImport_Button";
+            this.Debug_NewSingerImport_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_NewSingerImport_Button.TabIndex = 14;
+            this.Debug_NewSingerImport_Button.Text = "匯入新增歌手";
+            this.Debug_NewSingerImport_Button.UseVisualStyleBackColor = true;
+            this.Debug_NewSingerImport_Button.Click += new System.EventHandler(this.Debug_NewSingerImport_Button_Click);
+            // 
+            // Debug_NewSingerExport_Button
+            // 
+            this.Debug_NewSingerExport_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_NewSingerExport_Button.Location = new System.Drawing.Point(9, 39);
+            this.Debug_NewSingerExport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_NewSingerExport_Button.Name = "Debug_NewSingerExport_Button";
+            this.Debug_NewSingerExport_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_NewSingerExport_Button.TabIndex = 13;
+            this.Debug_NewSingerExport_Button.Text = "匯出新增歌手";
+            this.Debug_NewSingerExport_Button.UseVisualStyleBackColor = true;
+            this.Debug_NewSingerExport_Button.Click += new System.EventHandler(this.Debug_NewSingerExport_Button_Click);
             // 
             // Debug_UpdateDataColumn_Button
             // 
@@ -7167,9 +7207,7 @@
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxNonSingerDataLog_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CreateCashboxTable_Button);
             this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(265, 351);
-            this.Debug_Cashbox_GroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.Debug_Cashbox_GroupBox.Name = "Debug_Cashbox_GroupBox";
-            this.Debug_Cashbox_GroupBox.Padding = new System.Windows.Forms.Padding(2);
             this.Debug_Cashbox_GroupBox.Size = new System.Drawing.Size(436, 271);
             this.Debug_Cashbox_GroupBox.TabIndex = 10;
             this.Debug_Cashbox_GroupBox.TabStop = false;
@@ -7386,6 +7424,7 @@
             this.SongLog_TabPage.ResumeLayout(false);
             this.SongLog_GroupBox.ResumeLayout(false);
             this.Debug_TabPage.ResumeLayout(false);
+            this.Debug_Singer_GroupBox.ResumeLayout(false);
             this.Debug_Cashbox_GroupBox.ResumeLayout(false);
             this.Debug_Tooltip_GroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -7904,6 +7943,9 @@
         private System.Windows.Forms.Label Cashbox_EditSongLang_Label;
         private System.Windows.Forms.TextBox Cashbox_EditSongId_TextBox;
         private System.Windows.Forms.Label Cashbox_EditSongId_Label;
+        private System.Windows.Forms.GroupBox Debug_Singer_GroupBox;
+        private System.Windows.Forms.Button Debug_NewSingerExport_Button;
+        private System.Windows.Forms.Button Debug_NewSingerImport_Button;
     }
 }
 

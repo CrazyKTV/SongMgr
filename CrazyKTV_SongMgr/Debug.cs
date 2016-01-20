@@ -782,6 +782,7 @@ namespace CrazyKTV_SongMgr
                 {
                     this.BeginInvoke((Action)delegate()
                     {
+                        Common_InitializeSongData(false, false, true);
                         Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆。";
                         Common_SwitchSetUI(true);
                     });
@@ -833,7 +834,6 @@ namespace CrazyKTV_SongMgr
                     UpdCmd.Parameters.Clear();
                     valuelist.Clear();
                 }
-                Common_InitializeSongData(false, false, true);
             }
             #endif
         }
@@ -865,6 +865,271 @@ namespace CrazyKTV_SongMgr
             Cashbox_EditSongLang_ComboBox.ValueMember = "Value";
             #endif
         }
+
+        #endregion
+
+        #region --- Debug 匯入/匯出新增歌手 ---
+
+        private void Debug_NewSingerExport_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要匯出新增歌手嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    SingerMgr.CreateSongDataTable();
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在匯出新增歌手,請稍待...";
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Debug_NewSingerExportTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Debug_Tooltip_Label.Text = "總共從歌庫歌曲解析出 " + Global.TotalList[0] + " 筆歌手資料,查詢到 " + Global.TotalList[1] + " 筆歌手無資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                        SingerMgr.DisposeSongDataTable();
+                    });
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_NewSingerExportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            string SingerQuerySqlStr = "SELECT First(Song_Singer) AS Song_Singer, First(Song_SingerType) AS Song_SingerType, Count(Song_Singer) AS Song_SingerCount FROM ktv_Song GROUP BY Song_Singer HAVING (((First(Song_SingerType))<>10) AND ((Count(Song_Singer))>0)) ORDER BY First(Song_SingerType), First(Song_Singer)";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, ""))
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    List<string> list = new List<string>();
+                    List<string> Singerlist = new List<string>();
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+
+                    string SingerName = "";
+                    string SingerType = "";
+
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        SingerName = row["Song_Singer"].ToString();
+                        SingerType = row["Song_SingerType"].ToString();
+
+                        if (SingerType == "3")
+                        {
+                            // 處理合唱歌曲中的特殊歌手名稱
+                            foreach (string SpecialSingerName in SpecialStrlist)
+                            {
+                                Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                                if (SpecialStrRegex.IsMatch(SingerName))
+                                {
+                                    if (Singerlist.IndexOf(SpecialSingerName) < 0)
+                                    {
+                                        // 查找資料庫預設歌手資料表
+                                        if (SingerMgr.AllSingerLowCaseList.IndexOf(SpecialSingerName.ToLower()) < 0)
+                                        {
+                                            if (list.IndexOf(SpecialSingerName) < 0)
+                                            {
+                                                list.Add(SpecialSingerName + "|" + SingerType);
+                                                lock (LockThis) { Global.TotalList[1]++; }
+                                            }
+                                        }
+                                        Singerlist.Add(SpecialSingerName);
+                                        SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                    }
+                                }
+                            }
+
+                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                            if (r.IsMatch(SingerName))
+                            {
+                                string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
+                                foreach (string str in singers)
+                                {
+                                    string ChorusSingerName = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (Singerlist.IndexOf(ChorusSingerName) < 0)
+                                    {
+                                        // 查找資料庫預設歌手資料表
+                                        if (SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                                        {
+                                            if (list.IndexOf(ChorusSingerName) < 0)
+                                            {
+                                                list.Add(ChorusSingerName + "|" + SingerType);
+                                                lock (LockThis) { Global.TotalList[1]++; }
+                                            }
+                                        }
+                                        Singerlist.Add(ChorusSingerName);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (Singerlist.IndexOf(SingerName) < 0)
+                                {
+                                    if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                    {
+                                        list.Add(SingerName + "|" + SingerType);
+                                        lock (LockThis) { Global.TotalList[1]++; }
+                                    }
+                                    Singerlist.Add(SingerName);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Singerlist.IndexOf(SingerName) < 0)
+                            {
+                                if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                {
+                                    if (list.IndexOf(SingerName) < 0)
+                                    {
+                                        list.Add(SingerName + "|" + SingerType);
+                                        lock (LockThis) { Global.TotalList[1]++; }
+                                    }
+                                }
+                                Singerlist.Add(SingerName);
+                            }
+                        }
+                        lock (LockThis) { Global.TotalList[0]++; }
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Debug_Tooltip_Label.Text = "已解析到 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                        });
+                    }
+                    SpecialStrlist.Clear();
+                    Singerlist.Clear();
+
+                    if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+                    using (StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\NewSinger.txt"))
+                    {
+                        foreach (string str in list)
+                        {
+                            sw.WriteLine(str);
+                        }
+                    }
+                    list.Clear();
+                }
+            }
+        }
+        #endif
+
+        private void Debug_NewSingerImport_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\NewSinger.txt"))
+                {
+                    if (Debug_Tooltip_Label.Text == "新增歌手資料檔案不存在!") Debug_Tooltip_Label.Text = "";
+                    if (MessageBox.Show("你確定要匯入新增歌手嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Global.TimerStartTime = DateTime.Now;
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                        Common_SwitchSetUI(false);
+
+                        Debug_Tooltip_Label.Text = "正在匯入新增歌手,請稍待...";
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => Debug_NewSingerImportTask()));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            Global.TimerEndTime = DateTime.Now;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Debug_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 位歌手資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                                Common_SwitchSetUI(true);
+                            });
+                        });
+                    }
+                }
+                else
+                {
+                    Debug_Tooltip_Label.Text = "新增歌手資料檔案不存在!";
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_NewSingerImportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> Addlist = new List<string>();
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+            {
+                using (StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\NewSinger.txt"))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        Addlist.Add(sr.ReadLine());
+                    }
+                }
+                string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
+                string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
+                string SingerAddSqlStr = "insert into ktv_AllSinger" + " ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+
+                using (OleDbCommand singercmd = new OleDbCommand(SingerAddSqlStr, conn))
+                {
+                    int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_AllSinger", Global.CrazyktvSongMgrDatabaseFile);
+                    List<string> UnUsedSingerIdList = CommonFunc.GetNotExistsSingerId("ktv_AllSinger", Global.CrazyktvSongMgrDatabaseFile);
+                    string SingerId = "";
+                    List <string> list = new List<string>();
+                    List <string> SpellList = new List<string>();
+
+                    foreach (string AddStr in Addlist)
+                    {
+                        if (UnUsedSingerIdList.Count > 0)
+                        {
+                            SingerId = UnUsedSingerIdList[0];
+                            UnUsedSingerIdList.RemoveAt(0);
+                        }
+                        else
+                        {
+                            MaxSingerId++;
+                            SingerId = MaxSingerId.ToString();
+                        }
+
+                        list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
+                        SpellList = CommonFunc.GetSongNameSpell(list[0]);
+
+                        singercmd.Parameters.AddWithValue("@SingerId", SingerId);
+                        singercmd.Parameters.AddWithValue("@SingerName", list[0]);
+                        singercmd.Parameters.AddWithValue("@SingerType", list[1]);
+                        singercmd.Parameters.AddWithValue("@SingerSpell", SpellList[0]);
+                        singercmd.Parameters.AddWithValue("@SingerStrokes", SpellList[2]);
+                        singercmd.Parameters.AddWithValue("@SingerSpellNum", SpellList[1]);
+                        singercmd.Parameters.AddWithValue("@SingerPenStyle", SpellList[3]);
+
+                        singercmd.ExecuteNonQuery();
+                        singercmd.Parameters.Clear();
+
+                        SpellList.Clear();
+                        list.Clear();
+
+                        lock (LockThis)
+                        {
+                            Global.TotalList[0]++;
+                        }
+
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Debug_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                        });
+                    }
+                }
+            }
+            Addlist.Clear();
+        }
+        #endif
 
         #endregion
 
