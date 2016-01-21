@@ -1151,110 +1151,217 @@ namespace CrazyKTV_SongMgr
             {
                 if (Global.SongAddDataGridViewSelectList.Count <= 0) return;
                 int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
+                List<string> UpdateList = new List<string>();
+
+                SongAdd_Tooltip_Label.Text = "正在更新歌曲資料,請稍待...";
+                Common_SwitchSetUI(false);
+
+                string SongAddStatus;
+                string SongLang;
+                string SongSingerType;
+                string SongSinger;
+                string SongSongName;
+                string SongTrack;
+                string SongSongType;
+                string SongVolume;
+                string SongWordCount;
+                string SongCreatDate;
+                string SongSpell;
+                string SongSpellNum;
+                string SongSongStroke;
+                string SongPenStyle;
+                string SongSrcPath;
 
                 if (SelectedRowsCount > 1)
                 {
                     foreach (DataGridViewRow row in SongAdd_DataGridView.SelectedRows)
                     {
+                        SongAddStatus = row.Cells["Song_AddStatus"].Value.ToString();
+                        SongLang = row.Cells["Song_Lang"].Value.ToString();
+                        SongSingerType = row.Cells["Song_SingerType"].Value.ToString();
+                        SongSinger = row.Cells["Song_Singer"].Value.ToString();
+                        SongSongName = row.Cells["Song_SongName"].Value.ToString();
+                        SongTrack = row.Cells["Song_Track"].Value.ToString();
+                        SongSongType = row.Cells["Song_SongType"].Value.ToString();
+                        SongVolume = row.Cells["Song_Volume"].Value.ToString();
+                        SongWordCount = row.Cells["Song_WordCount"].Value.ToString();
+                        SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
+                        SongSpell = row.Cells["Song_Spell"].Value.ToString();
+                        SongSpellNum = row.Cells["Song_SpellNum"].Value.ToString();
+                        SongSongStroke = row.Cells["Song_SongStroke"].Value.ToString();
+                        SongPenStyle = row.Cells["Song_PenStyle"].Value.ToString();
+                        SongSrcPath = row.Cells["Song_SrcPath"].Value.ToString();
+
                         if (Global.SongAddMultiEditUpdateList[0])
                         {
-                            string SongLang = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
-                            if (row.Cells["Song_Lang"].Value.ToString() != SongLang) row.Cells["Song_Lang"].Value = SongLang;
+                            SongLang = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
                         }
 
                         if (Global.SongAddMultiEditUpdateList[1])
                         {
-                            string SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
-                            row.Cells["Song_CreatDate"].Value = SongCreatDate;
+                            SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
                         }
 
                         if (Global.SongAddMultiEditUpdateList[2])
                         {
-                            string SongSinger = SongAdd_EditSongSinger_TextBox.Text;
-                            row.Cells["Song_Singer"].Value = SongSinger;
+                            SongSinger = SongAdd_EditSongSinger_TextBox.Text;
                         }
 
                         if (Global.SongAddMultiEditUpdateList[3])
                         {
                             string SongSingerTypeStr = ((DataRowView)SongAdd_EditSongSingerType_ComboBox.SelectedItem)[0].ToString();
-                            string SongSingerType = CommonFunc.GetSingerTypeStr(0, 1, SongSingerTypeStr);
-                            row.Cells["Song_SingerType"].Value = SongSingerType;
+                            SongSingerType = CommonFunc.GetSingerTypeStr(0, 1, SongSingerTypeStr);
                         }
 
                         if (Global.SongAddMultiEditUpdateList[4])
                         {
-                            string SongSongType = ((DataRowView)SongAdd_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
-                            row.Cells["Song_SongType"].Value = (SongSongType != "無類別") ? SongSongType : "";
+                            string SongSongTypeStr = ((DataRowView)SongAdd_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
+                            SongSongType = (SongSongTypeStr != "無類別") ? SongSongTypeStr : "";
                         }
 
                         if (Global.SongAddMultiEditUpdateList[5])
                         {
-                            int SongTrack = (int)SongAdd_EditSongTrack_ComboBox.SelectedValue - 1;
-                            row.Cells["Song_Track"].Value = SongTrack;
+                            SongTrack = ((int)SongAdd_EditSongTrack_ComboBox.SelectedValue - 1).ToString();
                         }
 
                         if (Global.SongAddMultiEditUpdateList[6])
                         {
-                            string SongVolume = SongAdd_EditSongVolume_TextBox.Text;
-                            row.Cells["Song_Volume"].Value = SongVolume;
+                            SongVolume = SongAdd_EditSongVolume_TextBox.Text;
                         }
-                        row.Cells["Song_AddStatus"].Value = (row.Cells["Song_Lang"].Value.ToString() == "未知") ? "語系類別必須有值才能加歌!" : "";
-                        row.Cells["Song_AddStatus"].Value = (row.Cells["Song_AddStatus"].Value.ToString() == "" && row.Cells["Song_SingerType"].Value.ToString() == "10") ? "此歌手尚未設定歌手資料!" : row.Cells["Song_AddStatus"].Value;
+                        SongAddStatus = (SongLang == "未知") ? "語系類別必須有值才能加歌!" : "";
+                        SongAddStatus = (SongAddStatus == "" && SongSingerType == "10") ? "此歌手尚未設定歌手資料!" : SongAddStatus;
+
+                        UpdateList.Add(SongAddStatus + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongCreatDate + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongSrcPath);
                     }
                 }
                 else if (SelectedRowsCount == 1)
                 {
                     foreach (DataGridViewRow row in SongAdd_DataGridView.SelectedRows)
                     {
-                        string SongLang = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
-                        row.Cells["Song_Lang"].Value = SongLang;
-                        row.Cells["Song_AddStatus"].Value = (SongLang == "未知") ? "語系類別必須有值才能加歌!" : "";
-
-                        string SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
-                        row.Cells["Song_CreatDate"].Value = SongCreatDate;
-
-                        row.Cells["Song_Singer"].Value = SongAdd_EditSongSinger_TextBox.Text;
+                        SongLang = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                        SongAddStatus = (SongLang == "未知") ? "語系類別必須有值才能加歌!" : "";
 
                         string SongSingerTypeStr = ((DataRowView)SongAdd_EditSongSingerType_ComboBox.SelectedItem)[0].ToString();
-                        string SongSingerType = CommonFunc.GetSingerTypeStr(0, 1, SongSingerTypeStr);
-                        row.Cells["Song_SingerType"].Value = SongSingerType;
-                        row.Cells["Song_AddStatus"].Value = (row.Cells["Song_AddStatus"].Value.ToString() == "" && SongSingerType == "10") ? "此歌手尚未設定歌手資料!" : row.Cells["Song_AddStatus"].Value;
+                        SongSingerType = CommonFunc.GetSingerTypeStr(0, 1, SongSingerTypeStr);
+                        SongAddStatus = (SongAddStatus == "" && SongSingerType == "10") ? "此歌手尚未設定歌手資料!" : SongAddStatus;
 
-                        string SongSongName = SongAdd_EditSongSongName_TextBox.Text;
-                        row.Cells["Song_SongName"].Value = SongSongName;
+                        SongSinger = SongAdd_EditSongSinger_TextBox.Text;
+                        SongSongName = SongAdd_EditSongSongName_TextBox.Text;
+                        SongTrack = SongAdd_EditSongTrack_ComboBox.SelectedValue.ToString();
 
-                        string SongSongType = ((DataRowView)SongAdd_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
-                        row.Cells["Song_SongType"].Value = (SongSongType != "無類別") ? SongSongType : "";
+                        string SongSongTypeStr = ((DataRowView)SongAdd_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
+                        SongSongType = (SongSongTypeStr != "無類別") ? SongSongTypeStr : "";
+
+                        SongVolume = SongAdd_EditSongVolume_TextBox.Text;
 
                         // 計算歌曲字數
                         List<string> SongWordCountList = new List<string>();
                         SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
+                        SongWordCount = SongWordCountList[0];
+
+                        SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
 
                         // 取得歌曲拼音
                         List<string> SongSpellList = new List<string>();
                         SongSpellList = CommonFunc.GetSongNameSpell(SongSongName);
                         if (SongSpellList[2] == "") SongSpellList[2] = "0";
 
-                        row.Cells["Song_Spell"].Value = SongSpellList[0];
-                        row.Cells["Song_SpellNum"].Value = SongSpellList[1];
-                        row.Cells["Song_SongStroke"].Value = SongSpellList[2];
-                        row.Cells["Song_PenStyle"].Value = SongSpellList[3];
-                        row.Cells["Song_WordCount"].Value = SongWordCountList[0];
-                        row.Cells["Song_Track"].Value = SongAdd_EditSongTrack_ComboBox.SelectedValue;
-                        row.Cells["Song_Volume"].Value = SongAdd_EditSongVolume_TextBox.Text;
+                        SongSpell = SongSpellList[0];
+                        SongSpellNum = SongSpellList[1];
+                        SongSongStroke = SongSpellList[2];
+                        SongPenStyle = SongSpellList[3];
+                        SongSrcPath = row.Cells["Song_SrcPath"].Value.ToString();
+
+                        UpdateList.Add(SongAddStatus + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongCreatDate + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongSrcPath);
                     }
                 }
+
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Global.SongAddDataGridViewRestoreSelectList = new List<string>();
+                Global.SongAddDataGridViewRestoreCurrentRow = SongAdd_DataGridView.CurrentRow.Cells["Song_SrcPath"].Value.ToString();
+                SongAdd_DataGridView.Sorted -= new EventHandler(SongAdd_DataGridView_Sorted);
+
                 bool EnabledButton = true;
 
-                foreach (DataGridViewRow row in SongAdd_DataGridView.Rows)
+                using (DataTable UpdateDT = (DataTable)SongAdd_DataGridView.DataSource)
                 {
-                    if (row.Cells["Song_AddStatus"].Value.ToString() == "語系類別必須有值才能加歌!")
+                    List<string> valuelist;
+                    foreach (string UpdateStr in UpdateList)
                     {
-                        EnabledButton = false;
-                        break;
+                        valuelist = new List<string>(UpdateStr.Split('|'));
+                        Global.SongAddDataGridViewRestoreSelectList.Add(valuelist[14]);
+
+                        var query = from row in UpdateDT.AsEnumerable()
+                                    where row["Song_SrcPath"].ToString() == valuelist[14]
+                                    select row;
+
+                        foreach (DataRow row in query)
+                        {
+                            row["Song_AddStatus"] = valuelist[0];
+                            row["Song_Lang"] = valuelist[1];
+                            row["Song_SingerType"] = valuelist[2];
+                            row["Song_Singer"] = valuelist[3];
+                            row["Song_SongName"] = valuelist[4];
+                            row["Song_Track"] = valuelist[5];
+                            row["Song_SongType"] = valuelist[6];
+                            row["Song_Volume"] = valuelist[7];
+                            row["Song_WordCount"] = valuelist[8];
+                            row["Song_CreatDate"] = valuelist[9];
+                            row["Song_Spell"] = valuelist[10];
+                            row["Song_SpellNum"] = valuelist[11];
+                            row["Song_SongStroke"] = valuelist[12];
+                            row["Song_PenStyle"] = valuelist[13];
+                            row["Song_SrcPath"] = valuelist[14];
+                        }
+                        if (valuelist[0] == "語系類別必須有值才能加歌!") EnabledButton = false;
+                        valuelist.Clear();
+
+                        Global.TotalList[0]++;
+                        SongAdd_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 筆資料...";
+                    }
+                    UpdateList.Clear();
+                }
+
+                SongAdd_DataGridView.Sorted += new EventHandler(SongAdd_DataGridView_Sorted);
+                SongAdd_DataGridView_Sorted(new object(), new EventArgs());
+
+                SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
+
+                if (SelectedRowsCount > 1)
+                {
+                    Global.SongAddDataGridViewSelectList = new List<string>();
+
+                    foreach (DataGridViewRow row in SongAdd_DataGridView.SelectedRows)
+                    {
+                        string SelSongId = row.Cells["Song_Id"].Value.ToString();
+                        string SelSongLang = row.Cells["Song_Lang"].Value.ToString();
+                        int SelSongSingerType = Convert.ToInt32(row.Cells["Song_SingerType"].Value);
+                        string SelSongSinger = row.Cells["Song_Singer"].Value.ToString();
+                        string SelSongSongName = row.Cells["Song_SongName"].Value.ToString();
+                        int SelSongTrack = Convert.ToInt32(row.Cells["Song_Track"].Value);
+                        string SelSongSongType = row.Cells["Song_SongType"].Value.ToString();
+                        string SelSongVolume = row.Cells["Song_Volume"].Value.ToString();
+                        string SelSongWordCount = row.Cells["Song_WordCount"].Value.ToString();
+                        string SelSongPlayCount = row.Cells["Song_PlayCount"].Value.ToString();
+                        string SelSongMB = row.Cells["Song_MB"].Value.ToString();
+                        string SelSongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
+                        string SelSongFileName = row.Cells["Song_FileName"].Value.ToString();
+                        string SelSongPath = row.Cells["Song_Path"].Value.ToString();
+                        string SelSongSpell = row.Cells["Song_Spell"].Value.ToString();
+                        string SelSongSpellNum = row.Cells["Song_SpellNum"].Value.ToString();
+                        string SelSongSongStroke = row.Cells["Song_SongStroke"].Value.ToString();
+                        string SelSongPenStyle = row.Cells["Song_PenStyle"].Value.ToString();
+                        string SelSongPlayState = row.Cells["Song_PlayState"].Value.ToString();
+                        string SelSongSrcPath = row.Cells["Song_SrcPath"].Value.ToString();
+
+                        string SelectValue = SelSongId + "|" + SelSongLang + "|" + SelSongSingerType + "|" + SelSongSinger + "|" + SelSongSongName + "|" + SelSongTrack + "|" + SelSongSongType + "|" + SelSongVolume + "|" + SelSongWordCount + "|" + SelSongPlayCount + "|" + SelSongMB + "|" + SelSongCreatDate + "|" + SelSongFileName + "|" + SelSongPath + "|" + SelSongSpell + "|" + SelSongSpellNum + "|" + SelSongSongStroke + "|" + SelSongPenStyle + "|" + SelSongPlayState + "|" + SelSongSrcPath;
+                        Global.SongAddDataGridViewSelectList.Add(SelectValue);
                     }
                 }
+
+                SongAdd_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料。";
                 SongAdd_Add_Button.Enabled = (EnabledButton) ? true : false;
+                Common_SwitchSetUI(true);
             }
         }
 

@@ -822,73 +822,88 @@ namespace CrazyKTV_SongMgr
                 List<string> UpdateList = new List<string>();
                 Common_SwitchSetUI(false);
 
+                string SongId;
+                string SongLang;
+                string SongSongName;
+                string SongSinger;
+                string SongCreatDate;
+
                 if (SelectedRowsCount > 1)
                 {
                     foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
                     {
-                        if (Global.CashboxMultiEditUpdateList[0])
-                        {
-                            string SongLang = ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString();
-                            if (row.Cells["Song_Lang"].Value.ToString() != SongLang)
-                            {
-                                row.Cells["Song_Lang"].Value = SongLang;
-                            }
-                        }
+                        SongId = row.Cells["Cashbox_Id"].Value.ToString();
+                        SongLang = (Global.CashboxMultiEditUpdateList[0]) ? ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString() : row.Cells["Song_Lang"].Value.ToString();
+                        SongSongName = row.Cells["Song_SongName"].Value.ToString();
+                        SongCreatDate = (Global.CashboxMultiEditUpdateList[1]) ? Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString() : row.Cells["Song_CreatDate"].Value.ToString();
+                        SongSinger = (Global.CashboxMultiEditUpdateList[2]) ? Cashbox_EditSongSinger_TextBox.Text : row.Cells["Song_Singer"].Value.ToString();
 
-                        if (Global.CashboxMultiEditUpdateList[1])
-                        {
-                            string SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString();
-                            row.Cells["Song_CreatDate"].Value = SongCreatDate;
-                        }
-
-                        if (Global.CashboxMultiEditUpdateList[2])
-                        {
-                            string SongSinger = Cashbox_EditSongSinger_TextBox.Text;
-                            row.Cells["Song_Singer"].Value = SongSinger;
-                        }
-
-                        UpdateList.Add(row.Cells["Cashbox_Id"].Value.ToString() + "|" + row.Cells["Song_Lang"].Value.ToString() + "|" + row.Cells["Song_SongName"].Value.ToString() + "|" + row.Cells["Song_Singer"].Value.ToString() + "|" + row.Cells["Song_CreatDate"].Value.ToString());
+                        UpdateList.Add(SongId + "|" + SongLang + "|" + SongSongName + "|" + SongSinger + "|" + SongCreatDate);
                     }
                 }
                 else if (SelectedRowsCount == 1)
                 {
                     foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
                     {
-                        row.Cells["Song_Lang"].Value = ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                        SongId = row.Cells["Cashbox_Id"].Value.ToString();
+                        SongLang = ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                        SongSongName = Cashbox_EditSongSongName_TextBox.Text;
+                        SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString();
+                        SongSinger = Cashbox_EditSongSinger_TextBox.Text;
 
-                        string SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString();
-                        row.Cells["Song_CreatDate"].Value = SongCreatDate;
-
-                        row.Cells["Song_Singer"].Value = Cashbox_EditSongSinger_TextBox.Text;
-
-                        string SongSongName = Cashbox_EditSongSongName_TextBox.Text;
-                        row.Cells["Song_SongName"].Value = SongSongName;
-
-                        UpdateList.Add(row.Cells["Cashbox_Id"].Value.ToString() + "|" + row.Cells["Song_Lang"].Value.ToString() + "|" + row.Cells["Song_SongName"].Value.ToString() + "|" + row.Cells["Song_Singer"].Value.ToString() + "|" + row.Cells["Song_CreatDate"].Value.ToString());
+                        UpdateList.Add(SongId + "|" + SongLang + "|" + SongSongName + "|" + SongSinger + "|" + SongCreatDate);
                     }
                 }
 
                 Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Global.CashboxDataGridViewRestoreSelectList = new List<string>();
+                Global.CashboxDataGridViewRestoreCurrentRow = Cashbox_DataGridView.CurrentRow.Cells["Cashbox_Id"].Value.ToString();
+                Cashbox_DataGridView.Sorted -= new EventHandler(Cashbox_DataGridView_Sorted);
                 Cashbox_QueryStatus_Label.Text = "正在更新錢櫃資料,請稍待...";
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Cashbox_SongUpdate(UpdateList)));
-
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                using (DataTable UpdateDT = (DataTable)Cashbox_DataGridView.DataSource)
                 {
-                    this.BeginInvoke((Action)delegate()
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Cashbox_SongUpdate(UpdateList, UpdateDT)));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
-                        Common_InitializeSongData(false, false, true);
-                        Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆。";
-                        Common_SwitchSetUI(true);
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Cashbox_DataGridView.Sorted += new EventHandler(Cashbox_DataGridView_Sorted);
+                            Cashbox_DataGridView_Sorted(new object(), new EventArgs());
+
+                            SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
+
+                            if (SelectedRowsCount > 1)
+                            {
+                                Global.CashboxDataGridViewSelectList = new List<string>();
+
+                                foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
+                                {
+                                    SongId = row.Cells["Cashbox_Id"].Value.ToString();
+                                    SongLang = row.Cells["Song_Lang"].Value.ToString();
+                                    SongSinger = row.Cells["Song_Singer"].Value.ToString();
+                                    SongSongName = row.Cells["Song_SongName"].Value.ToString();
+                                    SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
+
+                                    string SelectValue = SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongCreatDate;
+                                    Global.CashboxDataGridViewSelectList.Add(SelectValue);
+                                }
+                            }
+
+                            Common_InitializeSongData(false, false, true);
+                            Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆。";
+                            Common_SwitchSetUI(true);
+                        });
+                        UpdateList.Clear();
                     });
-                    UpdateList.Clear();
-                });
+                }
             }
             #endif
         }
 
-        private void Cashbox_SongUpdate(List<string> UpdateList)
+        private void Cashbox_SongUpdate(List<string> UpdateList, DataTable UpdateDT)
         {
             #if DEBUG
             if (UpdateList.Count <= 0) return;
@@ -899,6 +914,7 @@ namespace CrazyKTV_SongMgr
 
                 OleDbCommand UpdCmd = new OleDbCommand(UpdSqlStr, conn);
                 List<string> valuelist;
+                List<string> dtvaluelist;
 
                 foreach (string SongData in UpdateList)
                 {
@@ -915,8 +931,26 @@ namespace CrazyKTV_SongMgr
                     {
                         UpdCmd.ExecuteNonQuery();
                         Global.TotalList[0]++;
+
                         this.BeginInvoke((Action)delegate()
                         {
+                            dtvaluelist = new List<string>(SongData.Split('|'));
+                            Global.CashboxDataGridViewRestoreSelectList.Add(dtvaluelist[0]);
+
+                            var query = from row in UpdateDT.AsEnumerable()
+                                        where row["Cashbox_Id"].ToString() == dtvaluelist[0]
+                                        select row;
+
+                            foreach (DataRow row in query)
+                            {
+                                row["Cashbox_Id"] = dtvaluelist[0];
+                                row["Song_Lang"] = dtvaluelist[1];
+                                row["Song_SongName"] = dtvaluelist[2];
+                                row["Song_Singer"] = dtvaluelist[3];
+                                row["Song_CreatDate"] = dtvaluelist[4];
+                            }
+
+                            dtvaluelist.Clear();
                             Cashbox_QueryStatus_Label.Text = "正在更新第 " + Global.TotalList[0] + " 首歌曲,請稍待...";
                         });
                     }

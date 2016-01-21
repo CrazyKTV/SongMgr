@@ -162,6 +162,7 @@ namespace CrazyKTV_SongMgr
         /// <para>16: SongSongStroke | 17: SongPenStyle | 18: SongPlayState | 19: SongSrcPath</para>
         /// </summary>
         public static List<string> SongQueryDataGridViewSelectList = new List<string>();
+        public static string SongQueryDataGridViewRestoreCurrentRow = "";
         public static List<string> SongQueryDataGridViewRestoreSelectList = new List<string>();
 
         public static bool SongAddMultiEdit;
@@ -175,11 +176,13 @@ namespace CrazyKTV_SongMgr
         /// <para>16: SongSongStroke | 17: SongPenStyle | 18: SongPlayState | 19: SongSrcPath</para>
         /// </summary>
         public static List<string> SongAddDataGridViewSelectList = new List<string>();
+        public static string SongAddDataGridViewRestoreCurrentRow = "";
         public static List<string> SongAddDataGridViewRestoreSelectList = new List<string>();
 
         public static bool SingerMgrMultiEdit;
         public static List<bool> SingerMgrMultiEditUpdateList = new List<bool>() { false };
         public static List<string> SingerMgrDataGridViewSelectList = new List<string>();
+        public static string SingerMgrDataGridViewRestoreCurrentRow = "";
         public static List<string> SingerMgrDataGridViewRestoreSelectList = new List<string>();
 
         public static bool CashboxMultiEdit;
@@ -189,6 +192,7 @@ namespace CrazyKTV_SongMgr
         /// <para>0: SongId | 1: SongLang | 2: SongSinger | 3: SongSongName | 4: SongCreatDate</para>
         /// </summary>
         public static List<string> CashboxDataGridViewSelectList = new List<string>();
+        public static string CashboxDataGridViewRestoreCurrentRow = "";
         public static List<string> CashboxDataGridViewRestoreSelectList = new List<string>();
 
         public static List<string> PlayerUpdateSongValueList = new List<string>();

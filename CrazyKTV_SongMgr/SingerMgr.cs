@@ -353,31 +353,11 @@ namespace CrazyKTV_SongMgr
 
         #region --- SingerMgr 更新歌手 ---
 
-        private void SingerMgr_SingerUpdateTask(object SingerUpdateDT)
+        private void SingerMgr_SingerUpdateTask(List<string> UpdateList, DataTable UpdateDT)
         {
+            if (UpdateList.Count <= 0) return;
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            DataTable dt = new DataTable();
-            dt = (DataTable)SingerUpdateDT;
-            List<string> UpdateValueList = new List<string>();
 
-            foreach (DataRow row in dt.Rows)
-            {
-                int i = Convert.ToInt32(row["RowIndex"]);
-                string OldSingerId = row["SingerId"].ToString();
-                string OldSingerName = row["SingerName"].ToString();
-
-                string SingerId = SingerMgr_DataGridView.Rows[i].Cells["Singer_Id"].Value.ToString();
-                string SingerName = SingerMgr_DataGridView.Rows[i].Cells["Singer_Name"].Value.ToString();
-                int SingerType = Convert.ToInt32(SingerMgr_DataGridView.Rows[i].Cells["Singer_Type"].Value);
-                string SingerSpell = SingerMgr_DataGridView.Rows[i].Cells["Singer_Spell"].Value.ToString();
-                string SingerStrokes = SingerMgr_DataGridView.Rows[i].Cells["Singer_Strokes"].Value.ToString();
-                string SingerSpellNum = SingerMgr_DataGridView.Rows[i].Cells["Singer_SpellNum"].Value.ToString();
-                string SingerPenStyle = SingerMgr_DataGridView.Rows[i].Cells["Singer_PenStyle"].Value.ToString();
-
-                string UpdateValue = SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle + "|" + OldSingerId + "|" + OldSingerName;
-                UpdateValueList.Add(UpdateValue);
-            }
-            
             OleDbConnection conn = new OleDbConnection();
             conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
 
@@ -405,9 +385,10 @@ namespace CrazyKTV_SongMgr
                 new OleDbCommand(SongSingerUpdateSqlStr, conn)
             };
 
-            List<string> valuelist = new List<string>();
+            List<string> valuelist;
+            List<string> dtvaluelist;
 
-            foreach (string str in UpdateValueList)
+            foreach (string str in UpdateList)
             {
                 valuelist = new List<string>(str.Split('|'));
 
@@ -732,6 +713,28 @@ namespace CrazyKTV_SongMgr
                             SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
                         });
                     }
+
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        dtvaluelist = new List<string>(str.Split('|'));
+                        Global.SingerMgrDataGridViewRestoreSelectList.Add(dtvaluelist[0]);
+
+                        var query = from row in UpdateDT.AsEnumerable()
+                                    where row["Singer_Id"].ToString() == dtvaluelist[7]
+                                    select row;
+
+                        foreach (DataRow row in query)
+                        {
+                            row["Singer_Id"] = dtvaluelist[0];
+                            row["Singer_Name"] = dtvaluelist[1];
+                            row["Singer_Type"] = dtvaluelist[2];
+                            row["Singer_Spell"] = dtvaluelist[3];
+                            row["Singer_Strokes"] = dtvaluelist[4];
+                            row["Singer_SpellNum"] = dtvaluelist[5];
+                            row["Singer_PenStyle"] = dtvaluelist[6];
+                        }
+                        dtvaluelist.Clear();
+                    });
                 }
                 catch
                 {
@@ -758,7 +761,6 @@ namespace CrazyKTV_SongMgr
                 SingerUpdateCmds[(Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? 0 : 1].Parameters.Clear();
                 valuelist.Clear();
             }
-            UpdateValueList.Clear();
             conn.Close();
             singerconn.Close();
 
@@ -1279,99 +1281,143 @@ namespace CrazyKTV_SongMgr
             {
                 if (Global.SingerMgrDataGridViewSelectList.Count <= 0) return;
                 int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
+                List<string> UpdateList = new List<string>();
 
-                DataTable dt = new DataTable();
-                dt.Columns.Add("RowIndex", typeof(int));
-                dt.Columns.Add("SingerId", typeof(string));
-                dt.Columns.Add("SingerName", typeof(string));
-
-                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                 SingerMgr.CreateSongDataTable();
+                SingerMgr_Tooltip_Label.Text = "正在更新歌手資料,請稍待...";
+
+                string OldSingerId;
+                string OldSingerName;
+                string SingerId;
+                string SingerName;
+                string SingerType;
+                string SingerSpell;
+                string SingerSpellNum;
+                string SingerStrokes;
+                string SingerPenStyle;
+                string CurrentRowSingerId = "";
 
                 if (SelectedRowsCount > 1)
                 {
                     Common_SwitchSetUI(false);
                     foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
                     {
-                        DataRow dtrow = dt.NewRow();
-                        dtrow["RowIndex"] = row.Index;
-                        dtrow["SingerId"] = row.Cells["Singer_Id"].Value.ToString();
-                        dtrow["SingerName"] = row.Cells["Singer_Name"].Value.ToString();
-                        dt.Rows.Add(dtrow);
+                        SingerId = row.Cells["Singer_Id"].Value.ToString();
+                        OldSingerId = SingerId;
+                        SingerName = row.Cells["Singer_Name"].Value.ToString();
+                        OldSingerName = SingerName;
+                        SingerType = row.Cells["Singer_Type"].Value.ToString();
+                        SingerSpell = row.Cells["Singer_Spell"].Value.ToString();
+                        SingerSpellNum = row.Cells["Singer_SpellNum"].Value.ToString();
+                        SingerStrokes = row.Cells["Singer_Strokes"].Value.ToString();
+                        SingerPenStyle = row.Cells["Singer_PenStyle"].Value.ToString();
 
                         if (Global.SingerMgrMultiEditUpdateList[0])
                         {
                             string SingerTypeStr = ((DataRowView)SingerMgr_EditSingerType_ComboBox.SelectedItem)[0].ToString();
-                            string SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
-                            row.Cells["Singer_Type"].Value = SingerType;
+                            SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
                         }
+
+                        if (SingerMgr_DataGridView.Rows.IndexOf(row) == SingerMgr_DataGridView.CurrentRow.Index)
+                        {
+                            CurrentRowSingerId = SingerId;
+                        }
+
+                        UpdateList.Add(SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle + "|" + OldSingerId + "|" + OldSingerName);
                     }
                 }
                 else if (SelectedRowsCount == 1)
                 {
                     foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
                     {
-                        DataRow dtrow = dt.NewRow();
-                        dtrow["RowIndex"] = row.Index;
-                        dtrow["SingerId"] = row.Cells["Singer_Id"].Value.ToString();
-                        dtrow["SingerName"] = row.Cells["Singer_Name"].Value.ToString();
-                        dt.Rows.Add(dtrow);
+                        SingerId = row.Cells["Singer_Id"].Value.ToString();
+                        OldSingerId = SingerId;
+                        OldSingerName = row.Cells["Singer_Name"].Value.ToString();
+                        SingerName = SingerMgr_EditSingerName_TextBox.Text;
 
-                        string SingerId = row.Cells["Singer_Id"].Value.ToString();
-                        string SingerName = SingerMgr_EditSingerName_TextBox.Text;
                         int SingerExists = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? SingerMgr.SingerLowCaseList.IndexOf(SingerName.ToLower()) : SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower());
-
                         if (SingerExists >= 0)
                         {
                             if (SingerId != ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? SingerMgr.SingerIdList[SingerExists] : SingerMgr.AllSingerIdList[SingerExists]))
                             {
                                 SingerMgr_Tooltip_Label.Text = "歌手【" + SingerName + "】已在" + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "歌庫" : "預設") + "歌手資料庫裡!";
-                                dt.Dispose();
-                                dt = null;
                                 return;
                             }
                         }
 
+                        CurrentRowSingerId = SingerId;
                         Common_SwitchSetUI(false);
+
                         string SingerTypeStr = ((DataRowView)SingerMgr_EditSingerType_ComboBox.SelectedItem)[0].ToString();
-                        string SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
-                        row.Cells["Singer_Type"].Value = SingerType;
-                        row.Cells["Singer_Name"].Value = SingerName;
-                        
+                        SingerType = CommonFunc.GetSingerTypeStr(0, 1, SingerTypeStr);
+
                         // 取得歌手拼音
                         List<string> SingerSpellList = new List<string>();
                         SingerSpellList = CommonFunc.GetSongNameSpell(SingerName);
 
-                        row.Cells["Singer_Spell"].Value = SingerSpellList[0];
-                        row.Cells["Singer_SpellNum"].Value = SingerSpellList[1];
-                        row.Cells["Singer_Strokes"].Value = SingerSpellList[2];
-                        row.Cells["Singer_PenStyle"].Value = SingerSpellList[3];
+                        SingerSpell = SingerSpellList[0];
+                        SingerSpellNum = SingerSpellList[1];
+                        SingerStrokes = SingerSpellList[2];
+                        SingerPenStyle = SingerSpellList[3];
+
+                        UpdateList.Add(SingerId + "|" + SingerName + "|" + SingerType + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle + "|" + OldSingerId + "|" + OldSingerName);
                     }
                 }
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(dt)));
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Global.SingerMgrDataGridViewRestoreSelectList = new List<string>();
+                Global.SingerMgrDataGridViewRestoreCurrentRow = CurrentRowSingerId;
+                SingerMgr_DataGridView.Sorted -= new EventHandler(SingerMgr_DataGridView_Sorted);
 
-                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                using (DataTable UpdateDT = (DataTable)SingerMgr_DataGridView.DataSource)
                 {
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        Common_SwitchSetUI(true);
-                        Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(UpdateList, UpdateDT)));
 
-                        if (Global.SingerMgrSyncSongSinger == "True")
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        this.BeginInvoke((Action)delegate()
                         {
-                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
-                        }
-                        else
-                        {
-                            SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
-                        }
+                            SingerMgr_DataGridView.Sorted += new EventHandler(SingerMgr_DataGridView_Sorted);
+                            SingerMgr_DataGridView_Sorted(new object(), new EventArgs());
+
+                            Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
+
+                            SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
+
+                            if (SelectedRowsCount > 1)
+                            {
+                                Global.SingerMgrDataGridViewSelectList = new List<string>();
+
+                                foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
+                                {
+                                    SingerId = row.Cells["Singer_Id"].Value.ToString();
+                                    SingerType = row.Cells["Singer_Type"].Value.ToString();
+                                    SingerName = row.Cells["Singer_Name"].Value.ToString();
+                                    SingerSpell = row.Cells["Singer_Spell"].Value.ToString();
+                                    SingerStrokes = row.Cells["Singer_Strokes"].Value.ToString();
+                                    SingerSpellNum = row.Cells["Singer_SpellNum"].Value.ToString();
+                                    SingerPenStyle = row.Cells["Singer_PenStyle"].Value.ToString();
+
+                                    string SelectValue = SingerId + "|" + SingerType + "|" + SingerName + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle;
+                                    Global.SingerMgrDataGridViewSelectList.Add(SelectValue);
+                                }
+                            }
+
+                            if (Global.SingerMgrSyncSongSinger == "True")
+                            {
+                                SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首。";
+                            }
+                            else
+                            {
+                                SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位。";
+                            }
+                            Common_SwitchSetUI(true);
+                        });
+                        UpdateList.Clear();
+                        SingerMgr.DisposeSongDataTable();
                     });
-                    SingerMgr.DisposeSongDataTable();
-                    dt.Dispose();
-                    dt = null;
-                });
+                }
             }
         }
 

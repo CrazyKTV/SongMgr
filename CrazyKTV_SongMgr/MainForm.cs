@@ -587,32 +587,57 @@ namespace CrazyKTV_SongMgr
                 switch (Global.PlayerUpdateSongValueList[0])
                 {
                     case "SongQuery":
-                        SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value = Global.PlayerUpdateSongValueList[2];
+                        string OldSongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                        string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                        string SongLang = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
+                        string SongSingerType = SongQuery_DataGridView.Rows[i].Cells["Song_SingerType"].Value.ToString();
+                        string SongSinger = SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
+                        string SongSongName = SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
+                        string SongTrack = Global.PlayerUpdateSongValueList[2];
+                        string SongSongType = SongQuery_DataGridView.Rows[i].Cells["Song_SongType"].Value.ToString();
+                        string SongVolume = SongQuery_DataGridView.Rows[i].Cells["Song_Volume"].Value.ToString();
+                        string SongWordCount = SongQuery_DataGridView.Rows[i].Cells["Song_WordCount"].Value.ToString();
+                        string SongPlayCount = SongQuery_DataGridView.Rows[i].Cells["Song_PlayCount"].Value.ToString();
+                        string SongMB = SongQuery_DataGridView.Rows[i].Cells["Song_MB"].Value.ToString();
+                        string SongCreatDate = SongQuery_DataGridView.Rows[i].Cells["Song_CreatDate"].Value.ToString();
+                        string SongFileName = SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
+                        string SongPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString();
+                        string SongSpell = SongQuery_DataGridView.Rows[i].Cells["Song_Spell"].Value.ToString();
+                        string SongSpellNum = SongQuery_DataGridView.Rows[i].Cells["Song_SpellNum"].Value.ToString();
+                        string SongSongStroke = SongQuery_DataGridView.Rows[i].Cells["Song_SongStroke"].Value.ToString();
+                        string SongPenStyle = SongQuery_DataGridView.Rows[i].Cells["Song_PenStyle"].Value.ToString();
+                        string SongPlayState = SongQuery_DataGridView.Rows[i].Cells["Song_PlayState"].Value.ToString();
 
-                        DataTable dt = new DataTable();
-                        dt.Columns.Add("RowIndex", typeof(int));
-                        dt.Columns.Add("SongId", typeof(string));
-                        dt.Columns.Add("SongLang", typeof(string));
+                        List<string> UpdateList = new List<string>();
+                        UpdateList.Add(SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + OldSongId);
 
-                        DataRow row = dt.NewRow();
-                        row["RowIndex"] = i;
-                        row["SongId"] = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
-                        row["SongLang"] = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
-                        dt.Rows.Add(row);
-
+                        SongQuery.CreateSongDataTable();
                         Common_SwitchSetUI(false);
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(dt)));
 
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                        Global.SongQueryDataGridViewRestoreSelectList = new List<string>();
+                        Global.SongQueryDataGridViewRestoreCurrentRow = OldSongId;
+                        SongQuery_DataGridView.Sorted -= new EventHandler(SongQuery_DataGridView_Sorted);
+                        SongQuery_QueryStatus_Label.Text = "正在更新音軌資料,請稍待...";
+
+                        using (DataTable UpdateDT = (DataTable)SongQuery_DataGridView.DataSource)
                         {
-                            this.BeginInvoke((Action)delegate()
+                            var tasks = new List<Task>();
+                            tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(UpdateList, UpdateDT)));
+
+                            Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                             {
-                                Common_SwitchSetUI(true);
+                                this.BeginInvoke((Action)delegate()
+                                {
+                                    SongQuery_DataGridView.Sorted += new EventHandler(SongQuery_DataGridView_Sorted);
+                                    SongQuery_DataGridView_Sorted(new object(), new EventArgs());
+                                    SongQuery_QueryStatus_Label.Text = "已成功更新 " + Global.TotalList[0] + " 首歌曲的音軌資料。";
+                                    Common_SwitchSetUI(true);
+                                });
+                                UpdateList.Clear();
+                                SongQuery.DisposeSongDataTable();
                             });
-                            dt.Dispose();
-                            dt = null;
-                        });
+                        }
                         break;
                     case "SongQueryEdit":
                         SongQuery_EditSongTrack_ComboBox.SelectedValue = Global.PlayerUpdateSongValueList[2];
@@ -624,6 +649,10 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
 
 
 

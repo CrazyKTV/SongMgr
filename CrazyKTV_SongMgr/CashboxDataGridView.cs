@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -23,6 +24,20 @@ namespace CrazyKTV_SongMgr
         #endregion
 
         #region --- Cashbox 列表滑鼠點擊狀態事件 ---
+
+        private void Cashbox_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex == -1)
+            {
+                Global.CashboxDataGridViewRestoreCurrentRow = Cashbox_DataGridView.CurrentRow.Cells["Cashbox_Id"].Value.ToString();
+                Global.CashboxDataGridViewRestoreSelectList = new List<string>();
+                foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
+                {
+                    string SongId = row.Cells["Cashbox_Id"].Value.ToString();
+                    Global.CashboxDataGridViewRestoreSelectList.Add(SongId);
+                }
+            }
+        }
 
         private void Cashbox_DataGridView_MouseUp(object sender, MouseEventArgs e)
         {
@@ -117,6 +132,43 @@ namespace CrazyKTV_SongMgr
                 }
             }
             #endif
+        }
+
+        #endregion
+
+        #region --- Cashbox 列表排序事件 ---
+
+        private void Cashbox_DataGridView_Sorted(object sender, EventArgs e)
+        {
+            Cashbox_DataGridView.ClearSelection();
+
+            if (Global.CashboxDataGridViewRestoreCurrentRow != "")
+            {
+                var query = from row in Cashbox_DataGridView.Rows.Cast<DataGridViewRow>()
+                            where row.Cells["Cashbox_Id"].Value.Equals(Global.CashboxDataGridViewRestoreCurrentRow)
+                            select row;
+
+                if (query.Count() > 0)
+                {
+                    foreach (DataGridViewRow row in query)
+                    {
+                        Cashbox_DataGridView.CurrentCell = row.Cells[0];
+                    }
+                }
+            }
+
+            foreach (string str in Global.CashboxDataGridViewRestoreSelectList)
+            {
+                var query = from row in Cashbox_DataGridView.Rows.Cast<DataGridViewRow>()
+                            where row.Cells["Cashbox_Id"].Value.Equals(str)
+                            select row;
+
+                foreach (DataGridViewRow row in query)
+                {
+                    row.Selected = true;
+                }
+            }
+            Global.CashboxDataGridViewRestoreSelectList.Clear();
         }
 
         #endregion

@@ -394,6 +394,7 @@ namespace CrazyKTV_SongMgr
         {
             if (e.RowIndex == -1)
             {
+                Global.SongQueryDataGridViewRestoreCurrentRow = SongQuery_DataGridView.CurrentRow.Cells["Song_Id"].Value.ToString();
                 Global.SongQueryDataGridViewRestoreSelectList = new List<string>();
                 foreach (DataGridViewRow row in SongQuery_DataGridView.SelectedRows)
                 {
@@ -624,6 +625,21 @@ namespace CrazyKTV_SongMgr
         private void SongQuery_DataGridView_Sorted(object sender, EventArgs e)
         {
             SongQuery_DataGridView.ClearSelection();
+            if (Global.SongQueryDataGridViewRestoreCurrentRow != "")
+            {
+                var query = from row in SongQuery_DataGridView.Rows.Cast<DataGridViewRow>()
+                            where row.Cells["Song_Id"].Value.Equals(Global.SongQueryDataGridViewRestoreCurrentRow)
+                            select row;
+
+                if (query.Count() > 0)
+                {
+                    foreach (DataGridViewRow row in query)
+                    {
+                        SongQuery_DataGridView.CurrentCell = row.Cells[0];
+                    }
+                }
+            }
+
             foreach (string str in Global.SongQueryDataGridViewRestoreSelectList)
             {
                 var query = from row in SongQuery_DataGridView.Rows.Cast<DataGridViewRow>()
@@ -634,7 +650,6 @@ namespace CrazyKTV_SongMgr
                 {
                     row.Selected = true;
                 }
-                SongQuery_DataGridView.CurrentCell = SongQuery_DataGridView.SelectedRows[SongQuery_DataGridView.SelectedRows.Count - 1].Cells[0];
             }
             Global.SongQueryDataGridViewRestoreSelectList.Clear();
 
