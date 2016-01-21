@@ -432,6 +432,104 @@ namespace CrazyKTV_SongMgr
             #endif
         }
 
+        private void Debug_CashboxImport_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (File.Exists(Application.StartupPath + @"\SongMgr\Backup\UpdateCashboxDB.txt"))
+                {
+                    if (Debug_Tooltip_Label.Text == "錢櫃資料檔案不存在!") Debug_Tooltip_Label.Text = "";
+                    if (MessageBox.Show("你確定要匯入錢櫃資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Global.TimerStartTime = DateTime.Now;
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                        Common_SwitchSetUI(false);
+
+                        Debug_Tooltip_Label.Text = "正在匯入錢櫃資料,請稍待...";
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => Debug_CashboxImportTask()));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            Global.TimerEndTime = DateTime.Now;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Debug_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 筆錢櫃資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                                Common_SwitchSetUI(true);
+                            });
+                        });
+                    }
+                }
+                else
+                {
+                    Debug_Tooltip_Label.Text = "錢櫃資料檔案不存在!";
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_CashboxImportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> Addlist = new List<string>();
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+            {
+                string TruncateSqlStr = "delete * from ktv_Cashbox";
+                using (OleDbCommand cmd = new OleDbCommand(TruncateSqlStr, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\UpdateCashboxDB.txt"))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        Addlist.Add(sr.ReadLine());
+                    }
+                }
+
+                string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_SongName, Song_Singer, Song_CreatDate";
+                string sqlValuesStr = "@CashboxId, @SongLang, @SongSongName, @SongSinger, @SongCreatDate";
+                string InsertSqlStr = "insert into ktv_Cashbox ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+
+                using (OleDbCommand cmd = new OleDbCommand(InsertSqlStr, conn))
+                {
+                    List<string> list = new List<string>();
+
+                    foreach (string AddStr in Addlist)
+                    {
+                        list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
+
+                        switch (list[0])
+                        {
+                            case "ktv_Cashbox":
+                                cmd.Parameters.AddWithValue("@CashboxId", list[1]);
+                                cmd.Parameters.AddWithValue("@SongLang", list[2]);
+                                cmd.Parameters.AddWithValue("@SongSongName", list[4]);
+                                cmd.Parameters.AddWithValue("@SongSinger", list[3]);
+                                cmd.Parameters.AddWithValue("@SongCreatDate", list[5]);
+
+                                cmd.ExecuteNonQuery();
+                                cmd.Parameters.Clear();
+                                lock (LockThis) { Global.TotalList[0]++; }
+                                break;
+                        }
+                        list.Clear();
+
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Debug_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 筆錢櫃資料,請稍待...";
+                        });
+                    }
+                }
+            }
+            Addlist.Clear();
+        }
+        #endif
+
         #endregion
 
         #region --- Debug 建立欄位資料 ---
@@ -721,9 +819,7 @@ namespace CrazyKTV_SongMgr
             {
                 if (Global.CashboxDataGridViewSelectList.Count <= 0) return;
                 int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
-
                 List<string> UpdateList = new List<string>();
-
                 Common_SwitchSetUI(false);
 
                 if (SelectedRowsCount > 1)
