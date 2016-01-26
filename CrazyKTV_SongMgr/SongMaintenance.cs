@@ -2490,20 +2490,27 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "加入":
                     DataTable dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
-                    if (dt == null)
+                    if (SongMaintenance_MultiSongPath_ListBox.SelectedItems.Count > 0)
                     {
-                        dt = new DataTable();
-                        dt.Columns.Add(new DataColumn("Display", typeof(string)));
-                        dt.Columns.Add(new DataColumn("Value", typeof(int)));
                         dt.Rows.Add(dt.NewRow());
                         dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
                         dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
                     }
                     else
                     {
-                        dt.Rows.Add(dt.NewRow());
-                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
-                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                        using (DataTable NewDT = new DataTable())
+                        {
+                            NewDT.Columns.Add(new DataColumn("Display", typeof(string)));
+                            NewDT.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                            NewDT.Rows.Add(NewDT.NewRow());
+                            NewDT.Rows[NewDT.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
+                            NewDT.Rows[NewDT.Rows.Count - 1][1] = NewDT.Rows.Count;
+                            dt = NewDT.Copy();
+                        }
+                        SongMaintenance_MultiSongPath_ListBox.DataSource = dt;
+                        SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
+                        SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
                     }
                     SongMaintenance_MultiSongPath_TextBox.Text = "";
                     SongMaintenance_MultiSongPath_Button.Text = "瀏覽";

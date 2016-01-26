@@ -404,12 +404,33 @@ namespace CrazyKTV_SongMgr
                         }
                         else
                         {
+                            DataTable dt = new DataTable();
                             List<string> list = new List<string>();
 
-                            DataTable dt = (DataTable)SongMgrCfg_SongType_ListBox.DataSource;
-                            dt.Rows.Add(dt.NewRow());
-                            dt.Rows[dt.Rows.Count - 1][0] = SongMgrCfg_SongType_TextBox.Text;
-                            dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                            if (SongMgrCfg_SongType_ListBox.SelectedItems.Count > 0)
+                            {
+                                dt = (DataTable)SongMgrCfg_SongType_ListBox.DataSource;
+                                dt.Rows.Add(dt.NewRow());
+                                dt.Rows[dt.Rows.Count - 1][0] = SongMgrCfg_SongType_TextBox.Text;
+                                dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                            }
+                            else
+                            {
+                                using (DataTable NewDT = new DataTable())
+                                {
+                                    NewDT.Columns.Add(new DataColumn("Display", typeof(string)));
+                                    NewDT.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                                    NewDT.Rows.Add(NewDT.NewRow());
+                                    NewDT.Rows[NewDT.Rows.Count - 1][0] = SongMgrCfg_SongType_TextBox.Text;
+                                    NewDT.Rows[NewDT.Rows.Count - 1][1] = NewDT.Rows.Count;
+                                    dt = NewDT.Copy();
+                                }
+                                SongMgrCfg_SongType_ListBox.DataSource = dt;
+                                SongMgrCfg_SongType_ListBox.DisplayMember = "Display";
+                                SongMgrCfg_SongType_ListBox.ValueMember = "Value";
+                            }
+
                             SongMgrCfg_SongType_TextBox.Text = "";
 
                             foreach (DataRow row in dt.Rows)
