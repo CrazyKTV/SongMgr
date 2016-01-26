@@ -124,9 +124,6 @@ namespace CrazyKTV_SongMgr
                     this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVer1Value_Label.Text = SongDBVer.ToString("F2") + " 版";
-                        SongMaintenance_DBVer2Value_Label.Text = SingerDBVer.ToString() + " 版";
-                        SongMaintenance_DBVer3Value_Label.Text = PhoneticsDBVer.ToString() + " 版";
-                        SongMaintenance_DBVer4Value_Label.Text = CashboxDBVer.ToString() + " 版";
                         Cashbox_UpdDateValue_Label.Text = DateTime.Parse(CashboxUpdDate).ToLongDateString();
                         Cashbox_UpdDate_Button.Enabled = Cashbox.GetUpdDateButtonEnableStatus();
                     });
@@ -436,13 +433,13 @@ namespace CrazyKTV_SongMgr
 
                     OleDbCommand[] Updatecmds =
                     {
-                    new OleDbCommand("alter table ktv_Song alter column Song_SongName TEXT(80) WITH COMPRESSION", conn),
-                    new OleDbCommand("alter table ktv_Song alter column Song_Singer TEXT(60) WITH COMPRESSION", conn),
-                    new OleDbCommand("alter table ktv_Song alter column Song_Spell TEXT(80) WITH COMPRESSION", conn),
-                    new OleDbCommand("alter table ktv_Song alter column Song_FileName TEXT(255) WITH COMPRESSION", conn),
-                    new OleDbCommand("alter table ktv_Song alter column Song_SpellNum TEXT(80) WITH COMPRESSION", conn),
-                    new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(80) WITH COMPRESSION", conn)
-                };
+                        new OleDbCommand("alter table ktv_Song alter column Song_SongName TEXT(80) WITH COMPRESSION", conn),
+                        new OleDbCommand("alter table ktv_Song alter column Song_Singer TEXT(60) WITH COMPRESSION", conn),
+                        new OleDbCommand("alter table ktv_Song alter column Song_Spell TEXT(80) WITH COMPRESSION", conn),
+                        new OleDbCommand("alter table ktv_Song alter column Song_FileName TEXT(255) WITH COMPRESSION", conn),
+                        new OleDbCommand("alter table ktv_Song alter column Song_SpellNum TEXT(80) WITH COMPRESSION", conn),
+                        new OleDbCommand("alter table ktv_Song alter column Song_PenStyle TEXT(80) WITH COMPRESSION", conn)
+                    };
 
                     try
                     {
@@ -501,8 +498,8 @@ namespace CrazyKTV_SongMgr
                 {
                     OleDbCommand[] Updatecmds =
                     {
-                    new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn)
-                };
+                        new OleDbCommand("alter table ktv_Phonetics alter column PenStyle TEXT(40) WITH COMPRESSION", conn)
+                    };
 
                     try
                     {
@@ -525,8 +522,8 @@ namespace CrazyKTV_SongMgr
                 {
                     OleDbCommand[] Updatecmds =
                     {
-                    new OleDbCommand("alter table ktv_Langauage add column Langauage_KeyWord TEXT(255) WITH COMPRESSION", conn)
-                };
+                        new OleDbCommand("alter table ktv_Langauage add column Langauage_KeyWord TEXT(255) WITH COMPRESSION", conn)
+                    };
 
                     try
                     {
@@ -692,9 +689,6 @@ namespace CrazyKTV_SongMgr
                 }
 
                 SongMaintenance_DBVer1Value_Label.Text = Global.CrazyktvSongDBVer + " 版";
-                SongMaintenance_DBVer2Value_Label.Text = Global.CrazyktvSingerDBVer + " 版";
-                SongMaintenance_DBVer3Value_Label.Text = Global.CrazyktvPhoneticsDBVer + " 版";
-                SongMaintenance_DBVer4Value_Label.Text = Global.CrazyktvCashboxDBVer + " 版";
                 Cashbox_UpdDateValue_Label.Text = Global.CashboxUpdDate.ToLongDateString();
                 Cashbox_UpdDate_Button.Enabled = Cashbox.GetUpdDateButtonEnableStatus();
 

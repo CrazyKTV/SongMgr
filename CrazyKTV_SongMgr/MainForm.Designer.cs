@@ -409,18 +409,12 @@
             this.SongMaintenance_MultiSongPath_ListBox = new System.Windows.Forms.ListBox();
             this.SongMaintenance_EnableMultiSongPath_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_DBVer_TabPage = new System.Windows.Forms.TabPage();
-            this.SongMaintenance_DBVer4Value_Label = new System.Windows.Forms.Label();
-            this.SongMaintenance_DBVer4_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_DBVerUpdate_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_EnableRebuildSingerData_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_EnableDBVerUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_DBVerTooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_DBVerTooltip_Label = new System.Windows.Forms.Label();
-            this.SongMaintenance_DBVer3Value_Label = new System.Windows.Forms.Label();
-            this.SongMaintenance_DBVer2Value_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_DBVer1Value_Label = new System.Windows.Forms.Label();
-            this.SongMaintenance_DBVer3_Label = new System.Windows.Forms.Label();
-            this.SongMaintenance_DBVer2_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_DBVer1_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_VolumeChange_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_VolumeChange_TextBox = new System.Windows.Forms.TextBox();
@@ -5401,15 +5395,9 @@
             // 
             // SongMaintenance_DBVer_TabPage
             // 
-            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer4Value_Label);
-            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer4_Label);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVerUpdate_GroupBox);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVerTooltip_GroupBox);
-            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer3Value_Label);
-            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer2Value_Label);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer1Value_Label);
-            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer3_Label);
-            this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer2_Label);
             this.SongMaintenance_DBVer_TabPage.Controls.Add(this.SongMaintenance_DBVer1_Label);
             this.SongMaintenance_DBVer_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SongMaintenance_DBVer_TabPage.Margin = new System.Windows.Forms.Padding(2);
@@ -5419,29 +5407,6 @@
             this.SongMaintenance_DBVer_TabPage.TabIndex = 3;
             this.SongMaintenance_DBVer_TabPage.Text = "歌庫版本";
             this.SongMaintenance_DBVer_TabPage.UseVisualStyleBackColor = true;
-            // 
-            // SongMaintenance_DBVer4Value_Label
-            // 
-            this.SongMaintenance_DBVer4Value_Label.AutoSize = true;
-            this.SongMaintenance_DBVer4Value_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_DBVer4Value_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.SongMaintenance_DBVer4Value_Label.Location = new System.Drawing.Point(128, 178);
-            this.SongMaintenance_DBVer4Value_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongMaintenance_DBVer4Value_Label.Name = "SongMaintenance_DBVer4Value_Label";
-            this.SongMaintenance_DBVer4Value_Label.Size = new System.Drawing.Size(41, 22);
-            this.SongMaintenance_DBVer4Value_Label.TabIndex = 7;
-            this.SongMaintenance_DBVer4Value_Label.Text = "0 版";
-            // 
-            // SongMaintenance_DBVer4_Label
-            // 
-            this.SongMaintenance_DBVer4_Label.AutoSize = true;
-            this.SongMaintenance_DBVer4_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_DBVer4_Label.Location = new System.Drawing.Point(16, 178);
-            this.SongMaintenance_DBVer4_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongMaintenance_DBVer4_Label.Name = "SongMaintenance_DBVer4_Label";
-            this.SongMaintenance_DBVer4_Label.Size = new System.Drawing.Size(99, 22);
-            this.SongMaintenance_DBVer4_Label.TabIndex = 6;
-            this.SongMaintenance_DBVer4_Label.Text = "錢櫃資料庫:";
             // 
             // SongMaintenance_DBVerUpdate_GroupBox
             // 
@@ -5507,30 +5472,6 @@
             this.SongMaintenance_DBVerTooltip_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.SongMaintenance_DBVerTooltip_Label.UseMnemonic = false;
             // 
-            // SongMaintenance_DBVer3Value_Label
-            // 
-            this.SongMaintenance_DBVer3Value_Label.AutoSize = true;
-            this.SongMaintenance_DBVer3Value_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_DBVer3Value_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.SongMaintenance_DBVer3Value_Label.Location = new System.Drawing.Point(128, 128);
-            this.SongMaintenance_DBVer3Value_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongMaintenance_DBVer3Value_Label.Name = "SongMaintenance_DBVer3Value_Label";
-            this.SongMaintenance_DBVer3Value_Label.Size = new System.Drawing.Size(41, 22);
-            this.SongMaintenance_DBVer3Value_Label.TabIndex = 5;
-            this.SongMaintenance_DBVer3Value_Label.Text = "0 版";
-            // 
-            // SongMaintenance_DBVer2Value_Label
-            // 
-            this.SongMaintenance_DBVer2Value_Label.AutoSize = true;
-            this.SongMaintenance_DBVer2Value_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_DBVer2Value_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.SongMaintenance_DBVer2Value_Label.Location = new System.Drawing.Point(128, 78);
-            this.SongMaintenance_DBVer2Value_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongMaintenance_DBVer2Value_Label.Name = "SongMaintenance_DBVer2Value_Label";
-            this.SongMaintenance_DBVer2Value_Label.Size = new System.Drawing.Size(41, 22);
-            this.SongMaintenance_DBVer2Value_Label.TabIndex = 3;
-            this.SongMaintenance_DBVer2Value_Label.Text = "0 版";
-            // 
             // SongMaintenance_DBVer1Value_Label
             // 
             this.SongMaintenance_DBVer1Value_Label.AutoSize = true;
@@ -5542,28 +5483,6 @@
             this.SongMaintenance_DBVer1Value_Label.Size = new System.Drawing.Size(65, 22);
             this.SongMaintenance_DBVer1Value_Label.TabIndex = 1;
             this.SongMaintenance_DBVer1Value_Label.Text = "0.00 版";
-            // 
-            // SongMaintenance_DBVer3_Label
-            // 
-            this.SongMaintenance_DBVer3_Label.AutoSize = true;
-            this.SongMaintenance_DBVer3_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_DBVer3_Label.Location = new System.Drawing.Point(16, 128);
-            this.SongMaintenance_DBVer3_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongMaintenance_DBVer3_Label.Name = "SongMaintenance_DBVer3_Label";
-            this.SongMaintenance_DBVer3_Label.Size = new System.Drawing.Size(99, 22);
-            this.SongMaintenance_DBVer3_Label.TabIndex = 4;
-            this.SongMaintenance_DBVer3_Label.Text = "拼音資料庫:";
-            // 
-            // SongMaintenance_DBVer2_Label
-            // 
-            this.SongMaintenance_DBVer2_Label.AutoSize = true;
-            this.SongMaintenance_DBVer2_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_DBVer2_Label.Location = new System.Drawing.Point(16, 78);
-            this.SongMaintenance_DBVer2_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.SongMaintenance_DBVer2_Label.Name = "SongMaintenance_DBVer2_Label";
-            this.SongMaintenance_DBVer2_Label.Size = new System.Drawing.Size(99, 22);
-            this.SongMaintenance_DBVer2_Label.TabIndex = 2;
-            this.SongMaintenance_DBVer2_Label.Text = "歌手資料庫:";
             // 
             // SongMaintenance_DBVer1_Label
             // 
@@ -7818,11 +7737,7 @@
         private System.Windows.Forms.Label SongMaintenance_RebuildSongStructure_Label;
         private System.Windows.Forms.TextBox SongMaintenance_RebuildSongStructure_TextBox;
         private System.Windows.Forms.TabPage SongMaintenance_DBVer_TabPage;
-        private System.Windows.Forms.Label SongMaintenance_DBVer3Value_Label;
-        private System.Windows.Forms.Label SongMaintenance_DBVer2Value_Label;
         private System.Windows.Forms.Label SongMaintenance_DBVer1Value_Label;
-        private System.Windows.Forms.Label SongMaintenance_DBVer3_Label;
-        private System.Windows.Forms.Label SongMaintenance_DBVer2_Label;
         private System.Windows.Forms.Label SongMaintenance_DBVer1_Label;
         private System.Windows.Forms.GroupBox SongMaintenance_DBVerTooltip_GroupBox;
         private System.Windows.Forms.Label SongMaintenance_DBVerTooltip_Label;
@@ -8001,8 +7916,6 @@
         private System.Windows.Forms.Label Cashbox_OtherQuery_Label;
         private System.Windows.Forms.Label Cashbox_UpdDateValue_Label;
         private System.Windows.Forms.Label Cashbox_UpdDate_Label;
-        private System.Windows.Forms.Label SongMaintenance_DBVer4Value_Label;
-        private System.Windows.Forms.Label SongMaintenance_DBVer4_Label;
         private System.Windows.Forms.Button Debug_CashboxExport_Button;
         private System.Windows.Forms.Button Cashbox_UpdDate_Button;
         private System.Windows.Forms.Button Debug_CreateDataColumn_Button;
