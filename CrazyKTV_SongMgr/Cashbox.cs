@@ -532,7 +532,7 @@ namespace CrazyKTV_SongMgr
 
                                                     // 處理合唱歌曲中的特殊歌手名稱
                                                     string ChorusSongSingerName = row["Song_Singer"].ToString().ToLower();
-                                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                                                     foreach (string SpecialSingerName in SpecialStrlist)
                                                     {
@@ -1055,7 +1055,7 @@ namespace CrazyKTV_SongMgr
 
                                     // 處理合唱歌曲中的特殊歌手名稱
                                     string ChorusSongSingerName = row["Song_Singer"].ToString().ToLower();
-                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                                     foreach (string SpecialSingerName in SpecialStrlist)
                                     {

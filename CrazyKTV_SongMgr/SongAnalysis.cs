@@ -127,7 +127,7 @@ namespace CrazyKTV_SongMgr
             if (Global.SongAddEnableConvToTC == "True") FileStr = CommonFunc.ConvToTraditionalChinese(FileStr);
 
             // 特殊歌手及歌曲名稱處理
-            list = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+            list = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
             foreach (string str in list)
             {
                 FileStr = Regex.Replace(FileStr, str, "%%" + str + "%%", RegexOptions.IgnoreCase);
@@ -604,7 +604,7 @@ namespace CrazyKTV_SongMgr
 
                     // 處理合唱歌曲中的特殊歌手名稱
                     string ChorusSongSingerName = SongSinger.ToLower();
-                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                     foreach (string SpecialSingerName in SpecialStrlist)
                     {

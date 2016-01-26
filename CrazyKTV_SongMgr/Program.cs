@@ -80,7 +80,7 @@ namespace CrazyKTV_SongMgr
         public static string SongAddDefaultSongTrack = "1";
         public static string SongAddDefaultSongType = "1";
         public static string SongAddDefaultSongVolume = "100";
-        public static string SongAddSpecialStr = "A-Lin";
+        public static string SongAddSpecialStr = "";
         public static string SongAddSongIdentificationMode = "1";
         public static string SongAddDupSongMode = "1";
         public static string SongAddEngSongNameFormat = "False";

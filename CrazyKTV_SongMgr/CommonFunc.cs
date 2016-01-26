@@ -487,6 +487,26 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
+
+                if (InitSongId && InitPhonetics && InitCashbox)
+                {
+                    string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    {
+                        List<string> SpecialStrLowCaselist = new List<string>(Regex.Split(Global.SongAddSpecialStr.ToLower(), @"\|", RegexOptions.IgnoreCase));
+                        string SongAddSpecialStr = "";
+
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            if (SpecialStrLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
+                            {
+                                SongAddSpecialStr += row["Config_Value"].ToString() + "|";
+                            }
+                        }
+                        Global.SongAddSpecialStr = (Global.SongAddSpecialStr == "") ? SongAddSpecialStr : SongAddSpecialStr + Global.SongAddSpecialStr;
+                        Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|$", "");
+                    }
+                }
             }
         }
 
@@ -1001,7 +1021,7 @@ namespace CrazyKTV_SongMgr
                 List<string> Addlist = new List<string>();
                 List<string> spelllist = new List<string>();
                 List<string> ChorusSingerList = new List<string>();
-                List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                 foreach (DataRow row in dt.AsEnumerable())
                 {

@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,7 +25,26 @@ namespace CrazyKTV_SongMgr
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongTrack", Global.SongAddDefaultSongTrack);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongType", Global.SongAddDefaultSongType);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongVolume", Global.SongAddDefaultSongVolume);
-                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr", Global.SongAddSpecialStr);
+
+                    string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
+                    string SongAddSpecialStr = "";
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    {
+                        List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
+                        List<string> SpecialStrLowCaselist = SpecialStrlist.ConvertAll(str => str.ToLower());
+
+                        foreach (string SpecialStrLowCase in SpecialStrLowCaselist)
+                        {
+                            var query = from row in dt.AsEnumerable()
+                                        where row["Config_Value"].ToString().ToLower().Equals(SpecialStrLowCase)
+                                        select row;
+
+                            if (query.Count<DataRow>() == 0) SongAddSpecialStr += SpecialStrlist[SpecialStrLowCaselist.IndexOf(SpecialStrLowCase)] + "|";
+                        }
+                    }
+                    SongAddSpecialStr = Regex.Replace(SongAddSpecialStr, @"\|$", "");
+
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr", SongAddSpecialStr);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode", Global.SongAddSongIdentificationMode);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", Global.SongAddDupSongMode);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
@@ -128,29 +148,60 @@ namespace CrazyKTV_SongMgr
                 case "加入":
                     if (SongAdd_SpecialStr_TextBox.Text != "")
                     {
-                        if (SongAdd_Tooltip_Label.Text == "尚未輸入要加入的特殊歌手及歌曲名稱!") SongAdd_Tooltip_Label.Text = "";
-                        dt = (DataTable)SongAdd_SpecialStr_ListBox.DataSource;
-                        dt.Rows.Add(dt.NewRow());
-                        dt.Rows[dt.Rows.Count - 1][0] = SongAdd_SpecialStr_TextBox.Text;
-                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
-                        SongAdd_SpecialStr_TextBox.Text = "";
+                        List<string> SpecialStrLowCaselist = new List<string>();
 
-                        List<string> list = new List<string>();
-
-                        foreach (DataRow row in dt.Rows)
+                        string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
+                        using (DataTable SpecialStrDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
                         {
-                            foreach (DataColumn column in dt.Columns)
+                            foreach (DataRow row in SpecialStrDT.AsEnumerable())
                             {
-                                if (row[column] != null)
-                                {
-                                    if (column.ColumnName == "Display")
-                                    {
-                                        list.Add(row[column].ToString());
-                                    }
-                                }
+                                SpecialStrLowCaselist.Add(row["Config_Value"].ToString().ToLower());
                             }
                         }
-                        Global.SongAddSpecialStr = string.Join(",", list);
+
+                        if (SpecialStrLowCaselist.IndexOf(SongAdd_SpecialStr_TextBox.Text.ToLower()) >= 0)
+                        {
+                            SongAdd_Tooltip_Label.Text = "要加入的特殊歌手及歌曲名稱已內建!";
+                        }
+                        else
+                        {
+                            if (SongAdd_SpecialStr_ListBox.SelectedItems.Count > 0)
+                            {
+                                dt = (DataTable)SongAdd_SpecialStr_ListBox.DataSource;
+
+                                foreach (DataRow row in dt.AsEnumerable())
+                                {
+                                    if (row["Display"].ToString().ToLower() == SongAdd_SpecialStr_TextBox.Text.ToLower())
+                                    {
+                                        SongAdd_Tooltip_Label.Text = "要加入的特殊歌手及歌曲名稱已存在!";
+                                        return;
+                                    }
+                                }
+
+                                dt.Rows.Add(dt.NewRow());
+                                dt.Rows[dt.Rows.Count - 1][0] = SongAdd_SpecialStr_TextBox.Text;
+                                dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                            }
+                            else
+                            {
+                                using (DataTable NewDT = new DataTable())
+                                {
+                                    NewDT.Columns.Add(new DataColumn("Display", typeof(string)));
+                                    NewDT.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                                    NewDT.Rows.Add(NewDT.NewRow());
+                                    NewDT.Rows[NewDT.Rows.Count - 1][0] = SongAdd_SpecialStr_TextBox.Text;
+                                    NewDT.Rows[NewDT.Rows.Count - 1][1] = NewDT.Rows.Count;
+                                    dt = NewDT.Copy();
+                                }
+                                SongAdd_SpecialStr_ListBox.DataSource = dt;
+                                SongAdd_SpecialStr_ListBox.DisplayMember = "Display";
+                                SongAdd_SpecialStr_ListBox.ValueMember = "Value";
+                            }
+                            Global.SongAddSpecialStr += "|" + SongAdd_SpecialStr_TextBox.Text;
+                            SongAdd_SpecialStr_TextBox.Text = "";
+                            SongAdd_Tooltip_Label.Text = "已成功加入特殊歌手及歌曲名稱!";
+                        }
                     }
                     else
                     {
@@ -160,26 +211,11 @@ namespace CrazyKTV_SongMgr
                 case "移除":
                     if (SongAdd_SpecialStr_ListBox.SelectedItem != null)
                     {
+                        string RemoveStr = ((DataRowView)SongAdd_SpecialStr_ListBox.SelectedItem)[0].ToString();
                         int index = int.Parse(SongAdd_SpecialStr_ListBox.SelectedIndex.ToString());
                         dt = (DataTable)SongAdd_SpecialStr_ListBox.DataSource;
                         dt.Rows.RemoveAt(index);
-
-                        List<string> list = new List<string>();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            foreach (DataColumn column in dt.Columns)
-                            {
-                                if (row[column] != null)
-                                {
-                                    if (column.ColumnName == "Display")
-                                    {
-                                        list.Add(row[column].ToString());
-                                    }
-                                }
-                            }
-                        }
-                        Global.SongAddSpecialStr = string.Join(",", list);
+                        Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|" + RemoveStr, "", RegexOptions.IgnoreCase);
                     }
                     else
                     {
@@ -1000,7 +1036,7 @@ namespace CrazyKTV_SongMgr
                     Global.SongAddMultiEditUpdateList[2] = (SongAdd_EditSongSinger_TextBox.Text != "") ? true : false;
                     if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
                     {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split(',')).ConvertAll(str => str.ToLower());
+                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
                         if (list.IndexOf(SongSinger.ToLower()) < 0) SongAdd_EditSongSingerType_ComboBox.SelectedValue = 5;
                     }
                 }
@@ -1008,7 +1044,7 @@ namespace CrazyKTV_SongMgr
                 {
                     if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
                     {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split(',')).ConvertAll(str => str.ToLower());
+                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
                         if (list.IndexOf(SongSinger.ToLower()) < 0) SongAdd_EditSongSingerType_ComboBox.SelectedValue = 4;
                     }
                 }
@@ -1473,16 +1509,50 @@ namespace CrazyKTV_SongMgr
                         list = new List<string>(str.Split(','));
                         break;
                     case "SpecialStr":
-                        if (Global.SongAddSpecialStr != "") { str = Global.SongAddSpecialStr; } else { str = "A-Lin"; }
-                        list = new List<string>(str.Split(','));
+                        if (Global.SongAddSpecialStr != "")
+                        {
+                            string SongAddSpecialStr = Global.SongAddSpecialStr;
+                            if (Global.SongAddSpecialStr.IndexOf("|") < 0)
+                            {
+                                SongAddSpecialStr = "";
+                                Global.SongAddSpecialStr = Global.SongAddSpecialStr.Replace(",", "|");
+                                string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
+                                
+                                using (DataTable SpecialStrDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                                {
+                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
+                                    List<string> SpecialStrLowCaselist = SpecialStrlist.ConvertAll(SpecialStr => SpecialStr.ToLower());
+
+                                    foreach (string SpecialStrLowCase in SpecialStrLowCaselist)
+                                    {
+                                        var query = from row in SpecialStrDT.AsEnumerable()
+                                                    where row["Config_Value"].ToString().ToLower().Equals(SpecialStrLowCase)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() == 0) SongAddSpecialStr += SpecialStrlist[SpecialStrLowCaselist.IndexOf(SpecialStrLowCase)] + "|";
+                                    }
+                                }
+                                SongAddSpecialStr = Regex.Replace(SongAddSpecialStr, @"\|$", "");
+                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr", SongAddSpecialStr);
+                            }
+                            str = SongAddSpecialStr;
+                        }
+                        else
+                        {
+                            str = "";
+                        }
+                        if (str != "") list = new List<string>(str.Split('|'));
                         break;
                 }
 
-                foreach (string s in list)
+                if (list.Count > 0)
                 {
-                    dt.Rows.Add(dt.NewRow());
-                    dt.Rows[dt.Rows.Count - 1][0] = s;
-                    dt.Rows[dt.Rows.Count - 1][1] = (SongInfoType == "DefaultSongTrack") ? dt.Rows.Count - 1 : dt.Rows.Count;
+                    foreach (string s in list)
+                    {
+                        dt.Rows.Add(dt.NewRow());
+                        dt.Rows[dt.Rows.Count - 1][0] = s;
+                        dt.Rows[dt.Rows.Count - 1][1] = (SongInfoType == "DefaultSongTrack") ? dt.Rows.Count - 1 : dt.Rows.Count;
+                    }
                 }
                 list.Clear();
                 return dt;

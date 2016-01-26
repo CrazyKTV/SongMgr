@@ -542,6 +542,11 @@
             this.SongLog_ClearLog_Button = new System.Windows.Forms.Button();
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
+            this.Debug_ConfigData_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Debug_ConfigData_TextBox = new System.Windows.Forms.TextBox();
+            this.Debug_ConfigData_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Debug_ConfigData_Button = new System.Windows.Forms.Button();
+            this.Debug_CreateDataTable_Button = new System.Windows.Forms.Button();
             this.Debug_Singer_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_NewSingerImport_Button = new System.Windows.Forms.Button();
             this.Debug_NewSingerExport_Button = new System.Windows.Forms.Button();
@@ -637,6 +642,7 @@
             this.SongLog_TabPage.SuspendLayout();
             this.SongLog_GroupBox.SuspendLayout();
             this.Debug_TabPage.SuspendLayout();
+            this.Debug_ConfigData_GroupBox.SuspendLayout();
             this.Debug_Singer_GroupBox.SuspendLayout();
             this.Debug_Cashbox_GroupBox.SuspendLayout();
             this.Debug_Tooltip_GroupBox.SuspendLayout();
@@ -7130,6 +7136,8 @@
             // 
             // Debug_TabPage
             // 
+            this.Debug_TabPage.Controls.Add(this.Debug_ConfigData_GroupBox);
+            this.Debug_TabPage.Controls.Add(this.Debug_CreateDataTable_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_Singer_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_UpdateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateDataColumn_Button);
@@ -7146,11 +7154,69 @@
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
             // 
+            // Debug_ConfigData_GroupBox
+            // 
+            this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigData_TextBox);
+            this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigData_ComboBox);
+            this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigData_Button);
+            this.Debug_ConfigData_GroupBox.Location = new System.Drawing.Point(8, 210);
+            this.Debug_ConfigData_GroupBox.Name = "Debug_ConfigData_GroupBox";
+            this.Debug_ConfigData_GroupBox.Size = new System.Drawing.Size(343, 193);
+            this.Debug_ConfigData_GroupBox.TabIndex = 15;
+            this.Debug_ConfigData_GroupBox.TabStop = false;
+            this.Debug_ConfigData_GroupBox.Text = "加歌程式設定資料";
+            // 
+            // Debug_ConfigData_TextBox
+            // 
+            this.Debug_ConfigData_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_ConfigData_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Debug_ConfigData_TextBox.Location = new System.Drawing.Point(9, 87);
+            this.Debug_ConfigData_TextBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.Debug_ConfigData_TextBox.Name = "Debug_ConfigData_TextBox";
+            this.Debug_ConfigData_TextBox.Size = new System.Drawing.Size(232, 30);
+            this.Debug_ConfigData_TextBox.TabIndex = 16;
+            // 
+            // Debug_ConfigData_ComboBox
+            // 
+            this.Debug_ConfigData_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Debug_ConfigData_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_ConfigData_ComboBox.FormattingEnabled = true;
+            this.Debug_ConfigData_ComboBox.Location = new System.Drawing.Point(9, 41);
+            this.Debug_ConfigData_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.Debug_ConfigData_ComboBox.Name = "Debug_ConfigData_ComboBox";
+            this.Debug_ConfigData_ComboBox.Size = new System.Drawing.Size(232, 30);
+            this.Debug_ConfigData_ComboBox.TabIndex = 15;
+            this.Debug_ConfigData_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Debug_ConfigData_ComboBox_SelectedIndexChanged);
+            // 
+            // Debug_ConfigData_Button
+            // 
+            this.Debug_ConfigData_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_ConfigData_Button.Location = new System.Drawing.Point(253, 86);
+            this.Debug_ConfigData_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_ConfigData_Button.Name = "Debug_ConfigData_Button";
+            this.Debug_ConfigData_Button.Size = new System.Drawing.Size(81, 32);
+            this.Debug_ConfigData_Button.TabIndex = 14;
+            this.Debug_ConfigData_Button.Text = "加入";
+            this.Debug_ConfigData_Button.UseVisualStyleBackColor = true;
+            this.Debug_ConfigData_Button.Click += new System.EventHandler(this.Debug_ConfigData_Button_Click);
+            // 
+            // Debug_CreateDataTable_Button
+            // 
+            this.Debug_CreateDataTable_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CreateDataTable_Button.Location = new System.Drawing.Point(26, 66);
+            this.Debug_CreateDataTable_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CreateDataTable_Button.Name = "Debug_CreateDataTable_Button";
+            this.Debug_CreateDataTable_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CreateDataTable_Button.TabIndex = 14;
+            this.Debug_CreateDataTable_Button.Text = "建立表格資料";
+            this.Debug_CreateDataTable_Button.UseVisualStyleBackColor = true;
+            this.Debug_CreateDataTable_Button.Click += new System.EventHandler(this.Debug_CreateDataTable_Button_Click);
+            // 
             // Debug_Singer_GroupBox
             // 
             this.Debug_Singer_GroupBox.Controls.Add(this.Debug_NewSingerImport_Button);
             this.Debug_Singer_GroupBox.Controls.Add(this.Debug_NewSingerExport_Button);
-            this.Debug_Singer_GroupBox.Location = new System.Drawing.Point(265, 152);
+            this.Debug_Singer_GroupBox.Location = new System.Drawing.Point(357, 152);
             this.Debug_Singer_GroupBox.Name = "Debug_Singer_GroupBox";
             this.Debug_Singer_GroupBox.Size = new System.Drawing.Size(436, 193);
             this.Debug_Singer_GroupBox.TabIndex = 13;
@@ -7184,7 +7250,7 @@
             // Debug_UpdateDataColumn_Button
             // 
             this.Debug_UpdateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 108);
+            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 166);
             this.Debug_UpdateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_UpdateDataColumn_Button.Name = "Debug_UpdateDataColumn_Button";
             this.Debug_UpdateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
@@ -7196,7 +7262,7 @@
             // Debug_CreateDataColumn_Button
             // 
             this.Debug_CreateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_CreateDataColumn_Button.Location = new System.Drawing.Point(26, 58);
+            this.Debug_CreateDataColumn_Button.Location = new System.Drawing.Point(26, 116);
             this.Debug_CreateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_CreateDataColumn_Button.Name = "Debug_CreateDataColumn_Button";
             this.Debug_CreateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
@@ -7222,7 +7288,7 @@
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxImport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxExport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxNonSingerDataLog_Button);
-            this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(265, 351);
+            this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(357, 351);
             this.Debug_Cashbox_GroupBox.Name = "Debug_Cashbox_GroupBox";
             this.Debug_Cashbox_GroupBox.Size = new System.Drawing.Size(436, 271);
             this.Debug_Cashbox_GroupBox.TabIndex = 10;
@@ -7440,6 +7506,8 @@
             this.SongLog_TabPage.ResumeLayout(false);
             this.SongLog_GroupBox.ResumeLayout(false);
             this.Debug_TabPage.ResumeLayout(false);
+            this.Debug_ConfigData_GroupBox.ResumeLayout(false);
+            this.Debug_ConfigData_GroupBox.PerformLayout();
             this.Debug_Singer_GroupBox.ResumeLayout(false);
             this.Debug_Cashbox_GroupBox.ResumeLayout(false);
             this.Debug_Tooltip_GroupBox.ResumeLayout(false);
@@ -7963,6 +8031,11 @@
         private System.Windows.Forms.Button Debug_NewSingerExport_Button;
         private System.Windows.Forms.Button Debug_NewSingerImport_Button;
         private System.Windows.Forms.Button Debug_CashboxImport_Button;
+        private System.Windows.Forms.Button Debug_CreateDataTable_Button;
+        private System.Windows.Forms.GroupBox Debug_ConfigData_GroupBox;
+        private System.Windows.Forms.Button Debug_ConfigData_Button;
+        private System.Windows.Forms.ComboBox Debug_ConfigData_ComboBox;
+        private System.Windows.Forms.TextBox Debug_ConfigData_TextBox;
     }
 }
 

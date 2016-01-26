@@ -282,7 +282,7 @@ namespace CrazyKTV_SongMgr
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             List<string> list = new List<string>();
             List<string> Singerlist = new List<string>();
-            List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+            List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
             DataTable dt = new DataTable();
             string SingerQuerySqlStr = "SELECT First(Song_Singer) AS Song_Singer, Count(Song_Singer) AS Song_SingerCount FROM ktv_Cashbox GROUP BY Song_Singer HAVING (Count(Song_Singer)>0) ORDER BY First(Song_Singer)";
@@ -527,6 +527,57 @@ namespace CrazyKTV_SongMgr
                 }
             }
             Addlist.Clear();
+        }
+#endif
+
+        #endregion
+
+        #region --- Debug 建立表格資料 ---
+
+        private void Debug_CreateDataTable_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要建立表格資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在建立表格資料,請稍待...";
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Debug_CreateDataTableTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            Debug_Tooltip_Label.Text = "新增表格資料完畢,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_CreateDataTableTask()
+        {
+            string DatabaseFile = Global.CrazyktvSongMgrDatabaseFile;
+            string TableName = "ktv_SongMgr";
+            string Columns = " (Config_Id INTEGER NOT NULL PRIMARY KEY, Config_Type TEXT(30) WITH COMPRESSION, Config_Value TEXT(60) WITH COMPRESSION)";
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(DatabaseFile, ""))
+            {
+                OleDbCommand[] cmds =
+                {
+                    new OleDbCommand("create table " + TableName + Columns, conn)
+                };
+                cmds[0].ExecuteNonQuery();
+            }
         }
         #endif
 
@@ -1043,7 +1094,7 @@ namespace CrazyKTV_SongMgr
                 {
                     List<string> list = new List<string>();
                     List<string> Singerlist = new List<string>();
-                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                     string SingerName = "";
                     string SingerType = "";
@@ -1263,11 +1314,95 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Debug 新增設定資料 ---
+
+        private void Debug_ConfigData_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            #if DEBUG
+            switch (Debug_ConfigData_ComboBox.SelectedValue.ToString())
+            {
+                case "1":
+                    Debug.ConfigDataType = "SpecialStr";
+                    break;
+            }
+            #endif
+        }
+
+        private void Debug_ConfigData_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Debug_ConfigData_TextBox.Text != "")
+            {
+                if (Global.CrazyktvDatabaseStatus)
+                {
+                    if (MessageBox.Show("你確定要加入設定資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Global.TimerStartTime = DateTime.Now;
+                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                        Common_SwitchSetUI(false);
+
+                        Debug_Tooltip_Label.Text = "正在加入設定資料,請稍待...";
+
+                        string ConfigType = Debug.ConfigDataType;
+                        string ConfigValue = Debug_ConfigData_TextBox.Text;
+                        int ConfigId;
+
+                        string SqlStr = "select * from ktv_SongMgr";
+                        using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                        {
+                            ConfigId = dt.Rows.Count + 1;
+                        }
+                        
+                        var tasks = new List<Task>();
+                        tasks.Add(Task.Factory.StartNew(() => Debug_AddConfigDataTask(ConfigType, ConfigValue, ConfigId)));
+
+                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        {
+                            Global.TimerEndTime = DateTime.Now;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Debug_Tooltip_Label.Text = "加入設定資料完畢,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                                Common_SwitchSetUI(true);
+                            });
+                        });
+                    }
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_AddConfigDataTask(string ConfigType, string ConfigValue, int ConfigId)
+        {
+            string DatabaseFile = Global.CrazyktvSongMgrDatabaseFile;
+            string sqlColumnStr = "Config_Id, Config_Type, Config_Value";
+            string sqlValuesStr = "@ConfigId, @ConfigType, @ConfigValue";
+            string AddSqlStr = "insert into ktv_SongMgr ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(DatabaseFile, ""))
+            {
+                OleDbCommand[] cmds =
+                {
+                    new OleDbCommand(AddSqlStr, conn)
+                };
+
+                cmds[0].Parameters.AddWithValue("@ConfigId", ConfigId);
+                cmds[0].Parameters.AddWithValue("@ConfigType", ConfigType);
+                cmds[0].Parameters.AddWithValue("@ConfigValue", ConfigValue);
+                cmds[0].ExecuteNonQuery();
+            }
+        }
+        #endif
+
+        #endregion
+
     }
 
 
     class Debug
     {
+        public static string ConfigDataType = "SpecialStr";
+
         public static DataTable GetEditSongLangList(bool MultiEdit)
         {
             #if DEBUG
@@ -1292,10 +1427,32 @@ namespace CrazyKTV_SongMgr
                 return list;
             }
             #else
-            return null;
+                return null;
             #endif
         }
 
+        public static DataTable GetConfigDataList()
+        {
+            #if DEBUG
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> Itemlist = new List<string>() { "SpecialStr" };
+
+                foreach (string str in Itemlist)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
+            }
+            #else
+                return null;
+            #endif
+        }
 
 
     }

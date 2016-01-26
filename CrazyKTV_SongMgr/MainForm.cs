@@ -479,6 +479,14 @@ namespace CrazyKTV_SongMgr
             SongDBConverter_SetRtfText("資料庫類型: ", "請選擇你要轉換的點歌軟體資料庫類型。" + Environment.NewLine);
             SongDBConverter_SetRtfText("目的資料庫: ", "請選擇本工具所附的 CrazySongEmpty.mdb 空白資料庫檔案。" + Environment.NewLine);
 
+            // Debug - 載入下拉選單清單
+            #if DEBUG
+                Debug_ConfigData_ComboBox.DataSource = Debug.GetConfigDataList();
+                Debug_ConfigData_ComboBox.DisplayMember = "Display";
+                Debug_ConfigData_ComboBox.ValueMember = "Value";
+                Debug_ConfigData_ComboBox.SelectedValue = 1;
+            #endif
+
             if (!Global.CrazyktvDatabaseStatus)
             {
                 if (!Global.CrazyktvDatabaseIsOld) MainTabControl.SelectedIndex = 3;
@@ -649,6 +657,24 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

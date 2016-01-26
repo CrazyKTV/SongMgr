@@ -722,7 +722,7 @@ namespace CrazyKTV_SongMgr
 
                         // 處理合唱歌曲中的特殊歌手名稱
                         string ChorusSongSingerName = SongSinger;
-                        List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, ",", RegexOptions.IgnoreCase));
+                        List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
@@ -1696,7 +1696,7 @@ namespace CrazyKTV_SongMgr
                     Global.SongQueryMultiEditUpdateList[2] = (SongQuery_EditSongSinger_TextBox.Text != "") ? true : false;
                     if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
                     {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split(',')).ConvertAll(str => str.ToLower());
+                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
                         if (list.IndexOf(SongSinger.ToLower()) < 0) SongQuery_EditSongSingerType_ComboBox.SelectedValue = 5;
                     }
                 }
@@ -1704,7 +1704,7 @@ namespace CrazyKTV_SongMgr
                 {
                     if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
                     {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split(',')).ConvertAll(str => str.ToLower());
+                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
                         if (list.IndexOf(SongSinger.ToLower()) < 0)
                         {
                             SongQuery_EditSongSingerType_ComboBox.SelectedValue = 4;
