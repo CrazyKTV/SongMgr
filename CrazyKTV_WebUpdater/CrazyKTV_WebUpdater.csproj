@@ -351,7 +351,10 @@
     <Content Include="UpdateFile\CrazyKTV_ConfigTool.exe" />
     <Content Include="UpdateFile\CrazyKTV_SongMgr.exe" />
     <Content Include="UpdateFile\CrazySong.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UpdateFile\CrazySongMgr.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="UpdateFile\DirectShowLib-2005.dll" />
     <Content Include="UpdateFile\Folder_BackGround.exe" />

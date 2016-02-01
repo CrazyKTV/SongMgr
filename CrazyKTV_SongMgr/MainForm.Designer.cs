@@ -694,7 +694,7 @@
             this.SongQuery_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.SongQuery_OtherQuery_GroupBox.Name = "SongQuery_OtherQuery_GroupBox";
             this.SongQuery_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SongQuery_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 82);
+            this.SongQuery_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 83);
             this.SongQuery_OtherQuery_GroupBox.TabIndex = 1;
             this.SongQuery_OtherQuery_GroupBox.TabStop = false;
             this.SongQuery_OtherQuery_GroupBox.Text = "其它查詢";
@@ -2474,9 +2474,9 @@
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Tooltip_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_DataGridView);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Query_GroupBox);
-            this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_SingerAdd_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Manager_GroupBox);
             this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_Edit_GroupBox);
+            this.SingerMgr_TabPage.Controls.Add(this.SingerMgr_SingerAdd_GroupBox);
             this.SingerMgr_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_TabPage.Location = new System.Drawing.Point(4, 34);
             this.SingerMgr_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -2492,11 +2492,11 @@
             this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_Label);
             this.SingerMgr_OtherQuery_GroupBox.Controls.Add(this.SingerMgr_QueryType_ComboBox);
             this.SingerMgr_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_OtherQuery_GroupBox.Location = new System.Drawing.Point(22, 174);
+            this.SingerMgr_OtherQuery_GroupBox.Location = new System.Drawing.Point(22, 172);
             this.SingerMgr_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(2, 10, 2, 2);
             this.SingerMgr_OtherQuery_GroupBox.Name = "SingerMgr_OtherQuery_GroupBox";
             this.SingerMgr_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SingerMgr_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 119);
+            this.SingerMgr_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 120);
             this.SingerMgr_OtherQuery_GroupBox.TabIndex = 1;
             this.SingerMgr_OtherQuery_GroupBox.TabStop = false;
             this.SingerMgr_OtherQuery_GroupBox.Text = "其它查詢";
@@ -2792,11 +2792,11 @@
             this.SingerMgr_Tooltip_GroupBox.Controls.Add(this.SingerMgr_EditMode_CheckBox);
             this.SingerMgr_Tooltip_GroupBox.Controls.Add(this.SingerMgr_Tooltip_Label);
             this.SingerMgr_Tooltip_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 1.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_Tooltip_GroupBox.Location = new System.Drawing.Point(22, 621);
-            this.SingerMgr_Tooltip_GroupBox.Margin = new System.Windows.Forms.Padding(2, 12, 6, 2);
+            this.SingerMgr_Tooltip_GroupBox.Location = new System.Drawing.Point(22, 310);
+            this.SingerMgr_Tooltip_GroupBox.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
             this.SingerMgr_Tooltip_GroupBox.Name = "SingerMgr_Tooltip_GroupBox";
             this.SingerMgr_Tooltip_GroupBox.Padding = new System.Windows.Forms.Padding(0);
-            this.SingerMgr_Tooltip_GroupBox.Size = new System.Drawing.Size(949, 35);
+            this.SingerMgr_Tooltip_GroupBox.Size = new System.Drawing.Size(952, 35);
             this.SingerMgr_Tooltip_GroupBox.TabIndex = 6;
             this.SingerMgr_Tooltip_GroupBox.TabStop = false;
             // 
@@ -2846,7 +2846,7 @@
             this.SingerMgr_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SingerMgr_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.SingerMgr_DataGridView.EnableHeadersVisualStyles = false;
-            this.SingerMgr_DataGridView.Location = new System.Drawing.Point(22, 310);
+            this.SingerMgr_DataGridView.Location = new System.Drawing.Point(22, 365);
             this.SingerMgr_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
             this.SingerMgr_DataGridView.Name = "SingerMgr_DataGridView";
             dataGridViewCellStyle9.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -2977,7 +2977,7 @@
             this.SingerMgr_SingerAdd_GroupBox.Controls.Add(this.SingerMgr_SingerAddName_TextBox);
             this.SingerMgr_SingerAdd_GroupBox.Controls.Add(this.SingerMgr_SingerAddName_Label);
             this.SingerMgr_SingerAdd_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_SingerAdd_GroupBox.Location = new System.Drawing.Point(508, 306);
+            this.SingerMgr_SingerAdd_GroupBox.Location = new System.Drawing.Point(508, 362);
             this.SingerMgr_SingerAdd_GroupBox.Margin = new System.Windows.Forms.Padding(12, 10, 2, 2);
             this.SingerMgr_SingerAdd_GroupBox.Name = "SingerMgr_SingerAdd_GroupBox";
             this.SingerMgr_SingerAdd_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
@@ -3078,7 +3078,7 @@
             this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerExport_Button);
             this.SingerMgr_Manager_GroupBox.Controls.Add(this.SingerMgr_SingerImport_Button);
             this.SingerMgr_Manager_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_Manager_GroupBox.Location = new System.Drawing.Point(508, 462);
+            this.SingerMgr_Manager_GroupBox.Location = new System.Drawing.Point(508, 517);
             this.SingerMgr_Manager_GroupBox.Margin = new System.Windows.Forms.Padding(12, 9, 2, 2);
             this.SingerMgr_Manager_GroupBox.Name = "SingerMgr_Manager_GroupBox";
             this.SingerMgr_Manager_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
@@ -3173,11 +3173,11 @@
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerId_TextBox);
             this.SingerMgr_Edit_GroupBox.Controls.Add(this.SingerMgr_EditSingerId_Label);
             this.SingerMgr_Edit_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_Edit_GroupBox.Location = new System.Drawing.Point(508, 306);
+            this.SingerMgr_Edit_GroupBox.Location = new System.Drawing.Point(508, 362);
             this.SingerMgr_Edit_GroupBox.Margin = new System.Windows.Forms.Padding(12, 10, 2, 2);
             this.SingerMgr_Edit_GroupBox.Name = "SingerMgr_Edit_GroupBox";
             this.SingerMgr_Edit_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SingerMgr_Edit_GroupBox.Size = new System.Drawing.Size(468, 300);
+            this.SingerMgr_Edit_GroupBox.Size = new System.Drawing.Size(468, 299);
             this.SingerMgr_Edit_GroupBox.TabIndex = 7;
             this.SingerMgr_Edit_GroupBox.TabStop = false;
             this.SingerMgr_Edit_GroupBox.Text = "歌手編輯";

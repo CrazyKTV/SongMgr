@@ -634,12 +634,7 @@ namespace CrazyKTV_SongMgr
 
                     if (Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())) != null)
                     {
-                        List<string> SongDataList = new List<string>(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())).Split('|'));
-                        if (list[1] == SongSongName.ToLower())
-                        {
-                            SongDataIndex = Global.CashboxSongDataLowCaseList.IndexOf(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())));
-                        }
-                        SongDataList.Clear();
+                        SongDataIndex = Global.CashboxSongDataLowCaseList.IndexOf(Global.CashboxSongDataLowCaseList.Find(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray())));
                     }
                     ChorusSongDatalist.Clear();
                 }
