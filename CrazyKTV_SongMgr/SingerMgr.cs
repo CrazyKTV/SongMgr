@@ -207,6 +207,32 @@ namespace CrazyKTV_SongMgr
                     string DatabaseFile = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile;
                     using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SingerQuerySqlStr, ""))
                     {
+                        if (QueryType == "SingerName")
+                        {
+                            if (Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower()) >= 0)
+                            {
+                                int i = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower())];
+                                List<string> list = new List<string>(Global.SingerGroupList[i].Split(','));
+                                if (list.Count > 0)
+                                {
+                                    foreach (string GroupSingerName in list)
+                                    {
+                                        if (GroupSingerName.ToLower() != QueryValue.ToLower())
+                                        {
+                                            SingerQuerySqlStr = "select " + sqlColumnStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + GroupSingerName + "'),0) <>0 order by Singer_Name";
+                                            using (DataTable SingerGroupDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, ""))
+                                            {
+                                                foreach (DataRow row in SingerGroupDT.Rows)
+                                                {
+                                                    dt.ImportRow(row);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         if (dt.Rows.Count == 0)
                         {
                             this.BeginInvoke((Action)delegate()

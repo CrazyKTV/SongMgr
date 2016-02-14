@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 
@@ -32,6 +33,26 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders", Global.SongMgrEnableMonitorFolders);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders", string.Join(",", Global.SongMgrMonitorFoldersList));
+
+            string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
+            string SongMgrSingerGroup = string.Empty;
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+            {
+                List<string> SingerGrouplist = new List<string>(Regex.Split(Global.SongMgrSingerGroup, @"\|", RegexOptions.IgnoreCase));
+                List<string> SingerGroupLowCaselist = SingerGrouplist.ConvertAll(str => str.ToLower());
+
+                foreach (string SingerGroupLowCase in SingerGroupLowCaselist)
+                {
+                    var query = from row in dt.AsEnumerable()
+                                where row["Config_Value"].ToString().ToLower().Equals(SingerGroupLowCase)
+                                select row;
+
+                    if (query.Count<DataRow>() == 0) SongMgrSingerGroup += SingerGrouplist[SingerGroupLowCaselist.IndexOf(SingerGroupLowCase)] + "|";
+                }
+            }
+            SongMgrSingerGroup = Regex.Replace(SongMgrSingerGroup, @"\|$", "");
+
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", SongMgrSingerGroup);
         }
 
 
@@ -788,6 +809,115 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongMgrCfg_SingerGroup_ListBox_Enter(object sender, EventArgs e)
+        {
+            SongMgrCfg_Tooltip_Label.Text = "";
+            SongMgrCfg_SingerGroup_Button.Text = "移除";
+        }
+
+        private void SongMgrCfg_SingerGroup_TextBox_Enter(object sender, EventArgs e)
+        {
+            if (SongMgrCfg_Tooltip_Label.Text != "此項目的值含有非法字元!") SongMgrCfg_Tooltip_Label.Text = "";
+            SongMgrCfg_SingerGroup_Button.Text = "加入";
+        }
+
+        private void SongMgrCfg_SingerGroup_Button_Click(object sender, EventArgs e)
+        {
+            DataTable dt = new DataTable();
+            switch (SongMgrCfg_SingerGroup_Button.Text)
+            {
+                case "加入":
+                    Regex r = new Regex("^,|,$|,,");
+                    if (SongMgrCfg_SingerGroup_TextBox.Text != "" && SongMgrCfg_SingerGroup_TextBox.Text != "," && SongMgrCfg_SingerGroup_TextBox.Text.IndexOf(",") >= 0 && !r.IsMatch(SongMgrCfg_SingerGroup_TextBox.Text))
+                    {
+                        List<string> SingerGroupLowCaselist = new List<string>();
+
+                        string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
+                        using (DataTable SingerGroupDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                        {
+                            foreach (DataRow row in SingerGroupDT.AsEnumerable())
+                            {
+                                SingerGroupLowCaselist.Add(row["Config_Value"].ToString().ToLower());
+                            }
+                        }
+
+                        if (SingerGroupLowCaselist.IndexOf(SongMgrCfg_SingerGroup_TextBox.Text.ToLower()) >= 0)
+                        {
+                            SongMgrCfg_Tooltip_Label.Text = "要加入的歌手群組已內建!";
+                        }
+                        else
+                        {
+                            if (SongMgrCfg_SingerGroup_ListBox.SelectedItems.Count > 0)
+                            {
+                                dt = (DataTable)SongMgrCfg_SingerGroup_ListBox.DataSource;
+
+                                foreach (DataRow row in dt.AsEnumerable())
+                                {
+                                    if (row["Display"].ToString().ToLower() == SongMgrCfg_SingerGroup_TextBox.Text.ToLower())
+                                    {
+                                        SongMgrCfg_Tooltip_Label.Text = "要加入的歌手群組已存在!";
+                                        return;
+                                    }
+                                }
+
+                                dt.Rows.Add(dt.NewRow());
+                                dt.Rows[dt.Rows.Count - 1][0] = SongMgrCfg_SingerGroup_TextBox.Text;
+                                dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                            }
+                            else
+                            {
+                                using (DataTable NewDT = new DataTable())
+                                {
+                                    NewDT.Columns.Add(new DataColumn("Display", typeof(string)));
+                                    NewDT.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                                    NewDT.Rows.Add(NewDT.NewRow());
+                                    NewDT.Rows[NewDT.Rows.Count - 1][0] = SongMgrCfg_SingerGroup_TextBox.Text;
+                                    NewDT.Rows[NewDT.Rows.Count - 1][1] = NewDT.Rows.Count;
+                                    dt = NewDT.Copy();
+                                }
+                                SongMgrCfg_SingerGroup_ListBox.DataSource = dt;
+                                SongMgrCfg_SingerGroup_ListBox.DisplayMember = "Display";
+                                SongMgrCfg_SingerGroup_ListBox.ValueMember = "Value";
+                            }
+                            Global.SongMgrSingerGroup += "|" + SongMgrCfg_SingerGroup_TextBox.Text;
+                            SongMgrCfg_SingerGroup_TextBox.Text = "";
+                            SongMgrCfg_Tooltip_Label.Text = "已成功加入歌手群組!";
+                            Common_InitializeSongData(false, false, false, false, true);
+                        }
+                        SingerGroupLowCaselist.Clear();
+                    }
+                    else
+                    {
+                        if (SongMgrCfg_SingerGroup_TextBox.Text == "")
+                        {
+                            SongMgrCfg_Tooltip_Label.Text = "尚未輸入要加入的歌手群組!";
+                        }
+                        else
+                        {
+                            SongMgrCfg_Tooltip_Label.Text = "輸入錯誤,請以逗號區隔歌手名稱。";
+                        }
+                    }
+                    break;
+                case "移除":
+                    if (SongMgrCfg_SingerGroup_ListBox.SelectedItem != null)
+                    {
+                        string RemoveStr = ((DataRowView)SongMgrCfg_SingerGroup_ListBox.SelectedItem)[0].ToString();
+                        int index = int.Parse(SongMgrCfg_SingerGroup_ListBox.SelectedIndex.ToString());
+                        dt = (DataTable)SongMgrCfg_SingerGroup_ListBox.DataSource;
+                        dt.Rows.RemoveAt(index);
+                        Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, @"\|" + RemoveStr, "", RegexOptions.IgnoreCase);
+                        SongMgrCfg_Tooltip_Label.Text = "已成功移除歌手群組!";
+                        Common_InitializeSongData(false, false, false, false, true);
+                    }
+                    else
+                    {
+                        SongMgrCfg_Tooltip_Label.Text = "已無可以刪除的歌手群組!";
+                    }
+                    break;
+            }
+        }
+
 
         #region --- 監視目錄 ---
 
@@ -1092,6 +1222,34 @@ namespace CrazyKTV_SongMgr
             Global.SongMgrCustomSingerTypeStructureList.Add("新進");
         }
 
+        public static DataTable GetSingerGroupList()
+        {
+            using (DataTable dt = new DataTable())
+            {
+                dt.Columns.Add(new DataColumn("Display", typeof(string)));
+                dt.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                string SongMgrSingerGroup = string.Empty;
+                List<string> list = new List<string>();
+
+                if (Global.SongMgrSingerGroup != "")
+                {
+                    list = new List<string>(Global.SongMgrSingerGroup.Split('|'));
+                }
+                
+                if (list.Count > 0)
+                {
+                    foreach (string s in list)
+                    {
+                        dt.Rows.Add(dt.NewRow());
+                        dt.Rows[dt.Rows.Count - 1][0] = s;
+                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
+                    }
+                }
+                list.Clear();
+                return dt;
+            }
+        }
 
     }
 }

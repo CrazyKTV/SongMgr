@@ -178,6 +178,30 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+
+                    if (Global.GroupSingerLowCaseList.IndexOf(SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower()) >= 0)
+                    {
+                        int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower())];
+                        List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
+                        if (GroupSingerList.Count > 0)
+                        {
+                            foreach (string GroupSingerName in GroupSingerList)
+                            {
+                                if (GroupSingerName.ToLower() != SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower())
+                                {
+                                    SongData = SongAddDT.Rows[i].Field<string>("Song_Lang") + "|" + GroupSingerName.ToLower() + "|" + SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower() + "|" + SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower();
+                                }
+
+                                if (SongDataLowCaseList.IndexOf(SongData) >= 0)
+                                {
+                                    DuplicateSongInfoIndex = SongDataLowCaseList.IndexOf(SongData);
+                                    DuplicateSongStatus = true;
+                                    break;
+                                }
+                            }
+                            GroupSingerList.Clear();
+                        }
+                    }
                 }
 
                 if (!DuplicateSongStatus && SongAddDT.Rows[i].Field<int>("Song_SingerType") == 3)
@@ -186,6 +210,13 @@ namespace CrazyKTV_SongMgr
                     ChorusSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_Lang"));
                     ChorusSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower());
                     if (SongAddDT.Rows[i].Field<string>("Song_SongType") != "") ChorusSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower());
+
+                    List<string> ChorusGroupSongDatalist = new List<string>();
+                    ChorusGroupSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_Lang"));
+                    ChorusGroupSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower());
+                    if (SongAddDT.Rows[i].Field<string>("Song_SongType") != "") ChorusGroupSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower());
+                    
+                    List<string> ChorusGroupSingerList = new List<string>();
 
                     // 處理合唱歌曲中的特殊歌手名稱
                     string ChorusSongSingerName = SongAddDT.Rows[i].Field<string>("Song_Singer");
@@ -202,6 +233,7 @@ namespace CrazyKTV_SongMgr
                     }
                     SpecialStrlist.Clear();
 
+                    int ChorusSongSingerCount = 0;
                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                     if (r.IsMatch(ChorusSongSingerName))
                     {
@@ -210,6 +242,31 @@ namespace CrazyKTV_SongMgr
                         {
                             string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
                             if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
+
+                            if (Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower()) >= 0)
+                            {
+                                int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower())];
+                                List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
+                                if (GroupSingerList.Count > 0)
+                                {
+                                    foreach (string GroupSingerName in GroupSingerList)
+                                    {
+                                        if (GroupSingerName.ToLower() != SingerStr.ToLower())
+                                        {
+                                            if (ChorusGroupSingerList.IndexOf(GroupSingerName.ToLower()) < 0)
+                                            {
+                                                ChorusGroupSingerList.Add(GroupSingerName.ToLower());
+                                                ChorusSongSingerCount++;
+                                            }
+                                        }
+                                    }
+                                    GroupSingerList.Clear();
+                                }
+                            }
+                            else
+                            {
+                                ChorusGroupSongDatalist.Add(SingerStr.ToLower());
+                            }
                         }
                     }
                     else
@@ -240,7 +297,24 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
                         }
+
+                        if (!DuplicateSongStatus && ChorusGroupSingerList.Count > 0)
+                        {
+                            List<string> list = SongDataLowCaseList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDatalist.ToArray()));
+
+                            if (list.Count > 0)
+                            {
+                                if (list.Find(SongInfo => SongInfo.ContainsCount(ChorusSongSingerCount, ChorusGroupSingerList.ToArray())) != null)
+                                {
+                                    DuplicateSongInfoIndex = SongDataLowCaseList.IndexOf(list.Find(SongInfo => SongInfo.ContainsCount(ChorusSongSingerCount, ChorusGroupSingerList.ToArray())));
+                                    DuplicateSongStatus = true;
+                                }
+                            }
+                            list.Clear();
+                        }
                     }
+                    ChorusGroupSingerList.Clear();
+                    ChorusGroupSongDatalist.Clear();
                     ChorusSongDatalist.Clear();
                 }
                 SynonymousSongNameList.Clear();

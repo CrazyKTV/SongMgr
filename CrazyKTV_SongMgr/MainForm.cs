@@ -106,6 +106,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders", Global.SongMgrEnableMonitorFolders);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders", string.Join(",", Global.SongMgrMonitorFoldersList));
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger", Global.SingerMgrSyncSongSinger);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", Global.SongMgrSingerGroup);
             }
 
             List<string> list = new List<string>()
@@ -155,6 +156,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup"),
                 CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "CashboxDBVer")
             };
 
@@ -382,7 +384,12 @@ namespace CrazyKTV_SongMgr
             if (list[44] != "") Global.SingerMgrSyncSongSinger = list[44];
             SingerMgr_EditSyncSongSinger_CheckBox.Checked = bool.Parse(Global.SingerMgrSyncSongSinger);
 
-            if (list[45] != "") Global.CrazyktvCashboxDBVer = list[45];
+            if (list[45] != "") Global.SongMgrSingerGroup = list[45];
+            SongMgrCfg_SingerGroup_ListBox.DataSource = SongMgrCfg.GetSingerGroupList();
+            SongMgrCfg_SingerGroup_ListBox.DisplayMember = "Display";
+            SongMgrCfg_SingerGroup_ListBox.ValueMember = "Value";
+
+            if (list[46] != "") Global.CrazyktvCashboxDBVer = list[46];
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
@@ -402,7 +409,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Common_InitializeSongData(true, true, true);
+            Common_InitializeSongData(true, true, true, true, true);
 
             // 歌庫監視
             SongMonitor_CheckCurSong();
@@ -657,6 +664,15 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
+
+
+
+
 
 
 

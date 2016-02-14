@@ -229,6 +229,7 @@ namespace CrazyKTV_SongMgr
                         SingerMgr_Tooltip_Label.Text = "此項目的值含有非法字元!";
                         break;
                     case "SongMgrCfg_SongType_TextBox":
+                    case "SongMgrCfg_SingerGroup_TextBox":
                         SongMgrCfg_Tooltip_Label.Text = "此項目的值含有非法字元!";
                         break;
                 }
@@ -244,6 +245,7 @@ namespace CrazyKTV_SongMgr
                         if (SingerMgr_Tooltip_Label.Text == "此項目的值含有非法字元!") SingerMgr_Tooltip_Label.Text = "";
                         break;
                     case "SongMgrCfg_SongType_TextBox":
+                    case "SongMgrCfg_SingerGroup_TextBox":
                         if (SongMgrCfg_Tooltip_Label.Text == "此項目的值含有非法字元!") SongMgrCfg_Tooltip_Label.Text = "";
                         break;
                 }
@@ -432,7 +434,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- Common 初始化歌曲資料 ---
 
-        private void Common_InitializeSongData(bool InitSongId, bool InitPhonetics, bool InitCashbox)
+        private void Common_InitializeSongData(bool InitSongId, bool InitPhonetics, bool InitCashbox, bool InitSpecialStr, bool InitSingerGroup)
         {
             if (Global.CrazyktvDatabaseStatus)
             {
@@ -488,7 +490,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                if (InitSongId && InitPhonetics && InitCashbox)
+                if (InitSpecialStr)
                 {
                     string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
                     using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
@@ -505,6 +507,47 @@ namespace CrazyKTV_SongMgr
                         }
                         Global.SongAddSpecialStr = (Global.SongAddSpecialStr == "") ? SongAddSpecialStr : SongAddSpecialStr + Global.SongAddSpecialStr;
                         Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|$", "");
+                    }
+                }
+
+                if (InitSingerGroup)
+                {
+                    string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    {
+                        List<string> SingerGroupLowCaselist = new List<string>(Regex.Split(Global.SongMgrSingerGroup.ToLower(), @"\|", RegexOptions.IgnoreCase));
+                        string SongMgrSingerGroup = "";
+
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            if (SingerGroupLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
+                            {
+                                SongMgrSingerGroup += row["Config_Value"].ToString() + "|";
+                            }
+                        }
+                        Global.SongMgrSingerGroup = (Global.SongMgrSingerGroup == "") ? SongMgrSingerGroup : SongMgrSingerGroup + Global.SongMgrSingerGroup;
+                        Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, @"\|$", "");
+                        SingerGroupLowCaselist.Clear();
+                    }
+
+                    Global.SingerGroupList = new List<string>();
+                    Global.GroupSingerIdList = new List<int>();
+                    Global.GroupSingerLowCaseList = new List<string>();
+
+                    List<string> SingerGroupList = new List<string>(Regex.Split(Global.SongMgrSingerGroup, @"\|", RegexOptions.IgnoreCase));
+                    foreach (string SingerGroup in SingerGroupList)
+                    {
+                        Global.SingerGroupList.Add(SingerGroup);
+
+                        string[] Singers = SingerGroup.Split(',');
+                        foreach (string singer in Singers)
+                        {
+                            if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
+                            {
+                                Global.GroupSingerIdList.Add(SingerGroupList.IndexOf(SingerGroup));
+                                Global.GroupSingerLowCaseList.Add(singer.ToLower());
+                            }
+                        }
                     }
                 }
             }
@@ -1444,7 +1487,7 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Common_InitializeSongData(true, true, true);
+            Common_InitializeSongData(true, true, true, true, true);
 
             // 歌庫監視
             SongMonitor_CheckCurSong();

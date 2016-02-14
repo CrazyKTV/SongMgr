@@ -943,7 +943,7 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
 
-                            Common_InitializeSongData(false, false, true);
+                            Common_InitializeSongData(false, false, true, false, false);
                             Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆。";
                             Common_SwitchSetUI(true);
                         });
@@ -1324,6 +1324,10 @@ namespace CrazyKTV_SongMgr
                 case "1":
                     Debug.ConfigDataType = "SpecialStr";
                     break;
+                case "2":
+                    Debug.ConfigDataType = "SingerGroup";
+                    break;
+
             }
             #endif
         }
@@ -1439,7 +1443,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> Itemlist = new List<string>() { "SpecialStr" };
+                List<string> Itemlist = new List<string>() { "SpecialStr", "SingerGroup" };
 
                 foreach (string str in Itemlist)
                 {

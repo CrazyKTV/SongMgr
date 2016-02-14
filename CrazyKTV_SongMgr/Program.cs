@@ -67,6 +67,7 @@ namespace CrazyKTV_SongMgr
         public static string SongMgrBackupRemoveSong = "False";
         public static string SongMgrCustomSingerTypeStructure = "1,1,1,1,1,1,1,1";
         public static string SongMgrEnableMonitorFolders = "False";
+        public static string SongMgrSingerGroup = "";
         public static bool SongMgrInitializeStatus = false;
         public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
         public static List<string> SongMgrMonitorFoldersList = new List<string>() { "", "", "", "", "" };
@@ -117,6 +118,10 @@ namespace CrazyKTV_SongMgr
         public static List<string> AllSingerList = new List<string>();
         public static List<string> AllSingerLowCaseList = new List<string>();
         public static List<string> AllSingerTypeList = new List<string>();
+
+        public static List<string> SingerGroupList = new List<string>();
+        public static List<int> GroupSingerIdList = new List<int>();
+        public static List<string> GroupSingerLowCaseList = new List<string>();
 
         public static List<string> PhoneticsWordList = new List<string>();
         public static List<string> PhoneticsSpellList = new List<string>();
@@ -207,7 +212,7 @@ namespace CrazyKTV_SongMgr
             "阿|啊", "遊|游", "痴|癡", "姍|珊", "袂|抹|袜|抺|祙", "你|妳", "姊|姐", "未|末", "他|她", "秘|祕", "周|週", "已|己", "雙|双",
             "兩|二", "作|做", "密|蜜", "愈|越", "裡|裏", "腳|脚", "嘆|歎", "煙|菸|烟", "叉|义", "叨|叼", "妝|粧", "鉤|鈎", "沈|沉", "灑|洒",
             "無|嘸|毋|唔", "恒|恆", "那|哪", "甘|咁", "庄|莊", "漂|飄", "什|甚|啥", "決|絕", "麥|嘜", "奈|耐", "果|菓", "的|得|の", "一|ㄧ",
-            "逃|鼗", "喲|呦", "藥|葯", "只|衹|祇|袛|祗"
+            "逃|鼗", "喲|呦", "藥|葯", "只|衹|祇|袛|祗", "群|羣"
         };
 
         public static List<string> SingerTypeStructureList = new List<string>()

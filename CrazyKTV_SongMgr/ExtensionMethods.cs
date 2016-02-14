@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace CrazyKTV_SongMgr
 {
@@ -14,6 +15,12 @@ namespace CrazyKTV_SongMgr
         {
             if (values.Count() <= 0) return false;
             return values.Any(x => source.Contains(x));
+        }
+
+        public static bool ContainsCount(this string source, int count, params string[] values)
+        {
+            if (values.Count() <= 0) return false;
+            return values.Where(x => source.Contains(x)).Count() == count;
         }
     }
 }
