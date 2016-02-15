@@ -165,6 +165,11 @@ namespace CrazyKTV_SongMgr
                 MainTabPage.Show();
             }
 
+            foreach (TabPage SongQueryTabPage in SongQuery_TabControl.TabPages)
+            {
+                SongQueryTabPage.Show();
+            }
+
             foreach (TabPage SongMgrCfgTabPage in SongMgrCfg_TabControl.TabPages)
             {
                 SongMgrCfgTabPage.Show();
@@ -420,7 +425,7 @@ namespace CrazyKTV_SongMgr
             SongQuery_QueryType_ComboBox.ValueMember = "Value";
             SongQuery_QueryType_ComboBox.SelectedValue = 1;
 
-            SongQuery_QueryFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList();
+            SongQuery_QueryFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(Global.CrazyktvSongLangList);
             SongQuery_QueryFilter_ComboBox.DisplayMember = "Display";
             SongQuery_QueryFilter_ComboBox.ValueMember = "Value";
             SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
@@ -457,7 +462,7 @@ namespace CrazyKTV_SongMgr
             Cashbox_QueryType_ComboBox.ValueMember = "Value";
             Cashbox_QueryType_ComboBox.SelectedValue = 1;
 
-            Cashbox_QueryFilter_ComboBox.DataSource = Cashbox.GetQueryFilterList();
+            Cashbox_QueryFilter_ComboBox.DataSource = Cashbox.GetQueryFilterList(Global.CashboxSongLangList);
             Cashbox_QueryFilter_ComboBox.DisplayMember = "Display";
             Cashbox_QueryFilter_ComboBox.ValueMember = "Value";
             Cashbox_QueryFilter_ComboBox.SelectedValue = 1;
@@ -664,6 +669,11 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
 
 
 

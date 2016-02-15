@@ -43,24 +43,30 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.SongQuery_TabPage = new System.Windows.Forms.TabPage();
-            this.SongQuery_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
-            this.SongQuery_FavoriteQuery_ComboBox = new System.Windows.Forms.ComboBox();
-            this.SongQuery_FavoriteQuery_Label = new System.Windows.Forms.Label();
-            this.SongQuery_ExceptionalQuery_ComboBox = new System.Windows.Forms.ComboBox();
-            this.SongQuery_ExceptionalQuery_Label = new System.Windows.Forms.Label();
-            this.SongQuery_Query_GroupBox = new System.Windows.Forms.GroupBox();
-            this.SongQuery_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
-            this.SongQuery_Clear_Button = new System.Windows.Forms.Button();
-            this.SongQuery_Paste_Button = new System.Windows.Forms.Button();
-            this.SongQuery_QueryFilter_ComboBox = new System.Windows.Forms.ComboBox();
-            this.SongQuery_QueryFilter_Label = new System.Windows.Forms.Label();
+            this.SongQuery_TabControl = new System.Windows.Forms.TabControl();
+            this.SongQuery_Query_TabPage = new System.Windows.Forms.TabPage();
             this.SongQuery_FuzzyQuery_CheckBox = new System.Windows.Forms.CheckBox();
-            this.SongQuery_QueryValue_Label = new System.Windows.Forms.Label();
+            this.SongQuery_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongQuery_Query_Button = new System.Windows.Forms.Button();
             this.SongQuery_QueryType_Label = new System.Windows.Forms.Label();
+            this.SongQuery_Clear_Button = new System.Windows.Forms.Button();
             this.SongQuery_QueryType_ComboBox = new System.Windows.Forms.ComboBox();
             this.SongQuery_QueryValue_TextBox = new System.Windows.Forms.TextBox();
+            this.SongQuery_Paste_Button = new System.Windows.Forms.Button();
+            this.SongQuery_QueryFilter_Label = new System.Windows.Forms.Label();
+            this.SongQuery_QueryFilter_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_QueryValue_Label = new System.Windows.Forms.Label();
             this.SongQuery_QueryValue_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_OtherQuery_TabPage = new System.Windows.Forms.TabPage();
+            this.SongQuery_FavoriteQuery_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_ExceptionalQuery_Label = new System.Windows.Forms.Label();
+            this.SongQuery_FavoriteQuery_Label = new System.Windows.Forms.Label();
+            this.SongQuery_ExceptionalQuery_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_QueryFilter_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongQuery_WordCountFilter_Label = new System.Windows.Forms.Label();
+            this.SongQuery_WordCountFilter_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongQuery_LangFilter_Label = new System.Windows.Forms.Label();
+            this.SongQuery_LangFilter_ComboBox = new System.Windows.Forms.ComboBox();
             this.SongQuery_Statistics_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongQuery_Statistics12Value_Label = new System.Windows.Forms.Label();
             this.SongQuery_Statistics12_Label = new System.Windows.Forms.Label();
@@ -435,33 +441,39 @@
             this.SongMaintenance_SongSpellCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SingerSpellCorrect_Button = new System.Windows.Forms.Button();
             this.Cashbox_TabPage = new System.Windows.Forms.TabPage();
+            this.Cashbox_TabControl = new System.Windows.Forms.TabControl();
+            this.Cashbox_Query_TabPage = new System.Windows.Forms.TabPage();
+            this.Cashbox_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
+            this.Cashbox_QueryType_Label = new System.Windows.Forms.Label();
+            this.Cashbox_FuzzyQuery_CheckBox = new System.Windows.Forms.CheckBox();
+            this.Cashbox_Clear_Button = new System.Windows.Forms.Button();
+            this.Cashbox_Query_Button = new System.Windows.Forms.Button();
+            this.Cashbox_QueryType_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_Paste_Button = new System.Windows.Forms.Button();
+            this.Cashbox_QueryFilter_Label = new System.Windows.Forms.Label();
+            this.Cashbox_QueryFilter_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_QueryValue_Label = new System.Windows.Forms.Label();
+            this.Cashbox_QueryValue_TextBox = new System.Windows.Forms.TextBox();
+            this.Cashbox_QueryValue_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_OtherQuery_TabPage = new System.Windows.Forms.TabPage();
+            this.Cashbox_DateQuery_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_OtherQuery_Label = new System.Windows.Forms.Label();
+            this.Cashbox_DateQuery_Label = new System.Windows.Forms.Label();
+            this.Cashbox_OtherQuery_ComboBox = new System.Windows.Forms.ComboBox();
             this.Cashbox_UpdDate_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_UpdDate_Label = new System.Windows.Forms.Label();
             this.Cashbox_UpdDate_Button = new System.Windows.Forms.Button();
             this.Cashbox_UpdDateValue_Label = new System.Windows.Forms.Label();
-            this.Cashbox_OtherQuery_GroupBox = new System.Windows.Forms.GroupBox();
-            this.Cashbox_DateQuery_ComboBox = new System.Windows.Forms.ComboBox();
-            this.Cashbox_DateQuery_Label = new System.Windows.Forms.Label();
-            this.Cashbox_OtherQuery_ComboBox = new System.Windows.Forms.ComboBox();
-            this.Cashbox_OtherQuery_Label = new System.Windows.Forms.Label();
+            this.Cashbox_QueryFilter_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Cashbox_SongSingerFilter_Label = new System.Windows.Forms.Label();
+            this.Cashbox_SongSingerFilter_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Cashbox_LangFilter_Label = new System.Windows.Forms.Label();
+            this.Cashbox_LangFilter_ComboBox = new System.Windows.Forms.ComboBox();
             this.Cashbox_QueryStatus_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
             this.Cashbox_Maintenance_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_ApplyCashboxId_Button = new System.Windows.Forms.Button();
-            this.Cashbox_Query_GroupBox = new System.Windows.Forms.GroupBox();
-            this.Cashbox_SynonymousQuery_CheckBox = new System.Windows.Forms.CheckBox();
-            this.Cashbox_Clear_Button = new System.Windows.Forms.Button();
-            this.Cashbox_Paste_Button = new System.Windows.Forms.Button();
-            this.Cashbox_QueryFilter_ComboBox = new System.Windows.Forms.ComboBox();
-            this.Cashbox_QueryFilter_Label = new System.Windows.Forms.Label();
-            this.Cashbox_FuzzyQuery_CheckBox = new System.Windows.Forms.CheckBox();
-            this.Cashbox_QueryValue_Label = new System.Windows.Forms.Label();
-            this.Cashbox_Query_Button = new System.Windows.Forms.Button();
-            this.Cashbox_QueryType_Label = new System.Windows.Forms.Label();
-            this.Cashbox_QueryType_ComboBox = new System.Windows.Forms.ComboBox();
-            this.Cashbox_QueryValue_TextBox = new System.Windows.Forms.TextBox();
-            this.Cashbox_QueryValue_ComboBox = new System.Windows.Forms.ComboBox();
             this.Cashbox_DataGridView = new System.Windows.Forms.DataGridView();
             this.Cashbox_Edit_GroupBox = new System.Windows.Forms.GroupBox();
             this.Cashbox_EditSongCreatDate_DateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -560,8 +572,10 @@
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
-            this.SongQuery_OtherQuery_GroupBox.SuspendLayout();
-            this.SongQuery_Query_GroupBox.SuspendLayout();
+            this.SongQuery_TabControl.SuspendLayout();
+            this.SongQuery_Query_TabPage.SuspendLayout();
+            this.SongQuery_OtherQuery_TabPage.SuspendLayout();
+            this.SongQuery_QueryFilter_GroupBox.SuspendLayout();
             this.SongQuery_Statistics_GroupBox.SuspendLayout();
             this.SongQuery_QueryStatus_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SongQuery_DataGridView)).BeginInit();
@@ -614,11 +628,13 @@
             this.SongMaintenance_Tooltip_GroupBox.SuspendLayout();
             this.SongMaintenance_SpellCorrect_GroupBox.SuspendLayout();
             this.Cashbox_TabPage.SuspendLayout();
+            this.Cashbox_TabControl.SuspendLayout();
+            this.Cashbox_Query_TabPage.SuspendLayout();
+            this.Cashbox_OtherQuery_TabPage.SuspendLayout();
             this.Cashbox_UpdDate_GroupBox.SuspendLayout();
-            this.Cashbox_OtherQuery_GroupBox.SuspendLayout();
+            this.Cashbox_QueryFilter_GroupBox.SuspendLayout();
             this.Cashbox_QueryStatus_GroupBox.SuspendLayout();
             this.Cashbox_Maintenance_GroupBox.SuspendLayout();
-            this.Cashbox_Query_GroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).BeginInit();
             this.Cashbox_Edit_GroupBox.SuspendLayout();
             this.MainCfg_TabPage.SuspendLayout();
@@ -672,8 +688,8 @@
             // 
             // SongQuery_TabPage
             // 
-            this.SongQuery_TabPage.Controls.Add(this.SongQuery_OtherQuery_GroupBox);
-            this.SongQuery_TabPage.Controls.Add(this.SongQuery_Query_GroupBox);
+            this.SongQuery_TabPage.Controls.Add(this.SongQuery_TabControl);
+            this.SongQuery_TabPage.Controls.Add(this.SongQuery_QueryFilter_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_Statistics_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_QueryStatus_GroupBox);
             this.SongQuery_TabPage.Controls.Add(this.SongQuery_DataGridView);
@@ -688,159 +704,47 @@
             this.SongQuery_TabPage.Text = "歌庫查詢";
             this.SongQuery_TabPage.UseVisualStyleBackColor = true;
             // 
-            // SongQuery_OtherQuery_GroupBox
+            // SongQuery_TabControl
             // 
-            this.SongQuery_OtherQuery_GroupBox.Controls.Add(this.SongQuery_FavoriteQuery_ComboBox);
-            this.SongQuery_OtherQuery_GroupBox.Controls.Add(this.SongQuery_FavoriteQuery_Label);
-            this.SongQuery_OtherQuery_GroupBox.Controls.Add(this.SongQuery_ExceptionalQuery_ComboBox);
-            this.SongQuery_OtherQuery_GroupBox.Controls.Add(this.SongQuery_ExceptionalQuery_Label);
-            this.SongQuery_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_OtherQuery_GroupBox.Location = new System.Drawing.Point(22, 209);
-            this.SongQuery_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(2);
-            this.SongQuery_OtherQuery_GroupBox.Name = "SongQuery_OtherQuery_GroupBox";
-            this.SongQuery_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SongQuery_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 83);
-            this.SongQuery_OtherQuery_GroupBox.TabIndex = 1;
-            this.SongQuery_OtherQuery_GroupBox.TabStop = false;
-            this.SongQuery_OtherQuery_GroupBox.Text = "其它查詢";
+            this.SongQuery_TabControl.Controls.Add(this.SongQuery_Query_TabPage);
+            this.SongQuery_TabControl.Controls.Add(this.SongQuery_OtherQuery_TabPage);
+            this.SongQuery_TabControl.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_TabControl.Location = new System.Drawing.Point(22, 22);
+            this.SongQuery_TabControl.Margin = new System.Windows.Forms.Padding(2);
+            this.SongQuery_TabControl.Name = "SongQuery_TabControl";
+            this.SongQuery_TabControl.SelectedIndex = 0;
+            this.SongQuery_TabControl.Size = new System.Drawing.Size(468, 182);
+            this.SongQuery_TabControl.TabIndex = 0;
             // 
-            // SongQuery_FavoriteQuery_ComboBox
+            // SongQuery_Query_TabPage
             // 
-            this.SongQuery_FavoriteQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SongQuery_FavoriteQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_FavoriteQuery_ComboBox.FormattingEnabled = true;
-            this.SongQuery_FavoriteQuery_ComboBox.Location = new System.Drawing.Point(332, 35);
-            this.SongQuery_FavoriteQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
-            this.SongQuery_FavoriteQuery_ComboBox.Name = "SongQuery_FavoriteQuery_ComboBox";
-            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(120, 30);
-            this.SongQuery_FavoriteQuery_ComboBox.TabIndex = 3;
-            this.SongQuery_FavoriteQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_FavoriteQuery_ComboBox_SelectedIndexChanged);
-            // 
-            // SongQuery_FavoriteQuery_Label
-            // 
-            this.SongQuery_FavoriteQuery_Label.AutoSize = true;
-            this.SongQuery_FavoriteQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_FavoriteQuery_Label.Location = new System.Drawing.Point(272, 39);
-            this.SongQuery_FavoriteQuery_Label.Margin = new System.Windows.Forms.Padding(10, 9, 6, 18);
-            this.SongQuery_FavoriteQuery_Label.Name = "SongQuery_FavoriteQuery_Label";
-            this.SongQuery_FavoriteQuery_Label.Size = new System.Drawing.Size(48, 22);
-            this.SongQuery_FavoriteQuery_Label.TabIndex = 2;
-            this.SongQuery_FavoriteQuery_Label.Text = "最愛:";
-            // 
-            // SongQuery_ExceptionalQuery_ComboBox
-            // 
-            this.SongQuery_ExceptionalQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SongQuery_ExceptionalQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_ExceptionalQuery_ComboBox.FormattingEnabled = true;
-            this.SongQuery_ExceptionalQuery_ComboBox.Location = new System.Drawing.Point(76, 35);
-            this.SongQuery_ExceptionalQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
-            this.SongQuery_ExceptionalQuery_ComboBox.Name = "SongQuery_ExceptionalQuery_ComboBox";
-            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(180, 30);
-            this.SongQuery_ExceptionalQuery_ComboBox.TabIndex = 1;
-            this.SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
-            // 
-            // SongQuery_ExceptionalQuery_Label
-            // 
-            this.SongQuery_ExceptionalQuery_Label.AutoSize = true;
-            this.SongQuery_ExceptionalQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_ExceptionalQuery_Label.Location = new System.Drawing.Point(16, 39);
-            this.SongQuery_ExceptionalQuery_Label.Margin = new System.Windows.Forms.Padding(6, 9, 6, 18);
-            this.SongQuery_ExceptionalQuery_Label.Name = "SongQuery_ExceptionalQuery_Label";
-            this.SongQuery_ExceptionalQuery_Label.Size = new System.Drawing.Size(48, 22);
-            this.SongQuery_ExceptionalQuery_Label.TabIndex = 0;
-            this.SongQuery_ExceptionalQuery_Label.Text = "異常:";
-            // 
-            // SongQuery_Query_GroupBox
-            // 
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_SynonymousQuery_CheckBox);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_Clear_Button);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_Paste_Button);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryFilter_ComboBox);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryFilter_Label);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_FuzzyQuery_CheckBox);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryValue_Label);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_Query_Button);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryType_Label);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryType_ComboBox);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryValue_TextBox);
-            this.SongQuery_Query_GroupBox.Controls.Add(this.SongQuery_QueryValue_ComboBox);
-            this.SongQuery_Query_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_Query_GroupBox.Location = new System.Drawing.Point(22, 22);
-            this.SongQuery_Query_GroupBox.Margin = new System.Windows.Forms.Padding(2);
-            this.SongQuery_Query_GroupBox.Name = "SongQuery_Query_GroupBox";
-            this.SongQuery_Query_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SongQuery_Query_GroupBox.Size = new System.Drawing.Size(468, 180);
-            this.SongQuery_Query_GroupBox.TabIndex = 0;
-            this.SongQuery_Query_GroupBox.TabStop = false;
-            this.SongQuery_Query_GroupBox.Text = "歌曲查詢";
-            // 
-            // SongQuery_SynonymousQuery_CheckBox
-            // 
-            this.SongQuery_SynonymousQuery_CheckBox.AutoSize = true;
-            this.SongQuery_SynonymousQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_SynonymousQuery_CheckBox.Location = new System.Drawing.Point(175, 135);
-            this.SongQuery_SynonymousQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
-            this.SongQuery_SynonymousQuery_CheckBox.Name = "SongQuery_SynonymousQuery_CheckBox";
-            this.SongQuery_SynonymousQuery_CheckBox.Size = new System.Drawing.Size(83, 26);
-            this.SongQuery_SynonymousQuery_CheckBox.TabIndex = 8;
-            this.SongQuery_SynonymousQuery_CheckBox.Text = "同義字";
-            this.SongQuery_SynonymousQuery_CheckBox.UseVisualStyleBackColor = true;
-            this.SongQuery_SynonymousQuery_CheckBox.CheckedChanged += new System.EventHandler(this.SongQuery_SynonymousQuery_CheckBox_CheckedChanged);
-            // 
-            // SongQuery_Clear_Button
-            // 
-            this.SongQuery_Clear_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_Clear_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.SongQuery_Clear_Button.Location = new System.Drawing.Point(392, 86);
-            this.SongQuery_Clear_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
-            this.SongQuery_Clear_Button.Name = "SongQuery_Clear_Button";
-            this.SongQuery_Clear_Button.Size = new System.Drawing.Size(60, 30);
-            this.SongQuery_Clear_Button.TabIndex = 7;
-            this.SongQuery_Clear_Button.Text = "清空";
-            this.SongQuery_Clear_Button.UseVisualStyleBackColor = true;
-            this.SongQuery_Clear_Button.Click += new System.EventHandler(this.SongQuery_Clear_Button_Click);
-            // 
-            // SongQuery_Paste_Button
-            // 
-            this.SongQuery_Paste_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_Paste_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.SongQuery_Paste_Button.Location = new System.Drawing.Point(320, 86);
-            this.SongQuery_Paste_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
-            this.SongQuery_Paste_Button.Name = "SongQuery_Paste_Button";
-            this.SongQuery_Paste_Button.Size = new System.Drawing.Size(60, 30);
-            this.SongQuery_Paste_Button.TabIndex = 6;
-            this.SongQuery_Paste_Button.Text = "貼上";
-            this.SongQuery_Paste_Button.UseVisualStyleBackColor = true;
-            this.SongQuery_Paste_Button.Click += new System.EventHandler(this.SongQuery_Paste_Button_Click);
-            // 
-            // SongQuery_QueryFilter_ComboBox
-            // 
-            this.SongQuery_QueryFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SongQuery_QueryFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_QueryFilter_ComboBox.FormattingEnabled = true;
-            this.SongQuery_QueryFilter_ComboBox.Location = new System.Drawing.Point(308, 40);
-            this.SongQuery_QueryFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
-            this.SongQuery_QueryFilter_ComboBox.Name = "SongQuery_QueryFilter_ComboBox";
-            this.SongQuery_QueryFilter_ComboBox.Size = new System.Drawing.Size(145, 30);
-            this.SongQuery_QueryFilter_ComboBox.TabIndex = 3;
-            this.SongQuery_QueryFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_QueryFilter_ComboBox_SelectedIndexChanged);
-            // 
-            // SongQuery_QueryFilter_Label
-            // 
-            this.SongQuery_QueryFilter_Label.AutoSize = true;
-            this.SongQuery_QueryFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_QueryFilter_Label.Location = new System.Drawing.Point(248, 44);
-            this.SongQuery_QueryFilter_Label.Margin = new System.Windows.Forms.Padding(10, 14, 6, 14);
-            this.SongQuery_QueryFilter_Label.Name = "SongQuery_QueryFilter_Label";
-            this.SongQuery_QueryFilter_Label.Size = new System.Drawing.Size(48, 22);
-            this.SongQuery_QueryFilter_Label.TabIndex = 2;
-            this.SongQuery_QueryFilter_Label.Text = "篩選:";
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_FuzzyQuery_CheckBox);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_SynonymousQuery_CheckBox);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_Query_Button);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryType_Label);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_Clear_Button);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryType_ComboBox);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryValue_TextBox);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_Paste_Button);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryFilter_Label);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryFilter_ComboBox);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryValue_Label);
+            this.SongQuery_Query_TabPage.Controls.Add(this.SongQuery_QueryValue_ComboBox);
+            this.SongQuery_Query_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_Query_TabPage.Location = new System.Drawing.Point(4, 34);
+            this.SongQuery_Query_TabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.SongQuery_Query_TabPage.Name = "SongQuery_Query_TabPage";
+            this.SongQuery_Query_TabPage.Padding = new System.Windows.Forms.Padding(6, 2, 6, 2);
+            this.SongQuery_Query_TabPage.Size = new System.Drawing.Size(460, 144);
+            this.SongQuery_Query_TabPage.TabIndex = 0;
+            this.SongQuery_Query_TabPage.Text = "歌曲查詢";
+            this.SongQuery_Query_TabPage.UseVisualStyleBackColor = true;
             // 
             // SongQuery_FuzzyQuery_CheckBox
             // 
             this.SongQuery_FuzzyQuery_CheckBox.AutoSize = true;
             this.SongQuery_FuzzyQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_FuzzyQuery_CheckBox.Location = new System.Drawing.Point(270, 135);
+            this.SongQuery_FuzzyQuery_CheckBox.Location = new System.Drawing.Point(266, 107);
             this.SongQuery_FuzzyQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
             this.SongQuery_FuzzyQuery_CheckBox.Name = "SongQuery_FuzzyQuery_CheckBox";
             this.SongQuery_FuzzyQuery_CheckBox.Size = new System.Drawing.Size(100, 26);
@@ -849,21 +753,23 @@
             this.SongQuery_FuzzyQuery_CheckBox.UseVisualStyleBackColor = true;
             this.SongQuery_FuzzyQuery_CheckBox.CheckedChanged += new System.EventHandler(this.SongQuery_FuzzyQuery_CheckBox_CheckedChanged);
             // 
-            // SongQuery_QueryValue_Label
+            // SongQuery_SynonymousQuery_CheckBox
             // 
-            this.SongQuery_QueryValue_Label.AutoSize = true;
-            this.SongQuery_QueryValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_QueryValue_Label.Location = new System.Drawing.Point(16, 90);
-            this.SongQuery_QueryValue_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
-            this.SongQuery_QueryValue_Label.Name = "SongQuery_QueryValue_Label";
-            this.SongQuery_QueryValue_Label.Size = new System.Drawing.Size(48, 22);
-            this.SongQuery_QueryValue_Label.TabIndex = 4;
-            this.SongQuery_QueryValue_Label.Text = "條件:";
+            this.SongQuery_SynonymousQuery_CheckBox.AutoSize = true;
+            this.SongQuery_SynonymousQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_SynonymousQuery_CheckBox.Location = new System.Drawing.Point(171, 107);
+            this.SongQuery_SynonymousQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
+            this.SongQuery_SynonymousQuery_CheckBox.Name = "SongQuery_SynonymousQuery_CheckBox";
+            this.SongQuery_SynonymousQuery_CheckBox.Size = new System.Drawing.Size(83, 26);
+            this.SongQuery_SynonymousQuery_CheckBox.TabIndex = 8;
+            this.SongQuery_SynonymousQuery_CheckBox.Text = "同義字";
+            this.SongQuery_SynonymousQuery_CheckBox.UseVisualStyleBackColor = true;
+            this.SongQuery_SynonymousQuery_CheckBox.CheckedChanged += new System.EventHandler(this.SongQuery_SynonymousQuery_CheckBox_CheckedChanged);
             // 
             // SongQuery_Query_Button
             // 
             this.SongQuery_Query_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_Query_Button.Location = new System.Drawing.Point(382, 131);
+            this.SongQuery_Query_Button.Location = new System.Drawing.Point(378, 103);
             this.SongQuery_Query_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
             this.SongQuery_Query_Button.Name = "SongQuery_Query_Button";
             this.SongQuery_Query_Button.Size = new System.Drawing.Size(70, 32);
@@ -876,22 +782,35 @@
             // 
             this.SongQuery_QueryType_Label.AutoSize = true;
             this.SongQuery_QueryType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_QueryType_Label.Location = new System.Drawing.Point(16, 44);
+            this.SongQuery_QueryType_Label.Location = new System.Drawing.Point(12, 16);
             this.SongQuery_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
             this.SongQuery_QueryType_Label.Name = "SongQuery_QueryType_Label";
             this.SongQuery_QueryType_Label.Size = new System.Drawing.Size(48, 22);
             this.SongQuery_QueryType_Label.TabIndex = 0;
             this.SongQuery_QueryType_Label.Text = "類型:";
             // 
+            // SongQuery_Clear_Button
+            // 
+            this.SongQuery_Clear_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_Clear_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.SongQuery_Clear_Button.Location = new System.Drawing.Point(388, 58);
+            this.SongQuery_Clear_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SongQuery_Clear_Button.Name = "SongQuery_Clear_Button";
+            this.SongQuery_Clear_Button.Size = new System.Drawing.Size(60, 30);
+            this.SongQuery_Clear_Button.TabIndex = 7;
+            this.SongQuery_Clear_Button.Text = "清空";
+            this.SongQuery_Clear_Button.UseVisualStyleBackColor = true;
+            this.SongQuery_Clear_Button.Click += new System.EventHandler(this.SongQuery_Clear_Button_Click);
+            // 
             // SongQuery_QueryType_ComboBox
             // 
             this.SongQuery_QueryType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongQuery_QueryType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_QueryType_ComboBox.FormattingEnabled = true;
-            this.SongQuery_QueryType_ComboBox.Location = new System.Drawing.Point(76, 40);
+            this.SongQuery_QueryType_ComboBox.Location = new System.Drawing.Point(72, 12);
             this.SongQuery_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SongQuery_QueryType_ComboBox.Name = "SongQuery_QueryType_ComboBox";
-            this.SongQuery_QueryType_ComboBox.Size = new System.Drawing.Size(155, 30);
+            this.SongQuery_QueryType_ComboBox.Size = new System.Drawing.Size(150, 30);
             this.SongQuery_QueryType_ComboBox.TabIndex = 1;
             this.SongQuery_QueryType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_QueryType_ComboBox_SelectedIndexChanged);
             // 
@@ -899,24 +818,197 @@
             // 
             this.SongQuery_QueryValue_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_QueryValue_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.SongQuery_QueryValue_TextBox.Location = new System.Drawing.Point(76, 86);
+            this.SongQuery_QueryValue_TextBox.Location = new System.Drawing.Point(72, 58);
             this.SongQuery_QueryValue_TextBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
             this.SongQuery_QueryValue_TextBox.Name = "SongQuery_QueryValue_TextBox";
             this.SongQuery_QueryValue_TextBox.Size = new System.Drawing.Size(232, 30);
             this.SongQuery_QueryValue_TextBox.TabIndex = 5;
             this.SongQuery_QueryValue_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SongQuery_QueryValue_TextBox_KeyPress);
             // 
+            // SongQuery_Paste_Button
+            // 
+            this.SongQuery_Paste_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_Paste_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.SongQuery_Paste_Button.Location = new System.Drawing.Point(316, 58);
+            this.SongQuery_Paste_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SongQuery_Paste_Button.Name = "SongQuery_Paste_Button";
+            this.SongQuery_Paste_Button.Size = new System.Drawing.Size(60, 30);
+            this.SongQuery_Paste_Button.TabIndex = 6;
+            this.SongQuery_Paste_Button.Text = "貼上";
+            this.SongQuery_Paste_Button.UseVisualStyleBackColor = true;
+            this.SongQuery_Paste_Button.Click += new System.EventHandler(this.SongQuery_Paste_Button_Click);
+            // 
+            // SongQuery_QueryFilter_Label
+            // 
+            this.SongQuery_QueryFilter_Label.AutoSize = true;
+            this.SongQuery_QueryFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_QueryFilter_Label.Location = new System.Drawing.Point(238, 16);
+            this.SongQuery_QueryFilter_Label.Margin = new System.Windows.Forms.Padding(10, 14, 6, 14);
+            this.SongQuery_QueryFilter_Label.Name = "SongQuery_QueryFilter_Label";
+            this.SongQuery_QueryFilter_Label.Size = new System.Drawing.Size(48, 22);
+            this.SongQuery_QueryFilter_Label.TabIndex = 2;
+            this.SongQuery_QueryFilter_Label.Text = "篩選:";
+            // 
+            // SongQuery_QueryFilter_ComboBox
+            // 
+            this.SongQuery_QueryFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_QueryFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_QueryFilter_ComboBox.FormattingEnabled = true;
+            this.SongQuery_QueryFilter_ComboBox.Location = new System.Drawing.Point(298, 12);
+            this.SongQuery_QueryFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.SongQuery_QueryFilter_ComboBox.Name = "SongQuery_QueryFilter_ComboBox";
+            this.SongQuery_QueryFilter_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_QueryFilter_ComboBox.TabIndex = 3;
+            this.SongQuery_QueryFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_QueryFilter_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_QueryValue_Label
+            // 
+            this.SongQuery_QueryValue_Label.AutoSize = true;
+            this.SongQuery_QueryValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_QueryValue_Label.Location = new System.Drawing.Point(12, 62);
+            this.SongQuery_QueryValue_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
+            this.SongQuery_QueryValue_Label.Name = "SongQuery_QueryValue_Label";
+            this.SongQuery_QueryValue_Label.Size = new System.Drawing.Size(48, 22);
+            this.SongQuery_QueryValue_Label.TabIndex = 4;
+            this.SongQuery_QueryValue_Label.Text = "條件:";
+            // 
             // SongQuery_QueryValue_ComboBox
             // 
             this.SongQuery_QueryValue_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SongQuery_QueryValue_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_QueryValue_ComboBox.FormattingEnabled = true;
-            this.SongQuery_QueryValue_ComboBox.Location = new System.Drawing.Point(76, 86);
+            this.SongQuery_QueryValue_ComboBox.Location = new System.Drawing.Point(72, 58);
             this.SongQuery_QueryValue_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
             this.SongQuery_QueryValue_ComboBox.Name = "SongQuery_QueryValue_ComboBox";
             this.SongQuery_QueryValue_ComboBox.Size = new System.Drawing.Size(232, 30);
             this.SongQuery_QueryValue_ComboBox.TabIndex = 6;
             this.SongQuery_QueryValue_ComboBox.Visible = false;
+            // 
+            // SongQuery_OtherQuery_TabPage
+            // 
+            this.SongQuery_OtherQuery_TabPage.Controls.Add(this.SongQuery_FavoriteQuery_ComboBox);
+            this.SongQuery_OtherQuery_TabPage.Controls.Add(this.SongQuery_ExceptionalQuery_Label);
+            this.SongQuery_OtherQuery_TabPage.Controls.Add(this.SongQuery_FavoriteQuery_Label);
+            this.SongQuery_OtherQuery_TabPage.Controls.Add(this.SongQuery_ExceptionalQuery_ComboBox);
+            this.SongQuery_OtherQuery_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_OtherQuery_TabPage.Location = new System.Drawing.Point(4, 34);
+            this.SongQuery_OtherQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.SongQuery_OtherQuery_TabPage.Name = "SongQuery_OtherQuery_TabPage";
+            this.SongQuery_OtherQuery_TabPage.Padding = new System.Windows.Forms.Padding(6, 2, 6, 2);
+            this.SongQuery_OtherQuery_TabPage.Size = new System.Drawing.Size(460, 144);
+            this.SongQuery_OtherQuery_TabPage.TabIndex = 1;
+            this.SongQuery_OtherQuery_TabPage.Text = "其它查詢";
+            this.SongQuery_OtherQuery_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // SongQuery_FavoriteQuery_ComboBox
+            // 
+            this.SongQuery_FavoriteQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_FavoriteQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_FavoriteQuery_ComboBox.FormattingEnabled = true;
+            this.SongQuery_FavoriteQuery_ComboBox.Location = new System.Drawing.Point(72, 58);
+            this.SongQuery_FavoriteQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SongQuery_FavoriteQuery_ComboBox.Name = "SongQuery_FavoriteQuery_ComboBox";
+            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(180, 30);
+            this.SongQuery_FavoriteQuery_ComboBox.TabIndex = 3;
+            this.SongQuery_FavoriteQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_FavoriteQuery_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_ExceptionalQuery_Label
+            // 
+            this.SongQuery_ExceptionalQuery_Label.AutoSize = true;
+            this.SongQuery_ExceptionalQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_ExceptionalQuery_Label.Location = new System.Drawing.Point(12, 16);
+            this.SongQuery_ExceptionalQuery_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.SongQuery_ExceptionalQuery_Label.Name = "SongQuery_ExceptionalQuery_Label";
+            this.SongQuery_ExceptionalQuery_Label.Size = new System.Drawing.Size(48, 22);
+            this.SongQuery_ExceptionalQuery_Label.TabIndex = 0;
+            this.SongQuery_ExceptionalQuery_Label.Text = "異常:";
+            // 
+            // SongQuery_FavoriteQuery_Label
+            // 
+            this.SongQuery_FavoriteQuery_Label.AutoSize = true;
+            this.SongQuery_FavoriteQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_FavoriteQuery_Label.Location = new System.Drawing.Point(12, 62);
+            this.SongQuery_FavoriteQuery_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
+            this.SongQuery_FavoriteQuery_Label.Name = "SongQuery_FavoriteQuery_Label";
+            this.SongQuery_FavoriteQuery_Label.Size = new System.Drawing.Size(48, 22);
+            this.SongQuery_FavoriteQuery_Label.TabIndex = 2;
+            this.SongQuery_FavoriteQuery_Label.Text = "最愛:";
+            // 
+            // SongQuery_ExceptionalQuery_ComboBox
+            // 
+            this.SongQuery_ExceptionalQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_ExceptionalQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_ExceptionalQuery_ComboBox.FormattingEnabled = true;
+            this.SongQuery_ExceptionalQuery_ComboBox.Location = new System.Drawing.Point(72, 12);
+            this.SongQuery_ExceptionalQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.SongQuery_ExceptionalQuery_ComboBox.Name = "SongQuery_ExceptionalQuery_ComboBox";
+            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(180, 30);
+            this.SongQuery_ExceptionalQuery_ComboBox.TabIndex = 1;
+            this.SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_QueryFilter_GroupBox
+            // 
+            this.SongQuery_QueryFilter_GroupBox.Controls.Add(this.SongQuery_WordCountFilter_Label);
+            this.SongQuery_QueryFilter_GroupBox.Controls.Add(this.SongQuery_WordCountFilter_ComboBox);
+            this.SongQuery_QueryFilter_GroupBox.Controls.Add(this.SongQuery_LangFilter_Label);
+            this.SongQuery_QueryFilter_GroupBox.Controls.Add(this.SongQuery_LangFilter_ComboBox);
+            this.SongQuery_QueryFilter_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_QueryFilter_GroupBox.Location = new System.Drawing.Point(22, 209);
+            this.SongQuery_QueryFilter_GroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.SongQuery_QueryFilter_GroupBox.Name = "SongQuery_QueryFilter_GroupBox";
+            this.SongQuery_QueryFilter_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.SongQuery_QueryFilter_GroupBox.Size = new System.Drawing.Size(468, 83);
+            this.SongQuery_QueryFilter_GroupBox.TabIndex = 1;
+            this.SongQuery_QueryFilter_GroupBox.TabStop = false;
+            this.SongQuery_QueryFilter_GroupBox.Text = "列表篩選";
+            // 
+            // SongQuery_WordCountFilter_Label
+            // 
+            this.SongQuery_WordCountFilter_Label.AutoSize = true;
+            this.SongQuery_WordCountFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_WordCountFilter_Label.Location = new System.Drawing.Point(242, 39);
+            this.SongQuery_WordCountFilter_Label.Margin = new System.Windows.Forms.Padding(10, 10, 6, 10);
+            this.SongQuery_WordCountFilter_Label.Name = "SongQuery_WordCountFilter_Label";
+            this.SongQuery_WordCountFilter_Label.Size = new System.Drawing.Size(48, 22);
+            this.SongQuery_WordCountFilter_Label.TabIndex = 4;
+            this.SongQuery_WordCountFilter_Label.Text = "字數:";
+            // 
+            // SongQuery_WordCountFilter_ComboBox
+            // 
+            this.SongQuery_WordCountFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_WordCountFilter_ComboBox.Enabled = false;
+            this.SongQuery_WordCountFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_WordCountFilter_ComboBox.FormattingEnabled = true;
+            this.SongQuery_WordCountFilter_ComboBox.Location = new System.Drawing.Point(302, 35);
+            this.SongQuery_WordCountFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6);
+            this.SongQuery_WordCountFilter_ComboBox.Name = "SongQuery_WordCountFilter_ComboBox";
+            this.SongQuery_WordCountFilter_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_WordCountFilter_ComboBox.TabIndex = 5;
+            this.SongQuery_WordCountFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_CommonFilter_ComboBox_SelectedIndexChanged);
+            // 
+            // SongQuery_LangFilter_Label
+            // 
+            this.SongQuery_LangFilter_Label.AutoSize = true;
+            this.SongQuery_LangFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_LangFilter_Label.Location = new System.Drawing.Point(16, 39);
+            this.SongQuery_LangFilter_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.SongQuery_LangFilter_Label.Name = "SongQuery_LangFilter_Label";
+            this.SongQuery_LangFilter_Label.Size = new System.Drawing.Size(48, 22);
+            this.SongQuery_LangFilter_Label.TabIndex = 2;
+            this.SongQuery_LangFilter_Label.Text = "語系:";
+            // 
+            // SongQuery_LangFilter_ComboBox
+            // 
+            this.SongQuery_LangFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongQuery_LangFilter_ComboBox.Enabled = false;
+            this.SongQuery_LangFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_LangFilter_ComboBox.FormattingEnabled = true;
+            this.SongQuery_LangFilter_ComboBox.Location = new System.Drawing.Point(76, 35);
+            this.SongQuery_LangFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6);
+            this.SongQuery_LangFilter_ComboBox.Name = "SongQuery_LangFilter_ComboBox";
+            this.SongQuery_LangFilter_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.SongQuery_LangFilter_ComboBox.TabIndex = 3;
+            this.SongQuery_LangFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_CommonFilter_ComboBox_SelectedIndexChanged);
             // 
             // SongQuery_Statistics_GroupBox
             // 
@@ -5732,11 +5824,11 @@
             // 
             // Cashbox_TabPage
             // 
+            this.Cashbox_TabPage.Controls.Add(this.Cashbox_TabControl);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_UpdDate_GroupBox);
-            this.Cashbox_TabPage.Controls.Add(this.Cashbox_OtherQuery_GroupBox);
+            this.Cashbox_TabPage.Controls.Add(this.Cashbox_QueryFilter_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_QueryStatus_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_Maintenance_GroupBox);
-            this.Cashbox_TabPage.Controls.Add(this.Cashbox_Query_GroupBox);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_DataGridView);
             this.Cashbox_TabPage.Controls.Add(this.Cashbox_Edit_GroupBox);
             this.Cashbox_TabPage.Location = new System.Drawing.Point(4, 34);
@@ -5747,6 +5839,247 @@
             this.Cashbox_TabPage.TabIndex = 11;
             this.Cashbox_TabPage.Text = "錢櫃資料";
             this.Cashbox_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Cashbox_TabControl
+            // 
+            this.Cashbox_TabControl.Controls.Add(this.Cashbox_Query_TabPage);
+            this.Cashbox_TabControl.Controls.Add(this.Cashbox_OtherQuery_TabPage);
+            this.Cashbox_TabControl.Location = new System.Drawing.Point(22, 22);
+            this.Cashbox_TabControl.Margin = new System.Windows.Forms.Padding(2);
+            this.Cashbox_TabControl.Name = "Cashbox_TabControl";
+            this.Cashbox_TabControl.SelectedIndex = 0;
+            this.Cashbox_TabControl.Size = new System.Drawing.Size(468, 182);
+            this.Cashbox_TabControl.TabIndex = 0;
+            // 
+            // Cashbox_Query_TabPage
+            // 
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_SynonymousQuery_CheckBox);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryType_Label);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_FuzzyQuery_CheckBox);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_Clear_Button);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_Query_Button);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryType_ComboBox);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_Paste_Button);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryFilter_Label);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryFilter_ComboBox);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryValue_Label);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryValue_TextBox);
+            this.Cashbox_Query_TabPage.Controls.Add(this.Cashbox_QueryValue_ComboBox);
+            this.Cashbox_Query_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_Query_TabPage.Location = new System.Drawing.Point(4, 34);
+            this.Cashbox_Query_TabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.Cashbox_Query_TabPage.Name = "Cashbox_Query_TabPage";
+            this.Cashbox_Query_TabPage.Padding = new System.Windows.Forms.Padding(6, 2, 6, 2);
+            this.Cashbox_Query_TabPage.Size = new System.Drawing.Size(460, 144);
+            this.Cashbox_Query_TabPage.TabIndex = 1;
+            this.Cashbox_Query_TabPage.Text = "歌曲查詢";
+            this.Cashbox_Query_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Cashbox_SynonymousQuery_CheckBox
+            // 
+            this.Cashbox_SynonymousQuery_CheckBox.AutoSize = true;
+            this.Cashbox_SynonymousQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_SynonymousQuery_CheckBox.Location = new System.Drawing.Point(171, 107);
+            this.Cashbox_SynonymousQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
+            this.Cashbox_SynonymousQuery_CheckBox.Name = "Cashbox_SynonymousQuery_CheckBox";
+            this.Cashbox_SynonymousQuery_CheckBox.Size = new System.Drawing.Size(83, 26);
+            this.Cashbox_SynonymousQuery_CheckBox.TabIndex = 8;
+            this.Cashbox_SynonymousQuery_CheckBox.Text = "同義字";
+            this.Cashbox_SynonymousQuery_CheckBox.UseVisualStyleBackColor = true;
+            this.Cashbox_SynonymousQuery_CheckBox.CheckedChanged += new System.EventHandler(this.Cashbox_SynonymousQuery_CheckBox_CheckedChanged);
+            // 
+            // Cashbox_QueryType_Label
+            // 
+            this.Cashbox_QueryType_Label.AutoSize = true;
+            this.Cashbox_QueryType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryType_Label.Location = new System.Drawing.Point(12, 16);
+            this.Cashbox_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.Cashbox_QueryType_Label.Name = "Cashbox_QueryType_Label";
+            this.Cashbox_QueryType_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_QueryType_Label.TabIndex = 0;
+            this.Cashbox_QueryType_Label.Text = "類型:";
+            // 
+            // Cashbox_FuzzyQuery_CheckBox
+            // 
+            this.Cashbox_FuzzyQuery_CheckBox.AutoSize = true;
+            this.Cashbox_FuzzyQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_FuzzyQuery_CheckBox.Location = new System.Drawing.Point(266, 107);
+            this.Cashbox_FuzzyQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
+            this.Cashbox_FuzzyQuery_CheckBox.Name = "Cashbox_FuzzyQuery_CheckBox";
+            this.Cashbox_FuzzyQuery_CheckBox.Size = new System.Drawing.Size(100, 26);
+            this.Cashbox_FuzzyQuery_CheckBox.TabIndex = 9;
+            this.Cashbox_FuzzyQuery_CheckBox.Text = "模糊查詢";
+            this.Cashbox_FuzzyQuery_CheckBox.UseVisualStyleBackColor = true;
+            this.Cashbox_FuzzyQuery_CheckBox.CheckedChanged += new System.EventHandler(this.Cashbox_FuzzyQuery_CheckBox_CheckedChanged);
+            // 
+            // Cashbox_Clear_Button
+            // 
+            this.Cashbox_Clear_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_Clear_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Cashbox_Clear_Button.Location = new System.Drawing.Point(388, 58);
+            this.Cashbox_Clear_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.Cashbox_Clear_Button.Name = "Cashbox_Clear_Button";
+            this.Cashbox_Clear_Button.Size = new System.Drawing.Size(60, 30);
+            this.Cashbox_Clear_Button.TabIndex = 7;
+            this.Cashbox_Clear_Button.Text = "清空";
+            this.Cashbox_Clear_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_Clear_Button.Click += new System.EventHandler(this.Cashbox_Clear_Button_Click);
+            // 
+            // Cashbox_Query_Button
+            // 
+            this.Cashbox_Query_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_Query_Button.Location = new System.Drawing.Point(378, 103);
+            this.Cashbox_Query_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
+            this.Cashbox_Query_Button.Name = "Cashbox_Query_Button";
+            this.Cashbox_Query_Button.Size = new System.Drawing.Size(70, 32);
+            this.Cashbox_Query_Button.TabIndex = 10;
+            this.Cashbox_Query_Button.Text = "查詢";
+            this.Cashbox_Query_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_Query_Button.Click += new System.EventHandler(this.Cashbox_Query_Button_Click);
+            // 
+            // Cashbox_QueryType_ComboBox
+            // 
+            this.Cashbox_QueryType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_QueryType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryType_ComboBox.FormattingEnabled = true;
+            this.Cashbox_QueryType_ComboBox.Location = new System.Drawing.Point(72, 12);
+            this.Cashbox_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.Cashbox_QueryType_ComboBox.Name = "Cashbox_QueryType_ComboBox";
+            this.Cashbox_QueryType_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_QueryType_ComboBox.TabIndex = 1;
+            this.Cashbox_QueryType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_QueryType_ComboBox_SelectedIndexChanged);
+            // 
+            // Cashbox_Paste_Button
+            // 
+            this.Cashbox_Paste_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_Paste_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Cashbox_Paste_Button.Location = new System.Drawing.Point(316, 58);
+            this.Cashbox_Paste_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.Cashbox_Paste_Button.Name = "Cashbox_Paste_Button";
+            this.Cashbox_Paste_Button.Size = new System.Drawing.Size(60, 30);
+            this.Cashbox_Paste_Button.TabIndex = 6;
+            this.Cashbox_Paste_Button.Text = "貼上";
+            this.Cashbox_Paste_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_Paste_Button.Click += new System.EventHandler(this.Cashbox_Paste_Button_Click);
+            // 
+            // Cashbox_QueryFilter_Label
+            // 
+            this.Cashbox_QueryFilter_Label.AutoSize = true;
+            this.Cashbox_QueryFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryFilter_Label.Location = new System.Drawing.Point(238, 16);
+            this.Cashbox_QueryFilter_Label.Margin = new System.Windows.Forms.Padding(10, 14, 6, 14);
+            this.Cashbox_QueryFilter_Label.Name = "Cashbox_QueryFilter_Label";
+            this.Cashbox_QueryFilter_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_QueryFilter_Label.TabIndex = 2;
+            this.Cashbox_QueryFilter_Label.Text = "篩選:";
+            // 
+            // Cashbox_QueryFilter_ComboBox
+            // 
+            this.Cashbox_QueryFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_QueryFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryFilter_ComboBox.FormattingEnabled = true;
+            this.Cashbox_QueryFilter_ComboBox.Location = new System.Drawing.Point(298, 12);
+            this.Cashbox_QueryFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.Cashbox_QueryFilter_ComboBox.Name = "Cashbox_QueryFilter_ComboBox";
+            this.Cashbox_QueryFilter_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_QueryFilter_ComboBox.TabIndex = 3;
+            this.Cashbox_QueryFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_QueryFilter_ComboBox_SelectedIndexChanged);
+            // 
+            // Cashbox_QueryValue_Label
+            // 
+            this.Cashbox_QueryValue_Label.AutoSize = true;
+            this.Cashbox_QueryValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryValue_Label.Location = new System.Drawing.Point(12, 62);
+            this.Cashbox_QueryValue_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
+            this.Cashbox_QueryValue_Label.Name = "Cashbox_QueryValue_Label";
+            this.Cashbox_QueryValue_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_QueryValue_Label.TabIndex = 4;
+            this.Cashbox_QueryValue_Label.Text = "條件:";
+            // 
+            // Cashbox_QueryValue_TextBox
+            // 
+            this.Cashbox_QueryValue_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryValue_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Cashbox_QueryValue_TextBox.Location = new System.Drawing.Point(72, 58);
+            this.Cashbox_QueryValue_TextBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.Cashbox_QueryValue_TextBox.Name = "Cashbox_QueryValue_TextBox";
+            this.Cashbox_QueryValue_TextBox.Size = new System.Drawing.Size(232, 30);
+            this.Cashbox_QueryValue_TextBox.TabIndex = 5;
+            this.Cashbox_QueryValue_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cashbox_QueryValue_TextBox_KeyPress);
+            // 
+            // Cashbox_QueryValue_ComboBox
+            // 
+            this.Cashbox_QueryValue_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_QueryValue_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryValue_ComboBox.FormattingEnabled = true;
+            this.Cashbox_QueryValue_ComboBox.Location = new System.Drawing.Point(72, 58);
+            this.Cashbox_QueryValue_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.Cashbox_QueryValue_ComboBox.Name = "Cashbox_QueryValue_ComboBox";
+            this.Cashbox_QueryValue_ComboBox.Size = new System.Drawing.Size(232, 30);
+            this.Cashbox_QueryValue_ComboBox.TabIndex = 6;
+            this.Cashbox_QueryValue_ComboBox.Visible = false;
+            // 
+            // Cashbox_OtherQuery_TabPage
+            // 
+            this.Cashbox_OtherQuery_TabPage.Controls.Add(this.Cashbox_DateQuery_ComboBox);
+            this.Cashbox_OtherQuery_TabPage.Controls.Add(this.Cashbox_OtherQuery_Label);
+            this.Cashbox_OtherQuery_TabPage.Controls.Add(this.Cashbox_DateQuery_Label);
+            this.Cashbox_OtherQuery_TabPage.Controls.Add(this.Cashbox_OtherQuery_ComboBox);
+            this.Cashbox_OtherQuery_TabPage.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_OtherQuery_TabPage.Location = new System.Drawing.Point(4, 34);
+            this.Cashbox_OtherQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.Cashbox_OtherQuery_TabPage.Name = "Cashbox_OtherQuery_TabPage";
+            this.Cashbox_OtherQuery_TabPage.Padding = new System.Windows.Forms.Padding(6, 2, 6, 2);
+            this.Cashbox_OtherQuery_TabPage.Size = new System.Drawing.Size(460, 144);
+            this.Cashbox_OtherQuery_TabPage.TabIndex = 0;
+            this.Cashbox_OtherQuery_TabPage.Text = "其它查詢";
+            this.Cashbox_OtherQuery_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // Cashbox_DateQuery_ComboBox
+            // 
+            this.Cashbox_DateQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_DateQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DateQuery_ComboBox.FormattingEnabled = true;
+            this.Cashbox_DateQuery_ComboBox.Location = new System.Drawing.Point(72, 58);
+            this.Cashbox_DateQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.Cashbox_DateQuery_ComboBox.Name = "Cashbox_DateQuery_ComboBox";
+            this.Cashbox_DateQuery_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_DateQuery_ComboBox.TabIndex = 3;
+            this.Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+            // 
+            // Cashbox_OtherQuery_Label
+            // 
+            this.Cashbox_OtherQuery_Label.AutoSize = true;
+            this.Cashbox_OtherQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_OtherQuery_Label.Location = new System.Drawing.Point(12, 16);
+            this.Cashbox_OtherQuery_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
+            this.Cashbox_OtherQuery_Label.Name = "Cashbox_OtherQuery_Label";
+            this.Cashbox_OtherQuery_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_OtherQuery_Label.TabIndex = 0;
+            this.Cashbox_OtherQuery_Label.Text = "類型:";
+            // 
+            // Cashbox_DateQuery_Label
+            // 
+            this.Cashbox_DateQuery_Label.AutoSize = true;
+            this.Cashbox_DateQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DateQuery_Label.Location = new System.Drawing.Point(12, 62);
+            this.Cashbox_DateQuery_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
+            this.Cashbox_DateQuery_Label.Name = "Cashbox_DateQuery_Label";
+            this.Cashbox_DateQuery_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_DateQuery_Label.TabIndex = 2;
+            this.Cashbox_DateQuery_Label.Text = "日期:";
+            // 
+            // Cashbox_OtherQuery_ComboBox
+            // 
+            this.Cashbox_OtherQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_OtherQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_OtherQuery_ComboBox.FormattingEnabled = true;
+            this.Cashbox_OtherQuery_ComboBox.Location = new System.Drawing.Point(72, 12);
+            this.Cashbox_OtherQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.Cashbox_OtherQuery_ComboBox.Name = "Cashbox_OtherQuery_ComboBox";
+            this.Cashbox_OtherQuery_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_OtherQuery_ComboBox.TabIndex = 1;
+            this.Cashbox_OtherQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_OtherQuery_ComboBox_SelectedIndexChanged);
             // 
             // Cashbox_UpdDate_GroupBox
             // 
@@ -5759,7 +6092,7 @@
             this.Cashbox_UpdDate_GroupBox.Name = "Cashbox_UpdDate_GroupBox";
             this.Cashbox_UpdDate_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
             this.Cashbox_UpdDate_GroupBox.Size = new System.Drawing.Size(468, 96);
-            this.Cashbox_UpdDate_GroupBox.TabIndex = 7;
+            this.Cashbox_UpdDate_GroupBox.TabIndex = 2;
             this.Cashbox_UpdDate_GroupBox.TabStop = false;
             this.Cashbox_UpdDate_GroupBox.Text = "資料更新";
             // 
@@ -5798,67 +6131,69 @@
             this.Cashbox_UpdDateValue_Label.TabIndex = 5;
             this.Cashbox_UpdDateValue_Label.Text = "2016年1月3日";
             // 
-            // Cashbox_OtherQuery_GroupBox
+            // Cashbox_QueryFilter_GroupBox
             // 
-            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_DateQuery_ComboBox);
-            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_DateQuery_Label);
-            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_OtherQuery_ComboBox);
-            this.Cashbox_OtherQuery_GroupBox.Controls.Add(this.Cashbox_OtherQuery_Label);
-            this.Cashbox_OtherQuery_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_OtherQuery_GroupBox.Location = new System.Drawing.Point(22, 209);
-            this.Cashbox_OtherQuery_GroupBox.Margin = new System.Windows.Forms.Padding(2);
-            this.Cashbox_OtherQuery_GroupBox.Name = "Cashbox_OtherQuery_GroupBox";
-            this.Cashbox_OtherQuery_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.Cashbox_OtherQuery_GroupBox.Size = new System.Drawing.Size(468, 82);
-            this.Cashbox_OtherQuery_GroupBox.TabIndex = 6;
-            this.Cashbox_OtherQuery_GroupBox.TabStop = false;
-            this.Cashbox_OtherQuery_GroupBox.Text = "其它查詢";
+            this.Cashbox_QueryFilter_GroupBox.Controls.Add(this.Cashbox_SongSingerFilter_Label);
+            this.Cashbox_QueryFilter_GroupBox.Controls.Add(this.Cashbox_SongSingerFilter_ComboBox);
+            this.Cashbox_QueryFilter_GroupBox.Controls.Add(this.Cashbox_LangFilter_Label);
+            this.Cashbox_QueryFilter_GroupBox.Controls.Add(this.Cashbox_LangFilter_ComboBox);
+            this.Cashbox_QueryFilter_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_QueryFilter_GroupBox.Location = new System.Drawing.Point(22, 209);
+            this.Cashbox_QueryFilter_GroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.Cashbox_QueryFilter_GroupBox.Name = "Cashbox_QueryFilter_GroupBox";
+            this.Cashbox_QueryFilter_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.Cashbox_QueryFilter_GroupBox.Size = new System.Drawing.Size(468, 82);
+            this.Cashbox_QueryFilter_GroupBox.TabIndex = 1;
+            this.Cashbox_QueryFilter_GroupBox.TabStop = false;
+            this.Cashbox_QueryFilter_GroupBox.Text = "列表篩選";
             // 
-            // Cashbox_DateQuery_ComboBox
+            // Cashbox_SongSingerFilter_Label
             // 
-            this.Cashbox_DateQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Cashbox_DateQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_DateQuery_ComboBox.FormattingEnabled = true;
-            this.Cashbox_DateQuery_ComboBox.Location = new System.Drawing.Point(308, 35);
-            this.Cashbox_DateQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
-            this.Cashbox_DateQuery_ComboBox.Name = "Cashbox_DateQuery_ComboBox";
-            this.Cashbox_DateQuery_ComboBox.Size = new System.Drawing.Size(145, 30);
-            this.Cashbox_DateQuery_ComboBox.TabIndex = 3;
-            this.Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+            this.Cashbox_SongSingerFilter_Label.AutoSize = true;
+            this.Cashbox_SongSingerFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_SongSingerFilter_Label.Location = new System.Drawing.Point(242, 39);
+            this.Cashbox_SongSingerFilter_Label.Margin = new System.Windows.Forms.Padding(10, 10, 6, 10);
+            this.Cashbox_SongSingerFilter_Label.Name = "Cashbox_SongSingerFilter_Label";
+            this.Cashbox_SongSingerFilter_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_SongSingerFilter_Label.TabIndex = 8;
+            this.Cashbox_SongSingerFilter_Label.Text = "歌手:";
             // 
-            // Cashbox_DateQuery_Label
+            // Cashbox_SongSingerFilter_ComboBox
             // 
-            this.Cashbox_DateQuery_Label.AutoSize = true;
-            this.Cashbox_DateQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_DateQuery_Label.Location = new System.Drawing.Point(248, 39);
-            this.Cashbox_DateQuery_Label.Margin = new System.Windows.Forms.Padding(10, 9, 6, 18);
-            this.Cashbox_DateQuery_Label.Name = "Cashbox_DateQuery_Label";
-            this.Cashbox_DateQuery_Label.Size = new System.Drawing.Size(48, 22);
-            this.Cashbox_DateQuery_Label.TabIndex = 2;
-            this.Cashbox_DateQuery_Label.Text = "日期:";
+            this.Cashbox_SongSingerFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_SongSingerFilter_ComboBox.Enabled = false;
+            this.Cashbox_SongSingerFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_SongSingerFilter_ComboBox.FormattingEnabled = true;
+            this.Cashbox_SongSingerFilter_ComboBox.Location = new System.Drawing.Point(302, 35);
+            this.Cashbox_SongSingerFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6);
+            this.Cashbox_SongSingerFilter_ComboBox.Name = "Cashbox_SongSingerFilter_ComboBox";
+            this.Cashbox_SongSingerFilter_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_SongSingerFilter_ComboBox.TabIndex = 9;
+            this.Cashbox_SongSingerFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_CommonFilter_ComboBox_SelectedIndexChanged);
             // 
-            // Cashbox_OtherQuery_ComboBox
+            // Cashbox_LangFilter_Label
             // 
-            this.Cashbox_OtherQuery_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Cashbox_OtherQuery_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_OtherQuery_ComboBox.FormattingEnabled = true;
-            this.Cashbox_OtherQuery_ComboBox.Location = new System.Drawing.Point(76, 35);
-            this.Cashbox_OtherQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
-            this.Cashbox_OtherQuery_ComboBox.Name = "Cashbox_OtherQuery_ComboBox";
-            this.Cashbox_OtherQuery_ComboBox.Size = new System.Drawing.Size(155, 30);
-            this.Cashbox_OtherQuery_ComboBox.TabIndex = 1;
-            this.Cashbox_OtherQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_OtherQuery_ComboBox_SelectedIndexChanged);
+            this.Cashbox_LangFilter_Label.AutoSize = true;
+            this.Cashbox_LangFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_LangFilter_Label.Location = new System.Drawing.Point(16, 39);
+            this.Cashbox_LangFilter_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.Cashbox_LangFilter_Label.Name = "Cashbox_LangFilter_Label";
+            this.Cashbox_LangFilter_Label.Size = new System.Drawing.Size(48, 22);
+            this.Cashbox_LangFilter_Label.TabIndex = 6;
+            this.Cashbox_LangFilter_Label.Text = "語系:";
             // 
-            // Cashbox_OtherQuery_Label
+            // Cashbox_LangFilter_ComboBox
             // 
-            this.Cashbox_OtherQuery_Label.AutoSize = true;
-            this.Cashbox_OtherQuery_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_OtherQuery_Label.Location = new System.Drawing.Point(16, 39);
-            this.Cashbox_OtherQuery_Label.Margin = new System.Windows.Forms.Padding(6, 9, 6, 18);
-            this.Cashbox_OtherQuery_Label.Name = "Cashbox_OtherQuery_Label";
-            this.Cashbox_OtherQuery_Label.Size = new System.Drawing.Size(48, 22);
-            this.Cashbox_OtherQuery_Label.TabIndex = 0;
-            this.Cashbox_OtherQuery_Label.Text = "類型:";
+            this.Cashbox_LangFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cashbox_LangFilter_ComboBox.Enabled = false;
+            this.Cashbox_LangFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_LangFilter_ComboBox.FormattingEnabled = true;
+            this.Cashbox_LangFilter_ComboBox.Location = new System.Drawing.Point(76, 35);
+            this.Cashbox_LangFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6);
+            this.Cashbox_LangFilter_ComboBox.Name = "Cashbox_LangFilter_ComboBox";
+            this.Cashbox_LangFilter_ComboBox.Size = new System.Drawing.Size(150, 30);
+            this.Cashbox_LangFilter_ComboBox.TabIndex = 7;
+            this.Cashbox_LangFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_CommonFilter_ComboBox_SelectedIndexChanged);
             // 
             // Cashbox_QueryStatus_GroupBox
             // 
@@ -5926,174 +6261,6 @@
             this.Cashbox_ApplyCashboxId_Button.UseVisualStyleBackColor = true;
             this.Cashbox_ApplyCashboxId_Button.Click += new System.EventHandler(this.Cashbox_ApplyCashboxId_Button_Click);
             // 
-            // Cashbox_Query_GroupBox
-            // 
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_SynonymousQuery_CheckBox);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_Clear_Button);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_Paste_Button);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryFilter_ComboBox);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryFilter_Label);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_FuzzyQuery_CheckBox);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryValue_Label);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_Query_Button);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryType_Label);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryType_ComboBox);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryValue_TextBox);
-            this.Cashbox_Query_GroupBox.Controls.Add(this.Cashbox_QueryValue_ComboBox);
-            this.Cashbox_Query_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_Query_GroupBox.Location = new System.Drawing.Point(22, 22);
-            this.Cashbox_Query_GroupBox.Margin = new System.Windows.Forms.Padding(2);
-            this.Cashbox_Query_GroupBox.Name = "Cashbox_Query_GroupBox";
-            this.Cashbox_Query_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.Cashbox_Query_GroupBox.Size = new System.Drawing.Size(468, 180);
-            this.Cashbox_Query_GroupBox.TabIndex = 1;
-            this.Cashbox_Query_GroupBox.TabStop = false;
-            this.Cashbox_Query_GroupBox.Text = "歌曲查詢";
-            // 
-            // Cashbox_SynonymousQuery_CheckBox
-            // 
-            this.Cashbox_SynonymousQuery_CheckBox.AutoSize = true;
-            this.Cashbox_SynonymousQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_SynonymousQuery_CheckBox.Location = new System.Drawing.Point(175, 135);
-            this.Cashbox_SynonymousQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
-            this.Cashbox_SynonymousQuery_CheckBox.Name = "Cashbox_SynonymousQuery_CheckBox";
-            this.Cashbox_SynonymousQuery_CheckBox.Size = new System.Drawing.Size(83, 26);
-            this.Cashbox_SynonymousQuery_CheckBox.TabIndex = 8;
-            this.Cashbox_SynonymousQuery_CheckBox.Text = "同義字";
-            this.Cashbox_SynonymousQuery_CheckBox.UseVisualStyleBackColor = true;
-            this.Cashbox_SynonymousQuery_CheckBox.CheckedChanged += new System.EventHandler(this.Cashbox_SynonymousQuery_CheckBox_CheckedChanged);
-            // 
-            // Cashbox_Clear_Button
-            // 
-            this.Cashbox_Clear_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_Clear_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Cashbox_Clear_Button.Location = new System.Drawing.Point(392, 86);
-            this.Cashbox_Clear_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
-            this.Cashbox_Clear_Button.Name = "Cashbox_Clear_Button";
-            this.Cashbox_Clear_Button.Size = new System.Drawing.Size(60, 30);
-            this.Cashbox_Clear_Button.TabIndex = 7;
-            this.Cashbox_Clear_Button.Text = "清空";
-            this.Cashbox_Clear_Button.UseVisualStyleBackColor = true;
-            this.Cashbox_Clear_Button.Click += new System.EventHandler(this.Cashbox_Clear_Button_Click);
-            // 
-            // Cashbox_Paste_Button
-            // 
-            this.Cashbox_Paste_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_Paste_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Cashbox_Paste_Button.Location = new System.Drawing.Point(320, 86);
-            this.Cashbox_Paste_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
-            this.Cashbox_Paste_Button.Name = "Cashbox_Paste_Button";
-            this.Cashbox_Paste_Button.Size = new System.Drawing.Size(60, 30);
-            this.Cashbox_Paste_Button.TabIndex = 6;
-            this.Cashbox_Paste_Button.Text = "貼上";
-            this.Cashbox_Paste_Button.UseVisualStyleBackColor = true;
-            this.Cashbox_Paste_Button.Click += new System.EventHandler(this.Cashbox_Paste_Button_Click);
-            // 
-            // Cashbox_QueryFilter_ComboBox
-            // 
-            this.Cashbox_QueryFilter_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Cashbox_QueryFilter_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryFilter_ComboBox.FormattingEnabled = true;
-            this.Cashbox_QueryFilter_ComboBox.Location = new System.Drawing.Point(308, 40);
-            this.Cashbox_QueryFilter_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
-            this.Cashbox_QueryFilter_ComboBox.Name = "Cashbox_QueryFilter_ComboBox";
-            this.Cashbox_QueryFilter_ComboBox.Size = new System.Drawing.Size(145, 30);
-            this.Cashbox_QueryFilter_ComboBox.TabIndex = 3;
-            this.Cashbox_QueryFilter_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_QueryFilter_ComboBox_SelectedIndexChanged);
-            // 
-            // Cashbox_QueryFilter_Label
-            // 
-            this.Cashbox_QueryFilter_Label.AutoSize = true;
-            this.Cashbox_QueryFilter_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryFilter_Label.Location = new System.Drawing.Point(248, 44);
-            this.Cashbox_QueryFilter_Label.Margin = new System.Windows.Forms.Padding(10, 14, 6, 14);
-            this.Cashbox_QueryFilter_Label.Name = "Cashbox_QueryFilter_Label";
-            this.Cashbox_QueryFilter_Label.Size = new System.Drawing.Size(48, 22);
-            this.Cashbox_QueryFilter_Label.TabIndex = 2;
-            this.Cashbox_QueryFilter_Label.Text = "篩選:";
-            // 
-            // Cashbox_FuzzyQuery_CheckBox
-            // 
-            this.Cashbox_FuzzyQuery_CheckBox.AutoSize = true;
-            this.Cashbox_FuzzyQuery_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_FuzzyQuery_CheckBox.Location = new System.Drawing.Point(270, 135);
-            this.Cashbox_FuzzyQuery_CheckBox.Margin = new System.Windows.Forms.Padding(6, 9, 6, 16);
-            this.Cashbox_FuzzyQuery_CheckBox.Name = "Cashbox_FuzzyQuery_CheckBox";
-            this.Cashbox_FuzzyQuery_CheckBox.Size = new System.Drawing.Size(100, 26);
-            this.Cashbox_FuzzyQuery_CheckBox.TabIndex = 9;
-            this.Cashbox_FuzzyQuery_CheckBox.Text = "模糊查詢";
-            this.Cashbox_FuzzyQuery_CheckBox.UseVisualStyleBackColor = true;
-            this.Cashbox_FuzzyQuery_CheckBox.CheckedChanged += new System.EventHandler(this.Cashbox_FuzzyQuery_CheckBox_CheckedChanged);
-            // 
-            // Cashbox_QueryValue_Label
-            // 
-            this.Cashbox_QueryValue_Label.AutoSize = true;
-            this.Cashbox_QueryValue_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryValue_Label.Location = new System.Drawing.Point(16, 90);
-            this.Cashbox_QueryValue_Label.Margin = new System.Windows.Forms.Padding(6, 10, 6, 14);
-            this.Cashbox_QueryValue_Label.Name = "Cashbox_QueryValue_Label";
-            this.Cashbox_QueryValue_Label.Size = new System.Drawing.Size(48, 22);
-            this.Cashbox_QueryValue_Label.TabIndex = 4;
-            this.Cashbox_QueryValue_Label.Text = "條件:";
-            // 
-            // Cashbox_Query_Button
-            // 
-            this.Cashbox_Query_Button.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_Query_Button.Location = new System.Drawing.Point(382, 131);
-            this.Cashbox_Query_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 14);
-            this.Cashbox_Query_Button.Name = "Cashbox_Query_Button";
-            this.Cashbox_Query_Button.Size = new System.Drawing.Size(70, 32);
-            this.Cashbox_Query_Button.TabIndex = 10;
-            this.Cashbox_Query_Button.Text = "查詢";
-            this.Cashbox_Query_Button.UseVisualStyleBackColor = true;
-            this.Cashbox_Query_Button.Click += new System.EventHandler(this.Cashbox_Query_Button_Click);
-            // 
-            // Cashbox_QueryType_Label
-            // 
-            this.Cashbox_QueryType_Label.AutoSize = true;
-            this.Cashbox_QueryType_Label.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryType_Label.Location = new System.Drawing.Point(16, 44);
-            this.Cashbox_QueryType_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 14);
-            this.Cashbox_QueryType_Label.Name = "Cashbox_QueryType_Label";
-            this.Cashbox_QueryType_Label.Size = new System.Drawing.Size(48, 22);
-            this.Cashbox_QueryType_Label.TabIndex = 0;
-            this.Cashbox_QueryType_Label.Text = "類型:";
-            // 
-            // Cashbox_QueryType_ComboBox
-            // 
-            this.Cashbox_QueryType_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Cashbox_QueryType_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryType_ComboBox.FormattingEnabled = true;
-            this.Cashbox_QueryType_ComboBox.Location = new System.Drawing.Point(76, 40);
-            this.Cashbox_QueryType_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
-            this.Cashbox_QueryType_ComboBox.Name = "Cashbox_QueryType_ComboBox";
-            this.Cashbox_QueryType_ComboBox.Size = new System.Drawing.Size(155, 30);
-            this.Cashbox_QueryType_ComboBox.TabIndex = 1;
-            this.Cashbox_QueryType_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Cashbox_QueryType_ComboBox_SelectedIndexChanged);
-            // 
-            // Cashbox_QueryValue_TextBox
-            // 
-            this.Cashbox_QueryValue_TextBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryValue_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Cashbox_QueryValue_TextBox.Location = new System.Drawing.Point(76, 86);
-            this.Cashbox_QueryValue_TextBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
-            this.Cashbox_QueryValue_TextBox.Name = "Cashbox_QueryValue_TextBox";
-            this.Cashbox_QueryValue_TextBox.Size = new System.Drawing.Size(232, 30);
-            this.Cashbox_QueryValue_TextBox.TabIndex = 5;
-            this.Cashbox_QueryValue_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cashbox_QueryValue_TextBox_KeyPress);
-            // 
-            // Cashbox_QueryValue_ComboBox
-            // 
-            this.Cashbox_QueryValue_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Cashbox_QueryValue_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_QueryValue_ComboBox.FormattingEnabled = true;
-            this.Cashbox_QueryValue_ComboBox.Location = new System.Drawing.Point(76, 86);
-            this.Cashbox_QueryValue_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
-            this.Cashbox_QueryValue_ComboBox.Name = "Cashbox_QueryValue_ComboBox";
-            this.Cashbox_QueryValue_ComboBox.Size = new System.Drawing.Size(232, 30);
-            this.Cashbox_QueryValue_ComboBox.TabIndex = 6;
-            this.Cashbox_QueryValue_ComboBox.Visible = false;
-            // 
             // Cashbox_DataGridView
             // 
             this.Cashbox_DataGridView.AllowUserToAddRows = false;
@@ -6149,7 +6316,7 @@
             this.Cashbox_Edit_GroupBox.Name = "Cashbox_Edit_GroupBox";
             this.Cashbox_Edit_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
             this.Cashbox_Edit_GroupBox.Size = new System.Drawing.Size(952, 308);
-            this.Cashbox_Edit_GroupBox.TabIndex = 8;
+            this.Cashbox_Edit_GroupBox.TabIndex = 6;
             this.Cashbox_Edit_GroupBox.TabStop = false;
             this.Cashbox_Edit_GroupBox.Text = "歌曲編輯";
             this.Cashbox_Edit_GroupBox.Visible = false;
@@ -7363,10 +7530,13 @@
             this.VisibleChanged += new System.EventHandler(this.MainForm_VisibleChanged);
             this.MainTabControl.ResumeLayout(false);
             this.SongQuery_TabPage.ResumeLayout(false);
-            this.SongQuery_OtherQuery_GroupBox.ResumeLayout(false);
-            this.SongQuery_OtherQuery_GroupBox.PerformLayout();
-            this.SongQuery_Query_GroupBox.ResumeLayout(false);
-            this.SongQuery_Query_GroupBox.PerformLayout();
+            this.SongQuery_TabControl.ResumeLayout(false);
+            this.SongQuery_Query_TabPage.ResumeLayout(false);
+            this.SongQuery_Query_TabPage.PerformLayout();
+            this.SongQuery_OtherQuery_TabPage.ResumeLayout(false);
+            this.SongQuery_OtherQuery_TabPage.PerformLayout();
+            this.SongQuery_QueryFilter_GroupBox.ResumeLayout(false);
+            this.SongQuery_QueryFilter_GroupBox.PerformLayout();
             this.SongQuery_Statistics_GroupBox.ResumeLayout(false);
             this.SongQuery_Statistics_GroupBox.PerformLayout();
             this.SongQuery_QueryStatus_GroupBox.ResumeLayout(false);
@@ -7448,15 +7618,18 @@
             this.SongMaintenance_Tooltip_GroupBox.ResumeLayout(false);
             this.SongMaintenance_SpellCorrect_GroupBox.ResumeLayout(false);
             this.Cashbox_TabPage.ResumeLayout(false);
+            this.Cashbox_TabControl.ResumeLayout(false);
+            this.Cashbox_Query_TabPage.ResumeLayout(false);
+            this.Cashbox_Query_TabPage.PerformLayout();
+            this.Cashbox_OtherQuery_TabPage.ResumeLayout(false);
+            this.Cashbox_OtherQuery_TabPage.PerformLayout();
             this.Cashbox_UpdDate_GroupBox.ResumeLayout(false);
             this.Cashbox_UpdDate_GroupBox.PerformLayout();
-            this.Cashbox_OtherQuery_GroupBox.ResumeLayout(false);
-            this.Cashbox_OtherQuery_GroupBox.PerformLayout();
+            this.Cashbox_QueryFilter_GroupBox.ResumeLayout(false);
+            this.Cashbox_QueryFilter_GroupBox.PerformLayout();
             this.Cashbox_QueryStatus_GroupBox.ResumeLayout(false);
             this.Cashbox_QueryStatus_GroupBox.PerformLayout();
             this.Cashbox_Maintenance_GroupBox.ResumeLayout(false);
-            this.Cashbox_Query_GroupBox.ResumeLayout(false);
-            this.Cashbox_Query_GroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Cashbox_DataGridView)).EndInit();
             this.Cashbox_Edit_GroupBox.ResumeLayout(false);
             this.Cashbox_Edit_GroupBox.PerformLayout();
@@ -7498,7 +7671,6 @@
         private System.Windows.Forms.TabControl MainTabControl;
         private System.Windows.Forms.TabPage SongQuery_TabPage;
         private System.Windows.Forms.DataGridView SongQuery_DataGridView;
-        private System.Windows.Forms.GroupBox SongQuery_Query_GroupBox;
         private System.Windows.Forms.Label SongQuery_QueryValue_Label;
         private System.Windows.Forms.TextBox SongQuery_QueryValue_TextBox;
         private System.Windows.Forms.Button SongQuery_Query_Button;
@@ -7666,7 +7838,7 @@
         private System.Windows.Forms.Button SongMaintenance_CodeCorrect_Button;
         private System.Windows.Forms.ComboBox SongQuery_ExceptionalQuery_ComboBox;
         private System.Windows.Forms.Label SongQuery_ExceptionalQuery_Label;
-        private System.Windows.Forms.GroupBox SongQuery_OtherQuery_GroupBox;
+        private System.Windows.Forms.GroupBox SongQuery_QueryFilter_GroupBox;
         private System.Windows.Forms.CheckBox SongQuery_FuzzyQuery_CheckBox;
         private System.Windows.Forms.ComboBox SongQuery_QueryFilter_ComboBox;
         private System.Windows.Forms.Label SongQuery_QueryFilter_Label;
@@ -7954,7 +8126,6 @@
         private System.Windows.Forms.CheckBox Cashbox_EditMode_CheckBox;
         private System.Windows.Forms.Label Cashbox_QueryStatus_Label;
         private System.Windows.Forms.GroupBox Cashbox_Maintenance_GroupBox;
-        private System.Windows.Forms.GroupBox Cashbox_Query_GroupBox;
         private System.Windows.Forms.CheckBox Cashbox_SynonymousQuery_CheckBox;
         private System.Windows.Forms.Button Cashbox_Clear_Button;
         private System.Windows.Forms.Button Cashbox_Paste_Button;
@@ -7968,7 +8139,7 @@
         private System.Windows.Forms.TextBox Cashbox_QueryValue_TextBox;
         private System.Windows.Forms.ComboBox Cashbox_QueryValue_ComboBox;
         private System.Windows.Forms.ComboBox SongQuery_QueryValue_ComboBox;
-        private System.Windows.Forms.GroupBox Cashbox_OtherQuery_GroupBox;
+        private System.Windows.Forms.GroupBox Cashbox_QueryFilter_GroupBox;
         private System.Windows.Forms.ComboBox Cashbox_DateQuery_ComboBox;
         private System.Windows.Forms.Label Cashbox_DateQuery_Label;
         private System.Windows.Forms.ComboBox Cashbox_OtherQuery_ComboBox;
@@ -8012,6 +8183,20 @@
         private System.Windows.Forms.Button SongMgrCfg_SingerGroup_Button;
         private System.Windows.Forms.TextBox SongMgrCfg_SingerGroup_TextBox;
         private System.Windows.Forms.ListBox SongMgrCfg_SingerGroup_ListBox;
+        private System.Windows.Forms.TabControl SongQuery_TabControl;
+        private System.Windows.Forms.TabPage SongQuery_Query_TabPage;
+        private System.Windows.Forms.TabPage SongQuery_OtherQuery_TabPage;
+        private System.Windows.Forms.Label SongQuery_LangFilter_Label;
+        private System.Windows.Forms.ComboBox SongQuery_LangFilter_ComboBox;
+        private System.Windows.Forms.Label SongQuery_WordCountFilter_Label;
+        private System.Windows.Forms.ComboBox SongQuery_WordCountFilter_ComboBox;
+        private System.Windows.Forms.TabControl Cashbox_TabControl;
+        private System.Windows.Forms.TabPage Cashbox_OtherQuery_TabPage;
+        private System.Windows.Forms.TabPage Cashbox_Query_TabPage;
+        private System.Windows.Forms.Label Cashbox_SongSingerFilter_Label;
+        private System.Windows.Forms.ComboBox Cashbox_SongSingerFilter_ComboBox;
+        private System.Windows.Forms.Label Cashbox_LangFilter_Label;
+        private System.Windows.Forms.ComboBox Cashbox_LangFilter_ComboBox;
     }
 }
 

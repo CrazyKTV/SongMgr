@@ -111,13 +111,13 @@ namespace CrazyKTV_SongMgr
 
                     if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) < 0)
                     {
-                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongType_TabPage) + 1, SongMgrCfg_SongStructure_TabPage);
+                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SingerGroup_TabPage) + 1, SongMgrCfg_SongStructure_TabPage);
                         SongMgrCfg_SongStructure_TabPage.Show();
                     }
 
                     if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_CustomStructure_TabPage) < 0)
                     {
-                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongType_TabPage) + 2, SongMgrCfg_CustomStructure_TabPage);
+                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SingerGroup_TabPage) + 2, SongMgrCfg_CustomStructure_TabPage);
                         SongMgrCfg_CustomStructure_TabPage.Show();
                     }
 
@@ -161,7 +161,7 @@ namespace CrazyKTV_SongMgr
 
                     if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "4" && SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) < 0)
                     {
-                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongType_TabPage) + 1, SongMgrCfg_MonitorFolders_TabPage);
+                        SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SingerGroup_TabPage) + 1, SongMgrCfg_MonitorFolders_TabPage);
                         SongMgrCfg_MonitorFolders_TabPage.Show();
                     }
                     else if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "3" && SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) >= 0)

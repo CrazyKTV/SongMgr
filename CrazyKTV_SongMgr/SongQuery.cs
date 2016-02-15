@@ -200,6 +200,17 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongQuery_CommonFilter_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ComboBox)sender).Focused)
+            {
+                string FilterStr = "";
+                if (SongQuery_LangFilter_ComboBox.Text != "全部" && SongQuery_LangFilter_ComboBox.Text != "") FilterStr = "Song_Lang = '" + SongQuery_LangFilter_ComboBox.Text + "'";
+                if (SongQuery_WordCountFilter_ComboBox.Text != "全部" && SongQuery_WordCountFilter_ComboBox.Text != "") FilterStr += (FilterStr != "") ? " and Song_WordCount = '" + SongQuery_WordCountFilter_ComboBox.Text + "'" : "Song_WordCount = '" + SongQuery_WordCountFilter_ComboBox.Text + "'";
+                ((DataTable)SongQuery_DataGridView.DataSource).DefaultView.RowFilter = FilterStr;
+            }
+        }
+
         #endregion
 
         #region --- SongQuery 查詢歌曲 ---
@@ -308,6 +319,9 @@ namespace CrazyKTV_SongMgr
                 {
                     this.BeginInvoke((Action)delegate()
                     {
+                        SongQuery_EditMode_CheckBox.Enabled = false;
+                        SongQuery_LangFilter_ComboBox.Enabled = false;
+                        SongQuery_WordCountFilter_ComboBox.Enabled = false;
                         SongQuery_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
                     });
                 }
@@ -489,6 +503,8 @@ namespace CrazyKTV_SongMgr
                             this.BeginInvoke((Action)delegate()
                             {
                                 SongQuery_EditMode_CheckBox.Enabled = false;
+                                SongQuery_LangFilter_ComboBox.Enabled = false;
+                                SongQuery_WordCountFilter_ComboBox.Enabled = false;
                                 SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
                             });
                         }
@@ -536,6 +552,8 @@ namespace CrazyKTV_SongMgr
                                 this.BeginInvoke((Action)delegate()
                                 {
                                     SongQuery_EditMode_CheckBox.Enabled = false;
+                                    SongQuery_LangFilter_ComboBox.Enabled = false;
+                                    SongQuery_WordCountFilter_ComboBox.Enabled = false;
                                     SongQuery_QueryStatus_Label.Text = "查無『" + SongQueryStatusText + "』的相關歌曲,請重新查詢...";
                                 });
                             }
@@ -555,6 +573,50 @@ namespace CrazyKTV_SongMgr
                                     }
 
                                     SongQuery_DataGridView.DataSource = dt;
+
+                                    List<string> LangFilterList = new List<string>();
+                                    List<int> WordCountFilterList = new List<int>();
+
+                                    using (DataTable LangDistinctDT = dt.DefaultView.ToTable(true, "Song_Lang"))
+                                    {
+                                        if (LangDistinctDT.Rows.Count > 0)
+                                        {
+                                            foreach (DataRow row in LangDistinctDT.AsEnumerable())
+                                            {
+                                                LangFilterList.Add(row["Song_Lang"].ToString());
+                                            }
+                                        }
+                                    }
+
+                                    using (DataTable WordCountDistinctDT = dt.DefaultView.ToTable(true, "Song_WordCount"))
+                                    {
+                                        if (WordCountDistinctDT.Rows.Count > 0)
+                                        {
+                                            foreach (DataRow row in WordCountDistinctDT.AsEnumerable())
+                                            {
+                                                WordCountFilterList.Add(Convert.ToInt32(row["Song_WordCount"].ToString()));
+                                            }
+                                        }
+                                    }
+
+                                    if (LangFilterList.Count > 0)
+                                    {
+                                        SongQuery_LangFilter_ComboBox.Enabled = true;
+                                        SongQuery_LangFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(LangFilterList);
+                                        SongQuery_LangFilter_ComboBox.DisplayMember = "Display";
+                                        SongQuery_LangFilter_ComboBox.ValueMember = "Value";
+                                        LangFilterList.Clear();
+                                    }
+
+                                    if (WordCountFilterList.Count > 0)
+                                    {
+                                        WordCountFilterList.Sort();
+                                        SongQuery_WordCountFilter_ComboBox.Enabled = true;
+                                        SongQuery_WordCountFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(WordCountFilterList.ConvertAll(i => i.ToString()));
+                                        SongQuery_WordCountFilter_ComboBox.DisplayMember = "Display";
+                                        SongQuery_WordCountFilter_ComboBox.ValueMember = "Value";
+                                        WordCountFilterList.Clear();
+                                    }
 
                                     for (int i = 0; i < SongQuery_DataGridView.ColumnCount; i++)
                                     {
@@ -601,6 +663,8 @@ namespace CrazyKTV_SongMgr
                         this.BeginInvoke((Action)delegate()
                         {
                             SongQuery_EditMode_CheckBox.Enabled = false;
+                            SongQuery_LangFilter_ComboBox.Enabled = false;
+                            SongQuery_WordCountFilter_ComboBox.Enabled = false;
                             SongQuery_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
                         });
                     }
@@ -622,8 +686,8 @@ namespace CrazyKTV_SongMgr
                 SongQuery_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
                 SongQuery_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
                 SongQuery_Edit_GroupBox.Visible = true;
-                SongQuery_Query_GroupBox.Visible = false;
-                SongQuery_OtherQuery_GroupBox.Visible = false;
+                SongQuery_TabControl.Visible = false;
+                SongQuery_QueryFilter_GroupBox.Visible = false;
                 SongQuery_Statistics_GroupBox.Visible = false;
 
                 Global.SongQueryMultiEdit = false;
@@ -641,8 +705,8 @@ namespace CrazyKTV_SongMgr
                 SongQuery_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                 SongQuery_EditMode_CheckBox.Enabled = (SongQuery_DataGridView.RowCount == 0) ? false : true;
                 SongQuery_Edit_GroupBox.Visible = false;
-                SongQuery_Query_GroupBox.Visible = true;
-                SongQuery_OtherQuery_GroupBox.Visible = true;
+                SongQuery_TabControl.Visible = true;
+                SongQuery_QueryFilter_GroupBox.Visible = true;
                 SongQuery_Statistics_GroupBox.Visible = true;
 
                 SongQuery_QueryStatus_Label.Text = "已進入檢視模式...";
@@ -1363,6 +1427,9 @@ namespace CrazyKTV_SongMgr
                 {
                     this.BeginInvoke((Action)delegate()
                     {
+                        SongQuery_EditMode_CheckBox.Enabled = false;
+                        SongQuery_LangFilter_ComboBox.Enabled = false;
+                        SongQuery_WordCountFilter_ComboBox.Enabled = false;
                         SongQuery_QueryStatus_Label.Text = "必須輸入查詢條件才能查詢...";
                     });
                 }
@@ -1451,6 +1518,8 @@ namespace CrazyKTV_SongMgr
                             this.BeginInvoke((Action)delegate()
                             {
                                 SongQuery_EditMode_CheckBox.Enabled = false;
+                                SongQuery_LangFilter_ComboBox.Enabled = false;
+                                SongQuery_WordCountFilter_ComboBox.Enabled = false;
                                 SongQuery_QueryStatus_Label.Text = "查無異常歌曲,請重新查詢...";
                             });
                         }
@@ -1462,6 +1531,50 @@ namespace CrazyKTV_SongMgr
                                 SongQuery_QueryStatus_Label.Text = "總共查詢到 " + dt.Rows.Count + " 筆有關『" + SongQueryStatusText + "』的異常歌曲。";
 
                                 SongQuery_DataGridView.DataSource = dt;
+
+                                List<string> LangFilterList = new List<string>();
+                                List<int> WordCountFilterList = new List<int>();
+
+                                using (DataTable LangDistinctDT = dt.DefaultView.ToTable(true, "Song_Lang"))
+                                {
+                                    if (LangDistinctDT.Rows.Count > 0)
+                                    {
+                                        foreach (DataRow row in LangDistinctDT.AsEnumerable())
+                                        {
+                                            LangFilterList.Add(row["Song_Lang"].ToString());
+                                        }
+                                    }
+                                }
+
+                                using (DataTable WordCountDistinctDT = dt.DefaultView.ToTable(true, "Song_WordCount"))
+                                {
+                                    if (WordCountDistinctDT.Rows.Count > 0)
+                                    {
+                                        foreach (DataRow row in WordCountDistinctDT.AsEnumerable())
+                                        {
+                                            WordCountFilterList.Add(Convert.ToInt32(row["Song_WordCount"].ToString()));
+                                        }
+                                    }
+                                }
+
+                                if (LangFilterList.Count > 0)
+                                {
+                                    SongQuery_LangFilter_ComboBox.Enabled = true;
+                                    SongQuery_LangFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(LangFilterList);
+                                    SongQuery_LangFilter_ComboBox.DisplayMember = "Display";
+                                    SongQuery_LangFilter_ComboBox.ValueMember = "Value";
+                                    LangFilterList.Clear();
+                                }
+
+                                if (WordCountFilterList.Count > 0)
+                                {
+                                    WordCountFilterList.Sort();
+                                    SongQuery_WordCountFilter_ComboBox.Enabled = true;
+                                    SongQuery_WordCountFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(WordCountFilterList.ConvertAll(i => i.ToString()));
+                                    SongQuery_WordCountFilter_ComboBox.DisplayMember = "Display";
+                                    SongQuery_WordCountFilter_ComboBox.ValueMember = "Value";
+                                    WordCountFilterList.Clear();
+                                }
 
                                 for (int i = 0; i < SongQuery_DataGridView.ColumnCount; i++)
                                 {
@@ -1506,6 +1619,8 @@ namespace CrazyKTV_SongMgr
                         this.BeginInvoke((Action)delegate()
                         {
                             SongQuery_EditMode_CheckBox.Enabled = false;
+                            SongQuery_LangFilter_ComboBox.Enabled = false;
+                            SongQuery_WordCountFilter_ComboBox.Enabled = false;
                             SongQuery_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
                         });
                     }
@@ -1614,6 +1729,8 @@ namespace CrazyKTV_SongMgr
                             DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
                             if (dt.Rows.Count == 0)
                             {
+                                SongQuery_LangFilter_ComboBox.Enabled = false;
+                                SongQuery_WordCountFilter_ComboBox.Enabled = false;
                                 SongQuery_QueryStatus_Label.Text = "查無最愛歌曲,請重新查詢...";
                             }
                             else
@@ -1640,6 +1757,50 @@ namespace CrazyKTV_SongMgr
                                 if (dt.Rows.Count > 0)
                                 {
                                     SongQuery_DataGridView.DataSource = dt;
+
+                                    List<string> LangFilterList = new List<string>();
+                                    List<int> WordCountFilterList = new List<int>();
+
+                                    using (DataTable LangDistinctDT = dt.DefaultView.ToTable(true, "Song_Lang"))
+                                    {
+                                        if (LangDistinctDT.Rows.Count > 0)
+                                        {
+                                            foreach (DataRow row in LangDistinctDT.AsEnumerable())
+                                            {
+                                                LangFilterList.Add(row["Song_Lang"].ToString());
+                                            }
+                                        }
+                                    }
+
+                                    using (DataTable WordCountDistinctDT = dt.DefaultView.ToTable(true, "Song_WordCount"))
+                                    {
+                                        if (WordCountDistinctDT.Rows.Count > 0)
+                                        {
+                                            foreach (DataRow row in WordCountDistinctDT.AsEnumerable())
+                                            {
+                                                WordCountFilterList.Add(Convert.ToInt32(row["Song_WordCount"].ToString()));
+                                            }
+                                        }
+                                    }
+
+                                    if (LangFilterList.Count > 0)
+                                    {
+                                        SongQuery_LangFilter_ComboBox.Enabled = true;
+                                        SongQuery_LangFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(LangFilterList);
+                                        SongQuery_LangFilter_ComboBox.DisplayMember = "Display";
+                                        SongQuery_LangFilter_ComboBox.ValueMember = "Value";
+                                        LangFilterList.Clear();
+                                    }
+
+                                    if (WordCountFilterList.Count > 0)
+                                    {
+                                        WordCountFilterList.Sort();
+                                        SongQuery_WordCountFilter_ComboBox.Enabled = true;
+                                        SongQuery_WordCountFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(WordCountFilterList.ConvertAll(i => i.ToString()));
+                                        SongQuery_WordCountFilter_ComboBox.DisplayMember = "Display";
+                                        SongQuery_WordCountFilter_ComboBox.ValueMember = "Value";
+                                        WordCountFilterList.Clear();
+                                    }
 
                                     for (int i = 0; i < SongQuery_DataGridView.ColumnCount; i++)
                                     {
@@ -1680,6 +1841,8 @@ namespace CrazyKTV_SongMgr
                         }
                         catch
                         {
+                            SongQuery_LangFilter_ComboBox.Enabled = false;
+                            SongQuery_WordCountFilter_ComboBox.Enabled = false;
                             SongQuery_QueryStatus_Label.Text = "查詢條件輸入錯誤,請重新輸入...";
                         }
                     }
@@ -2399,7 +2562,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        public static DataTable GetSongQueryFilterList()
+        public static DataTable GetSongQueryFilterList(List<string> FilterList)
         {
             using (DataTable list = new DataTable())
             {
@@ -2409,7 +2572,7 @@ namespace CrazyKTV_SongMgr
                 list.Rows[0][0] = "全部";
                 list.Rows[0][1] = 1;
 
-                foreach (string str in Global.CrazyktvSongLangList)
+                foreach (string str in FilterList)
                 {
                     list.Rows.Add(list.NewRow());
                     list.Rows[list.Rows.Count - 1][0] = str;

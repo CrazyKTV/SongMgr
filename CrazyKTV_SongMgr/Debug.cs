@@ -780,8 +780,8 @@ namespace CrazyKTV_SongMgr
                 Cashbox_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
                 Cashbox_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
                 Cashbox_Edit_GroupBox.Visible = true;
-                Cashbox_Query_GroupBox.Visible = false;
-                Cashbox_OtherQuery_GroupBox.Visible = false;
+                Cashbox_TabControl.Visible = false;
+                Cashbox_QueryFilter_GroupBox.Visible = false;
                 Cashbox_UpdDate_GroupBox.Visible = false;
                 Cashbox_Maintenance_GroupBox.Visible = false;
 
@@ -800,8 +800,8 @@ namespace CrazyKTV_SongMgr
                 Cashbox_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
                 Cashbox_EditMode_CheckBox.Enabled = (Cashbox_DataGridView.RowCount == 0) ? false : true;
                 Cashbox_Edit_GroupBox.Visible = false;
-                Cashbox_Query_GroupBox.Visible = true;
-                Cashbox_OtherQuery_GroupBox.Visible = true;
+                Cashbox_TabControl.Visible = true;
+                Cashbox_QueryFilter_GroupBox.Visible = true;
                 Cashbox_UpdDate_GroupBox.Visible = true;
                 Cashbox_Maintenance_GroupBox.Visible = true;
 

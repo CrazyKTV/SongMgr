@@ -289,8 +289,8 @@ namespace CrazyKTV_SongMgr
 
         private void Common_SwitchDBVerErrorUI(bool status)
         {
-            SongQuery_Query_GroupBox.Enabled = status;
-            SongQuery_OtherQuery_GroupBox.Enabled = status;
+            SongQuery_TabControl.Enabled = status;
+            SongQuery_QueryFilter_GroupBox.Enabled = status;
             SongQuery_Statistics_GroupBox.Enabled = status;
             SongQuery_DataGridView.Enabled = status;
             SongQuery_Edit_GroupBox.Enabled = status;
@@ -316,8 +316,8 @@ namespace CrazyKTV_SongMgr
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
             SingerMgr_Edit_GroupBox.Enabled = status;
-            Cashbox_Query_GroupBox.Enabled = status;
-            Cashbox_OtherQuery_GroupBox.Enabled = status;
+            Cashbox_TabControl.Enabled = status;
+            Cashbox_QueryFilter_GroupBox.Enabled = status;
             Cashbox_UpdDate_GroupBox.Enabled = status;
             Cashbox_Maintenance_GroupBox.Enabled = status;
             Cashbox_DataGridView.Enabled = status;
@@ -339,8 +339,8 @@ namespace CrazyKTV_SongMgr
                 SongAddResult_FailureSong_ListBox.Items.Clear();
             }
 
-            SongQuery_Query_GroupBox.Enabled = status;
-            SongQuery_OtherQuery_GroupBox.Enabled = status;
+            SongQuery_TabControl.Enabled = status;
+            SongQuery_QueryFilter_GroupBox.Enabled = status;
             SongQuery_Statistics_GroupBox.Enabled = status;
             SongQuery_DataGridView.Enabled = status;
             SongQuery_Edit_GroupBox.Enabled = status;
@@ -370,8 +370,8 @@ namespace CrazyKTV_SongMgr
             SingerMgr_Manager_GroupBox.Enabled = status;
             SingerMgr_DataGridView.Enabled = status;
             SingerMgr_Edit_GroupBox.Enabled = status;
-            Cashbox_Query_GroupBox.Enabled = status;
-            Cashbox_OtherQuery_GroupBox.Enabled = status;
+            Cashbox_TabControl.Enabled = status;
+            Cashbox_QueryFilter_GroupBox.Enabled = status;
             Cashbox_UpdDate_GroupBox.Enabled = status;
             Cashbox_Maintenance_GroupBox.Enabled = status;
             Cashbox_DataGridView.Enabled = status;
@@ -797,7 +797,7 @@ namespace CrazyKTV_SongMgr
             int SelectedValue = 1;
             int SelectedRowsCount;
 
-            SongQuery_QueryFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList();
+            SongQuery_QueryFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(Global.CrazyktvSongLangList);
             SongQuery_QueryFilter_ComboBox.DisplayMember = "Display";
             SongQuery_QueryFilter_ComboBox.ValueMember = "Value";
             SongQuery_QueryFilter_ComboBox.SelectedValue = SelectedValue;
