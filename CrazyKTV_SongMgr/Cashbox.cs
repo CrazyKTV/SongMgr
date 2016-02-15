@@ -1123,6 +1123,8 @@ namespace CrazyKTV_SongMgr
                 if (sDateList.IndexOf(DateStartDate.AddDays(i).ToString("yyyy/MM/dd")) < 0) sDateList.Add(DateStartDate.AddDays(i).ToString("yyyy/MM/dd"));
             }
 
+            if (sDateList.IndexOf(DateEndDate.ToString("yyyy/MM/dd")) < 0) sDateList.Add(DateEndDate.ToString("yyyy/MM/dd"));
+
             foreach (string sdate in sDateList)
             {
                 doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + sdate);

@@ -180,6 +180,11 @@ namespace CrazyKTV_SongMgr
                 SongMaintenanceTabPage.Show();
             }
 
+            foreach (TabPage CashboxTabPage in Cashbox_TabControl.TabPages)
+            {
+                CashboxTabPage.Show();
+            }
+
             if (list[21] != "") Global.CrazyktvSongLangList = new List<string>(list[21].Split(','));
             if (Global.CrazyktvSongLangList.Count < 10) Global.CrazyktvSongLangList = new List<string>() { "國語", "台語", "粵語", "日語", "英語", "客語", "原住民語", "韓語", "兒歌", "其它" };
 
