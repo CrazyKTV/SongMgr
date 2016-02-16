@@ -44,6 +44,32 @@ namespace CrazyKTV_SongMgr
 
             Global.DPIScalingFactor = Common_GetDPIScalingFactor();
 
+            // 檢查加歌程式參考資料庫檔案
+            if (!File.Exists(Global.CrazyktvSongMgrDatabaseFile))
+            {
+                if (File.Exists(Application.StartupPath + @"\CrazySongMgr.mdb"))
+                {
+                    try
+                    {
+                        File.Move(Application.StartupPath + @"\CrazySongMgr.mdb", Global.CrazyktvSongMgrDatabaseFile);
+                    }
+                    catch
+                    {
+                        if (MessageBox.Show("請將 CrazySongMgr.mdb 移至 SongMgr 資料夾裡。" + Environment.NewLine + "或是重新下載並執行 CrazyKTV_WebUpdater.exe 來重建所有檔案。", @"SongMgr\CrazySongMgr.mdb 參考資料庫檔案不存在!", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
+                        {
+                            Application.Exit();
+                        }
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("請將 CrazySongMgr.mdb 移至 SongMgr 資料夾裡。" + Environment.NewLine + "或是重新下載並執行 CrazyKTV_WebUpdater.exe 來重建所有檔案。", @"SongMgr\CrazySongMgr.mdb 參考資料庫檔案不存在!", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
+                    {
+                        Application.Exit();
+                    }
+                }
+            }
+
             // 歌庫版本資訊
             if (!File.Exists(Global.CrazyktvSongDBUpdateFile))
             {
