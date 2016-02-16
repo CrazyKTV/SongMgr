@@ -1397,6 +1397,12 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "7":
+                        SongQueryType = "MatchSingerType";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
+                        break;
+                    case "8":
                         SongQueryType = "MatchSongTrack";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
@@ -1477,6 +1483,47 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                     RemoveRowsIdxlist.Clear(); 
+                                }
+                                break;
+                            case "MatchSingerType":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+                                    List<string> SingerLowCaseList = new List<string>();
+                                    List<string> SingerTypeList = new List<string>();
+
+                                    string SongSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_Singer";
+                                    using (DataTable SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, ""))
+                                    {
+                                        foreach (DataRow SingerRow in SingerDT.AsEnumerable())
+                                        {
+                                            SingerLowCaseList.Add(SingerRow["Singer_Name"].ToString().ToLower());
+                                            SingerTypeList.Add(SingerRow["Singer_Type"].ToString());
+                                        }
+                                    }
+
+                                    var MatchSingerTypeQuery = from row in dt.AsEnumerable()
+                                                               where row["Song_SingerType"].ToString() == SingerTypeList[SingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower())]
+                                                               select row;
+
+                                    foreach (DataRow row in MatchSingerTypeQuery)
+                                    {
+                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                    }
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
+                                    SingerLowCaseList.Clear();
+                                    SingerTypeList.Clear();
                                 }
                                 break;
                             case "MatchSongTrack":
@@ -2589,7 +2636,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)" };
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "歌手類別不符", "檔名不符 (歌曲聲道)" };
 
                 foreach (string str in ItemList)
                 {
@@ -2810,6 +2857,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "DuplicateSongOnlyChorusSinger":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_SongType, Song_SingerType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_SongType = ktv_Song.Song_SongType and Song_SingerType = 3))) order by Song_SongName";
+                    break;
+                case "MatchSingerType":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_SingerType <> 3 order by Song_Singer";
                     break;
                 case "MatchSongTrack":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
