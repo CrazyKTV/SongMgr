@@ -122,6 +122,9 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net40\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MediaInfoDotNet">
+      <HintPath>SongMgr\Libs\MediaInfoDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="nVLC, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\nVLC.2.1.0.3\lib\net40\nVLC.dll</HintPath>
       <Private>True</Private>
@@ -277,6 +280,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SongMgr\Libs\libvlccore.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SongMgr\Libs\MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SongMgr\Libs\plugins\access\libaccess_bd_plugin.dll">

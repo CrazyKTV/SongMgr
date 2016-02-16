@@ -1442,15 +1442,15 @@ namespace CrazyKTV_SongMgr
             SongAdd_EditSongLang_ComboBox.DisplayMember = "Display";
             SongAdd_EditSongLang_ComboBox.ValueMember = "Value";
 
-            SongAdd_EditSongSingerType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSingerType", MultiEdit);
+            SongAdd_EditSongSingerType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSingerType", MultiEdit, true);
             SongAdd_EditSongSingerType_ComboBox.DisplayMember = "Display";
             SongAdd_EditSongSingerType_ComboBox.ValueMember = "Value";
 
-            SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", MultiEdit);
+            SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", MultiEdit, true);
             SongAdd_EditSongSongType_ComboBox.DisplayMember = "Display";
             SongAdd_EditSongSongType_ComboBox.ValueMember = "Value";
 
-            SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", MultiEdit);
+            SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", MultiEdit, true);
             SongAdd_EditSongTrack_ComboBox.DisplayMember = "Display";
             SongAdd_EditSongTrack_ComboBox.ValueMember = "Value";
         }
@@ -1465,7 +1465,7 @@ namespace CrazyKTV_SongMgr
         
         #region --- SongAdd 加歌頁面下拉清單 ---
 
-        public static DataTable GetDefaultSongInfo(string SongInfoType, bool MultiEdit)
+        public static DataTable GetDefaultSongInfo(string SongInfoType, bool MultiEdit, bool SongEditComboBox)
         {
             using (DataTable dt = new DataTable())
             {
@@ -1553,6 +1553,16 @@ namespace CrazyKTV_SongMgr
                         dt.Rows.Add(dt.NewRow());
                         dt.Rows[dt.Rows.Count - 1][0] = s;
                         dt.Rows[dt.Rows.Count - 1][1] = (SongInfoType == "DefaultSongTrack") ? dt.Rows.Count - 1 : dt.Rows.Count;
+                    }
+
+                    if (!SongEditComboBox)
+                    {
+                        if (SongInfoType == "DefaultSongTrack")
+                        {
+                            dt.Rows.Add(dt.NewRow());
+                            dt.Rows[dt.Rows.Count - 1][0] = "自動偵測 (緩慢)";
+                            dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count - 1;
+                        }
                     }
                 }
                 list.Clear();

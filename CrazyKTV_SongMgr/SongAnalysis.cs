@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MediaInfoLib;
 
 namespace CrazyKTV_SongMgr
 {
@@ -320,7 +321,39 @@ namespace CrazyKTV_SongMgr
             // 套用預設歌曲聲道
             if (SongTrack == "")
             {
-                SongTrack = Global.SongAddDefaultSongTrack;
+                if (Global.SongAddDefaultSongTrack == "6")
+                {
+                    MediaInfo mi = new MediaInfo();
+                    mi.Open(SongSrcPath);
+
+                    if (mi.Get(StreamKind.General, 0, "AudioCount") != "")
+                    {
+                        switch (mi.Get(StreamKind.General, 0, "AudioCount"))
+                        {
+                            case "1":
+                                SongTrack = (Global.SongMgrSongTrackMode == "True") ? "1" : "2";
+                                break;
+                            case "2":
+                                SongTrack = (Global.SongMgrSongTrackMode == "True") ? "2" : "1";
+                                break;
+                            case "3":
+                                SongTrack = "3";
+                                break;
+                            default:
+                                SongTrack = "0";
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        SongTrack = "0";
+                    }
+                    mi.Close();
+                }
+                else
+                {
+                    SongTrack = Global.SongAddDefaultSongTrack;
+                }
             }
 
             // 套用預設歌曲類別

@@ -805,7 +805,7 @@ namespace CrazyKTV_SongMgr
             SongLangStr = ((DataRowView)SongAdd_DefaultSongLang_ComboBox.SelectedItem)[0].ToString();
             SelectedValue = 1;
 
-            SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang", false);
+            SongAdd_DefaultSongLang_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongLang", false, false);
             SongAdd_DefaultSongLang_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongLang_ComboBox.ValueMember = "Value";
 
@@ -915,7 +915,7 @@ namespace CrazyKTV_SongMgr
             SongTypeStr = ((DataRowView)SongAdd_DefaultSongType_ComboBox.SelectedItem)[0].ToString();
             SelectedValue = 1;
 
-            SongAdd_DefaultSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false);
+            SongAdd_DefaultSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false, false);
             SongAdd_DefaultSongType_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongType_ComboBox.ValueMember = "Value";
 
@@ -989,7 +989,7 @@ namespace CrazyKTV_SongMgr
 
                 if (SelectedRowsCount > 1)
                 {
-                    SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", true);
+                    SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", true, true);
                     SongAdd_EditSongSongType_ComboBox.DisplayMember = "Display";
                     SongAdd_EditSongSongType_ComboBox.ValueMember = "Value";
 
@@ -1009,7 +1009,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else if (SelectedRowsCount == 1)
                 {
-                    SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false);
+                    SongAdd_EditSongSongType_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongType", false, true);
                     SongAdd_EditSongSongType_ComboBox.DisplayMember = "Display";
                     SongAdd_EditSongSongType_ComboBox.ValueMember = "Value";
 

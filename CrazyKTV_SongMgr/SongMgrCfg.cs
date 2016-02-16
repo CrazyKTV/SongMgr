@@ -242,7 +242,7 @@ namespace CrazyKTV_SongMgr
             SongTrackStr = ((DataRowView)SongAdd_DefaultSongTrack_ComboBox.SelectedItem)[0].ToString();
             SelectedValue = 0;
 
-            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false);
+            SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false, false);
             SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
 
@@ -302,13 +302,13 @@ namespace CrazyKTV_SongMgr
 
                 if (SelectedRowsCount > 1)
                 {
-                    SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", true);
+                    SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", true, true);
                     SongAdd_EditSongTrack_ComboBox.DisplayMember = "Display";
                     SongAdd_EditSongTrack_ComboBox.ValueMember = "Value";
                 }
                 else if (SelectedRowsCount == 1)
                 {
-                    SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false);
+                    SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false, true);
                     SongAdd_EditSongTrack_ComboBox.DisplayMember = "Display";
                     SongAdd_EditSongTrack_ComboBox.ValueMember = "Value";
                 }
