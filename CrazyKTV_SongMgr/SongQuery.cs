@@ -411,6 +411,12 @@ namespace CrazyKTV_SongMgr
 
                                 if (Global.GroupSingerLowCaseList.IndexOf(SongQueryValue.ToLower()) >= 0)
                                 {
+                                    List<string> dtSongIdList = new List<string>();
+                                    foreach (DataRow row in dt.AsEnumerable())
+                                    {
+                                        dtSongIdList.Add(row["Song_Id"].ToString());
+                                    }
+
                                     int i = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SongQueryValue.ToLower())];
                                     List<string> list = new List<string>(Global.SingerGroupList[i].Split(','));
                                     if (list.Count > 0)
@@ -423,12 +429,16 @@ namespace CrazyKTV_SongMgr
                                                 {
                                                     foreach (DataRow row in SingerGroupDT.Rows)
                                                     {
-                                                        dt.ImportRow(row);
+                                                        if (dtSongIdList.IndexOf(row["Song_Id"].ToString()) < 0)
+                                                        {
+                                                            dt.ImportRow(row);
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    dtSongIdList.Clear();
                                 }
                                 break;
                             case "CashboxId":
