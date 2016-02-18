@@ -220,7 +220,7 @@ namespace CrazyKTV_SongMgr
                                         if (GroupSingerName.ToLower() != QueryValue.ToLower())
                                         {
                                             SingerQuerySqlStr = "select " + sqlColumnStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + GroupSingerName + "'),0) <>0 order by Singer_Name";
-                                            using (DataTable SingerGroupDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, ""))
+                                            using (DataTable SingerGroupDT = CommonFunc.GetOleDbDataTable(DatabaseFile, SingerQuerySqlStr, ""))
                                             {
                                                 foreach (DataRow row in SingerGroupDT.Rows)
                                                 {

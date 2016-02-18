@@ -302,7 +302,7 @@ namespace CrazyKTV_SongMgr
                         // 處理合唱歌曲中的特殊歌手名稱
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
-                            Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
                             if (SpecialStrRegex.IsMatch(SingerName))
                             {
                                 if (Singerlist.IndexOf(SpecialSingerName) < 0)
@@ -317,43 +317,54 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                     Singerlist.Add(SpecialSingerName);
-                                    SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+
+                                    if (SingerName.ToLower() != SpecialSingerName.ToLower())
+                                    {
+                                        SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
+                                    }
+                                    else
+                                    {
+                                        SingerName = "";
+                                    }
                                 }
                             }
                         }
 
-                        MatchCollection matches = Regex.Matches(SingerName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
-                        if (r.IsMatch(SingerName) && matches.Count == 0)
+                        if (SingerName != "")
                         {
-                            string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
-                            foreach (string str in singers)
+                            MatchCollection matches = Regex.Matches(SingerName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                            if (r.IsMatch(SingerName) && matches.Count == 0)
                             {
-                                string ChorusSingerName = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                if (Singerlist.IndexOf(ChorusSingerName) < 0)
+                                string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
+                                foreach (string str in singers)
                                 {
-                                    // 查找資料庫預設歌手資料表
-                                    if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                                    string ChorusSingerName = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (Singerlist.IndexOf(ChorusSingerName) < 0)
                                     {
-                                        if (list.IndexOf(ChorusSingerName) < 0)
+                                        // 查找資料庫預設歌手資料表
+                                        if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
                                         {
-                                            list.Add(ChorusSingerName);
-                                            lock (LockThis) { Global.TotalList[1]++; }
+                                            if (list.IndexOf(ChorusSingerName) < 0)
+                                            {
+                                                list.Add(ChorusSingerName);
+                                                lock (LockThis) { Global.TotalList[1]++; }
+                                            }
                                         }
+                                        Singerlist.Add(ChorusSingerName);
                                     }
-                                    Singerlist.Add(ChorusSingerName);
                                 }
                             }
-                        }
-                        else
-                        {
-                            if (Singerlist.IndexOf(SingerName) < 0)
+                            else
                             {
-                                if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                if (Singerlist.IndexOf(SingerName) < 0)
                                 {
-                                    list.Add(SingerName);
-                                    lock (LockThis) { Global.TotalList[1]++; }
+                                    if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                    {
+                                        list.Add(SingerName);
+                                        lock (LockThis) { Global.TotalList[1]++; }
+                                    }
+                                    Singerlist.Add(SingerName);
                                 }
-                                Singerlist.Add(SingerName);
                             }
                         }
                     }
@@ -1109,7 +1120,7 @@ namespace CrazyKTV_SongMgr
                             // 處理合唱歌曲中的特殊歌手名稱
                             foreach (string SpecialSingerName in SpecialStrlist)
                             {
-                                Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                                Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
                                 if (SpecialStrRegex.IsMatch(SingerName))
                                 {
                                     if (Singerlist.IndexOf(SpecialSingerName) < 0)
@@ -1124,7 +1135,7 @@ namespace CrazyKTV_SongMgr
                                             }
                                         }
                                         Singerlist.Add(SpecialSingerName);
-                                        SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                        SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
                                     }
                                 }
                             }

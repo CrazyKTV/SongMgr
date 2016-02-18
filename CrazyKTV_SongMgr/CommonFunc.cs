@@ -1070,40 +1070,43 @@ namespace CrazyKTV_SongMgr
                 {
                     SingerName = row["Song_Singer"].ToString();
                     SingerType = row["Song_SingerType"].ToString();
-
+                    
                     if (SingerType == "3")
                     {
                         // 處理合唱歌曲中的特殊歌手名稱
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
-                            Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
                             if (SpecialStrRegex.IsMatch(SingerName))
                             {
                                 if (ChorusSingerList.IndexOf(SpecialSingerName) < 0)
                                 {
                                     ChorusSingerList.Add(SpecialSingerName);
                                 }
-                                SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
                             }
                         }
 
-                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                        if (r.IsMatch(SingerName))
+                        if(SingerName != "")
                         {
-                            string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
-                            foreach (string str in singers)
+                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                            if (r.IsMatch(SingerName))
                             {
-                                if (ChorusSingerList.IndexOf(str) < 0)
+                                string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
+                                foreach (string str in singers)
                                 {
-                                    ChorusSingerList.Add(str);
+                                    if (ChorusSingerList.IndexOf(str) < 0)
+                                    {
+                                        ChorusSingerList.Add(str);
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            if (ChorusSingerList.IndexOf(SingerName) < 0)
+                            else
                             {
-                                ChorusSingerList.Add(SingerName);
+                                if (ChorusSingerList.IndexOf(SingerName) < 0)
+                                {
+                                    ChorusSingerList.Add(SingerName);
+                                }
                             }
                         }
                     }

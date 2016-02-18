@@ -156,7 +156,7 @@ namespace CrazyKTV_SongMgr
                         // 處理合唱歌曲中的特殊歌手名稱
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
-                            Regex SpecialStrRegex = new Regex(SpecialSingerName, RegexOptions.IgnoreCase);
+                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
                             if (SpecialStrRegex.IsMatch(SingerName))
                             {
                                 if (Singerlist.IndexOf(SpecialSingerName) < 0)
@@ -171,43 +171,46 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                     Singerlist.Add(SpecialSingerName);
-                                    SingerName = Regex.Replace(SingerName, "&" + SpecialSingerName + "|" + SpecialSingerName + "&", "");
+                                    SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
                                 }
                             }
                         }
 
-                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                        if (r.IsMatch(SingerName))
+                        if (SingerName != "")
                         {
-                            string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
-                            foreach (string str in singers)
+                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                            if (r.IsMatch(SingerName))
                             {
-                                string ChorusSingerName = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                if (Singerlist.IndexOf(ChorusSingerName) < 0)
+                                string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
+                                foreach (string str in singers)
                                 {
-                                    // 查找資料庫預設歌手資料表
-                                    if (SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                                    string ChorusSingerName = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (Singerlist.IndexOf(ChorusSingerName) < 0)
                                     {
-                                        if (list.IndexOf(ChorusSingerName) < 0)
+                                        // 查找資料庫預設歌手資料表
+                                        if (SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
                                         {
-                                            list.Add(ChorusSingerName);
-                                            lock (LockThis) { Global.TotalList[1]++; }
+                                            if (list.IndexOf(ChorusSingerName) < 0)
+                                            {
+                                                list.Add(ChorusSingerName);
+                                                lock (LockThis) { Global.TotalList[1]++; }
+                                            }
                                         }
+                                        Singerlist.Add(ChorusSingerName);
                                     }
-                                    Singerlist.Add(ChorusSingerName);
                                 }
                             }
-                        }
-                        else
-                        {
-                            if (Singerlist.IndexOf(SingerName) < 0)
+                            else
                             {
-                                if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                if (Singerlist.IndexOf(SingerName) < 0)
                                 {
-                                    list.Add(SingerName);
-                                    lock (LockThis) { Global.TotalList[1]++; }
+                                    if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) < 0)
+                                    {
+                                        list.Add(SingerName);
+                                        lock (LockThis) { Global.TotalList[1]++; }
+                                    }
+                                    Singerlist.Add(SingerName);
                                 }
-                                Singerlist.Add(SingerName);
                             }
                         }
                     }
