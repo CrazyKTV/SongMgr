@@ -782,19 +782,14 @@ namespace CrazyKTV_SongMgr
                         {
                             foreach (string FindResult in FindResultList)
                             {
-                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                {
-                                    list = new List<string>(FindResult.Split('|'));
-                                    string[] ResultSingers = Regex.Split(list[0], "&", RegexOptions.None);
-                                    string ChorusGroupSinger = string.Join("|", ChorusGroupSingerList);
+                                list = new List<string>(FindResult.Split('|'));
 
-                                    if (list[0].ContainsAll(ChorusGroupSingerList.ToArray()) && list[1] == SongSongName.ToLower())
-                                    {
-                                        SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(FindResult) : -1;
-                                        break;
-                                    }
-                                    list.Clear();
+                                if (list[0].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[1] == SongSongName.ToLower())
+                                {
+                                    SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(FindResult) : -1;
+                                    break;
                                 }
+                                list.Clear();
                             }
                         }
                         FindResultList.Clear();
@@ -807,19 +802,14 @@ namespace CrazyKTV_SongMgr
                         {
                             foreach (string FindResult in FindResultList)
                             {
-                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                {
-                                    list = new List<string>(FindResult.Split('|'));
-                                    string[] ResultSingers = Regex.Split(list[0], "&", RegexOptions.None);
-                                    string ChorusGroupSinger = string.Join("|", ChorusGroupSingerList);
+                                list = new List<string>(FindResult.Split('|'));
 
-                                    if (list[0].ContainsAll(ChorusGroupSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
-                                    {
-                                        SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) : -1;
-                                        break;
-                                    }
-                                    list.Clear();
+                                if (list[0].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                {
+                                    SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) : -1;
+                                    break;
                                 }
+                                list.Clear();
                             }
                         }
                         FindResultList.Clear();

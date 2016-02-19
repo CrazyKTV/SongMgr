@@ -288,18 +288,15 @@ namespace CrazyKTV_SongMgr
                         {
                             foreach (string FindResult in FindResultList)
                             {
-                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                {
-                                    List<string> list = new List<string>(FindResult.Split('|'));
+                                List<string> list = new List<string>(FindResult.Split('|'));
 
-                                    if (list[1].ContainsAll(ChorusGroupSingerList.ToArray()) && list[2] == SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
-                                    {
-                                        DuplicateSongInfoIndex = SongDataLowCaseList.IndexOf(FindResult);
-                                        DuplicateSongStatus = true;
-                                        break;
-                                    }
-                                    list.Clear();
+                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower())
+                                {
+                                    DuplicateSongInfoIndex = SongDataLowCaseList.IndexOf(FindResult);
+                                    DuplicateSongStatus = true;
+                                    break;
                                 }
+                                list.Clear();
                             }
                         }
                         FindResultList.Clear();

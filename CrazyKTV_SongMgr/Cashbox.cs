@@ -859,21 +859,18 @@ namespace CrazyKTV_SongMgr
                                                         {
                                                             foreach (string FindResult in FindResultList)
                                                             {
-                                                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                                                {
-                                                                    List<string> list = new List<string>(FindResult.Split('|'));
+                                                                List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                                    if (list[1].ContainsAll(ChorusGroupSingerList.ToArray()) && list[2] == row["Song_SongName"].ToString().ToLower())
+                                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == row["Song_SongName"].ToString().ToLower())
+                                                                {
+                                                                    lock (LockThis)
                                                                     {
-                                                                        lock (LockThis)
-                                                                        {
-                                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                                                            RemoveRowStatus = true;
-                                                                        }
-                                                                        break;
+                                                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                                        RemoveRowStatus = true;
                                                                     }
-                                                                    list.Clear();
+                                                                    break;
                                                                 }
+                                                                list.Clear();
                                                             }
                                                         }
                                                         FindResultList.Clear();
@@ -886,21 +883,18 @@ namespace CrazyKTV_SongMgr
                                                         {
                                                             foreach (string FindResult in FindResultList)
                                                             {
-                                                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                                                {
-                                                                    List<string> list = new List<string>(FindResult.Split('|'));
+                                                                List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                                    if (list[1].ContainsAll(ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                                {
+                                                                    lock (LockThis)
                                                                     {
-                                                                        lock (LockThis)
-                                                                        {
-                                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                                                            RemoveRowStatus = true;
-                                                                        }
-                                                                        break;
+                                                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                                        RemoveRowStatus = true;
                                                                     }
-                                                                    list.Clear();
+                                                                    break;
                                                                 }
+                                                                list.Clear();
                                                             }
                                                         }
                                                         FindResultList.Clear();
@@ -1656,17 +1650,14 @@ namespace CrazyKTV_SongMgr
                                         {
                                             foreach (string FindResult in FindResultList)
                                             {
-                                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                                {
-                                                    List<string> list = new List<string>(FindResult.Split('|'));
+                                                List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                    if (list[1].ContainsAll(ChorusGroupSingerList.ToArray()) && list[2] == row["Song_SongName"].ToString().ToLower())
-                                                    {
-                                                        SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(FindResult) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(FindResult) : -1;
-                                                        break;
-                                                    }
-                                                    list.Clear();
+                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == row["Song_SongName"].ToString().ToLower())
+                                                {
+                                                    SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(FindResult) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                                    break;
                                                 }
+                                                list.Clear();
                                             }
                                         }
                                         FindResultList.Clear();
@@ -1679,17 +1670,14 @@ namespace CrazyKTV_SongMgr
                                         {
                                             foreach (string FindResult in FindResultList)
                                             {
-                                                if (FindResult.ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()))
-                                                {
-                                                    List<string> list = new List<string>(FindResult.Split('|'));
+                                                List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                    if (list[1].ContainsAll(ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
-                                                    {
-                                                        SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(FindResult) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(FindResult) : -1;
-                                                        break;
-                                                    }
-                                                    list.Clear();
+                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                {
+                                                    SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(FindResult) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                                    break;
                                                 }
+                                                list.Clear();
                                             }
                                         }
                                         FindResultList.Clear();
