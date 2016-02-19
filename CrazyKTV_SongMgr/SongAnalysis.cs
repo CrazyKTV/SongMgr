@@ -658,11 +658,14 @@ namespace CrazyKTV_SongMgr
                 if (SongDataIndex < 0 && SongSingerType == "3") //合唱歌曲
                 {
                     List<string> ChorusSongDatalist = new List<string>() { SongSongName.ToLower() };
+                    List<string> ChorusSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
                     List<string> ChorusGroupSongDatalist = new List<string>() { SongSongName.ToLower() };
+                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
 
                     // 處理合唱歌曲中的特殊歌手名稱
                     string ChorusSongSingerName = SongSinger.ToLower();
                     int ChorusGroupSongSingerCount = 0;
+                    bool MatchChorusGroupSongSinger = false;
                     List<string> ChorusSingerList = new List<string>();
                     List<string> ChorusGroupSingerList = new List<string>();
                     List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
@@ -674,7 +677,10 @@ namespace CrazyKTV_SongMgr
                         {
                             if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
                             if (ChorusSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSingerList.Add(SpecialSingerName.ToLower());
-                            ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
+                            if (ChorusGroupSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(SpecialSingerName.ToLower());
+                            ChorusGroupSongSingerCount++;
+
+                            ChorusSongSingerName = (ChorusSongSingerName != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
                         }
                     }
                     SpecialStrlist.Clear();
@@ -705,15 +711,13 @@ namespace CrazyKTV_SongMgr
                                             }
                                         }
                                         ChorusGroupSongSingerCount++;
+                                        MatchChorusGroupSongSinger = true;
                                         GroupSingerList.Clear();
                                     }
                                 }
                                 else
                                 {
-                                    if (ChorusGroupSingerList.IndexOf(SingerStr.ToLower()) < 0)
-                                    {
-                                        ChorusGroupSingerList.Add(SingerStr.ToLower());
-                                    }
+                                    if (ChorusGroupSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusGroupSingerList.Add(SingerStr.ToLower());
                                     ChorusGroupSongSingerCount++;
                                 }
                             }
@@ -722,32 +726,16 @@ namespace CrazyKTV_SongMgr
                         {
                             if (ChorusSongDatalist.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSongDatalist.Add(ChorusSongSingerName.ToLower());
                             if (ChorusSingerList.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSingerList.Add(ChorusSongSingerName.ToLower());
+                            if (ChorusGroupSingerList.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(ChorusSongSingerName.ToLower());
+                            ChorusGroupSongSingerCount++;
                         }
                     }
 
-                    List<string> FindResultList = Global.CashboxSongDataLowCaseList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray()));
-                    if (FindResultList.Count > 0)
+                    List<string> FindResultList = new List<string>();
+
+                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0)
                     {
-                        foreach (string FindResult in FindResultList)
-                        {
-                            list = new List<string>(FindResult.Split('|'));
-                            string[] ResultSingers = Regex.Split(list[0], "&", RegexOptions.None);
-                            string ChorusSinger = string.Join("|", ChorusSingerList);
-
-                            if (ChorusSinger.ContainsAll(ResultSingers))
-                            {
-                                SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(FindResult) : -1;
-                                break;
-                            }
-                            list.Clear();
-                        }
-                    }
-                    FindResultList.Clear();
-
-                    if (SongDataIndex < 0)
-                    {
-                        FindResultList = Global.CashboxSongDataNonBracketStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray()));
-
+                        FindResultList = Global.CashboxSongDataLowCaseList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray()));
                         if (FindResultList.Count > 0)
                         {
                             foreach (string FindResult in FindResultList)
@@ -756,7 +744,27 @@ namespace CrazyKTV_SongMgr
                                 string[] ResultSingers = Regex.Split(list[0], "&", RegexOptions.None);
                                 string ChorusSinger = string.Join("|", ChorusSingerList);
 
-                                if (ChorusSinger.ContainsAll(ResultSingers))
+                                if (list[0].ContainsAll(ChorusSingerList.ToArray()) && list[1] == SongSongName.ToLower())
+                                {
+                                    SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(FindResult) : -1;
+                                    break;
+                                }
+                                list.Clear();
+                            }
+                        }
+                        FindResultList.Clear();
+                    }
+
+                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0)
+                    {
+                        FindResultList = Global.CashboxSongDataNonBracketStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDataNonBracketlist.ToArray()));
+                        if (FindResultList.Count > 0)
+                        {
+                            foreach (string FindResult in FindResultList)
+                            {
+                                list = new List<string>(FindResult.Split('|'));
+
+                                if (list[0].ContainsAll(ChorusSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
                                 {
                                     SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) : -1;
                                     break;
@@ -767,7 +775,7 @@ namespace CrazyKTV_SongMgr
                         FindResultList.Clear();
                     }
 
-                    if (SongDataIndex < 0)
+                    if (MatchChorusGroupSongSinger && SongDataIndex < 0)
                     {
                         FindResultList = Global.CashboxSongDataLowCaseList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDatalist.ToArray()));
                         if (FindResultList.Count > 0)
@@ -780,7 +788,7 @@ namespace CrazyKTV_SongMgr
                                     string[] ResultSingers = Regex.Split(list[0], "&", RegexOptions.None);
                                     string ChorusGroupSinger = string.Join("|", ChorusGroupSingerList);
 
-                                    if (ChorusGroupSinger.ContainsAll(ResultSingers))
+                                    if (list[0].ContainsAll(ChorusGroupSingerList.ToArray()) && list[1] == SongSongName.ToLower())
                                     {
                                         SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(FindResult) : -1;
                                         break;
@@ -792,9 +800,9 @@ namespace CrazyKTV_SongMgr
                         FindResultList.Clear();
                     }
 
-                    if (SongDataIndex < 0)
+                    if (MatchChorusGroupSongSinger && SongDataIndex < 0)
                     {
-                        FindResultList = Global.CashboxSongDataNonBracketStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDatalist.ToArray()));
+                        FindResultList = Global.CashboxSongDataNonBracketStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDataNonBracketlist.ToArray()));
                         if (FindResultList.Count > 0)
                         {
                             foreach (string FindResult in FindResultList)
@@ -805,7 +813,7 @@ namespace CrazyKTV_SongMgr
                                     string[] ResultSingers = Regex.Split(list[0], "&", RegexOptions.None);
                                     string ChorusGroupSinger = string.Join("|", ChorusGroupSingerList);
 
-                                    if (ChorusGroupSinger.ContainsAll(ResultSingers))
+                                    if (list[0].ContainsAll(ChorusGroupSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
                                     {
                                         SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) : -1;
                                         break;
