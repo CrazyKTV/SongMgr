@@ -1530,7 +1530,7 @@ namespace CrazyKTV_SongMgr
 
             string sqlColumnStr = "Word, Code, Spell, PenStyle, SortIdx, Strokes";
             PhoneticsQuerySqlStr = "select " + sqlColumnStr + " from ktv_Phonetics order by Code, SortIdx";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, PhoneticsQuerySqlStr, "");
+            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, PhoneticsQuerySqlStr, "");
 
             if (dt.Rows.Count > 0)
             {
@@ -1599,7 +1599,7 @@ namespace CrazyKTV_SongMgr
             OleDbCommand cmd = new OleDbCommand();
             OleDbCommand Versioncmd = new OleDbCommand();
 
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
+            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, "");
             string TruncateSqlStr = "delete * from ktv_Phonetics";
             cmd = new OleDbCommand(TruncateSqlStr, conn);
             cmd.ExecuteNonQuery();

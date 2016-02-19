@@ -456,7 +456,7 @@ namespace CrazyKTV_SongMgr
 
                     string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
 
-                    using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
+                    using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongPhoneticsQuerySqlStr, ""))
                     {
                         var query = from row in PhoneticsDT.AsEnumerable()
                                     where row.Field<Int16>("SortIdx") < 2
@@ -2147,7 +2147,7 @@ namespace CrazyKTV_SongMgr
 
                 string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
 
-                using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongPhoneticsQuerySqlStr, ""))
+                using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongPhoneticsQuerySqlStr, ""))
                 {
                     var query = from row in PhoneticsDT.AsEnumerable()
                                 where row.Field<Int16>("SortIdx") < 2
