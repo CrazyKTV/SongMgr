@@ -202,6 +202,10 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+                    else
+                    {
+                        SongDBUpdate_UpdateFinish();
+                    }
                 }
             }
         }

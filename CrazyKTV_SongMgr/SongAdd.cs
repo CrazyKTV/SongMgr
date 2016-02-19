@@ -311,40 +311,33 @@ namespace CrazyKTV_SongMgr
             {
                 if (list.Count > 0)
                 {
-                    if (list.Count > Global.RemainingSongID)
-                    {
-                        SongAdd_Tooltip_Label.Text = "要加入的歌曲檔案數量大於最小歌曲剩餘編號!";
-                    }
-                    else
-                    {
-                        SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
-                        SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
-                        SongAdd_DataGridView.AllowDrop = false;
-                        SongAdd_DataGridView.SelectionChanged -= new EventHandler(SongAdd_DataGridView_SelectionChanged);
-                        SongAdd_DragDrop_Label.Visible = false;
-                        SongAdd_Edit_GroupBox.Visible = true;
-                        SongAdd_SongAddCfg_GroupBox.Visible = false;
-                        SongAdd_SpecialStr_GroupBox.Visible = false;
-                        SongAdd_DefaultSongInfo_GroupBox.Visible = false;
-                        SongAdd_Save_Button.Text = "取消加入";
-                        SongAdd_InitializeEditControl();
-                        Common_SwitchSetUI(false);
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.AllowDrop = false;
+                    SongAdd_DataGridView.SelectionChanged -= new EventHandler(SongAdd_DataGridView_SelectionChanged);
+                    SongAdd_DragDrop_Label.Visible = false;
+                    SongAdd_Edit_GroupBox.Visible = true;
+                    SongAdd_SongAddCfg_GroupBox.Visible = false;
+                    SongAdd_SpecialStr_GroupBox.Visible = false;
+                    SongAdd_DefaultSongInfo_GroupBox.Visible = false;
+                    SongAdd_Save_Button.Text = "取消加入";
+                    SongAdd_InitializeEditControl();
+                    Common_SwitchSetUI(false);
 
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongAdd_SongAnalysisTask(list)));
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => SongAdd_SongAnalysisTask(list)));
 
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        if (Global.SongMgrSongAddMode != "4")
                         {
-                            if (Global.SongMgrSongAddMode != "4")
+                            this.BeginInvoke((Action)delegate ()
                             {
-                                this.BeginInvoke((Action)delegate()
-                                {
-                                    SongAdd_DataGridView.SelectionChanged += new EventHandler(SongAdd_DataGridView_SelectionChanged);
-                                    SongAdd_DataGridView_SelectionChanged(new object(), new EventArgs());
-                                });
-                            }
-                        });
-                    }
+                                SongAdd_DataGridView.SelectionChanged += new EventHandler(SongAdd_DataGridView_SelectionChanged);
+                                SongAdd_DataGridView_SelectionChanged(new object(), new EventArgs());
+                            });
+                        }
+                    });
                 }
                 else
                 {
@@ -461,7 +454,15 @@ namespace CrazyKTV_SongMgr
                 }
 
                 Global.TimerEndTime = DateTime.Now;
-                SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 "  +(long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
+
+                if (SongAdd.RemainingSongIdCountStr != "")
+                {
+                    SongAdd_Tooltip_Label.Text = SongAdd.RemainingSongIdCountStr;
+                }
+                else
+                {
+                    SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
+                }
 
                 SongLangKeyWordList.Clear();
                 SingerTypeKeyWordList.Clear();
@@ -472,13 +473,34 @@ namespace CrazyKTV_SongMgr
 
         private bool SongAdd_CheckSongAddStatus()
         {
+            SongAdd.RemainingSongIdCountStr = "";
             using (DataTable dt = SongAdd_DataGridView.DataSource as DataTable)
             {
                 var query = from row in dt.AsEnumerable()
                             where row.Field<string>("Song_Lang").Equals("未知")
                             select row;
 
-                if (query.Count<DataRow>() > 0) { return false; } else { return true; }
+                if (query.Count<DataRow>() > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    foreach (string langstr in Global.CrazyktvSongLangList)
+                    {
+                        var langquery = from row in dt.AsEnumerable()
+                                        where row.Field<string>("Song_Lang").Equals(langstr)
+                                        select row;
+
+                        if (langquery.Count<DataRow>() > Global.RemainingSongIdCountList[Global.CrazyktvSongLangList.IndexOf(langstr)])
+                        {
+                            SongAdd.RemainingSongIdCountStr = langstr + "歌曲的剩餘歌曲編號已不夠所加入的" + langstr + "歌曲使用!";
+                            SongAdd_Edit_GroupBox.Enabled = false;
+                            return false;
+                        }
+                    }
+                    return true;
+                }
             }
         }
 
@@ -1462,7 +1484,8 @@ namespace CrazyKTV_SongMgr
 
     class SongAdd
     {
-        
+        public static string RemainingSongIdCountStr = string.Empty;
+
         #region --- SongAdd 加歌頁面下拉清單 ---
 
         public static DataTable GetDefaultSongInfo(string SongInfoType, bool MultiEdit, bool SongEditComboBox)

@@ -578,10 +578,6 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "SongAdd_TabPage":
                     i = 1;
-                    if (Global.RemainingSongID < 100)
-                    {
-                        SongAdd_Tooltip_Label.Text = "注意: 已有語系的歌曲編號僅剩 " + Global.RemainingSongID + " 個編號可用!";
-                    }
                     break;
                 case "SingerMgr_TabPage":
                     i = 2;

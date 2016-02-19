@@ -1902,9 +1902,9 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDatabaseStatus)
             {
-                List<string> StartIdlist = new List<string>();
-                StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
+                List<string> StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
                 StartIdlist.Add((DigitCode == 5) ? "100000" : "1000000");
+                Global.RemainingSongIdCountList = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
                 using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
@@ -1933,8 +1933,12 @@ namespace CrazyKTV_SongMgr
                             if (query.Count<DataRow>() > 0)
                             {
                                 RemainingSongId = TotalId - query.Count<DataRow>();
-                                if (RemainingSongId < Global.RemainingSongID) Global.RemainingSongID = RemainingSongId;
                             }
+                            else
+                            {
+                                RemainingSongId = TotalId;
+                            }
+                            Global.RemainingSongIdCountList[StartIdlist.IndexOf(StartIdStr)] = RemainingSongId;
                         }
                     }
                 }
