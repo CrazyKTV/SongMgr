@@ -386,26 +386,51 @@ namespace CrazyKTV_SongMgr
                 strlist.Clear();
             }
 
-            Parallel.ForEach(filelist, (str, loopState) =>
+            if (Global.SongAddDefaultSongTrack == "6")
             {
-                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-                lock(LockThis)
+                foreach(string str in filelist)
                 {
-                    total++;
-                }
-
-                SongAnalysis.SongInfoAnalysis(str, SongLangKeyWordList, SingerTypeKeyWordList, SongTrackKeyWordList);
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongAdd_Tooltip_Label.Text = "正在分析第 " + total + " 首歌曲...";
-                    if (Global.SongMgrSongAddMode == "4")
+                    lock (LockThis)
                     {
-                        SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
-                        SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                        total++;
                     }
+
+                    SongAnalysis.SongInfoAnalysis(str, SongLangKeyWordList, SingerTypeKeyWordList, SongTrackKeyWordList);
+
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongAdd_Tooltip_Label.Text = "正在分析第 " + total + " 首歌曲...";
+                        if (Global.SongMgrSongAddMode == "4")
+                        {
+                            SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                            SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                        }
+                    });
+                }
+            }
+            else
+            {
+                Parallel.ForEach(filelist, (str, loopState) =>
+                {
+                    Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+                    lock (LockThis)
+                    {
+                        total++;
+                    }
+
+                    SongAnalysis.SongInfoAnalysis(str, SongLangKeyWordList, SingerTypeKeyWordList, SongTrackKeyWordList);
+
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongAdd_Tooltip_Label.Text = "正在分析第 " + total + " 首歌曲...";
+                        if (Global.SongMgrSongAddMode == "4")
+                        {
+                            SongQuery_QueryStatus_Label.Text = SongAdd_Tooltip_Label.Text;
+                            SongMgrCfg_Tooltip_Label.Text = SongAdd_Tooltip_Label.Text;
+                        }
+                    });
                 });
-            });
+            }
 
             this.BeginInvoke((Action)delegate()
             {

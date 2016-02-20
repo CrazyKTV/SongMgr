@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaInfoLib;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -82,7 +83,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
                     
-                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
+                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false, false);
                     SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                     SongQuery_QueryValue_ComboBox.ValueMember = "Value";
                     SongQuery_QueryValue_ComboBox.SelectedValue = 1;
@@ -98,7 +99,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
 
-                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SingerType", false);
+                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SingerType", false, false);
                     SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                     SongQuery_QueryValue_ComboBox.ValueMember = "Value";
                     SongQuery_QueryValue_ComboBox.SelectedValue = 1;
@@ -114,7 +115,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
 
-                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false);
+                    SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", false, false);
                     SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                     SongQuery_QueryValue_ComboBox.ValueMember = "Value";
                     SongQuery_QueryValue_ComboBox.SelectedValue = 0;
@@ -2265,6 +2266,14 @@ namespace CrazyKTV_SongMgr
                         if (Global.SongQueryMultiEditUpdateList[5])
                         {
                             SongTrack = ((int)SongQuery_EditSongTrack_ComboBox.SelectedValue - 1).ToString();
+                            
+                            // 自動偵測歌曲聲道
+                            if (SongTrack == "6")
+                            {
+                                string FilePath = Path.Combine(SongPath, SongFileName);
+                                var task = Task.Factory.StartNew(() => CommonFunc.AutoDetectSongTrack(FilePath));
+                                SongTrack = task.Result;
+                            }
                         }
 
                         if (Global.SongQueryMultiEditUpdateList[6])
@@ -2299,6 +2308,7 @@ namespace CrazyKTV_SongMgr
 
                         SongSinger = SongQuery_EditSongSinger_TextBox.Text;
                         SongSongName = SongQuery_EditSongSongName_TextBox.Text;
+
                         SongTrack = SongQuery_EditSongTrack_ComboBox.SelectedValue.ToString();
 
                         string SongSongTypeStr = ((DataRowView)SongQuery_EditSongSongType_ComboBox.SelectedItem)[0].ToString();
@@ -2316,6 +2326,14 @@ namespace CrazyKTV_SongMgr
                         SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString();
                         SongFileName = row.Cells["Song_FileName"].Value.ToString();
                         SongPath = row.Cells["Song_Path"].Value.ToString();
+
+                        // 自動偵測歌曲聲道
+                        if (SongTrack == "6")
+                        {
+                            string FilePath = Path.Combine(SongPath, SongFileName);
+                            var task = Task.Factory.StartNew(() => CommonFunc.AutoDetectSongTrack(FilePath));
+                            SongTrack = task.Result;
+                        }
 
                         // 取得歌曲拼音
                         List<string> SongSpellList = new List<string>();
@@ -2432,15 +2450,15 @@ namespace CrazyKTV_SongMgr
             SongQuery_EditSongLang_ComboBox.DisplayMember = "Display";
             SongQuery_EditSongLang_ComboBox.ValueMember = "Value";
 
-            SongQuery_EditSongSingerType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SingerType", MultiEdit);
+            SongQuery_EditSongSingerType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SingerType", MultiEdit, false);
             SongQuery_EditSongSingerType_ComboBox.DisplayMember = "Display";
             SongQuery_EditSongSingerType_ComboBox.ValueMember = "Value";
 
-            SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", MultiEdit);
+            SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", MultiEdit, false);
             SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
             SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
 
-            SongQuery_EditSongTrack_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", MultiEdit);
+            SongQuery_EditSongTrack_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongTrack", MultiEdit, true);
             SongQuery_EditSongTrack_ComboBox.DisplayMember = "Display";
             SongQuery_EditSongTrack_ComboBox.ValueMember = "Value";
         }
@@ -2546,7 +2564,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        public static DataTable GetSongQueryValueList(string ValueType, bool MultiEdit)
+        public static DataTable GetSongQueryValueList(string ValueType, bool MultiEdit, bool AutoDetectSongTrack)
         {
             using (DataTable list = new DataTable())
             {
@@ -2591,6 +2609,13 @@ namespace CrazyKTV_SongMgr
                         {
                             list.Rows.Add(list.NewRow());
                             list.Rows[list.Rows.Count - 1][0] = value;
+                            list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
+                        }
+
+                        if (AutoDetectSongTrack)
+                        {
+                            list.Rows.Add(list.NewRow());
+                            list.Rows[list.Rows.Count - 1][0] = "自動偵測";
                             list.Rows[list.Rows.Count - 1][1] = list.Rows.Count - 1;
                         }
                         break;

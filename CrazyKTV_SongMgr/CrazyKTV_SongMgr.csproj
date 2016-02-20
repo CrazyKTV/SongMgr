@@ -285,6 +285,9 @@
     <Content Include="SongMgr\Libs\MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="SongMgr\Libs\MediaInfoDotNet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="SongMgr\Libs\plugins\access\libaccess_bd_plugin.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

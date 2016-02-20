@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaInfoLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -906,7 +907,7 @@ namespace CrazyKTV_SongMgr
 
             if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "6")
             {
-                SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
+                SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false, false);
                 SongQuery_QueryValue_ComboBox.DisplayMember = "Display";
                 SongQuery_QueryValue_ComboBox.ValueMember = "Value";
                 SongQuery_QueryValue_ComboBox.SelectedValue = SelectedValue;
@@ -941,7 +942,7 @@ namespace CrazyKTV_SongMgr
 
                 if (SelectedRowsCount > 1)
                 {
-                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", true);
+                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", true, false);
                     SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
 
@@ -961,7 +962,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else if (SelectedRowsCount == 1)
                 {
-                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false);
+                    SongQuery_EditSongSongType_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false, false);
                     SongQuery_EditSongSongType_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongSongType_ComboBox.ValueMember = "Value";
 
@@ -2993,6 +2994,38 @@ namespace CrazyKTV_SongMgr
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
             WindowsPrincipal principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static string AutoDetectSongTrack(string SongFilePath)
+        {
+            string SongTrack = string.Empty;
+            MediaInfo MI = new MediaInfo();
+            MI.Open(SongFilePath);
+
+            if (MI.Get(StreamKind.General, 0, "AudioCount") != "")
+            {
+                switch (MI.Get(StreamKind.General, 0, "AudioCount"))
+                {
+                    case "1":
+                        SongTrack = (Global.SongMgrSongTrackMode == "True") ? "1" : "2";
+                        break;
+                    case "2":
+                        SongTrack = (Global.SongMgrSongTrackMode == "True") ? "2" : "1";
+                        break;
+                    case "3":
+                        SongTrack = "3";
+                        break;
+                    default:
+                        SongTrack = "0";
+                        break;
+                }
+            }
+            else
+            {
+                SongTrack = "0";
+            }
+            MI.Close();
+            return SongTrack;
         }
 
         #endregion
