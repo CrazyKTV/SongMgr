@@ -1909,37 +1909,34 @@ namespace CrazyKTV_SongMgr
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
                 using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
-                    if (dt.Rows.Count > 0)
+                    int StartId;
+                    int EndId;
+                    int TotalId;
+                    int RemainingSongId;
+
+                    foreach (string StartIdStr in StartIdlist)
                     {
-                        int StartId;
-                        int EndId;
-                        int TotalId;
-                        int RemainingSongId;
+                        if (StartIdStr == ((DigitCode == 5) ? "100000" : "1000000")) break;
 
-                        foreach (string StartIdStr in StartIdlist)
+                        StartId = Convert.ToInt32(StartIdStr);
+                        EndId = Convert.ToInt32(StartIdlist[StartIdlist.IndexOf(StartIdStr) + 1]) - 1;
+                        TotalId = EndId - StartId;
+
+                        var query = from row in dt.AsEnumerable()
+                                    where Convert.ToInt32(row.Field<string>("Song_Id")) >= StartId &&
+                                          Convert.ToInt32(row.Field<string>("Song_Id")) <= EndId &&
+                                          row.Field<string>("Song_Id").Length == DigitCode
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
                         {
-                            if (StartIdStr == ((DigitCode == 5) ? "100000" : "1000000")) break;
-
-                            StartId = Convert.ToInt32(StartIdStr);
-                            EndId = Convert.ToInt32(StartIdlist[StartIdlist.IndexOf(StartIdStr) + 1]) - 1;
-                            TotalId = EndId - StartId;
-
-                            var query = from row in dt.AsEnumerable()
-                                        where Convert.ToInt32(row.Field<string>("Song_Id")) >= StartId &&
-                                              Convert.ToInt32(row.Field<string>("Song_Id")) <= EndId &&
-                                              row.Field<string>("Song_Id").Length == DigitCode
-                                        select row;
-
-                            if (query.Count<DataRow>() > 0)
-                            {
-                                RemainingSongId = TotalId - query.Count<DataRow>();
-                            }
-                            else
-                            {
-                                RemainingSongId = TotalId;
-                            }
-                            Global.RemainingSongIdCountList[StartIdlist.IndexOf(StartIdStr)] = RemainingSongId;
+                            RemainingSongId = TotalId - query.Count<DataRow>();
                         }
+                        else
+                        {
+                            RemainingSongId = TotalId;
+                        }
+                        Global.RemainingSongIdCountList[StartIdlist.IndexOf(StartIdStr)] = RemainingSongId;
                     }
                 }
             }
