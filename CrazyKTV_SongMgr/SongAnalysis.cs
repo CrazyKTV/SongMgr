@@ -595,7 +595,7 @@ namespace CrazyKTV_SongMgr
                 list.Clear();
             }
 
-            // 台灣女孩問題處理
+            // 問題歌曲處理
             if (SongSinger == "台灣女孩")
             {
                 if (SongSongName == "羅百吉&寶貝")
@@ -605,7 +605,28 @@ namespace CrazyKTV_SongMgr
                     SongSingerType = "3";
                 }
             }
-            
+            else if (SongSinger == SongSongName)
+            {
+                switch (SongSinger)
+                {
+                    case "梁靜茹":
+                    case "張懸":
+                        if (SongLang == "兒歌")
+                        {
+                            SongLang = "國語";
+                            SongSongName = "兒歌";
+                        }
+                        break;
+                    case "莫文蔚":
+                        if (SongLang == "台語")
+                        {
+                            SongLang = "國語";
+                            SongSongName = "台";
+                        }
+                        break;
+                }
+            }
+
             // 套用預設歌手類別
             if (SongSingerType == "")
             {
