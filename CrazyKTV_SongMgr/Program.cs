@@ -224,7 +224,16 @@ namespace CrazyKTV_SongMgr
             "外男,外國男星,外國男歌星,外國男歌手",
             "外女,外國女星,外國女歌星,外國女歌手",
             "外團,外國團體,外國樂團",
-            "未知",
+            "未知"
+        };
+
+        public static List<string> SongAnalysisExceptionSingerList = new List<string>() { "台灣女孩", "梁靜茹", "張懸", "莫文蔚" };
+        public static List<string> SongAnalysisExceptionSongList = new List<string>()
+        {
+            "羅百吉&寶貝|台灣女孩",
+            "梁靜茹|兒歌",
+            "張懸|兒歌",
+            "莫文蔚|台"
         };
 
         public static DataTable SongMonitorDT = new DataTable();

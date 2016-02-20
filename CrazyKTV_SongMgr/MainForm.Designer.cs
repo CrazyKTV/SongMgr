@@ -7359,7 +7359,7 @@
             // 
             this.Debug_Singer_GroupBox.Controls.Add(this.Debug_NewSingerImport_Button);
             this.Debug_Singer_GroupBox.Controls.Add(this.Debug_NewSingerExport_Button);
-            this.Debug_Singer_GroupBox.Location = new System.Drawing.Point(357, 152);
+            this.Debug_Singer_GroupBox.Location = new System.Drawing.Point(538, 23);
             this.Debug_Singer_GroupBox.Name = "Debug_Singer_GroupBox";
             this.Debug_Singer_GroupBox.Size = new System.Drawing.Size(436, 193);
             this.Debug_Singer_GroupBox.TabIndex = 13;
@@ -7431,7 +7431,7 @@
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxImport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxExport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxNonSingerDataLog_Button);
-            this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(357, 351);
+            this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(538, 231);
             this.Debug_Cashbox_GroupBox.Name = "Debug_Cashbox_GroupBox";
             this.Debug_Cashbox_GroupBox.Size = new System.Drawing.Size(436, 271);
             this.Debug_Cashbox_GroupBox.TabIndex = 10;

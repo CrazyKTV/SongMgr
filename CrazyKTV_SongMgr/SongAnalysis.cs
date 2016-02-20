@@ -596,32 +596,43 @@ namespace CrazyKTV_SongMgr
             }
 
             // 問題歌曲處理
-            if (SongSinger == "台灣女孩")
+            if (Global.SongAnalysisExceptionSingerList.IndexOf(SongSinger) >= 0)
             {
-                if (SongSongName == "羅百吉&寶貝")
-                {
-                    SongSinger = "羅百吉&寶貝";
-                    SongSongName = "台灣女孩";
-                    SongSingerType = "3";
-                }
-            }
-            else if (SongSinger == SongSongName)
-            {
+                int i = Global.SongAnalysisExceptionSingerList.IndexOf(SongSinger);
+
                 switch (SongSinger)
                 {
+                    case "台灣女孩":
+                        if (SongSongName == "羅百吉&寶貝")
+                        {
+                            if (FileStr.ContainsAll(Global.SongAnalysisExceptionSongList[i].Split('|')))
+                            {
+                                SongLang = "國語";
+                                SongSinger = "羅百吉&寶貝";
+                                SongSongName = "台灣女孩";
+                                SongSingerType = "3";
+                            }
+                        }
+                        break;
                     case "梁靜茹":
                     case "張懸":
                         if (SongLang == "兒歌")
                         {
-                            SongLang = "國語";
-                            SongSongName = "兒歌";
+                            if (FileStr.ContainsAll(Global.SongAnalysisExceptionSongList[i].Split('|')))
+                            {
+                                SongLang = "國語";
+                                SongSongName = "兒歌";
+                            }
                         }
                         break;
                     case "莫文蔚":
                         if (SongLang == "台語")
                         {
-                            SongLang = "國語";
-                            SongSongName = "台";
+                            if (FileStr.ContainsAll(Global.SongAnalysisExceptionSongList[i].Split('|')))
+                            {
+                                SongLang = "國語";
+                                SongSongName = "台";
+                            }
                         }
                         break;
                 }
