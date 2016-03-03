@@ -4119,6 +4119,7 @@
             this.SongMgrCfg_Lang10Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang10Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang10Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang10Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang10Code_Label
             // 
@@ -4143,6 +4144,7 @@
             this.SongMgrCfg_Lang9Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang9Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang9Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang9Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang9Code_Label
             // 
@@ -4167,6 +4169,7 @@
             this.SongMgrCfg_Lang8Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang8Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang8Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang8Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang8Code_Label
             // 
@@ -4191,6 +4194,7 @@
             this.SongMgrCfg_Lang7Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang7Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang7Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang7Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang7Code_Label
             // 
@@ -4215,6 +4219,7 @@
             this.SongMgrCfg_Lang6Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang6Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang6Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang6Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang6Code_Label
             // 
@@ -4239,6 +4244,7 @@
             this.SongMgrCfg_Lang5Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang5Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang5Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang5Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang5Code_Label
             // 
@@ -4263,6 +4269,7 @@
             this.SongMgrCfg_Lang4Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang4Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang4Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang4Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang4Code_Label
             // 
@@ -4287,6 +4294,7 @@
             this.SongMgrCfg_Lang3Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang3Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang3Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang3Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang3Code_Label
             // 
@@ -4311,6 +4319,7 @@
             this.SongMgrCfg_Lang2Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang2Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang2Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang2Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang2Code_Label
             // 
@@ -4335,6 +4344,7 @@
             this.SongMgrCfg_Lang1Code_TextBox.Enter += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Enter);
             this.SongMgrCfg_Lang1Code_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
             this.SongMgrCfg_Lang1Code_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SongMgrCfg_LangCode_TextBox_Validating);
+            this.SongMgrCfg_Lang1Code_TextBox.Validated += new System.EventHandler(this.SongMgrCfg_LangCode_TextBox_Validated);
             // 
             // SongMgrCfg_Lang1Code_Label
             // 

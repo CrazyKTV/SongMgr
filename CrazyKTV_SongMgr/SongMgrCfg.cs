@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -657,6 +658,12 @@ namespace CrazyKTV_SongMgr
                     }
                 }
             }
+        }
+
+        private void SongMgrCfg_LangCode_TextBox_Validated(object sender, EventArgs e)
+        {
+            SongMgrCfg_GetSongMgrLangCode();
+            Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
         }
 
         private void SongMgrCfg_SongInfoSeparate_ComboBox_SelectedIndexChanged(object sender, EventArgs e)

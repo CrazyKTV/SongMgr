@@ -1936,6 +1936,7 @@ namespace CrazyKTV_SongMgr
                         Global.RemainingSongIdCountList[StartIdlist.IndexOf(StartIdStr)] = RemainingSongId;
                     }
                 }
+                Console.WriteLine(string.Join(" | ", Global.RemainingSongIdCountList));
             }
         }
 
