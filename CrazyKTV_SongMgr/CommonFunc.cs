@@ -486,7 +486,7 @@ namespace CrazyKTV_SongMgr
                         {
                             Global.CashboxSongDataLangList.Add(row["Song_Lang"].ToString());
                             Global.CashboxSongDataLowCaseList.Add(row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
-                            Global.CashboxSongDataNonBracketStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""));
+                            Global.CashboxSongDataNonBracketStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
                         }
                     }
                 }

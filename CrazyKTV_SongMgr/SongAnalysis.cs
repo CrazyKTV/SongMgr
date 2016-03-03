@@ -683,9 +683,9 @@ namespace CrazyKTV_SongMgr
                 if (SongDataIndex < 0 && SongSingerType == "3") //合唱歌曲
                 {
                     List<string> ChorusSongDatalist = new List<string>() { SongSongName.ToLower() };
-                    List<string> ChorusSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
+                    List<string> ChorusSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
                     List<string> ChorusGroupSongDatalist = new List<string>() { SongSongName.ToLower() };
-                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
+                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
 
                     // 處理合唱歌曲中的特殊歌手名稱
                     string ChorusSongSingerName = SongSinger.ToLower();
@@ -789,7 +789,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 list = new List<string>(FindResult.Split('|'));
 
-                                if (list[0].ContainsAll(ChorusSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                if (list[0].ContainsAll(ChorusSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""))
                                 {
                                     SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) : -1;
                                     break;
@@ -829,7 +829,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 list = new List<string>(FindResult.Split('|'));
 
-                                if (list[0].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                if (list[0].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[1] == Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""))
                                 {
                                     SongDataIndex = (Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) >= 0) ? Global.CashboxSongDataNonBracketStrList.IndexOf(FindResult) : -1;
                                     break;

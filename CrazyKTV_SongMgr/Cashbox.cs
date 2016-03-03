@@ -678,7 +678,7 @@ namespace CrazyKTV_SongMgr
                                                 bool RemoveRowStatus = false;
                                                 bool MatchNonBracketData = true;
                                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
-                                                string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
+                                                string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                                                 string SongSinger = row["Song_Singer"].ToString().ToLower();
 
                                                 MatchCollection BracketMatches = Regex.Matches(row["Song_SongName"].ToString(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
@@ -723,7 +723,7 @@ namespace CrazyKTV_SongMgr
                                                                 if (GroupSingerName.ToLower() != SongSinger.ToLower())
                                                                 {
                                                                     SongData = row["Song_Lang"].ToString() + "|" + GroupSingerName.ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
-                                                                    SongDataNonBracket = row["Song_Lang"].ToString() + "|" + GroupSingerName.ToLower() + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
+                                                                    SongDataNonBracket = row["Song_Lang"].ToString() + "|" + GroupSingerName.ToLower() + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                                                                 }
 
                                                                 if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataLowCaseList.IndexOf(SongDataNonBracket) >= 0 || Cashbox.SongDataNonBracketList.IndexOf(SongDataNonBracket) >= 0)
@@ -752,9 +752,9 @@ namespace CrazyKTV_SongMgr
                                                 if (!RemoveRowStatus && row["Song_Singer"].ToString().Contains("&")) //合唱歌曲
                                                 {
                                                     List<string> ChorusSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
-                                                    List<string> ChorusSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
+                                                    List<string> ChorusSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
                                                     List<string> ChorusGroupSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
-                                                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
+                                                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
 
                                                     // 處理合唱歌曲中的特殊歌手名稱
                                                     string ChorusSongSingerName = row["Song_Singer"].ToString().ToLower();
@@ -867,7 +867,7 @@ namespace CrazyKTV_SongMgr
                                                             {
                                                                 List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                                if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                                if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""))
                                                                 {
                                                                     lock (LockThis)
                                                                     {
@@ -915,7 +915,7 @@ namespace CrazyKTV_SongMgr
                                                             {
                                                                 List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""))
                                                                 {
                                                                     lock (LockThis)
                                                                     {
@@ -1515,7 +1515,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
                                 string SongData = row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
-                                string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
+                                string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                                 string SongSinger = row["Song_Singer"].ToString();
 
                                 int SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(SongData) : -1;
@@ -1536,7 +1536,7 @@ namespace CrazyKTV_SongMgr
                                                     if (GroupSingerName.ToLower() != SongSinger.ToLower())
                                                     {
                                                         SongData = row["Song_Lang"].ToString() + "|" + GroupSingerName.ToLower() + "|" + row["Song_SongName"].ToString().ToLower();
-                                                        SongDataNonBracket = row["Song_Lang"].ToString() + "|" + GroupSingerName.ToLower() + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "");
+                                                        SongDataNonBracket = row["Song_Lang"].ToString() + "|" + GroupSingerName.ToLower() + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                                                         SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(SongData) : -1;
                                                         if (SongDataIndex == -1) SongDataIndex = (Cashbox.SongDataNonBracketList.IndexOf(SongDataNonBracket) >= 0) ? Cashbox.SongDataNonBracketList.IndexOf(SongDataNonBracket) : -1;
                                                         if (SongDataIndex >= 0) break;
@@ -1551,9 +1551,9 @@ namespace CrazyKTV_SongMgr
                                 if (SongDataIndex < 0 && row["Song_Singer"].ToString().ToLower().Contains("&"))  //合唱歌曲
                                 {
                                     List<string> ChorusSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
-                                    List<string> ChorusSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
+                                    List<string> ChorusSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
                                     List<string> ChorusGroupSongDatalist = new List<string>() { row["Song_Lang"].ToString(), row["Song_SongName"].ToString().ToLower() };
-                                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") };
+                                    List<string> ChorusGroupSongDataNonBracketlist = new List<string>() { row["Song_Lang"].ToString(), Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
 
                                     // 處理合唱歌曲中的特殊歌手名稱
                                     string ChorusSongSingerName = row["Song_Singer"].ToString().ToLower();
@@ -1662,7 +1662,7 @@ namespace CrazyKTV_SongMgr
                                             {
                                                 List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""))
                                                 {
                                                     SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(FindResult) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(FindResult) : -1;
                                                     break;
@@ -1702,7 +1702,7 @@ namespace CrazyKTV_SongMgr
                                             {
                                                 List<string> list = new List<string>(FindResult.Split('|'));
 
-                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""))
+                                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""))
                                                 {
                                                     SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(FindResult) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(FindResult) : -1;
                                                     break;
@@ -1924,7 +1924,7 @@ namespace CrazyKTV_SongMgr
                     SongIdList.Add(row["Song_Id"].ToString());
                     SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString());
                     SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
-                    SongDataNonBracketList.Add(row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""));
+                    SongDataNonBracketList.Add(row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
                 }
             }
         }
