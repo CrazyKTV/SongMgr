@@ -1319,7 +1319,7 @@ namespace CrazyKTV_SongMgr
             tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
             tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
             tasks.Add(Task.Factory.StartNew(() => Common_GetSongStatisticsTask()));
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6)));
+            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6)));
             return RemoveSongIdlist;
         }
 

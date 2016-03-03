@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -113,6 +112,7 @@ namespace CrazyKTV_SongMgr
 
         private void SongDBUpdate_CheckDatabaseVersion()
         {
+            bool UpdateDBStatus = false;
             double SongDBVer = 1.00;
             string CashboxUpdDate = "";
 
@@ -161,26 +161,15 @@ namespace CrazyKTV_SongMgr
                                         MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
                                         SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                                         SongMaintenance_DBVerTooltip_Label.Text = "開始進行歌庫版本更新...";
-
+                                        UpdateDBStatus = true;
                                         var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("UpdateVersion"));
-                                    }
-                                    else
-                                    {
-                                        SongDBUpdate_UpdateFinish();
                                     }
                                 });
                             }
-                            else
-                            {
-                                SongDBUpdate_UpdateFinish();
-                            }
                         }
                     }
-                    else
-                    {
-                        SongDBUpdate_UpdateFinish();
-                    }
                 }
+                if (!UpdateDBStatus) SongDBUpdate_UpdateFinish();
             }
         }
 
@@ -745,7 +734,7 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.StartNew(() => Common_CheckBackupRemoveSongTask());
 
                 // 取得最小歌曲剩餘編號
-                Task.Factory.StartNew(() => CommonFunc.GetRemainingSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
+                Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                 this.BeginInvoke((Action)delegate()
                 {

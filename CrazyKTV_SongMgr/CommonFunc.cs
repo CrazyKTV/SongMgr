@@ -1895,7 +1895,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- CommonFunc 取得剩餘的歌曲編號 ---
 
-        public static void GetRemainingSongId(int DigitCode)
+        public static void GetRemainingSongIdCount(int DigitCode)
         {
             if (Global.CrazyktvDatabaseStatus)
             {
