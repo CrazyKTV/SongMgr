@@ -1358,7 +1358,7 @@ namespace CrazyKTV_SongMgr
             }
             SongDataList.Clear();
 
-            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
             {
                 Global.CashboxUpdDate = DateEndDate;
                 string CashboxUpdDateSqlStr = "CashboxUpdDate = @CashboxUpdDate";

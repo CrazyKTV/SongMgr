@@ -420,7 +420,6 @@
             this.SongMaintenance_EnableMultiSongPath_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_DBVer_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_DBVerUpdate_GroupBox = new System.Windows.Forms.GroupBox();
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_EnableDBVerUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_DBVerTooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_DBVerTooltip_Label = new System.Windows.Forms.Label();
@@ -5559,7 +5558,6 @@
             // 
             // SongMaintenance_DBVerUpdate_GroupBox
             // 
-            this.SongMaintenance_DBVerUpdate_GroupBox.Controls.Add(this.SongMaintenance_EnableRebuildSingerData_CheckBox);
             this.SongMaintenance_DBVerUpdate_GroupBox.Controls.Add(this.SongMaintenance_EnableDBVerUpdate_CheckBox);
             this.SongMaintenance_DBVerUpdate_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMaintenance_DBVerUpdate_GroupBox.Location = new System.Drawing.Point(12, 235);
@@ -5570,19 +5568,6 @@
             this.SongMaintenance_DBVerUpdate_GroupBox.TabIndex = 8;
             this.SongMaintenance_DBVerUpdate_GroupBox.TabStop = false;
             this.SongMaintenance_DBVerUpdate_GroupBox.Text = "版本更新";
-            // 
-            // SongMaintenance_EnableRebuildSingerData_CheckBox
-            // 
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.AutoSize = true;
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.Location = new System.Drawing.Point(44, 82);
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.Margin = new System.Windows.Forms.Padding(34, 6, 6, 6);
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.Name = "SongMaintenance_EnableRebuildSingerData_CheckBox";
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.Size = new System.Drawing.Size(236, 26);
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.TabIndex = 1;
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.Text = "更新後重建歌庫歌手資料表";
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.UseVisualStyleBackColor = true;
-            this.SongMaintenance_EnableRebuildSingerData_CheckBox.CheckedChanged += new System.EventHandler(this.SongMaintenance_EnableRebuildSingerData_CheckBox_CheckedChanged);
             // 
             // SongMaintenance_EnableDBVerUpdate_CheckBox
             // 
@@ -7993,7 +7978,6 @@
         private System.Windows.Forms.Label SingerMgr_DefaultSingerDataTable_Label;
         private System.Windows.Forms.ComboBox SingerMgr_DefaultSingerDataTable_ComboBox;
         private System.Windows.Forms.GroupBox SongMaintenance_DBVerUpdate_GroupBox;
-        private System.Windows.Forms.CheckBox SongMaintenance_EnableRebuildSingerData_CheckBox;
         private System.Windows.Forms.CheckBox SongMaintenance_EnableDBVerUpdate_CheckBox;
         private System.Windows.Forms.TabPage SongMaintenance_MultiSongPath_TabPage;
         private System.Windows.Forms.CheckBox SongMaintenance_EnableMultiSongPath_CheckBox;

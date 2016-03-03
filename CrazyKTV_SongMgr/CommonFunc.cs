@@ -1480,10 +1480,6 @@ namespace CrazyKTV_SongMgr
 
         private void Common_RefreshSongMgr()
         {
-            Global.CrazyktvDatabaseStatus = false;
-            Global.CrazyktvDatabaseIsOld = false;
-            Global.CrazyktvDatabaseMaxDigitCode = true;
-
             // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
             Common_ClearDataGridView();
 

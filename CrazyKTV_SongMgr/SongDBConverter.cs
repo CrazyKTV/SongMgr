@@ -77,36 +77,40 @@ namespace CrazyKTV_SongMgr
                 SongDBConverter_DestDBFile_TextBox.Text = "";
                 SongDBConverter_StartConv_Button.Enabled = false;
 
-                string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType from ktv_Song";
-                List<string> list = new List<string>();
-                list = CommonFunc.GetOleDbTableList(opd.FileName, "");
+                bool CrazyktvDatabaseError = false;
+                List<string> TableList = new List<string>() { "ktv_Favorite", "ktv_Langauage", "ktv_Phonetics", "ktv_Remote", "ktv_Singer", "ktv_SingerName", "ktv_Song", "ktv_Swan", "ktv_User", "ktv_Words" };
+                List<string> CrazyktvDBTableList = new List<string>(CommonFunc.GetOleDbTableList(opd.FileName, ""));
 
-                if (list.IndexOf("ktv_Version") >= 0)
+                foreach (string TableName in TableList)
                 {
-                    if (SongDBConverter_Tooltip_Label.Text == "你選取的目的資料庫不是新版的 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
+                    if (CrazyktvDBTableList.IndexOf(TableName) < 0) CrazyktvDatabaseError = true;
+                }
+
+                if (!CrazyktvDatabaseError)
+                {
+                    if (SongDBConverter_Tooltip_Label.Text == "你選取的目的資料庫不是 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
                 }
                 else
                 {
-                    SongDBConverter_Tooltip_Label.Text = "你選取的目的資料庫不是新版的 CrazyKTV 資料庫!";
+                    SongDBConverter_Tooltip_Label.Text = "你選取的目的資料庫不是 CrazyKTV 資料庫!";
                 }
                     
-                if (SongDBConverter_Tooltip_Label.Text != "你選取的目的資料庫不是新版的 CrazyKTV 資料庫!")
+                if (SongDBConverter_Tooltip_Label.Text != "你選取的目的資料庫不是 CrazyKTV 資料庫!")
                 {
-                    DataTable dt = new DataTable();
-                    dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, "");
-
-                    if (dt.Rows.Count > 0)
+                    string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName, Song_SongType from ktv_Song";
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, ""))
                     {
-                        SongDBConverter_Tooltip_Label.Text = "你選取的目的資料庫不是空白的 CrazyKTV 資料庫!";
+                        if (dt.Rows.Count > 0)
+                        {
+                            SongDBConverter_Tooltip_Label.Text = "你選取的目的資料庫不是空白的 CrazyKTV 資料庫!";
+                        }
+                        else
+                        {
+                            if (SongDBConverter_Tooltip_Label.Text == "你選取的目的資料庫不是空白的 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
+                            SongDBConverter_DestDBFile_TextBox.Text = opd.FileName;
+                            SongDBConverter_SwitchButton(1);
+                        }
                     }
-                    else
-                    {
-                        if (SongDBConverter_Tooltip_Label.Text == "你選取的目的資料庫不是空白的 CrazyKTV 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
-                        SongDBConverter_DestDBFile_TextBox.Text = opd.FileName;
-                        SongDBConverter_SwitchButton(1);
-                    }
-                    dt.Dispose();
-                    dt = null;
                 }
             }
         }

@@ -578,8 +578,10 @@ namespace CrazyKTV_SongMgr
         private void Debug_CreateDataTableTask()
         {
             string DatabaseFile = Global.CrazyktvSongMgrDatabaseFile;
-            string TableName = "ktv_SongMgr";
-            string Columns = " (Config_Id INTEGER NOT NULL PRIMARY KEY, Config_Type TEXT(30) WITH COMPRESSION, Config_Value TEXT(60) WITH COMPRESSION)";
+            //string TableName = "ktv_SongMgr";
+            //string Columns = " (Config_Id INTEGER NOT NULL PRIMARY KEY, Config_Type TEXT(30) WITH COMPRESSION, Config_Value TEXT(60) WITH COMPRESSION)";
+            string TableName = "ktv_Version";
+            string Columns = " (Id INTEGER NOT NULL PRIMARY KEY, SongDB TEXT(10), CashboxUpdDate DATETIME)";
 
             using (OleDbConnection conn = CommonFunc.OleDbOpenConn(DatabaseFile, ""))
             {

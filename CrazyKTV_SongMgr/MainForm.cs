@@ -76,9 +76,6 @@ namespace CrazyKTV_SongMgr
                 if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Update")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Update");
                 CommonFunc.CreateConfigXmlFile(Global.CrazyktvSongDBUpdateFile);
                 CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", Global.CrazyktvSongDBVer);
-                CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer", Global.CrazyktvSingerDBVer);
-                CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer", Global.CrazyktvPhoneticsDBVer);
-                CommonFunc.SaveConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "CashboxDBVer", Global.CrazyktvCashboxDBVer);
             }
 
             // CrazyKTV 設定
@@ -122,7 +119,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", Global.MainCfgHideSongLogTabPage);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", Global.DBVerRebuildSingerData);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", "");
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
@@ -174,16 +171,15 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID"),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SingerDBVer"),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "PhoneticsDBVer"),
+                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer"),
+                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup"),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "CashboxDBVer")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup")
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -383,8 +379,8 @@ namespace CrazyKTV_SongMgr
             if (list[32] != "") Global.DBVerEnableDBVerUpdate = list[32];
             SongMaintenance_EnableDBVerUpdate_CheckBox.Checked = bool.Parse(Global.DBVerEnableDBVerUpdate);
 
-            if (list[33] != "") Global.DBVerRebuildSingerData = list[33];
-            SongMaintenance_EnableRebuildSingerData_CheckBox.Checked = bool.Parse(Global.DBVerRebuildSingerData);
+            //if (list[33] != "") Global.DBVerRebuildSingerData = list[33];
+            //SongMaintenance_EnableRebuildSingerData_CheckBox.Checked = bool.Parse(Global.DBVerRebuildSingerData);
 
             if (list[34] != "") Global.SongMaintenanceEnableMultiSongPath = list[34];
             SongMaintenance_EnableMultiSongPath_CheckBox.Checked = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
@@ -399,9 +395,9 @@ namespace CrazyKTV_SongMgr
             if (list[36] != "") Global.SongAddUseCustomSongID = list[36];
             SongAdd_UseCustomSongID_CheckBox.Checked = bool.Parse(Global.SongAddUseCustomSongID);
 
-            if (list[37] != "") Global.CrazyktvSingerDBVer = list[37];
+            //if (list[37] != "") Global.CrazyktvSingerDBVer = list[37];
 
-            if (list[38] != "") Global.CrazyktvPhoneticsDBVer = list[38];
+            //if (list[38] != "") Global.CrazyktvPhoneticsDBVer = list[38];
 
             if (list[39] != "") Global.SongMgrCustomSingerTypeStructure = list[39];
             SongMgrCfg_SetCustomSingerTypeStructureCbox();
@@ -425,7 +421,6 @@ namespace CrazyKTV_SongMgr
             SongMgrCfg_SingerGroup_ListBox.DisplayMember = "Display";
             SongMgrCfg_SingerGroup_ListBox.ValueMember = "Value";
 
-            if (list[46] != "") Global.CrazyktvCashboxDBVer = list[46];
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
@@ -611,17 +606,28 @@ namespace CrazyKTV_SongMgr
             {
                 if (!Global.CrazyktvDatabaseStatus)
                 {
-                    if (!File.Exists(Global.CrazyktvDatabaseFile)) Tooltip_Label[i].Text = "資料庫檔案不存在!";
+                    if (!File.Exists(Global.CrazyktvDatabaseFile)) Tooltip_Label[i].Text = "CrazyKTV 資料庫檔案不存在!";
+                    else if (!File.Exists(Global.CrazyktvSongMgrDatabaseFile)) Tooltip_Label[i].Text = "加歌程式參考資料庫檔案不存在!";
+                    else if (Global.CrazyktvDatabaseError) Tooltip_Label[i].Text = "資料庫檔案不是 CrazyKTV 資料庫!";
+                    else if (Global.SongMgrDatabaseError) Tooltip_Label[i].Text = "加歌程式參考資料庫不是最新版本!";
                     else if (Global.CrazyktvDatabaseIsOld) Tooltip_Label[i].Text = "資料庫檔案為舊版本!";
                     else if (!Global.CrazyktvDatabaseMaxDigitCode) Tooltip_Label[i].Text = "歌庫編碼混雜 5 及 6 位數編碼!";
                     else if (!Directory.Exists(Global.SongMgrDestFolder)) Tooltip_Label[i].Text = "歌庫資料夾不存在!";
                 }
                 else
                 {
-                    if (Tooltip_Label[i].Text == "資料庫檔案不存在!") Tooltip_Label[i].Text = "";
-                    else if (Tooltip_Label[i].Text == "資料庫檔案為舊版本!") Tooltip_Label[i].Text = "";
-                    else if (Tooltip_Label[i].Text == "歌庫編碼混雜 5 及 6 位數編碼!") Tooltip_Label[i].Text = "";
-                    else if (Tooltip_Label[i].Text == "歌庫資料夾不存在!") Tooltip_Label[i].Text = "";
+                    List<string> ErrorTextList = new List<string>()
+                    {
+                        "CrazyKTV 資料庫檔案不存在!",
+                        "加歌程式參考資料庫檔案不存在!",
+                        "資料庫檔案不是 CrazyKTV 資料庫!",
+                        "加歌程式參考資料庫不是最新版本!",
+                        "資料庫檔案為舊版本!",
+                        "歌庫編碼混雜 5 及 6 位數編碼!",
+                        "歌庫資料夾不存在!"
+                    };
+                    if (ErrorTextList.IndexOf(Tooltip_Label[i].Text) >= 0) Tooltip_Label[i].Text = "";
+                    ErrorTextList.Clear();
                 }
             }
         }

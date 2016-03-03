@@ -41,14 +41,13 @@ namespace CrazyKTV_SongMgr
         public static string CrazyktvDatabaseFile = Application.StartupPath + @"\CrazySong.mdb";
         public static string CrazyktvSongMgrDatabaseFile = Application.StartupPath + @"\SongMgr\CrazySongMgr.mdb";
         public static string CrazyktvSongDBVer = "1.00";
-        public static string CrazyktvSingerDBVer = "1";
-        public static string CrazyktvPhoneticsDBVer = "1";
-        public static string CrazyktvCashboxDBVer = "1";
         public static string CrazyktvSongDBUpdateFile = Application.StartupPath + @"\SongMgr\Update\UpdateDB.xml";
         public static string CrazyktvCfgFile = Application.StartupPath + @"\CrazyKTV.cfg";
         public static bool CrazyktvDatabaseStatus = false;
         public static bool CrazyktvDatabaseIsOld = false;
+        public static bool CrazyktvDatabaseError = false;
         public static bool CrazyktvDatabaseMaxDigitCode = true;
+        public static bool SongMgrDatabaseError = false;
 
         public static string SongMgrVer = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString().Replace(".", "");
         public static string SongMgrCfgFile = Application.StartupPath + @"\CrazyKTV_SongMgr.cfg";
@@ -96,7 +95,6 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgBackupRemoveSongDays = "7";
 
         public static string DBVerEnableDBVerUpdate = "True";
-        public static string DBVerRebuildSingerData = "False";
         public static string SongMaintenanceEnableMultiSongPath = "False";
 
         public static List<int> MTotalList = new List<int>();
