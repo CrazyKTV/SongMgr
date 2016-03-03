@@ -681,18 +681,7 @@ namespace CrazyKTV_SongMgr
                                                 string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                                                 string SongSinger = row["Song_Singer"].ToString().ToLower();
 
-                                                MatchCollection BracketMatches = Regex.Matches(row["Song_SongName"].ToString(), @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
-                                                if (BracketMatches.Count > 0)
-                                                {
-                                                    if (Global.CashboxSongDataLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower() + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "")) >= 0)
-                                                    {
-                                                        int i = Global.CashboxSongDataLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower() + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
-                                                        if (Global.CashboxSongDataLangList[i] == row["Song_Lang"].ToString())
-                                                        {
-                                                            MatchNonBracketData = false;
-                                                        }
-                                                    }
-                                                }
+                                                if (Cashbox.FullMatchSongList.IndexOf(SongData) >= 0) MatchNonBracketData = false;
 
                                                 if (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0 || Cashbox.SongDataLowCaseList.IndexOf(SongDataNonBracket) >= 0 || Cashbox.SongDataNonBracketList.IndexOf(SongDataNonBracket) >= 0)
                                                 {
@@ -1518,9 +1507,12 @@ namespace CrazyKTV_SongMgr
                                 string SongDataNonBracket = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                                 string SongSinger = row["Song_Singer"].ToString();
 
+                                bool MatchNonBracketData = true;
+                                if (Cashbox.FullMatchSongList.IndexOf(SongData) >= 0) MatchNonBracketData = false;
+
                                 int SongDataIndex = (Cashbox.SongDataLowCaseList.IndexOf(SongData) >= 0) ? Cashbox.SongDataLowCaseList.IndexOf(SongData) : -1;
 
-                                if (SongDataIndex < 0 && !row["Song_Singer"].ToString().ToLower().Contains("&"))
+                                if (SongDataIndex < 0 && !row["Song_Singer"].ToString().ToLower().Contains("&") && MatchNonBracketData)
                                 {
                                     SongDataIndex = (Cashbox.SongDataNonBracketList.IndexOf(SongDataNonBracket) >= 0) ? Cashbox.SongDataNonBracketList.IndexOf(SongDataNonBracket) : -1;
                                     if (SongDataIndex == -1)
@@ -1653,7 +1645,7 @@ namespace CrazyKTV_SongMgr
                                         FindResultList.Clear();
                                     }
 
-                                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0)
+                                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0 && MatchNonBracketData)
                                     {
                                         FindResultList = Cashbox.SongDataNonBracketList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDataNonBracketlist.ToArray()));
                                         if (FindResultList.Count > 0)
@@ -1693,7 +1685,7 @@ namespace CrazyKTV_SongMgr
                                         FindResultList.Clear();
                                     }
 
-                                    if (MatchChorusGroupSongSinger && SongDataIndex < 0)
+                                    if (MatchChorusGroupSongSinger && SongDataIndex < 0 && MatchNonBracketData)
                                     {
                                         FindResultList = Cashbox.SongDataNonBracketList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDataNonBracketlist.ToArray()));
                                         if (FindResultList.Count > 0)
@@ -1908,6 +1900,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongDataList;
         public static List<string> SongDataLowCaseList;
         public static List<string> SongDataNonBracketList;
+        public static List<string> FullMatchSongList;
 
         public static void CreateSongDataTable()
         {
@@ -1927,6 +1920,29 @@ namespace CrazyKTV_SongMgr
                     SongDataNonBracketList.Add(row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
                 }
             }
+
+            FullMatchSongList = new List<string>();
+
+            foreach (string SongData in Global.CashboxSongDataLowCaseList)
+            {
+                string SongLang = Global.CashboxSongDataLangList[Global.CashboxSongDataLowCaseList.IndexOf(SongData)];
+                List<string> list = new List<string>(SongData.Split('|'));
+
+                MatchCollection BracketMatches = Regex.Matches(list[1], @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                if (BracketMatches.Count > 0)
+                {
+                    if (Global.CashboxSongDataLowCaseList.IndexOf(list[0] + "|" + Regex.Replace(list[1], @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "")) >= 0)
+                    {
+                        int i = Global.CashboxSongDataLowCaseList.IndexOf(list[0] + "|" + Regex.Replace(list[1], @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
+                        if (Global.CashboxSongDataLangList[i] == SongLang)
+                        {
+                            FullMatchSongList.Add(SongLang + "|" + SongData);
+                            FullMatchSongList.Add(SongLang + "|" + Global.CashboxSongDataLowCaseList[i]);
+                        }
+                    }
+                }
+                list.Clear();
+            }
         }
 
         public static void DisposeSongDataTable()
@@ -1935,6 +1951,7 @@ namespace CrazyKTV_SongMgr
             SongDataList.Clear();
             SongDataLowCaseList.Clear();
             SongDataNonBracketList.Clear();
+            FullMatchSongList.Clear();
             GC.Collect();
         }
 
