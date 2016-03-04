@@ -1414,10 +1414,10 @@ namespace CrazyKTV_SongMgr
             {
                 Global.TimerStartTime = DateTime.Now;
                 Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                Cashbox.CreateSongDataTable();
-                Common_SwitchSetUI(false);
-
                 Cashbox_QueryStatus_Label.Text = "正在解析錢櫃歌曲編號,請稍待...";
+
+                Common_SwitchSetUI(false);
+                Cashbox.CreateSongDataTable();
 
                 var tasks = new List<Task>();
                 tasks.Add(Task.Factory.StartNew(() => Cashbox_ApplyCashboxIdTask()));

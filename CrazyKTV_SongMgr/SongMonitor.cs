@@ -179,7 +179,11 @@ namespace CrazyKTV_SongMgr
                 {
                     Thread.Sleep(500);
                 }
-                SongAdd_SongAddTask();
+
+                if (SongAdd.RemainingSongIdCountStr == "")
+                {
+                    SongAdd_SongAddTask();
+                }
             }
             else
             {
