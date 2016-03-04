@@ -507,6 +507,7 @@ namespace CrazyKTV_SongMgr
 
                 if (query.Count<DataRow>() > 0)
                 {
+                    SongAnalysis.SongAnalysisError = true;
                     return false;
                 }
                 else
@@ -526,6 +527,7 @@ namespace CrazyKTV_SongMgr
                             {
                                 SongAdd.RemainingSongIdCountStr = langstr + "歌曲的剩餘歌曲編號已不夠所加入的" + langstr + "歌曲使用!";
                                 SongAdd_Edit_GroupBox.Enabled = false;
+                                SongAnalysis.SongAnalysisError = true;
                                 return false;
                             }
                         }

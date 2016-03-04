@@ -22,10 +22,12 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongDataLowCaseList;
         public static List<int> DuplicateSongCountList;
         public static bool SongAnalysisCompleted;
+        public static bool SongAnalysisError;
 
         public static void CreateSongDataTable()
         {
             SongAnalysisCompleted = false;
+            SongAnalysisError = false;
 
             SongAnalysisDT = new DataTable();
             SongAnalysisDT.Columns.Add("Song_AddStatus", typeof(string));

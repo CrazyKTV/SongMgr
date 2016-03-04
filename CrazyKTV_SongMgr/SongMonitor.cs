@@ -180,7 +180,7 @@ namespace CrazyKTV_SongMgr
                     Thread.Sleep(500);
                 }
 
-                if (SongAdd.RemainingSongIdCountStr == "")
+                if (!SongAnalysis.SongAnalysisError)
                 {
                     SongAdd_SongAddTask();
                 }
@@ -515,7 +515,11 @@ namespace CrazyKTV_SongMgr
                 {
                     Thread.Sleep(500);
                 }
-                SongAdd_SongAddTask();
+
+                if (!SongAnalysis.SongAnalysisError)
+                {
+                    SongAdd_SongAddTask();
+                }
 
                 this.BeginInvoke((Action)delegate()
                 {
