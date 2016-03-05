@@ -296,6 +296,7 @@ namespace CrazyKTV_SongMgr
             list.Clear();
 
             string DirStr = Path.GetDirectoryName(file);
+            List<string> DirStrRemoveList = new List<string>();
 
             if (SongSingerType == "" || SongSinger == "" || SongLang == "")
             {
@@ -317,24 +318,35 @@ namespace CrazyKTV_SongMgr
                     }
 
                     // 查看資料夾名稱中有無歌手類別
-                    if (SongSingerType == "")
+                    if (SingerTypeKeyWordList.IndexOf(splitstr) >= 0)
                     {
-                        if (SingerTypeKeyWordList.IndexOf(splitstr) >= 0)
+                        if (SongSingerType == "")
                         {
                             SongSingerType = GetSongInfo("SongSingerType", splitstr);
                         }
+                        DirStrRemoveList.Add(str);
                     }
 
+
                     // 查看資料夾名稱中有無語系類別
-                    if (SongLang == "")
+                    if (SongLangKeyWordList.IndexOf(splitstr) >= 0)
                     {
-                        if (SongLangKeyWordList.IndexOf(splitstr) >= 0)
+                        if (SongLang == "")
                         {
                             SongLang = GetSongInfo("SongLang", splitstr);
                         }
+                        DirStrRemoveList.Add(str);
                     }
                 }
                 list.Clear();
+            }
+
+            if (DirStrRemoveList.Count > 0)
+            {
+                foreach (string RemoveStr in DirStrRemoveList)
+                {
+                    DirStr = Regex.Replace(DirStr, @"\\?" + RemoveStr, "");
+                }
             }
 
             // 套用預設歌曲聲道
