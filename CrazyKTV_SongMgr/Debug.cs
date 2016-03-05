@@ -790,8 +790,8 @@ namespace CrazyKTV_SongMgr
             #if DEBUG
             if (Cashbox_EditMode_CheckBox.Checked == true)
             {
-                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(216 * Global.DPIScalingFactor));
-                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(18 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor));
                 Cashbox_Edit_GroupBox.Visible = true;
                 Cashbox_TabControl.Visible = false;
                 Cashbox_QueryFilter_GroupBox.Visible = false;
@@ -809,8 +809,8 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
-                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
                 Cashbox_EditMode_CheckBox.Enabled = (Cashbox_DataGridView.RowCount == 0) ? false : true;
                 Cashbox_Edit_GroupBox.Visible = false;
                 Cashbox_TabControl.Visible = true;
