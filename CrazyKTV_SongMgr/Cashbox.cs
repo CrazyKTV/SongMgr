@@ -528,6 +528,10 @@ namespace CrazyKTV_SongMgr
                                         Cashbox_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                                     }
 
+                                    int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor);
+                                    Cashbox_DataGridView.Columns["Song_CreatDate"].MinimumWidth = ColumnWidth_140;
+                                    Cashbox_DataGridView.Columns["Song_CreatDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
                                     Cashbox_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                     Cashbox_DataGridView.Focus();
 
@@ -2186,23 +2190,28 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
 
+            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_190 = Convert.ToInt32((190 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_320 = Convert.ToInt32((320 * Global.DPIScalingFactor)).ToString();
+
             // List<string>() { "欄位名稱", "欄位寬度", "欄位字數" };
             switch (ColumnName)
             {
                 case "Cashbox_Id":
-                    list = new List<string>() { "歌曲編號", "120", "6" };
+                    list = new List<string>() { "歌曲編號", ColumnWidth_120, "6" };
                     break;
                 case "Song_Lang":
-                    list = new List<string>() { "語系類別", "120", "none" };
+                    list = new List<string>() { "語系類別", ColumnWidth_120, "none" };
                     break;
                 case "Song_Singer":
-                    list = new List<string>() { "歌手名稱", "190", "none" };
+                    list = new List<string>() { "歌手名稱", ColumnWidth_190, "none" };
                     break;
                 case "Song_SongName":
-                    list = new List<string>() { "歌曲名稱", "320", "none" };
+                    list = new List<string>() { "歌曲名稱", ColumnWidth_320, "none" };
                     break;
                 case "Song_CreatDate":
-                    list = new List<string>() { "更新日期", "140", "none" };
+                    list = new List<string>() { "更新日期", ColumnWidth_140, "none" };
                     break;
             }
             return list;

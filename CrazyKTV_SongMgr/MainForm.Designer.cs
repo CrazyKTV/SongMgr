@@ -681,7 +681,7 @@
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1008, 725);
+            this.MainTabControl.Size = new System.Drawing.Size(1008, 729);
             this.MainTabControl.TabIndex = 0;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
             // 
@@ -698,7 +698,7 @@
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongQuery_TabPage.Name = "SongQuery_TabPage";
             this.SongQuery_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongQuery_TabPage.Size = new System.Drawing.Size(1000, 688);
+            this.SongQuery_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongQuery_TabPage.TabIndex = 1;
             this.SongQuery_TabPage.Text = "歌庫查詢";
             this.SongQuery_TabPage.UseVisualStyleBackColor = true;
@@ -7536,7 +7536,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1008, 725);
+            this.ClientSize = new System.Drawing.Size(1008, 729);
             this.Controls.Add(this.MainTabControl);
             this.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

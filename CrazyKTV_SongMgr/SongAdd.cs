@@ -447,7 +447,8 @@ namespace CrazyKTV_SongMgr
                     switch (SongAdd_DataGridView.Columns[i].HeaderText)
                     {
                         case "來源檔案路徑":
-                            SongAdd_DataGridView.Columns[i].MinimumWidth = 640;
+                            int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor);
+                            SongAdd_DataGridView.Columns[i].MinimumWidth = ColumnWidth_640;
                             SongAdd_DataGridView.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                             break;
                     }
@@ -1708,6 +1709,13 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
 
+            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_160 = Convert.ToInt32((160 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_240 = Convert.ToInt32((240 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_270 = Convert.ToInt32((270 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_640 = Convert.ToInt32((640 * Global.DPIScalingFactor)).ToString();
+
             // List<string>() { "欄位名稱", "欄位寬度", "欄位字數" };
             switch (ColumnName)
             {
@@ -1715,37 +1723,37 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "歌曲編號", "0", "6" };
                     break;
                 case "Song_Lang":
-                    list = new List<string>() { "語系類別", "120", "none" };
+                    list = new List<string>() { "語系類別", ColumnWidth_120, "none" };
                     break;
                 case "Song_SingerType":
-                    list = new List<string>() { "歌手類別", "120", "none" };
+                    list = new List<string>() { "歌手類別", ColumnWidth_120, "none" };
                     break;
                 case "Song_Singer":
-                    list = new List<string>() { "歌手名稱", "160", "none" };
+                    list = new List<string>() { "歌手名稱", ColumnWidth_160, "none" };
                     break;
                 case "Song_SongName":
-                    list = new List<string>() { "歌曲名稱", "270", "none" };
+                    list = new List<string>() { "歌曲名稱", ColumnWidth_270, "none" };
                     break;
                 case "Song_Track":
-                    list = new List<string>() { "歌曲聲道", "140", "none" };
+                    list = new List<string>() { "歌曲聲道", ColumnWidth_140, "none" };
                     break;
                 case "Song_SongType":
-                    list = new List<string>() { "歌曲類別", "120", "none" };
+                    list = new List<string>() { "歌曲類別", ColumnWidth_120, "none" };
                     break;
                 case "Song_Volume":
-                    list = new List<string>() { "歌曲音量", "120", "3" };
+                    list = new List<string>() { "歌曲音量", ColumnWidth_120, "3" };
                     break;
                 case "Song_WordCount":
-                    list = new List<string>() { "歌曲字數", "120", "2" };
+                    list = new List<string>() { "歌曲字數", ColumnWidth_120, "2" };
                     break;
                 case "Song_PlayCount":
                     list = new List<string>() { "點播次數", "0", "9" };
                     break;
                 case "Song_MB":
-                    list = new List<string>() { "歌曲大小", "120", "7" };
+                    list = new List<string>() { "歌曲大小", ColumnWidth_120, "7" };
                     break;
                 case "Song_CreatDate":
-                    list = new List<string>() { "加歌日期", "140", "none" };
+                    list = new List<string>() { "加歌日期", ColumnWidth_140, "none" };
                     break;
                 case "Song_FileName":
                     list = new List<string>() { "檔案名稱", "0", "none" };
@@ -1769,13 +1777,13 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "播放狀態", "0", "none" };
                     break;
                 case "Song_SrcPath":
-                    list = new List<string>() { "來源檔案路徑", "640", "none" };
+                    list = new List<string>() { "來源檔案路徑", ColumnWidth_640, "none" };
                     break;
                 case "Song_SortIndex":
                     list = new List<string>() { "排序索引", "0", "none" };
                     break;
                 case "Song_AddStatus":
-                    list = new List<string>() { "加歌狀況", "240", "none" };
+                    list = new List<string>() { "加歌狀況", ColumnWidth_240, "none" };
                     break;
             }
             return list;
