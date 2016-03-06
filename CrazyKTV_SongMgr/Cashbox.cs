@@ -1139,6 +1139,11 @@ namespace CrazyKTV_SongMgr
                                     }
                                     Cashbox_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                                 }
+
+                                int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor);
+                                Cashbox_DataGridView.Columns["Song_CreatDate"].MinimumWidth = ColumnWidth_140;
+                                Cashbox_DataGridView.Columns["Song_CreatDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
                                 Cashbox_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                 Cashbox_DataGridView.Focus();
 
