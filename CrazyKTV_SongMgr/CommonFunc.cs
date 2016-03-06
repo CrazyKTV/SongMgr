@@ -1505,7 +1505,7 @@ namespace CrazyKTV_SongMgr
             {
                 float DpiX = graphics.DpiX;
                 float DpiY = graphics.DpiY;
-                float ScalingFactor = (DpiX == 96) ? (float)1 : (DpiX == 120) ? (float)1.25 : (float)1.5;
+                float ScalingFactor = (float)DpiX / 96;
                 return ScalingFactor;
             }
         }
