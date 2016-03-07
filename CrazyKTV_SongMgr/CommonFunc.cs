@@ -439,117 +439,141 @@ namespace CrazyKTV_SongMgr
         {
             if (Global.CrazyktvDatabaseStatus)
             {
+                var tasks = new List<Task>();
+
                 if (InitSongId)
                 {
                     int MaxDigitCode;
                     if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-                    var tasks = new List<Task>();
                     tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
                     tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
                 }
 
                 if (InitPhonetics)
                 {
-                    Global.PhoneticsWordList = new List<string>();
-                    Global.PhoneticsSpellList = new List<string>();
-                    Global.PhoneticsStrokesList = new List<string>();
-                    Global.PhoneticsPenStyleList = new List<string>();
-
-                    string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
-
-                    using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongPhoneticsQuerySqlStr, ""))
+                    tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        var query = from row in PhoneticsDT.AsEnumerable()
-                                    where row.Field<Int16>("SortIdx") < 2
-                                    select row;
+                        Global.PhoneticsWordList = new List<string>();
+                        Global.PhoneticsSpellList = new List<string>();
+                        Global.PhoneticsStrokesList = new List<string>();
+                        Global.PhoneticsPenStyleList = new List<string>();
 
-                        foreach (DataRow row in query)
+                        string SongPhoneticsQuerySqlStr = "select * from ktv_Phonetics";
+
+                        using (DataTable PhoneticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongPhoneticsQuerySqlStr, ""))
                         {
-                            Global.PhoneticsWordList.Add(row["Word"].ToString());
-                            Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
-                            Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
-                            Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                            var query = from row in PhoneticsDT.AsEnumerable()
+                                        where row.Field<Int16>("SortIdx") < 2
+                                        select row;
+
+                            foreach (DataRow row in query)
+                            {
+                                Global.PhoneticsWordList.Add(row["Word"].ToString());
+                                Global.PhoneticsSpellList.Add((row["Spell"].ToString()).Substring(0, 1));
+                                Global.PhoneticsStrokesList.Add(row["Strokes"].ToString());
+                                Global.PhoneticsPenStyleList.Add((row["PenStyle"].ToString()).Substring(0, 1));
+                            }
                         }
-                    }
+                    }));
                 }
 
                 if (InitCashbox)
                 {
-                    Global.CashboxSongDataLangList = new List<string>();
-                    Global.CashboxSongDataLowCaseList = new List<string>();
-                    Global.CashboxSongDataNonBracketStrList = new List<string>();
-
-                    string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Cashbox order by Song_Lang";
-                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        foreach (DataRow row in dt.AsEnumerable())
+                        Global.CashboxSongDataLangList = new List<string>();
+                        Global.CashboxSongDataLowCaseList = new List<string>();
+                        Global.CashboxSongDataNonBracketStrList = new List<string>();
+
+                        string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Cashbox order by Song_Lang";
+                        using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
                         {
-                            Global.CashboxSongDataLangList.Add(row["Song_Lang"].ToString());
-                            Global.CashboxSongDataLowCaseList.Add(row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
-                            Global.CashboxSongDataNonBracketStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
+                            foreach (DataRow row in dt.AsEnumerable())
+                            {
+                                Global.CashboxSongDataLangList.Add(row["Song_Lang"].ToString());
+                                Global.CashboxSongDataLowCaseList.Add(row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
+                                Global.CashboxSongDataNonBracketStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
+                            }
                         }
-                    }
+                    }));
                 }
 
                 if (InitSpecialStr)
                 {
-                    string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
-                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        List<string> SpecialStrLowCaselist = new List<string>(Regex.Split(Global.SongAddSpecialStr.ToLower(), @"\|", RegexOptions.IgnoreCase));
-                        string SongAddSpecialStr = "";
-
-                        foreach (DataRow row in dt.AsEnumerable())
+                        string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SpecialStr' order by Config_Value";
+                        using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
                         {
-                            if (SpecialStrLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
+                            List<string> SpecialStrLowCaselist = new List<string>(Regex.Split(Global.SongAddSpecialStr.ToLower(), @"\|", RegexOptions.IgnoreCase));
+                            string SongAddSpecialStr = "";
+
+                            foreach (DataRow row in dt.AsEnumerable())
                             {
-                                SongAddSpecialStr += row["Config_Value"].ToString() + "|";
+                                if (SpecialStrLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
+                                {
+                                    SongAddSpecialStr += row["Config_Value"].ToString() + "|";
+                                }
                             }
+                            Global.SongAddSpecialStr = (Global.SongAddSpecialStr == "") ? SongAddSpecialStr : SongAddSpecialStr + Global.SongAddSpecialStr;
+                            Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|$", "");
                         }
-                        Global.SongAddSpecialStr = (Global.SongAddSpecialStr == "") ? SongAddSpecialStr : SongAddSpecialStr + Global.SongAddSpecialStr;
-                        Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|$", "");
-                    }
+                    }));
                 }
 
                 if (InitSingerGroup)
                 {
-                    string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
-                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                    tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        List<string> SingerGroupLowCaselist = new List<string>(Regex.Split(Global.SongMgrSingerGroup.ToLower(), @"\|", RegexOptions.IgnoreCase));
-                        string SongMgrSingerGroup = "";
-
-                        foreach (DataRow row in dt.AsEnumerable())
+                        string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
+                        using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
                         {
-                            if (SingerGroupLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
+                            List<string> SingerGroupLowCaselist = new List<string>(Regex.Split(Global.SongMgrSingerGroup.ToLower(), @"\|", RegexOptions.IgnoreCase));
+                            string SongMgrSingerGroup = "";
+
+                            foreach (DataRow row in dt.AsEnumerable())
                             {
-                                SongMgrSingerGroup += row["Config_Value"].ToString() + "|";
+                                if (SingerGroupLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
+                                {
+                                    SongMgrSingerGroup += row["Config_Value"].ToString() + "|";
+                                }
+                            }
+                            Global.SongMgrSingerGroup = (Global.SongMgrSingerGroup == "") ? SongMgrSingerGroup : SongMgrSingerGroup + Global.SongMgrSingerGroup;
+                            Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, @"\|$", "");
+                            SingerGroupLowCaselist.Clear();
+                        }
+
+                        Global.SingerGroupList = new List<string>();
+                        Global.GroupSingerIdList = new List<int>();
+                        Global.GroupSingerLowCaseList = new List<string>();
+
+                        List<string> SingerGroupList = new List<string>(Regex.Split(Global.SongMgrSingerGroup, @"\|", RegexOptions.IgnoreCase));
+                        foreach (string SingerGroup in SingerGroupList)
+                        {
+                            Global.SingerGroupList.Add(SingerGroup);
+
+                            string[] Singers = SingerGroup.Split(',');
+                            foreach (string singer in Singers)
+                            {
+                                if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
+                                {
+                                    Global.GroupSingerIdList.Add(SingerGroupList.IndexOf(SingerGroup));
+                                    Global.GroupSingerLowCaseList.Add(singer.ToLower());
+                                }
                             }
                         }
-                        Global.SongMgrSingerGroup = (Global.SongMgrSingerGroup == "") ? SongMgrSingerGroup : SongMgrSingerGroup + Global.SongMgrSingerGroup;
-                        Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, @"\|$", "");
-                        SingerGroupLowCaselist.Clear();
-                    }
+                    }));
+                }
 
-                    Global.SingerGroupList = new List<string>();
-                    Global.GroupSingerIdList = new List<int>();
-                    Global.GroupSingerLowCaseList = new List<string>();
+                bool TaskFinished = false;
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    TaskFinished = true;
+                });
 
-                    List<string> SingerGroupList = new List<string>(Regex.Split(Global.SongMgrSingerGroup, @"\|", RegexOptions.IgnoreCase));
-                    foreach (string SingerGroup in SingerGroupList)
-                    {
-                        Global.SingerGroupList.Add(SingerGroup);
-
-                        string[] Singers = SingerGroup.Split(',');
-                        foreach (string singer in Singers)
-                        {
-                            if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
-                            {
-                                Global.GroupSingerIdList.Add(SingerGroupList.IndexOf(SingerGroup));
-                                Global.GroupSingerLowCaseList.Add(singer.ToLower());
-                            }
-                        }
-                    }
+                while (!TaskFinished)
+                {
+                    Thread.Sleep(100);
                 }
             }
         }
@@ -1487,8 +1511,8 @@ namespace CrazyKTV_SongMgr
             SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
-            Common_InitializeSongData(true, true, true, true, true);
-
+            Common_InitializeSongData(true, false, false, true, true);
+            
             // 歌庫監視
             SongMonitor_CheckCurSong();
 
