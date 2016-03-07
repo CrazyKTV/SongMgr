@@ -1418,8 +1418,8 @@ namespace CrazyKTV_SongMgr
             SongAdd_DataGridView.DataSource = null;
             SongAdd_Add_Button.Text = "加入歌庫";
             SongAdd_Save_Button.Text = "儲存設定";
-            SongAdd_DataGridView.Size = new Size(Convert.ToInt32(762 * Global.DPIScalingFactor), Convert.ToInt32(237 * Global.DPIScalingFactor));
-            SongAdd_DataGridView.Location = new Point(Convert.ToInt32(18 * Global.DPIScalingFactor), Convert.ToInt32(292 * Global.DPIScalingFactor));
+            SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
+            SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
             SongAdd_DataGridView.DataSource = null;
             SongAdd_DataGridView.AllowDrop = true;
             SongAdd_DataGridView.Enabled = true;
