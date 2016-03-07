@@ -131,7 +131,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="UpdateFile\CrazyKTV_WebUpdater.ver" />
+    <None Include="UpdateFile\CrazyKTV_WebUpdater.ver">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="UpdateFile\README_使用說明.doc" />
   </ItemGroup>
   <ItemGroup>
