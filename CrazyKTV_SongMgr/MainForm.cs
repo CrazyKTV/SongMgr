@@ -443,6 +443,12 @@ namespace CrazyKTV_SongMgr
             Common_InitializeSongData(true, true, true, true, true);
 
             // 歌庫監視
+            SongMgrCfg_MonitorFolders_CheckBox.Enabled = false;
+            foreach (string MonitorFolder in Global.SongMgrMonitorFoldersList)
+            {
+                if (MonitorFolder != "") SongMgrCfg_MonitorFolders_CheckBox.Enabled = true;
+            }
+            if (!SongMgrCfg_MonitorFolders_CheckBox.Enabled) SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
             SongMonitor_CheckCurSong();
 
             // 歌曲查詢 - 載入下拉選單清單及設定

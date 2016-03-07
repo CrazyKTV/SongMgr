@@ -69,7 +69,7 @@ namespace CrazyKTV_SongMgr
                 Global.CrazyktvDatabaseFile = opd.FileName;
                 SongMgrCfg_DBFile_TextBox.Text = opd.FileName;
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", Global.CrazyktvDatabaseFile);
-                Common_RefreshSongMgr();
+                Common_RefreshSongMgr(true);
             }
         }
 
@@ -90,7 +90,7 @@ namespace CrazyKTV_SongMgr
                 Global.SongMgrDestFolder = opd.SelectedPath;
                 SongMgrCfg_DestFolder_TextBox.Text = opd.SelectedPath;
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder", Global.SongMgrDestFolder);
-                Common_RefreshSongMgr();
+                Common_RefreshSongMgr(false);
             }
         }
 
@@ -136,8 +136,9 @@ namespace CrazyKTV_SongMgr
 
                     if (Global.SongMgrInitializeStatus)
                     {
-                        SongMonitor_SwitchSongMonitorWatcher();
-                        Common_RefreshSongMgr();
+                        SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
+                        SongMgrCfg_MonitorFolders_CheckBox_CheckedChanged(new object(), new EventArgs());
+                        Common_RefreshSongMgr(false);
                     }
                     break;
                 case "3":
@@ -195,8 +196,18 @@ namespace CrazyKTV_SongMgr
 
                     if (Global.SongMgrInitializeStatus)
                     {
-                        SongMonitor_SwitchSongMonitorWatcher();
-                        Common_RefreshSongMgr();
+                        SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
+                        SongMgrCfg_MonitorFolders_CheckBox_CheckedChanged(new object(), new EventArgs());
+
+                        if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "4")
+                        {
+                            SongMgrCfg_MonitorFolders_CheckBox.Enabled = false;
+                            foreach (string MonitorFolder in Global.SongMgrMonitorFoldersList)
+                            {
+                                if (MonitorFolder != "") SongMgrCfg_MonitorFolders_CheckBox.Enabled = true;
+                            }
+                        }
+                        Common_RefreshSongMgr(false);
                     }
                     break;
             }
@@ -967,7 +978,19 @@ namespace CrazyKTV_SongMgr
         private void SongMgrCfg_MonitorFolders_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.SongMgrEnableMonitorFolders = SongMgrCfg_MonitorFolders_CheckBox.Checked.ToString();
-            if (Global.SongMgrInitializeStatus) SongMonitor_SwitchSongMonitorWatcher();
+            if (Global.SongMgrInitializeStatus)
+            {
+                if (!SongMgrCfg_MonitorFolders_CheckBox.Checked)
+                {
+                    SongMonitor_SwitchSongMonitorWatcher();
+                }
+                else
+                {
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders", Global.SongMgrEnableMonitorFolders);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders", string.Join(",", Global.SongMgrMonitorFoldersList));
+                    SongMonitor_CheckCurSong();
+                }
+            }
         }
 
 
@@ -1041,6 +1064,13 @@ namespace CrazyKTV_SongMgr
                     ((Button)sender).Text = "瀏覽";
                     break;
             }
+
+            SongMgrCfg_MonitorFolders_CheckBox.Enabled = false;
+            foreach (string MonitorFolder in Global.SongMgrMonitorFoldersList)
+            {
+                if (MonitorFolder != "") SongMgrCfg_MonitorFolders_CheckBox.Enabled = true;
+            }
+            if (!SongMgrCfg_MonitorFolders_CheckBox.Enabled) SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
         }
 
 

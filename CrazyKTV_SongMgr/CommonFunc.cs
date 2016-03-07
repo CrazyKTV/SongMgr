@@ -1502,7 +1502,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- Common 重整 SongMgr 資料 ---
 
-        private void Common_RefreshSongMgr()
+        private void Common_RefreshSongMgr(bool InitializeSongData)
         {
             // 清除歌曲查詢、歌手查詢、加歌頁面的相關歌曲、歌手列表
             Common_ClearDataGridView();
@@ -1510,12 +1510,11 @@ namespace CrazyKTV_SongMgr
             // 檢查資料庫檔案是否為舊版資料庫
             SongDBUpdate_CheckDatabaseFile();
 
-            // 初始化所需資料
-            Common_InitializeSongData(true, false, false, true, true);
-            
-            // 歌庫監視
-            SongMonitor_CheckCurSong();
-
+            if (InitializeSongData)
+            {
+                // 初始化所需資料
+                Common_InitializeSongData(true, false, false, true, true);
+            }
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
         }
 
