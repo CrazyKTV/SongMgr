@@ -70,6 +70,11 @@ namespace CrazyKTV_SongMgr
                 SongMgrCfg_DBFile_TextBox.Text = opd.FileName;
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", Global.CrazyktvDatabaseFile);
                 Common_RefreshSongMgr(true);
+                if (SongMgrCfg_SongAddMode_ComboBox.SelectedValue.ToString() == "4")
+                {
+                    SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
+                    SongMgrCfg_MonitorFolders_CheckBox_CheckedChanged(new object(), new EventArgs());
+                }
             }
         }
 
