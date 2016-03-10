@@ -903,7 +903,7 @@ namespace CrazyKTV_SongMgr
                                 SongMgrCfg_SingerGroup_ListBox.DisplayMember = "Display";
                                 SongMgrCfg_SingerGroup_ListBox.ValueMember = "Value";
                             }
-                            Global.SongMgrSingerGroup += "|" + SongMgrCfg_SingerGroup_TextBox.Text;
+                            Global.SongMgrSingerGroup += (Global.SongMgrSingerGroup == "") ? SongMgrCfg_SingerGroup_TextBox.Text : "|" + SongMgrCfg_SingerGroup_TextBox.Text;
                             SongMgrCfg_SingerGroup_TextBox.Text = "";
                             SongMgrCfg_Tooltip_Label.Text = "已成功加入歌手群組!";
                             Common_InitializeSongData(false, false, false, false, true);
@@ -1273,6 +1273,8 @@ namespace CrazyKTV_SongMgr
 
                 string SongMgrSingerGroup = string.Empty;
                 List<string> list = new List<string>();
+
+                Console.WriteLine(Global.SongMgrSingerGroup);
 
                 if (Global.SongMgrSingerGroup != "")
                 {

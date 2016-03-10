@@ -198,7 +198,7 @@ namespace CrazyKTV_SongMgr
                                 SongAdd_SpecialStr_ListBox.DisplayMember = "Display";
                                 SongAdd_SpecialStr_ListBox.ValueMember = "Value";
                             }
-                            Global.SongAddSpecialStr += "|" + SongAdd_SpecialStr_TextBox.Text;
+                            Global.SongAddSpecialStr += (Global.SongAddSpecialStr == "") ? SongAdd_SpecialStr_TextBox.Text : "|" + SongAdd_SpecialStr_TextBox.Text;
                             SongAdd_SpecialStr_TextBox.Text = "";
                             SongAdd_Tooltip_Label.Text = "已成功加入特殊歌手及歌曲名稱!";
                         }
