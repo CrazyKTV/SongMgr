@@ -1274,8 +1274,6 @@ namespace CrazyKTV_SongMgr
                 string SongMgrSingerGroup = string.Empty;
                 List<string> list = new List<string>();
 
-                Console.WriteLine(Global.SongMgrSingerGroup);
-
                 if (Global.SongMgrSingerGroup != "")
                 {
                     list = new List<string>(Global.SongMgrSingerGroup.Split('|'));
