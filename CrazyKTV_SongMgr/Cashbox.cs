@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -1401,7 +1402,7 @@ namespace CrazyKTV_SongMgr
 
             this.BeginInvoke((Action)delegate()
             {
-                Cashbox_UpdDateValue_Label.Text = Global.CashboxUpdDate.ToLongDateString();
+                Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? Global.CashboxUpdDate.ToLongDateString() : Global.CashboxUpdDate.ToShortDateString();
                 Cashbox_UpdDate_Button.Enabled = false;
 
                 Cashbox_DateQuery_ComboBox.SelectedIndexChanged -= new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);

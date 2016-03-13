@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -131,7 +132,7 @@ namespace CrazyKTV_SongMgr
                     this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVer1Value_Label.Text = SongDBVer.ToString("F2") + " 版";
-                        Cashbox_UpdDateValue_Label.Text = DateTime.Parse(CashboxUpdDate).ToLongDateString();
+                        Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? DateTime.Parse(CashboxUpdDate).ToLongDateString() : DateTime.Parse(CashboxUpdDate).ToShortDateString();
                         Cashbox_UpdDate_Button.Enabled = Cashbox.GetUpdDateButtonEnableStatus();
                     });
 
@@ -529,7 +530,7 @@ namespace CrazyKTV_SongMgr
                     Global.TimerEndTime = DateTime.Now;
 
                     SongMaintenance_DBVer1Value_Label.Text = Global.CrazyktvSongDBVer + " 版";
-                    Cashbox_UpdDateValue_Label.Text = Global.CashboxUpdDate.ToLongDateString();
+                    Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? Global.CashboxUpdDate.ToLongDateString() : Global.CashboxUpdDate.ToShortDateString();
                     Cashbox_UpdDate_Button.Enabled = Cashbox.GetUpdDateButtonEnableStatus();
 
                     SongMaintenance_DBVerTooltip_Label.Text = "";
