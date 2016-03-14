@@ -40,6 +40,33 @@ namespace CrazyKTV_SongMgr
             Cashbox_TabControl.ItemSize = new System.Drawing.Size(0, 0);
             Cashbox_TabControl.SizeMode = TabSizeMode.Normal;
 
+            if (Global.MainCfgHideSongDBConverterTabPage == "True")
+            {
+                if (MainTabControl.TabPages.IndexOf(SongDBConverter_TabPage) < 0)
+                {
+                    MainTabControl.TabPages.Insert(MainTabControl.TabPages.IndexOf(MainCfg_TabPage) + 1, SongDBConverter_TabPage);
+                    SongDBConverter_TabPage.Show();
+                }
+            }
+
+            if (Global.MainCfgHideSongAddResultTabPage == "True")
+            {
+                if (MainTabControl.TabPages.IndexOf(SongAddResult_TabPage) < 0)
+                {
+                    MainTabControl.TabPages.Insert(MainTabControl.TabPages.IndexOf(MainCfg_TabPage) + 1, SongAddResult_TabPage);
+                    SongAddResult_TabPage.Show();
+                }
+            }
+
+            if (Global.MainCfgHideSongLogTabPage == "True")
+            {
+                if (MainTabControl.TabPages.IndexOf(SongLog_TabPage) < 0)
+                {
+                    MainTabControl.TabPages.Insert(MainTabControl.TabPages.IndexOf(MainCfg_TabPage) + 1, SongLog_TabPage);
+                    SongLog_TabPage.Show();
+                }
+            }
+
             foreach (Control MainControl in this.Controls)
             {
                 MainControl.Location = new System.Drawing.Point(Convert.ToInt32(MainControl.Location.X / MainUIScale.UIScalingFactor * ScalingFactor), Convert.ToInt32(MainControl.Location.Y / MainUIScale.UIScalingFactor * ScalingFactor));
@@ -110,6 +137,34 @@ namespace CrazyKTV_SongMgr
                 Cashbox_TabControl.SizeMode = TabSizeMode.Fixed;
                 Cashbox_TabControl.ItemSize = new System.Drawing.Size(MainCfg_SubTabWidth_Button.Width, Cashbox_TabControl.ItemSize.Height);
             }
+
+            if (Global.MainCfgHideSongDBConverterTabPage == "True")
+            {
+                if (MainTabControl.TabPages.IndexOf(SongDBConverter_TabPage) >= 0)
+                {
+                    SongDBConverter_TabPage.Hide();
+                    MainTabControl.TabPages.Remove(SongDBConverter_TabPage);
+                }
+            }
+
+            if (Global.MainCfgHideSongAddResultTabPage == "True")
+            {
+                if (MainTabControl.TabPages.IndexOf(SongAddResult_TabPage) >= 0)
+                {
+                    SongAddResult_TabPage.Hide();
+                    MainTabControl.TabPages.Remove(SongAddResult_TabPage);
+                }
+            }
+
+            if (Global.MainCfgHideSongLogTabPage == "True")
+            {
+                if (MainTabControl.TabPages.IndexOf(SongLog_TabPage) >= 0)
+                {
+                    SongLog_TabPage.Hide();
+                    MainTabControl.TabPages.Remove(SongLog_TabPage);
+                }
+            }
+
             MainTabControl.Visible = true;
             MainUIScale.UIScalingFactor = ScalingFactor;
         }
