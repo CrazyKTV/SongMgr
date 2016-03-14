@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +12,9 @@ namespace CrazyKTV_SongMgr
 {
     public partial class MainForm : Form
     {
+
+        #region --- MainCfg 控制項事件 ---
+
         private void MainCfg_Save_Button_Click(object sender, EventArgs e)
         {
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop", Global.MainCfgAlwaysOnTop);
@@ -18,6 +23,9 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage", Global.MainCfgHideSongAddResultTabPage);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", Global.MainCfgHideSongLogTabPage);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", Global.MainCfgEnableUIScale);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -103,6 +111,33 @@ namespace CrazyKTV_SongMgr
                 Global.MainCfgBackupRemoveSongDays = MainCfg_BackupRemoveSongDays_ComboBox.SelectedValue.ToString();
             }
         }
+
+        private void MainCfg_UIScale_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ComboBox)sender).Focused)
+            {
+                Common_ScalingUI();
+            }
+        }
+
+        private void MainCfg_EnableUIScale_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgEnableUIScale = MainCfg_EnableUIScale_CheckBox.Checked.ToString();
+            if (Global.MainCfgEnableUIScale == "True")
+            {
+                MainCfg_UIScale_ComboBox.Enabled = true;
+                MainCfg_UIFont_ComboBox.Enabled = true;
+            }
+            else
+            {
+                MainCfg_UIScale_ComboBox.Enabled = false;
+                MainCfg_UIFont_ComboBox.Enabled = false;
+            }
+        }
+
+
+
+        #endregion
 
         #region --- MainCfg 記錄無資料歌手 ---
 
@@ -343,19 +378,75 @@ namespace CrazyKTV_SongMgr
 
     class MainCfg
     {
+
+        #region --- MainCfg 程式設定下拉清單 ---
+
         public static DataTable GetBackupRemoveSongDaysList()
         {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            for (int i = 1; i < 31; i++)
+            using (DataTable list = new DataTable())
             {
-                list.Rows.Add(list.NewRow());
-                list.Rows[list.Rows.Count - 1][0] = i + " 天";
-                list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                for (int i = 1; i < 31; i++)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = i + " 天";
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                return list;
             }
-            return list;
         }
+
+        public static DataTable GetUIScaleList()
+        {
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> ItemList = new List<string>() { "66%", "80%", "100%", "125%", "150%" };
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
+            }
+        }
+
+        public static DataTable GetUIFontList()
+        {
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                FontFamily[] fontFamilies;
+                InstalledFontCollection installedFontCollection = new InstalledFontCollection();
+                fontFamilies = installedFontCollection.Families;
+
+                List<string> ItemList = new List<string>();
+                foreach (FontFamily fontFamilie in fontFamilies)
+                {
+                    ItemList.Add(fontFamilie.Name);
+                }
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
+            }
+        }
+
+        #endregion
+
     }
 }

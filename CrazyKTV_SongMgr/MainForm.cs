@@ -43,6 +43,7 @@ namespace CrazyKTV_SongMgr
             #endif
 
             Global.DPIScalingFactor = Common_GetDPIScalingFactor();
+            SongAddResult_SplitContainer.SplitterDistance = Convert.ToInt32(SongAddResult_SplitContainer.SplitterDistance * Global.DPIScalingFactor);
 
             // 檢查加歌程式參考資料庫檔案
             if (!File.Exists(Global.CrazyktvSongMgrDatabaseFile))
@@ -119,10 +120,12 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", Global.MainCfgHideSongLogTabPage);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData", "");
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", Global.MainCfgEnableUIScale);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate", Global.MainCfgEnableAutoUpdate);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC", Global.SongAddEnableConvToTC);
@@ -167,12 +170,12 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrDefaultSingerDataTable"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerRebuildSingerData"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID"),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer"),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC"),
@@ -379,8 +382,11 @@ namespace CrazyKTV_SongMgr
             if (list[32] != "") Global.DBVerEnableDBVerUpdate = list[32];
             SongMaintenance_EnableDBVerUpdate_CheckBox.Checked = bool.Parse(Global.DBVerEnableDBVerUpdate);
 
-            //if (list[33] != "") Global.DBVerRebuildSingerData = list[33];
-            //SongMaintenance_EnableRebuildSingerData_CheckBox.Checked = bool.Parse(Global.DBVerRebuildSingerData);
+            if (list[33] != "") Global.MainCfgUIScale = list[33];
+            MainCfg_UIScale_ComboBox.DataSource = MainCfg.GetUIScaleList();
+            MainCfg_UIScale_ComboBox.DisplayMember = "Display";
+            MainCfg_UIScale_ComboBox.ValueMember = "Value";
+            MainCfg_UIScale_ComboBox.SelectedValue = Global.MainCfgUIScale;
 
             if (list[34] != "") Global.SongMaintenanceEnableMultiSongPath = list[34];
             SongMaintenance_EnableMultiSongPath_CheckBox.Checked = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
@@ -395,9 +401,14 @@ namespace CrazyKTV_SongMgr
             if (list[36] != "") Global.SongAddUseCustomSongID = list[36];
             SongAdd_UseCustomSongID_CheckBox.Checked = bool.Parse(Global.SongAddUseCustomSongID);
 
-            //if (list[37] != "") Global.CrazyktvSingerDBVer = list[37];
+            if (list[37] != "") Global.MainCfgUIFont = list[37];
+            MainCfg_UIFont_ComboBox.DataSource = MainCfg.GetUIFontList();
+            MainCfg_UIFont_ComboBox.DisplayMember = "Display";
+            MainCfg_UIFont_ComboBox.ValueMember = "Value";
+            MainCfg_UIFont_ComboBox.Text = Global.MainCfgUIFont;
 
-            //if (list[38] != "") Global.CrazyktvPhoneticsDBVer = list[38];
+            if (list[38] != "") Global.MainCfgEnableUIScale = list[38];
+            MainCfg_EnableUIScale_CheckBox.Checked = bool.Parse(Global.MainCfgEnableUIScale);
 
             if (list[39] != "") Global.SongMgrCustomSingerTypeStructure = list[39];
             SongMgrCfg_SetCustomSingerTypeStructureCbox();
@@ -539,6 +550,9 @@ namespace CrazyKTV_SongMgr
             {
                 MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
             }
+
+            if (Global.MainCfgEnableUIScale == "True") Common_ScalingUI();
+
             Global.SongMgrInitializeStatus = true;
         }
 
@@ -708,6 +722,18 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

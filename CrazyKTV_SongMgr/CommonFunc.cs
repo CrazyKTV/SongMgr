@@ -1442,8 +1442,8 @@ namespace CrazyKTV_SongMgr
             SongAdd_DataGridView.DataSource = null;
             SongAdd_Add_Button.Text = "加入歌庫";
             SongAdd_Save_Button.Text = "儲存設定";
-            SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-            SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+            SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+            SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
             SongAdd_DataGridView.DataSource = null;
             SongAdd_DataGridView.AllowDrop = true;
             SongAdd_DataGridView.Enabled = true;
@@ -1555,6 +1555,37 @@ namespace CrazyKTV_SongMgr
                 string SongQueryStatusText = "新進歌曲";
                 Task.Factory.StartNew(() => SongQuery_QueryTask(SongQueryType, SongQueryValue, SongQueryStatusText));
             }
+        }
+
+        #endregion
+
+        #region --- Common 縮放界面 ---
+
+        private void Common_ScalingUI()
+        {
+            Global.MainCfgUIScale = MainCfg_UIScale_ComboBox.SelectedValue.ToString();
+            Global.MainCfgUIFont = ((DataRowView)MainCfg_UIFont_ComboBox.SelectedItem)[0].ToString();
+
+            float ScalingFactor = 0;
+            switch (Global.MainCfgUIScale)
+            {
+                case "1":
+                    ScalingFactor = (float)96 / 144;
+                    break;
+                case "2":
+                    ScalingFactor = (float)96 / 120;
+                    break;
+                case "3":
+                    ScalingFactor = (float)96 / 96;
+                    break;
+                case "4":
+                    ScalingFactor = (float)120 / 96;
+                    break;
+                case "5":
+                    ScalingFactor = (float)144 / 96;
+                    break;
+            }
+            if (ScalingFactor != 0) MainUIScale_UIScale(ScalingFactor, Global.MainCfgUIFont);
         }
 
         #endregion
@@ -3014,6 +3045,10 @@ namespace CrazyKTV_SongMgr
             WindowsPrincipal principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
+
+        #endregion
+
+        #region --- CommonFunc 自動偵測聲道 ---
 
         public static string AutoDetectSongTrack(string SongFilePath)
         {

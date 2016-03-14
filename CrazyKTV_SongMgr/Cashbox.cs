@@ -529,11 +529,9 @@ namespace CrazyKTV_SongMgr
                                         Cashbox_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                                     }
 
-                                    int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor);
+                                    int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                     Cashbox_DataGridView.Columns["Song_CreatDate"].MinimumWidth = ColumnWidth_140;
                                     Cashbox_DataGridView.Columns["Song_CreatDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-                                    Cashbox_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                     Cashbox_DataGridView.Focus();
 
                                     dt.Dispose();
@@ -1141,11 +1139,9 @@ namespace CrazyKTV_SongMgr
                                     Cashbox_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                                 }
 
-                                int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor);
+                                int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                 Cashbox_DataGridView.Columns["Song_CreatDate"].MinimumWidth = ColumnWidth_140;
                                 Cashbox_DataGridView.Columns["Song_CreatDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-                                Cashbox_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                 Cashbox_DataGridView.Focus();
 
                                 dt.Dispose();
@@ -2196,10 +2192,10 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
 
-            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_190 = Convert.ToInt32((190 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_320 = Convert.ToInt32((320 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_190 = Convert.ToInt32((190 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_320 = Convert.ToInt32((320 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
 
             // List<string>() { "欄位名稱", "欄位寬度", "欄位字數" };
             switch (ColumnName)

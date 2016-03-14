@@ -54,8 +54,8 @@ namespace CrazyKTV_SongMgr
                 case "取消更新":
                     SongAdd_Add_Button.Text = "加入歌庫";
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -70,8 +70,8 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "取消加入":
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -311,8 +311,8 @@ namespace CrazyKTV_SongMgr
             {
                 if (list.Count > 0)
                 {
-                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor));
-                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.SelectionChanged -= new EventHandler(SongAdd_DataGridView_SelectionChanged);
                     SongAdd_DragDrop_Label.Visible = false;
@@ -447,7 +447,7 @@ namespace CrazyKTV_SongMgr
                     switch (SongAdd_DataGridView.Columns[i].HeaderText)
                     {
                         case "來源檔案路徑":
-                            int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor);
+                            int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                             SongAdd_DataGridView.Columns[i].MinimumWidth = ColumnWidth_640;
                             SongAdd_DataGridView.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                             break;
@@ -466,8 +466,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                     if (SongAdd_DataGridView.Columns[i].HeaderText == "排序索引") sortindex = i;
                 }
-
-                SongAdd_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                 SongAdd_DataGridView.Sort(SongAdd_DataGridView.Columns[sortindex], ListSortDirection.Ascending);
 
                 if (Global.SongMgrSongAddMode != "4")
@@ -876,8 +874,8 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -1025,8 +1023,8 @@ namespace CrazyKTV_SongMgr
 
                     SongAdd_Add_Button.Text = "加入歌庫";
                     SongAdd_Save_Button.Text = "儲存設定";
-                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+                    SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                    SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
                     SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
@@ -1709,12 +1707,12 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
 
-            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_160 = Convert.ToInt32((160 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_240 = Convert.ToInt32((240 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_270 = Convert.ToInt32((270 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_640 = Convert.ToInt32((640 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_160 = Convert.ToInt32((160 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_240 = Convert.ToInt32((240 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_270 = Convert.ToInt32((270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_640 = Convert.ToInt32((640 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
 
             // List<string>() { "欄位名稱", "欄位寬度", "欄位字數" };
             switch (ColumnName)

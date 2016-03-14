@@ -651,7 +651,7 @@ namespace CrazyKTV_SongMgr
                                     int SongFullPathIndex = SongQuery_DataGridView.ColumnCount - 1;
                                     SongQuery_DataGridView.Columns.Add("Song_FullPath", "檔案路徑");
 
-                                    int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor);
+                                    int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                     SongQuery_DataGridView.Columns["Song_FullPath"].Width = ColumnWidth_640;
                                     SongQuery_DataGridView.Columns["Song_FullPath"].MinimumWidth = ColumnWidth_640;
                                     SongQuery_DataGridView.Columns["Song_FullPath"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -661,7 +661,6 @@ namespace CrazyKTV_SongMgr
                                         SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                                         SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                     }
-                                    SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                     SongQuery_DataGridView.Focus();
 
                                     dt.Dispose();
@@ -695,8 +694,8 @@ namespace CrazyKTV_SongMgr
         {
             if (SongQuery_EditMode_CheckBox.Checked == true)
             {
-                SongQuery_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor));
-                SongQuery_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor));
+                SongQuery_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                SongQuery_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                 SongQuery_Edit_GroupBox.Visible = true;
                 SongQuery_TabControl.Visible = false;
                 SongQuery_QueryFilter_GroupBox.Visible = false;
@@ -713,8 +712,8 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                SongQuery_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-                SongQuery_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+                SongQuery_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                SongQuery_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                 SongQuery_EditMode_CheckBox.Enabled = (SongQuery_DataGridView.RowCount == 0) ? false : true;
                 SongQuery_Edit_GroupBox.Visible = false;
                 SongQuery_TabControl.Visible = true;
@@ -1637,7 +1636,7 @@ namespace CrazyKTV_SongMgr
                                 int SongFullPathIndex = SongQuery_DataGridView.ColumnCount - 1;
                                 SongQuery_DataGridView.Columns.Add("Song_FullPath", "檔案路徑");
 
-                                int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor);
+                                int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                 SongQuery_DataGridView.Columns["Song_FullPath"].Width = ColumnWidth_640;
                                 SongQuery_DataGridView.Columns["Song_FullPath"].MinimumWidth = ColumnWidth_640;
                                 SongQuery_DataGridView.Columns["Song_FullPath"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -1646,8 +1645,6 @@ namespace CrazyKTV_SongMgr
                                     SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                                     SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                 }
-
-                                SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                 SongQuery_DataGridView.Focus();
                                 dt.Dispose();
                                 dt = null;
@@ -1864,7 +1861,7 @@ namespace CrazyKTV_SongMgr
                                     int SongFullPathIndex = SongQuery_DataGridView.ColumnCount - 1;
                                     SongQuery_DataGridView.Columns.Add("Song_FullPath", "檔案路徑");
 
-                                    int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor);
+                                    int ColumnWidth_640 = Convert.ToInt32(640 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                     SongQuery_DataGridView.Columns["Song_FullPath"].Width = ColumnWidth_640;
                                     SongQuery_DataGridView.Columns["Song_FullPath"].MinimumWidth = ColumnWidth_640;
                                     SongQuery_DataGridView.Columns["Song_FullPath"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -1873,8 +1870,6 @@ namespace CrazyKTV_SongMgr
                                         SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                                         SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                     }
-
-                                    SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                     SongQuery_DataGridView.Focus();
                                     dt.Dispose();
                                 }
@@ -2898,10 +2893,10 @@ namespace CrazyKTV_SongMgr
         {
             List<string> list = new List<string>();
 
-            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_160 = Convert.ToInt32((160 * Global.DPIScalingFactor)).ToString();
-            string ColumnWidth_270 = Convert.ToInt32((270 * Global.DPIScalingFactor)).ToString();
+            string ColumnWidth_120 = Convert.ToInt32((120 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_140 = Convert.ToInt32((140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_160 = Convert.ToInt32((160 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
+            string ColumnWidth_270 = Convert.ToInt32((270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor)).ToString();
 
             // List<string>() { "欄位名稱", "欄位寬度", "欄位字數" };
             switch (ColumnName)

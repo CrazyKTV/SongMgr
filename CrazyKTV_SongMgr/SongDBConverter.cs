@@ -163,8 +163,6 @@ namespace CrazyKTV_SongMgr
                     SongDBConverter_ConvHelp_GroupBox.Visible = false;
                     SongDBConverter_JetktvPathCfg_GroupBox.Visible = true;
                     SongDBConverter_JetktvLangCfg_GroupBox.Visible = true;
-                    SongDBConverter_ConvHelp_GroupBox.Width = 660;
-                    SongDBConverter_ConvHelp_RichTextBox.Width = 628;
                     SongDBConverter_SrcDBFile_Button.Enabled = true;
 
                     ComboBox[] SongDBConverter_JetktvLang_ComboBox = 
@@ -197,8 +195,6 @@ namespace CrazyKTV_SongMgr
                     SongDBConverter_JetktvPathCfg_GroupBox.Visible = false;
                     SongDBConverter_JetktvLangCfg_GroupBox.Visible = false;
                     SongDBConverter_ConvHelp_GroupBox.Visible = true;
-                    SongDBConverter_ConvHelp_GroupBox.Width = 952;
-                    SongDBConverter_ConvHelp_RichTextBox.Width = 920;
                     SongDBConverter_SrcDBFile_Button.Enabled = false;
                     break;
             }

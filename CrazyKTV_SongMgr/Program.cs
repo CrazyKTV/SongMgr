@@ -93,6 +93,9 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgHideSongAddResultTabPage = "True";
         public static string MainCfgHideSongLogTabPage = "True";
         public static string MainCfgBackupRemoveSongDays = "7";
+        public static string MainCfgUIScale = "3";
+        public static string MainCfgUIFont = "Arial";
+        public static string MainCfgEnableUIScale = "False";
 
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";

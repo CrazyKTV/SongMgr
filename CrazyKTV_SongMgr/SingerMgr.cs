@@ -332,8 +332,6 @@ namespace CrazyKTV_SongMgr
 
                                         SingerMgr_DataGridView.Columns[i].Width = int.Parse(DataGridViewColumnName[1]);
                                     }
-
-                                    SingerMgr_DataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("微軟正黑體", 12, FontStyle.Bold);
                                     SingerMgr_DataGridView.Columns["Singer_Type"].Width = 100;
                                     SingerMgr_DataGridView.Columns["Singer_Type"].MinimumWidth = 100;
                                     SingerMgr_DataGridView.Columns["Singer_Type"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;

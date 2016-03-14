@@ -162,6 +162,9 @@
     <Compile Include="MainCfg.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MainUIScale.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PlayerForm.cs">
       <SubType>Form</SubType>

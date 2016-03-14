@@ -787,11 +787,11 @@ namespace CrazyKTV_SongMgr
 
         private void Cashbox_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            #if DEBUG
+#if DEBUG
             if (Cashbox_EditMode_CheckBox.Checked == true)
             {
-                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor));
-                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                 Cashbox_Edit_GroupBox.Visible = true;
                 Cashbox_TabControl.Visible = false;
                 Cashbox_QueryFilter_GroupBox.Visible = false;
@@ -809,8 +809,8 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor));
-                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor));
+                Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
+                Cashbox_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                 Cashbox_EditMode_CheckBox.Enabled = (Cashbox_DataGridView.RowCount == 0) ? false : true;
                 Cashbox_Edit_GroupBox.Visible = false;
                 Cashbox_TabControl.Visible = true;
@@ -821,7 +821,7 @@ namespace CrazyKTV_SongMgr
                 Cashbox_QueryStatus_Label.Text = "已進入檢視模式...";
             }
             Cashbox_DataGridView.Focus();
-            #endif
+#endif
         }
 
         private void Cashbox_EditSongLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
