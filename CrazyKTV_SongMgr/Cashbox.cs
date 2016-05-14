@@ -130,6 +130,8 @@ namespace CrazyKTV_SongMgr
                 if (Cashbox_SongSingerFilter_ComboBox.Text != "全部" && Cashbox_SongSingerFilter_ComboBox.Text != "")
                 {
                     string SongSinger = Cashbox_SongSingerFilter_ComboBox.Text;
+                    SongSinger = Regex.Replace(SongSinger, @"(%)|(_)|(\[)|(])|(\^)", "[$1$2$3$4$5]");
+
                     FilterStr += (FilterStr != "") ? " and (" : "";
                     FilterStr += "Song_Singer = '" + SongSinger + "' or Song_Singer like '%&" + SongSinger + "%' or Song_Singer like '%" + SongSinger + "&%'" + ((FilterStr != "") ? ")" : "");
                 }
