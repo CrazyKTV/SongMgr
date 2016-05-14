@@ -484,6 +484,7 @@ namespace CrazyKTV_SongMgr
                         Global.CashboxSongDataLangList = new List<string>();
                         Global.CashboxSongDataLowCaseList = new List<string>();
                         Global.CashboxSongDataNonBracketStrList = new List<string>();
+                        Global.CashboxSongDataNonSpaceStrList = new List<string>();
                         Global.CashboxFullMatchSongList = new List<string>();
 
                         string SongQuerySqlStr = "select Song_Lang, Song_Singer, Song_SongName from ktv_Cashbox order by Song_Lang";
@@ -494,6 +495,7 @@ namespace CrazyKTV_SongMgr
                                 Global.CashboxSongDataLangList.Add(row["Song_Lang"].ToString());
                                 Global.CashboxSongDataLowCaseList.Add(row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
                                 Global.CashboxSongDataNonBracketStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
+                                Global.CashboxSongDataNonSpaceStrList.Add(Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s", ""));
                             }
 
                             foreach (string SongData in Global.CashboxSongDataLowCaseList)
