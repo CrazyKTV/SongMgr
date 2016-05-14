@@ -109,6 +109,13 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
                 var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("RemovektvAllSinger"));
             }
+            else if (CrazyKTVDatabaseFile && !Global.CrazyktvDatabaseError && !Global.SongMgrDatabaseError && Global.CrazyktvDatabaseIsOld)
+            {
+                MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
+                SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
+                SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
+                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("UpdateVersion"));
+            }
         }
 
         private void SongDBUpdate_CheckDatabaseVersion()
