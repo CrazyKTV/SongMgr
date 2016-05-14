@@ -544,7 +544,7 @@ namespace CrazyKTV_SongMgr
 
             if (!Global.CrazyktvDatabaseStatus)
             {
-                MainTabControl.SelectedIndex = 3;
+                if (MainTabControl.SelectedIndex != 4) MainTabControl.SelectedIndex = 3;
             }
             else
             {
