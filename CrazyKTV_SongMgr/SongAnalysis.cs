@@ -190,6 +190,24 @@ namespace CrazyKTV_SongMgr
                         SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
                         if (SongSingerType == "") SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
                     }
+                    else
+                    {
+                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                        if (r.IsMatch(splitstr.ToLower()))
+                        {
+                            string[] singers = Regex.Split(splitstr.ToLower(), "[&+]", RegexOptions.None);
+                            foreach (string singer in singers)
+                            {
+                                string SingerName = Regex.Replace(singer, @"^\s*|\s*$", ""); //去除頭尾空白
+                                if (SingerDataLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                                {
+                                    SongSinger = splitstr;
+                                    if (SongSingerType == "") SongSingerType = "3";
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // 查看檔案名稱中有無歌手類別
@@ -314,6 +332,24 @@ namespace CrazyKTV_SongMgr
                         {
                             SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
                             if (SongSingerType == "") SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
+                        }
+                        else
+                        {
+                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                            if (r.IsMatch(splitstr.ToLower()))
+                            {
+                                string[] singers = Regex.Split(splitstr.ToLower(), "[&+]", RegexOptions.None);
+                                foreach (string singer in singers)
+                                {
+                                    string SingerName = Regex.Replace(singer, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (SingerDataLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                                    {
+                                        SongSinger = splitstr;
+                                        if (SongSingerType == "") SongSingerType = "3";
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
 
