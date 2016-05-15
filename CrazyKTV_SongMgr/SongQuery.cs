@@ -209,6 +209,13 @@ namespace CrazyKTV_SongMgr
                 if (SongQuery_LangFilter_ComboBox.Text != "全部" && SongQuery_LangFilter_ComboBox.Text != "") FilterStr = "Song_Lang = '" + SongQuery_LangFilter_ComboBox.Text + "'";
                 if (SongQuery_WordCountFilter_ComboBox.Text != "全部" && SongQuery_WordCountFilter_ComboBox.Text != "") FilterStr += (FilterStr != "") ? " and Song_WordCount = '" + SongQuery_WordCountFilter_ComboBox.Text + "'" : "Song_WordCount = '" + SongQuery_WordCountFilter_ComboBox.Text + "'";
                 ((DataTable)SongQuery_DataGridView.DataSource).DefaultView.RowFilter = FilterStr;
+
+                string SongFullPath = string.Empty;
+                for (int i = 0; i < SongQuery_DataGridView.Rows.Count; i++)
+                {
+                    SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
+                    SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
+                }
             }
         }
 
