@@ -472,6 +472,7 @@
             this.Cashbox_EditMode_CheckBox = new System.Windows.Forms.CheckBox();
             this.Cashbox_QueryStatus_Label = new System.Windows.Forms.Label();
             this.Cashbox_Maintenance_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Cashbox_WriteHaveSongData_Button = new System.Windows.Forms.Button();
             this.Cashbox_ApplyCashboxId_Button = new System.Windows.Forms.Button();
             this.Cashbox_DataGridView = new System.Windows.Forms.DataGridView();
             this.Cashbox_Edit_GroupBox = new System.Windows.Forms.GroupBox();
@@ -6250,6 +6251,7 @@
             // 
             // Cashbox_Maintenance_GroupBox
             // 
+            this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_WriteHaveSongData_Button);
             this.Cashbox_Maintenance_GroupBox.Controls.Add(this.Cashbox_ApplyCashboxId_Button);
             this.Cashbox_Maintenance_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Cashbox_Maintenance_GroupBox.Location = new System.Drawing.Point(508, 125);
@@ -6261,10 +6263,22 @@
             this.Cashbox_Maintenance_GroupBox.TabStop = false;
             this.Cashbox_Maintenance_GroupBox.Text = "資料維護";
             // 
+            // Cashbox_WriteHaveSongData_Button
+            // 
+            this.Cashbox_WriteHaveSongData_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_WriteHaveSongData_Button.Location = new System.Drawing.Point(302, 30);
+            this.Cashbox_WriteHaveSongData_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Cashbox_WriteHaveSongData_Button.Name = "Cashbox_WriteHaveSongData_Button";
+            this.Cashbox_WriteHaveSongData_Button.Size = new System.Drawing.Size(149, 32);
+            this.Cashbox_WriteHaveSongData_Button.TabIndex = 8;
+            this.Cashbox_WriteHaveSongData_Button.Text = "記錄已有歌曲";
+            this.Cashbox_WriteHaveSongData_Button.UseVisualStyleBackColor = true;
+            this.Cashbox_WriteHaveSongData_Button.Click += new System.EventHandler(this.Cashbox_WriteHaveSongData_Button_Click);
+            // 
             // Cashbox_ApplyCashboxId_Button
             // 
             this.Cashbox_ApplyCashboxId_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_ApplyCashboxId_Button.Location = new System.Drawing.Point(302, 39);
+            this.Cashbox_ApplyCashboxId_Button.Location = new System.Drawing.Point(302, 115);
             this.Cashbox_ApplyCashboxId_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Cashbox_ApplyCashboxId_Button.Name = "Cashbox_ApplyCashboxId_Button";
             this.Cashbox_ApplyCashboxId_Button.Size = new System.Drawing.Size(149, 32);
@@ -6305,6 +6319,7 @@
             this.Cashbox_DataGridView.TabIndex = 5;
             this.Cashbox_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Cashbox_DataGridView_CellFormatting);
             this.Cashbox_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Cashbox_DataGridView_CellMouseDown);
+            this.Cashbox_DataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.Cashbox_DataGridView_RowPrePaint);
             this.Cashbox_DataGridView.SelectionChanged += new System.EventHandler(this.Cashbox_DataGridView_SelectionChanged);
             this.Cashbox_DataGridView.Sorted += new System.EventHandler(this.Cashbox_DataGridView_Sorted);
             this.Cashbox_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cashbox_DataGridView_MouseUp);
@@ -8331,6 +8346,7 @@
         private System.Windows.Forms.CheckBox MainCfg_EnableUIScale_CheckBox;
         private System.Windows.Forms.Button MainCfg_SubTabWidth_Button;
         private System.Windows.Forms.Button MainCfg_MainTabWidth_Button;
+        private System.Windows.Forms.Button Cashbox_WriteHaveSongData_Button;
     }
 }
 

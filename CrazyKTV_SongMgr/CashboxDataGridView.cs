@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -18,6 +19,15 @@ namespace CrazyKTV_SongMgr
                     e.Value = DateTime.Parse(e.Value.ToString()).ToString("yyyy/MM/dd");
                     e.FormattingApplied = true;
                     break;
+            }
+        }
+
+        private void Cashbox_DataGridView_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            DataGridViewRow row = Cashbox_DataGridView.Rows[e.RowIndex];
+            if (row.Cells["Song_HaveSong"].Value.ToString() == "False")
+            {
+                row.DefaultCellStyle.ForeColor = Color.Red;
             }
         }
 
