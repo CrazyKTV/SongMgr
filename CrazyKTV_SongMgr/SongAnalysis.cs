@@ -700,26 +700,20 @@ namespace CrazyKTV_SongMgr
             {
                 SongLang = CommonFunc.GetSongLangStr(int.Parse(Global.SongAddDefaultSongLang) - 1, 0, "null");
 
-                bool MatchNonBracketData = true;
-                bool MatchNonSpaceData = false;
                 string SongData = SongSinger.ToLower() + "|" + SongSongName.ToLower();
                 string SongDataNonBracket = Regex.Replace(SongSinger.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "");
                 string SongDataNonSpace = Regex.Replace(SongSinger.ToLower(), @"\s", "") + "|" + Regex.Replace(SongSongName.ToLower(), @"\s", "");
-
-                if (Global.CashboxFullMatchSongList.IndexOf(SongData) >= 0) MatchNonBracketData = false;
-                Regex MatchSpace = new Regex(@"\s");
-                if (MatchSpace.IsMatch(SongData)) MatchNonSpaceData = true;
 
                 int SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(SongData) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(SongData) : -1;
 
                 if (SongDataIndex < 0  && SongSingerType != "3")
                 {
-                    if (SongDataIndex < 0 && MatchNonSpaceData)
+                    if (SongDataIndex < 0)
                     {
                         SongDataIndex = (Global.CashboxSongDataNonSpaceStrList.IndexOf(SongDataNonSpace) >= 0) ? Global.CashboxSongDataNonSpaceStrList.IndexOf(SongDataNonSpace) : -1;
                     }
 
-                    if (SongDataIndex < 0 && MatchNonBracketData)
+                    if (SongDataIndex < 0)
                     {
                         SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(SongDataNonBracket) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(SongDataNonBracket) : -1;
                         if (SongDataIndex < 0)
@@ -728,7 +722,7 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                     
-                    if (SongDataIndex == -1)
+                    if (SongDataIndex < 0)
                     {
                         if (Global.GroupSingerLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
                         {
@@ -743,12 +737,12 @@ namespace CrazyKTV_SongMgr
                                         SongData = GroupSingerName.ToLower() + "|" + SongSongName.ToLower();
                                         SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(SongData) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(SongData) : -1;
 
-                                        if (SongDataIndex < 0 && MatchNonSpaceData)
+                                        if (SongDataIndex < 0)
                                         {
                                             SongDataIndex = (Global.CashboxSongDataNonSpaceStrList.IndexOf(SongDataNonSpace) >= 0) ? Global.CashboxSongDataNonSpaceStrList.IndexOf(SongDataNonSpace) : -1;
                                         }
 
-                                        if (SongDataIndex < 0 && MatchNonBracketData)
+                                        if (SongDataIndex < 0)
                                         {
                                             SongDataIndex = (Global.CashboxSongDataLowCaseList.IndexOf(SongDataNonBracket) >= 0) ? Global.CashboxSongDataLowCaseList.IndexOf(SongDataNonBracket) : -1;
                                             if (SongDataIndex < 0)
@@ -764,8 +758,7 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
-
-                if (SongDataIndex < 0 && SongSingerType == "3") //合唱歌曲
+                else if (SongDataIndex < 0 && SongSingerType == "3") //合唱歌曲
                 {
                     List<string> ChorusSongDatalist = new List<string>() { SongSongName.ToLower() };
                     List<string> ChorusSongDataNonBracketlist = new List<string>() { Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") };
@@ -867,7 +860,7 @@ namespace CrazyKTV_SongMgr
                         FindResultList.Clear();
                     }
 
-                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0 && MatchNonBracketData)
+                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0)
                     {
                         FindResultList = Global.CashboxSongDataNonBracketStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDataNonBracketlist.ToArray()));
                         if (FindResultList.Count > 0)
@@ -887,7 +880,7 @@ namespace CrazyKTV_SongMgr
                         FindResultList.Clear();
                     }
 
-                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0 && MatchNonSpaceData)
+                    if (ChorusSingerList.Count > 0 && SongDataIndex < 0)
                     {
                         FindResultList = Global.CashboxSongDataNonSpaceStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDataNonSpacelist.ToArray()));
                         if (FindResultList.Count > 0)
@@ -927,7 +920,7 @@ namespace CrazyKTV_SongMgr
                         FindResultList.Clear();
                     }
 
-                    if (MatchChorusGroupSongSinger && SongDataIndex < 0 && MatchNonBracketData)
+                    if (MatchChorusGroupSongSinger && SongDataIndex < 0)
                     {
                         FindResultList = Global.CashboxSongDataNonBracketStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDataNonBracketlist.ToArray()));
                         if (FindResultList.Count > 0)
@@ -947,7 +940,7 @@ namespace CrazyKTV_SongMgr
                         FindResultList.Clear();
                     }
 
-                    if (MatchChorusGroupSongSinger && SongDataIndex < 0 && MatchNonSpaceData)
+                    if (MatchChorusGroupSongSinger && SongDataIndex < 0)
                     {
                         FindResultList = Global.CashboxSongDataNonSpaceStrList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDataNonSpacelist.ToArray()));
                         if (FindResultList.Count > 0)
