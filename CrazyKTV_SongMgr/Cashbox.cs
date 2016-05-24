@@ -1087,7 +1087,7 @@ namespace CrazyKTV_SongMgr
                             AddCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
                             AddCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
                             AddCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
-                            AddCmd.Parameters.AddWithValue("@SongHaveSong", "False");
+                            AddCmd.Parameters.AddWithValue("@SongHaveSong", "0");
 
                             try
                             {
@@ -1113,7 +1113,7 @@ namespace CrazyKTV_SongMgr
                             UpdCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
                             UpdCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
                             UpdCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
-                            UpdCmd.Parameters.AddWithValue("@SongHaveSong", "False");
+                            UpdCmd.Parameters.AddWithValue("@SongHaveSong", "0");
                             UpdCmd.Parameters.AddWithValue("@OldCashboxId", valuelist[0]);
 
                             try
