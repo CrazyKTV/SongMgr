@@ -1533,7 +1533,7 @@
             // SongQuery_EditSongPlayCount_TextBox
             // 
             this.SongQuery_EditSongPlayCount_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_EditSongPlayCount_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongPlayCount_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.SongQuery_EditSongPlayCount_TextBox.Location = new System.Drawing.Point(670, 262);
             this.SongQuery_EditSongPlayCount_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongQuery_EditSongPlayCount_TextBox.MaxLength = 8;
@@ -1571,7 +1571,7 @@
             // SongQuery_EditSongVolume_TextBox
             // 
             this.SongQuery_EditSongVolume_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_EditSongVolume_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongVolume_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.SongQuery_EditSongVolume_TextBox.Location = new System.Drawing.Point(456, 262);
             this.SongQuery_EditSongVolume_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongQuery_EditSongVolume_TextBox.MaxLength = 3;
@@ -1675,7 +1675,7 @@
             // SongQuery_EditSongSongName_TextBox
             // 
             this.SongQuery_EditSongSongName_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongQuery_EditSongSongName_TextBox.Location = new System.Drawing.Point(110, 124);
             this.SongQuery_EditSongSongName_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongQuery_EditSongSongName_TextBox.MaxLength = 80;
@@ -1712,7 +1712,7 @@
             // SongQuery_EditSongSinger_TextBox
             // 
             this.SongQuery_EditSongSinger_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongQuery_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongQuery_EditSongSinger_TextBox.Location = new System.Drawing.Point(110, 78);
             this.SongQuery_EditSongSinger_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongQuery_EditSongSinger_TextBox.MaxLength = 60;
@@ -1848,6 +1848,7 @@
             // SongAdd_SpecialStr_TextBox
             // 
             this.SongAdd_SpecialStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_SpecialStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongAdd_SpecialStr_TextBox.Location = new System.Drawing.Point(16, 224);
             this.SongAdd_SpecialStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SongAdd_SpecialStr_TextBox.Name = "SongAdd_SpecialStr_TextBox";
@@ -2325,7 +2326,7 @@
             // SongAdd_EditSongPlayCount_TextBox
             // 
             this.SongAdd_EditSongPlayCount_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EditSongPlayCount_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongAdd_EditSongPlayCount_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.SongAdd_EditSongPlayCount_TextBox.Location = new System.Drawing.Point(670, 262);
             this.SongAdd_EditSongPlayCount_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongAdd_EditSongPlayCount_TextBox.MaxLength = 8;
@@ -2363,7 +2364,7 @@
             // SongAdd_EditSongVolume_TextBox
             // 
             this.SongAdd_EditSongVolume_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EditSongVolume_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongAdd_EditSongVolume_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.SongAdd_EditSongVolume_TextBox.Location = new System.Drawing.Point(456, 262);
             this.SongAdd_EditSongVolume_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongAdd_EditSongVolume_TextBox.MaxLength = 3;
@@ -2467,7 +2468,7 @@
             // SongAdd_EditSongSongName_TextBox
             // 
             this.SongAdd_EditSongSongName_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongAdd_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongAdd_EditSongSongName_TextBox.Location = new System.Drawing.Point(110, 124);
             this.SongAdd_EditSongSongName_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongAdd_EditSongSongName_TextBox.MaxLength = 80;
@@ -2504,7 +2505,7 @@
             // SongAdd_EditSongSinger_TextBox
             // 
             this.SongAdd_EditSongSinger_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SongAdd_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongAdd_EditSongSinger_TextBox.Location = new System.Drawing.Point(110, 78);
             this.SongAdd_EditSongSinger_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongAdd_EditSongSinger_TextBox.MaxLength = 60;
@@ -2906,7 +2907,7 @@
             this.SingerMgr_Statistics8_Label.Name = "SingerMgr_Statistics8_Label";
             this.SingerMgr_Statistics8_Label.Size = new System.Drawing.Size(77, 20);
             this.SingerMgr_Statistics8_Label.TabIndex = 14;
-            this.SingerMgr_Statistics8_Label.Text = "外國樂團:";
+            this.SingerMgr_Statistics8_Label.Text = "外國團體:";
             // 
             // SingerMgr_Statistics7_Label
             // 
@@ -3022,7 +3023,7 @@
             this.SingerMgr_Statistics4_Label.Name = "SingerMgr_Statistics4_Label";
             this.SingerMgr_Statistics4_Label.Size = new System.Drawing.Size(45, 20);
             this.SingerMgr_Statistics4_Label.TabIndex = 6;
-            this.SingerMgr_Statistics4_Label.Text = "樂團:";
+            this.SingerMgr_Statistics4_Label.Text = "團體:";
             // 
             // SingerMgr_Statistics3_Label
             // 
@@ -3318,7 +3319,7 @@
             // SingerMgr_SingerAddName_TextBox
             // 
             this.SingerMgr_SingerAddName_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_SingerAddName_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.SingerMgr_SingerAddName_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SingerMgr_SingerAddName_TextBox.Location = new System.Drawing.Point(110, 40);
             this.SingerMgr_SingerAddName_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SingerMgr_SingerAddName_TextBox.Name = "SingerMgr_SingerAddName_TextBox";
@@ -3489,6 +3490,7 @@
             // SongMgrCfg_SongType_TextBox
             // 
             this.SongMgrCfg_SongType_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMgrCfg_SongType_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMgrCfg_SongType_TextBox.Location = new System.Drawing.Point(16, 238);
             this.SongMgrCfg_SongType_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongMgrCfg_SongType_TextBox.Name = "SongMgrCfg_SongType_TextBox";
@@ -3541,6 +3543,7 @@
             // SongMgrCfg_SingerGroup_TextBox
             // 
             this.SongMgrCfg_SingerGroup_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMgrCfg_SingerGroup_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMgrCfg_SingerGroup_TextBox.Location = new System.Drawing.Point(16, 238);
             this.SongMgrCfg_SingerGroup_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.SongMgrCfg_SingerGroup_TextBox.Name = "SongMgrCfg_SingerGroup_TextBox";
@@ -3785,7 +3788,7 @@
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.Name = "SongMgrCfg_CustomSingerTypeStructure3_Label";
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.Size = new System.Drawing.Size(45, 20);
             this.SongMgrCfg_CustomSingerTypeStructure3_Label.TabIndex = 4;
-            this.SongMgrCfg_CustomSingerTypeStructure3_Label.Text = "樂團:";
+            this.SongMgrCfg_CustomSingerTypeStructure3_Label.Text = "團體:";
             // 
             // SongMgrCfg_CustomSingerTypeStructure5_ComboBox
             // 
@@ -3877,7 +3880,7 @@
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.Name = "SongMgrCfg_CustomSingerTypeStructure7_Label";
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.Size = new System.Drawing.Size(77, 20);
             this.SongMgrCfg_CustomSingerTypeStructure7_Label.TabIndex = 12;
-            this.SongMgrCfg_CustomSingerTypeStructure7_Label.Text = "外國樂團:";
+            this.SongMgrCfg_CustomSingerTypeStructure7_Label.Text = "外國團體:";
             // 
             // SongMgrCfg_CustomSingerTypeStructure2_ComboBox
             // 
@@ -5057,6 +5060,7 @@
             // SongMaintenance_Lang10IDStr_TextBox
             // 
             this.SongMaintenance_Lang10IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang10IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang10IDStr_TextBox.Location = new System.Drawing.Point(312, 384);
             this.SongMaintenance_Lang10IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang10IDStr_TextBox.Name = "SongMaintenance_Lang10IDStr_TextBox";
@@ -5079,6 +5083,7 @@
             // SongMaintenance_Lang10_TextBox
             // 
             this.SongMaintenance_Lang10_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang10_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang10_TextBox.Location = new System.Drawing.Point(86, 384);
             this.SongMaintenance_Lang10_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang10_TextBox.MaxLength = 12;
@@ -5102,6 +5107,7 @@
             // SongMaintenance_Lang9IDStr_TextBox
             // 
             this.SongMaintenance_Lang9IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang9IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang9IDStr_TextBox.Location = new System.Drawing.Point(312, 344);
             this.SongMaintenance_Lang9IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang9IDStr_TextBox.Name = "SongMaintenance_Lang9IDStr_TextBox";
@@ -5124,6 +5130,7 @@
             // SongMaintenance_Lang9_TextBox
             // 
             this.SongMaintenance_Lang9_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang9_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang9_TextBox.Location = new System.Drawing.Point(86, 344);
             this.SongMaintenance_Lang9_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang9_TextBox.MaxLength = 12;
@@ -5147,6 +5154,7 @@
             // SongMaintenance_Lang8IDStr_TextBox
             // 
             this.SongMaintenance_Lang8IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang8IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang8IDStr_TextBox.Location = new System.Drawing.Point(312, 304);
             this.SongMaintenance_Lang8IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang8IDStr_TextBox.Name = "SongMaintenance_Lang8IDStr_TextBox";
@@ -5169,6 +5177,7 @@
             // SongMaintenance_Lang8_TextBox
             // 
             this.SongMaintenance_Lang8_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang8_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang8_TextBox.Location = new System.Drawing.Point(86, 304);
             this.SongMaintenance_Lang8_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang8_TextBox.MaxLength = 12;
@@ -5192,6 +5201,7 @@
             // SongMaintenance_Lang7IDStr_TextBox
             // 
             this.SongMaintenance_Lang7IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang7IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang7IDStr_TextBox.Location = new System.Drawing.Point(312, 264);
             this.SongMaintenance_Lang7IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang7IDStr_TextBox.Name = "SongMaintenance_Lang7IDStr_TextBox";
@@ -5214,6 +5224,7 @@
             // SongMaintenance_Lang7_TextBox
             // 
             this.SongMaintenance_Lang7_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang7_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang7_TextBox.Location = new System.Drawing.Point(86, 264);
             this.SongMaintenance_Lang7_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang7_TextBox.MaxLength = 12;
@@ -5237,6 +5248,7 @@
             // SongMaintenance_Lang6IDStr_TextBox
             // 
             this.SongMaintenance_Lang6IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang6IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang6IDStr_TextBox.Location = new System.Drawing.Point(312, 224);
             this.SongMaintenance_Lang6IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang6IDStr_TextBox.Name = "SongMaintenance_Lang6IDStr_TextBox";
@@ -5259,6 +5271,7 @@
             // SongMaintenance_Lang6_TextBox
             // 
             this.SongMaintenance_Lang6_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang6_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang6_TextBox.Location = new System.Drawing.Point(86, 224);
             this.SongMaintenance_Lang6_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang6_TextBox.MaxLength = 12;
@@ -5282,6 +5295,7 @@
             // SongMaintenance_Lang5IDStr_TextBox
             // 
             this.SongMaintenance_Lang5IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang5IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang5IDStr_TextBox.Location = new System.Drawing.Point(312, 184);
             this.SongMaintenance_Lang5IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang5IDStr_TextBox.Name = "SongMaintenance_Lang5IDStr_TextBox";
@@ -5304,6 +5318,7 @@
             // SongMaintenance_Lang5_TextBox
             // 
             this.SongMaintenance_Lang5_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang5_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang5_TextBox.Location = new System.Drawing.Point(86, 184);
             this.SongMaintenance_Lang5_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang5_TextBox.MaxLength = 12;
@@ -5327,6 +5342,7 @@
             // SongMaintenance_Lang4IDStr_TextBox
             // 
             this.SongMaintenance_Lang4IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang4IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang4IDStr_TextBox.Location = new System.Drawing.Point(312, 144);
             this.SongMaintenance_Lang4IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang4IDStr_TextBox.Name = "SongMaintenance_Lang4IDStr_TextBox";
@@ -5349,6 +5365,7 @@
             // SongMaintenance_Lang4_TextBox
             // 
             this.SongMaintenance_Lang4_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang4_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang4_TextBox.Location = new System.Drawing.Point(86, 144);
             this.SongMaintenance_Lang4_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang4_TextBox.MaxLength = 12;
@@ -5372,6 +5389,7 @@
             // SongMaintenance_Lang3IDStr_TextBox
             // 
             this.SongMaintenance_Lang3IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang3IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang3IDStr_TextBox.Location = new System.Drawing.Point(312, 104);
             this.SongMaintenance_Lang3IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang3IDStr_TextBox.Name = "SongMaintenance_Lang3IDStr_TextBox";
@@ -5394,6 +5412,7 @@
             // SongMaintenance_Lang3_TextBox
             // 
             this.SongMaintenance_Lang3_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang3_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang3_TextBox.Location = new System.Drawing.Point(86, 104);
             this.SongMaintenance_Lang3_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang3_TextBox.MaxLength = 12;
@@ -5417,6 +5436,7 @@
             // SongMaintenance_Lang2IDStr_TextBox
             // 
             this.SongMaintenance_Lang2IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang2IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang2IDStr_TextBox.Location = new System.Drawing.Point(312, 64);
             this.SongMaintenance_Lang2IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang2IDStr_TextBox.Name = "SongMaintenance_Lang2IDStr_TextBox";
@@ -5439,6 +5459,7 @@
             // SongMaintenance_Lang2_TextBox
             // 
             this.SongMaintenance_Lang2_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang2_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang2_TextBox.Location = new System.Drawing.Point(86, 64);
             this.SongMaintenance_Lang2_TextBox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.SongMaintenance_Lang2_TextBox.MaxLength = 12;
@@ -5462,6 +5483,7 @@
             // SongMaintenance_Lang1IDStr_TextBox
             // 
             this.SongMaintenance_Lang1IDStr_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang1IDStr_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang1IDStr_TextBox.Location = new System.Drawing.Point(312, 24);
             this.SongMaintenance_Lang1IDStr_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 5);
             this.SongMaintenance_Lang1IDStr_TextBox.Name = "SongMaintenance_Lang1IDStr_TextBox";
@@ -5484,6 +5506,7 @@
             // SongMaintenance_Lang1_TextBox
             // 
             this.SongMaintenance_Lang1_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Lang1_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.SongMaintenance_Lang1_TextBox.Location = new System.Drawing.Point(86, 24);
             this.SongMaintenance_Lang1_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 5);
             this.SongMaintenance_Lang1_TextBox.MaxLength = 12;
@@ -6388,7 +6411,7 @@
             // Cashbox_EditSongSongName_TextBox
             // 
             this.Cashbox_EditSongSongName_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Cashbox_EditSongSongName_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.Cashbox_EditSongSongName_TextBox.Location = new System.Drawing.Point(110, 124);
             this.Cashbox_EditSongSongName_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.Cashbox_EditSongSongName_TextBox.MaxLength = 80;
@@ -6412,7 +6435,7 @@
             // Cashbox_EditSongSinger_TextBox
             // 
             this.Cashbox_EditSongSinger_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Cashbox_EditSongSinger_TextBox.ImeMode = System.Windows.Forms.ImeMode.On;
             this.Cashbox_EditSongSinger_TextBox.Location = new System.Drawing.Point(110, 78);
             this.Cashbox_EditSongSinger_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.Cashbox_EditSongSinger_TextBox.MaxLength = 60;
