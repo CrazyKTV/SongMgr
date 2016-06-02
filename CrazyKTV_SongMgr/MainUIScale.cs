@@ -18,15 +18,19 @@ namespace CrazyKTV_SongMgr
 
             this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongQuery_DataGridView.RowsDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_DataGridView.RowTemplate.Height = this.SongQuery_DataGridView.RowsDefaultCellStyle.Font.Height;
 
             this.SongAdd_DataGridView.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongAdd_DataGridView.RowsDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_DataGridView.RowTemplate.Height = this.SongAdd_DataGridView.RowsDefaultCellStyle.Font.Height;
 
             this.SingerMgr_DataGridView.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SingerMgr_DataGridView.RowsDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_DataGridView.RowTemplate.Height = this.SingerMgr_DataGridView.RowsDefaultCellStyle.Font.Height;
 
             this.Cashbox_DataGridView.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Cashbox_DataGridView.RowsDefaultCellStyle.Font = new System.Drawing.Font(FontName, 12F * ScalingFactor, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DataGridView.RowTemplate.Height = this.Cashbox_DataGridView.RowsDefaultCellStyle.Font.Height;
 
             MainTabControl.Visible = false;
             MainTabControl.ItemSize = new System.Drawing.Size(0, 0);
