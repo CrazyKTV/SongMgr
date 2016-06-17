@@ -352,7 +352,8 @@ namespace CrazyKTV_SongMgr
             List<string> SongLangKeyWordList = new List<string>();
             List<string> SingerTypeKeyWordList = new List<string>();
             List<string> SongTrackKeyWordList = new List<string>();
-            
+
+            Global.TotalList = new List<int>() { 0, 0, 0, 0, 0 };
             SongAnalysis.CreateSongDataTable();
             int total = 0;
 
@@ -485,7 +486,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    SongAdd_Tooltip_Label.Text = "總共分析 " + total + " 首歌曲, 共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
+                    SongAdd_Tooltip_Label.Text = "已成功分析 " + (total - Global.TotalList[0]) + " 首歌曲,忽略 " + Global.TotalList[0] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成分析。";
                 }
 
                 SongLangKeyWordList.Clear();
@@ -520,7 +521,7 @@ namespace CrazyKTV_SongMgr
                         if (Global.CrazyktvSongLangList.IndexOf(langstr) >= 0)
                         {
                             int LangIndex = Global.CrazyktvSongLangList.IndexOf(langstr);
-                            int SongCount = langquery.Count<DataRow>() - SongAnalysis.DuplicateSongCountList[LangIndex] + 1;
+                            int SongCount = langquery.Count<DataRow>() + 1;
 
                             if (SongCount > Global.RemainingSongIdCountList[LangIndex])
                             {
