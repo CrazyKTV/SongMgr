@@ -229,6 +229,7 @@ namespace CrazyKTV_SongMgr
             {
                 SongQuery_QueryType_ComboBox.SelectedIndexChanged -= new EventHandler(SongQuery_QueryType_ComboBox_SelectedIndexChanged);
 
+                SongQuery.QuerySameFileSong = false;
                 Global.SongQueryQueryType = "SongQuery";
 
                 SongQuery_Query_Button.Enabled = false;
@@ -1248,12 +1249,14 @@ namespace CrazyKTV_SongMgr
                 string SongRemoveSqlStr = "delete from ktv_Song where Song_Id = @SongId";
                 using (OleDbCommand cmd = new OleDbCommand(SongRemoveSqlStr, conn))
                 {
-                    foreach (string str in SongFilelist)
+                    foreach (string SongId in SongIdlist)
                     {
-                        int i = SongFilelist.IndexOf(str);
+                        int i = SongIdlist.IndexOf(SongId);
                         bool RemoveError = false;
 
-                        if (Global.SongMgrSongAddMode != "3")
+                        string str = SongFilelist[i];
+
+                        if (Global.SongMgrSongAddMode != "3" && !SongQuery.QuerySameFileSong)
                         {
                             if (File.Exists(str))
                             {
@@ -1339,7 +1342,7 @@ namespace CrazyKTV_SongMgr
             if (Global.CrazyktvDatabaseStatus && SongQuery_ExceptionalQuery_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
             {
                 SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged -= new EventHandler(SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
-
+                SongQuery.QuerySameFileSong = false;
                 Global.SongQueryQueryType = "SongQuery";
 
                 SongQuery_Query_Button.Enabled = false;
@@ -1369,6 +1372,7 @@ namespace CrazyKTV_SongMgr
                         SongQueryValue = "NA";
                         SongQueryStatusText = "使用相同檔案";
                         SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
+                        SongQuery.QuerySameFileSong = true;
                         break;
                     case "3":
                         SongQueryType = "DuplicateSong";
@@ -2497,6 +2501,7 @@ namespace CrazyKTV_SongMgr
     class SongQuery
     {
         public static bool QueryStatusLabel = true;
+        public static bool QuerySameFileSong = false;
 
         #region --- SongQuery 建立資料表 ---
 
