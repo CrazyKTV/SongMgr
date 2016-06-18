@@ -161,7 +161,7 @@ namespace CrazyKTV_SongMgr
                     QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
                     QueryValueWide = CommonFunc.ConvToWide(QueryValue);
                     HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[\x21-\x7E\xFF01-\xFF5E]", "", RegexOptions.IgnoreCase);
-                    if (HasWideCharQueryValue == "") HasWideCharQueryValue = QueryValue;
+                    if (HasWideCharQueryValue == "" || HasWideCharQueryValue == " ") HasWideCharQueryValue = QueryValue;
                 }
 
                 Regex HasSymbols = new Regex("[']");
