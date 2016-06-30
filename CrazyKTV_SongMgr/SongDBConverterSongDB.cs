@@ -97,8 +97,42 @@ namespace CrazyKTV_SongMgr
 
             string SongSongType = "";
             string SongFileName = Global.SongSrcDT.Rows[i]["Song_FileName"].ToString();
-            string SongPath = Global.SongSrcDT.Rows[i]["Song_Path"].ToString();
-            if (!Directory.Exists(SongPath)) SongPath = "";
+            string SongPath = Global.SongSrcDT.Rows[i]["Song_Path"].ToString() + @"\";
+
+            List<string> SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
+
+            if (!Directory.Exists(SongPath))
+            {
+                foreach (string JetktvPath in Global.SongDBConvJetktvPathList)
+                {
+                    if (Path.GetExtension(SongFileName) == "")
+                    {
+                        foreach (string format in SupportFormat)
+                        {
+                            if (File.Exists(Path.Combine(JetktvPath, SongFileName + format)))
+                            {
+                                SongFileName = SongFileName + format;
+                                SongPath = JetktvPath + @"\";
+                                break;
+                            }
+                        }
+
+                        if (Directory.Exists(SongPath))
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (File.Exists(Path.Combine(JetktvPath, SongFileName)))
+                        {
+                            SongPath = JetktvPath + @"\";
+                            break;
+                        }
+                    }
+                }
+            }
+
             string file = Path.Combine(SongPath, SongFileName);
 
             list = new List<string>() { SongId, SongLang, SongSongName, SongSinger };
