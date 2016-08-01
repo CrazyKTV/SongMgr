@@ -95,7 +95,7 @@ namespace CrazyKTV_SongMgr
                 Global.SongMgrDestFolder = opd.SelectedPath;
                 SongMgrCfg_DestFolder_TextBox.Text = opd.SelectedPath;
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder", Global.SongMgrDestFolder);
-                Common_RefreshSongMgr(false);
+                Common_RefreshSongMgr(true);
             }
         }
 
@@ -197,7 +197,7 @@ namespace CrazyKTV_SongMgr
                         SongAdd_DataGridView.Visible = true;
                         SongAdd_DragDrop_Label.Visible = true;
                     }
-                    if (SongMgrCfg_Tooltip_Label.Text == "歌庫資料夾不存在!") SongMgrCfg_Tooltip_Label.Text = "";
+                    if (SongMgrCfg_Tooltip_Label.Text == "請先設定歌庫資料夾!") SongMgrCfg_Tooltip_Label.Text = "";
 
                     if (Global.SongMgrInitializeStatus)
                     {

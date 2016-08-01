@@ -632,7 +632,7 @@ namespace CrazyKTV_SongMgr
                     else if (Global.SongMgrDatabaseError) Tooltip_Label[i].Text = "加歌程式參考資料庫不是最新版本!";
                     else if (Global.CrazyktvDatabaseIsOld) Tooltip_Label[i].Text = "資料庫檔案為舊版本!";
                     else if (!Global.CrazyktvDatabaseMaxDigitCode) Tooltip_Label[i].Text = "歌庫編碼混雜 5 及 6 位數編碼!";
-                    else if (!Directory.Exists(Global.SongMgrDestFolder)) Tooltip_Label[i].Text = "歌庫資料夾不存在!";
+                    else if (!Directory.Exists(Global.SongMgrDestFolder)) Tooltip_Label[i].Text = "請先設定歌庫資料夾!";
                 }
                 else
                 {
@@ -644,7 +644,7 @@ namespace CrazyKTV_SongMgr
                         "加歌程式參考資料庫不是最新版本!",
                         "資料庫檔案為舊版本!",
                         "歌庫編碼混雜 5 及 6 位數編碼!",
-                        "歌庫資料夾不存在!"
+                        "請先設定歌庫資料夾!"
                     };
                     if (ErrorTextList.IndexOf(Tooltip_Label[i].Text) >= 0) Tooltip_Label[i].Text = "";
                     ErrorTextList.Clear();
