@@ -1757,7 +1757,16 @@ namespace CrazyKTV_SongMgr
                 {
                     QueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
                     {
-                        string str = "' + \"" + match.ToString() + "\" + '";
+                        string str = "'" + match.ToString();
+                        return str;
+                    });
+                }
+
+                if (HasSymbols.IsMatch(HasWideCharQueryValue))
+                {
+                    HasWideCharQueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
+                    {
+                        string str = "'" + match.ToString();
                         return str;
                     });
                 }
@@ -1766,7 +1775,7 @@ namespace CrazyKTV_SongMgr
                 {
                     QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate (Match match)
                     {
-                        string str = "' + \"" + match.ToString() + "\" + '";
+                        string str = "'" + match.ToString();
                         return str;
                     });
                 }
