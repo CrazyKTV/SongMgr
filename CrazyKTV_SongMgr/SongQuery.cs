@@ -205,6 +205,46 @@ namespace CrazyKTV_SongMgr
         {
             if (((ComboBox)sender).Focused)
             {
+                if (((ComboBox)sender).Name == "SongQuery_LangFilter_ComboBox")
+                {
+                    List<int> WordCountFilterList = new List<int>();
+                    ((DataTable)SongQuery_DataGridView.DataSource).DefaultView.RowFilter = "";
+
+                    using (DataTable dt = (DataTable)SongQuery_DataGridView.DataSource)
+                    {
+                        using (DataTable WordCountDistinctDT = dt.DefaultView.ToTable(true, "Song_Lang", "Song_WordCount"))
+                        {
+                            if (WordCountDistinctDT.Rows.Count > 0)
+                            {
+                                foreach (DataRow row in WordCountDistinctDT.AsEnumerable())
+                                {
+                                    if (row["Song_Lang"].ToString() == SongQuery_LangFilter_ComboBox.Text)
+                                    {
+                                        WordCountFilterList.Add(Convert.ToInt32(row["Song_WordCount"].ToString()));
+                                    }
+                                    else if (SongQuery_LangFilter_ComboBox.Text == "全部")
+                                    {
+                                        if (WordCountFilterList.IndexOf(Convert.ToInt32(row["Song_WordCount"].ToString())) <= 0)
+                                        {
+                                            WordCountFilterList.Add(Convert.ToInt32(row["Song_WordCount"].ToString()));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (WordCountFilterList.Count > 0)
+                    {
+                        WordCountFilterList.Sort();
+                        SongQuery_WordCountFilter_ComboBox.Enabled = true;
+                        SongQuery_WordCountFilter_ComboBox.DataSource = SongQuery.GetSongQueryFilterList(WordCountFilterList.ConvertAll(i => i.ToString()));
+                        SongQuery_WordCountFilter_ComboBox.DisplayMember = "Display";
+                        SongQuery_WordCountFilter_ComboBox.ValueMember = "Value";
+                        WordCountFilterList.Clear();
+                    }
+                }
+
                 string FilterStr = "";
                 if (SongQuery_LangFilter_ComboBox.Text != "全部" && SongQuery_LangFilter_ComboBox.Text != "") FilterStr = "Song_Lang = '" + SongQuery_LangFilter_ComboBox.Text + "'";
                 if (SongQuery_WordCountFilter_ComboBox.Text != "全部" && SongQuery_WordCountFilter_ComboBox.Text != "") FilterStr += (FilterStr != "") ? " and Song_WordCount = '" + SongQuery_WordCountFilter_ComboBox.Text + "'" : "Song_WordCount = '" + SongQuery_WordCountFilter_ComboBox.Text + "'";

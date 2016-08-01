@@ -124,6 +124,108 @@ namespace CrazyKTV_SongMgr
         {
             if (((ComboBox)sender).Focused)
             {
+                if (((ComboBox)sender).Name == "Cashbox_LangFilter_ComboBox")
+                {
+                    List<string> SongSingerFilterList = new List<string>();
+                    ((DataTable)Cashbox_DataGridView.DataSource).DefaultView.RowFilter = "";
+
+                    using (DataTable dt = (DataTable)Cashbox_DataGridView.DataSource)
+                    {
+                        using (DataTable SongSingerDistinctDT = dt.DefaultView.ToTable(true, "Song_Lang", "Song_Singer"))
+                        {
+                            if (SongSingerDistinctDT.Rows.Count > 0)
+                            {
+                                string SongSinger = string.Empty;
+                                foreach (DataRow row in SongSingerDistinctDT.AsEnumerable())
+                                {
+                                    SongSinger = row["Song_Singer"].ToString();
+                                    if (SongSinger.Contains("&"))
+                                    {
+                                        // 處理合唱歌曲中的特殊歌手名稱
+                                        string ChorusSongSingerName = SongSinger;
+                                        List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
+
+                                        foreach (string SpecialSingerName in SpecialStrlist)
+                                        {
+                                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                                            if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                                            {
+                                                if (SongSingerFilterList.IndexOf(SpecialSingerName) < 0)
+                                                {
+                                                    if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
+                                                    {
+                                                        SongSingerFilterList.Add(SpecialSingerName);
+                                                    }
+                                                }
+                                                if (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower())
+                                                {
+                                                    ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
+                                                }
+                                                else
+                                                {
+                                                    ChorusSongSingerName = "";
+                                                }
+                                            }
+                                        }
+                                        SpecialStrlist.Clear();
+
+                                        if (ChorusSongSingerName != "")
+                                        {
+                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                            if (r.IsMatch(ChorusSongSingerName))
+                                            {
+                                                string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
+                                                foreach (string str in singers)
+                                                {
+                                                    string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                                    if (SongSingerFilterList.IndexOf(SingerStr) < 0)
+                                                    {
+                                                        if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
+                                                        {
+                                                            SongSingerFilterList.Add(SingerStr);
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (SongSingerFilterList.IndexOf(ChorusSongSingerName) < 0)
+                                                {
+                                                    if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
+                                                    {
+                                                        SongSingerFilterList.Add(ChorusSongSingerName);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (SongSingerFilterList.IndexOf(SongSinger) < 0)
+                                        {
+                                            if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
+                                            {
+                                                SongSingerFilterList.Add(SongSinger);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (SongSingerFilterList.Count > 0)
+                    {
+                        SongSingerFilterList.Sort();
+                        Cashbox_SongSingerFilter_ComboBox.Enabled = true;
+                        Cashbox_SongSingerFilter_ComboBox.DataSource = Cashbox.GetQueryFilterList(SongSingerFilterList);
+                        Cashbox_SongSingerFilter_ComboBox.DisplayMember = "Display";
+                        Cashbox_SongSingerFilter_ComboBox.ValueMember = "Value";
+                        SongSingerFilterList.Clear();
+                    }
+                }
+
                 string FilterStr = "";
                 if (Cashbox_LangFilter_ComboBox.Text != "全部" && Cashbox_LangFilter_ComboBox.Text != "") FilterStr = "Song_Lang = '" + Cashbox_LangFilter_ComboBox.Text + "'";
                 if (Cashbox_SongSingerFilter_ComboBox.Text != "全部" && Cashbox_SongSingerFilter_ComboBox.Text != "")
