@@ -2457,7 +2457,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- CommonFunc 取得檔案結構 ---
 
-        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath, bool RebuildSongStructure, string RebuildSongPath)
+        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath, bool RebuildSongStructure, string RebuildSongPath, bool DetectMultiSongPath)
         {
             if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
             {
@@ -2473,30 +2473,14 @@ namespace CrazyKTV_SongMgr
 
                 if (SongSingerType == 3) SongSingerStr = Regex.Replace(SongSinger, "[&+]", CrtchorusSeparate, RegexOptions.IgnoreCase);
 
-                bool UseMultiSongPath = false;
-                string MultiSongPath = "";
-
-                if (Global.SongMaintenanceEnableMultiSongPath == "True" & SongPath.ContainsAny(Global.SongMaintenanceMultiSongPathList.ToArray()))
-                {
-                    foreach (string str in Global.SongMaintenanceMultiSongPathList)
-                    {
-                        if (SongPath.Contains(str))
-                        {
-                            MultiSongPath = str;
-                            UseMultiSongPath = true;
-                            break;
-                        }
-                    }
-                }
-
                 switch (Global.SongMgrFolderStructure)
                 {
                     case "1":
                         if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
                         {
-                            if (UseMultiSongPath && !RebuildSongStructure)
+                            if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 2) != Global.SongMgrDestFolder)
                             {
-                                SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
+                                SongPath = GetParentDirectoryPath(SongPath, 2) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                             }
                             else
                             {
@@ -2505,9 +2489,9 @@ namespace CrazyKTV_SongMgr
                         }
                         else
                         {
-                            if (UseMultiSongPath && !RebuildSongStructure)
+                            if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 3) != Global.SongMgrDestFolder)
                             {
-                                SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                SongPath = GetParentDirectoryPath(SongPath, 3) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
                             }
                             else
                             {
@@ -2516,9 +2500,9 @@ namespace CrazyKTV_SongMgr
                         }
                         break;
                     case "2":
-                        if (UseMultiSongPath && !RebuildSongStructure)
+                        if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 2) != Global.SongMgrDestFolder)
                         {
-                            SongPath = MultiSongPath + SongLang + @"\" + SingerTypeStr + @"\";
+                            SongPath = SongPath = GetParentDirectoryPath(SongPath, 2) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                         }
                         else
                         {
@@ -2526,9 +2510,9 @@ namespace CrazyKTV_SongMgr
                         }
                         break;
                     case "3":
-                        if (UseMultiSongPath && !RebuildSongStructure)
+                        if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 1) != Global.SongMgrDestFolder)
                         {
-                            SongPath = MultiSongPath + SongLang + @"\";
+                            SongPath = SongPath = GetParentDirectoryPath(SongPath, 1) + @"\" + SongLang + @"\";
                         }
                         else
                         {
@@ -3404,6 +3388,27 @@ namespace CrazyKTV_SongMgr
             }
 
             return MatchResult;
+        }
+
+        #endregion
+
+        #region --- CommonFunc 取得上層資料夾 ---
+
+        public static string GetParentDirectoryPath(string folderPath, int levels)
+        {
+            string result = Regex.Replace(folderPath, @"\\$", "");
+            for (int i = 0; i < levels; i++)
+            {
+                if (Directory.GetParent(result) != null)
+                {
+                    result = Directory.GetParent(result).FullName;
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            return result;
         }
 
         #endregion

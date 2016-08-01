@@ -121,8 +121,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath); // 已無用處
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList)); // 已無用處
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", Global.MainCfgEnableUIScale);
@@ -388,12 +388,12 @@ namespace CrazyKTV_SongMgr
             MainCfg_UIScale_ComboBox.ValueMember = "Value";
             MainCfg_UIScale_ComboBox.SelectedValue = Global.MainCfgUIScale;
 
-            if (list[34] != "") Global.SongMaintenanceEnableMultiSongPath = list[34];
+            if (list[34] != "") Global.SongMaintenanceEnableMultiSongPath = list[34]; // 已無用處
             SongMaintenance_EnableMultiSongPath_CheckBox.Checked = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
             SongMaintenance_MultiSongPath_ListBox.Enabled = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
             SongMaintenance_MultiSongPath_Button.Enabled = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
 
-            if (list[35] != "") Global.SongMaintenanceMultiSongPathList = new List<string>(list[35].Split(','));
+            if (list[35] != "") Global.SongMaintenanceMultiSongPathList = new List<string>(list[35].Split(',')); // 已無用處
             SongMaintenance_MultiSongPath_ListBox.DataSource = SongMaintenance.GetMultiSongPathList();
             SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
             SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";

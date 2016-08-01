@@ -511,7 +511,7 @@ namespace CrazyKTV_SongMgr
                                             }
                                         }
 
-                                        string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, OldSongFileName, OldSongPath, false, "");
+                                        string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, OldSongFileName, OldSongPath, false, "", true);
                                         string SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                                         string SongFileName = Path.GetFileName(SongDestPath);
 

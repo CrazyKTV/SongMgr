@@ -597,7 +597,7 @@ namespace CrazyKTV_SongMgr
 
                 if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                 {
-                    string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "");
+                    string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "", false);
                     SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                     SongFileName = Path.GetFileName(SongDestPath);
                 }
@@ -792,12 +792,9 @@ namespace CrazyKTV_SongMgr
             {
                 lock (LockThis) { Global.TotalList[4]++; }
 
-                SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
-                SongFileName = Path.GetFileName(SongSrcPath);
-
                 if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                 {
-                    string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "");
+                    string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "", true);
                     SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                     SongFileName = Path.GetFileName(SongDestPath);
                 }

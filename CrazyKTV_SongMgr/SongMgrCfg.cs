@@ -133,10 +133,10 @@ namespace CrazyKTV_SongMgr
                         SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_MonitorFolders_TabPage);
                     }
 
-                    if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) < 0)
+                    if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) >= 0)
                     {
-                        SongMaintenance_TabControl.TabPages.Insert(SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_CustomLang_TabPage) + 1, SongMaintenance_MultiSongPath_TabPage);
-                        SongMaintenance_MultiSongPath_TabPage.Show();
+                        SongMaintenance_MultiSongPath_TabPage.Hide();
+                        SongMaintenance_TabControl.TabPages.Remove(SongMaintenance_MultiSongPath_TabPage);
                     }
 
                     if (Global.SongMgrInitializeStatus)

@@ -1777,7 +1777,7 @@ namespace CrazyKTV_SongMgr
 
                 if (!HasInvalidChar)
                 {
-                    SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, true, RebuildSongPath); ;
+                    SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, true, RebuildSongPath, false); ;
                     SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                     SongFileName = Path.GetFileName(SongDestPath);
                 }
@@ -2434,7 +2434,7 @@ namespace CrazyKTV_SongMgr
         #endregion
 
 
-        #region --- 多重歌庫 ---
+        #region --- 多重歌庫 --- 暫未使用
 
 
         private void SongMaintenance_EnableMultiSongPath_CheckBox_CheckedChanged(object sender, EventArgs e)
