@@ -1399,13 +1399,19 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "7":
-                        SongQueryType = "MatchSingerType";
+                        SongQueryType = "MatchSongTrack";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "8":
-                        SongQueryType = "MatchSongTrack";
+                        SongQueryType = "MatchSingerType";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
+                        break;
+                    case "9":
+                        SongQueryType = "MatchSongLang";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
@@ -1487,6 +1493,35 @@ namespace CrazyKTV_SongMgr
                                     RemoveRowsIdxlist.Clear(); 
                                 }
                                 break;
+                            case "MatchSongTrack":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    string SongInfoSeparate = (Global.SongMgrSongInfoSeparate == "1") ? "_" : "-";
+
+                                    var MatchSongTrackQuery = from row in dt.AsEnumerable()
+                                                              where row.Field<string>("Song_FileName").Contains(SongInfoSeparate + CommonFunc.GetSongTrackStr(row.Field<byte>("Song_Track"), 1, "null"))
+                                                              select row;
+
+                                    foreach (DataRow row in MatchSongTrackQuery)
+                                    {
+                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                    }
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
+                                }
+                                break;
                             case "MatchSingerType":
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
 
@@ -1528,23 +1563,65 @@ namespace CrazyKTV_SongMgr
                                     SingerTypeList.Clear();
                                 }
                                 break;
-                            case "MatchSongTrack":
+                            case "MatchSongLang":
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
 
                                 if (dt.Rows.Count > 0)
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
-
-                                    string SongInfoSeparate = (Global.SongMgrSongInfoSeparate == "1") ? "_" : "-";
-
-                                    var MatchSongTrackQuery = from row in dt.AsEnumerable()
-                                                              where row.Field<string>("Song_FileName").Contains(SongInfoSeparate + CommonFunc.GetSongTrackStr(row.Field<byte>("Song_Track"), 1, "null"))
-                                                              select row;
-
-                                    foreach (DataRow row in MatchSongTrackQuery)
+                                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                                    this.BeginInvoke((Action)delegate()
                                     {
-                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                    }
+                                        SongQuery_QueryStatus_Label.Text = "正在比對歌曲語系,請稍待...";
+                                    });
+
+                                    Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
+                                    {
+                                        var query = from row in dt.AsEnumerable()
+                                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() > 0)
+                                        {
+                                            foreach (DataRow row in query)
+                                            {
+                                                string SongLang = row["Song_Lang"].ToString();
+                                                string SongSinger = row["Song_Singer"].ToString();
+                                                string SongSongName = row["Song_SongName"].ToString();
+                                                string SongSingerType = row["Song_SingerType"].ToString();
+                                                int SongDataIndex = CommonFunc.MatchCashboxSongLang(SongSinger, SongSongName, SongSingerType);
+
+                                                if (SongDataIndex >= 0)
+                                                {
+                                                    if (SongLang != Global.CashboxSongDataLangList[SongDataIndex])
+                                                    {
+                                                        string SongDataLowCase = SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower();
+                                                        if (Global.CashboxSongDataFullList.IndexOf(SongDataLowCase) >= 0)
+                                                        {
+                                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                        }
+                                                        else
+                                                        {
+                                                            Global.TotalList[0]++;
+                                                            this.BeginInvoke((Action)delegate()
+                                                            {
+                                                                SongQuery_QueryStatus_Label.Text = "已在歌庫比對到 " + Global.TotalList[0] + " 首語系不符的歌曲...";
+                                                            });
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                }
+                                            }
+                                        }
+                                    });
 
                                     RemoveRowsIdxlist.Sort();
                                     if (RemoveRowsIdxlist.Count > 0)
@@ -2661,7 +2738,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "歌手類別不符", "檔名不符 (歌曲聲道)" };
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手類別不符", "語系類別不符 (錢櫃)" };
 
                 foreach (string str in ItemList)
                 {
@@ -2892,10 +2969,13 @@ namespace CrazyKTV_SongMgr
                 case "DuplicateSongOnlyChorusSinger":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_SongType, Song_SingerType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_SongType = ktv_Song.Song_SongType and Song_SingerType = 3))) order by Song_SongName";
                     break;
+                case "MatchSongTrack":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
+                    break;
                 case "MatchSingerType":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_SingerType <> 3 order by Song_Singer";
                     break;
-                case "MatchSongTrack":
+                case "MatchSongLang":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
                     break;
                 case "FavoriteSong":

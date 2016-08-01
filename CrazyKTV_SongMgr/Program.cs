@@ -129,6 +129,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> PhoneticsPenStyleList = new List<string>();
         public static List<string> PhoneticsStrokesList = new List<string>();
 
+        public static List<string> CashboxSongDataFullList = new List<string>();
         public static List<string> CashboxSongDataLangList = new List<string>();
         public static List<string> CashboxSongDataLowCaseList = new List<string>();
         public static List<string> CashboxSongDataNonBracketStrList = new List<string>();
