@@ -101,7 +101,7 @@ namespace CrazyKTV_SongMgr
 
             List<string> SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
 
-            if (!Directory.Exists(SongPath))
+            if (!File.Exists(Path.Combine(SongPath, SongFileName)) || SongPath == @"\" || Path.GetExtension(SongFileName) == "")
             {
                 foreach (string JetktvPath in Global.SongDBConvJetktvPathList)
                 {
@@ -117,7 +117,7 @@ namespace CrazyKTV_SongMgr
                             }
                         }
 
-                        if (Directory.Exists(SongPath))
+                        if (File.Exists(Path.Combine(SongPath, SongFileName)))
                         {
                             break;
                         }
