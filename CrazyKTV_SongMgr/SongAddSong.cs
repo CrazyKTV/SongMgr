@@ -728,6 +728,7 @@ namespace CrazyKTV_SongMgr
             string SongPenStyle = DupSongAddDT.Rows[i].Field<string>("Song_PenStyle");
             int SongPlayState = DupSongAddDT.Rows[i].Field<int>("Song_PlayState");
             string SongSrcPath = DupSongAddDT.Rows[i].Field<string>("Song_SrcPath");
+            string SongExtension = Path.GetExtension(SongSrcPath);
 
             // 判斷是否要新增歌曲類別
             if (SongSongType != "")
@@ -792,11 +793,9 @@ namespace CrazyKTV_SongMgr
 
                 if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                 {
-                    SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
-                    SongFileName = Path.GetFileName(SongSrcPath);
                     string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "", true);
                     SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
-                    SongFileName = Path.GetFileName(SongDestPath);
+                    SongFileName = Path.GetFileNameWithoutExtension(SongDestPath) + SongExtension;
                 }
 
                 if (SongSinger.Length > 60)
