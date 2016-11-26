@@ -140,6 +140,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongDBConvValueList = new List<string>();
         public static List<string> SongDBConvJetktvLangList = new List<string>();
         public static List<string> SongDBConvJetktvPathList = new List<string>();
+        public static List<string> SongDBConvHK2SongPathList = new List<string>();
 
         public static DataTable SongDT = new DataTable();
         public static DataTable SingerDT = new DataTable();
@@ -148,6 +149,8 @@ namespace CrazyKTV_SongMgr
         public static DataTable FailureSongDT = new DataTable();
         public static DataTable SongSrcDT = new DataTable();
         public static DataTable SingerSrcDT = new DataTable();
+        public static DataTable SongPathSrcDT = new DataTable();
+        public static DataTable ExtensionSrcDT = new DataTable();
         public static DataTable SongLogDT = new DataTable();
         public static DataTable FavoriteUserDT = new DataTable();
 

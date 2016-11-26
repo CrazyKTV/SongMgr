@@ -24,7 +24,6 @@ namespace CrazyKTV_SongMgr
             {
                 List<string> list = new List<string>();
                 string SongQuerySqlStr = "";
-                DataTable dt = new DataTable();
                 
                 switch (SongDBConverter_SrcDBType_ComboBox.SelectedValue.ToString())
                 {
@@ -46,20 +45,60 @@ namespace CrazyKTV_SongMgr
 
                         if (SongDBConverter_Tooltip_Label.Text != "你選取的來源資料庫不是 JetKTV 資料庫!")
                         {
-                            dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, "tmwcmgumbonqd");
-                            if (dt.Rows.Count > 0)
+                            using (DataTable dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, "tmwcmgumbonqd"))
                             {
-                                if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫沒有歌曲資料!") SongDBConverter_Tooltip_Label.Text = "";
-                                SongDBConverter_SrcDBFile_TextBox.Text = opd.FileName;
-                                SongDBConverter_SwitchButton(1);
-                            }
-                            else
-                            {
-                                SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
+                                if (dt.Rows.Count > 0)
+                                {
+                                    if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫沒有歌曲資料!") SongDBConverter_Tooltip_Label.Text = "";
+                                    SongDBConverter_SrcDBFile_TextBox.Text = opd.FileName;
+                                    SongDBConverter_SwitchButton(1);
+                                }
+                                else
+                                {
+                                    SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
+                                }
                             }
                         }
-                        dt.Dispose();
-                        dt = null;
+                        break;
+                    case "3":
+                        SongDBConverter_SrcDBFile_TextBox.Text = "";
+                        SongDBConverter_StartConv_Button.Enabled = false;
+                        SongQuerySqlStr = "select Song_ID, Song_Title, Song_Singer, Song_Channel, Song_Type, Song_FileName, Song_Count, Song_Path, Song_CreateDate, Song_Chorus, Song_Volume from Tbl_Song";
+
+                        list = CommonFunc.GetOleDbTableList(opd.FileName, "");
+
+                        bool DBError = false;
+                        List<string> TBList = new List<string>() { "PhonAlpha", "PhonSpell", "Tbl_Extension", "Tbl_KeyName", "Tbl_Name", "Tbl_Remote2", "Tbl_Singer", "Tbl_Song", "Tbl_SongPath", "Tbl_Strokes" };
+                        foreach (string TBName in TBList)
+                        {
+                            if (list.IndexOf(TBName) < 0)
+                            {
+                                DBError = true;
+                                break;
+                            }
+                        }
+
+                        if (DBError)
+                        {
+                            SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫不是 HomeKara2 資料庫!";
+                        }
+                        else
+                        {
+                            if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫不是 HomeKara2 資料庫!") SongDBConverter_Tooltip_Label.Text = "";
+                            using (DataTable dt = CommonFunc.GetOleDbDataTable(opd.FileName, SongQuerySqlStr, ""))
+                            {
+                                if (dt.Rows.Count > 0)
+                                {
+                                    if (SongDBConverter_Tooltip_Label.Text == "你選取的來源資料庫沒有歌曲資料!") SongDBConverter_Tooltip_Label.Text = "";
+                                    SongDBConverter_SrcDBFile_TextBox.Text = opd.FileName;
+                                    SongDBConverter_SwitchButton(1);
+                                }
+                                else
+                                {
+                                    SongDBConverter_Tooltip_Label.Text = "你選取的來源資料庫沒有歌曲資料!";
+                                }
+                            }
+                        }
                         break;
                 }
             }
@@ -128,6 +167,12 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
                     Task.Factory.StartNew(SongDBConverter_ConvFromSrcDBTask, 2);
                     break;
+                case "3":
+                    SongDBConverter_StartConv_Button.Enabled = false;
+                    SongDBConverter_Converter_GroupBox.Enabled = false;
+                    Common_SwitchSetUI(false);
+                    Task.Factory.StartNew(SongDBConverter_ConvFromSrcDBTask, 3);
+                    break;
             }
         }
 
@@ -190,6 +235,12 @@ namespace CrazyKTV_SongMgr
                         cbox.SelectedValue = list[cboxvalue];
                         cboxvalue++;
                     }
+                    break;
+                case "3":
+                    SongDBConverter_ConvHelp_GroupBox.Visible = true;
+                    SongDBConverter_JetktvPathCfg_GroupBox.Visible = false;
+                    SongDBConverter_JetktvLangCfg_GroupBox.Visible = false;
+                    SongDBConverter_SrcDBFile_Button.Enabled = true;
                     break;
                 default:
                     SongDBConverter_JetktvPathCfg_GroupBox.Visible = false;
@@ -317,6 +368,9 @@ namespace CrazyKTV_SongMgr
                 {
                     case 2:
                         SongDBConverterSongDB.StartConvFromJetktvDB(i);
+                        break;
+                    case 3:
+                        SongDBConverterSongDB.StartConvFromHomeKara2DB(i);
                         break;
                 }
                 
@@ -484,6 +538,9 @@ namespace CrazyKTV_SongMgr
             list.Rows.Add(list.NewRow());
             list.Rows[1][0] = "JetKTV 資料庫";
             list.Rows[1][1] = 2;
+            list.Rows.Add(list.NewRow());
+            list.Rows[2][0] = "HomeKara2 資料庫";
+            list.Rows[2][1] = 3;
             return list;
         }
 
