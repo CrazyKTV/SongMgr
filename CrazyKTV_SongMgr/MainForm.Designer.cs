@@ -6341,6 +6341,7 @@
             this.Cashbox_DataGridView.StandardTab = true;
             this.Cashbox_DataGridView.TabIndex = 5;
             this.Cashbox_DataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Cashbox_DataGridView_CellFormatting);
+            this.Cashbox_DataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Cashbox_DataGridView_CellMouseClick);
             this.Cashbox_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Cashbox_DataGridView_CellMouseDown);
             this.Cashbox_DataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.Cashbox_DataGridView_RowPrePaint);
             this.Cashbox_DataGridView.SelectionChanged += new System.EventHandler(this.Cashbox_DataGridView_SelectionChanged);

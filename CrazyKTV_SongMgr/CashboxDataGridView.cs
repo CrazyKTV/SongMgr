@@ -33,6 +33,67 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- Cashbox 列表滑鼠點擊事件 ---
+
+        private void Cashbox_DataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if ((e.RowIndex < 0) || (e.ColumnIndex < 0)) return;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                if (!Cashbox_DataGridView.Rows[e.RowIndex].Selected) Cashbox_DataGridView.CurrentCell = Cashbox_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                ContextMenuStrip GridView_ContextMenu;
+                ToolStripMenuItem[] GridView_ContextMenuItem;
+                List<string> ContextMenuItemList = new List<string>() { "複製歌手名稱", "複製歌曲名稱" };
+
+                if (Cashbox_DataGridView.SelectedRows.Count == 1)
+                {
+                    GridView_ContextMenu = new ContextMenuStrip();
+                    GridView_ContextMenuItem = new ToolStripMenuItem[ContextMenuItemList.Count];
+
+                    for (int i = 0; i < ContextMenuItemList.Count; i++)
+                    {
+                        GridView_ContextMenuItem[i] = new ToolStripMenuItem(ContextMenuItemList[i]);
+                        GridView_ContextMenu.Items.Add(GridView_ContextMenuItem[i]);
+                        GridView_ContextMenuItem[i].Click += new EventHandler(Cashbox_DataGridView_ContextMenuItem_RightClick);
+                    }
+                    GridView_ContextMenu.Show(MousePosition.X, MousePosition.Y);
+                }
+            }
+        }
+
+        #endregion
+
+        #region --- Cashbox 列表滑鼠右鍵功能表點擊事件 ---
+
+        private void Cashbox_DataGridView_ContextMenuItem_RightClick(object sender, EventArgs e)
+        {
+            string ClipStr = string.Empty;
+            switch (sender.ToString())
+            {
+                case "複製歌手名稱":
+                    ClipStr = Cashbox_DataGridView.SelectedRows[0].Cells["Song_Singer"].Value.ToString();
+                    break;
+                case "複製歌曲名稱":
+                    ClipStr = Cashbox_DataGridView.SelectedRows[0].Cells["Song_SongName"].Value.ToString();
+                    break;
+            }
+            try
+            {
+                Clipboard.SetData(DataFormats.UnicodeText, ClipStr);
+            }
+            catch
+            {
+                // 剪貼簿被別的程式占用
+                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【複製到剪貼簿】無法完成複製到剪貼簿,因剪貼簿已被占用。";
+                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+            }
+        }
+
+        #endregion
+
         #region --- Cashbox 列表滑鼠點擊狀態事件 ---
 
         private void Cashbox_DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
