@@ -22,6 +22,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongDBConverterTabPage", Global.MainCfgHideSongDBConverterTabPage);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage", Global.MainCfgHideSongAddResultTabPage);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", Global.MainCfgHideSongLogTabPage);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton", Global.MainCfgHideApplyCashboxIdButton);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
@@ -99,6 +100,25 @@ namespace CrazyKTV_SongMgr
                             MainTabControl.TabPages.Insert(MainTabControl.TabPages.IndexOf(MainCfg_TabPage) + 1, SongLog_TabPage);
                             SongLog_TabPage.Show();
                         }
+                    }
+                    break;
+            }
+        }
+
+        private void MainCfg_HideButton_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cbox = (CheckBox)sender;
+            switch (cbox.Name)
+            {
+                case "MainCfg_HideApplyCashboxIdButton_CheckBox":
+                    Global.MainCfgHideApplyCashboxIdButton = MainCfg_HideApplyCashboxIdButton_CheckBox.Checked.ToString();
+                    if (cbox.Checked)
+                    {
+                        Cashbox_ApplyCashboxId_Button.Visible = false;
+                    }
+                    else
+                    {
+                        Cashbox_ApplyCashboxId_Button.Visible = true;
                     }
                     break;
             }

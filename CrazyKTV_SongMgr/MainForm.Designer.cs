@@ -492,6 +492,8 @@
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Tooltip_Label = new System.Windows.Forms.Label();
             this.MainCfg_General_ＧroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
             this.MainCfg_SubTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_MainTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_UIScale_GroupBox = new System.Windows.Forms.GroupBox();
@@ -6556,6 +6558,8 @@
             // 
             // MainCfg_General_ＧroupBox
             // 
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideApplyCashboxIdButton_CheckBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideButton_Label);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_SubTabWidth_Button);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_MainTabWidth_Button);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_UIScale_GroupBox);
@@ -6577,6 +6581,30 @@
             this.MainCfg_General_ＧroupBox.TabIndex = 0;
             this.MainCfg_General_ＧroupBox.TabStop = false;
             this.MainCfg_General_ＧroupBox.Text = "程式設定";
+            // 
+            // MainCfg_HideApplyCashboxIdButton_CheckBox
+            // 
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.AutoSize = true;
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Location = new System.Drawing.Point(144, 118);
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Margin = new System.Windows.Forms.Padding(6);
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Name = "MainCfg_HideApplyCashboxIdButton_CheckBox";
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Size = new System.Drawing.Size(124, 24);
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.TabIndex = 15;
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Text = "套用錢櫃編號";
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideButton_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_HideButton_Label
+            // 
+            this.MainCfg_HideButton_Label.AutoSize = true;
+            this.MainCfg_HideButton_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideButton_Label.Location = new System.Drawing.Point(16, 120);
+            this.MainCfg_HideButton_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.MainCfg_HideButton_Label.Name = "MainCfg_HideButton_Label";
+            this.MainCfg_HideButton_Label.Size = new System.Drawing.Size(109, 20);
+            this.MainCfg_HideButton_Label.TabIndex = 14;
+            this.MainCfg_HideButton_Label.Text = "隱藏功能按鈕:";
             // 
             // MainCfg_SubTabWidth_Button
             // 
@@ -6612,7 +6640,7 @@
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_Label);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_ComboBox);
             this.MainCfg_UIScale_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_UIScale_GroupBox.Location = new System.Drawing.Point(18, 162);
+            this.MainCfg_UIScale_GroupBox.Location = new System.Drawing.Point(18, 196);
             this.MainCfg_UIScale_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 20);
             this.MainCfg_UIScale_GroupBox.Name = "MainCfg_UIScale_GroupBox";
             this.MainCfg_UIScale_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
@@ -6738,7 +6766,7 @@
             this.MainCfg_BackupRemoveSongDays_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MainCfg_BackupRemoveSongDays_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_BackupRemoveSongDays_ComboBox.FormattingEnabled = true;
-            this.MainCfg_BackupRemoveSongDays_ComboBox.Location = new System.Drawing.Point(212, 118);
+            this.MainCfg_BackupRemoveSongDays_ComboBox.Location = new System.Drawing.Point(212, 152);
             this.MainCfg_BackupRemoveSongDays_ComboBox.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.MainCfg_BackupRemoveSongDays_ComboBox.Name = "MainCfg_BackupRemoveSongDays_ComboBox";
             this.MainCfg_BackupRemoveSongDays_ComboBox.Size = new System.Drawing.Size(90, 28);
@@ -6749,7 +6777,7 @@
             // 
             this.MainCfg_BackupRemoveSongDays_Label.AutoSize = true;
             this.MainCfg_BackupRemoveSongDays_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_BackupRemoveSongDays_Label.Location = new System.Drawing.Point(16, 122);
+            this.MainCfg_BackupRemoveSongDays_Label.Location = new System.Drawing.Point(16, 156);
             this.MainCfg_BackupRemoveSongDays_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.MainCfg_BackupRemoveSongDays_Label.Name = "MainCfg_BackupRemoveSongDays_Label";
             this.MainCfg_BackupRemoveSongDays_Label.Size = new System.Drawing.Size(173, 20);
@@ -8371,6 +8399,8 @@
         private System.Windows.Forms.Button MainCfg_SubTabWidth_Button;
         private System.Windows.Forms.Button MainCfg_MainTabWidth_Button;
         private System.Windows.Forms.Button Cashbox_WriteHaveSongData_Button;
+        private System.Windows.Forms.CheckBox MainCfg_HideApplyCashboxIdButton_CheckBox;
+        private System.Windows.Forms.Label MainCfg_HideButton_Label;
     }
 }
 
