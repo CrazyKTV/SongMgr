@@ -1,4 +1,8 @@
 # CrazyKTV 加歌程式
+
+[![Build status](https://ci.appveyor.com/api/projects/status/2xe034095a5c4b1y?svg=true)](https://ci.appveyor.com/project/KenLuoTW/songmgr)
+[![GitHub release](https://img.shields.io/github/release/CrazyKTV/SongMgr.svg)](https://github.com/CrazyKTV/SongMgr/releases)
+
 CrazyKTV 加歌程式是基於 CrazyKTV 卡拉OK點歌軟體的歌庫管理工具,主要因為 CrazyKTV 原本所採用的 GodLiu 加歌程式擁有許多問題且已停止開發,所以才重新撰寫了這個加歌程式。經過將近一年的修改,已將加歌程式所需要的功能幾乎都實作了出來,並且也對程式做了許多除錯及優化,以確保資料的正確性及使用效率,目前已足以拿來實際運用。
 
 ![CrazyKTV 加歌程式](https://raw.githubusercontent.com/wiki/KenLuoTW/CrazyKTVSongMgr/images/CrazyKTV_SongMgr01.png)
