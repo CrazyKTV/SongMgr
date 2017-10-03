@@ -693,7 +693,7 @@
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1008, 729);
+            this.MainTabControl.Size = new System.Drawing.Size(1008, 727);
             this.MainTabControl.TabIndex = 0;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
             // 
@@ -710,7 +710,7 @@
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongQuery_TabPage.Name = "SongQuery_TabPage";
             this.SongQuery_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongQuery_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongQuery_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongQuery_TabPage.TabIndex = 1;
             this.SongQuery_TabPage.Text = "歌庫查詢";
             this.SongQuery_TabPage.UseVisualStyleBackColor = true;
@@ -1797,14 +1797,13 @@
             this.SongAdd_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongAdd_TabPage.Name = "SongAdd_TabPage";
             this.SongAdd_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongAdd_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongAdd_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongAdd_TabPage.TabIndex = 3;
             this.SongAdd_TabPage.Text = "加歌頁面";
             this.SongAdd_TabPage.UseVisualStyleBackColor = true;
             // 
             // SongAdd_DragDrop_Label
             // 
-            this.SongAdd_DragDrop_Label.AllowDrop = true;
             this.SongAdd_DragDrop_Label.BackColor = System.Drawing.SystemColors.Control;
             this.SongAdd_DragDrop_Label.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongAdd_DragDrop_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
@@ -1815,8 +1814,6 @@
             this.SongAdd_DragDrop_Label.TabIndex = 7;
             this.SongAdd_DragDrop_Label.Text = "請將要加入的歌曲檔案或資料夾拖曳至此處";
             this.SongAdd_DragDrop_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.SongAdd_DragDrop_Label.DragDrop += new System.Windows.Forms.DragEventHandler(this.SongAdd_DragDrop);
-            this.SongAdd_DragDrop_Label.DragEnter += new System.Windows.Forms.DragEventHandler(this.SongAdd_DragEnter);
             // 
             // SongAdd_Add_Button
             // 
@@ -2166,7 +2163,6 @@
             // 
             // SongAdd_DataGridView
             // 
-            this.SongAdd_DataGridView.AllowDrop = true;
             this.SongAdd_DataGridView.AllowUserToAddRows = false;
             this.SongAdd_DataGridView.AllowUserToDeleteRows = false;
             this.SongAdd_DataGridView.AllowUserToResizeRows = false;
@@ -2199,8 +2195,6 @@
             this.SongAdd_DataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SongAdd_DataGridView_CellMouseDown);
             this.SongAdd_DataGridView.SelectionChanged += new System.EventHandler(this.SongAdd_DataGridView_SelectionChanged);
             this.SongAdd_DataGridView.Sorted += new System.EventHandler(this.SongAdd_DataGridView_Sorted);
-            this.SongAdd_DataGridView.DragDrop += new System.Windows.Forms.DragEventHandler(this.SongAdd_DragDrop);
-            this.SongAdd_DataGridView.DragEnter += new System.Windows.Forms.DragEventHandler(this.SongAdd_DragEnter);
             this.SongAdd_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SongAdd_DataGridView_KeyDown);
             this.SongAdd_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SongAdd_DataGridView_MouseUp);
             // 
@@ -2589,7 +2583,7 @@
             this.SingerMgr_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SingerMgr_TabPage.Name = "SingerMgr_TabPage";
             this.SingerMgr_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SingerMgr_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SingerMgr_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SingerMgr_TabPage.TabIndex = 8;
             this.SingerMgr_TabPage.Text = "歌手管理";
             this.SingerMgr_TabPage.UseVisualStyleBackColor = true;
@@ -3442,7 +3436,7 @@
             this.SongMgrCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongMgrCfg_TabPage.Name = "SongMgrCfg_TabPage";
             this.SongMgrCfg_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongMgrCfg_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongMgrCfg_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongMgrCfg_TabPage.TabIndex = 2;
             this.SongMgrCfg_TabPage.Text = "歌庫設定";
             this.SongMgrCfg_TabPage.UseVisualStyleBackColor = true;
@@ -4585,7 +4579,7 @@
             this.SongMaintenance_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongMaintenance_TabPage.Name = "SongMaintenance_TabPage";
             this.SongMaintenance_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongMaintenance_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongMaintenance_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongMaintenance_TabPage.TabIndex = 7;
             this.SongMaintenance_TabPage.Text = "歌庫維護";
             this.SongMaintenance_TabPage.UseVisualStyleBackColor = true;
@@ -5874,7 +5868,7 @@
             this.Cashbox_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.Cashbox_TabPage.Name = "Cashbox_TabPage";
             this.Cashbox_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.Cashbox_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.Cashbox_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.Cashbox_TabPage.TabIndex = 11;
             this.Cashbox_TabPage.Text = "錢櫃資料";
             this.Cashbox_TabPage.UseVisualStyleBackColor = true;
@@ -6515,7 +6509,7 @@
             this.MainCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.MainCfg_TabPage.Name = "MainCfg_TabPage";
             this.MainCfg_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.MainCfg_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.MainCfg_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.MainCfg_TabPage.TabIndex = 9;
             this.MainCfg_TabPage.Text = "程式設定";
             this.MainCfg_TabPage.UseVisualStyleBackColor = true;
@@ -6860,7 +6854,7 @@
             this.SongDBConverter_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongDBConverter_TabPage.Name = "SongDBConverter_TabPage";
             this.SongDBConverter_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongDBConverter_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongDBConverter_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongDBConverter_TabPage.TabIndex = 5;
             this.SongDBConverter_TabPage.Text = "歌庫轉換";
             this.SongDBConverter_TabPage.UseVisualStyleBackColor = true;
@@ -7334,7 +7328,7 @@
             this.SongAddResult_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_TabPage.Name = "SongAddResult_TabPage";
             this.SongAddResult_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongAddResult_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongAddResult_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongAddResult_TabPage.TabIndex = 4;
             this.SongAddResult_TabPage.Text = "加歌結果";
             this.SongAddResult_TabPage.UseVisualStyleBackColor = true;
@@ -7424,7 +7418,7 @@
             this.SongLog_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongLog_TabPage.Name = "SongLog_TabPage";
             this.SongLog_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongLog_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.SongLog_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.SongLog_TabPage.TabIndex = 6;
             this.SongLog_TabPage.Text = "操作記錄";
             this.SongLog_TabPage.UseVisualStyleBackColor = true;
@@ -7484,7 +7478,7 @@
             this.Debug_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.Debug_TabPage.Name = "Debug_TabPage";
             this.Debug_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.Debug_TabPage.Size = new System.Drawing.Size(1000, 692);
+            this.Debug_TabPage.Size = new System.Drawing.Size(1000, 690);
             this.Debug_TabPage.TabIndex = 10;
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
@@ -7710,7 +7704,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.ClientSize = new System.Drawing.Size(1008, 727);
             this.Controls.Add(this.MainTabControl);
             this.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

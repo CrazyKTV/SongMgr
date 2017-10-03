@@ -1471,7 +1471,6 @@ namespace CrazyKTV_SongMgr
             SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
             SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
             SongAdd_DataGridView.DataSource = null;
-            SongAdd_DataGridView.AllowDrop = true;
             SongAdd_DataGridView.Enabled = true;
             SongAdd_Edit_GroupBox.Visible = false;
             SongAdd_SongAddCfg_GroupBox.Visible = true;

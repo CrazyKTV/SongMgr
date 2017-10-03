@@ -57,7 +57,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
-                    SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
                     SongAdd_Edit_GroupBox.Visible = false;
                     SongAdd_SongAddCfg_GroupBox.Visible = true;
@@ -73,7 +72,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
-                    SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
                     SongAdd_Edit_GroupBox.Visible = false;
                     SongAdd_SongAddCfg_GroupBox.Visible = true;
@@ -257,31 +255,27 @@ namespace CrazyKTV_SongMgr
 
         #region --- SongAdd 分析歌曲 ---
 
-        private void SongAdd_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Link;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
-
-        private void SongAdd_DragDrop(object sender, DragEventArgs e)
+        private void SongAdd_ElevatedDragDrop(object sender, ElevatedDragDropArgs e)
         {
             Global.TimerStartTime = DateTime.Now;
             if (SongAdd_Tooltip_Label.Text == "要加入的歌曲檔案或資料夾不可與歌庫資料夾同目錄!") SongAdd_Tooltip_Label.Text = "";
             if (SongAdd_Tooltip_Label.Text == "要加入的歌曲檔案數量大於最小歌曲剩餘編號!") SongAdd_Tooltip_Label.Text = "";
 
-            string[] drop = (string[])e.Data.GetData(DataFormats.FileDrop);
+            List<string> droplist = new List<string>();
+            if (e.HWnd == SongAdd_DataGridView.Handle || e.HWnd == SongAdd_DragDrop_Label.Handle)
+            {
+                foreach (string file in e.Files)
+                {
+                    droplist.Add(file);
+                }
+            }
+
             List<string> SupportFormat = new List<string>(Global.SongMgrSupportFormat.Split(';'));
             List<string> list = new List<string>();
 
             SongAdd_DataGridView.DataSource = null;
 
-            foreach (string item in drop)
+            foreach (string item in droplist)
             {
                 if (item.Contains(Global.SongMgrDestFolder) && Global.SongMgrSongAddMode != "3")
                 {
@@ -313,7 +307,6 @@ namespace CrazyKTV_SongMgr
                 {
                     SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
-                    SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.SelectionChanged -= new EventHandler(SongAdd_DataGridView_SelectionChanged);
                     SongAdd_DragDrop_Label.Visible = false;
                     SongAdd_Edit_GroupBox.Visible = true;
@@ -471,7 +464,6 @@ namespace CrazyKTV_SongMgr
 
                 if (Global.SongMgrSongAddMode != "4")
                 {
-                    SongAdd_DataGridView.AllowDrop = true;
                     Common_SwitchSetUI(true);
                     this.Activate();
                     SongAdd_DataGridView.Focus();
@@ -878,7 +870,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
-                    SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
                     SongAdd_Edit_GroupBox.Visible = false;
                     SongAdd_SongAddCfg_GroupBox.Visible = true;
@@ -901,7 +892,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_Add_Button.Enabled = true;
                     SongAdd_Save_Button.Enabled = true;
                     SongAdd_DataGridView.DataSource = SongAddSong.DupSongAddDT;
-                    SongAdd_DataGridView.AllowDrop = false;
                     SongAdd_DataGridView.Enabled = true;
 
                     SongAddSong.DupSongAddDT.Dispose();
@@ -1027,7 +1017,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(296 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.Location = new Point(Convert.ToInt32(22 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(365 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
                     SongAdd_DataGridView.DataSource = null;
-                    SongAdd_DataGridView.AllowDrop = true;
                     SongAdd_DataGridView.Enabled = true;
                     SongAdd_Edit_GroupBox.Visible = false;
                     SongAdd_SongAddCfg_GroupBox.Visible = true;
