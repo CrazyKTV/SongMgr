@@ -815,6 +815,17 @@ namespace CrazyKTV_SongMgr
                 bool DuplicateSongStatus = false;
                 bool MoveError = false;
 
+                // SingerName bug
+                bool SingerNameisEmpty = false;
+                if (SongSinger == "")
+                {
+                    SingerNameisEmpty = true;
+
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】歌手名稱空白: 階段1 [" + UpdateStr + "]";
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+
                 // 重複歌曲判斷
                 if (SongQuery.SongDataLowCaseList.Count > 0)
                 {
@@ -884,7 +895,7 @@ namespace CrazyKTV_SongMgr
                                 if (ChorusGroupSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(SpecialSingerName.ToLower());
                                 ChorusGroupSongSingerCount++;
 
-                                ChorusSongSingerName = (ChorusSongSingerName != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
+                                ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
                             }
                         }
                         SpecialStrlist.Clear();
@@ -1007,7 +1018,24 @@ namespace CrazyKTV_SongMgr
                     });
                 }
 
-                if (!DuplicateSongStatus)
+                // SingerName bug
+                if (SongSinger == "")
+                {
+                    SingerNameisEmpty = true;
+
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫查詢】歌手名稱空白: 階段2 [" + UpdateStr + "]";
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+
+                    lock (LockThis) { Global.TotalList[2]++; }
+
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        SongQuery_QueryStatus_Label.Text = "已成功更新 " + Global.TotalList[0] + " 首歌曲,忽略重複歌曲 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首...";
+                    });
+                }
+
+                if (!DuplicateSongStatus && !SingerNameisEmpty)
                 {
                     if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                     {
@@ -1105,7 +1133,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 
-                if (MoveError | DuplicateSongStatus)
+                if (MoveError || DuplicateSongStatus || SingerNameisEmpty)
                 {
                     if (Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)] == Convert.ToInt32(SongId))
                     {
@@ -2124,30 +2152,10 @@ namespace CrazyKTV_SongMgr
                 if (SelectedRowsCount > 1)
                 {
                     Global.SongQueryMultiEditUpdateList[2] = (SongQuery_EditSongSinger_TextBox.Text != "") ? true : false;
-                    if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
-                    {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
-                        if (list.IndexOf(SongSinger.ToLower()) < 0) SongQuery_EditSongSingerType_ComboBox.SelectedValue = 5;
-                    }
                 }
                 else if (SelectedRowsCount == 1)
                 {
-                    if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
-                    {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
-                        if (list.IndexOf(SongSinger.ToLower()) < 0)
-                        {
-                            SongQuery_EditSongSingerType_ComboBox.SelectedValue = 4;
-                        }
-                        else
-                        {
-                            if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4") SongQuery_RefreshSongSrcPathTextBox();
-                        }
-                    }
-                    else
-                    {
-                        if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4") SongQuery_RefreshSongSrcPathTextBox();
-                    }
+                    if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4") SongQuery_RefreshSongSrcPathTextBox();
                 }
             }
         }

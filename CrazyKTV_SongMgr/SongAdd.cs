@@ -1079,19 +1079,6 @@ namespace CrazyKTV_SongMgr
                 if (SelectedRowsCount > 1)
                 {
                     Global.SongAddMultiEditUpdateList[2] = (SongAdd_EditSongSinger_TextBox.Text != "") ? true : false;
-                    if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
-                    {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
-                        if (list.IndexOf(SongSinger.ToLower()) < 0) SongAdd_EditSongSingerType_ComboBox.SelectedValue = 5;
-                    }
-                }
-                else if (SelectedRowsCount == 1)
-                {
-                    if (SongSinger.ContainsAny(Global.CrtchorusSeparateList.ToArray()))
-                    {
-                        List<string> list = new List<string>(Global.SongAddSpecialStr.Split('|')).ConvertAll(str => str.ToLower());
-                        if (list.IndexOf(SongSinger.ToLower()) < 0) SongAdd_EditSongSingerType_ComboBox.SelectedValue = 4;
-                    }
                 }
             }
         }

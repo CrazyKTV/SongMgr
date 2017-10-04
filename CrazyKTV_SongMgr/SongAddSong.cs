@@ -142,10 +142,10 @@ namespace CrazyKTV_SongMgr
             string DuplicateSongId = "";
             float DuplicateSongMB = 0;
 
+            string SongData = SongAddDT.Rows[i].Field<string>("Song_Lang") + "|" + SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower() + "|" + SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower() + "|" + SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower();
+
             if (SongDataLowCaseList.Count > 0)
             {
-                string SongData = SongAddDT.Rows[i].Field<string>("Song_Lang") + "|" + SongAddDT.Rows[i].Field<string>("Song_Singer").ToLower() + "|" + SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower() + "|" + SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower();
-
                 if (SongDataLowCaseList.IndexOf(SongData) >= 0)
                 {
                     DuplicateSongInfoIndex = SongDataLowCaseList.IndexOf(SongData);
@@ -208,7 +208,7 @@ namespace CrazyKTV_SongMgr
                             if (ChorusGroupSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(SpecialSingerName.ToLower());
                             ChorusGroupSongSingerCount++;
 
-                            ChorusSongSingerName = (ChorusSongSingerName != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
+                            ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
                         }
                     }
                     SpecialStrlist.Clear();
@@ -425,6 +425,18 @@ namespace CrazyKTV_SongMgr
                 string SongExtension = Path.GetExtension(SongSrcPath);
 
                 string SingerName = SongSinger;
+
+                // SingerName bug
+                bool SingerNameisEmpty = false;
+                if (SongSinger == "")
+                {
+                    SingerNameisEmpty = true;
+
+                    Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                    Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "歌手名稱空白: 階段1 [" + SongData + "]";
+                    Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                }
+
                 // 判斷是否要加入歌手資料至歌手資料庫
                 if (SongSingerType != 3)
                 {
@@ -616,6 +628,15 @@ namespace CrazyKTV_SongMgr
                     Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "歌曲名稱超過80字元: " + SongSrcPath;
                     Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
                 }
+                // SingerName bug
+                else if (SongSinger == "")
+                {
+                    SingerNameisEmpty = true;
+
+                    Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                    Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "歌手名稱空白: 階段2 [" + SongData + "]";
+                    Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                }
                 else
                 {
                     bool FileIOError = false;
@@ -687,7 +708,13 @@ namespace CrazyKTV_SongMgr
                         }
                     }
 
-                    if (!FileIOError)
+                    // SingerName bug
+                    if (SingerNameisEmpty)
+                    {
+                        lock (LockThis) { Global.TotalList[2]++; }
+                    }
+
+                    if (!FileIOError && !SingerNameisEmpty)
                     {
                         string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
                         SongAddSong.SongAddValueList.Add(SongAddValue);
