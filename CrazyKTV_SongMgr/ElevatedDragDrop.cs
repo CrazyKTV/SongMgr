@@ -21,8 +21,7 @@ namespace CrazyKTV_SongMgr
         private static extern void DragAcceptFiles(IntPtr hwnd, bool fAccept);
 
         [DllImport("shell32.dll")]
-        private static extern uint DragQueryFile(IntPtr hDrop, uint iFile, [Out()]
-StringBuilder lpszFile, uint cch);
+        private static extern uint DragQueryFileW(IntPtr hDrop, uint iFile, [MarshalAs(UnmanagedType.LPWStr)][Out()] StringBuilder lpszFile, uint cch);
 
         [DllImport("shell32.dll")]
         private static extern bool DragQueryPoint(IntPtr hDrop, ref POINT lppt);
@@ -130,13 +129,14 @@ StringBuilder lpszFile, uint cch);
 
         private void HandleDragDropMessage(Message m)
         {
-            dynamic sb = new StringBuilder(260);
-            uint numFiles = DragQueryFile(m.WParam, 0xffffffffu, sb, 0);
+            uint numFiles = DragQueryFileW(m.WParam, 0xFFFFFFFF, null, 0);
             dynamic list = new List<string>();
 
             for (uint i = 0; i <= numFiles - 1; i++)
             {
-                if (DragQueryFile(m.WParam, i, sb, Convert.ToUInt32(sb.Capacity) * 2) > 0)
+                uint size = DragQueryFileW(m.WParam, i, null, 0);
+                StringBuilder sb = new StringBuilder((int)size);
+                if (DragQueryFileW(m.WParam, i, sb, (uint)sb.Capacity + 1) > 0)
                 {
                     list.Add(sb.ToString());
                 }
