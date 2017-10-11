@@ -180,14 +180,19 @@ namespace CrazyKTV_SongMgr
 
                 if (!DuplicateSongStatus && SongAddDT.Rows[i].Field<int>("Song_SingerType") == 3)
                 {
-                    List<string> ChorusSongDatalist = new List<string>();
-                    ChorusSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_Lang"));
-                    ChorusSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower());
+                    List<string> ChorusSongDatalist = new List<string>()
+                    {
+                        SongAddDT.Rows[i].Field<string>("Song_Lang"),
+                        SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower()
+                    };
                     if (SongAddDT.Rows[i].Field<string>("Song_SongType") != "") ChorusSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower());
 
-                    List<string> ChorusGroupSongDatalist = new List<string>();
-                    ChorusGroupSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_Lang"));
-                    ChorusGroupSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower());
+                    List<string> ChorusGroupSongDatalist = new List<string>()
+                    {
+                        SongAddDT.Rows[i].Field<string>("Song_Lang"),
+                        SongAddDT.Rows[i].Field<string>("Song_SongName").ToLower()
+                    };
+
                     if (SongAddDT.Rows[i].Field<string>("Song_SongType") != "") ChorusGroupSongDatalist.Add(SongAddDT.Rows[i].Field<string>("Song_SongType").ToLower());
                     
                     // 處理合唱歌曲中的特殊歌手名稱

@@ -1289,10 +1289,12 @@ namespace CrazyKTV_SongMgr
 
             int MaxDigitCode;
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
-            tasks.Add(Task.Factory.StartNew(() => Common_GetSongStatisticsTask()));
+            var tasks = new List<Task>()
+            {
+                Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)),
+                Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)),
+                Task.Factory.StartNew(() => Common_GetSongStatisticsTask())
+            };
 
             this.BeginInvoke((Action)delegate()
             {
@@ -1393,11 +1395,13 @@ namespace CrazyKTV_SongMgr
 
             int MaxDigitCode;
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
-            tasks.Add(Task.Factory.StartNew(() => Common_GetSongStatisticsTask()));
-            tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6)));
+            var tasks = new List<Task>()
+            {
+                Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)),
+                Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)),
+                Task.Factory.StartNew(() => Common_GetSongStatisticsTask()),
+                Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6))
+            };
             return RemoveSongIdlist;
         }
 
@@ -1877,8 +1881,10 @@ namespace CrazyKTV_SongMgr
                     dt.Dispose();
 
                     Common_SwitchSetUI(false);
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongQuery_FavoriteQueryTask(list)));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongQuery_FavoriteQueryTask(list))
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -2491,8 +2497,10 @@ namespace CrazyKTV_SongMgr
 
                 using (DataTable UpdateDT = (DataTable)SongQuery_DataGridView.DataSource)
                 {
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(UpdateList, UpdateDT)));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongQuery_SongUpdate(UpdateList, UpdateDT))
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {

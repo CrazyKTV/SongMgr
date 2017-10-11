@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CrazyKTV_SongMgr.NativeMethods;
 
 namespace CrazyKTV_SongMgr
 {
@@ -693,8 +694,10 @@ namespace CrazyKTV_SongMgr
                         string SongPenStyle = SongQuery_DataGridView.Rows[i].Cells["Song_PenStyle"].Value.ToString();
                         string SongPlayState = SongQuery_DataGridView.Rows[i].Cells["Song_PlayState"].Value.ToString();
 
-                        List<string> UpdateList = new List<string>();
-                        UpdateList.Add(SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + OldSongId);
+                        List<string> UpdateList = new List<string>()
+                        {
+                            SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + OldSongId
+                        };
 
                         SongQuery.CreateSongDataTable();
                         Common_SwitchSetUI(false);
@@ -707,8 +710,10 @@ namespace CrazyKTV_SongMgr
 
                         using (DataTable UpdateDT = (DataTable)SongQuery_DataGridView.DataSource)
                         {
-                            var tasks = new List<Task>();
-                            tasks.Add(Task.Factory.StartNew(() => SongQuery_SongUpdate(UpdateList, UpdateDT)));
+                            var tasks = new List<Task>()
+                            {
+                                Task.Factory.StartNew(() => SongQuery_SongUpdate(UpdateList, UpdateDT))
+                            };
 
                             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                             {

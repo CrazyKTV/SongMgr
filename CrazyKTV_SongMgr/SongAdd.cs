@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CrazyKTV_SongMgr.NativeMethods;
 
 namespace CrazyKTV_SongMgr
 {
@@ -317,8 +318,10 @@ namespace CrazyKTV_SongMgr
                     SongAdd_InitializeEditControl();
                     Common_SwitchSetUI(false);
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongAdd_SongAnalysisTask(list)));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongAdd_SongAnalysisTask(list))
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {

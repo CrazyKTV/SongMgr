@@ -25,8 +25,10 @@ namespace CrazyKTV_SongMgr
                 string SingerType = Global.CrazyktvSingerTypeList.IndexOf(SingerMgr_QueryType_ComboBox.Text).ToString();
 
                 Common_SwitchSetUI(false);
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerName", QueryValue, SingerType)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerName", QueryValue, SingerType))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -78,8 +80,10 @@ namespace CrazyKTV_SongMgr
                 string SingerType = Global.CrazyktvSingerTypeList.IndexOf(SingerMgr_QueryType_ComboBox.Text).ToString();
 
                 Common_SwitchSetUI(false);
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerName", QueryValue, SingerType)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerName", QueryValue, SingerType))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -104,8 +108,10 @@ namespace CrazyKTV_SongMgr
                 string SingerType = Global.CrazyktvSingerTypeList.IndexOf(SingerMgr_QueryType_ComboBox.Text).ToString();
 
                 Common_SwitchSetUI(false);
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerType", QueryValue, SingerType)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerType", QueryValue, SingerType))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -927,8 +933,10 @@ namespace CrazyKTV_SongMgr
                 string SingerAddName = SingerMgr_SingerAddName_TextBox.Text;
                 string SingerAddType = SingerMgr_SingerAddType_ComboBox.Text;
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerAddTask(SingerAddName, SingerAddType)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SingerMgr_SingerAddTask(SingerAddName, SingerAddType))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1057,8 +1065,10 @@ namespace CrazyKTV_SongMgr
 
                     SingerMgr_Tooltip_Label.Text = "正在匯入歌手資料,請稍待...";
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerImportTask()));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SingerMgr_SingerImportTask())
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -1107,14 +1117,13 @@ namespace CrazyKTV_SongMgr
             foreach (string AddStr in Addlist)
             {
                 list = new List<string>(Regex.Split(AddStr, ",", RegexOptions.None));
-
-                list[1] = (Addlist.IndexOf(AddStr) + 1).ToString();
+                string singerid = (Addlist.IndexOf(AddStr) + 1).ToString();
 
                 switch (list[0])
                 {
                     case "ktv_Singer":
                     case "ktv_AllSinger":
-                        singercmd.Parameters.AddWithValue("@SingerId", list[1]);
+                        singercmd.Parameters.AddWithValue("@SingerId", singerid);
                         singercmd.Parameters.AddWithValue("@SingerName", list[2]);
                         singercmd.Parameters.AddWithValue("@SingerType", list[3]);
                         singercmd.Parameters.AddWithValue("@SingerSpell", list[4]);
@@ -1153,8 +1162,10 @@ namespace CrazyKTV_SongMgr
 
                 SingerMgr_Tooltip_Label.Text = "正在重建歌庫歌手資料,請稍待...";
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Common_RebuildSingerDataTask("SingerMgr")));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => Common_RebuildSingerDataTask("SingerMgr"))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1183,8 +1194,10 @@ namespace CrazyKTV_SongMgr
 
             SingerMgr_Tooltip_Label.Text = "正在重建歌星姓氏,請稍待...";
 
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => SingerMgr_RebuildSingerLastNameTask()));
+            var tasks = new List<Task>()
+            {
+                Task.Factory.StartNew(() => SingerMgr_RebuildSingerLastNameTask())
+            };
 
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
@@ -1265,9 +1278,11 @@ namespace CrazyKTV_SongMgr
                         }
                         SingerLastNameList.Clear();
 
-                        List<string> RebuildList = new List<string>();
-                        RebuildList.Add("英文|ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ");
-                        RebuildList.Add("數字|１２３４５６７８９０");
+                        List<string> RebuildList = new List<string>()
+                        {
+                            "英文|ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ",
+                            "數字|１２３４５６７８９０"
+                        };
 
                         var query = from row in dt.AsEnumerable()
                                     where row["SingerLastName"].ToString() != ""
@@ -1481,8 +1496,10 @@ namespace CrazyKTV_SongMgr
 
                 using (DataTable UpdateDT = (DataTable)SingerMgr_DataGridView.DataSource)
                 {
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(UpdateList, UpdateDT)));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SingerMgr_SingerUpdateTask(UpdateList, UpdateDT))
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
