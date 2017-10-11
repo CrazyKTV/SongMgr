@@ -158,7 +158,6 @@
     <Compile Include="Debug.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ElevatedDragDrop.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MainCfg.cs">
       <SubType>Form</SubType>
