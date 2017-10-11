@@ -36,7 +36,6 @@ namespace CrazyKTV_SongMgr
             if (CommonFunc.IsAdministrator())
             {
                 this.Text += " (系統管理員)";
-                SongAdd_Tooltip_Label.Text = "請勿使用管理員身份執行加歌程式，否則將無法用檔案總管來拖曳檔案。";
             }
 
             ElevatedDragDropManager.Instance.EnableDragDrop(SongAdd_DataGridView.Handle);
