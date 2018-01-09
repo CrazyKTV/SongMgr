@@ -111,7 +111,20 @@ namespace CrazyKTV_SongMgr
                             list = new List<string>() { "1", "0", "2" };
                             if (row["Singer_Sex"].ToString() != "")
                             {
-                                if (SongSingerType == "") SongSingerType = list[Convert.ToInt32(row["Singer_Sex"])];
+                                if (SongSingerType == "")
+                                {
+                                    try
+                                    {
+                                        SongSingerType = list[Convert.ToInt32(row["Singer_Sex"])];
+                                    }
+                                    catch
+                                    {
+                                        SongSingerType = "10";
+                                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                    }
+                                }
                                 break;
                             }
                         }
@@ -333,7 +346,20 @@ namespace CrazyKTV_SongMgr
                         list = new List<string>() { "1", "0", "2" };
                         if (row["Singer_Sex"].ToString() != "")
                         {
-                            if (SongSingerType == "") SongSingerType = list[Convert.ToInt32(row["Singer_Sex"])];
+                            if (SongSingerType == "")
+                            {
+                                try
+                                {
+                                    SongSingerType = list[Convert.ToInt32(row["Singer_Sex"])];
+                                }
+                                catch
+                                {
+                                    SongSingerType = "10";
+                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲歌手類別數值錯誤,已自動將其數值改為10: " + SongId + "|" + SongSongName;
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                }
+                            }
                             break;
                         }
                     }
