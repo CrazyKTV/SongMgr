@@ -437,7 +437,7 @@ namespace CrazyKTV_SongMgr
 
         private void Common_InitializeSongData(bool InitSongId, bool InitPhonetics, bool InitCashbox, bool InitSpecialStr, bool InitSingerGroup)
         {
-            if (Global.CrazyktvDatabaseStatus)
+            if (File.Exists(Global.CrazyktvSongMgrDatabaseFile))
             {
                 var tasks = new List<Task>();
 
