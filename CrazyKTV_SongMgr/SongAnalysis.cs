@@ -337,22 +337,25 @@ namespace CrazyKTV_SongMgr
             string DirStr = Path.GetDirectoryName(file);
             List<string> DirStrRemoveList = new List<string>();
 
-            if (SongSingerType == "" || SongSinger == "" || SongLang == "")
+            if (SongSingerType == "" || SongSinger == "" || SongLang == "" || Global.SongAddSongIdentificationMode == "5")
             {
                 list = new List<string>(Regex.Split(DirStr, @"\\", RegexOptions.None));
+                bool FindSinger = false;
+                if (Global.SongAddSongIdentificationMode == "5") FindSinger = true;
 
                 foreach (string str in list)
                 {
-                    if (SongSingerType != "" && SongSinger != "" && SongLang != "") break;
+                    if (SongSingerType != "" && SongSinger != "" && SongLang != "" && !FindSinger) break;
                     string splitstr = Regex.Replace(str, @"%%|^\s*|\s*$", "");
 
                     // 查看資料夾名稱中有無歌手
-                    if (SongSinger == "")
+                    if (SongSinger == "" || FindSinger)
                     {
-                        if (SingerDataLowCaseList.IndexOf(splitstr.ToLower()) >= 0 && Global.SongAddSongIdentificationMode == "1")
+                        if (SingerDataLowCaseList.IndexOf(splitstr.ToLower()) >= 0 && (Global.SongAddSongIdentificationMode == "1" || Global.SongAddSongIdentificationMode == "5"))
                         {
                             SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
-                            if (SongSingerType == "") SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
+                            if (SongSingerType == "" || FindSinger) SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(splitstr.ToLower())];
+                            FindSinger = false;
                         }
                         else
                         {
@@ -366,7 +369,8 @@ namespace CrazyKTV_SongMgr
                                     if (SingerDataLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
                                     {
                                         SongSinger = splitstr;
-                                        if (SongSingerType == "") SongSingerType = "3";
+                                        if (SongSingerType == "" || FindSinger) SongSingerType = "3";
+                                        FindSinger = false;
                                         break;
                                     }
                                 }
@@ -472,6 +476,7 @@ namespace CrazyKTV_SongMgr
                 switch (Global.SongAddSongIdentificationMode)
                 {
                     case "1":
+                    case "5":
                         switch (list.Count) // 智能辨識模式
                         {
                             case 1:
