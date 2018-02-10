@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CrazyKTV_SongMgr.NativeMethods;
@@ -462,6 +463,7 @@ namespace CrazyKTV_SongMgr
 
             // 檢查資料庫檔案是否為舊版資料庫
             SongDBUpdate_CheckDatabaseFile();
+            SpinWait.SpinUntil(() => Global.CrazyktvDatabaseIsOld == false);
 
             // 初始化所需資料
             Common_InitializeSongData(true, true, true, true, true);
