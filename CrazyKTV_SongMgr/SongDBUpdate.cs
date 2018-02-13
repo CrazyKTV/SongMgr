@@ -12,6 +12,22 @@ namespace CrazyKTV_SongMgr
 {
     public partial class MainForm : Form
     {
+        private void SongMgrDB_CheckDatabaseFile()
+        {
+            Global.SongMgrDatabaseError = false;
+
+            if (File.Exists(Global.CrazyktvSongMgrDatabaseFile))
+            {
+                List<string> TableList = new List<string>() { "ktv_AllSinger", "ktv_Cashbox", "ktv_Phonetics", "ktv_SongMgr", "ktv_Version" };
+                List<string> SongMgrDBTableList = new List<string>(CommonFunc.GetOleDbTableList(Global.CrazyktvSongMgrDatabaseFile, ""));
+                foreach (string TableName in TableList)
+                {
+                    if (SongMgrDBTableList.IndexOf(TableName) < 0) Global.SongMgrDatabaseError = true;
+                }
+            }
+
+        }
+
         private void SongDBUpdate_CheckDatabaseFile()
         {
             Global.CrazyktvDatabaseStatus = false;

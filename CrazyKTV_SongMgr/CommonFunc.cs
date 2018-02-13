@@ -596,11 +596,7 @@ namespace CrazyKTV_SongMgr
                 {
                     TaskFinished = true;
                 });
-
-                while (!TaskFinished)
-                {
-                    Thread.Sleep(100);
-                }
+                SpinWait.SpinUntil(() => TaskFinished == true);
             }
         }
 
