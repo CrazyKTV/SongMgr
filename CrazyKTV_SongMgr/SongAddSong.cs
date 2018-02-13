@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -544,20 +545,27 @@ namespace CrazyKTV_SongMgr
                             case "2":
                                 if (SongId.Length == 6 && SongDataIdList.IndexOf(SongId) < 0)
                                 {
-                                    if (Global.CrazyktvSongLangList.IndexOf(SongLang) < 9)
+                                    if (Convert.ToInt32(SongId) >= 0 && Convert.ToInt32(SongId) <= 99999)
                                     {
-                                        if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
-                                        Convert.ToInt32(SongId) < Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang) + 1]))
-                                        {
-                                            UseCustomSongID = true;
-                                        }
+                                        UseCustomSongID = true;
                                     }
                                     else
                                     {
-                                        if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
-                                        Convert.ToInt32(SongId) < 1000000)
+                                        if (Global.CrazyktvSongLangList.IndexOf(SongLang) < 9)
                                         {
-                                            UseCustomSongID = true;
+                                            if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
+                                            Convert.ToInt32(SongId) < Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang) + 1]))
+                                            {
+                                                UseCustomSongID = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Convert.ToInt32(SongId) >= Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]) &&
+                                            Convert.ToInt32(SongId) < 1000000)
+                                            {
+                                                UseCustomSongID = true;
+                                            }
                                         }
                                     }
                                 }
@@ -569,23 +577,61 @@ namespace CrazyKTV_SongMgr
                 // 自訂編號
                 if (UseCustomSongID)
                 {
-                    if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+                    if (SongId.Length == 6 && Convert.ToInt32(SongId) >= 0 && Convert.ToInt32(SongId) <= 99999)
                     {
-                        if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongId) >= 0)
+                        List<string> StartIdlist = new List<string>();
+                        StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
+                        bool RefreshID = false;
+                        foreach (string startid in StartIdlist)
+                        {
+                            if (Convert.ToInt32(startid) <= 99999)
+                            {
+                                RefreshID = true;
+                            }
+                        }
+                        if (RefreshID)
+                        {
+                            Parallel.ForEach(Global.CrazyktvSongLangList, (SongLangStr, loopState) =>
+                            {
+                                if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].Count > 0)
+                                {
+                                    if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].IndexOf(SongId) >= 0)
+                                    {
+                                        lock (LockThis)
+                                        {
+                                            Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].Remove(SongId);
+                                            if (Convert.ToInt32(SongId) > Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)])
+                                            {
+                                                Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)] = Convert.ToInt32(SongId);
+                                                GetUnUsedSongId(SongId, SongLangStr);
+                                            }
+                                            loopState.Break();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+                        {
+                            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongId) >= 0)
+                            {
+                                lock (LockThis)
+                                {
+                                    Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
+                                }
+                            }
+                        }
+
+                        if (Convert.ToInt32(SongId) > Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)])
                         {
                             lock (LockThis)
                             {
-                                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
+                                Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)] = Convert.ToInt32(SongId);
+                                GetUnUsedSongId(SongId, SongLang);
                             }
-                        }
-                    }
-
-                    if (Convert.ToInt32(SongId) > Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)])
-                    {
-                        lock (LockThis)
-                        {
-                            Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)] = Convert.ToInt32(SongId);
-                            GetUnUsedSongId(SongId, SongLang);
                         }
                     }
                 }
