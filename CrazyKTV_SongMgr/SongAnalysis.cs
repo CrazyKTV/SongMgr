@@ -692,6 +692,10 @@ namespace CrazyKTV_SongMgr
                                 SongLang = "國語";
                                 SongSongName = "兒歌";
                             }
+                            else if (Global.SongAddSongIdentificationMode == "5" && SongSongName == "兒歌")
+                            {
+                                SongLang = "國語";
+                            }
                         }
                         break;
                     case "莫文蔚":
@@ -701,6 +705,10 @@ namespace CrazyKTV_SongMgr
                             {
                                 SongLang = "國語";
                                 SongSongName = "台";
+                            }
+                            else if (Global.SongAddSongIdentificationMode == "5" && SongSongName == "台")
+                            {
+                                SongLang = "國語";
                             }
                         }
                         break;
