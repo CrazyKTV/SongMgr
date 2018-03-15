@@ -951,7 +951,7 @@ namespace CrazyKTV_SongMgr
             int SelectedValue = 1;
             int SelectedRowsCount;
 
-            if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "6")
+            if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "7")
             {
                 SongQuery_QueryValue_ComboBox.DataSource = SongQuery.GetSongQueryValueList("SongType", false, false);
                 SongQuery_QueryValue_ComboBox.DisplayMember = "Display";

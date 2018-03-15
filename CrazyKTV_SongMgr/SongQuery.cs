@@ -55,6 +55,17 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "4":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.Text = "*";
+                    SongQuery_QueryValue_TextBox.Enabled = false;
+                    SongQuery_QueryValue_ComboBox.Visible = false;
+                    SongQuery_QueryValue_TextBox.Visible = true;
+                    SongQuery_Paste_Button.Enabled = false;
+                    SongQuery_Clear_Button.Enabled = false;
+                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    SongQuery_DataGridView.Focus();
+                    break;
+                case "5":
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     SongQuery_QueryValue_TextBox.Text = "100";
                     SongQuery_QueryValue_TextBox.Enabled = true;
                     SongQuery_QueryValue_ComboBox.Visible = false;
@@ -64,7 +75,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Query_Button_Click(new Button(), new EventArgs());
                     SongQuery_DataGridView.Focus();
                     break;
-                case "5":
+                case "6":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     SongQuery_QueryValue_TextBox.Text = "*";
                     SongQuery_QueryValue_TextBox.Enabled = false;
@@ -75,7 +86,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Query_Button_Click(new Button(), new EventArgs());
                     SongQuery_DataGridView.Focus();
                     break;
-                case "6":
+                case "7":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = false;
@@ -91,7 +102,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Visible = true;
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
-                case "7":
+                case "8":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = false;
@@ -107,7 +118,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Visible = true;
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
-                case "8":
+                case "9":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = false;
@@ -123,7 +134,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Visible = true;
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
-                case "9":
+                case "10":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     SongQuery_QueryValue_TextBox.Text = "*";
                     SongQuery_QueryValue_TextBox.Enabled = false;
@@ -161,7 +172,7 @@ namespace CrazyKTV_SongMgr
                         e.Handled = true;
                     }
                     break;
-                case "4":
+                case "5":
                     if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13)
                     {
                         e.Handled = true;
@@ -307,36 +318,42 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "4":
+                        SongQueryType = "AllSong";
+                        SongQueryValue = SongQuery_QueryValue_TextBox.Text;
+                        SongQueryStatusText = "全部歌曲";
+                        SongQuery_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
+                        break;
+                    case "5":
                         SongQueryType = "NewSong";
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
                         SongQueryStatusText = "新進歌曲";
                         SongQuery_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
                         break;
-                    case "5":
+                    case "6":
                         SongQueryType = "ChorusSong";
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
                         SongQueryStatusText = "合唱歌曲";
                         SongQuery_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
                         break;
-                    case "6":
+                    case "7":
                         SongQueryType = "SongType";
                         SongQueryValue = SongQuery_QueryValue_ComboBox.Text;
                         SongQueryStatusText = "歌曲類別為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
-                    case "7":
+                    case "8":
                         SongQueryType = "SingerType";
                         SongQueryValue = Global.CrazyktvSingerTypeList.IndexOf(SongQuery_QueryValue_ComboBox.Text).ToString();
                         SongQueryStatusText = "歌手類別為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
-                    case "8":
+                    case "9":
                         SongQueryType = "SongTrack";
                         SongQueryValue = SongQuery_QueryValue_ComboBox.SelectedValue.ToString();
                         SongQueryStatusText = "歌曲聲道為" + SongQuery_QueryValue_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
-                    case "9":
+                    case "10":
                         SongQueryType = "CashboxId";
                         SongQueryValue = SongQuery_QueryValue_TextBox.Text;
                         SongQueryStatusText = "使用錢櫃編號";
@@ -2694,7 +2711,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道", "錢櫃編號" };
+                List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "全部歌曲", "新進歌曲", "合唱歌曲", "歌曲類別", "歌手類別", "歌曲聲道", "錢櫃編號" };
 
                 foreach (string str in ItemList)
                 {
@@ -2944,6 +2961,16 @@ namespace CrazyKTV_SongMgr
                     else
                     {
                         SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Id = '" + QueryValue + "'";
+                    }
+                    break;
+                case "AllSong":
+                    if (Global.SongQueryFilter != "全部")
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Lang = '" + Global.SongQueryFilter + "'" + SongQueryOrderStr;
+                    }
+                    else
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song" + SongQueryOrderStr;
                     }
                     break;
                 case "NewSong":
