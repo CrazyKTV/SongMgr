@@ -2595,6 +2595,16 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- CommonFunc 判斷是否為最愛用戶編號 ---
+
+        public static bool IsUserId(String str)
+        {
+            Regex r = new Regex(@"^(?:\d{4})?$");
+            return r.IsMatch(str);
+        }
+
+        #endregion
+
         #region --- CommonFunc 取得最愛用戶列表 ---
 
         public static DataTable GetFavoriteUserList(int ListTpye)

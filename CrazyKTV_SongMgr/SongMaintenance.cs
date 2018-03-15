@@ -1935,7 +1935,7 @@ namespace CrazyKTV_SongMgr
                     if (SongMaintenance_Favorite_TextBox.Text != "")
                     {
                         if (SongMaintenance_Tooltip_Label.Text == "尚未輸入要加入的最愛用戶名稱!") SongMaintenance_Tooltip_Label.Text = "";
-                        int AddUser = 1;
+                        bool AddUser = true;
                         dt = (DataTable)SongMaintenance_Favorite_ListBox.DataSource;
 
                         if (dt.Rows.Count > 0)
@@ -1947,35 +1947,36 @@ namespace CrazyKTV_SongMgr
                                 {
                                     SongMaintenance_Tooltip_Label.Text = "已有此最愛用戶名稱!";
                                     dt = new DataTable();
-                                    AddUser = 0;
+                                    AddUser = false;
                                     break;
                                 }
                             }
                         }
-                        if (AddUser != 0)
+
+                        if (AddUser)
                         {
                             SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
                             dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
-                            for (int i = 1; i < 999; i++)
+                            List<string> UserIdList = new List<string>();
+                            foreach (DataRow row in dt.Rows)
                             {
-                                int AddUserID = 1;
-                                foreach (DataRow row in dt.AsEnumerable())
+                                if (CommonFunc.IsUserId(row["User_Id"].ToString()))
                                 {
-                                    if (row["User_Id"].ToString() == "U" + i.ToString("D3"))
-                                    {
-                                        AddUserID = 0;
-                                        break;
-                                    }
+                                    UserIdList.Add(row["User_Id"].ToString());
                                 }
+                            }
 
-                                if (AddUserID != 0)
+                            for (int i = 1; i < 9999; i++)
+                            {
+                                if (UserIdList.IndexOf(i.ToString("D4")) < 0)
                                 {
-                                    UserId = "U" + i.ToString("D3");
+                                    UserId = i.ToString("D4");
                                     UserName = SongMaintenance_Favorite_TextBox.Text;
                                     break;
                                 }
                             }
+
                             if (UserId != "")
                             {
                                 conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
