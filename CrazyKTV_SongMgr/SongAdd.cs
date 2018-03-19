@@ -748,56 +748,60 @@ namespace CrazyKTV_SongMgr
                     if (SongAddSong.AllSingerDataLowCaseList.IndexOf(singer.ToLower()) >= 0)
                     {
                         singertype = SongAddSong.AllSingerDataTypeList[SongAddSong.AllSingerDataLowCaseList.IndexOf(singer.ToLower())];
+                    }
+                    else
+                    {
+                        singertype = (Convert.ToInt32(Global.SongAddDefaultSingerType) - 1).ToString();
+                    }
 
-                        if (SingerList.Count > 0)
-                        {
-                            if (SingerLowCaseList.IndexOf(singer.ToLower()) < 0)
-                            {
-                                AddSinger = true;
-                            }
-                        }
-                        else
+                    if (SingerList.Count > 0)
+                    {
+                        if (SingerLowCaseList.IndexOf(singer.ToLower()) < 0)
                         {
                             AddSinger = true;
                         }
+                    }
+                    else
+                    {
+                        AddSinger = true;
+                    }
 
-                        if (AddSinger)
+                    if (AddSinger)
+                    {
+                        if (NotExistsSingerId.Count > 0)
                         {
-                            if (NotExistsSingerId.Count > 0)
-                            {
-                                NextSingerId = NotExistsSingerId[0];
-                                NotExistsSingerId.RemoveAt(0);
-                            }
-                            else
-                            {
-                                NextSingerId = MaxSingerId.ToString();
-                                MaxSingerId++;
-                            }
-
-                            spelllist = new List<string>();
-                            spelllist = CommonFunc.GetSongNameSpell(singer);
-
-                            singercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
-                            singercmd.Parameters.AddWithValue("@SingerName", singer);
-                            singercmd.Parameters.AddWithValue("@SingerType", singertype);
-                            singercmd.Parameters.AddWithValue("@SingerSpell", spelllist[0]);
-                            singercmd.Parameters.AddWithValue("@SingerStrokes", spelllist[2]);
-                            singercmd.Parameters.AddWithValue("@SingerSpellNum", spelllist[1]);
-                            singercmd.Parameters.AddWithValue("@SingerPenStyle", spelllist[3]);
-
-                            try
-                            {
-                                singercmd.ExecuteNonQuery();
-                                Global.TotalList[4]++;
-                            }
-                            catch
-                            {
-                                Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
-                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入合唱歌手至 ktv_Singer 時發生錯誤: " + valuelist[3];
-                                Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
-                            }
-                            singercmd.Parameters.Clear();
+                            NextSingerId = NotExistsSingerId[0];
+                            NotExistsSingerId.RemoveAt(0);
                         }
+                        else
+                        {
+                            NextSingerId = MaxSingerId.ToString();
+                            MaxSingerId++;
+                        }
+
+                        spelllist = new List<string>();
+                        spelllist = CommonFunc.GetSongNameSpell(singer);
+
+                        singercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
+                        singercmd.Parameters.AddWithValue("@SingerName", singer);
+                        singercmd.Parameters.AddWithValue("@SingerType", singertype);
+                        singercmd.Parameters.AddWithValue("@SingerSpell", spelllist[0]);
+                        singercmd.Parameters.AddWithValue("@SingerStrokes", spelllist[2]);
+                        singercmd.Parameters.AddWithValue("@SingerSpellNum", spelllist[1]);
+                        singercmd.Parameters.AddWithValue("@SingerPenStyle", spelllist[3]);
+
+                        try
+                        {
+                            singercmd.ExecuteNonQuery();
+                            Global.TotalList[4]++;
+                        }
+                        catch
+                        {
+                            Global.FailureSongDT.Rows.Add(Global.FailureSongDT.NewRow());
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][0] = "加入合唱歌手至 ktv_Singer 時發生錯誤: " + valuelist[3];
+                            Global.FailureSongDT.Rows[Global.FailureSongDT.Rows.Count - 1][1] = Global.FailureSongDT.Rows.Count;
+                        }
+                        singercmd.Parameters.Clear();
                     }
 
                     this.BeginInvoke((Action)delegate()
