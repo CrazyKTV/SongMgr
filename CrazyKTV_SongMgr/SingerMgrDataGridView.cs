@@ -113,18 +113,34 @@ namespace CrazyKTV_SongMgr
                 case "移除歌手":
                     if (MessageBox.Show("你確定要移除歌手嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        List<string> SingerIdlist = new List<string>();
-
+                        List<string> RemoveSingerIdlist = new List<string>();
                         foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
                         {
-                            SingerIdlist.Add(row.Cells["Singer_Id"].Value.ToString());
-                            SingerMgr_DataGridView.Rows.Remove(row);
+                            RemoveSingerIdlist.Add(row.Cells["Singer_Id"].Value.ToString());
+                        }
+
+                        using (DataTable dt = (DataTable)SingerMgr_DataGridView.DataSource)
+                        {
+                            List<DataRow> RemoveRomList = new List<DataRow>();
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                if (RemoveSingerIdlist.IndexOf(row["Singer_Id"].ToString()) > -1)
+                                {
+                                    RemoveRomList.Add(row);
+                                }
+                            }
+
+                            foreach (DataRow row in RemoveRomList)
+                            {
+                                dt.Rows.Remove(row);
+                            }
+                            RemoveRomList.Clear();
                         }
 
                         Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                         Common_SwitchSetUI(false);
                         var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(SingerIdlist)));
+                        tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(RemoveSingerIdlist)));
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
@@ -133,6 +149,7 @@ namespace CrazyKTV_SongMgr
                                 Common_SwitchSetUI(true);
                                 Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
                                 SingerMgr_Tooltip_Label.Text = "已成功移除 " + Global.TotalList[0] + " 位歌手資料。";
+                                RemoveSingerIdlist.Clear();
                             });
                         });
                     }
@@ -215,18 +232,34 @@ namespace CrazyKTV_SongMgr
                         case Keys.Delete:
                             if (MessageBox.Show("你確定要移除歌手嗎?", "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                             {
-                                List<string> SingerIdlist = new List<string>();
-
+                                List<string> RemoveSingerIdlist = new List<string>();
                                 foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
                                 {
-                                    SingerIdlist.Add(row.Cells["Singer_Id"].Value.ToString());
-                                    SingerMgr_DataGridView.Rows.Remove(row);
+                                    RemoveSingerIdlist.Add(row.Cells["Singer_Id"].Value.ToString());
+                                }
+
+                                using (DataTable dt = (DataTable)SingerMgr_DataGridView.DataSource)
+                                {
+                                    List<DataRow> RemoveRomList = new List<DataRow>();
+                                    foreach (DataRow row in dt.Rows)
+                                    {
+                                        if (RemoveSingerIdlist.IndexOf(row["Singer_Id"].ToString()) > -1)
+                                        {
+                                            RemoveRomList.Add(row);
+                                        }
+                                    }
+
+                                    foreach (DataRow row in RemoveRomList)
+                                    {
+                                        dt.Rows.Remove(row);
+                                    }
+                                    RemoveRomList.Clear();
                                 }
 
                                 Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                                 Common_SwitchSetUI(false);
                                 var tasks = new List<Task>();
-                                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(SingerIdlist)));
+                                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(RemoveSingerIdlist)));
 
                                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                                 {
@@ -235,6 +268,7 @@ namespace CrazyKTV_SongMgr
                                         Common_SwitchSetUI(true);
                                         Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
                                         SingerMgr_Tooltip_Label.Text = "已成功移除 " + Global.TotalList[0] + " 位歌手資料。";
+                                        RemoveSingerIdlist.Clear();
                                     });
                                 });
                             }

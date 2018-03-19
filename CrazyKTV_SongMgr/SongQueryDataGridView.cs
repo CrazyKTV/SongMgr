@@ -282,12 +282,22 @@ namespace CrazyKTV_SongMgr
                         var task = Task<List<string>>.Factory.StartNew(() => SongQuery_SongRemove(SongIdlist, SongFilelist));
                         RemoveSongIdlist = task.Result;
 
-                        foreach (DataGridViewRow row in SongQuery_DataGridView.SelectedRows)
+                        using (DataTable dt = (DataTable)SongQuery_DataGridView.DataSource)
                         {
-                            if (RemoveSongIdlist.IndexOf(row.Cells["Song_Id"].Value.ToString()) > -1)
+                            List<DataRow> RemoveRomList = new List<DataRow>();
+                            foreach (DataRow row in dt.Rows)
                             {
-                                SongQuery_DataGridView.Rows.Remove(row);
+                                if (RemoveSongIdlist.IndexOf(row["Song_Id"].ToString()) > -1)
+                                {
+                                    RemoveRomList.Add(row);
+                                }
                             }
+
+                            foreach (DataRow row in RemoveRomList)
+                            {
+                                dt.Rows.Remove(row);
+                            }
+                            RemoveRomList.Clear();
                         }
 
                         if (SongQuery_DataGridView.RowCount == 0)
@@ -476,12 +486,22 @@ namespace CrazyKTV_SongMgr
                                 var task = Task<List<string>>.Factory.StartNew(() => SongQuery_SongRemove(SongIdlist, SongFilelist));
                                 RemoveSongIdlist = task.Result;
 
-                                foreach (DataGridViewRow row in SongQuery_DataGridView.SelectedRows)
+                                using (DataTable dt = (DataTable) SongQuery_DataGridView.DataSource)
                                 {
-                                    if (RemoveSongIdlist.IndexOf(row.Cells["Song_Id"].Value.ToString()) > -1)
+                                    List<DataRow> RemoveRomList = new List<DataRow>();
+                                    foreach (DataRow row in dt.Rows)
                                     {
-                                        SongQuery_DataGridView.Rows.Remove(row);
+                                        if (RemoveSongIdlist.IndexOf(row["Song_Id"].ToString()) > -1)
+                                        {
+                                            RemoveRomList.Add(row);
+                                        }
                                     }
+
+                                    foreach (DataRow row in RemoveRomList)
+                                    {
+                                        dt.Rows.Remove(row);
+                                    }
+                                    RemoveRomList.Clear();
                                 }
 
                                 if (SongQuery_DataGridView.RowCount == 0)
