@@ -54,6 +54,17 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "4":
                     Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    Cashbox_QueryValue_TextBox.Text = "*";
+                    Cashbox_QueryValue_TextBox.Enabled = false;
+                    Cashbox_QueryValue_ComboBox.Visible = false;
+                    Cashbox_QueryValue_TextBox.Visible = true;
+                    Cashbox_Paste_Button.Enabled = false;
+                    Cashbox_Clear_Button.Enabled = false;
+                    Cashbox_Query_Button_Click(new Button(), new EventArgs());
+                    Cashbox_DataGridView.Focus();
+                    break;
+                case "5":
+                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Off;
                     Cashbox_QueryValue_TextBox.Text = "100";
                     Cashbox_QueryValue_TextBox.Enabled = true;
                     Cashbox_QueryValue_ComboBox.Visible = false;
@@ -78,16 +89,8 @@ namespace CrazyKTV_SongMgr
         {
             switch (Cashbox_QueryType_ComboBox.SelectedValue.ToString())
             {
-                case "1":
-                case "2":
-                    break;
                 case "3":
-                    if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13)
-                    {
-                        e.Handled = true;
-                    }
-                    break;
-                case "4":
+                case "5":
                     if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13)
                     {
                         e.Handled = true;
@@ -282,6 +285,12 @@ namespace CrazyKTV_SongMgr
                         Cashbox_QueryStatus_Label.Text = "正在查詢『" + SongQueryStatusText + "』的相關歌曲,請稍待...";
                         break;
                     case "4":
+                        SongQueryType = "AllSong";
+                        SongQueryValue = Cashbox_QueryValue_TextBox.Text;
+                        SongQueryStatusText = "全部歌曲";
+                        Cashbox_QueryStatus_Label.Text = "正在查詢" + SongQueryStatusText + ",請稍待...";
+                        break;
+                    case "5":
                         SongQueryType = "NewSong";
                         SongQueryValue = Cashbox_QueryValue_TextBox.Text;
                         SongQueryStatusText = "新進歌曲";
@@ -1746,7 +1755,7 @@ namespace CrazyKTV_SongMgr
             {
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
-                List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "新進歌曲" };
+                List<string> ItemList = new List<string>() { "歌曲名稱", "歌手名稱", "歌曲編號", "全部歌曲", "新進歌曲" };
 
                 foreach (string str in ItemList)
                 {
@@ -1942,6 +1951,16 @@ namespace CrazyKTV_SongMgr
                     else
                     {
                         SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where Cashbox_Id = '" + QueryValue + "'";
+                    }
+                    break;
+                case "AllSong":
+                    if (Global.CashboxQueryFilter != "全部")
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where Song_Lang = '" + Global.CashboxQueryFilter + "'" + SongQueryOrderStr;
+                    }
+                    else
+                    {
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox" + SongQueryOrderStr;
                     }
                     break;
                 case "NewSong":

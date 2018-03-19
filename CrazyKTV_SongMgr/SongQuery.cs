@@ -160,18 +160,7 @@ namespace CrazyKTV_SongMgr
         {
             switch (SongQuery_QueryType_ComboBox.SelectedValue.ToString())
             {
-                case "1":
-
-                    break;
-                case "2":
-
-                    break;
                 case "3":
-                    if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13)
-                    {
-                        e.Handled = true;
-                    }
-                    break;
                 case "5":
                     if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & (int)e.KeyChar != 13)
                     {
