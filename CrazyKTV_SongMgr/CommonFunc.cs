@@ -446,7 +446,7 @@ namespace CrazyKTV_SongMgr
                     int MaxDigitCode;
                     if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
                     tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
-                    tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)));
+                    tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetUnusedSongId(MaxDigitCode)));
                 }
 
                 if (InitPhonetics)
@@ -1095,7 +1095,7 @@ namespace CrazyKTV_SongMgr
 
             int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_Singer", Global.CrazyktvDatabaseFile) + 1;
             List<string> NotExistsSingerId = new List<string>();
-            NotExistsSingerId = CommonFunc.GetNotExistsSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
+            NotExistsSingerId = CommonFunc.GetUnusedSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
 
             DataTable dt = new DataTable();
             string SingerQuerySqlStr = "SELECT First(Song_Singer) AS Song_Singer, First(Song_SingerType) AS Song_SingerType, Count(Song_Singer) AS Song_SingerCount FROM ktv_Song GROUP BY Song_Singer HAVING First(Song_SingerType)<=10 AND First(Song_SingerType)<>8 AND First(Song_SingerType)<>9 AND Count(Song_Singer)>0 ORDER BY First(Song_SingerType), First(Song_Singer)";
@@ -1981,32 +1981,29 @@ namespace CrazyKTV_SongMgr
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
                 using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
-                    int StartId;
-                    int EndId;
-                    int TotalId;
                     int RemainingSongId;
 
                     foreach (string StartIdStr in StartIdlist)
                     {
                         if (StartIdStr == ((DigitCode == 5) ? "100000" : "1000000")) break;
 
-                        StartId = Convert.ToInt32(StartIdStr);
-                        EndId = Convert.ToInt32(StartIdlist[StartIdlist.IndexOf(StartIdStr) + 1]) - 1;
-                        TotalId = EndId - StartId;
+                        int sid = Convert.ToInt32(StartIdStr);
+                        int eid = Convert.ToInt32(StartIdlist[StartIdlist.IndexOf(StartIdStr) + 1]) - 1;
+                        int tid = eid - sid + 1;
 
                         var query = from row in dt.AsEnumerable()
-                                    where Convert.ToInt32(row.Field<string>("Song_Id")) >= StartId &&
-                                          Convert.ToInt32(row.Field<string>("Song_Id")) <= EndId &&
+                                    where Convert.ToInt32(row.Field<string>("Song_Id")) >= sid &&
+                                          Convert.ToInt32(row.Field<string>("Song_Id")) <= eid &&
                                           row.Field<string>("Song_Id").Length == DigitCode
                                     select row;
 
                         if (query.Count<DataRow>() > 0)
                         {
-                            RemainingSongId = TotalId - query.Count<DataRow>();
+                            RemainingSongId = tid - query.Count<DataRow>();
                         }
                         else
                         {
-                            RemainingSongId = TotalId;
+                            RemainingSongId = tid;
                         }
                         Global.RemainingSongIdCountList[StartIdlist.IndexOf(StartIdStr)] = RemainingSongId;
                     }
@@ -2024,39 +2021,51 @@ namespace CrazyKTV_SongMgr
             List<string> StartIdlist = new List<string>();
             StartIdlist = new List<string> (Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
 
-            DataTable dt = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
             Global.MaxIDList = new List<int>() { Convert.ToInt32(StartIdlist[0]) - 1, Convert.ToInt32(StartIdlist[1]) - 1,
                 Convert.ToInt32(StartIdlist[2]) - 1, Convert.ToInt32(StartIdlist[3]) - 1, Convert.ToInt32(StartIdlist[4]) - 1,
                 Convert.ToInt32(StartIdlist[5]) - 1, Convert.ToInt32(StartIdlist[6]) - 1, Convert.ToInt32(StartIdlist[7]) - 1,
                 Convert.ToInt32(StartIdlist[8]) - 1, Convert.ToInt32(StartIdlist[9]) - 1 };
 
-            if(dt.Rows.Count != 0)
+            string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
-                int i;
-                Parallel.ForEach(Global.CrazyktvSongLangList, (str, loopState) =>
+                if (dt.Rows.Count > 0)
                 {
-                    var query = from row in dt.AsEnumerable()
-                                where row.Field<string>("Song_Lang").Equals(str) &&
-                                      row.Field<string>("Song_Id").Length == DigitCode
-                                orderby row.Field<string>("Song_Id") descending
-                                select row;
-                    
-                    foreach (DataRow row in query)
+                    Parallel.ForEach(Global.CrazyktvSongLangList, (str, loopState) =>
                     {
-                        i = Global.CrazyktvSongLangList.IndexOf(str);
-                        Global.MaxIDList[i] = Convert.ToInt32(row["Song_Id"]);
-                        break;
-                    }
-                });
+                        int i = Global.CrazyktvSongLangList.IndexOf(str);
+                        int sid = Convert.ToInt32(StartIdlist[i]);
+                        int eid;
+                        if (i < 9)
+                        {
+                            eid = Convert.ToInt32(StartIdlist[i + 1]) - 1;
+                        }
+                        else
+                        {
+                            eid = (Global.SongMgrMaxDigitCode == "1") ? 99999 : 999999;
+                        }
+
+                        var query = from row in dt.AsEnumerable()
+                                    where Convert.ToInt32(row.Field<string>("Song_Id")) >= sid &&
+                                          Convert.ToInt32(row.Field<string>("Song_Id")) <= eid &&
+                                          row.Field<string>("Song_Id").Length == DigitCode
+                                    orderby row.Field<string>("Song_Id") descending
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
+                        {
+                            foreach (DataRow row in query)
+                            {
+                                Global.MaxIDList[i] = Convert.ToInt32(row["Song_Id"]);
+                                break;
+                            }
+                        }
+                    });
+                }
             }
-            dt.Dispose();
-            dt = null;
         }
 
-        public static void GetNotExistsSongId(int DigitCode)
+        public static void GetUnusedSongId(int DigitCode)
         {
             string MaxDigitCode = "";
             if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = "D5"; } else { MaxDigitCode = "D6"; }
@@ -2064,53 +2073,65 @@ namespace CrazyKTV_SongMgr
             List<string> StartIdlist = new List<string>();
             StartIdlist = new List<string> (Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
 
-            DataTable dt = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
-            Global.LostSongIdList = new List<List<string>>();
+            Global.UnusedSongIdList = new List<List<string>>();
             for (int i = 0; i < Global.CrazyktvSongLangList.Count; i++)
             {
                 List<string> list = new List<string>();
-                Global.LostSongIdList.Add(list);
+                Global.UnusedSongIdList.Add(list);
             }
 
-            if (dt.Rows.Count != 0)
+            string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
-                Parallel.ForEach(Global.CrazyktvSongLangList, (str, loopState) =>
+                if (dt.Rows.Count > 0)
                 {
-                    int iMin = Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(str)]);
-                    List<string> ExistsIdlist = new List<string>();
-
-                    var query = from row in dt.AsEnumerable()
-                                where row.Field<string>("Song_Lang").Equals(str) &&
-                                      row.Field<string>("Song_Id").Length == DigitCode
-                                orderby row.Field<string>("Song_Id")
-                                select row;
-
-                    if (query.Count<DataRow>() > 0)
+                    Parallel.ForEach(Global.CrazyktvSongLangList, (str, loopState) =>
                     {
-                        foreach (DataRow row in query)
+                        List<string> UsedIdlist = new List<string>();
+
+                        int i = Global.CrazyktvSongLangList.IndexOf(str);
+                        int sid = Convert.ToInt32(StartIdlist[i]);
+                        int eid;
+                        if (i < 9)
                         {
-                            ExistsIdlist.Add(row["Song_Id"].ToString());
+                            eid = Convert.ToInt32(StartIdlist[i + 1]) - 1;
+                        }
+                        else
+                        {
+                            eid = (Global.SongMgrMaxDigitCode == "1") ? 99999 : 999999;
                         }
 
-                        if (ExistsIdlist.Count > 0)
+                        var query = from row in dt.AsEnumerable()
+                                    where Convert.ToInt32(row.Field<string>("Song_Id")) >= sid &&
+                                          Convert.ToInt32(row.Field<string>("Song_Id")) <= eid &&
+                                          row.Field<string>("Song_Id").Length == DigitCode
+                                    orderby row.Field<string>("Song_Id")
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
                         {
-                            int iMax = Convert.ToInt32(ExistsIdlist[ExistsIdlist.Count - 1]);
-                            for (int i = iMin; i < iMax; i++)
+                            foreach (DataRow row in query)
                             {
-                                if (ExistsIdlist.IndexOf(i.ToString(MaxDigitCode)) < 0)
+                                UsedIdlist.Add(row["Song_Id"].ToString());
+                            }
+
+                            if (UsedIdlist.Count > 0)
+                            {
+                                UsedIdlist.Sort();
+                                eid = Convert.ToInt32(UsedIdlist[UsedIdlist.Count - 1]);
+                                for (int id = sid; id <= eid; id++)
                                 {
-                                    Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(str)].Add(i.ToString(MaxDigitCode));
+                                    if (UsedIdlist.IndexOf(id.ToString(MaxDigitCode)) < 0)
+                                    {
+                                        Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(str)].Add(id.ToString(MaxDigitCode));
+                                    }
                                 }
                             }
                         }
-                    }
-                    ExistsIdlist.Clear();
-                });
+                        UsedIdlist.Clear();
+                    });
+                }
             }
-            dt.Dispose();
         }
 
         #endregion
@@ -2120,66 +2141,64 @@ namespace CrazyKTV_SongMgr
         public static int GetMaxSingerId(string TableName, string DatabaseFile)
         {
             int i = 0;
-            DataTable dt = new DataTable();
+
             string SongQuerySqlStr = "select Singer_Id from " + TableName + " order by Singer_Id";
-            dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SongQuerySqlStr, "");
-
-            if (dt.Rows.Count != 0)
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
-                var query = from row in dt.AsEnumerable()
-                            where row.Field<Int32>("Singer_Id") > 0
-                            orderby row.Field<Int32>("Singer_Id") descending
-                            select row;
-
-                foreach (DataRow row in query)
+                if (dt.Rows.Count > 0)
                 {
-                    i = Convert.ToInt32(row["Singer_Id"]);
-                    break;
+                    var query = from row in dt.AsEnumerable()
+                                where row.Field<Int32>("Singer_Id") > 0
+                                orderby row.Field<Int32>("Singer_Id") descending
+                                select row;
+
+                    foreach (DataRow row in query)
+                    {
+                        i = Convert.ToInt32(row["Singer_Id"]);
+                        break;
+                    }
                 }
             }
-
-            dt.Dispose();
-            dt = null;
             return i;
         }
 
-        public static List<string> GetNotExistsSingerId(string TableName, string DatabaseFile)
+        public static List<string> GetUnusedSingerId(string TableName, string DatabaseFile)
         {
             List<string> list = new List<string>();
-            List<int> ExistsIdlist = new List<int>();
-            DataTable dt = new DataTable();
+            List<int> UsedIdlist = new List<int>();
+
             string SongQuerySqlStr = "select Singer_Id from " + TableName + " order by Singer_Id";
-            dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SongQuerySqlStr, "");
-            
-            if (dt.Rows.Count != 0)
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
-                var query = from row in dt.AsEnumerable()
-                            where row.Field<Int32>("Singer_Id") > 0
-                            orderby row.Field<Int32>("Singer_Id")
-                            select row;
-
-                if (query.Count<DataRow>() > 0)
+                if (dt.Rows.Count > 0)
                 {
-                    foreach (DataRow row in query)
-                    {
-                        ExistsIdlist.Add(Convert.ToInt32(row["Singer_Id"]));
-                    }
+                    var query = from row in dt.AsEnumerable()
+                                where row.Field<Int32>("Singer_Id") > 0
+                                orderby row.Field<Int32>("Singer_Id")
+                                select row;
 
-                    if (ExistsIdlist.Count > 0)
+                    if (query.Count<DataRow>() > 0)
                     {
-                        int iMin = 1;
-                        int iMax = Convert.ToInt32(ExistsIdlist[ExistsIdlist.Count - 1]);
-                        Parallel.For(iMin, iMax, (i, ForloopState) =>
+                        foreach (DataRow row in query)
                         {
-                            if (ExistsIdlist.IndexOf(i) < 0)
+                            UsedIdlist.Add(Convert.ToInt32(row["Singer_Id"]));
+                        }
+
+                        if (UsedIdlist.Count > 0)
+                        {
+                            int iMin = 1;
+                            int iMax = Convert.ToInt32(UsedIdlist[UsedIdlist.Count - 1]);
+                            Parallel.For(iMin, iMax, (i, ForloopState) =>
                             {
-                                list.Add(i.ToString());
-                            }
-                        });
+                                if (UsedIdlist.IndexOf(i) < 0)
+                                {
+                                    list.Add(i.ToString());
+                                }
+                            });
+                        }
                     }
                 }
             }
-            dt.Dispose();
             return list;
         }
 

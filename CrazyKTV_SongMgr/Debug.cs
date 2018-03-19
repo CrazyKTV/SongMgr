@@ -1274,7 +1274,7 @@ namespace CrazyKTV_SongMgr
                 using (OleDbCommand singercmd = new OleDbCommand(SingerAddSqlStr, conn))
                 {
                     int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_AllSinger", Global.CrazyktvSongMgrDatabaseFile);
-                    List<string> UnUsedSingerIdList = CommonFunc.GetNotExistsSingerId("ktv_AllSinger", Global.CrazyktvSongMgrDatabaseFile);
+                    List<string> UnUsedSingerIdList = CommonFunc.GetUnusedSingerId("ktv_AllSinger", Global.CrazyktvSongMgrDatabaseFile);
                     string SingerId = "";
                     List <string> list = new List<string>();
                     List <string> SpellList = new List<string>();

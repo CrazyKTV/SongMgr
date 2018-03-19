@@ -574,7 +574,7 @@ namespace CrazyKTV_SongMgr
             SongAddSong.CreateSongDataTable();
 
             CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
-            CommonFunc.GetNotExistsSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
+            CommonFunc.GetUnusedSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
 
             int count = SongAddSong.SongAddDT.Rows.Count;
 
@@ -608,7 +608,7 @@ namespace CrazyKTV_SongMgr
 
             List<string> valuelist = new List<string>();
             List<string> NotExistsSingerId = new List<string>();
-            NotExistsSingerId = CommonFunc.GetNotExistsSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
+            NotExistsSingerId = CommonFunc.GetUnusedSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
             int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_Singer", Global.CrazyktvDatabaseFile) + 1;
             string NextSingerId = "";
             List<string> spelllist = new List<string>();
@@ -871,7 +871,7 @@ namespace CrazyKTV_SongMgr
                     Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                     Task.Factory.StartNew(() => Common_GetSingerStatisticsTask());
                     Task.Factory.StartNew(() => CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
-                    Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
+                    Task.Factory.StartNew(() => CommonFunc.GetUnusedSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
                     Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                     SongAdd_Save_Button.Text = "儲存設定";
@@ -1017,7 +1017,7 @@ namespace CrazyKTV_SongMgr
                     int MaxDigitCode;
                     if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
                     Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode));
-                    Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode));
+                    Task.Factory.StartNew(() => CommonFunc.GetUnusedSongId(MaxDigitCode));
                     Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6));
 
                     SongAdd_Add_Button.Text = "加入歌庫";

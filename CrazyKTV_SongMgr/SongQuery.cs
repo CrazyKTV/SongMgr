@@ -1309,7 +1309,7 @@ namespace CrazyKTV_SongMgr
             var tasks = new List<Task>()
             {
                 Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)),
-                Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)),
+                Task.Factory.StartNew(() => CommonFunc.GetUnusedSongId(MaxDigitCode)),
                 Task.Factory.StartNew(() => Common_GetSongStatisticsTask())
             };
 
@@ -1415,7 +1415,7 @@ namespace CrazyKTV_SongMgr
             var tasks = new List<Task>()
             {
                 Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)),
-                Task.Factory.StartNew(() => CommonFunc.GetNotExistsSongId(MaxDigitCode)),
+                Task.Factory.StartNew(() => CommonFunc.GetUnusedSongId(MaxDigitCode)),
                 Task.Factory.StartNew(() => Common_GetSongStatisticsTask()),
                 Task.Factory.StartNew(() => CommonFunc.GetRemainingSongIdCount((Global.SongMgrMaxDigitCode == "1") ? 5 : 6))
             };
@@ -3205,10 +3205,10 @@ namespace CrazyKTV_SongMgr
             string NewSongID = "";
 
             // 查詢歌曲編號有無斷號
-            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+            if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
             {
-                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
-                if (UpdateIdList) Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
+                NewSongID = Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                if (UpdateIdList) Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
             }
 
             // 若無斷號查詢各語系下個歌曲編號

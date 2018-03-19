@@ -593,13 +593,13 @@ namespace CrazyKTV_SongMgr
                         {
                             Parallel.ForEach(Global.CrazyktvSongLangList, (SongLangStr, loopState) =>
                             {
-                                if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].Count > 0)
+                                if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].Count > 0)
                                 {
-                                    if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].IndexOf(SongId) >= 0)
+                                    if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].IndexOf(SongId) >= 0)
                                     {
                                         lock (LockThis)
                                         {
-                                            Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].Remove(SongId);
+                                            Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)].Remove(SongId);
                                             if (Convert.ToInt32(SongId) > Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)])
                                             {
                                                 Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLangStr)] = Convert.ToInt32(SongId);
@@ -614,13 +614,13 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+                        if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
                         {
-                            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongId) >= 0)
+                            if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].IndexOf(SongId) >= 0)
                             {
                                 lock (LockThis)
                                 {
-                                    Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
+                                    Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
                                 }
                             }
                         }
@@ -640,10 +640,10 @@ namespace CrazyKTV_SongMgr
                     SongId = "";
 
                     // 查詢歌曲編號有無斷號
-                    if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+                    if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
                     {
-                        SongId = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
-                        Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
+                        SongId = Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                        Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(SongId);
                     }
                     
                     // 若無斷號查詢各語系下個歌曲編號
@@ -984,13 +984,13 @@ namespace CrazyKTV_SongMgr
             int iMin = Convert.ToInt32(StartIdlist[Global.CrazyktvSongLangList.IndexOf(SongLang)]);
             int iMax = Convert.ToInt32(MaxSongID);
 
-            Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Clear();
+            Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Clear();
 
             for (int i = iMin; i < iMax; i++)
             {
                 if (SongDataIdList.IndexOf(i.ToString(MaxDigitCode)) < 0)
                 {
-                    Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Add(i.ToString(MaxDigitCode));
+                    Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Add(i.ToString(MaxDigitCode));
                 }
             }
         }

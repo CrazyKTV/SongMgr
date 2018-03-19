@@ -973,7 +973,7 @@ namespace CrazyKTV_SongMgr
             {
                 int MaxAllSingerId = CommonFunc.GetMaxSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile) + 1;
                 List<string> NotExistsAllSingerId = new List<string>();
-                NotExistsAllSingerId = CommonFunc.GetNotExistsSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile);
+                NotExistsAllSingerId = CommonFunc.GetUnusedSingerId((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger", (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile);
 
                 string SingerId = "";
                 SingerId = (NotExistsAllSingerId.Count > 0) ? NotExistsAllSingerId[0] : MaxAllSingerId.ToString();

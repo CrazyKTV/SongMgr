@@ -211,7 +211,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> PlayerUpdateSongValueList = new List<string>();
         public static bool PlayerInitialized = false;
 
-        public static List<List<string>> LostSongIdList = new List<List<string>>();
+        public static List<List<string>> UnusedSongIdList = new List<List<string>>();
 
         public static List<string> CrtchorusSeparateList = new List<string>() { "&", "+" };
 

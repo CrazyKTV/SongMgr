@@ -1352,7 +1352,7 @@ namespace CrazyKTV_SongMgr
 
                 string MaxDigitCode = (Global.SongMgrMaxDigitCode == "1") ? "D5" : "D6";
                 CommonFunc.GetMaxSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
-                CommonFunc.GetNotExistsSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
+                CommonFunc.GetUnusedSongId((Global.SongMgrMaxDigitCode == "1") ? 5 : 6);
 
                 string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
                 using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
@@ -2005,10 +2005,10 @@ namespace CrazyKTV_SongMgr
             string NewSongID = "";
 
             // 查詢歌曲編號有無斷號
-            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+            if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
             {
-                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
-                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
+                NewSongID = Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
             }
 
             // 若無斷號查詢各語系下個歌曲編號

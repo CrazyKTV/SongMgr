@@ -720,13 +720,13 @@ namespace CrazyKTV_SongMgr
                 {
                     if (Global.SongMgrMaxDigitCode != "1") SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue = 1;
                     CommonFunc.GetMaxSongId(5);
-                    CommonFunc.GetNotExistsSongId(5);
+                    CommonFunc.GetUnusedSongId(5);
                 }
                 else
                 {
                     if (Global.SongMgrMaxDigitCode != "2") SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue = 2;
                     CommonFunc.GetMaxSongId(6);
-                    CommonFunc.GetNotExistsSongId(6);
+                    CommonFunc.GetUnusedSongId(6);
                 }
                 SongMgrCfg_GetSongMgrLangCode();
 
@@ -2654,10 +2654,10 @@ namespace CrazyKTV_SongMgr
             string NewSongID = "";
 
             // 查詢歌曲編號有無斷號
-            if (Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
+            if (Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Count > 0)
             {
-                NewSongID = Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
-                Global.LostSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
+                NewSongID = Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)][0];
+                Global.UnusedSongIdList[Global.CrazyktvSongLangList.IndexOf(SongLang)].Remove(NewSongID);
             }
 
             // 若無斷號查詢各語系下個歌曲編號
