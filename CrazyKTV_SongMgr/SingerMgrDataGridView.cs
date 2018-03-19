@@ -139,8 +139,10 @@ namespace CrazyKTV_SongMgr
 
                         Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                         Common_SwitchSetUI(false);
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(RemoveSingerIdlist)));
+                        var tasks = new List<Task>()
+                        {
+                            Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(RemoveSingerIdlist))
+                        };
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
@@ -258,8 +260,10 @@ namespace CrazyKTV_SongMgr
 
                                 Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                                 Common_SwitchSetUI(false);
-                                var tasks = new List<Task>();
-                                tasks.Add(Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(RemoveSingerIdlist)));
+                                var tasks = new List<Task>()
+                                {
+                                    Task.Factory.StartNew(() => SingerMgr_SingerRemoveTask(RemoveSingerIdlist))
+                                };
 
                                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                                 {

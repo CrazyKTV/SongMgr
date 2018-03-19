@@ -70,8 +70,10 @@ namespace CrazyKTV_SongMgr
                     Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                     Common_SwitchSetUI(false);
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask())
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -102,9 +104,11 @@ namespace CrazyKTV_SongMgr
 
                 SongMaintenance_Tooltip_Label.Text = "正在解析歌手的拼音資料,請稍待...";
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SpellCorrectTask("ktv_Singer")));
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SpellCorrectTask("ktv_AllSinger")));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_SpellCorrectTask("ktv_Singer")),
+                    Task.Factory.StartNew(() => SongMaintenance_SpellCorrectTask("ktv_AllSinger"))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), SpellCorrectEndTask =>
                 {
@@ -130,8 +134,10 @@ namespace CrazyKTV_SongMgr
 
                 SongMaintenance_Tooltip_Label.Text = "正在解析歌曲的拼音資料,請稍待...";
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SpellCorrectTask("ktv_Song")));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_SpellCorrectTask("ktv_Song"))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), SpellCorrectEndTask =>
                 {
@@ -363,8 +369,10 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance.CreateSongDataTable();
                 Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_LRTrackExchangeTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_LRTrackExchangeTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), LRTrackExchangeEndTask =>
                 {
@@ -465,8 +473,10 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance.CreateSongDataTable();
                 Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_VolumeChangeTask(SongMaintenance_VolumeChange_TextBox.Text)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_VolumeChangeTask(SongMaintenance_VolumeChange_TextBox.Text))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), VolumeChangeEndTask =>
                 {
@@ -559,8 +569,10 @@ namespace CrazyKTV_SongMgr
                 if (Global.SongMgrMaxDigitCode != "2") SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue = 2;
                 SongMgrCfg_GetSongMgrLangCode();
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_CodeConvTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_CodeConvTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeConvEndTask =>
                 {
@@ -730,8 +742,10 @@ namespace CrazyKTV_SongMgr
                 }
                 SongMgrCfg_GetSongMgrLangCode();
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_CodeCorrectTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_CodeCorrectTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), CodeCorrectEndTask =>
                 {
@@ -883,8 +897,10 @@ namespace CrazyKTV_SongMgr
                         string SrcSongPath = SongMaintenance_SrcSongPath_TextBox.Text;
                         string DestSongPath = SongMaintenance_DestSongPath_TextBox.Text;
 
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongPathChangeTask(SrcSongPath, DestSongPath)));
+                        var tasks = new List<Task>()
+                        {
+                            Task.Factory.StartNew(() => SongMaintenance_SongPathChangeTask(SrcSongPath, DestSongPath))
+                        };
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
@@ -1027,8 +1043,10 @@ namespace CrazyKTV_SongMgr
 
                     SongMaintenance_Tooltip_Label.Text = "正在匯入播放次數資料,請稍待...";
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PlayCountImportTask()));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_PlayCountImportTask())
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountImportEndTask =>
                     {
@@ -1119,8 +1137,10 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance.CreateSongDataTable();
                 Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PlayCountResetTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_PlayCountResetTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), PlayCountResetEndTask =>
                 {
@@ -1210,8 +1230,10 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance.CreateSongDataTable();
                 Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_WordCountCorrectTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_WordCountCorrectTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1300,8 +1322,10 @@ namespace CrazyKTV_SongMgr
 
                 SongMaintenance_Tooltip_Label.Text = "正在解析空資料夾,請稍待...";
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RemoveEmptyDirsTask(Global.SongMgrDestFolder, false)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_RemoveEmptyDirsTask(Global.SongMgrDestFolder, false))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1440,8 +1464,10 @@ namespace CrazyKTV_SongMgr
 
                     SongMaintenance_Tooltip_Label.Text = "正在匯入遙控設定,請稍待...";
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RemoteCfgImportTask()));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_RemoteCfgImportTask())
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -1567,8 +1593,10 @@ namespace CrazyKTV_SongMgr
 
                     SongMaintenance_Tooltip_Label.Text = "正在匯入拼音資料,請稍待...";
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_PhoneticsImportTask(false)));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_PhoneticsImportTask(false))
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -1702,8 +1730,10 @@ namespace CrazyKTV_SongMgr
 
                         string RebuildSongPath = SongMaintenance_RebuildSongStructure_TextBox.Text;
 
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => SongMaintenance_RebuildSongStructureTask(RebuildSongPath, Global.SongMgrSongAddMode)));
+                        var tasks = new List<Task>()
+                        {
+                            Task.Factory.StartNew(() => SongMaintenance_RebuildSongStructureTask(RebuildSongPath, Global.SongMgrSongAddMode))
+                        };                        ;
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
@@ -2102,8 +2132,10 @@ namespace CrazyKTV_SongMgr
         {
             SongMaintenance.CreateSongDataTable();
 
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_FavoriteExportTask()));
+            var tasks = new List<Task>()
+            {
+                Task.Factory.StartNew(() => SongMaintenance_FavoriteExportTask())
+            };
 
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
@@ -2177,8 +2209,10 @@ namespace CrazyKTV_SongMgr
 
                     SongMaintenance_Tooltip_Label.Text = "正在匯入我的最愛,請稍待...";
 
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => SongMaintenance_FavoriteImportTask()));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_FavoriteImportTask())
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
                     {

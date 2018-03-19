@@ -671,9 +671,11 @@ namespace CrazyKTV_SongMgr
                 string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Path, Song_FileName from ktv_Song";
                 using (DataTable SongStatisticsDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
                 {
-                    var tasks = new List<Task<List<int>>>();
-                    tasks.Add(Task<List<int>>.Factory.StartNew(() => CommonFunc.GetSongLangCount(SongStatisticsDT)));
-                    tasks.Add(Task<List<int>>.Factory.StartNew(() => CommonFunc.GetSongFileCount(SongStatisticsDT)));
+                    var tasks = new List<Task<List<int>>>()
+                    {
+                        Task<List<int>>.Factory.StartNew(() => CommonFunc.GetSongLangCount(SongStatisticsDT)),
+                        Task<List<int>>.Factory.StartNew(() => CommonFunc.GetSongFileCount(SongStatisticsDT))
+                    };
 
                     SongLangCount = tasks[0].Result;
                     this.BeginInvoke((Action)delegate()
@@ -818,8 +820,10 @@ namespace CrazyKTV_SongMgr
                             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", string.Join(",", Global.CrazyktvSongLangList));
                             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", string.Join("|", Global.CrazyktvSongLangKeyWordList));
 
-                            var tasks = new List<Task>();
-                            tasks.Add(Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask()));
+                            var tasks = new List<Task>()
+                            {
+                                Task.Factory.StartNew(() => SongMaintenance_SongLangUpdateTask())
+                            };
 
                             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                             {
@@ -1702,8 +1706,7 @@ namespace CrazyKTV_SongMgr
 
         public static List<string> LoadVersionXmlFile(string VersionFile, string FileName)
         {
-            List<string> Value = new List<string>();
-            Value.Add(FileName);
+            List<string> Value = new List<string>() { FileName };
             try
             {
                 XElement rootElement = XElement.Load(VersionFile);
@@ -1740,8 +1743,8 @@ namespace CrazyKTV_SongMgr
             {
                 cnstr = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Database + ";");
             }
-            OleDbConnection conn = new OleDbConnection();
-            conn.ConnectionString = cnstr;
+
+            OleDbConnection conn = new OleDbConnection(cnstr);
             if (conn.State == ConnectionState.Open) conn.Close();
             try
             {
@@ -1975,8 +1978,8 @@ namespace CrazyKTV_SongMgr
             if (Global.CrazyktvDatabaseStatus)
             {
                 List<string> StartIdlist = new List<string>(Regex.Split(Global.SongMgrLangCode, ",", RegexOptions.None));
-                StartIdlist.Add((DigitCode == 5) ? "100000" : "1000000");
                 Global.RemainingSongIdCountList = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                StartIdlist.Add((DigitCode == 5) ? "100000" : "1000000");
 
                 string SongQuerySqlStr = "select Song_Id, Song_Lang from ktv_Song order by Song_Id";
                 using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))

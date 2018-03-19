@@ -693,8 +693,10 @@ namespace CrazyKTV_SongMgr
                 Cashbox_QueryStatus_Label.Text = "";
                 GC.Collect();
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -726,8 +728,10 @@ namespace CrazyKTV_SongMgr
                 Cashbox_QueryStatus_Label.Text = "";
                 GC.Collect();
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => Cashbox_OtherQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText))
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1034,8 +1038,10 @@ namespace CrazyKTV_SongMgr
 
                 Cashbox_QueryStatus_Label.Text = "正在更新錢櫃資料,請稍待...";
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Cashbox_UpdDateTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => Cashbox_UpdDateTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1284,8 +1290,10 @@ namespace CrazyKTV_SongMgr
                 Common_SwitchSetUI(false);
                 Cashbox.CreateSongDataTable();
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Cashbox_ApplyCashboxIdTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => Cashbox_ApplyCashboxIdTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -1561,8 +1569,10 @@ namespace CrazyKTV_SongMgr
                 Common_SwitchSetUI(false);
                 Cashbox.CreateSongDataTable();
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => Cashbox_WriteHaveSongDataTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => Cashbox_WriteHaveSongDataTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
