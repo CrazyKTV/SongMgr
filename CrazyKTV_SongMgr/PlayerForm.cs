@@ -25,8 +25,7 @@ namespace CrazyKTV_SongMgr
         string dvRowIndex;
         string UpdateSongTrack;
         string UpdateDataGridView;
-
-        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        List<int> TrackIdList = new List<int>();
 
         public PlayerForm()
         {
@@ -79,7 +78,6 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            List<int> TrackIdList = new List<int>();
             foreach (Declarations.TrackDescription TrackDesc in m_player.AudioTracksInfo)
             {
                 TrackIdList.Add(TrackDesc.Id);
@@ -119,10 +117,6 @@ namespace CrazyKTV_SongMgr
 
             m_player.Position = 0;
             m_player.Mute = false;
-
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = 500;
-            timer.Start();
         }
 
         // Player Events
@@ -130,33 +124,20 @@ namespace CrazyKTV_SongMgr
         {
             this.BeginInvoke((Action)delegate()
             {
+                if (e.NewPosition > 0.999)
+                {
+                    this.Close();
+                }
                 Player_ProgressTrackBar.ProgressBarValue = (int)(e.NewPosition * 100);
                 Player_ProgressTrackBar.TrackBarValue = (int)(e.NewPosition * 100);
             });
         }
 
-        void timer_Tick(object sender, EventArgs e)
-        {
-            if (Global.PlayerInitialized)
-            {
-                if (!m_player.IsPlaying && Player_PlayControl_Button.Text == "暫停播放")
-                {
-                    timer.Stop();
-                    this.Close();
-                }
-            }
-            else
-            {
-                Thread.Sleep(1000);
-                Global.PlayerInitialized = true;
-            }
-        }
-
         private void Player_ProgressTrackBar_Click(object sender, EventArgs e)
         {
-            if(Player_ProgressTrackBar.TrackBarValue >= 99.5)
+            if (Player_ProgressTrackBar.TrackBarValue >= 99.9)
             {
-                m_player.Position = (float)99.5 / 100;
+                m_player.Position = (float)99.9 / 100;
             }
             else
             {
@@ -166,12 +147,6 @@ namespace CrazyKTV_SongMgr
 
         private void Player_SwithChannel_Button_Click(object sender, EventArgs e)
         {
-            List<int> TrackIdList = new List<int>();
-            foreach (Declarations.TrackDescription TrackDesc in m_player.AudioTracksInfo)
-            {
-                TrackIdList.Add(TrackDesc.Id);
-            }
-
             if (TrackIdList.Count > 2)
             {
                 if (m_player.AudioTrack == TrackIdList[1])
@@ -240,7 +215,7 @@ namespace CrazyKTV_SongMgr
         private void PlayerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Task.Factory.StartNew(() => m_player.Stop());
-            timer.Dispose();
+            TrackIdList.Clear();
             this.Owner.Show();
         }
     }

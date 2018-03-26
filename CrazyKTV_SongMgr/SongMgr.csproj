@@ -279,9 +279,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="SongMgr\CrazySongEmpty.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -316,7 +313,7 @@
     <Content Include="SongMgr\Libs\plugins\access\libattachment_plugin.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SongMgr\Libs\plugins\access\libbluray-j2se-0.7.0.jar">
+    <Content Include="SongMgr\Libs\plugins\access\libbluray-j2se-0.9.3.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SongMgr\Libs\plugins\access\libcdda_plugin.dll">
