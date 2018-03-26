@@ -223,8 +223,11 @@ namespace CrazyKTV_SongMgr
                     string DatabaseFile = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile;
                     using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SingerQuerySqlStr, ""))
                     {
+                        List<string> GroupSingerList = new List<string>();
+
                         if (QueryType == "SingerName")
                         {
+                            
                             if (Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower()) >= 0)
                             {
                                 List<string> dtSingerIdList = new List<string>();
@@ -234,10 +237,10 @@ namespace CrazyKTV_SongMgr
                                 }
 
                                 int i = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower())];
-                                List<string> list = new List<string>(Global.SingerGroupList[i].Split(','));
-                                if (list.Count > 0)
+                                GroupSingerList.AddRange(Global.SingerGroupList[i].Split(','));
+                                if (GroupSingerList.Count > 0)
                                 {
-                                    foreach (string GroupSingerName in list)
+                                    foreach (string GroupSingerName in GroupSingerList)
                                     {
                                         if (GroupSingerName.ToLower() != QueryValue.ToLower())
                                         {
@@ -255,10 +258,6 @@ namespace CrazyKTV_SongMgr
                                             }
                                         }
                                     }
-                                }
-                                foreach ( DataRow r in dt.Rows)
-                                {
-                                    Console.WriteLine(r["Singer_Name"].ToString());
                                 }
                                 dtSingerIdList.Clear();
                             }
@@ -281,19 +280,22 @@ namespace CrazyKTV_SongMgr
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
                                     QueryValue = Regex.Replace(QueryValue, "''", "'");
-                                    int sindex = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower())];
-                                    List<string> GroupSingerlist = new List<string>(Global.SingerGroupList[sindex].Split(','));
-
+                                    
                                     var query = from row in dt.AsEnumerable()
-                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Singer_Name")).ToLower().Contains(CommonFunc.ConvToNarrow(QueryValue).ToLower()) &&
-                                                      GroupSingerlist.IndexOf(row.Field<string>("Singer_Name")) < 0
+                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Singer_Name")).ToLower().Contains(CommonFunc.ConvToNarrow(QueryValue).ToLower())
                                                 select row;
 
                                     if (query.Count<DataRow>() > 0)
                                     {
                                         foreach (DataRow row in query)
                                         {
-                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                            if (GroupSingerList.Count > 0)
+                                            {
+                                                if (GroupSingerList.IndexOf(row.Field<string>("Singer_Name")) < 0)
+                                                {
+                                                    RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                                }
+                                            }
                                         }
 
                                         if (RemoveRowsIdxlist.Count > 0)
@@ -368,6 +370,7 @@ namespace CrazyKTV_SongMgr
                                 }
                             });
                         }
+                        GroupSingerList.Clear();
                     }
                 }
                 catch
