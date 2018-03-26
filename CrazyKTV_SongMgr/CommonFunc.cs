@@ -2146,7 +2146,7 @@ namespace CrazyKTV_SongMgr
             int i = 0;
 
             string SongQuerySqlStr = "select Singer_Id from " + TableName + " order by Singer_Id";
-            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SongQuerySqlStr, ""))
             {
                 if (dt.Rows.Count > 0)
                 {
@@ -2171,7 +2171,7 @@ namespace CrazyKTV_SongMgr
             List<int> UsedIdlist = new List<int>();
 
             string SongQuerySqlStr = "select Singer_Id from " + TableName + " order by Singer_Id";
-            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SongQuerySqlStr, ""))
             {
                 if (dt.Rows.Count > 0)
                 {

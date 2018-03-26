@@ -80,6 +80,7 @@ namespace CrazyKTV_SongMgr
                 string SingerType = Global.CrazyktvSingerTypeList.IndexOf(SingerMgr_QueryType_ComboBox.Text).ToString();
 
                 Common_SwitchSetUI(false);
+                SingerMgr_QueryTask("SingerName", QueryValue, SingerType);
                 var tasks = new List<Task>()
                 {
                     Task.Factory.StartNew(() => SingerMgr_QueryTask("SingerName", QueryValue, SingerType))
@@ -247,12 +248,17 @@ namespace CrazyKTV_SongMgr
                                                 {
                                                     if (dtSingerIdList.IndexOf(row["Singer_Id"].ToString()) < 0)
                                                     {
+                                                        dtSingerIdList.Add(row["Singer_Id"].ToString());
                                                         dt.ImportRow(row);
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                }
+                                foreach ( DataRow r in dt.Rows)
+                                {
+                                    Console.WriteLine(r["Singer_Name"].ToString());
                                 }
                                 dtSingerIdList.Clear();
                             }
@@ -275,9 +281,12 @@ namespace CrazyKTV_SongMgr
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
                                     QueryValue = Regex.Replace(QueryValue, "''", "'");
+                                    int sindex = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower())];
+                                    List<string> GroupSingerlist = new List<string>(Global.SingerGroupList[sindex].Split(','));
 
                                     var query = from row in dt.AsEnumerable()
-                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Singer_Name")).ToLower().Contains(CommonFunc.ConvToNarrow(QueryValue).ToLower())
+                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Singer_Name")).ToLower().Contains(CommonFunc.ConvToNarrow(QueryValue).ToLower()) &&
+                                                      GroupSingerlist.IndexOf(row.Field<string>("Singer_Name")) < 0
                                                 select row;
 
                                     if (query.Count<DataRow>() > 0)
@@ -295,6 +304,11 @@ namespace CrazyKTV_SongMgr
                                             }
                                         }
                                     }
+                                }
+
+                                foreach (DataRow r in dt.Rows)
+                                {
+                                    Console.WriteLine(r["Singer_Name"].ToString());
                                 }
 
                                 if (dt.Rows.Count == 0)
