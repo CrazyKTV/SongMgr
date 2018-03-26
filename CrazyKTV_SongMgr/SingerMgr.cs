@@ -308,11 +308,6 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
 
-                                foreach (DataRow r in dt.Rows)
-                                {
-                                    Console.WriteLine(r["Singer_Name"].ToString());
-                                }
-
                                 if (dt.Rows.Count == 0)
                                 {
                                     this.BeginInvoke((Action)delegate()

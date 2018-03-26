@@ -436,6 +436,7 @@ namespace CrazyKTV_SongMgr
                                                     {
                                                         if (dtSongIdList.IndexOf(row["Cashbox_Id"].ToString()) < 0)
                                                         {
+                                                            dtSongIdList.Add(row["Cashbox_Id"].ToString());
                                                             dt.ImportRow(row);
                                                         }
                                                     }
