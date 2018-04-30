@@ -821,7 +821,7 @@ namespace CrazyKTV_SongMgr
             // 移除原有歌曲
             bool DeleteError = false;
 
-            if (Global.SongMgrSongAddMode != "3")
+            if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
             {
                 string oldfile = Path.Combine(SongPath, SongFileName);
 
@@ -874,6 +874,11 @@ namespace CrazyKTV_SongMgr
                     string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "", true);
                     SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                     SongFileName = Path.GetFileNameWithoutExtension(SongDestPath) + SongExtension;
+                }
+                else
+                {
+                    SongPath = Path.GetDirectoryName(SongSrcPath);
+                    SongFileName = Path.GetFileNameWithoutExtension(SongSrcPath) + SongExtension;
                 }
 
                 if (SongSinger.Length > 60)
