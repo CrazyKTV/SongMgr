@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CrazyKTV_SongMgr.NativeMethods;
@@ -556,6 +557,8 @@ namespace CrazyKTV_SongMgr
                 Debug_ConfigData_ComboBox.SelectedValue = 1;
             #endif
 
+            if (Global.MainCfgEnableUIScale == "True") Common_ScalingUI();
+            SpinWait.SpinUntil(() => Global.DatabaseUpdateFinished == true);
             if (!Global.CrazyktvDatabaseStatus)
             {
                 if (MainTabControl.SelectedIndex != 4) MainTabControl.SelectedIndex = 3;
@@ -564,8 +567,6 @@ namespace CrazyKTV_SongMgr
             {
                 MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
             }
-
-            if (Global.MainCfgEnableUIScale == "True") Common_ScalingUI();
 
             Global.SongMgrInitializeStatus = true;
         }

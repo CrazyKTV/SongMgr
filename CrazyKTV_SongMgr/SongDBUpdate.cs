@@ -132,6 +132,10 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
                 var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("UpdateVersion"));
             }
+            else
+            {
+                Global.DatabaseUpdateFinished = true;
+            }
         }
 
         private void SongDBUpdate_CheckDatabaseVersion()
@@ -773,6 +777,7 @@ namespace CrazyKTV_SongMgr
                     SongMaintenance_SetCustomLangControl();
                 });
             }
+            Global.DatabaseUpdateFinished = true;
         }
 
     }

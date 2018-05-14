@@ -48,6 +48,7 @@ namespace CrazyKTV_SongMgr
         public static bool CrazyktvDatabaseError = false;
         public static bool CrazyktvDatabaseMaxDigitCode = true;
         public static bool SongMgrDatabaseError = false;
+        public static bool DatabaseUpdateFinished = false;
 
         public static string SongMgrVer = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString().Replace(".", "");
         public static string SongMgrCfgFile = Application.StartupPath + @"\CrazyKTV_SongMgr.cfg";
