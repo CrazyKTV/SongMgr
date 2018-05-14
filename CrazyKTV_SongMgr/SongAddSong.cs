@@ -877,7 +877,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    SongPath = Path.GetDirectoryName(SongSrcPath);
+                    SongPath = Path.GetDirectoryName(SongSrcPath) + @"\";
                     SongFileName = Path.GetFileNameWithoutExtension(SongSrcPath) + SongExtension;
                 }
 
