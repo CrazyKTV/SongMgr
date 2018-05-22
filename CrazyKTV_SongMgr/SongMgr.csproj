@@ -37,8 +37,8 @@
     <ProductName>CrazyKTV 加歌程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
     <SuiteName>CrazyKTV 加歌程式</SuiteName>
-    <ApplicationRevision>9</ApplicationRevision>
-    <ApplicationVersion>1.4.7.09</ApplicationVersion>
+    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationVersion>1.4.7.10</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
@@ -1266,7 +1266,8 @@
   <Target Name="AfterBuild">
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>del "$(TargetDir)nVLC.dll"</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetFileName) $(TargetName)_$(ConfigurationName)$(TargetExt)
+del "$(TargetDir)nVLC.dll"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

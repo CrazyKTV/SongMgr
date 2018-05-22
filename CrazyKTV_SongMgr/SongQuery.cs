@@ -1621,7 +1621,7 @@ namespace CrazyKTV_SongMgr
                                     }
 
                                     var MatchSingerTypeQuery = from row in dt.AsEnumerable()
-                                                               where row["Song_SingerType"].ToString() == SingerTypeList[SingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower())]
+                                                               where row["Song_SingerType"].ToString() == ((SingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower()) > -1) ? SingerTypeList[SingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower())] : "11")
                                                                select row;
 
                                     foreach (DataRow row in MatchSingerTypeQuery)
