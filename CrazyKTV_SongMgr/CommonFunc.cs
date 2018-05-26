@@ -3718,5 +3718,193 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
+        #region --- CommonFunc 比對重複歌曲 ---
+
+        public class DupSongStatus
+        {
+            public bool IsDupSong { get; set; }
+            public int DupSongIndex { get; set; }
+        }
+
+        public static DupSongStatus IsDupSong(string SongLang, string SongSinger, int SongSingerType, string SongSongName, string SongSongType, List<string> SongDataLowCaseList)
+        {
+            DupSongStatus result = new DupSongStatus { IsDupSong = false, DupSongIndex = -1 };
+
+            string SongData = SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower() + "|" + SongSongType.ToLower();
+
+            if (SongDataLowCaseList.Count > 0)
+            {
+                if (SongDataLowCaseList.IndexOf(SongData) >= 0)
+                {
+                    result.DupSongIndex = SongDataLowCaseList.IndexOf(SongData);
+                    result.IsDupSong = true;
+                }
+                else
+                {
+                    if (Global.GroupSingerLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                    {
+                        int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SongSinger.ToLower())];
+                        List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
+                        if (GroupSingerList.Count > 0)
+                        {
+                            foreach (string GroupSingerName in GroupSingerList)
+                            {
+                                if (GroupSingerName.ToLower() != SongSinger.ToLower())
+                                {
+                                    SongData = SongLang + "|" + GroupSingerName.ToLower() + "|" + SongSongName.ToLower() + "|" + SongSongType.ToLower();
+                                }
+
+                                if (SongDataLowCaseList.IndexOf(SongData) >= 0)
+                                {
+                                    result.DupSongIndex = SongDataLowCaseList.IndexOf(SongData);
+                                    result.IsDupSong = true;
+                                    break;
+                                }
+                            }
+                            GroupSingerList.Clear();
+                        }
+                    }
+                }
+
+                if (!result.IsDupSong && SongSingerType == 3)
+                {
+                    List<string> ChorusSongDatalist = new List<string>()
+                    {
+                        SongLang,
+                        SongSongName.ToLower()
+                    };
+                    if (SongSongType != "") ChorusSongDatalist.Add(SongSongType.ToLower());
+
+                    List<string> ChorusGroupSongDatalist = new List<string>()
+                    {
+                        SongLang,
+                        SongSongName.ToLower()
+                    };
+
+                    if (SongSongType != "") ChorusGroupSongDatalist.Add(SongSongType.ToLower());
+
+                    // 處理合唱歌曲中的特殊歌手名稱
+                    string ChorusSongSingerName = SongSinger;
+                    int ChorusGroupSongSingerCount = 0;
+                    bool MatchChorusGroupSongSinger = false;
+                    List<string> ChorusSingerList = new List<string>();
+                    List<string> ChorusGroupSingerList = new List<string>();
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
+
+                    foreach (string SpecialSingerName in SpecialStrlist)
+                    {
+                        Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                        if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                        {
+                            if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
+                            if (ChorusSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSingerList.Add(SpecialSingerName.ToLower());
+                            if (ChorusGroupSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(SpecialSingerName.ToLower());
+                            ChorusGroupSongSingerCount++;
+
+                            ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
+                        }
+                    }
+                    SpecialStrlist.Clear();
+
+                    if (ChorusSongSingerName != "")
+                    {
+                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                        if (r.IsMatch(ChorusSongSingerName))
+                        {
+                            string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
+                            foreach (string str in singers)
+                            {
+                                string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
+                                if (ChorusSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusSingerList.Add(SingerStr.ToLower());
+
+                                if (Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower()) >= 0)
+                                {
+                                    int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower())];
+                                    List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
+                                    if (GroupSingerList.Count > 0)
+                                    {
+                                        foreach (string GroupSingerName in GroupSingerList)
+                                        {
+                                            if (ChorusGroupSingerList.IndexOf(GroupSingerName.ToLower()) < 0)
+                                            {
+                                                ChorusGroupSingerList.Add(GroupSingerName.ToLower());
+                                            }
+                                        }
+                                        ChorusGroupSongSingerCount++;
+                                        MatchChorusGroupSongSinger = true;
+                                        GroupSingerList.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    if (ChorusGroupSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusGroupSingerList.Add(SingerStr.ToLower());
+                                    ChorusGroupSongSingerCount++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (ChorusSongDatalist.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSongDatalist.Add(ChorusSongSingerName.ToLower());
+                            if (ChorusSingerList.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSingerList.Add(ChorusSongSingerName.ToLower());
+                            if (ChorusGroupSingerList.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(ChorusSongSingerName.ToLower());
+                            ChorusGroupSongSingerCount++;
+                        }
+                    }
+
+                    List<string> FindResultList = new List<string>();
+                    if (!result.IsDupSong && ChorusSingerList.Count > 0)
+                    {
+                        FindResultList = SongDataLowCaseList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusSongDatalist.ToArray()));
+                        if (FindResultList.Count > 0)
+                        {
+                            foreach (string FindResult in FindResultList)
+                            {
+                                List<string> list = new List<string>(FindResult.Split('|'));
+
+                                if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == SongSongName.ToLower())
+                                {
+                                    result.DupSongIndex = SongDataLowCaseList.IndexOf(FindResult);
+                                    result.IsDupSong = true;
+                                    break;
+                                }
+                                list.Clear();
+                            }
+                        }
+                        FindResultList.Clear();
+                    }
+
+                    if (!result.IsDupSong && MatchChorusGroupSongSinger)
+                    {
+                        FindResultList = SongDataLowCaseList.FindAll(SongInfo => SongInfo.ContainsAll(ChorusGroupSongDatalist.ToArray()));
+                        if (FindResultList.Count > 0)
+                        {
+                            foreach (string FindResult in FindResultList)
+                            {
+                                List<string> list = new List<string>(FindResult.Split('|'));
+
+                                if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == SongSongName.ToLower())
+                                {
+                                    result.DupSongIndex = SongDataLowCaseList.IndexOf(FindResult);
+                                    result.IsDupSong = true;
+                                    break;
+                                }
+                                list.Clear();
+                            }
+                        }
+                        FindResultList.Clear();
+                    }
+                    ChorusGroupSingerList.Clear();
+                    ChorusGroupSongDatalist.Clear();
+                    ChorusSingerList.Clear();
+                    ChorusSongDatalist.Clear();
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
     }
 }

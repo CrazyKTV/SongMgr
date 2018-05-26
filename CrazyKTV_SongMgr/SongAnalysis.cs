@@ -838,10 +838,11 @@ namespace CrazyKTV_SongMgr
                 row["Song_SrcPath"] = SongSrcPath;
                 row["Song_SortIndex"] = SongSortIndex;
 
-                if (SongAnalysisSongList.IndexOf(SongLang.ToLower() + "|" + SongSingerType.ToLower() + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower() + "|" + SongSongType.ToLower()) < 0)
+                CommonFunc.DupSongStatus DupSongStatus = CommonFunc.IsDupSong(SongLang, SongSinger, Convert.ToInt32(SongSingerType), SongSongName, SongSongType, SongAnalysisSongList);
+                if (!DupSongStatus.IsDupSong)
                 {
                     SongAnalysisDT.Rows.Add(row);
-                    SongAnalysisSongList.Add(SongLang.ToLower() + "|" + SongSingerType.ToLower() + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower() + "|" + SongSongType.ToLower());
+                    SongAnalysisSongList.Add(SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower() + "|" + SongSongType.ToLower());
                 }
                 else
                 {
