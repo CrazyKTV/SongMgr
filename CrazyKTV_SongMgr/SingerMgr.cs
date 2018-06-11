@@ -427,10 +427,21 @@ namespace CrazyKTV_SongMgr
 
                         if (Global.SingerMgrSyncSongSinger == "True")
                         {
+                            string OldSingerName = valuelist[8];
+                            Regex HasSymbols = new Regex("[']");
+                            if (HasSymbols.IsMatch(OldSingerName))
+                            {
+                                OldSingerName = Regex.Replace(OldSingerName, "[']", delegate (Match match)
+                                {
+                                    string s = "'" + match.ToString();
+                                    return s;
+                                });
+                            }
+
                             if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
                             {
                                 string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
-                                string SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Singer = '" + valuelist[8] + "' or InStr(1,LCase(Song_Singer),LCase('&" + valuelist[8] + "'),0) <>0 or InStr(1,LCase(Song_Singer),LCase('" + valuelist[8] + "&'),0) <>0";
+                                string SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Singer = '" + OldSingerName + "' or InStr(1,LCase(Song_Singer),LCase('&" + OldSingerName + "'),0) <>0 or InStr(1,LCase(Song_Singer),LCase('" + OldSingerName + "&'),0) <>0";
                                 List<string> SyncValuelist = new List<string>();
 
                                 using (DataTable SyncDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
@@ -634,7 +645,7 @@ namespace CrazyKTV_SongMgr
                             else // 不搬移模式
                             {
                                 string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
-                                string SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Singer = '" + valuelist[8] + "' or InStr(1,LCase(Song_Singer),LCase('&" + valuelist[8] + "'),0) <>0 or InStr(1,LCase(Song_Singer),LCase('" + valuelist[8] + "&'),0) <>0";
+                                string SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_Singer = '" + OldSingerName + "' or InStr(1,LCase(Song_Singer),LCase('&" + OldSingerName + "'),0) <>0 or InStr(1,LCase(Song_Singer),LCase('" + OldSingerName + "&'),0) <>0";
                                 List<string> SyncValuelist = new List<string>();
 
                                 using (DataTable SyncDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
@@ -1838,8 +1849,6 @@ namespace CrazyKTV_SongMgr
                     SingerQuerySqlStr = "select " + sqlCommonStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where Singer_Type = '" + QueryValue + "'" + SingerQueryOrderStr;
                     break;
             }
-            Console.WriteLine(SingerQuerySqlStr);
-
             return SingerQuerySqlStr;
         }
 
