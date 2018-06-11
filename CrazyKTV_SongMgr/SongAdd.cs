@@ -751,7 +751,8 @@ namespace CrazyKTV_SongMgr
                     }
                     else
                     {
-                        singertype = (Convert.ToInt32(Global.SongAddDefaultSingerType) - 1).ToString();
+                        string str = CommonFunc.GetSingerTypeStr(Convert.ToInt32(Global.SongAddDefaultSingerType) - 1, 3, "null");
+                        singertype = CommonFunc.GetSingerTypeStr(0, 1, str);
                     }
 
                     if (SingerList.Count > 0)
