@@ -1886,7 +1886,7 @@ namespace CrazyKTV_SongMgr
 
                 if (HasSymbols.IsMatch(HasWideCharQueryValue))
                 {
-                    HasWideCharQueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
+                    HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[']", delegate (Match match)
                     {
                         string str = "'" + match.ToString();
                         return str;
