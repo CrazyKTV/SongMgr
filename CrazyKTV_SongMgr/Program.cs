@@ -65,11 +65,11 @@ namespace CrazyKTV_SongMgr
         public static string SongMgrFileStructure = "1";
         public static string SongMgrSongTrackMode = "True";
         public static string SongMgrBackupRemoveSong = "False";
-        public static string SongMgrCustomSingerTypeStructure = "1,1,1,1,1,1,1,1";
+        public static string SongMgrCustomSingerTypeStructure = "1,1,1,1,1,1,1,2";
         public static string SongMgrEnableMonitorFolders = "False";
         public static string SongMgrSingerGroup = "";
         public static bool SongMgrInitializeStatus = false;
-        public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "未知", "歌星姓氏", "全部歌星", "新進" };
+        public static List<string> SongMgrCustomSingerTypeStructureList = new List<string>() { "男", "女", "團", "合唱", "外男", "外女", "外團", "其他", "歌星姓氏", "全部歌星", "新進" };
         public static List<string> SongMgrMonitorFoldersList = new List<string>() { "", "", "", "", "" };
 
         public static string SingerMgrDefaultSingerDataTable = "ktv_Singer";
@@ -109,8 +109,8 @@ namespace CrazyKTV_SongMgr
 
         public static List<string> CrazyktvSongLangList = new List<string>() { "國語", "台語", "粵語", "日語", "英語", "客語", "原住民語", "韓語", "兒歌", "其它" };
         public static List<string> CrazyktvSongLangKeyWordList = new List<string>() { "國語,國", "台語,台,閩南,閩,臺語,臺", "粵語,粵,廣東", "日語,日文,日", "英語,英文,英", "客語,客", "原住民語,民謠", "韓語,韓", "兒歌,兒", "其它" };
-        public static List<string> CrazyktvSingerTypeList = new List<string>() { "男歌星", "女歌星", "團體", "合唱", "外國男", "外國女", "外國團體", "其它", "未使用", "未使用", "新進歌星" };
-        public static List<string> CrazyktvSingerTypeKeyWordList = new List<string>() { "男,男星,男歌星,男歌手", "女,女星,女歌星,女歌手", "團,團體,樂團", "合唱,對唱", "外男,外國男星,外國男歌星,外國男歌手", "外女,外國女星,外國女歌星,外國女歌手", "外團,外國團體,外國樂團", "未知" };
+        public static List<string> CrazyktvSingerTypeList = new List<string>() { "男歌星", "女歌星", "團體", "合唱", "外國男", "外國女", "外國團體", "其他", "未使用", "未使用", "新進歌星" };
+        public static List<string> CrazyktvSingerTypeKeyWordList = new List<string>() { "男,男星,男歌星,男歌手", "女,女星,女歌星,女歌手", "團,團體,樂團", "合唱,對唱", "外男,外國男星,外國男歌星,外國男歌手", "外女,外國女星,外國女歌星,外國女歌手", "外團,外國團體,外國樂團", "未知,其他,其他歌星,其他歌手" };
         public static List<string> CrazyktvSongTrackList = new List<string>() { "V0", "VR", "VL", "V3", "V4", "V5" };
         public static List<string> CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
         public static List<string> CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
@@ -234,7 +234,7 @@ namespace CrazyKTV_SongMgr
             "外男,外國男星,外國男歌星,外國男歌手",
             "外女,外國女星,外國女歌星,外國女歌手",
             "外團,外國團體,外國樂團",
-            "未知"
+            "未知,其他,其他歌星,其他歌手"
         };
 
         public static List<string> SongAnalysisExceptionSingerList = new List<string>() { "台灣女孩", "梁靜茹", "張懸", "莫文蔚" };

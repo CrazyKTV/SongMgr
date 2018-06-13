@@ -1912,16 +1912,16 @@ namespace CrazyKTV_SongMgr
             switch (ListType)
             {
                 case 1:
-                    list = new List<string>() { "男歌星", "女歌星", "團體", "合唱", "外國男", "外國女", "外國團體", "其它", "歌星姓氏", "全部歌星", "新進歌星" };
+                    list = new List<string>() { "男歌星", "女歌星", "團體", "合唱", "外國男", "外國女", "外國團體", "其他", "歌星姓氏", "全部歌星", "新進歌星" };
                     break;
                 case 2:
                     list = Global.SongMgrCustomSingerTypeStructureList;
                     break;
                 case 3:
-                    list = new List<string>() { "男歌星", "女歌星", "團體", "合唱", "外國男", "外國女", "外國團體", "其它", "新進歌星" };
+                    list = new List<string>() { "男歌星", "女歌星", "團體", "合唱", "外國男", "外國女", "外國團體", "其他", "新進歌星" };
                     break;
                 default:
-                    list = new List<string>() { "男歌星", "女歌星", "團體", "外國男", "外國女", "外國團體", "其它", "新進歌星" };
+                    list = new List<string>() { "男歌星", "女歌星", "團體", "外國男", "外國女", "外國團體", "其他", "新進歌星" };
                     break;
             }
             
