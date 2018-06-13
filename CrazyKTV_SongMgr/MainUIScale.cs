@@ -71,6 +71,27 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
+            if (Global.SongMgrSongAddMode != "4")
+            {
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) < 0)
+                {
+                    SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SingerGroup_TabPage) + 1, SongMgrCfg_MonitorFolders_TabPage);
+                }
+            }
+
+            if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
+            {
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_CustomStructure_TabPage) < 0)
+                {
+                    SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SingerGroup_TabPage) + 1, SongMgrCfg_CustomStructure_TabPage);
+                }
+
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) < 0)
+                {
+                    SongMgrCfg_TabControl.TabPages.Insert(SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SingerGroup_TabPage) + 1, SongMgrCfg_SongStructure_TabPage);
+                }
+            }
+
             foreach (Control MainControl in this.Controls)
             {
                 MainControl.Location = new System.Drawing.Point(Convert.ToInt32(MainControl.Location.X / MainUIScale.UIScalingFactor * ScalingFactor), Convert.ToInt32(MainControl.Location.Y / MainUIScale.UIScalingFactor * ScalingFactor));
@@ -166,6 +187,30 @@ namespace CrazyKTV_SongMgr
                 {
                     SongLog_TabPage.Hide();
                     MainTabControl.TabPages.Remove(SongLog_TabPage);
+                }
+            }
+
+            if (Global.SongMgrSongAddMode != "4")
+            {
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) >= 0)
+                {
+                    SongMgrCfg_MonitorFolders_TabPage.Hide();
+                    SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_MonitorFolders_TabPage);
+                }
+            }
+
+            if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
+            {
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_CustomStructure_TabPage) >= 0)
+                {
+                    SongMgrCfg_CustomStructure_TabPage.Hide();
+                    SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_CustomStructure_TabPage);
+                }
+
+                if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_SongStructure_TabPage) >= 0)
+                {
+                    SongMgrCfg_SongStructure_TabPage.Hide();
+                    SongMgrCfg_TabControl.TabPages.Remove(SongMgrCfg_SongStructure_TabPage);
                 }
             }
 
