@@ -747,6 +747,29 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private void SongMgrCfg_TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (SongMgrCfg_TabControl.SelectedTab.Name)
+            {
+                case "SongMgrCfg_SongStructure_TabPage":
+                case "SongMgrCfg_CustomStructure_TabPage":
+                    SongMgrCfg_UpdateStructure_Button.Visible = true;
+                    break;
+                default:
+                    SongMgrCfg_UpdateStructure_Button.Visible = false;
+                    break;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 

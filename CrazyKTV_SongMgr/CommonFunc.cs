@@ -2501,7 +2501,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- CommonFunc 取得檔案結構 ---
 
-        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath, bool RebuildSongStructure, string RebuildSongPath, bool DetectMultiSongPath)
+        public static string GetFileStructure(string SongId, string SongLang, int SongSingerType, string SongSinger, string SongSongName, int SongTrack, string SongSongType, string SongFileName, string SongPath, bool RebuildSongStructure, string RebuildSongPath, bool DetectMultiSongPath, bool UpdateStructure)
         {
             if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
             {
@@ -2520,47 +2520,80 @@ namespace CrazyKTV_SongMgr
                 switch (Global.SongMgrFolderStructure)
                 {
                     case "1":
-                        if (Global.SongMgrChorusMerge == "True" & SongSingerType == 3)
+                        if (Global.SongMgrChorusMerge == "True" && SongSingerType == 3)
                         {
-                            if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 2) != Global.SongMgrDestFolder)
+                            if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 2) != Global.SongMgrDestFolder && !UpdateStructure)
                             {
                                 SongPath = GetParentDirectoryPath(SongPath, 2) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                            }
+                            else
+                            {
+                                if (UpdateStructure)
+                                {
+                                    SongPath = SongPath.Substring(0, SongPath.IndexOf(SongLang) - 1) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                }
+                                else
+                                {
+                                    SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                                }
+                                
+                            }
+                        }
+                        else
+                        {
+                            string fSongSingerStr = SongSingerStr;
+                            Regex r = new Regex(@"\.$");
+                            if (r.IsMatch(fSongSingerStr)) fSongSingerStr = Regex.Replace(fSongSingerStr, @"\.$", "", RegexOptions.IgnoreCase);
+
+                            if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 3) != Global.SongMgrDestFolder && !UpdateStructure)
+                            {
+                                SongPath = GetParentDirectoryPath(SongPath, 3) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + fSongSingerStr + @"\";
+                            }
+                            else
+                            {
+                                if (UpdateStructure)
+                                {
+                                    SongPath = SongPath.Substring(0, SongPath.IndexOf(SongLang) - 1) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + fSongSingerStr + @"\";
+                                }
+                                else
+                                {
+                                    SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + fSongSingerStr + @"\";
+                                }
+                            }
+                        }
+                        break;
+                    case "2":
+                        if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 2) != Global.SongMgrDestFolder && !UpdateStructure)
+                        {
+                            SongPath = GetParentDirectoryPath(SongPath, 2) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
+                        }
+                        else
+                        {
+                            if (UpdateStructure)
+                            {
+                                SongPath = SongPath.Substring(0, SongPath.IndexOf(SongLang) - 1) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                             }
                             else
                             {
                                 SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
                             }
                         }
+                        break;
+                    case "3":
+                        if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 1) != Global.SongMgrDestFolder && !UpdateStructure)
+                        {
+                            SongPath = GetParentDirectoryPath(SongPath, 1) + @"\" + SongLang + @"\";
+                        }
                         else
                         {
-                            if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 3) != Global.SongMgrDestFolder)
+                            if (UpdateStructure)
                             {
-                                SongPath = GetParentDirectoryPath(SongPath, 3) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                SongPath = SongPath.Substring(0, SongPath.IndexOf(SongLang) - 1) + @"\" + SongLang + @"\";
                             }
                             else
                             {
-                                SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\" + SongSingerStr + @"\";
+                                SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\";
                             }
-                        }
-                        break;
-                    case "2":
-                        if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 2) != Global.SongMgrDestFolder)
-                        {
-                            SongPath = SongPath = GetParentDirectoryPath(SongPath, 2) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        }
-                        else
-                        {
-                            SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\" + SingerTypeStr + @"\";
-                        }
-                        break;
-                    case "3":
-                        if (!RebuildSongStructure && DetectMultiSongPath && GetParentDirectoryPath(SongPath, 1) != Global.SongMgrDestFolder)
-                        {
-                            SongPath = SongPath = GetParentDirectoryPath(SongPath, 1) + @"\" + SongLang + @"\";
-                        }
-                        else
-                        {
-                            SongPath = ((!RebuildSongStructure) ? Global.SongMgrDestFolder : RebuildSongPath) + @"\" + SongLang + @"\";
                         }
                         break;
                 }

@@ -250,6 +250,7 @@
             this.SingerMgr_SingerExport_Button = new System.Windows.Forms.Button();
             this.SingerMgr_SingerImport_Button = new System.Windows.Forms.Button();
             this.SongMgrCfg_TabPage = new System.Windows.Forms.TabPage();
+            this.SongMgrCfg_UpdateStructure_Button = new System.Windows.Forms.Button();
             this.SongMgrCfg_TabControl = new System.Windows.Forms.TabControl();
             this.SongMgrCfg_SongType_TabPage = new System.Windows.Forms.TabPage();
             this.SongMgrCfg_SongType_Button = new System.Windows.Forms.Button();
@@ -497,6 +498,7 @@
             this.MainCfg_SubTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_MainTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_UIScale_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_UIScale_Label2 = new System.Windows.Forms.Label();
             this.MainCfg_UIScale_Button = new System.Windows.Forms.Button();
             this.MainCfg_UIScale_TextBox = new System.Windows.Forms.TextBox();
             this.MainCfg_EnableUIScale_CheckBox = new System.Windows.Forms.CheckBox();
@@ -582,7 +584,6 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_TabControl.SuspendLayout();
@@ -3429,6 +3430,7 @@
             // 
             // SongMgrCfg_TabPage
             // 
+            this.SongMgrCfg_TabPage.Controls.Add(this.SongMgrCfg_UpdateStructure_Button);
             this.SongMgrCfg_TabPage.Controls.Add(this.SongMgrCfg_TabControl);
             this.SongMgrCfg_TabPage.Controls.Add(this.SongMgrCfg_Tooltip_GroupBox);
             this.SongMgrCfg_TabPage.Controls.Add(this.SongMgrCfg_SongID_GroupBox);
@@ -3444,6 +3446,19 @@
             this.SongMgrCfg_TabPage.Text = "歌庫設定";
             this.SongMgrCfg_TabPage.UseVisualStyleBackColor = true;
             // 
+            // SongMgrCfg_UpdateStructure_Button
+            // 
+            this.SongMgrCfg_UpdateStructure_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMgrCfg_UpdateStructure_Button.Location = new System.Drawing.Point(865, 270);
+            this.SongMgrCfg_UpdateStructure_Button.Margin = new System.Windows.Forms.Padding(6);
+            this.SongMgrCfg_UpdateStructure_Button.Name = "SongMgrCfg_UpdateStructure_Button";
+            this.SongMgrCfg_UpdateStructure_Button.Size = new System.Drawing.Size(110, 35);
+            this.SongMgrCfg_UpdateStructure_Button.TabIndex = 16;
+            this.SongMgrCfg_UpdateStructure_Button.Text = "更新結構";
+            this.SongMgrCfg_UpdateStructure_Button.UseVisualStyleBackColor = true;
+            this.SongMgrCfg_UpdateStructure_Button.Visible = false;
+            this.SongMgrCfg_UpdateStructure_Button.Click += new System.EventHandler(this.SongMgrCfg_UpdateStructure_Button_Click);
+            // 
             // SongMgrCfg_TabControl
             // 
             this.SongMgrCfg_TabControl.Controls.Add(this.SongMgrCfg_SongType_TabPage);
@@ -3458,6 +3473,7 @@
             this.SongMgrCfg_TabControl.SelectedIndex = 0;
             this.SongMgrCfg_TabControl.Size = new System.Drawing.Size(608, 320);
             this.SongMgrCfg_TabControl.TabIndex = 2;
+            this.SongMgrCfg_TabControl.SelectedIndexChanged += new System.EventHandler(this.SongMgrCfg_TabControl_SelectedIndexChanged);
             // 
             // SongMgrCfg_SongType_TabPage
             // 
@@ -6631,7 +6647,7 @@
             // 
             // MainCfg_UIScale_GroupBox
             // 
-            this.MainCfg_UIScale_GroupBox.Controls.Add(this.label1);
+            this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_Label2);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_Button);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_TextBox);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_EnableUIScale_CheckBox);
@@ -6648,6 +6664,17 @@
             this.MainCfg_UIScale_GroupBox.TabIndex = 11;
             this.MainCfg_UIScale_GroupBox.TabStop = false;
             this.MainCfg_UIScale_GroupBox.Text = "界面縮放";
+            // 
+            // MainCfg_UIScale_Label2
+            // 
+            this.MainCfg_UIScale_Label2.AutoSize = true;
+            this.MainCfg_UIScale_Label2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_UIScale_Label2.Location = new System.Drawing.Point(302, 80);
+            this.MainCfg_UIScale_Label2.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.MainCfg_UIScale_Label2.Name = "MainCfg_UIScale_Label2";
+            this.MainCfg_UIScale_Label2.Size = new System.Drawing.Size(23, 20);
+            this.MainCfg_UIScale_Label2.TabIndex = 16;
+            this.MainCfg_UIScale_Label2.Text = "%";
             // 
             // MainCfg_UIScale_Button
             // 
@@ -7730,17 +7757,6 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label1.Location = new System.Drawing.Point(302, 80);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 20);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "%";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -8439,7 +8455,8 @@
         private System.Windows.Forms.Label MainCfg_HideButton_Label;
         private System.Windows.Forms.TextBox MainCfg_UIScale_TextBox;
         private System.Windows.Forms.Button MainCfg_UIScale_Button;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label MainCfg_UIScale_Label2;
+        private System.Windows.Forms.Button SongMgrCfg_UpdateStructure_Button;
     }
 }
 

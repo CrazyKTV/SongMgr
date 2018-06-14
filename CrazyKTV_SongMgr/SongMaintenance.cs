@@ -1690,6 +1690,7 @@ namespace CrazyKTV_SongMgr
         
         #endregion
 
+        
         #region --- 歌庫結構重建 ---
 
         private void SongMaintenance_RebuildSongStructure_Button_Click(object sender, EventArgs e)
@@ -1807,7 +1808,7 @@ namespace CrazyKTV_SongMgr
 
                 if (!HasInvalidChar)
                 {
-                    SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, true, RebuildSongPath, false); ;
+                    SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, true, RebuildSongPath, false, false);
                     SongPath = Path.GetDirectoryName(SongDestPath) + @"\";
                     SongFileName = Path.GetFileName(SongDestPath);
                 }
