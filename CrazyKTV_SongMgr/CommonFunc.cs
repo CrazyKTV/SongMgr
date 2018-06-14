@@ -59,7 +59,8 @@ namespace CrazyKTV_SongMgr
                 SongAdd_Tooltip_Label,
                 SingerMgr_Tooltip_Label,
                 SongMgrCfg_Tooltip_Label,
-                SongMaintenance_Tooltip_Label
+                SongMaintenance_Tooltip_Label,
+                MainCfg_Tooltip_Label
             };
 
             int i = 3;
@@ -77,6 +78,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "SongMaintenance_VolumeChange_TextBox":
                     i = 4;
+                    break;
+                case "MainCfg_UIScale_TextBox":
+                    i = 5;
                     break;
                 default:
                     i = 3;
@@ -116,7 +120,8 @@ namespace CrazyKTV_SongMgr
                 SingerMgr_Tooltip_Label,
                 SongMgrCfg_Tooltip_Label,
                 SongMaintenance_Tooltip_Label,
-                Cashbox_QueryStatus_Label
+                Cashbox_QueryStatus_Label,
+                MainCfg_Tooltip_Label
             };
 
             bool MultiEdit = false;
@@ -146,6 +151,9 @@ namespace CrazyKTV_SongMgr
                 case "Cashbox_EditSongSongName_TextBox":
                     if (Cashbox_EditMode_CheckBox.Checked && Global.CashboxMultiEdit) MultiEdit = true;
                     i = 5;
+                    break;
+                case "MainCfg_UIScale_TextBox":
+                    i = 6;
                     break;
                 default:
                     i = 4;
@@ -192,6 +200,17 @@ namespace CrazyKTV_SongMgr
                             Tooltip_Label[i].Text = "";
                         }
                         break;
+                    case "MainCfg_UIScale_TextBox":
+                        if (int.Parse(((TextBox)sender).Text) > 200 || int.Parse(((TextBox)sender).Text) < 50)
+                        {
+                            Tooltip_Label[i].Text = "此項目只能輸入 50 ~ 200 的值!";
+                            e.Cancel = true;
+                        }
+                        else
+                        {
+                            Tooltip_Label[i].Text = "";
+                        }
+                        break;
                 }
 
                 switch (((TextBox)sender).Name)
@@ -202,6 +221,7 @@ namespace CrazyKTV_SongMgr
                     case "SongMaintenance_VolumeChange_TextBox":
                     case "SongAdd_EditSongVolume_TextBox":
                     case "SongAdd_EditSongPlayCount_TextBox":
+                    case "MainCfg_UIScale_TextBox":
                         if (int.Parse(((TextBox)sender).Text) > 0)
                         {
                             ((TextBox)sender).Text = ((TextBox)sender).Text.TrimStart('0');
@@ -1590,8 +1610,10 @@ namespace CrazyKTV_SongMgr
         {
             Global.MainCfgUIScale = MainCfg_UIScale_ComboBox.SelectedValue.ToString();
             Global.MainCfgUIFont = ((DataRowView)MainCfg_UIFont_ComboBox.SelectedItem)[0].ToString();
+            Global.MainCfgUICustomScale = MainCfg_UIScale_TextBox.Text;
 
             float ScalingFactor = 0;
+            float CustomScale = float.Parse(Global.MainCfgUICustomScale);
             switch (Global.MainCfgUIScale)
             {
                 case "1":
@@ -1608,6 +1630,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "5":
                     ScalingFactor = (float)144 / 96;
+                    break;
+                case "6":
+                    ScalingFactor = (float)96 * CustomScale / 100 / 96;
                     break;
             }
             if (ScalingFactor != 0) MainUIScale_UIScale(ScalingFactor, Global.MainCfgUIFont);

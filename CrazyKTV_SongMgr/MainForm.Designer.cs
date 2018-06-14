@@ -497,6 +497,8 @@
             this.MainCfg_SubTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_MainTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_UIScale_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_UIScale_Button = new System.Windows.Forms.Button();
+            this.MainCfg_UIScale_TextBox = new System.Windows.Forms.TextBox();
             this.MainCfg_EnableUIScale_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_UIFont_Label = new System.Windows.Forms.Label();
             this.MainCfg_UIFont_ComboBox = new System.Windows.Forms.ComboBox();
@@ -580,6 +582,7 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_TabControl.SuspendLayout();
@@ -6628,6 +6631,9 @@
             // 
             // MainCfg_UIScale_GroupBox
             // 
+            this.MainCfg_UIScale_GroupBox.Controls.Add(this.label1);
+            this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_Button);
+            this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_TextBox);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_EnableUIScale_CheckBox);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIFont_Label);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIFont_ComboBox);
@@ -6638,10 +6644,36 @@
             this.MainCfg_UIScale_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 20);
             this.MainCfg_UIScale_GroupBox.Name = "MainCfg_UIScale_GroupBox";
             this.MainCfg_UIScale_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_UIScale_GroupBox.Size = new System.Drawing.Size(341, 168);
+            this.MainCfg_UIScale_GroupBox.Size = new System.Drawing.Size(341, 205);
             this.MainCfg_UIScale_GroupBox.TabIndex = 11;
             this.MainCfg_UIScale_GroupBox.TabStop = false;
             this.MainCfg_UIScale_GroupBox.Text = "界面縮放";
+            // 
+            // MainCfg_UIScale_Button
+            // 
+            this.MainCfg_UIScale_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_UIScale_Button.Location = new System.Drawing.Point(227, 158);
+            this.MainCfg_UIScale_Button.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.MainCfg_UIScale_Button.Name = "MainCfg_UIScale_Button";
+            this.MainCfg_UIScale_Button.Size = new System.Drawing.Size(98, 32);
+            this.MainCfg_UIScale_Button.TabIndex = 15;
+            this.MainCfg_UIScale_Button.Text = "套用";
+            this.MainCfg_UIScale_Button.UseVisualStyleBackColor = true;
+            this.MainCfg_UIScale_Button.Click += new System.EventHandler(this.MainCfg_UIScale_Button_Click);
+            // 
+            // MainCfg_UIScale_TextBox
+            // 
+            this.MainCfg_UIScale_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_UIScale_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.MainCfg_UIScale_TextBox.Location = new System.Drawing.Point(227, 76);
+            this.MainCfg_UIScale_TextBox.Margin = new System.Windows.Forms.Padding(6, 8, 6, 9);
+            this.MainCfg_UIScale_TextBox.MaxLength = 3;
+            this.MainCfg_UIScale_TextBox.Name = "MainCfg_UIScale_TextBox";
+            this.MainCfg_UIScale_TextBox.Size = new System.Drawing.Size(63, 29);
+            this.MainCfg_UIScale_TextBox.TabIndex = 14;
+            this.MainCfg_UIScale_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
+            this.MainCfg_UIScale_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.MainCfg_UIScale_TextBox.Validated += new System.EventHandler(this.MainCfg_UIScale_TextBox_Validated);
             // 
             // MainCfg_EnableUIScale_CheckBox
             // 
@@ -6678,7 +6710,6 @@
             this.MainCfg_UIFont_ComboBox.Name = "MainCfg_UIFont_ComboBox";
             this.MainCfg_UIFont_ComboBox.Size = new System.Drawing.Size(220, 28);
             this.MainCfg_UIFont_ComboBox.TabIndex = 12;
-            this.MainCfg_UIFont_ComboBox.SelectedIndexChanged += new System.EventHandler(this.MainCfg_UIScale_ComboBox_SelectedIndexChanged);
             // 
             // MainCfg_UIScale_Label
             // 
@@ -7699,6 +7730,17 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label1.Location = new System.Drawing.Point(302, 80);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 20);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "%";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -8395,6 +8437,9 @@
         private System.Windows.Forms.Button Cashbox_WriteHaveSongData_Button;
         private System.Windows.Forms.CheckBox MainCfg_HideApplyCashboxIdButton_CheckBox;
         private System.Windows.Forms.Label MainCfg_HideButton_Label;
+        private System.Windows.Forms.TextBox MainCfg_UIScale_TextBox;
+        private System.Windows.Forms.Button MainCfg_UIScale_Button;
+        private System.Windows.Forms.Label label1;
     }
 }
 

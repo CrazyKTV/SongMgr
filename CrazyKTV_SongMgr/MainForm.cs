@@ -144,6 +144,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", Global.SongMgrSingerGroup);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", Global.SongMgrSingerGroup);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton", Global.MainCfgHideApplyCashboxIdButton);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
             }
 
             List<string> list = new List<string>()
@@ -194,7 +195,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale")
         };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -446,6 +448,9 @@ namespace CrazyKTV_SongMgr
 
             if (list[46] != "") Global.MainCfgHideApplyCashboxIdButton = list[46];
             MainCfg_HideApplyCashboxIdButton_CheckBox.Checked = bool.Parse(Global.MainCfgHideApplyCashboxIdButton);
+
+            if (list[47] != "") Global.MainCfgUICustomScale = list[47];
+            MainCfg_UIScale_TextBox.Text = Global.MainCfgUICustomScale;
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
@@ -741,6 +746,17 @@ namespace CrazyKTV_SongMgr
                 Global.PlayerUpdateSongValueList.Clear();
             }
         }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

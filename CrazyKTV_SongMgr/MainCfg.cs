@@ -27,6 +27,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", Global.MainCfgEnableUIScale);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -134,10 +135,16 @@ namespace CrazyKTV_SongMgr
 
         private void MainCfg_UIScale_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (((ComboBox)sender).Focused)
+            if (MainCfg_UIScale_ComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
             {
-                Common_ScalingUI();
+                Global.MainCfgUIScale = MainCfg_UIScale_ComboBox.SelectedValue.ToString();
+                MainCfg_UIScale_TextBox.Enabled = (Global.MainCfgUIScale == "6") ? true : false;
             }
+        }
+
+        private void MainCfg_UIScale_TextBox_Validated(object sender, EventArgs e)
+        {
+            Global.MainCfgUICustomScale = MainCfg_UIScale_TextBox.Text;
         }
 
         private void MainCfg_EnableUIScale_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -147,15 +154,20 @@ namespace CrazyKTV_SongMgr
             {
                 MainCfg_UIScale_ComboBox.Enabled = true;
                 MainCfg_UIFont_ComboBox.Enabled = true;
+                MainCfg_UIScale_Button.Enabled = true;
             }
             else
             {
                 MainCfg_UIScale_ComboBox.Enabled = false;
                 MainCfg_UIFont_ComboBox.Enabled = false;
+                MainCfg_UIScale_Button.Enabled = false;
             }
         }
 
-
+        private void MainCfg_UIScale_Button_Click(object sender, EventArgs e)
+        {
+            Common_ScalingUI();
+        }
 
         #endregion
 
@@ -425,7 +437,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "66%", "80%", "100%", "125%", "150%" };
+                List<string> ItemList = new List<string>() { "66%", "80%", "100%", "125%", "150%", "自訂" };
 
                 foreach (string str in ItemList)
                 {

@@ -96,6 +96,7 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgHideApplyCashboxIdButton = "True";
         public static string MainCfgBackupRemoveSongDays = "7";
         public static string MainCfgUIScale = "3";
+        public static string MainCfgUICustomScale = "100";
         public static string MainCfgUIFont = "Arial";
         public static string MainCfgEnableUIScale = "False";
 
