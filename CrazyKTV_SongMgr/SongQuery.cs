@@ -3171,10 +3171,10 @@ namespace CrazyKTV_SongMgr
                     list = new List<string>() { "開啟資料夾", "播放檔案", "刪除資料列" };
                     break;
                 case 2:
-                    list = new List<string>() { "開啟資料夾", "播放檔案" };
+                    list = new List<string>() { "開啟資料夾", "播放檔案", "查詢此歌手所有歌曲" };
                     break;
                 case 3:
-                    list = new List<string>() { "開啟資料夾", "播放檔案", "從我的最愛移除" };
+                    list = new List<string>() { "開啟資料夾", "播放檔案", "查詢此歌手所有歌曲", "從我的最愛移除" };
                     break;
                 default:
                     list = new List<string>() { "刪除資料列" };

@@ -262,6 +262,14 @@ namespace CrazyKTV_SongMgr
                         this.Hide();
                     }
                     break;
+                case "查詢此歌手所有歌曲":
+                    string SingerName = SongQuery_DataGridView.SelectedRows[0].Cells["Song_Singer"].Value.ToString();
+                    SongQuery_QueryType_ComboBox.SelectedValue = 2;
+                    SongQuery_QueryValue_TextBox.Text = SingerName;
+                    SongQuery_QueryFilter_ComboBox.SelectedValue = 1;
+                    SongQuery_EditMode_CheckBox.Checked = false;
+                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    break;
                 case "刪除資料列":
                     string MessageText = (Global.SongMgrSongAddMode != "3") ? "你確定要刪除歌曲資料及歌曲檔案嗎?" : "你確定要刪除歌曲資料嗎?";
                     if (MessageBox.Show(MessageText, "刪除提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
