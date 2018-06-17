@@ -96,6 +96,7 @@ namespace CrazyKTV_SongMgr
                 case "3":
                 case "4":
                 case "5":
+                case "6":
                     Global.SongAddSongIdentificationMode = SongAdd_SongIdentificationMode_ComboBox.SelectedValue.ToString();
                     break;
             }
@@ -1619,7 +1620,7 @@ namespace CrazyKTV_SongMgr
                 dt.Columns.Add(new DataColumn("Value", typeof(int)));
 
                 List<string> list = new List<string>();
-                list = new List<string>() { "智能辨識模式", "歌手_歌名", "歌名_歌手", "歌曲編號_歌手_歌名", @"歌手\歌名" };
+                list = new List<string>() { "智能辨識模式", "歌手_歌名", "歌名_歌手", "歌曲編號_歌手_歌名", "歌曲編號_歌名_歌手", @"歌手\歌名" };
 
                 foreach (string s in list)
                 {
