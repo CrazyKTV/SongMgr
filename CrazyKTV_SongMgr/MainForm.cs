@@ -468,19 +468,10 @@ namespace CrazyKTV_SongMgr
 
             // 初始化所需資料
             SongMgrDB_CheckDatabaseFile();
-            Common_InitializeSongData(true, true, true, true, true);
-
+            Task.Factory.StartNew(() => Common_InitializeSongData(true, true, true, true, true));
+            
             // 檢查資料庫檔案是否為舊版資料庫
             SongDBUpdate_CheckDatabaseFile();
-
-            // 歌庫監視
-            SongMgrCfg_MonitorFolders_CheckBox.Enabled = false;
-            foreach (string MonitorFolder in Global.SongMgrMonitorFoldersList)
-            {
-                if (MonitorFolder != "") SongMgrCfg_MonitorFolders_CheckBox.Enabled = true;
-            }
-            if (!SongMgrCfg_MonitorFolders_CheckBox.Enabled) SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
-            SongMonitor_CheckCurSong();
 
             // 歌曲查詢 - 載入下拉選單清單及設定
             SongQuery_QueryType_ComboBox.DataSource = SongQuery.GetSongQueryTypeList();
@@ -564,6 +555,16 @@ namespace CrazyKTV_SongMgr
 
             if (Global.MainCfgEnableUIScale == "True") Common_ScalingUI();
             SpinWait.SpinUntil(() => Global.DatabaseUpdateFinished == true);
+
+            // 歌庫監視
+            SongMgrCfg_MonitorFolders_CheckBox.Enabled = false;
+            foreach (string MonitorFolder in Global.SongMgrMonitorFoldersList)
+            {
+                if (MonitorFolder != "") SongMgrCfg_MonitorFolders_CheckBox.Enabled = true;
+            }
+            if (!SongMgrCfg_MonitorFolders_CheckBox.Enabled) SongMgrCfg_MonitorFolders_CheckBox.Checked = false;
+            SongMonitor_CheckCurSong();
+
             if (!Global.CrazyktvDatabaseStatus)
             {
                 if (MainTabControl.SelectedIndex != 4) MainTabControl.SelectedIndex = 3;
@@ -664,7 +665,8 @@ namespace CrazyKTV_SongMgr
                         "加歌程式參考資料庫不是最新版本!",
                         "資料庫檔案為舊版本!",
                         "歌庫編碼混雜 5 及 6 位數編碼!",
-                        "請先設定歌庫資料夾!"
+                        "請先設定歌庫資料夾!",
+                        "資料初始化已完成。"
                     };
                     if (ErrorTextList.IndexOf(Tooltip_Label[i].Text) >= 0) Tooltip_Label[i].Text = "";
                     ErrorTextList.Clear();

@@ -16,7 +16,7 @@ namespace CrazyKTV_SongMgr
         {
             if (!Global.CrazyktvDatabaseStatus) return;
 
-            if (Global.SongMgrSongAddMode == "1")
+            if (Global.SongMgrSongAddMode != "4")
             {
                 if (SongMgrCfg_TabControl.TabPages.IndexOf(SongMgrCfg_MonitorFolders_TabPage) >= 0)
                 {
@@ -32,10 +32,6 @@ namespace CrazyKTV_SongMgr
                 Global.TotalList = new List<int>() { 0, 0, 0, 0, 0 };
                 Global.MTotalList = new List<int>() { 0, 0, 0, 0 };
                 Common_SwitchSetUI(false);
-
-                SongQuery_QueryStatus_Label.Text = "正在檢查歌曲資料庫,請稍待...";
-                SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
-                SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
 
                 var tasks = new List<Task>();
                 tasks.Add(Task.Factory.StartNew(() => SongMonitor_CheckCurSongTask()));
@@ -57,6 +53,14 @@ namespace CrazyKTV_SongMgr
 
         private void SongMonitor_CheckCurSongTask()
         {
+            SpinWait.SpinUntil(() => Global.InitializeSongData == true);
+            this.BeginInvoke((Action)delegate()
+            {
+                SongQuery_QueryStatus_Label.Text = "正在檢查歌曲資料庫,請稍待...";
+                SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+                SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+            });
+
             DataTable dt = new DataTable();
             string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_FileName, Song_Path from ktv_Song order by Song_Id";
             dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");

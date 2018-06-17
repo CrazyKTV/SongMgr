@@ -459,6 +459,15 @@ namespace CrazyKTV_SongMgr
         {
             if (File.Exists(Global.CrazyktvSongMgrDatabaseFile) && !Global.SongMgrDatabaseError)
             {
+                Global.InitializeSongData = false;
+
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongQuery_QueryStatus_Label.Text = "正在等待資料初始化完成,請稍待...";
+                    SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+                    SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+                });
+
                 var tasks = new List<Task>();
 
                 if (InitSongId)
@@ -617,6 +626,14 @@ namespace CrazyKTV_SongMgr
                     TaskFinished = true;
                 });
                 SpinWait.SpinUntil(() => TaskFinished == true);
+                Global.InitializeSongData = true;
+
+                this.BeginInvoke((Action)delegate()
+                {
+                    SongQuery_QueryStatus_Label.Text = "資料初始化已完成。";
+                    SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+                    SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+                });
             }
         }
 
