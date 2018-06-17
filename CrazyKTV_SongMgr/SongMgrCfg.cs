@@ -963,7 +963,14 @@ namespace CrazyKTV_SongMgr
                     Global.TimerEndTime = DateTime.Now;
                     this.BeginInvoke((Action)delegate()
                     {
-                        SongMgrCfg_Tooltip_Label.Text = "總共成功更新 " + Global.TotalList[0] + " 首歌曲檔案,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        if (SongMgrCfg.UpdateStructureError)
+                        {
+                            SongMgrCfg_Tooltip_Label.Text = "偵測到您的歌庫結構並非由加歌程式所建立,請改用歌庫維護頁面裡的重建歌庫結構功能。";
+                        }
+                        else
+                        {
+                            SongMgrCfg_Tooltip_Label.Text = "總共成功更新 " + Global.TotalList[0] + " 首歌曲檔案,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        }
                         Common_SwitchSetUI(true);
                     });
                 });
@@ -981,6 +988,8 @@ namespace CrazyKTV_SongMgr
                     if (dt.Rows.Count > 0)
                     {
                         List<string> UpdateList = new List<string>();
+                        List<string> HasInvalidCharList = new List<string>();
+                        SongMgrCfg.UpdateStructureError = false;
 
                         Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
                         {
@@ -1003,6 +1012,12 @@ namespace CrazyKTV_SongMgr
                                     string SongFileName = row["Song_FileName"].ToString();
                                     string SongPath = row["Song_Path"].ToString();
 
+                                    if (SongPath.IndexOf(SongLang) < 0)
+                                    {
+                                        SongMgrCfg.UpdateStructureError = true;
+                                        return;
+                                    }
+
                                     string SongSrcPath = Path.Combine(SongPath, SongFileName);
                                     string SongDestPath = CommonFunc.GetFileStructure(SongId, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongFileName, SongPath, false, "", true, true);
                                     if (SongSrcPath != SongDestPath)
@@ -1016,10 +1031,7 @@ namespace CrazyKTV_SongMgr
 
                                         if (HasInvalidChar)
                                         {
-                                            lock (LockThis) { Global.TotalList[1]++; }
-                                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構更新】新的結構含有無效字元: " + SongDestPath + " (已忽略更新)";
-                                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                            lock (LockThis) { HasInvalidCharList.Add(SongDestPath); }
                                         }
                                         else
                                         {
@@ -1029,6 +1041,19 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
                         });
+                        if (SongMgrCfg.UpdateStructureError) return;
+
+                        if (HasInvalidCharList.Count > 0)
+                        {
+                            foreach (string SongDestPath in HasInvalidCharList)
+                            {
+                                Global.TotalList[1]++;
+                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫結構更新】新的結構含有無效字元: " + SongDestPath + " (已忽略更新)";
+                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                            }
+                        }
+                        HasInvalidCharList.Clear();
 
                         List<string> UpdateDBList = new List<string>();
                         if (UpdateList.Count > 0)
@@ -1475,5 +1500,6 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        public static bool UpdateStructureError = false;
     }
 }
