@@ -447,6 +447,7 @@ namespace CrazyKTV_SongMgr
                 SongVolume = Global.SongAddDefaultSongVolume;
             }
 
+            int FileStrCount = 0;
             // 判斷歌手及歌曲名稱
             if (SongSongName == "")
             {
@@ -472,6 +473,7 @@ namespace CrazyKTV_SongMgr
                 FileNameRemoveList.Clear();
 
                 list = new List<string>(Regex.Split(str, SeparateStr, RegexOptions.None));
+                FileStrCount = list.Count;
 
                 switch (Global.SongAddSongIdentificationMode)
                 {
@@ -485,6 +487,26 @@ namespace CrazyKTV_SongMgr
                                     Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
                                     if (r.IsMatch(Path.GetFileName(DirStr))) SongSingerType = "3";
                                     SongSinger = Regex.Replace(Path.GetFileName(DirStr), @"%%|^\s*|\s*$", "");
+                                }
+                                else
+                                {
+                                    if (Global.SongAddSongIdentificationMode == "1")
+                                    {
+                                        SongSinger = Regex.Replace(Path.GetFileName(DirStr), @"%%|^\s*|\s*$", "");
+                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                                        if (r.IsMatch(Path.GetFileName(DirStr)))
+                                        {
+                                            SongSingerType = "3";
+                                        }
+                                        else
+                                        {
+                                            if (SingerDataLowCaseList.IndexOf(SongSinger.ToLower()) >= 0)
+                                            {
+                                                SongSinger = SingerDataList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                                SongSingerType = SingerDataTypeList[SingerDataLowCaseList.IndexOf(SongSinger.ToLower())];
+                                            }
+                                        }
+                                    }
                                 }
                                 SongSongName = Regex.Replace(list[0], @"%%|^\s*|\s*$", "");
                                 break;
@@ -716,7 +738,7 @@ namespace CrazyKTV_SongMgr
                                 SongLang = "國語";
                                 SongSongName = "兒歌";
                             }
-                            else if (Global.SongAddSongIdentificationMode == "6" && SongSongName == "兒歌")
+                            else if (FileStrCount == 1 && SongSongName == "兒歌")
                             {
                                 SongLang = "國語";
                             }
@@ -730,7 +752,7 @@ namespace CrazyKTV_SongMgr
                                 SongLang = "國語";
                                 SongSongName = "台";
                             }
-                            else if (Global.SongAddSongIdentificationMode == "6" && SongSongName == "台")
+                            else if (FileStrCount == 1 && SongSongName == "台")
                             {
                                 SongLang = "國語";
                             }
