@@ -1460,36 +1460,42 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "4":
-                        SongQueryType = "DuplicateSongIgnoreSinger";
+                        SongQueryType = "DuplicateSongIgnorebrackets";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "5":
-                        SongQueryType = "DuplicateSongIgnoreSongType";
+                        SongQueryType = "DuplicateSongIgnoreSinger";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "6":
-                        SongQueryType = "DuplicateSongOnlyChorusSinger";
+                        SongQueryType = "DuplicateSongIgnoreSongType";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "7":
-                        SongQueryType = "MatchSongTrack";
+                        SongQueryType = "DuplicateSongOnlyChorusSinger";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "8":
-                        SongQueryType = "MatchSingerType";
+                        SongQueryType = "MatchSongTrack";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "9":
+                        SongQueryType = "MatchSingerType";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
+                        break;
+                    case "10":
                         SongQueryType = "MatchSongLang";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
@@ -1570,6 +1576,82 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                     RemoveRowsIdxlist.Clear(); 
+                                }
+                                break;
+                            case "DuplicateSongIgnorebrackets":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                                    this.BeginInvoke((Action)delegate ()
+                                    {
+                                        SongQuery_QueryStatus_Label.Text = "正在比對重複歌曲 (忽略括號),請稍待...";
+                                    });
+
+                                    Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
+                                    {
+                                        var query = from row in dt.AsEnumerable()
+                                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() > 0)
+                                        {
+                                            List<string> SongDataList = new List<string>();
+                                            List<int> RowIndexList = new List<int>();
+                                            foreach (DataRow row in query)
+                                            {
+                                                string SongLang = row["Song_Lang"].ToString();
+                                                string SongSinger = row["Song_Singer"].ToString();
+                                                string SongSongName = row["Song_SongName"].ToString();
+                                                string SongSongType = row["Song_SongType"].ToString();
+                                                SongSongName = Regex.Replace(SongSongName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
+                                                SongSongName = Regex.Replace(SongSongName, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                                                string SongData = SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower();
+                                                SongDataList.Add(SongData);
+                                                RowIndexList.Add(dt.Rows.IndexOf(row));
+                                            }
+                                            
+                                            if (SongDataList.Count > 0)
+                                            {
+                                                List<string> FindResultList = new List<string>();
+                                                foreach (string SongData in SongDataList)
+                                                {
+                                                    FindResultList = SongDataList.FindAll(SongInfo => SongInfo.Equals(SongData));
+                                                    if (FindResultList.Count > 1)
+                                                    {
+                                                        lock (LockThis)
+                                                        {
+                                                            Global.TotalList[0]++;
+                                                            this.BeginInvoke((Action)delegate()
+                                                            {
+                                                                SongQuery_QueryStatus_Label.Text = "已在歌庫比對到 " + Global.TotalList[0] + " 首重複歌曲...";
+                                                            });
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        lock (LockThis) { RemoveRowsIdxlist.Add(RowIndexList[SongDataList.IndexOf(SongData)]); }
+                                                    }
+                                                }
+                                            }
+                                            SongDataList.Clear();
+                                            RowIndexList.Clear();
+                                        }
+                                    });
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
                                 }
                                 break;
                             case "MatchSongTrack":
@@ -2801,7 +2883,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手類別不符", "語系類別不符 (錢櫃)" };
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略括號)", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手類別不符", "語系類別不符 (錢櫃)" };
 
                 foreach (string str in ItemList)
                 {
@@ -3031,16 +3113,19 @@ namespace CrazyKTV_SongMgr
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_FileName) In (select Song_FileName from ktv_Song As Tmp group by Song_FileName, Song_Path HAVING Count(*)>1 and Song_FileName = ktv_Song.Song_FileName and Song_Path = ktv_Song.Song_Path))) order by Song_FileName";
                     break;
                 case "DuplicateSong":
-                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_Singer, Song_SongType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_Singer = ktv_Song.Song_Singer and Song_SongType = ktv_Song.Song_SongType))) order by Song_SongName";
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_Singer, Song_SongType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_Singer = ktv_Song.Song_Singer and Song_SongType = ktv_Song.Song_SongType))) order by Song_Lang, Song_SongName";
+                    break;
+                case "DuplicateSongIgnorebrackets":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Lang, Song_SongName";
                     break;
                 case "DuplicateSongIgnoreSinger":
-                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_SongType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_SongType = ktv_Song.Song_SongType))) order by Song_SongName";
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang))) order by Song_Lang, Song_SongName";
                     break;
                 case "DuplicateSongIgnoreSongType":
-                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_Singer HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_Singer = ktv_Song.Song_Singer))) order by Song_SongName";
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_Singer HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_Singer = ktv_Song.Song_Singer))) order by Song_Lang, Song_SongName";
                     break;
                 case "DuplicateSongOnlyChorusSinger":
-                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_SongType, Song_SingerType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_SongType = ktv_Song.Song_SongType and Song_SingerType = 3))) order by Song_SongName";
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where (((Song_SongName) In (select Song_SongName from ktv_Song As Tmp group by Song_SongName, Song_Lang, Song_SingerType HAVING Count(*)>1 and Song_SongName = ktv_Song.Song_SongName and Song_Lang = ktv_Song.Song_Lang and Song_SingerType = 3))) order by Song_Lang, Song_SongName";
                     break;
                 case "MatchSongTrack":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
