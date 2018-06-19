@@ -36,26 +36,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", Global.SongMgrCustomSingerTypeStructure);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders", Global.SongMgrEnableMonitorFolders);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders", string.Join(",", Global.SongMgrMonitorFoldersList));
-
-            string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
-            string SongMgrSingerGroup = string.Empty;
-            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
-            {
-                List<string> SingerGrouplist = new List<string>(Regex.Split(Global.SongMgrSingerGroup, @"\|", RegexOptions.IgnoreCase));
-                List<string> SingerGroupLowCaselist = SingerGrouplist.ConvertAll(str => str.ToLower());
-
-                foreach (string SingerGroupLowCase in SingerGroupLowCaselist)
-                {
-                    var query = from row in dt.AsEnumerable()
-                                where row["Config_Value"].ToString().ToLower().Equals(SingerGroupLowCase)
-                                select row;
-
-                    if (query.Count<DataRow>() == 0) SongMgrSingerGroup += SingerGrouplist[SingerGroupLowCaselist.IndexOf(SingerGroupLowCase)] + "|";
-                }
-            }
-            SongMgrSingerGroup = Regex.Replace(SongMgrSingerGroup, @"\|$", "");
-
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", SongMgrSingerGroup);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", Global.SongMgrSingerGroup);
         }
 
 
@@ -931,7 +912,13 @@ namespace CrazyKTV_SongMgr
                         int index = int.Parse(SongMgrCfg_SingerGroup_ListBox.SelectedIndex.ToString());
                         dt = (DataTable)SongMgrCfg_SingerGroup_ListBox.DataSource;
                         dt.Rows.RemoveAt(index);
-                        Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, @"\|" + RemoveStr, "", RegexOptions.IgnoreCase);
+
+                        RemoveStr = Regex.Replace(RemoveStr, @"[\{\(\[｛（［【]|[】］）｝\]\)\}]", delegate (Match match)
+                        {
+                            string str = @"\" + match.ToString();
+                            return str;
+                        });
+                        Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, "^" + RemoveStr + @"\|?" + @"|\|?" + RemoveStr, "", RegexOptions.IgnoreCase);
                         SongMgrCfg_Tooltip_Label.Text = "已成功移除歌手群組!";
                         Common_InitializeSongData(false, false, false, false, true);
                     }

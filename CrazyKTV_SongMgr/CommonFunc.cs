@@ -580,40 +580,81 @@ namespace CrazyKTV_SongMgr
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
-                        using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
-                        {
-                            List<string> SingerGroupLowCaselist = new List<string>(Regex.Split(Global.SongMgrSingerGroup.ToLower(), @"\|", RegexOptions.IgnoreCase));
-                            string SongMgrSingerGroup = "";
-
-                            foreach (DataRow row in dt.AsEnumerable())
-                            {
-                                if (SingerGroupLowCaselist.IndexOf(row["Config_Value"].ToString().ToLower()) < 0)
-                                {
-                                    SongMgrSingerGroup += row["Config_Value"].ToString() + "|";
-                                }
-                            }
-                            Global.SongMgrSingerGroup = (Global.SongMgrSingerGroup == "") ? SongMgrSingerGroup : SongMgrSingerGroup + Global.SongMgrSingerGroup;
-                            Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, @"\|$", "");
-                            SingerGroupLowCaselist.Clear();
-                        }
-
                         Global.SingerGroupList = new List<string>();
                         Global.GroupSingerIdList = new List<int>();
                         Global.GroupSingerLowCaseList = new List<string>();
 
-                        List<string> SingerGroupList = new List<string>(Regex.Split(Global.SongMgrSingerGroup, @"\|", RegexOptions.IgnoreCase));
-                        foreach (string SingerGroup in SingerGroupList)
+                        if (Global.SongMgrSingerGroup != "")
                         {
-                            Global.SingerGroupList.Add(SingerGroup);
+                            List<string> SingerGroupList = new List<string>(Regex.Split(Global.SongMgrSingerGroup.ToLower(), @"\|", RegexOptions.IgnoreCase));
 
-                            string[] Singers = SingerGroup.Split(',');
-                            foreach (string singer in Singers)
+                            foreach (string SingerGroup in SingerGroupList)
                             {
-                                if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
+                                Global.SingerGroupList.Add(SingerGroup);
+
+                                string[] Singers = SingerGroup.Split(',');
+                                foreach (string singer in Singers)
                                 {
-                                    Global.GroupSingerIdList.Add(SingerGroupList.IndexOf(SingerGroup));
-                                    Global.GroupSingerLowCaseList.Add(singer.ToLower());
+                                    if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
+                                    {
+                                        Global.GroupSingerIdList.Add(Global.SingerGroupList.IndexOf(SingerGroup));
+                                        Global.GroupSingerLowCaseList.Add(singer.ToLower());
+                                    }
+                                }
+                            }
+                        }
+
+                        string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
+                        using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SongQuerySqlStr, ""))
+                        {
+                            string SongMgrSingerGroup = string.Empty;
+
+                            foreach (DataRow row in dt.AsEnumerable())
+                            {
+                                string SingerGroup = row["Config_Value"].ToString().ToLower();
+                                string [] Singers = SingerGroup.Split(',');
+
+                                bool AddSingerGroup = true;
+                                int AppendIndex = -1;
+                                foreach (string singer in Singers)
+                                {
+                                    if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) >= 0  && singer != "")
+                                    {
+                                        if (Global.GroupSingerLowCaseList[Global.GroupSingerLowCaseList.IndexOf(singer.ToLower())] == singer.ToLower())
+                                        {
+                                            AddSingerGroup = false;
+                                            AppendIndex = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(singer.ToLower())];
+                                        }
+                                    }
+                                }
+
+                                if (AddSingerGroup)
+                                {
+                                    Global.SingerGroupList.Add(SingerGroup);
+
+                                    foreach (string singer in Singers)
+                                    {
+                                        if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
+                                        {
+                                            Global.GroupSingerIdList.Add(Global.SingerGroupList.IndexOf(SingerGroup));
+                                            Global.GroupSingerLowCaseList.Add(singer.ToLower());
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (string singer in Singers)
+                                    {
+                                        if (Global.GroupSingerLowCaseList.IndexOf(singer.ToLower()) < 0 && singer != "")
+                                        {
+                                            if (Global.SingerGroupList[AppendIndex].IndexOf(singer.ToLower()) < 0)
+                                            {
+                                                Global.SingerGroupList[AppendIndex] = Global.SingerGroupList[AppendIndex] + "," + singer.ToLower();
+                                                Global.GroupSingerIdList.Add(AppendIndex);
+                                                Global.GroupSingerLowCaseList.Add(singer.ToLower());
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
