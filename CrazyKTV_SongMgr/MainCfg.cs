@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,8 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", Global.MainCfgEnableUIScale);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", Global.MainCfgBackupDB);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", Global.MainCfgBackupDBPath);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -167,6 +170,24 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_UIScale_Button_Click(object sender, EventArgs e)
         {
             Common_ScalingUI();
+        }
+
+        private void MainCfg_BackupDB_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgBackupDB = MainCfg_BackupDB_CheckBox.Checked.ToString();
+        }
+
+        private void MainCfg_BackupDB_Button_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if (MainCfg_BackupDB_TextBox.Text != "") fbd.SelectedPath = MainCfg_BackupDB_TextBox.Text;
+                if (fbd.ShowDialog() == DialogResult.OK && fbd.SelectedPath.Length > 0)
+                {
+                    Global.MainCfgBackupDBPath = fbd.SelectedPath;
+                    MainCfg_BackupDB_TextBox.Text = fbd.SelectedPath;
+                }
+            }
         }
 
         #endregion

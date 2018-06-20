@@ -144,6 +144,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", Global.SongMgrSingerGroup);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton", Global.MainCfgHideApplyCashboxIdButton);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", Global.MainCfgBackupDB);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", Global.MainCfgBackupDBPath);
             }
 
             List<string> list = new List<string>()
@@ -195,7 +197,9 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup"),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale")
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB"),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath")
         };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -451,6 +455,12 @@ namespace CrazyKTV_SongMgr
             if (list[47] != "") Global.MainCfgUICustomScale = list[47];
             MainCfg_UIScale_TextBox.Text = Global.MainCfgUICustomScale;
 
+            if (list[48] != "") Global.MainCfgBackupDB = list[48];
+            MainCfg_BackupDB_CheckBox.Checked = bool.Parse(Global.MainCfgBackupDB);
+
+            if (list[49] != "") Global.MainCfgBackupDBPath = list[49];
+            MainCfg_BackupDB_TextBox.Text = Global.MainCfgBackupDBPath;
+
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
             SongMgrCfg_SongAddMode_ComboBox.DisplayMember = "Display";
@@ -584,8 +594,25 @@ namespace CrazyKTV_SongMgr
                 {
                     CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
                     CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvSongMgrDatabaseFile + ";", Global.CrazyktvSongMgrDatabaseFile);
+                    if (Global.MainCfgBackupDB == "True" && Directory.Exists(Global.MainCfgBackupDBPath))
+                    {
+                        try
+                        {
+                            File.Copy(Global.CrazyktvDatabaseFile, Global.MainCfgBackupDBPath + @"\" + Path.GetFileName(Global.CrazyktvDatabaseFile), true);
+                        } catch { }
+                    }
                 }
-                catch { }
+                catch
+                {
+                    if (Global.MainCfgBackupDB == "True" && Directory.Exists(Global.MainCfgBackupDBPath))
+                    {
+                        try
+                        {
+                            File.Copy(Global.CrazyktvDatabaseFile, Global.MainCfgBackupDBPath + @"\" + Path.GetFileName(Global.CrazyktvDatabaseFile), true);
+                        }
+                        catch { }
+                    }
+                }
             }
         }
 
@@ -761,6 +788,13 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
+
+
+
+
+
 
 
 

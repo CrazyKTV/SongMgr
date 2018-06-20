@@ -100,6 +100,8 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgUICustomScale = "100";
         public static string MainCfgUIFont = "Arial";
         public static string MainCfgEnableUIScale = "False";
+        public static string MainCfgBackupDB = "False";
+        public static string MainCfgBackupDBPath = "";
 
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";

@@ -1375,8 +1375,9 @@ namespace CrazyKTV_SongMgr
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
+                            Common_InitializeSongData(false, false, false, true, true);
                             Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Debug_Tooltip_Label.Text = "加入設定資料完畢,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                                 Common_SwitchSetUI(true);

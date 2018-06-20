@@ -493,6 +493,9 @@
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Tooltip_Label = new System.Windows.Forms.Label();
             this.MainCfg_General_ＧroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_BackupDB_Button = new System.Windows.Forms.Button();
+            this.MainCfg_BackupDB_TextBox = new System.Windows.Forms.TextBox();
+            this.MainCfg_BackupDB_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_HideApplyCashboxIdButton_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
             this.MainCfg_SubTabWidth_Button = new System.Windows.Forms.Button();
@@ -6571,6 +6574,9 @@
             // 
             // MainCfg_General_ＧroupBox
             // 
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_Button);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_TextBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_CheckBox);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideApplyCashboxIdButton_CheckBox);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideButton_Label);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_SubTabWidth_Button);
@@ -6594,6 +6600,41 @@
             this.MainCfg_General_ＧroupBox.TabIndex = 0;
             this.MainCfg_General_ＧroupBox.TabStop = false;
             this.MainCfg_General_ＧroupBox.Text = "程式設定";
+            // 
+            // MainCfg_BackupDB_Button
+            // 
+            this.MainCfg_BackupDB_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_BackupDB_Button.Location = new System.Drawing.Point(866, 530);
+            this.MainCfg_BackupDB_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 19);
+            this.MainCfg_BackupDB_Button.Name = "MainCfg_BackupDB_Button";
+            this.MainCfg_BackupDB_Button.Size = new System.Drawing.Size(70, 32);
+            this.MainCfg_BackupDB_Button.TabIndex = 18;
+            this.MainCfg_BackupDB_Button.Text = "瀏覽";
+            this.MainCfg_BackupDB_Button.UseVisualStyleBackColor = true;
+            this.MainCfg_BackupDB_Button.Click += new System.EventHandler(this.MainCfg_BackupDB_Button_Click);
+            // 
+            // MainCfg_BackupDB_TextBox
+            // 
+            this.MainCfg_BackupDB_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_BackupDB_TextBox.Location = new System.Drawing.Point(20, 531);
+            this.MainCfg_BackupDB_TextBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 20);
+            this.MainCfg_BackupDB_TextBox.Name = "MainCfg_BackupDB_TextBox";
+            this.MainCfg_BackupDB_TextBox.ReadOnly = true;
+            this.MainCfg_BackupDB_TextBox.Size = new System.Drawing.Size(834, 29);
+            this.MainCfg_BackupDB_TextBox.TabIndex = 17;
+            // 
+            // MainCfg_BackupDB_CheckBox
+            // 
+            this.MainCfg_BackupDB_CheckBox.AutoSize = true;
+            this.MainCfg_BackupDB_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_BackupDB_CheckBox.Location = new System.Drawing.Point(20, 495);
+            this.MainCfg_BackupDB_CheckBox.Margin = new System.Windows.Forms.Padding(10, 8, 6, 6);
+            this.MainCfg_BackupDB_CheckBox.Name = "MainCfg_BackupDB_CheckBox";
+            this.MainCfg_BackupDB_CheckBox.Size = new System.Drawing.Size(316, 24);
+            this.MainCfg_BackupDB_CheckBox.TabIndex = 16;
+            this.MainCfg_BackupDB_CheckBox.Text = "離開程式時備份資料庫檔案至指定資料夾";
+            this.MainCfg_BackupDB_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_BackupDB_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_BackupDB_CheckBox_CheckedChanged);
             // 
             // MainCfg_HideApplyCashboxIdButton_CheckBox
             // 
@@ -6624,7 +6665,7 @@
             this.MainCfg_SubTabWidth_Button.AutoSize = true;
             this.MainCfg_SubTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_SubTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(843, 529);
+            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(843, 422);
             this.MainCfg_SubTabWidth_Button.Name = "MainCfg_SubTabWidth_Button";
             this.MainCfg_SubTabWidth_Button.Size = new System.Drawing.Size(84, 31);
             this.MainCfg_SubTabWidth_Button.TabIndex = 13;
@@ -6637,7 +6678,7 @@
             this.MainCfg_MainTabWidth_Button.AutoSize = true;
             this.MainCfg_MainTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_MainTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(831, 489);
+            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(831, 382);
             this.MainCfg_MainTabWidth_Button.Name = "MainCfg_MainTabWidth_Button";
             this.MainCfg_MainTabWidth_Button.Size = new System.Drawing.Size(96, 34);
             this.MainCfg_MainTabWidth_Button.TabIndex = 12;
@@ -6656,11 +6697,11 @@
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_Label);
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_ComboBox);
             this.MainCfg_UIScale_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_UIScale_GroupBox.Location = new System.Drawing.Point(18, 196);
+            this.MainCfg_UIScale_GroupBox.Location = new System.Drawing.Point(583, 36);
             this.MainCfg_UIScale_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 20);
             this.MainCfg_UIScale_GroupBox.Name = "MainCfg_UIScale_GroupBox";
             this.MainCfg_UIScale_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_UIScale_GroupBox.Size = new System.Drawing.Size(341, 205);
+            this.MainCfg_UIScale_GroupBox.Size = new System.Drawing.Size(344, 205);
             this.MainCfg_UIScale_GroupBox.TabIndex = 11;
             this.MainCfg_UIScale_GroupBox.TabStop = false;
             this.MainCfg_UIScale_GroupBox.Text = "界面縮放";
@@ -6767,7 +6808,7 @@
             this.MainCfg_Report_GroupBox.Controls.Add(this.MainCfg_NonPhoneticsWordLog_Button);
             this.MainCfg_Report_GroupBox.Controls.Add(this.MainCfg_NonSingerDataLog_Button);
             this.MainCfg_Report_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_Report_GroupBox.Location = new System.Drawing.Point(18, 464);
+            this.MainCfg_Report_GroupBox.Location = new System.Drawing.Point(586, 273);
             this.MainCfg_Report_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 20);
             this.MainCfg_Report_GroupBox.Name = "MainCfg_Report_GroupBox";
             this.MainCfg_Report_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
@@ -8457,6 +8498,9 @@
         private System.Windows.Forms.Button MainCfg_UIScale_Button;
         private System.Windows.Forms.Label MainCfg_UIScale_Label2;
         private System.Windows.Forms.Button SongMgrCfg_UpdateStructure_Button;
+        private System.Windows.Forms.CheckBox MainCfg_BackupDB_CheckBox;
+        private System.Windows.Forms.Button MainCfg_BackupDB_Button;
+        private System.Windows.Forms.TextBox MainCfg_BackupDB_TextBox;
     }
 }
 
