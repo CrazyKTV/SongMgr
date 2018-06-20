@@ -570,6 +570,8 @@
             this.SongLog_ListBox = new System.Windows.Forms.ListBox();
             this.Debug_TabPage = new System.Windows.Forms.TabPage();
             this.Debug_ConfigData_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Debug_ConfigDataImport_Button = new System.Windows.Forms.Button();
+            this.Debug_ConfigDataExport_Button = new System.Windows.Forms.Button();
             this.Debug_ConfigData_TextBox = new System.Windows.Forms.TextBox();
             this.Debug_ConfigData_ComboBox = new System.Windows.Forms.ComboBox();
             this.Debug_ConfigData_Button = new System.Windows.Forms.Button();
@@ -7584,16 +7586,42 @@
             // 
             // Debug_ConfigData_GroupBox
             // 
+            this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigDataImport_Button);
+            this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigDataExport_Button);
             this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigData_TextBox);
             this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigData_ComboBox);
             this.Debug_ConfigData_GroupBox.Controls.Add(this.Debug_ConfigData_Button);
             this.Debug_ConfigData_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_ConfigData_GroupBox.Location = new System.Drawing.Point(8, 210);
+            this.Debug_ConfigData_GroupBox.Location = new System.Drawing.Point(23, 123);
             this.Debug_ConfigData_GroupBox.Name = "Debug_ConfigData_GroupBox";
-            this.Debug_ConfigData_GroupBox.Size = new System.Drawing.Size(343, 193);
+            this.Debug_ConfigData_GroupBox.Size = new System.Drawing.Size(425, 193);
             this.Debug_ConfigData_GroupBox.TabIndex = 15;
             this.Debug_ConfigData_GroupBox.TabStop = false;
             this.Debug_ConfigData_GroupBox.Text = "加歌程式設定資料";
+            // 
+            // Debug_ConfigDataImport_Button
+            // 
+            this.Debug_ConfigDataImport_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_ConfigDataImport_Button.Location = new System.Drawing.Point(190, 135);
+            this.Debug_ConfigDataImport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_ConfigDataImport_Button.Name = "Debug_ConfigDataImport_Button";
+            this.Debug_ConfigDataImport_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_ConfigDataImport_Button.TabIndex = 18;
+            this.Debug_ConfigDataImport_Button.Text = "匯入設定資料";
+            this.Debug_ConfigDataImport_Button.UseVisualStyleBackColor = true;
+            this.Debug_ConfigDataImport_Button.Click += new System.EventHandler(this.Debug_ConfigDataImport_Button_Click);
+            // 
+            // Debug_ConfigDataExport_Button
+            // 
+            this.Debug_ConfigDataExport_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_ConfigDataExport_Button.Location = new System.Drawing.Point(9, 135);
+            this.Debug_ConfigDataExport_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_ConfigDataExport_Button.Name = "Debug_ConfigDataExport_Button";
+            this.Debug_ConfigDataExport_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_ConfigDataExport_Button.TabIndex = 17;
+            this.Debug_ConfigDataExport_Button.Text = "匯出設定資料";
+            this.Debug_ConfigDataExport_Button.UseVisualStyleBackColor = true;
+            this.Debug_ConfigDataExport_Button.Click += new System.EventHandler(this.Debug_ConfigDataExport_Button_Click);
             // 
             // Debug_ConfigData_TextBox
             // 
@@ -7632,7 +7660,7 @@
             // Debug_CreateDataTable_Button
             // 
             this.Debug_CreateDataTable_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_CreateDataTable_Button.Location = new System.Drawing.Point(26, 66);
+            this.Debug_CreateDataTable_Button.Location = new System.Drawing.Point(26, 29);
             this.Debug_CreateDataTable_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_CreateDataTable_Button.Name = "Debug_CreateDataTable_Button";
             this.Debug_CreateDataTable_Button.Size = new System.Drawing.Size(169, 32);
@@ -7680,7 +7708,7 @@
             // Debug_UpdateDataColumn_Button
             // 
             this.Debug_UpdateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 166);
+            this.Debug_UpdateDataColumn_Button.Location = new System.Drawing.Point(26, 79);
             this.Debug_UpdateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_UpdateDataColumn_Button.Name = "Debug_UpdateDataColumn_Button";
             this.Debug_UpdateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
@@ -7692,7 +7720,7 @@
             // Debug_CreateDataColumn_Button
             // 
             this.Debug_CreateDataColumn_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_CreateDataColumn_Button.Location = new System.Drawing.Point(26, 116);
+            this.Debug_CreateDataColumn_Button.Location = new System.Drawing.Point(207, 29);
             this.Debug_CreateDataColumn_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Debug_CreateDataColumn_Button.Name = "Debug_CreateDataColumn_Button";
             this.Debug_CreateDataColumn_Button.Size = new System.Drawing.Size(169, 32);
@@ -8501,6 +8529,8 @@
         private System.Windows.Forms.CheckBox MainCfg_BackupDB_CheckBox;
         private System.Windows.Forms.Button MainCfg_BackupDB_Button;
         private System.Windows.Forms.TextBox MainCfg_BackupDB_TextBox;
+        private System.Windows.Forms.Button Debug_ConfigDataImport_Button;
+        private System.Windows.Forms.Button Debug_ConfigDataExport_Button;
     }
 }
 

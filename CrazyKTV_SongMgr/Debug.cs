@@ -408,7 +408,7 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- Debug 滙出錢櫃資料 ---
+        #region --- Debug 匯入/匯出錢櫃資料 ---
 
         private void Debug_CashboxExport_Button_Click(object sender, EventArgs e)
         {
@@ -539,7 +539,7 @@ namespace CrazyKTV_SongMgr
             }
             Addlist.Clear();
         }
-#endif
+        #endif
 
         #endregion
 
@@ -1409,6 +1409,156 @@ namespace CrazyKTV_SongMgr
                 cmds[0].Parameters.AddWithValue("@ConfigValue", ConfigValue);
                 cmds[0].ExecuteNonQuery();
             }
+        }
+        #endif
+
+        #endregion
+
+        #region --- Debug 匯入/匯出設定資料 ---
+
+        private void Debug_ConfigDataExport_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要匯出設定資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在匯出設定資料,請稍待...";
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Debug_ConfigDataExportTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Common_InitializeSongData(false, false, false, true, true);
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            Debug_Tooltip_Label.Text = "總共匯出 " + Global.TotalList[0] + " 筆設定資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_ConfigDataExportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            string SqlStr = "select * from ktv_SongMgr order by Config_Type, Config_Value";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    List<string> list = new List<string>();
+
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        list.Add(row["Config_Type"].ToString() + "|" + row["Config_Value"].ToString());
+                    }
+
+                    if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+                    using (StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\ConfigData.txt"))
+                    {
+                        foreach (string str in list)
+                        {
+                            sw.WriteLine(str);
+                            Global.TotalList[0]++;
+                        }
+                    }
+                    list.Clear();
+                }
+            }
+        }
+        #endif
+
+        private void Debug_ConfigDataImport_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要匯入設定資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在匯入設定資料,請稍待...";
+                    var tasks = new List<Task>();
+                    tasks.Add(Task.Factory.StartNew(() => Debug_ConfigDataImportTask()));
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Common_InitializeSongData(false, false, false, true, true);
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            Debug_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 筆設定資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_ConfigDataImportTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            List<string> Addlist = new List<string>();
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+            {
+                string TruncateSqlStr = "delete * from ktv_SongMgr";
+                using (OleDbCommand cmd = new OleDbCommand(TruncateSqlStr, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\Backup\ConfigData.txt"))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        Addlist.Add(sr.ReadLine());
+                    }
+                }
+
+                string sqlColumnStr = "Config_Id, Config_Type, Config_Value";
+                string sqlValuesStr = "@ConfigId, @ConfigType, @ConfigValue";
+                string InsertSqlStr = "insert into ktv_SongMgr ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+
+                using (OleDbCommand cmd = new OleDbCommand(InsertSqlStr, conn))
+                {
+                    List<string> list = new List<string>();
+
+                    foreach (string AddStr in Addlist)
+                    {
+                        list = new List<string>(Regex.Split(AddStr, @"\|", RegexOptions.None));
+
+                        cmd.Parameters.AddWithValue("@ConfigId", Addlist.IndexOf(AddStr)+1);
+                        cmd.Parameters.AddWithValue("@ConfigType", list[0]);
+                        cmd.Parameters.AddWithValue("@ConfigValue", list[1]);
+
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                        Global.TotalList[0]++;
+                        list.Clear();
+
+                        this.BeginInvoke((Action)delegate()
+                        {
+                            Debug_Tooltip_Label.Text = "正在匯入第 " + Global.TotalList[0] + " 筆設定資料,請稍待...";
+                        });
+                    }
+                }
+            }
+            Addlist.Clear();
         }
         #endif
 
