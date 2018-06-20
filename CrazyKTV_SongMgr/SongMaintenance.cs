@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -1998,7 +1999,7 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
 
-                            for (int i = 1; i < 9999; i++)
+                            for (int i = 20; i < 100; i++)
                             {
                                 if (UserIdList.IndexOf(i.ToString("D4")) < 0)
                                 {
@@ -2325,6 +2326,816 @@ namespace CrazyKTV_SongMgr
                 }
             }
             conn.Close();
+        }
+
+
+        #endregion
+
+
+        #region --- 錢櫃排行 (我的最愛) ---
+
+
+        private void SongMaintenance_Favorite_UpdateNewbill_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要更新錢櫃新歌排行榜至我的最愛嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在更新錢櫃新歌排行榜至我的最愛,請稍待...";
+
+                var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_Favorite_UpdateNewbillTask())
+                    };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 位最愛用戶及 " + Global.TotalList[1] + " 首排行歌曲,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+
+                        SongQuery_GetFavoriteUserList();
+                        SongMaintenance_GetFavoriteUserList();
+                        if (Global.SongQueryQueryType == "FavoriteQuery")
+                        {
+                            Global.SongQueryQueryType = "SongQuery";
+                            SongQuery_DataGridView.DataSource = null;
+                            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                            SongQuery_QueryStatus_Label.Text = "";
+                        }
+                        Cashbox.DisposeSongDataTable();
+                    });
+                });
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_UpdateNewbillTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                HtmlWeb hw = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc;
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newbill.asp");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> clist = new List<string>();
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 4)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                clist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                table = doc.DocumentNode.SelectSingleNode("//table[3]");
+                child = table.SelectNodes("tr");
+                List<string> tlist = new List<string>();
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 4)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                tlist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                List<string> CUpdateList = new List<string>();
+                List<string> TUpdateList = new List<string>();
+                string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
+                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                {
+                    // 國語新歌排行
+                    if (clist.Count > 0)
+                    {
+                        CUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, clist, 1);
+                    }
+                    clist.Clear();
+
+                    // 台語新歌排行
+                    if (tlist.Count > 0)
+                    {
+                        TUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, tlist, 1);
+                    }
+                    tlist.Clear();
+                }
+
+                if (CUpdateList.Count > 0 || TUpdateList.Count > 0)
+                {
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        if (CUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB1", "錢櫃新歌排行榜 (國語)", CUpdateList);
+                        }
+
+                        if (TUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB2", "錢櫃新歌排行榜 (台語)", TUpdateList);
+                        }
+
+                    }
+                }
+                CUpdateList.Clear();
+                TUpdateList.Clear();
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_UpdateTotalbill_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要更新錢櫃總排行至我的最愛嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在更新錢櫃總排行至我的最愛,請稍待...";
+
+                var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_Favorite_UpdateTotalbillTask())
+                    };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 位最愛用戶及 " + Global.TotalList[1] + " 首排行歌曲,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+
+                        SongQuery_GetFavoriteUserList();
+                        SongMaintenance_GetFavoriteUserList();
+                        if (Global.SongQueryQueryType == "FavoriteQuery")
+                        {
+                            Global.SongQueryQueryType = "SongQuery";
+                            SongQuery_DataGridView.DataSource = null;
+                            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                            SongQuery_QueryStatus_Label.Text = "";
+                        }
+                        Cashbox.DisposeSongDataTable();
+                    });
+                });
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_UpdateTotalbillTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                HtmlWeb hw = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc;
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_totalbill.asp");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> clist = new List<string>();
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 4)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                clist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                table = doc.DocumentNode.SelectSingleNode("//table[3]");
+                child = table.SelectNodes("tr");
+                List<string> tlist = new List<string>();
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 4)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                tlist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                List<string> CUpdateList = new List<string>();
+                List<string> TUpdateList = new List<string>();
+                string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
+                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                {
+                    // 國語新歌排行
+                    if (clist.Count > 0)
+                    {
+                        CUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, clist, 1);
+                    }
+                    clist.Clear();
+
+                    // 台語新歌排行
+                    if (tlist.Count > 0)
+                    {
+                        TUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, tlist, 1);
+                    }
+                    tlist.Clear();
+                }
+
+                if (CUpdateList.Count > 0 || TUpdateList.Count > 0)
+                {
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        if (CUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB3", "錢櫃國語排行榜", CUpdateList);
+                        }
+
+                        if (TUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB4", "錢櫃台語排行榜", TUpdateList);
+                        }
+
+                    }
+                }
+                CUpdateList.Clear();
+                TUpdateList.Clear();
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_UpdateOtherlangbill_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要更新錢櫃外語排行榜至我的最愛嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在更新錢櫃外語排行榜至我的最愛,請稍待...";
+
+                var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_Favorite_UpdateOtherlangbillTask())
+                    };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 位最愛用戶及 " + Global.TotalList[1] + " 首排行歌曲,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+
+                        SongQuery_GetFavoriteUserList();
+                        SongMaintenance_GetFavoriteUserList();
+                        if (Global.SongQueryQueryType == "FavoriteQuery")
+                        {
+                            Global.SongQueryQueryType = "SongQuery";
+                            SongQuery_DataGridView.DataSource = null;
+                            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                            SongQuery_QueryStatus_Label.Text = "";
+                        }
+                        Cashbox.DisposeSongDataTable();
+                    });
+                });
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_UpdateOtherlangbillTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                HtmlWeb hw = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc;
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                // 粵語排行榜
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=2");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> hlist = new List<string>();
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 1)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                hlist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                // 英語排行榜
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=1");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> elist = new List<string>();
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 1)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                elist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                // 日語排行榜
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=3");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> jlist = new List<string>();
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                        if (td.IndexOf(tdnode) == 1)
+                        {
+                            if (CommonFunc.IsSongId(data))
+                            {
+                                jlist.Add(data);
+                            }
+                        }
+                    }
+                }
+
+                List<string> HUpdateList = new List<string>();
+                List<string> EUpdateList = new List<string>();
+                List<string> JUpdateList = new List<string>();
+                string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
+                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                {
+                    // 粵語新歌排行
+                    if (hlist.Count > 0)
+                    {
+                        HUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, hlist, 1);
+                    }
+                    hlist.Clear();
+
+                    // 英語新歌排行
+                    if (elist.Count > 0)
+                    {
+                        EUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, elist, 1);
+                    }
+                    elist.Clear();
+
+                    // 日語新歌排行
+                    if (jlist.Count > 0)
+                    {
+                        JUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, jlist, 1);
+                    }
+                    jlist.Clear();
+                }
+
+                if (HUpdateList.Count > 0 || EUpdateList.Count > 0 || JUpdateList.Count > 0)
+                {
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        if (HUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB5", "錢櫃粵語排行榜", HUpdateList);
+                        }
+
+                        if (EUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB6", "錢櫃英語排行榜", EUpdateList);
+                        }
+
+                        if (JUpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CB7", "錢櫃日語排行榜", JUpdateList);
+                        }
+                    }
+                }
+                HUpdateList.Clear();
+                EUpdateList.Clear();
+                JUpdateList.Clear();
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_Update3456Gold_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要更新錢櫃懷念金曲至我的最愛嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在更新錢櫃懷念金曲至我的最愛,請稍待...";
+
+                var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMaintenance_Favorite_Update3456GoldTask())
+                    };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 位最愛用戶及 " + Global.TotalList[1] + " 首排行歌曲,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+
+                        SongQuery_GetFavoriteUserList();
+                        SongMaintenance_GetFavoriteUserList();
+                        if (Global.SongQueryQueryType == "FavoriteQuery")
+                        {
+                            Global.SongQueryQueryType = "SongQuery";
+                            SongQuery_DataGridView.DataSource = null;
+                            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                            SongQuery_QueryStatus_Label.Text = "";
+                        }
+                        Cashbox.DisposeSongDataTable();
+                    });
+                });
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_Update3456GoldTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                HtmlWeb hw = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc;
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                // 三四年級國語金曲
+                int pages = 0;
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=1");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> c34list = new List<string>();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在更新三四年級國語金曲至我的最愛,請稍待...";
+                });
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (data.Contains("::::::"))
+                        {
+                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                            if (matches.Count > 0)
+                            {
+                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page < pages + 1; page++)
+                    {
+                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=" + page.ToString());
+                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
+                        child = table.SelectNodes("tr");
+
+                        foreach (HtmlNode childnode in child)
+                        {
+                            HtmlNodeCollection td = childnode.SelectNodes("td");
+                            foreach (HtmlNode tdnode in td)
+                            {
+                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                                if (td.IndexOf(tdnode) == 0)
+                                {
+                                    if (CommonFunc.IsSongId(data))
+                                    {
+                                        c34list.Add(data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 三四年級台語金曲
+                pages = 0;
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=1");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> t34list = new List<string>();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在更新三四年級台語金曲至我的最愛,請稍待...";
+                });
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (data.Contains("::::::"))
+                        {
+                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                            if (matches.Count > 0)
+                            {
+                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page < pages + 1; page++)
+                    {
+                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=" + page.ToString());
+                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
+                        child = table.SelectNodes("tr");
+
+                        foreach (HtmlNode childnode in child)
+                        {
+                            HtmlNodeCollection td = childnode.SelectNodes("td");
+                            foreach (HtmlNode tdnode in td)
+                            {
+                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                                if (td.IndexOf(tdnode) == 0)
+                                {
+                                    if (CommonFunc.IsSongId(data))
+                                    {
+                                        t34list.Add(data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 五六年級國語金曲
+                pages = 0;
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=1");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> c56list = new List<string>();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在更新五六年級國語金曲至我的最愛,請稍待...";
+                });
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (data.Contains("::::::"))
+                        {
+                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                            if (matches.Count > 0)
+                            {
+                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page < pages + 1; page++)
+                    {
+                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=" + page.ToString());
+                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
+                        child = table.SelectNodes("tr");
+
+                        foreach (HtmlNode childnode in child)
+                        {
+                            HtmlNodeCollection td = childnode.SelectNodes("td");
+                            foreach (HtmlNode tdnode in td)
+                            {
+                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                                if (td.IndexOf(tdnode) == 0)
+                                {
+                                    if (CommonFunc.IsSongId(data))
+                                    {
+                                        c56list.Add(data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 五六年級台語金曲
+                pages = 0;
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=1");
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+                List<string> t56list = new List<string>();
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在更新五六年級台語金曲至我的最愛,請稍待...";
+                });
+
+                foreach (HtmlNode childnode in child)
+                {
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (data.Contains("::::::"))
+                        {
+                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                            if (matches.Count > 0)
+                            {
+                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page < pages + 1; page++)
+                    {
+                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=" + page.ToString());
+                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
+                        child = table.SelectNodes("tr");
+
+                        foreach (HtmlNode childnode in child)
+                        {
+                            HtmlNodeCollection td = childnode.SelectNodes("td");
+                            foreach (HtmlNode tdnode in td)
+                            {
+                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                                if (td.IndexOf(tdnode) == 0)
+                                {
+                                    if (CommonFunc.IsSongId(data))
+                                    {
+                                        t56list.Add(data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                List<string> C34UpdateList = new List<string>();
+                List<string> T34UpdateList = new List<string>();
+                List<string> C56UpdateList = new List<string>();
+                List<string> T56UpdateList = new List<string>();
+                string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
+                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                {
+                    // 三四年級國語金曲
+                    if (c34list.Count > 0)
+                    {
+                        C34UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, c34list, 1);
+                    }
+                    c34list.Clear();
+                    
+                    // 三四年級台語金曲
+                    if (t34list.Count > 0)
+                    {
+                        T34UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, t34list, 1);
+                    }
+                    t34list.Clear();
+
+                    // 五六年級國語金曲
+                    if (c56list.Count > 0)
+                    {
+                        C56UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, c56list, 1);
+                    }
+                    c56list.Clear();
+
+                    // 五六年級台語金曲
+                    if (t56list.Count > 0)
+                    {
+                        T56UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, t56list, 1);
+                    }
+                    t56list.Clear();
+                }
+
+                if (C34UpdateList.Count > 0 || T34UpdateList.Count > 0 || C56UpdateList.Count > 0 || T56UpdateList.Count > 0)
+                {
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        if (C34UpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CG1", "三四年級國語金曲", C34UpdateList);
+                        }
+
+                        if (T34UpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CG2", "三四年級台語金曲", T34UpdateList);
+                        }
+
+                        if (C56UpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CG3", "五六年級國語金曲", C56UpdateList);
+                        }
+
+                        if (T56UpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, "^CG4", "五六年級台語金曲", T56UpdateList);
+                        }
+                    }
+                }
+                C34UpdateList.Clear();
+                T34UpdateList.Clear();
+                C56UpdateList.Clear();
+                T56UpdateList.Clear();
+            }
         }
 
 
@@ -2703,6 +3514,77 @@ namespace CrazyKTV_SongMgr
                 NewSongID = Global.MaxIDList[Global.CrazyktvSongLangList.IndexOf(SongLang)].ToString(MaxDigitCode);
             }
             return NewSongID;
+        }
+
+
+        public static List<string> MatchCashboxData(DataTable CashboxDT, List<string> songidlist, int TotalNum)
+        {
+            List<string> ResultList = new List<string>();
+            foreach (string songid in songidlist)
+            {
+                var query = from row in CashboxDT.AsEnumerable()
+                            where row.Field<string>("Cashbox_Id").Equals(songid)
+                            select row;
+
+                if (query.Count<DataRow>() > 0)
+                {
+                    foreach (DataRow row in query)
+                    {
+                        int SongDataIndex = CommonFunc.MatchCashboxSong(row);
+
+                        string CashboxId = row["Cashbox_Id"].ToString();
+
+                        if (SongDataIndex >= 0)
+                        {
+                            Global.TotalList[TotalNum]++;
+                            ResultList.Add(Cashbox.SongIdList[SongDataIndex]);
+                            break;
+                        }
+                    }
+                }
+            }
+            return ResultList;
+        }
+
+
+        public static void UpdateFavoriteData(OleDbConnection conn, string userid, string username, List<string> songidlist)
+        {
+            string TruncateSqlStr = "delete from ktv_User where User_Id = @UserId";
+            using (OleDbCommand Ucmd = new OleDbCommand(TruncateSqlStr, conn))
+            {
+                Ucmd.Parameters.AddWithValue("@UserId", userid);
+                Ucmd.ExecuteNonQuery();
+                Ucmd.Parameters.Clear();
+            }
+
+            TruncateSqlStr = "delete from ktv_Favorite where User_Id = @UserId";
+            using (OleDbCommand Fcmd = new OleDbCommand(TruncateSqlStr, conn))
+            {
+                Fcmd.Parameters.AddWithValue("@UserId", userid);
+                Fcmd.ExecuteNonQuery();
+                Fcmd.Parameters.Clear();
+            }
+
+            string AddSqlStr = "insert into ktv_User ( User_Id, User_Name ) values ( @UserId, @UserName )";
+            using (OleDbCommand Ucmd = new OleDbCommand(AddSqlStr, conn))
+            {
+                Ucmd.Parameters.AddWithValue("@UserId", userid);
+                Ucmd.Parameters.AddWithValue("@UserName", username);
+                Ucmd.ExecuteNonQuery();
+                Ucmd.Parameters.Clear();
+            }
+
+            AddSqlStr = "insert into ktv_Favorite ( User_Id, Song_Id ) values ( @UserId, @SongId )";
+            using (OleDbCommand Fcmd = new OleDbCommand(AddSqlStr, conn))
+            {
+                foreach (string songid in songidlist)
+                {
+                    Fcmd.Parameters.AddWithValue("@UserId", userid);
+                    Fcmd.Parameters.AddWithValue("@SongId", songid);
+                    Fcmd.ExecuteNonQuery();
+                    Fcmd.Parameters.Clear();
+                }
+            }
         }
 
 

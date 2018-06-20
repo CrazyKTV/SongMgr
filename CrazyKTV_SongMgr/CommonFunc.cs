@@ -2778,13 +2778,11 @@ namespace CrazyKTV_SongMgr
                 string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
-                List<string> removelist = new List<string>() { "####", "****", "9999", "^NT" };
+                List<string> removelist = new List<string>() { "####", "****", "9999" };
                 List<int> RemoveRowsIdxlist = new List<int>();
 
                 var query = from row in dt.AsEnumerable()
-                            where removelist.Contains(row.Field<string>("User_Id")) ||
-                                  removelist.Contains(row.Field<string>("User_Id").Substring(0, row.Field<string>("User_Id").Length - 1)) ||
-                                  row.Field<string>("User_Name").Contains("錢櫃新歌")
+                            where removelist.Contains(row.Field<string>("User_Id"))
                             select row;
 
                 if (query.Count<DataRow>() > 0)

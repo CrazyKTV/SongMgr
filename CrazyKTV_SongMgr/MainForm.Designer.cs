@@ -368,6 +368,9 @@
             this.SongMaintenance_CompactAccessDB_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SongWordCountCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_TabPage = new System.Windows.Forms.TabPage();
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_Favorite_UpdateNewbill_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_FavoriteExport_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_FavoriteImport_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_TextBox = new System.Windows.Forms.TextBox();
@@ -589,6 +592,7 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_Favorite_Update3456Gold_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_TabControl.SuspendLayout();
@@ -4952,6 +4956,10 @@
             // 
             // SongMaintenance_Favorite_TabPage
             // 
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_Update3456Gold_Button);
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateOtherlangbill_Button);
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateTotalbill_Button);
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateNewbill_Button);
             this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_FavoriteExport_Button);
             this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_FavoriteImport_Button);
             this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_TextBox);
@@ -4965,6 +4973,42 @@
             this.SongMaintenance_Favorite_TabPage.TabIndex = 0;
             this.SongMaintenance_Favorite_TabPage.Text = "我的最愛";
             this.SongMaintenance_Favorite_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // SongMaintenance_Favorite_UpdateOtherlangbill_Button
+            // 
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Location = new System.Drawing.Point(378, 123);
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Margin = new System.Windows.Forms.Padding(50, 9, 6, 9);
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Name = "SongMaintenance_Favorite_UpdateOtherlangbill_Button";
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.TabIndex = 7;
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Text = "錢櫃外語排行榜";
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_UpdateOtherlangbill_Button_Click);
+            // 
+            // SongMaintenance_Favorite_UpdateTotalbill_Button
+            // 
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Location = new System.Drawing.Point(378, 73);
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Margin = new System.Windows.Forms.Padding(50, 9, 6, 9);
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Name = "SongMaintenance_Favorite_UpdateTotalbill_Button";
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.TabIndex = 6;
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Text = "錢櫃點播總排行";
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_Favorite_UpdateTotalbill_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_UpdateTotalbill_Button_Click);
+            // 
+            // SongMaintenance_Favorite_UpdateNewbill_Button
+            // 
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Location = new System.Drawing.Point(378, 23);
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Margin = new System.Windows.Forms.Padding(50, 9, 6, 9);
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Name = "SongMaintenance_Favorite_UpdateNewbill_Button";
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.TabIndex = 5;
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Text = "錢櫃新歌排行榜";
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_Favorite_UpdateNewbill_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_UpdateNewbill_Button_Click);
             // 
             // SongMaintenance_FavoriteExport_Button
             // 
@@ -7826,6 +7870,18 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
+            // SongMaintenance_Favorite_Update3456Gold_Button
+            // 
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Location = new System.Drawing.Point(378, 173);
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Margin = new System.Windows.Forms.Padding(50, 9, 6, 9);
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Name = "SongMaintenance_Favorite_Update3456Gold_Button";
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_Favorite_Update3456Gold_Button.TabIndex = 8;
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Text = "錢櫃懷念金曲";
+            this.SongMaintenance_Favorite_Update3456Gold_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_Update3456Gold_Button_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -8531,6 +8587,10 @@
         private System.Windows.Forms.TextBox MainCfg_BackupDB_TextBox;
         private System.Windows.Forms.Button Debug_ConfigDataImport_Button;
         private System.Windows.Forms.Button Debug_ConfigDataExport_Button;
+        private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateNewbill_Button;
+        private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateTotalbill_Button;
+        private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateOtherlangbill_Button;
+        private System.Windows.Forms.Button SongMaintenance_Favorite_Update3456Gold_Button;
     }
 }
 
