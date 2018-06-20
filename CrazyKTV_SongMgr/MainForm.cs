@@ -652,13 +652,18 @@ namespace CrazyKTV_SongMgr
                     switch (SongMaintenance_TabControl.SelectedTab.Name)
                     {
                         case "SongMaintenance_CustomLang_TabPage":
-                        case "SongMaintenance_MultiSongPath_TabPage":
                         case "SongMaintenance_DBVer_TabPage":
                             if (SongMaintenance_TabControl.Enabled == true) SongMaintenance_Save_Button.Enabled = true;
                             break;
                         default:
                             SongMaintenance_Save_Button.Enabled = false;
                             break;
+                    }
+
+                    if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) >= 0)
+                    {
+                        SongMaintenance_MultiSongPath_TabPage.Hide();
+                        SongMaintenance_TabControl.TabPages.Remove(SongMaintenance_MultiSongPath_TabPage);
                     }
                     break;
                 case "Cashbox_TabPage":
