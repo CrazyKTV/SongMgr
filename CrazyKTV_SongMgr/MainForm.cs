@@ -477,7 +477,7 @@ namespace CrazyKTV_SongMgr
 
             // 初始化所需資料
             SongMgrDB_CheckDatabaseFile();
-            Task.Factory.StartNew(() => Common_InitializeSongData(true, true, true, true, true));
+            Task.Factory.StartNew(() => Common_InitializeSongData(true, true, true, true, true, false));
             
             // 檢查資料庫檔案是否為舊版資料庫
             SongDBUpdate_CheckDatabaseFile();

@@ -30,8 +30,8 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在建立測試歌庫,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_CreateTestFileTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CreateTestFileTask()) };
+
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -106,8 +106,7 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在建立錢櫃資料,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_CreateCashboxTableTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CreateCashboxTableTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -260,8 +259,7 @@ namespace CrazyKTV_SongMgr
 
             Debug_Tooltip_Label.Text = "正在解析錢櫃歌庫歌手資料,請稍待...";
 
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => Debug_CashboxNonSingerDataLogTask()));
+            var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CashboxNonSingerDataLogTask()) };
 
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
@@ -413,9 +411,11 @@ namespace CrazyKTV_SongMgr
         private void Debug_CashboxExport_Button_Click(object sender, EventArgs e)
         {
             #if DEBUG
-            List<string> list = new List<string>();
-            list.Add("ktv_Version|1");
-            list.Add("ktv_UpdDate|" + DateTime.Now);
+            List<string> list = new List<string>()
+            {
+                "ktv_Version|1",
+                "ktv_UpdDate|" + DateTime.Now
+            };
 
             string sqlColumnStr = "Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate";
             string CashboxQuerySqlStr = "select " + sqlColumnStr + " from ktv_Cashbox order by Cashbox_Id";
@@ -458,13 +458,12 @@ namespace CrazyKTV_SongMgr
                         Common_SwitchSetUI(false);
 
                         Debug_Tooltip_Label.Text = "正在匯入錢櫃資料,請稍待...";
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => Debug_CashboxImportTask()));
+                        var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CashboxImportTask()) };
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
                             Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Debug_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 筆錢櫃資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                                 Common_SwitchSetUI(true);
@@ -557,13 +556,12 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在建立表格資料,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_CreateDataTableTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CreateDataTableTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Debug_Tooltip_Label.Text = "新增表格資料完畢,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -610,8 +608,7 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在建立資料欄位,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_CreateDataColumnTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CreateDataColumnTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -704,8 +701,7 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在更新資料欄位,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_UpdateDataColumnTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_UpdateDataColumnTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -927,8 +923,7 @@ namespace CrazyKTV_SongMgr
 
                 using (DataTable UpdateDT = (DataTable)Cashbox_DataGridView.DataSource)
                 {
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Cashbox_SongUpdate(UpdateList, UpdateDT)));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Cashbox_SongUpdate(UpdateList, UpdateDT)) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -956,7 +951,7 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
 
-                            Common_InitializeSongData(false, false, true, false, false);
+                            Common_InitializeSongData(false, false, true, false, false, false);
                             Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆。";
                             Common_SwitchSetUI(true);
                         });
@@ -1077,8 +1072,7 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在匯出新增歌手,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_NewSingerExportTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_NewSingerExportTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
@@ -1230,13 +1224,12 @@ namespace CrazyKTV_SongMgr
                         Common_SwitchSetUI(false);
 
                         Debug_Tooltip_Label.Text = "正在匯入新增歌手,請稍待...";
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => Debug_NewSingerImportTask()));
+                        var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_NewSingerImportTask()) };
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
                             Global.TimerEndTime = DateTime.Now;
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 Debug_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 位歌手資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                                 Common_SwitchSetUI(true);
@@ -1370,12 +1363,11 @@ namespace CrazyKTV_SongMgr
                             ConfigId = dt.Rows.Count + 1;
                         }
                         
-                        var tasks = new List<Task>();
-                        tasks.Add(Task.Factory.StartNew(() => Debug_AddConfigDataTask(ConfigType, ConfigValue, ConfigId)));
+                        var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_AddConfigDataTask(ConfigType, ConfigValue, ConfigId)) };
 
                         Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                         {
-                            Common_InitializeSongData(false, false, false, true, true);
+                            Common_InitializeSongData(false, false, false, true, true, false);
                             Global.TimerEndTime = DateTime.Now;
                             this.BeginInvoke((Action)delegate()
                             {
@@ -1428,14 +1420,13 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在匯出設定資料,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_ConfigDataExportTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_ConfigDataExportTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
-                        Common_InitializeSongData(false, false, false, true, true);
+                        Common_InitializeSongData(false, false, false, true, true, false);
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Debug_Tooltip_Label.Text = "總共匯出 " + Global.TotalList[0] + " 筆設定資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);
@@ -1490,14 +1481,13 @@ namespace CrazyKTV_SongMgr
                     Common_SwitchSetUI(false);
 
                     Debug_Tooltip_Label.Text = "正在匯入設定資料,請稍待...";
-                    var tasks = new List<Task>();
-                    tasks.Add(Task.Factory.StartNew(() => Debug_ConfigDataImportTask()));
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_ConfigDataImportTask()) };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
-                        Common_InitializeSongData(false, false, false, true, true);
+                        Common_InitializeSongData(false, false, false, true, true, false);
                         Global.TimerEndTime = DateTime.Now;
-                        this.BeginInvoke((Action)delegate ()
+                        this.BeginInvoke((Action)delegate()
                         {
                             Debug_Tooltip_Label.Text = "總共匯入 " + Global.TotalList[0] + " 筆設定資料,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                             Common_SwitchSetUI(true);

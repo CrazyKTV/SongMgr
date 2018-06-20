@@ -889,7 +889,7 @@ namespace CrazyKTV_SongMgr
                             Global.SongMgrSingerGroup += (Global.SongMgrSingerGroup == "") ? SongMgrCfg_SingerGroup_TextBox.Text : "|" + SongMgrCfg_SingerGroup_TextBox.Text;
                             SongMgrCfg_SingerGroup_TextBox.Text = "";
                             SongMgrCfg_Tooltip_Label.Text = "已成功加入歌手群組!";
-                            Common_InitializeSongData(false, false, false, false, true);
+                            Common_InitializeSongData(false, false, false, false, true, false);
                         }
                         SingerGroupLowCaselist.Clear();
                     }
@@ -920,7 +920,7 @@ namespace CrazyKTV_SongMgr
                         });
                         Global.SongMgrSingerGroup = Regex.Replace(Global.SongMgrSingerGroup, "^" + RemoveStr + @"\|?" + @"|\|?" + RemoveStr, "", RegexOptions.IgnoreCase);
                         SongMgrCfg_Tooltip_Label.Text = "已成功移除歌手群組!";
-                        Common_InitializeSongData(false, false, false, false, true);
+                        Common_InitializeSongData(false, false, false, false, true, false);
                     }
                     else
                     {

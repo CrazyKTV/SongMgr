@@ -1586,7 +1586,7 @@ namespace CrazyKTV_SongMgr
                                     List<int> RemoveRowsIdxlist = new List<int>();
 
                                     Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                                    this.BeginInvoke((Action)delegate ()
+                                    this.BeginInvoke((Action)delegate()
                                     {
                                         SongQuery_QueryStatus_Label.Text = "正在比對重複歌曲 (忽略括號),請稍待...";
                                     });

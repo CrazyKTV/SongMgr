@@ -203,8 +203,7 @@ namespace CrazyKTV_SongMgr
 
             MainCfg_Tooltip_Label.Text = "正在解析歌庫歌手資料,請稍待...";
 
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => MainCfg_NonSingerDataLogTask()));
+            var tasks = new List<Task>() { Task.Factory.StartNew(() => MainCfg_NonSingerDataLogTask()) };
 
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {
@@ -349,8 +348,7 @@ namespace CrazyKTV_SongMgr
             SongMaintenance.CreateSongDataTable();
             Common_SwitchSetUI(false);
 
-            var tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(() => MainCfg_NonPhoneticsWordLogTask()));
+            var tasks = new List<Task>() { Task.Factory.StartNew(() => MainCfg_NonPhoneticsWordLogTask()) };
 
             Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
             {

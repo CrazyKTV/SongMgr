@@ -262,7 +262,7 @@ namespace CrazyKTV_SongMgr
                 catch
                 {
                     UpdateError = true;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         SongMaintenance_DBVerTooltip_Label.Text = "移除 ktv_Version 資料表失敗,已還原為原本的資料庫檔案。";
                     });

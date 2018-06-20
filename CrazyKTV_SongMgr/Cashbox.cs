@@ -1062,7 +1062,7 @@ namespace CrazyKTV_SongMgr
                         {
                             Cashbox_QueryStatus_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
                         }
-                        Common_InitializeSongData(false, false, true, false, false);
+                        Common_InitializeSongData(false, false, true, false, false, false);
                         Common_SwitchSetUI(true);
                     });
                 });
@@ -1587,9 +1587,10 @@ namespace CrazyKTV_SongMgr
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
                     Global.TimerEndTime = DateTime.Now;
-                    this.BeginInvoke((Action)delegate ()
+                    this.BeginInvoke((Action)delegate()
                     {
                         Cashbox_QueryStatus_Label.Text = "總共解析到 " + Global.TotalList[0] + " 首已有歌曲,更新 " + Global.TotalList[1] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_InitializeSongData(false, false, false, false, false, true);
                         Common_SwitchSetUI(true);
                     });
                     Cashbox.DisposeSongDataTable();
@@ -1620,81 +1621,37 @@ namespace CrazyKTV_SongMgr
                                 int SongDataIndex = CommonFunc.MatchCashboxSong(row);
 
                                 string CashboxId = row["Cashbox_Id"].ToString();
-                                string SongLang = row["Song_Lang"].ToString();
-                                string SongSinger = row["Song_Singer"].ToString();
-                                string SongSongName = row["Song_SongName"].ToString();
-                                string SongCreatDate = row["Song_CreatDate"].ToString();
-                                string SongHaveSong = row["Song_HaveSong"].ToString();
-
 
                                 if (SongDataIndex >= 0)
                                 {
                                     lock (LockThis) { Global.TotalList[0]++; }
-
-                                    if (SongHaveSong != "True")
-                                    {
-                                        SongHaveSong = "1";
-                                        UpdateList.Add(CashboxId + "|" + SongLang + "|" + SongSongName + "|" + SongSinger + "|" + SongCreatDate + "|" + SongHaveSong);
-                                    }
+                                    UpdateList.Add(CashboxId);
 
                                     this.BeginInvoke((Action)delegate()
                                     {
                                         Cashbox_QueryStatus_Label.Text = "已在歌庫找到 " + Global.TotalList[0] + " 首錢櫃歌曲...";
                                     });
                                 }
-                                else
-                                {
-                                    if (SongHaveSong != "False")
-                                    {
-                                        SongHaveSong = "0";
-                                        UpdateList.Add(CashboxId + "|" + SongLang + "|" + SongSongName + "|" + SongSinger + "|" + SongCreatDate + "|" + SongHaveSong);
-                                    }
-                                }
                             }
                         }
                     });
                 }
 
-                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+                if (!Directory.Exists(Application.StartupPath + @"\SongMgr")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
+                using (StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\CashboxLog.txt"))
                 {
-                    string sqlUpdStr = "Cashbox_Id = @CashboxId, Song_Lang = @SongLang, Song_SongName = @SongSongName, Song_Singer = @SongSinger, Song_CreatDate = @SongCreatDate, Song_HaveSong = @SongHaveSong";
-                    string UpdSqlStr = "update ktv_Cashbox set " + sqlUpdStr + " where Cashbox_Id = @OldCashboxId";
-
-                    OleDbCommand UpdCmd = new OleDbCommand(UpdSqlStr, conn);
-                    List<string> valuelist;
-
-                    foreach (string SongData in UpdateList)
+                    foreach (string str in UpdateList)
                     {
-                        valuelist = new List<string>(SongData.Split('|'));
-                        UpdCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
-                        UpdCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
-                        UpdCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
-                        UpdCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
-                        UpdCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
-                        UpdCmd.Parameters.AddWithValue("@SongHaveSong", valuelist[5]);
-                        UpdCmd.Parameters.AddWithValue("@OldCashboxId", valuelist[0]);
+                        sw.WriteLine(str);
+                        Global.TotalList[1]++;
 
-                        try
+                        this.BeginInvoke((Action)delegate()
                         {
-                            UpdCmd.ExecuteNonQuery();
-                            Global.TotalList[1]++;
-                            this.BeginInvoke((Action)delegate ()
-                            {
-                                Cashbox_QueryStatus_Label.Text = "正在將第 " + Global.TotalList[1] + " 首已有歌曲寫入資料庫,請稍待...";
-                            });
-                        }
-                        catch
-                        {
-                            Global.TotalList[2]++;
-                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "更新已有歌曲記錄時發生未知的錯誤: " + SongData;
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        }
-                        UpdCmd.Parameters.Clear();
-                        valuelist.Clear();
+                            Cashbox_QueryStatus_Label.Text = "正在將第 " + Global.TotalList[1] + " 首已有歌曲寫入記錄,請稍待...";
+                        });
                     }
-                    UpdateList.Clear();
                 }
+                UpdateList.Clear();
             }
         }
 

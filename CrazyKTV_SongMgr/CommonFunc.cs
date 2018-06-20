@@ -457,7 +457,7 @@ namespace CrazyKTV_SongMgr
 
         #region --- Common 初始化歌曲資料 ---
 
-        private void Common_InitializeSongData(bool InitSongId, bool InitPhonetics, bool InitCashbox, bool InitSpecialStr, bool InitSingerGroup)
+        private void Common_InitializeSongData(bool InitSongId, bool InitPhonetics, bool InitCashbox, bool InitSpecialStr, bool InitSingerGroup, bool InitCashboxHaveSong)
         {
             if (File.Exists(Global.CrazyktvSongMgrDatabaseFile) && !Global.SongMgrDatabaseError)
             {
@@ -657,6 +657,24 @@ namespace CrazyKTV_SongMgr
                                             }
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }));
+                }
+
+                if (InitCashboxHaveSong)
+                {
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        string CashboxLogFile = Application.StartupPath + @"\SongMgr\CashboxLog.txt";
+                        if (File.Exists(CashboxLogFile))
+                        {
+                            using (StreamReader sr = new StreamReader(Application.StartupPath + @"\SongMgr\CashboxLog.txt"))
+                            {
+                                while (!sr.EndOfStream)
+                                {
+                                    Global.CashboxHaveSongList.Add(sr.ReadLine());
                                 }
                             }
                         }
@@ -1618,7 +1636,7 @@ namespace CrazyKTV_SongMgr
             if (InitializeSongData)
             {
                 // 初始化所需資料
-                Common_InitializeSongData(true, false, false, true, true);
+                Common_InitializeSongData(true, false, false, true, true, false);
             }
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
         }

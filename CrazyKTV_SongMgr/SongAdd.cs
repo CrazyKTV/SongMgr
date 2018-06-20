@@ -329,7 +329,7 @@ namespace CrazyKTV_SongMgr
                     {
                         if (Global.SongMgrSongAddMode != "4")
                         {
-                            this.BeginInvoke((Action)delegate ()
+                            this.BeginInvoke((Action)delegate()
                             {
                                 SongAdd_DataGridView.SelectionChanged += new EventHandler(SongAdd_DataGridView_SelectionChanged);
                                 SongAdd_DataGridView_SelectionChanged(new object(), new EventArgs());

@@ -25,7 +25,7 @@ namespace CrazyKTV_SongMgr
         private void Cashbox_DataGridView_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             DataGridViewRow row = Cashbox_DataGridView.Rows[e.RowIndex];
-            if (row.Cells["Song_HaveSong"].Value.ToString() == "True")
+            if (Global.CashboxHaveSongList.IndexOf(row.Cells["Cashbox_Id"].Value.ToString()) > 0)
             {
                 row.DefaultCellStyle.ForeColor = Color.Blue;
             }
