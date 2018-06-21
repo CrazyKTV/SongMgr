@@ -1999,7 +1999,7 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
 
-                            for (int i = 20; i < 100; i++)
+                            for (int i = 21; i < 100; i++)
                             {
                                 if (UserIdList.IndexOf(i.ToString("D4")) < 0)
                                 {
