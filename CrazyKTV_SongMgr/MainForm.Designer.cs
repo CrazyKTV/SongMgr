@@ -368,6 +368,7 @@
             this.SongMaintenance_CompactAccessDB_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SongWordCountCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_TabPage = new System.Windows.Forms.TabPage();
+            this.SongMaintenance_Favorite_Update3456Gold_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_UpdateOtherlangbill_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_UpdateTotalbill_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_UpdateNewbill_Button = new System.Windows.Forms.Button();
@@ -584,15 +585,15 @@
             this.Debug_NewSingerExport_Button = new System.Windows.Forms.Button();
             this.Debug_UpdateDataColumn_Button = new System.Windows.Forms.Button();
             this.Debug_CreateDataColumn_Button = new System.Windows.Forms.Button();
-            this.Debug_CreateCashboxTable_Button = new System.Windows.Forms.Button();
             this.Debug_Cashbox_GroupBox = new System.Windows.Forms.GroupBox();
+            this.Debug_CashboxUpdateLostSong_Button = new System.Windows.Forms.Button();
             this.Debug_CashboxImport_Button = new System.Windows.Forms.Button();
             this.Debug_CashboxExport_Button = new System.Windows.Forms.Button();
             this.Debug_CashboxNonSingerDataLog_Button = new System.Windows.Forms.Button();
+            this.Debug_CreateCashboxTable_Button = new System.Windows.Forms.Button();
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
-            this.SongMaintenance_Favorite_Update3456Gold_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_TabControl.SuspendLayout();
@@ -4974,6 +4975,18 @@
             this.SongMaintenance_Favorite_TabPage.Text = "我的最愛";
             this.SongMaintenance_Favorite_TabPage.UseVisualStyleBackColor = true;
             // 
+            // SongMaintenance_Favorite_Update3456Gold_Button
+            // 
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Location = new System.Drawing.Point(378, 173);
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Margin = new System.Windows.Forms.Padding(50, 9, 6, 9);
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Name = "SongMaintenance_Favorite_Update3456Gold_Button";
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_Favorite_Update3456Gold_Button.TabIndex = 8;
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Text = "錢櫃懷念金曲";
+            this.SongMaintenance_Favorite_Update3456Gold_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_Favorite_Update3456Gold_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_Update3456Gold_Button_Click);
+            // 
             // SongMaintenance_Favorite_UpdateOtherlangbill_Button
             // 
             this.SongMaintenance_Favorite_UpdateOtherlangbill_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -7614,7 +7627,6 @@
             this.Debug_TabPage.Controls.Add(this.Debug_Singer_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_UpdateDataColumn_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateDataColumn_Button);
-            this.Debug_TabPage.Controls.Add(this.Debug_CreateCashboxTable_Button);
             this.Debug_TabPage.Controls.Add(this.Debug_Cashbox_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_Tooltip_GroupBox);
             this.Debug_TabPage.Controls.Add(this.Debug_CreateTestFile_Button);
@@ -7773,23 +7785,13 @@
             this.Debug_CreateDataColumn_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateDataColumn_Button.Click += new System.EventHandler(this.Debug_CreateDataColumn_Button_Click);
             // 
-            // Debug_CreateCashboxTable_Button
-            // 
-            this.Debug_CreateCashboxTable_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Debug_CreateCashboxTable_Button.Location = new System.Drawing.Point(802, 540);
-            this.Debug_CreateCashboxTable_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.Debug_CreateCashboxTable_Button.Name = "Debug_CreateCashboxTable_Button";
-            this.Debug_CreateCashboxTable_Button.Size = new System.Drawing.Size(169, 32);
-            this.Debug_CreateCashboxTable_Button.TabIndex = 9;
-            this.Debug_CreateCashboxTable_Button.Text = "建立錢櫃資料";
-            this.Debug_CreateCashboxTable_Button.UseVisualStyleBackColor = true;
-            this.Debug_CreateCashboxTable_Button.Click += new System.EventHandler(this.Debug_CreateCashboxTable_Button_Click);
-            // 
             // Debug_Cashbox_GroupBox
             // 
+            this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxUpdateLostSong_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxImport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxExport_Button);
             this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CashboxNonSingerDataLog_Button);
+            this.Debug_Cashbox_GroupBox.Controls.Add(this.Debug_CreateCashboxTable_Button);
             this.Debug_Cashbox_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Debug_Cashbox_GroupBox.Location = new System.Drawing.Point(538, 231);
             this.Debug_Cashbox_GroupBox.Name = "Debug_Cashbox_GroupBox";
@@ -7797,6 +7799,18 @@
             this.Debug_Cashbox_GroupBox.TabIndex = 10;
             this.Debug_Cashbox_GroupBox.TabStop = false;
             this.Debug_Cashbox_GroupBox.Text = "錢櫃相關";
+            // 
+            // Debug_CashboxUpdateLostSong_Button
+            // 
+            this.Debug_CashboxUpdateLostSong_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CashboxUpdateLostSong_Button.Location = new System.Drawing.Point(190, 39);
+            this.Debug_CashboxUpdateLostSong_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CashboxUpdateLostSong_Button.Name = "Debug_CashboxUpdateLostSong_Button";
+            this.Debug_CashboxUpdateLostSong_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CashboxUpdateLostSong_Button.TabIndex = 13;
+            this.Debug_CashboxUpdateLostSong_Button.Text = "更新錢櫃遺漏歌曲";
+            this.Debug_CashboxUpdateLostSong_Button.UseVisualStyleBackColor = true;
+            this.Debug_CashboxUpdateLostSong_Button.Click += new System.EventHandler(this.Debug_CashboxUpdateLostSong_Button_Click);
             // 
             // Debug_CashboxImport_Button
             // 
@@ -7834,6 +7848,18 @@
             this.Debug_CashboxNonSingerDataLog_Button.UseVisualStyleBackColor = true;
             this.Debug_CashboxNonSingerDataLog_Button.Click += new System.EventHandler(this.Debug_CashboxNonSingerDataLog_Button_Click);
             // 
+            // Debug_CreateCashboxTable_Button
+            // 
+            this.Debug_CreateCashboxTable_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Debug_CreateCashboxTable_Button.Location = new System.Drawing.Point(190, 227);
+            this.Debug_CreateCashboxTable_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Debug_CreateCashboxTable_Button.Name = "Debug_CreateCashboxTable_Button";
+            this.Debug_CreateCashboxTable_Button.Size = new System.Drawing.Size(169, 32);
+            this.Debug_CreateCashboxTable_Button.TabIndex = 9;
+            this.Debug_CreateCashboxTable_Button.Text = "建立錢櫃資料";
+            this.Debug_CreateCashboxTable_Button.UseVisualStyleBackColor = true;
+            this.Debug_CreateCashboxTable_Button.Click += new System.EventHandler(this.Debug_CreateCashboxTable_Button_Click);
+            // 
             // Debug_Tooltip_GroupBox
             // 
             this.Debug_Tooltip_GroupBox.Controls.Add(this.Debug_Tooltip_Label);
@@ -7869,18 +7895,6 @@
             this.Debug_CreateTestFile_Button.Text = "建立測試歌庫";
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
-            // 
-            // SongMaintenance_Favorite_Update3456Gold_Button
-            // 
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Location = new System.Drawing.Point(378, 173);
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Margin = new System.Windows.Forms.Padding(50, 9, 6, 9);
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Name = "SongMaintenance_Favorite_Update3456Gold_Button";
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Size = new System.Drawing.Size(149, 32);
-            this.SongMaintenance_Favorite_Update3456Gold_Button.TabIndex = 8;
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Text = "錢櫃懷念金曲";
-            this.SongMaintenance_Favorite_Update3456Gold_Button.UseVisualStyleBackColor = true;
-            this.SongMaintenance_Favorite_Update3456Gold_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_Update3456Gold_Button_Click);
             // 
             // MainForm
             // 
@@ -8591,6 +8605,7 @@
         private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateTotalbill_Button;
         private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateOtherlangbill_Button;
         private System.Windows.Forms.Button SongMaintenance_Favorite_Update3456Gold_Button;
+        private System.Windows.Forms.Button Debug_CashboxUpdateLostSong_Button;
     }
 }
 

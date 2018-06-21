@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -242,6 +243,190 @@ namespace CrazyKTV_SongMgr
                 }
             }
             SongDataList.Clear();
+        }
+        #endif
+
+        #endregion
+
+        #region --- Debug 更新錢櫃遺漏歌曲 ---
+
+        private void Debug_CashboxUpdateLostSong_Button_Click(object sender, EventArgs e)
+        {
+            #if DEBUG
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                if (MessageBox.Show("你確定要更新錢櫃遺漏歌曲嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+
+                    Debug_Tooltip_Label.Text = "正在更新錢櫃遺漏歌曲,請稍待...";
+
+                    List<string> datelist = new List<string>();
+                    List<string> updatelist = new List<string>();
+                    using (DataTable dt = ((DataTable)Cashbox_DateQuery_ComboBox.DataSource).Copy())
+                    {
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            if (datelist.Count > 0)
+                            {
+                                DateTime dt1 = DateTime.Parse(datelist[dt.Rows.IndexOf(row) - 1]);
+                                DateTime dt2 = DateTime.Parse(row["Display"].ToString());
+                                TimeSpan ts = dt1 - dt2;
+                                if (ts.Days > 8)
+                                {
+                                    for (int i = 1; i < ts.Days; i++)
+                                    {
+                                        if (updatelist.IndexOf(dt2.AddDays(i).ToString("yyyy/MM/dd")) < 0)
+                                        {
+                                            updatelist.Add(dt2.AddDays(i).ToString("yyyy/MM/dd"));
+                                        }
+                                    }
+                                }
+                            }
+                            datelist.Add(row["Display"].ToString());
+                        }
+                    }
+                    datelist.Clear();
+
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CashboxUpdateLostSongTask(updatelist)) };
+
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                    {
+                        Global.TimerEndTime = DateTime.Now;
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            updatelist.Clear();
+                            Debug_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆,忽略 " + Global.TotalList[2] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                            Common_InitializeSongData(false, false, true, false, false, false);
+                            Common_SwitchSetUI(true);
+                        });
+                    });
+                }
+            }
+            #endif
+        }
+
+        #if DEBUG
+        private void Debug_CashboxUpdateLostSongTask(List<string> sDateList)
+        {
+            List<string> SongDataList = new List<string>();
+            List<string> SongIdList = new List<string>();
+            string CashboxQuerySqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox order by Cashbox_Id";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, CashboxQuerySqlStr, ""))
+            {
+                foreach (DataRow row in dt.AsEnumerable())
+                {
+                    SongIdList.Add(row["Cashbox_Id"].ToString());
+                }
+            }
+
+            HtmlWeb hw = new HtmlWeb();
+            HtmlAgilityPack.HtmlDocument doc;
+            HtmlNode table;
+            HtmlNodeCollection child;
+
+            foreach (string sdate in sDateList)
+            {
+                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + sdate);
+                table = doc.DocumentNode.SelectSingleNode("//table[2]");
+                child = table.SelectNodes("tr");
+
+                this.BeginInvoke((Action)delegate ()
+                {
+                    Debug_Tooltip_Label.Text = "正在分析第 " + (sDateList.IndexOf(sdate) + 1) + " / " + sDateList.Count + " 天的更新歌曲,請稍待...";
+                });
+
+                foreach (HtmlNode childnode in child)
+                {
+                    List<string> list = new List<string>();
+                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                    foreach (HtmlNode tdnode in td)
+                    {
+                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (list.Count < 4)
+                        {
+                            list.Add(data);
+                        }
+                    }
+
+                    if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
+                    {
+                        list.Add(sdate);
+                        if (list[1] == "") list[1] = "其它";
+                        list[3] = Regex.Replace(list[3], "、", "&");
+
+                        if (SongIdList.IndexOf(list[0]) < 0)
+                        {
+                            SongIdList.Add(list[0]);
+                            SongDataList.Add(string.Join("|", list));
+                        }
+                        else
+                        {
+                            Global.TotalList[2]++;
+                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【錢櫃更新】判斷為重複歌曲,已忽略: " + string.Join(" | ", list.ToArray());
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                        }
+                    }
+                    list.Clear();
+                }
+            }
+            SongIdList.Clear();
+
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
+            {
+                string sqlAddStr = "Cashbox_Id, Song_Lang, Song_SongName, Song_Singer, Song_CreatDate";
+                string sqlValuesStr = "@CashboxId, @SongLang, @SongSongName, @SongSinger, @SongCreatDate";
+                string AddSqlStr = "insert into ktv_Cashbox ( " + sqlAddStr + " ) values ( " + sqlValuesStr + " )";
+
+                using (OleDbCommand AddCmd = new OleDbCommand(AddSqlStr, conn))
+                {
+                    List<string> valuelist;
+                    foreach (string SongData in SongDataList)
+                    {
+                        valuelist = new List<string>(SongData.Split('|'));
+
+                        AddCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
+                        AddCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
+                        AddCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
+                        AddCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
+                        AddCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
+
+                        try
+                        {
+                            AddCmd.ExecuteNonQuery();
+                            Global.TotalList[0]++;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                Debug_Tooltip_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
+                            });
+                        }
+                        catch
+                        {
+                            Global.TotalList[1]++;
+                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "加入錢櫃資料時發生未知的錯誤: " + SongData;
+                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                        }
+                        AddCmd.Parameters.Clear();
+                        valuelist.Clear();
+                    }
+                }
+            }
+            SongDataList.Clear();
+
+            this.BeginInvoke((Action)delegate ()
+            {
+                Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? Global.CashboxUpdDate.ToLongDateString() : Global.CashboxUpdDate.ToShortDateString();
+                Cashbox_DateQuery_ComboBox.SelectedIndexChanged -= new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+                Cashbox_DateQuery_ComboBox.DataSource = Cashbox.GetDateQueryList();
+                Cashbox_DateQuery_ComboBox.DisplayMember = "Display";
+                Cashbox_DateQuery_ComboBox.ValueMember = "Value";
+                Cashbox_DateQuery_ComboBox.SelectedValue = 1;
+                Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+            });
         }
         #endif
 

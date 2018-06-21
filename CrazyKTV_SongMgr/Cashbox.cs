@@ -1120,11 +1120,15 @@ namespace CrazyKTV_SongMgr
             int DaysCount = (DateEndDate - DateStartDate).Days;
             int PrevUpdDaysCount = (DateStartDate - DatePrevUpdDate).Days;
 
-            for (int i = 1; i <= PrevUpdDaysCount; i++)
+            if (DateTime.Compare(DatePrevUpdDate, DateValidDate) >= 0)
             {
-                if (DatePrevUpdDate.AddDays(i).DayOfWeek == DayOfWeek.Thursday)
+                for (int i = 1; i < PrevUpdDaysCount; i++)
                 {
-                    if (DateTime.Compare(DatePrevUpdDate, DateValidDate) >= 0) sDateList.Add(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
+                    if (sDateList.IndexOf(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd")) < 0)
+                    {
+                        Console.WriteLine(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
+                        sDateList.Add(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
+                    }
                 }
             }
 
