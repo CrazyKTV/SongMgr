@@ -368,6 +368,9 @@
             this.SongMaintenance_CompactAccessDB_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SongWordCountCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_TabPage = new System.Windows.Forms.TabPage();
+            this.SongMaintenance_Favorite_UpdateNewsong_Label = new System.Windows.Forms.Label();
+            this.SongMaintenance_Favorite_UpdateNewsong_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox = new System.Windows.Forms.ComboBox();
             this.SongMaintenance_Favorite_Update3456Gold_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_UpdateOtherlangbill_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_UpdateTotalbill_Button = new System.Windows.Forms.Button();
@@ -933,7 +936,7 @@
             this.SongQuery_FavoriteQuery_ComboBox.Location = new System.Drawing.Point(72, 58);
             this.SongQuery_FavoriteQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
             this.SongQuery_FavoriteQuery_ComboBox.Name = "SongQuery_FavoriteQuery_ComboBox";
-            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(180, 28);
+            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(200, 28);
             this.SongQuery_FavoriteQuery_ComboBox.TabIndex = 3;
             this.SongQuery_FavoriteQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_FavoriteQuery_ComboBox_SelectedIndexChanged);
             // 
@@ -967,7 +970,7 @@
             this.SongQuery_ExceptionalQuery_ComboBox.Location = new System.Drawing.Point(72, 12);
             this.SongQuery_ExceptionalQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SongQuery_ExceptionalQuery_ComboBox.Name = "SongQuery_ExceptionalQuery_ComboBox";
-            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(180, 28);
+            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(200, 28);
             this.SongQuery_ExceptionalQuery_ComboBox.TabIndex = 1;
             this.SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
             // 
@@ -4957,6 +4960,9 @@
             // 
             // SongMaintenance_Favorite_TabPage
             // 
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateNewsong_Label);
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateNewsong_Button);
+            this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateNewsong_ComboBox);
             this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_Update3456Gold_Button);
             this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateOtherlangbill_Button);
             this.SongMaintenance_Favorite_TabPage.Controls.Add(this.SongMaintenance_Favorite_UpdateTotalbill_Button);
@@ -4974,6 +4980,40 @@
             this.SongMaintenance_Favorite_TabPage.TabIndex = 0;
             this.SongMaintenance_Favorite_TabPage.Text = "我的最愛";
             this.SongMaintenance_Favorite_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // SongMaintenance_Favorite_UpdateNewsong_Label
+            // 
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.AutoSize = true;
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.Location = new System.Drawing.Point(334, 246);
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.Margin = new System.Windows.Forms.Padding(6);
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.Name = "SongMaintenance_Favorite_UpdateNewsong_Label";
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.Size = new System.Drawing.Size(109, 20);
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.TabIndex = 11;
+            this.SongMaintenance_Favorite_UpdateNewsong_Label.Text = "錢櫃新歌快報:";
+            // 
+            // SongMaintenance_Favorite_UpdateNewsong_Button
+            // 
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Location = new System.Drawing.Point(498, 276);
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Margin = new System.Windows.Forms.Padding(6, 4, 6, 9);
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Name = "SongMaintenance_Favorite_UpdateNewsong_Button";
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Size = new System.Drawing.Size(70, 32);
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.TabIndex = 10;
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Text = "加入";
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_Favorite_UpdateNewsong_Button.Click += new System.EventHandler(this.SongMaintenance_Favorite_UpdateNewsong_Button_Click);
+            // 
+            // SongMaintenance_Favorite_UpdateNewsong_ComboBox
+            // 
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.FormattingEnabled = true;
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.Location = new System.Drawing.Point(334, 278);
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.Name = "SongMaintenance_Favorite_UpdateNewsong_ComboBox";
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.Size = new System.Drawing.Size(152, 28);
+            this.SongMaintenance_Favorite_UpdateNewsong_ComboBox.TabIndex = 9;
             // 
             // SongMaintenance_Favorite_Update3456Gold_Button
             // 
@@ -8606,6 +8646,9 @@
         private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateOtherlangbill_Button;
         private System.Windows.Forms.Button SongMaintenance_Favorite_Update3456Gold_Button;
         private System.Windows.Forms.Button Debug_CashboxUpdateLostSong_Button;
+        private System.Windows.Forms.Button SongMaintenance_Favorite_UpdateNewsong_Button;
+        private System.Windows.Forms.ComboBox SongMaintenance_Favorite_UpdateNewsong_ComboBox;
+        private System.Windows.Forms.Label SongMaintenance_Favorite_UpdateNewsong_Label;
     }
 }
 

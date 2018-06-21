@@ -1126,7 +1126,6 @@ namespace CrazyKTV_SongMgr
                 {
                     if (sDateList.IndexOf(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd")) < 0)
                     {
-                        Console.WriteLine(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
                         sDateList.Add(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
                     }
                 }
@@ -1286,6 +1285,11 @@ namespace CrazyKTV_SongMgr
                 Cashbox_DateQuery_ComboBox.ValueMember = "Value";
                 Cashbox_DateQuery_ComboBox.SelectedValue = 1;
                 Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.DataSource = SongMaintenance.GetNewsongDateList();
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.DisplayMember = "Display";
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.ValueMember = "Value";
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.SelectedValue = 1;
             });
         }
 

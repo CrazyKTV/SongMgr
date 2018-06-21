@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -3139,6 +3140,120 @@ namespace CrazyKTV_SongMgr
         }
 
 
+        private void SongMaintenance_Favorite_UpdateNewsong_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要更新錢櫃新歌快報至我的最愛嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Cashbox.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在更新錢櫃新歌快報至我的最愛,請稍待...";
+
+                string DateItem = SongMaintenance_Favorite_UpdateNewsong_ComboBox.Text;
+
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_Favorite_UpdateNewsongTask(DateItem))
+                };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 位最愛用戶及 " + Global.TotalList[1] + " 首排行歌曲,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+
+                        SongQuery_GetFavoriteUserList();
+                        SongMaintenance_GetFavoriteUserList();
+                        if (Global.SongQueryQueryType == "FavoriteQuery")
+                        {
+                            Global.SongQueryQueryType = "SongQuery";
+                            SongQuery_DataGridView.DataSource = null;
+                            if (SongQuery_DataGridView.Columns.Count > 0) SongQuery_DataGridView.Columns.Remove("Song_FullPath");
+                            SongQuery_QueryStatus_Label.Text = "";
+                        }
+                        Cashbox.DisposeSongDataTable();
+                    });
+                });
+            }
+        }
+
+
+        private void SongMaintenance_Favorite_UpdateNewsongTask(string DateItem)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (Global.CrazyktvDatabaseStatus)
+            {
+                List<string> UpdateDateList = new List<string>();
+                List<string> UpdateCashboxIdList = new List<string>();
+                string UpdateDate = string.Empty;
+                string SqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox";
+                using (DataTable CashboxDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, SqlStr, ""))
+                {
+                    if (DateItem != "")
+                    {
+                        var query = from row in Global.CashboxNewSongDateDT.AsEnumerable()
+                                    where row.Field<string>("Date").Equals(DateItem)
+                                    select row;
+
+                        if (query.Count<DataRow>() > 0)
+                        {
+                            foreach (DataRow row in query)
+                            {
+                                UpdateDateList.AddRange(row["Value"].ToString().Split('|'));
+                            }
+                        }
+                    }
+
+                    if (UpdateDateList.Count > 0)
+                    {
+                        UpdateDate = DateTime.Parse(UpdateDateList[0]).ToString("yyMM");
+                        foreach (string date in UpdateDateList)
+                        {
+                            var query = from row in CashboxDT.AsEnumerable()
+                                        where row.Field<DateTime>("Song_CreatDate").ToString("yyyy/MM/dd").Equals(date)
+                                        select row;
+                            
+                            if (query.Count<DataRow>() > 0)
+                            {
+                                foreach (DataRow row in query)
+                                {
+                                    string SongId = row["Cashbox_Id"].ToString();
+                                    if (UpdateCashboxIdList.IndexOf(SongId) < 0)
+                                    {
+                                        UpdateCashboxIdList.Add(SongId);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    UpdateDateList.Clear();
+
+                    List<string> UpdateList = new List<string>();
+                    if (UpdateCashboxIdList.Count > 0)
+                    {
+                        UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, UpdateCashboxIdList, 1);
+                    }
+                    UpdateCashboxIdList.Clear();
+
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        if (UpdateList.Count > 0)
+                        {
+                            Global.TotalList[0]++;
+                            SongMaintenance.UpdateFavoriteData(conn, UpdateDate, "新歌快報 (" + Regex.Replace(DateItem, "份", "") + ")", UpdateList);
+                        }
+                    }
+                    UpdateList.Clear();
+                }
+            }
+        }
+
+
         #endregion
 
 
@@ -3476,6 +3591,70 @@ namespace CrazyKTV_SongMgr
             Global.AllSingerDT.Dispose();
             Global.AllSingerDT = null;
         }
+
+        #region --- SongMaintenance 歌曲查詢下拉清單 ---
+
+        public static DataTable GetNewsongDateList()
+        {
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                Global.CashboxNewSongDateDT = new DataTable();
+                Global.CashboxNewSongDateDT.Columns.Add(new DataColumn("Date", typeof(string)));
+                Global.CashboxNewSongDateDT.Columns.Add(new DataColumn("Value", typeof(string)));
+
+                List<string> ItemList = new List<string>();
+
+                string QuerySqlStr = "SELECT First(Song_CreatDate) AS Song_CreatDate, Count(Song_CreatDate) AS Song_CreatDateCount FROM ktv_Cashbox GROUP BY Song_CreatDate HAVING (Count(Song_CreatDate)>0) ORDER BY First(Song_CreatDate) desc";
+                using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, QuerySqlStr, ""))
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in dt.AsEnumerable())
+                        {
+                            string DateItem = (CultureInfo.CurrentCulture.Name == "zh-TW") ? DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy年MM月份") : DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM");
+                            string DateValue = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd");
+                            if (ItemList.IndexOf(DateItem) < 0)
+                            {
+                                ItemList.Add(DateItem);
+                            }
+
+                            var query = from drow in Global.CashboxNewSongDateDT.AsEnumerable()
+                                        where drow.Field<string>("Date").Equals(DateItem)
+                                        select drow;
+
+                            if (query.Count<DataRow>() > 0)
+                            {
+                                foreach (DataRow drow in query)
+                                {
+                                    drow["Value"] = drow["Value"] + "|" + DateValue;
+                                }
+                            }
+                            else
+                            {
+                                DataRow drow = Global.CashboxNewSongDateDT.NewRow();
+                                drow["Date"] = DateItem;
+                                drow["Value"] = DateValue;
+                                Global.CashboxNewSongDateDT.Rows.Add(drow);
+                            }
+                        }
+                    }
+                }
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
+            }
+        }
+
+        #endregion
 
         public static DataTable GetMultiSongPathList()
         {

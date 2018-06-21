@@ -160,6 +160,7 @@ namespace CrazyKTV_SongMgr
         public static DataTable ExtensionSrcDT = new DataTable();
         public static DataTable SongLogDT = new DataTable();
         public static DataTable FavoriteUserDT = new DataTable();
+        public static DataTable CashboxNewSongDateDT = new DataTable();
 
         public static DateTime TimerStartTime = new DateTime();
         public static DateTime TimerEndTime = new DateTime();

@@ -419,13 +419,17 @@ namespace CrazyKTV_SongMgr
 
             this.BeginInvoke((Action)delegate ()
             {
-                Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? Global.CashboxUpdDate.ToLongDateString() : Global.CashboxUpdDate.ToShortDateString();
                 Cashbox_DateQuery_ComboBox.SelectedIndexChanged -= new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
                 Cashbox_DateQuery_ComboBox.DataSource = Cashbox.GetDateQueryList();
                 Cashbox_DateQuery_ComboBox.DisplayMember = "Display";
                 Cashbox_DateQuery_ComboBox.ValueMember = "Value";
                 Cashbox_DateQuery_ComboBox.SelectedValue = 1;
                 Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
+
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.DataSource = SongMaintenance.GetNewsongDateList();
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.DisplayMember = "Display";
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.ValueMember = "Value";
+                SongMaintenance_Favorite_UpdateNewsong_ComboBox.SelectedValue = 1;
             });
         }
         #endif
