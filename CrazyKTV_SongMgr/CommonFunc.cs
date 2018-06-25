@@ -3310,6 +3310,22 @@ namespace CrazyKTV_SongMgr
                     }
                     break;
                 case "CashboxLang":
+                    FindResultList = MatchList.FindAll(SongInfo => MatchData.Contains(SongInfo));
+                    if (FindResultList.Count > 0)
+                    {
+                        MatchCollection matches;
+                        foreach (string FindResult in FindResultList)
+                        {
+                            matches = Regex.Matches(FindResult, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", RegexOptions.IgnoreCase);
+                            if (matches.Count > 0)
+                            {
+                                int i = MatchList.IndexOf(FindResultList[FindResultList.IndexOf(FindResult)]);
+                                string RemoveStr = MatchData.Replace(MatchList[i], "");
+                                result = (RemoveStr != "") ? MatchData.Replace(RemoveStr, "") : MatchData;
+                                break;
+                            }
+                        }
+                    }
                     break;
             }
             FindResultList.Clear();
