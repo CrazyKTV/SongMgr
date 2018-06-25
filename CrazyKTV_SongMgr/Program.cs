@@ -138,9 +138,9 @@ namespace CrazyKTV_SongMgr
         public static List<string> CashboxSongDataFullList = new List<string>();
         public static List<string> CashboxSongDataLangList = new List<string>();
         public static List<string> CashboxSongDataLowCaseList = new List<string>();
-        public static List<string> CashboxSongDataNonBracketStrList = new List<string>();
-        public static List<string> CashboxSongDataNonSpaceStrList = new List<string>();
+        public static List<string> CashboxSongDataFuzzyList = new List<string>();
         public static List<string> CashboxFullMatchSongList = new List<string>();
+        public static List<string> CashboxFullAnalysisSongList = new List<string>();
         public static List<string> CashboxHaveSongList = new List<string>();
 
         public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
@@ -280,6 +280,7 @@ namespace CrazyKTV_SongMgr
         public static DataTable CashboxDT = new DataTable();
         public static bool CashboxFuzzyQuery = true;
         public static string CashboxQueryFilter = "全部";
+        public static string CashboxNonSymbolList = "、|。|！|，|．|？";
         public static bool CashboxSynonymousQuery = true;
         public static bool CashboxHasWideChar = false;
 

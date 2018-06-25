@@ -1749,8 +1749,8 @@ namespace CrazyKTV_SongMgr
                                                 string SongLang = row["Song_Lang"].ToString();
                                                 string SongSinger = row["Song_Singer"].ToString();
                                                 string SongSongName = row["Song_SongName"].ToString();
-                                                string SongSingerType = row["Song_SingerType"].ToString();
-                                                int SongDataIndex = CommonFunc.MatchCashboxSongLang(SongSinger, SongSongName, SongSingerType);
+
+                                                int SongDataIndex = CommonFunc.MatchCashboxSong("CashboxLang", null, SongLang, SongSinger, SongSongName, Global.CashboxSongDataLowCaseList, Global.CashboxSongDataFuzzyList);
 
                                                 if (SongDataIndex >= 0)
                                                 {

@@ -795,7 +795,7 @@ namespace CrazyKTV_SongMgr
                                         {
                                             foreach (DataRow row in query)
                                             {
-                                                bool RemoveRowStatus = (CommonFunc.MatchCashboxSong(row) >= 0) ? true : false;
+                                                bool RemoveRowStatus = (CommonFunc.MatchCashboxSong("CashboxSong", row, "", "", "", Cashbox.SongDataLowCaseList, Cashbox.SongDataFuzzyList) >= 0) ? true : false;
 
                                                 if (RemoveRowStatus)
                                                 {
@@ -1394,7 +1394,7 @@ namespace CrazyKTV_SongMgr
                             foreach (DataRow row in query)
                             {
                                 string CashboxId = Convert.ToInt32(row["Cashbox_Id"].ToString()).ToString(MaxDigitCode);
-                                int SongDataIndex = CommonFunc.MatchCashboxSong(row);
+                                int SongDataIndex = CommonFunc.MatchCashboxSong("CashboxSong", row, "", "", "", Cashbox.SongDataLowCaseList, Cashbox.SongDataFuzzyList);
 
                                 if (SongDataIndex >= 0)
                                 {
@@ -1626,7 +1626,7 @@ namespace CrazyKTV_SongMgr
                         {
                             foreach (DataRow row in query)
                             {
-                                int SongDataIndex = CommonFunc.MatchCashboxSong(row);
+                                int SongDataIndex = CommonFunc.MatchCashboxSong("CashboxSong", row, "", "", "", Cashbox.SongDataLowCaseList, Cashbox.SongDataFuzzyList);
 
                                 string CashboxId = row["Cashbox_Id"].ToString();
 
@@ -1676,27 +1676,28 @@ namespace CrazyKTV_SongMgr
         public static List<string> SongIdList;
         public static List<string> SongDataList;
         public static List<string> SongDataLowCaseList;
-        public static List<string> SongDataNonBracketList;
-        public static List<string> SongDataNonSpaceList;
+        public static List<string> SongDataFuzzyList;
 
         public static void CreateSongDataTable()
         {
             SongIdList = new List<string>();
             SongDataList = new List<string>();
             SongDataLowCaseList = new List<string>();
-            SongDataNonBracketList = new List<string>();
-            SongDataNonSpaceList = new List<string>();
+            SongDataFuzzyList = new List<string>();
 
             string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName from ktv_Song order by Song_Id";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
+                string FuzzyStr = string.Empty;
                 foreach (DataRow row in dt.AsEnumerable())
                 {
                     SongIdList.Add(row["Song_Id"].ToString());
                     SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString());
                     SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
-                    SongDataNonBracketList.Add(row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?", ""));
-                    SongDataNonSpaceList.Add(row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s", ""));
+
+                    FuzzyStr = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "");
+                    if (Global.CashboxFullMatchSongList.IndexOf(FuzzyStr) > 0 || Global.GroupSingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower()) >= 0) FuzzyStr = CommonFunc.GetFuzzyMatchStr("UserSong", row["Song_Lang"].ToString(), row["Song_Singer"].ToString().ToLower(), row["Song_SongName"].ToString().ToLower(), false, "");
+                    SongDataFuzzyList.Add(FuzzyStr);
                 }
             }
         }
@@ -1706,8 +1707,6 @@ namespace CrazyKTV_SongMgr
             SongIdList.Clear();
             SongDataList.Clear();
             SongDataLowCaseList.Clear();
-            SongDataNonBracketList.Clear();
-            SongDataNonSpaceList.Clear();
             GC.Collect();
         }
 

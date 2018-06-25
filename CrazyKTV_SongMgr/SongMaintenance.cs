@@ -3709,7 +3709,7 @@ namespace CrazyKTV_SongMgr
                 {
                     foreach (DataRow row in query)
                     {
-                        int SongDataIndex = CommonFunc.MatchCashboxSong(row);
+                        int SongDataIndex = CommonFunc.MatchCashboxSong("CashboxSong", row, "", "", "", Cashbox.SongDataLowCaseList, Cashbox.SongDataFuzzyList);
 
                         string CashboxId = row["Cashbox_Id"].ToString();
 

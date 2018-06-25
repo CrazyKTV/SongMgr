@@ -780,7 +780,7 @@ namespace CrazyKTV_SongMgr
             {
                 SongLang = CommonFunc.GetSongLangStr(int.Parse(Global.SongAddDefaultSongLang) - 1, 0, "null");
 
-                int SongDataIndex = CommonFunc.MatchCashboxSongLang(SongSinger, SongSongName, SongSingerType);
+                int SongDataIndex = CommonFunc.MatchCashboxSong("CashboxLang", null, SongLang, SongSinger, SongSongName, Global.CashboxSongDataLowCaseList, Global.CashboxSongDataFuzzyList);
 
                 if (SongDataIndex >= 0)
                 {
