@@ -3397,7 +3397,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> GetFuzzyMatchList(string MatchType, string SongLang, string SongSongName)
         {
             List<string> result = new List<string>();
-            List<string> DataList = new List<string>();
 
             switch (MatchType)
             {
@@ -3523,7 +3522,9 @@ namespace CrazyKTV_SongMgr
                 int ChorusGroupSongSingerCount = 0;
                 bool MatchChorusGroupSongSinger = false;
                 List<string> ChorusSingerList = new List<string>();
+                List<string> ChorusSingerFuzzyMatchList = new List<string>();
                 List<string> ChorusGroupSingerList = new List<string>();
+                List<string> ChorusGroupSingerFuzzyMatchList = new List<string>();
                 List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
                 foreach (string SpecialStr in SpecialStrlist)
@@ -3534,7 +3535,10 @@ namespace CrazyKTV_SongMgr
                     {
                         if (ChorusSongDatalist.IndexOf(SpecialSingerName) < 0) ChorusSongDatalist.Add(SpecialSingerName);
                         if (ChorusSingerList.IndexOf(SpecialSingerName) < 0) ChorusSingerList.Add(SpecialSingerName);
+                        if (ChorusSongDataFuzzyMatchlist.IndexOf(SpecialSingerName) < 0) ChorusSongDataFuzzyMatchlist.Add(SpecialSingerName);
+                        if (ChorusSingerFuzzyMatchList.IndexOf(SpecialSingerName) < 0) ChorusSingerFuzzyMatchList.Add(SpecialSingerName);
                         if (ChorusGroupSingerList.IndexOf(SpecialSingerName) < 0) ChorusGroupSingerList.Add(SpecialSingerName);
+                        if (ChorusGroupSingerFuzzyMatchList.IndexOf(SpecialSingerName) < 0) ChorusGroupSingerFuzzyMatchList.Add(SpecialSingerName);
                         ChorusGroupSongSingerCount++;
 
                         if (ChorusSongSingerName != SpecialSingerName)
@@ -3561,6 +3565,10 @@ namespace CrazyKTV_SongMgr
                             if (ChorusSongDatalist.IndexOf(SingerStr) < 0) ChorusSongDatalist.Add(SingerStr);
                             if (ChorusSingerList.IndexOf(SingerStr) < 0) ChorusSingerList.Add(SingerStr);
 
+                            string FuzzySingerStr = Regex.Replace(SingerStr, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "");
+                            if (ChorusSongDataFuzzyMatchlist.IndexOf(FuzzySingerStr) < 0) ChorusSongDataFuzzyMatchlist.Add(FuzzySingerStr);
+                            if (ChorusSingerFuzzyMatchList.IndexOf(FuzzySingerStr) < 0) ChorusSingerFuzzyMatchList.Add(FuzzySingerStr);
+
                             if (Global.GroupSingerLowCaseList.IndexOf(SingerStr) >= 0)
                             {
                                 int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SingerStr)];
@@ -3569,10 +3577,10 @@ namespace CrazyKTV_SongMgr
                                 {
                                     foreach (string GroupSingerName in GroupSingerList)
                                     {
-                                        if (ChorusGroupSingerList.IndexOf(GroupSingerName.ToLower()) < 0)
-                                        {
-                                            ChorusGroupSingerList.Add(GroupSingerName.ToLower());
-                                        }
+                                        if (ChorusGroupSingerList.IndexOf(GroupSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(GroupSingerName.ToLower());
+
+                                        string FuzzyGroupSingerName = Regex.Replace(GroupSingerName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "");
+                                        if (ChorusGroupSingerFuzzyMatchList.IndexOf(FuzzyGroupSingerName) < 0) ChorusGroupSingerFuzzyMatchList.Add(FuzzyGroupSingerName);
                                     }
                                     ChorusGroupSongSingerCount++;
                                     MatchChorusGroupSongSinger = true;
@@ -3582,6 +3590,8 @@ namespace CrazyKTV_SongMgr
                             else
                             {
                                 if (ChorusGroupSingerList.IndexOf(SingerStr) < 0) ChorusGroupSingerList.Add(SingerStr);
+                                string FuzzyGroupSingerName = Regex.Replace(SingerStr.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "");
+                                if (ChorusGroupSingerFuzzyMatchList.IndexOf(FuzzyGroupSingerName) < 0) ChorusGroupSingerFuzzyMatchList.Add(FuzzyGroupSingerName);
                                 ChorusGroupSongSingerCount++;
                             }
                         }
@@ -3590,7 +3600,12 @@ namespace CrazyKTV_SongMgr
                     {
                         if (ChorusSongDatalist.IndexOf(ChorusSongSingerName) < 0) ChorusSongDatalist.Add(ChorusSongSingerName);
                         if (ChorusSingerList.IndexOf(ChorusSongSingerName) < 0) ChorusSingerList.Add(ChorusSongSingerName);
+                        string FuzzySingerStr = Regex.Replace(ChorusSongSingerName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "");
+                        if (ChorusSongDataFuzzyMatchlist.IndexOf(FuzzySingerStr) < 0) ChorusSongDataFuzzyMatchlist.Add(FuzzySingerStr);
+                        if (ChorusSingerFuzzyMatchList.IndexOf(FuzzySingerStr) < 0) ChorusSingerFuzzyMatchList.Add(FuzzySingerStr);
+
                         if (ChorusGroupSingerList.IndexOf(ChorusSongSingerName) < 0) ChorusGroupSingerList.Add(ChorusSongSingerName);
+                        if (ChorusGroupSingerFuzzyMatchList.IndexOf(FuzzySingerStr) < 0) ChorusGroupSingerFuzzyMatchList.Add(FuzzySingerStr);
                         ChorusGroupSongSingerCount++;
                     }
                 }
@@ -3605,12 +3620,24 @@ namespace CrazyKTV_SongMgr
                         foreach (string FindResult in FindResultList)
                         {
                             List<string> list = new List<string>(FindResult.Split('|'));
-
-                            if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == SongSongName)
+                            switch (MatchType)
                             {
-                                MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
-                                MatchSongStatus = true;
-                                break;
+                                case "CashboxSong":
+                                    if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == SongSongName)
+                                    {
+                                        MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
+                                case "CashboxLang":
+                                    if (list[0].ContainsAll(ChorusSingerList.ToArray()) && list[1] == SongSongName)
+                                    {
+                                        MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
                             }
                             list.Clear();
                         }
@@ -3626,12 +3653,25 @@ namespace CrazyKTV_SongMgr
                         foreach (string FindResult in FindResultList)
                         {
                             List<string> list = new List<string>(FindResult.Split('|'));
-
-                            if (list[1].ContainsAll(ChorusSingerList.ToArray()) && list[2] == Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", ""))
+                            switch (MatchType)
                             {
-                                MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
-                                MatchSongStatus = true;
-                                break;
+                                case "CashboxSong":
+                                    if (list[1].ContainsAll(ChorusSingerFuzzyMatchList.ToArray()) && list[2] == Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", ""))
+                                    {
+                                        MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
+                                case "CashboxLang":
+                                    Console.WriteLine(string.Join("|", list));
+                                    if (list[0].ContainsAll(ChorusSingerFuzzyMatchList.ToArray()) && list[1] == Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", ""))
+                                    {
+                                        MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
                             }
                             list.Clear();
                         }
@@ -3647,12 +3687,24 @@ namespace CrazyKTV_SongMgr
                         foreach (string FindResult in FindResultList)
                         {
                             List<string> list = new List<string>(FindResult.Split('|'));
-
-                            if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == SongSongName)
+                            switch (MatchType)
                             {
-                                MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
-                                MatchSongStatus = true;
-                                break;
+                                case "CashboxSong":
+                                    if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == SongSongName)
+                                    {
+                                        MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
+                                case "CashboxLang":
+                                    if (list[0].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[1] == SongSongName)
+                                    {
+                                        MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
                             }
                             list.Clear();
                         }
@@ -3668,23 +3720,39 @@ namespace CrazyKTV_SongMgr
                         foreach (string FindResult in FindResultList)
                         {
                             List<string> list = new List<string>(FindResult.Split('|'));
-
-                            if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerList.ToArray()) && list[2] == Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", ""))
+                            switch (MatchType)
                             {
-                                MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
-                                MatchSongStatus = true;
-                                break;
+                                case "CashboxSong":
+                                    if (list[1].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerFuzzyMatchList.ToArray()) && list[2] == Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", ""))
+                                    {
+                                        MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
+                                case "CashboxLang":
+                                    if (list[0].ContainsCount(ChorusGroupSongSingerCount, ChorusGroupSingerFuzzyMatchList.ToArray()) && list[1] == Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", ""))
+                                    {
+                                        MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
+                                        MatchSongStatus = true;
+                                        break;
+                                    }
+                                    break;
                             }
+
                             list.Clear();
                         }
                     }
                     FindResultList.Clear();
                 }
-
                 ChorusGroupSingerList.Clear();
                 ChorusGroupSongDatalist.Clear();
                 ChorusSingerList.Clear();
                 ChorusSongDatalist.Clear();
+                ChorusGroupSingerFuzzyMatchList.Clear();
+                ChorusGroupSongDataFuzzyMatchlist.Clear();
+                ChorusSingerFuzzyMatchList.Clear();
+                ChorusSongDataFuzzyMatchlist.Clear();
             }
 
             return MatchResult;
