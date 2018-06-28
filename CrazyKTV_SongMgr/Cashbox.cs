@@ -1688,15 +1688,24 @@ namespace CrazyKTV_SongMgr
             string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_Singer, Song_SongName from ktv_Song order by Song_Id";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
+                string SongId = string.Empty;
+                string SongLang = string.Empty;
+                string SongSinger = string.Empty;
+                string SongSongName = string.Empty;
                 string FuzzyStr = string.Empty;
                 foreach (DataRow row in dt.AsEnumerable())
                 {
-                    SongIdList.Add(row["Song_Id"].ToString());
-                    SongDataList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString() + "|" + row["Song_SongName"].ToString());
-                    SongDataLowCaseList.Add(row["Song_Lang"].ToString() + "|" + row["Song_Singer"].ToString().ToLower() + "|" + row["Song_SongName"].ToString().ToLower());
+                    SongId = row["Song_Id"].ToString();
+                    SongLang = row["Song_Lang"].ToString();
+                    SongSinger = row["Song_Singer"].ToString();
+                    SongSongName = row["Song_SongName"].ToString();
 
-                    FuzzyStr = row["Song_Lang"].ToString() + "|" + Regex.Replace(row["Song_Singer"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "") + "|" + Regex.Replace(row["Song_SongName"].ToString().ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s", "");
-                    if (Global.CashboxFullMatchSongList.IndexOf(FuzzyStr) > 0 || Global.GroupSingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower()) >= 0) FuzzyStr = CommonFunc.GetFuzzyMatchStr("UserSong", row["Song_Lang"].ToString(), row["Song_Singer"].ToString().ToLower(), row["Song_SongName"].ToString().ToLower(), false, "");
+                    SongIdList.Add(SongId);
+                    SongDataList.Add(SongLang + "|" + SongSinger + "|" + SongSongName);
+                    SongDataLowCaseList.Add(SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower());
+
+                    FuzzyStr = SongLang + "|" + Regex.Replace(SongSinger.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "") + "|" + Regex.Replace(SongSongName.ToLower(), @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "");
+                    if (Global.CashboxFullMatchSongList.IndexOf(FuzzyStr) > 0 || Global.GroupSingerLowCaseList.IndexOf(SongSinger.ToLower()) >= 0) FuzzyStr = CommonFunc.GetFuzzyMatchStr("UserSong", SongLang, SongSinger.ToLower(), SongSongName.ToLower(), false, "");
                     SongDataFuzzyList.Add(FuzzyStr);
                 }
             }
