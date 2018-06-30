@@ -109,20 +109,21 @@ namespace CrazyKTV_SongMgr
             {
                 TaskFinished = true;
             });
-
-            while (!TaskFinished)
-            {
-                Thread.Sleep(100);
-            }
+            SpinWait.SpinUntil(() => TaskFinished == true);
         }
 
         public static void DisposeSongDataTable()
         {
             SingerDataList.Clear();
+            SingerDataList = null;
             SingerDataLowCaseList.Clear();
+            SingerDataLowCaseList = null;
             SingerDataTypeList.Clear();
+            SingerDataTypeList = null;
             SongDataLowCaseList.Clear();
+            SongDataLowCaseList = null;
             SongAnalysisSongList.Clear();
+            SongAnalysisSongList = null;
             SongAnalysisDT.Dispose();
             SongAnalysisDT = null;
             SongAnalysisCompleted = true;
