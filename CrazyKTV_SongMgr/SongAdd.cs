@@ -260,6 +260,8 @@ namespace CrazyKTV_SongMgr
 
         private void SongAdd_ElevatedDragDrop(object sender, ElevatedDragDropArgs e)
         {
+            if (e.HWnd != SongAdd_DataGridView.Handle && e.HWnd != SongAdd_DragDrop_Label.Handle) return;
+
             Global.TimerStartTime = DateTime.Now;
             if (SongAdd_Tooltip_Label.Text == "要加入的歌曲檔案或資料夾不可與歌庫資料夾同目錄!") SongAdd_Tooltip_Label.Text = "";
             if (SongAdd_Tooltip_Label.Text == "要加入的歌曲檔案數量大於最小歌曲剩餘編號!") SongAdd_Tooltip_Label.Text = "";

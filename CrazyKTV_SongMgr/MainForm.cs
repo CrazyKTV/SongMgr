@@ -44,8 +44,11 @@ namespace CrazyKTV_SongMgr
             ElevatedDragDropManager.Instance.EnableDragDrop(SongAdd_DragDrop_Label.Handle);
             ElevatedDragDropManager.Instance.ElevatedDragDrop += SongAdd_ElevatedDragDrop;
 
+            ElevatedDragDropManager.Instance.EnableDragDrop(SingerMgr_EditSingerImg_Panel.Handle);
+            ElevatedDragDropManager.Instance.ElevatedDragDrop += SingerMgr_EditSingerImg_Panel_ElevatedDragDrop;
+
             #if DEBUG
-                Cashbox_EditMode_CheckBox.Visible = true;
+            Cashbox_EditMode_CheckBox.Visible = true;
             #else
                 Debug_TabPage.Hide();
                 MainTabControl.TabPages.Remove(Debug_TabPage);

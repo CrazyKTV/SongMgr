@@ -2645,7 +2645,6 @@
             // 
             // SingerMgr_EditSingerImg_Panel
             // 
-            this.SingerMgr_EditSingerImg_Panel.AllowDrop = true;
             this.SingerMgr_EditSingerImg_Panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.SingerMgr_EditSingerImg_Panel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SingerMgr_EditSingerImg_Panel.Location = new System.Drawing.Point(110, 170);
@@ -2653,8 +2652,6 @@
             this.SingerMgr_EditSingerImg_Panel.Name = "SingerMgr_EditSingerImg_Panel";
             this.SingerMgr_EditSingerImg_Panel.Size = new System.Drawing.Size(114, 114);
             this.SingerMgr_EditSingerImg_Panel.TabIndex = 9;
-            this.SingerMgr_EditSingerImg_Panel.DragDrop += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragDrop);
-            this.SingerMgr_EditSingerImg_Panel.DragEnter += new System.Windows.Forms.DragEventHandler(this.SingerMgr_EditSingerImg_Panel_DragEnter);
             // 
             // SingerMgr_EditSingerImg_Label
             // 

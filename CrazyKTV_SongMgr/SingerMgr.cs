@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CrazyKTV_SongMgr.NativeMethods;
 
 namespace CrazyKTV_SongMgr
 {
@@ -1528,32 +1529,31 @@ namespace CrazyKTV_SongMgr
 
         #region --- 歌手圖片 ---
 
-        private void SingerMgr_EditSingerImg_Panel_DragEnter(object sender, DragEventArgs e)
+        private void SingerMgr_EditSingerImg_Panel_ElevatedDragDrop(object sender, ElevatedDragDropArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Link;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
+            if (e.HWnd != SingerMgr_EditSingerImg_Panel.Handle) return;
 
-        private void SingerMgr_EditSingerImg_Panel_DragDrop(object sender, DragEventArgs e)
-        {
             if (SingerMgr_Tooltip_Label.Text != "") SingerMgr_Tooltip_Label.Text = "";
-            string[] drop = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            List<string> droplist = new List<string>();
+            if (e.HWnd == SingerMgr_EditSingerImg_Panel.Handle)
+            {
+                foreach (string file in e.Files)
+                {
+                    droplist.Add(file);
+                }
+            }
+
             List<string> SupportFormat = new List<string>() { ".bmp", ".gif", ".jpg", ".png" };
 
-            if (drop.Count<string>() > 1 || Directory.Exists(drop[0]))
+            if (droplist.Count > 1 || Directory.Exists(droplist[0]))
             {
                 SingerMgr_Tooltip_Label.Text = "一次僅能拖曳一個圖檔!";
             }
             else
             {
                 if (SingerMgr_Tooltip_Label.Text == "一次僅能拖曳一個圖檔!") SingerMgr_Tooltip_Label.Text = "";
-                foreach (string item in drop)
+                foreach (string item in droplist)
                 {
                     if (File.Exists(item))
                     {
@@ -1563,7 +1563,6 @@ namespace CrazyKTV_SongMgr
                             string SingerName = SingerMgr_EditSingerName_TextBox.Text;
                             if (!Directory.Exists(Application.StartupPath + @"\Web\singerimg")) Directory.CreateDirectory(Application.StartupPath + @"\Web\singerimg");
                             string FilePath = Application.StartupPath + @"\Web\singerimg\" + SingerName + f.Extension.ToLower();
-                            if (FilePath != item) SingerMgr_EditSingerImg_Panel.BackgroundImage.Dispose();
 
                             if (File.Exists(FilePath))
                             {
@@ -1597,6 +1596,8 @@ namespace CrazyKTV_SongMgr
                                         Image img = Image.FromFile(FilePath);
                                         Bitmap bmp = new Bitmap(img);
                                         img.Dispose();
+
+                                        if (SingerMgr_EditSingerImg_Panel.BackgroundImage != null) SingerMgr_EditSingerImg_Panel.BackgroundImage.Dispose();
                                         SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
                                         SingerMgr_EditSingerImg_Panel.BackgroundImage = bmp;
                                         SingerMgr_Tooltip_Label.Text = "已成功加入歌手圖片!";
@@ -1623,6 +1624,8 @@ namespace CrazyKTV_SongMgr
                                 Image img = Image.FromFile(FilePath);
                                 Bitmap bmp = new Bitmap(img);
                                 img.Dispose();
+
+                                if (SingerMgr_EditSingerImg_Panel.BackgroundImage != null) SingerMgr_EditSingerImg_Panel.BackgroundImage.Dispose();
                                 SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
                                 SingerMgr_EditSingerImg_Panel.BackgroundImage = bmp;
                                 SingerMgr_Tooltip_Label.Text = "已成功加入歌手圖片!";
