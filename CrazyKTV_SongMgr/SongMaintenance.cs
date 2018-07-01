@@ -2382,48 +2382,35 @@ namespace CrazyKTV_SongMgr
 
             if (Global.CrazyktvDatabaseStatus)
             {
-                HtmlWeb hw = new HtmlWeb();
-                HtmlAgilityPack.HtmlDocument doc;
-                HtmlNode table;
-                HtmlNodeCollection child;
-
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_newbill.asp");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> clist = new List<string>();
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                        if (td.IndexOf(tdnode) == 4)
-                        {
-                            if (CommonFunc.IsSongId(data))
-                            {
-                                clist.Add(data);
-                            }
-                        }
-                    }
-                }
-
-                table = doc.DocumentNode.SelectSingleNode("//table[3]");
-                child = table.SelectNodes("tr");
                 List<string> tlist = new List<string>();
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
 
-                        if (td.IndexOf(tdnode) == 4)
+                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_newbill.md";
+                using (MemoryStream ms = CommonFunc.Download(url))
+                {
+                    if (ms.Length > 0)
+                    {
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
                         {
-                            if (CommonFunc.IsSongId(data))
+                            string line = string.Empty;
+                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+                            while (!sr.EndOfStream)
                             {
-                                tlist.Add(data);
+                                line = sr.ReadLine();
+                                if (dataline.IsMatch(line))
+                                {
+                                    line = Regex.Replace(line, @"\s\s\t$", "");
+                                    line = Regex.Replace(line, @"\s\t", "|");
+                                    List<string> list = new List<string>(line.Split('|'));
+                                    if (CommonFunc.IsSongId(list[4]) && list[5] != "")
+                                    {
+                                        if (list[5] == "國語") { clist.Add(list[4]); }
+                                        else if (list[5] == "台語") { tlist.Add(list[4]); }
+                                    }
+                                    list.Clear();
+                                    list = null;
+                                }
                             }
                         }
                     }
@@ -2440,6 +2427,7 @@ namespace CrazyKTV_SongMgr
                         CUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, clist, 1);
                     }
                     clist.Clear();
+                    clist = null;
 
                     // 台語新歌排行
                     if (tlist.Count > 0)
@@ -2447,6 +2435,7 @@ namespace CrazyKTV_SongMgr
                         TUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, tlist, 1);
                     }
                     tlist.Clear();
+                    tlist = null;
                 }
 
                 if (CUpdateList.Count > 0 || TUpdateList.Count > 0)
@@ -2464,11 +2453,12 @@ namespace CrazyKTV_SongMgr
                             Global.TotalList[0]++;
                             SongMaintenance.UpdateFavoriteData(conn, "^CB2", "錢櫃新歌排行榜 (台語)", TUpdateList);
                         }
-
                     }
                 }
                 CUpdateList.Clear();
+                CUpdateList = null;
                 TUpdateList.Clear();
+                TUpdateList = null;
             }
         }
 

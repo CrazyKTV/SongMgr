@@ -277,7 +277,6 @@ namespace CrazyKTV_SongMgr
                         {
                             this.BeginInvoke((Action)delegate ()
                             {
-                                Debug_Tooltip_Label.Text = "正在初始化錢櫃資料,請稍待...";
                                 Common_InitializeSongData(false, false, true, false, false, false);
                                 Common_SwitchSetUI(true);
                                 Global.TimerEndTime = DateTime.Now;
@@ -310,7 +309,7 @@ namespace CrazyKTV_SongMgr
             {
                 string line = string.Empty;
                 Regex firstline = new Regex(@"\d{4}\/\d{2}\/\d{2}");
-                Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t.+?\s\t\t");
+                Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
                 while (!sr.EndOfStream)
                 {
                     line = sr.ReadLine();

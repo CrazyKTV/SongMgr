@@ -3040,6 +3040,35 @@ namespace CrazyKTV_SongMgr
 
         #region --- CommonFunc 下載檔案 ---
 
+        public static MemoryStream Download(string Url)
+        {
+            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create(Url);
+            MemoryStream mStream = new MemoryStream();
+
+            try
+            {
+                using (HttpWebResponse Response = (HttpWebResponse)Request.GetResponse())
+                {
+                    long FileSize = Response.ContentLength;
+
+                    using (Stream DataStream = Response.GetResponseStream())
+                    {
+                        byte[] Databuffer = new byte[8192];
+                        int CompletedLength = 0;
+                        long TotalDLByte = 0;
+
+                        while ((CompletedLength = DataStream.Read(Databuffer, 0, 8192)) > 0)
+                        {
+                            TotalDLByte += CompletedLength;
+                            mStream.Write(Databuffer, 0, CompletedLength);
+                        }
+                    }
+                }
+            }
+            catch { }
+            return mStream;
+        }
+
         public static bool DownloadFile(string File, string Url)
         {
             bool DownloadStatus = false;
