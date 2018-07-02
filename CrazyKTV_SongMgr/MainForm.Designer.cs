@@ -6270,7 +6270,6 @@
             this.Cashbox_UpdDate_Button.TabIndex = 6;
             this.Cashbox_UpdDate_Button.Text = "立即更新";
             this.Cashbox_UpdDate_Button.UseVisualStyleBackColor = true;
-            this.Cashbox_UpdDate_Button.Visible = false;
             this.Cashbox_UpdDate_Button.Click += new System.EventHandler(this.Cashbox_UpdDate_Button_Click);
             // 
             // Cashbox_UpdDateValue_Label

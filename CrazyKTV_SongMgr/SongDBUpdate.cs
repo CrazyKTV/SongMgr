@@ -160,7 +160,6 @@ namespace CrazyKTV_SongMgr
                     {
                         SongMaintenance_DBVer1Value_Label.Text = SongDBVer.ToString("F2") + " 版";
                         Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? DateTime.Parse(CashboxUpdDate).ToLongDateString() : DateTime.Parse(CashboxUpdDate).ToShortDateString();
-                        Cashbox_UpdDate_Button.Enabled = Cashbox.GetUpdDateButtonEnableStatus();
                     });
 
                     if (Global.DBVerEnableDBVerUpdate == "True")
@@ -558,7 +557,6 @@ namespace CrazyKTV_SongMgr
 
                     SongMaintenance_DBVer1Value_Label.Text = Global.CrazyktvSongDBVer + " 版";
                     Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? Global.CashboxUpdDate.ToLongDateString() : Global.CashboxUpdDate.ToShortDateString();
-                    Cashbox_UpdDate_Button.Enabled = Cashbox.GetUpdDateButtonEnableStatus();
 
                     SongMaintenance_DBVerTooltip_Label.Text = "";
                     SongMaintenance_Tooltip_Label.Text = "已完成歌庫版本更新,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
