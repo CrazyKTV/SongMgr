@@ -2637,75 +2637,37 @@ namespace CrazyKTV_SongMgr
 
             if (Global.CrazyktvDatabaseStatus)
             {
-                HtmlWeb hw = new HtmlWeb();
-                HtmlAgilityPack.HtmlDocument doc;
-                HtmlNode table;
-                HtmlNodeCollection child;
-
-                // 粵語排行榜
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=2");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> hlist = new List<string>();
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                        if (td.IndexOf(tdnode) == 1)
-                        {
-                            if (CommonFunc.IsSongId(data))
-                            {
-                                hlist.Add(data);
-                            }
-                        }
-                    }
-                }
-
-                // 英語排行榜
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=1");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> elist = new List<string>();
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                        if (td.IndexOf(tdnode) == 1)
-                        {
-                            if (CommonFunc.IsSongId(data))
-                            {
-                                elist.Add(data);
-                            }
-                        }
-                    }
-                }
-
-                // 日語排行榜
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=3");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> jlist = new List<string>();
 
-                foreach (HtmlNode childnode in child)
+                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_otherlangbill.md";
+                using (MemoryStream ms = CommonFunc.Download(url))
                 {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
+                    if (ms.Length > 0)
                     {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                        if (td.IndexOf(tdnode) == 1)
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
                         {
-                            if (CommonFunc.IsSongId(data))
+                            string line = string.Empty;
+                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+                            while (!sr.EndOfStream)
                             {
-                                jlist.Add(data);
+                                line = sr.ReadLine();
+                                if (dataline.IsMatch(line))
+                                {
+                                    line = Regex.Replace(line, @"\s\s\t$", "");
+                                    line = Regex.Replace(line, @"\s\t", "|");
+                                    List<string> list = new List<string>(line.Split('|'));
+                                    if (CommonFunc.IsSongId(list[1]) && list[2] != "")
+                                    {
+                                        if (list[2] == "粵語") { hlist.Add(list[1]); }
+                                        else if (list[2] == "英語") { elist.Add(list[1]); }
+                                        else if (list[2] == "日語") { jlist.Add(list[1]); }
+                                    }
+                                    list.Clear();
+                                    list = null;
+                                }
                             }
                         }
                     }
@@ -2723,6 +2685,7 @@ namespace CrazyKTV_SongMgr
                         HUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, hlist, 1);
                     }
                     hlist.Clear();
+                    hlist = null;
 
                     // 英語新歌排行
                     if (elist.Count > 0)
@@ -2730,13 +2693,14 @@ namespace CrazyKTV_SongMgr
                         EUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, elist, 1);
                     }
                     elist.Clear();
-
+                    elist = null;
                     // 日語新歌排行
                     if (jlist.Count > 0)
                     {
                         JUpdateList = SongMaintenance.MatchCashboxData(CashboxDT, jlist, 1);
                     }
                     jlist.Clear();
+                    jlist = null;
                 }
 
                 if (HUpdateList.Count > 0 || EUpdateList.Count > 0 || JUpdateList.Count > 0)
@@ -2763,8 +2727,11 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 HUpdateList.Clear();
+                HUpdateList = null;
                 EUpdateList.Clear();
+                EUpdateList = null;
                 JUpdateList.Clear();
+                JUpdateList = null;
             }
         }
 
