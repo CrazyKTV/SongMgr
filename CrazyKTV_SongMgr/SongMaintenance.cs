@@ -2782,233 +2782,52 @@ namespace CrazyKTV_SongMgr
 
             if (Global.CrazyktvDatabaseStatus)
             {
-                HtmlWeb hw = new HtmlWeb();
-                HtmlAgilityPack.HtmlDocument doc;
-                HtmlNode table;
-                HtmlNodeCollection child;
-
-                // 三四年級國語金曲
-                int pages = 0;
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=1");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> c34list = new List<string>();
-
-                this.BeginInvoke((Action)delegate ()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在更新三四年級國語金曲至我的最愛,請稍待...";
-                });
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                        if (data.Contains("::::::"))
-                        {
-                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                            if (matches.Count > 0)
-                            {
-                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (pages > 0)
-                {
-                    for (int page = 1; page < pages + 1; page++)
-                    {
-                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=" + page.ToString());
-                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
-                        child = table.SelectNodes("tr");
-
-                        foreach (HtmlNode childnode in child)
-                        {
-                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                            foreach (HtmlNode tdnode in td)
-                            {
-                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                                if (td.IndexOf(tdnode) == 0)
-                                {
-                                    if (CommonFunc.IsSongId(data))
-                                    {
-                                        c34list.Add(data);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // 三四年級台語金曲
-                pages = 0;
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=1");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> t34list = new List<string>();
-
-                this.BeginInvoke((Action)delegate ()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在更新三四年級台語金曲至我的最愛,請稍待...";
-                });
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                        if (data.Contains("::::::"))
-                        {
-                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                            if (matches.Count > 0)
-                            {
-                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (pages > 0)
-                {
-                    for (int page = 1; page < pages + 1; page++)
-                    {
-                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=" + page.ToString());
-                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
-                        child = table.SelectNodes("tr");
-
-                        foreach (HtmlNode childnode in child)
-                        {
-                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                            foreach (HtmlNode tdnode in td)
-                            {
-                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                                if (td.IndexOf(tdnode) == 0)
-                                {
-                                    if (CommonFunc.IsSongId(data))
-                                    {
-                                        t34list.Add(data);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // 五六年級國語金曲
-                pages = 0;
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=1");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> c56list = new List<string>();
-
-                this.BeginInvoke((Action)delegate ()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在更新五六年級國語金曲至我的最愛,請稍待...";
-                });
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
-                    {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                        if (data.Contains("::::::"))
-                        {
-                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                            if (matches.Count > 0)
-                            {
-                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (pages > 0)
-                {
-                    for (int page = 1; page < pages + 1; page++)
-                    {
-                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=" + page.ToString());
-                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
-                        child = table.SelectNodes("tr");
-
-                        foreach (HtmlNode childnode in child)
-                        {
-                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                            foreach (HtmlNode tdnode in td)
-                            {
-                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                                if (td.IndexOf(tdnode) == 0)
-                                {
-                                    if (CommonFunc.IsSongId(data))
-                                    {
-                                        c56list.Add(data);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // 五六年級台語金曲
-                pages = 0;
-                doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=1");
-                table = doc.DocumentNode.SelectSingleNode("//table[2]");
-                child = table.SelectNodes("tr");
                 List<string> t56list = new List<string>();
 
-                this.BeginInvoke((Action)delegate ()
+                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_3456goldsong.md";
+                using (MemoryStream ms = CommonFunc.Download(url))
                 {
-                    SongMaintenance_Tooltip_Label.Text = "正在更新五六年級台語金曲至我的最愛,請稍待...";
-                });
-
-                foreach (HtmlNode childnode in child)
-                {
-                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                    foreach (HtmlNode tdnode in td)
+                    if (ms.Length > 0)
                     {
-                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                        if (data.Contains("::::::"))
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
                         {
-                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                            if (matches.Count > 0)
+                            string line = string.Empty;
+                            string type = string.Empty;
+                            Regex typeline = new Regex(@"^.{6}金曲$");
+                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+                            while (!sr.EndOfStream)
                             {
-                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (pages > 0)
-                {
-                    for (int page = 1; page < pages + 1; page++)
-                    {
-                        doc = hw.Load("http://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=" + page.ToString());
-                        table = doc.DocumentNode.SelectSingleNode("//table[3]");
-                        child = table.SelectNodes("tr");
-
-                        foreach (HtmlNode childnode in child)
-                        {
-                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                            foreach (HtmlNode tdnode in td)
-                            {
-                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-
-                                if (td.IndexOf(tdnode) == 0)
+                                line = sr.ReadLine();
+                                if (typeline.IsMatch(line)) type = line;
+                                if (dataline.IsMatch(line))
                                 {
-                                    if (CommonFunc.IsSongId(data))
+                                    line = Regex.Replace(line, @"\s\s\t$", "");
+                                    line = Regex.Replace(line, @"\s\t", "|");
+                                    List<string> list = new List<string>(line.Split('|'));
+                                    if (CommonFunc.IsSongId(list[0]))
                                     {
-                                        t56list.Add(data);
+                                        switch (type)
+                                        {
+                                            case "三四年級國語金曲":
+                                                c34list.Add(list[0]);
+                                                break;
+                                            case "三四年級台語金曲":
+                                                t34list.Add(list[0]);
+                                                break;
+                                            case "五六年級國語金曲":
+                                                c56list.Add(list[0]);
+                                                break;
+                                            case "五六年級台語金曲":
+                                                t56list.Add(list[0]);
+                                                break;
+                                        }
                                     }
+                                    list.Clear();
+                                    list = null;
                                 }
                             }
                         }
@@ -3028,13 +2847,15 @@ namespace CrazyKTV_SongMgr
                         C34UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, c34list, 1);
                     }
                     c34list.Clear();
-                    
+                    c34list = null;
+
                     // 三四年級台語金曲
                     if (t34list.Count > 0)
                     {
                         T34UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, t34list, 1);
                     }
                     t34list.Clear();
+                    t34list = null;
 
                     // 五六年級國語金曲
                     if (c56list.Count > 0)
@@ -3042,6 +2863,7 @@ namespace CrazyKTV_SongMgr
                         C56UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, c56list, 1);
                     }
                     c56list.Clear();
+                    c56list = null;
 
                     // 五六年級台語金曲
                     if (t56list.Count > 0)
@@ -3049,6 +2871,7 @@ namespace CrazyKTV_SongMgr
                         T56UpdateList = SongMaintenance.MatchCashboxData(CashboxDT, t56list, 1);
                     }
                     t56list.Clear();
+                    t56list = null;
                 }
 
                 if (C34UpdateList.Count > 0 || T34UpdateList.Count > 0 || C56UpdateList.Count > 0 || T56UpdateList.Count > 0)
@@ -3081,9 +2904,13 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 C34UpdateList.Clear();
+                C34UpdateList = null;
                 T34UpdateList.Clear();
+                T34UpdateList = null;
                 C56UpdateList.Clear();
+                C56UpdateList = null;
                 T56UpdateList.Clear();
+                T56UpdateList = null;
             }
         }
 
