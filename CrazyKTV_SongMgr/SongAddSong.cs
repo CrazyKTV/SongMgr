@@ -295,14 +295,15 @@ namespace CrazyKTV_SongMgr
                     List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
                     foreach (string SpecialSingerName in SpecialStrlist)
                     {
-                        Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                        string sSingerName = Regex.Escape(SpecialSingerName);
+                        Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
                         if (SpecialStrRegex.IsMatch(SingerName))
                         {
                             if (ChorusSingerList.IndexOf(SpecialSingerName) < 0)
                             {
                                 ChorusSingerList.Add(SpecialSingerName);
                             }
-                            SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
+                            SingerName = Regex.Replace(SingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
                         }
                     }
 

@@ -1241,14 +1241,15 @@ namespace CrazyKTV_SongMgr
                         // 處理合唱歌曲中的特殊歌手名稱
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
-                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                            string sSingerName = Regex.Escape(SpecialSingerName);
+                            Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
                             if (SpecialStrRegex.IsMatch(SingerName))
                             {
                                 if (ChorusSingerList.IndexOf(SpecialSingerName) < 0)
                                 {
                                     ChorusSingerList.Add(SpecialSingerName);
                                 }
-                                SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
+                                SingerName = Regex.Replace(SingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
                             }
                         }
 
@@ -3906,7 +3907,8 @@ namespace CrazyKTV_SongMgr
             foreach (string SpecialStr in SpecialStrlist)
             {
                 string SpecialSingerName = SpecialStr.ToLower();
-                Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                string sSingerName = Regex.Escape(SpecialSingerName);
+                Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
                 if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
                 {
                     if (result.SongDataSingerList.IndexOf(SpecialSingerName) < 0) result.SongDataSingerList.Add(SpecialSingerName);
@@ -3918,7 +3920,7 @@ namespace CrazyKTV_SongMgr
                     result.ChorusSongSingerCount++;
                     result.ChorusGroupSongSingerCount++;
 
-                    ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
+                    ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName) ? Regex.Replace(ChorusSongSingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase) : "";
                 }
             }
             SpecialStrlist.Clear();

@@ -243,7 +243,8 @@ namespace CrazyKTV_SongMgr
                         // 處理合唱歌曲中的特殊歌手名稱
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
-                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                            string sSingerName = Regex.Escape(SpecialSingerName);
+                            Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
                             if (SpecialStrRegex.IsMatch(SingerName))
                             {
                                 if (Singerlist.IndexOf(SpecialSingerName) < 0)
@@ -258,7 +259,7 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                     Singerlist.Add(SpecialSingerName);
-                                    SingerName = Regex.Replace(SingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase);
+                                    SingerName = Regex.Replace(SingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
                                 }
                             }
                         }

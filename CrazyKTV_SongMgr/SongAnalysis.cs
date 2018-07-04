@@ -172,7 +172,7 @@ namespace CrazyKTV_SongMgr
             list = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
             foreach (string str in list)
             {
-                FileStr = Regex.Replace(FileStr, str, "%%" + str + "%%", RegexOptions.IgnoreCase);
+                FileStr = Regex.Replace(FileStr, Regex.Escape(str), "%%" + str + "%%", RegexOptions.IgnoreCase);
             }
             list.Clear();
 
@@ -407,7 +407,7 @@ namespace CrazyKTV_SongMgr
             {
                 foreach (string RemoveStr in DirStrRemoveList)
                 {
-                    DirStr = Regex.Replace(DirStr, @"\\?" + RemoveStr, "");
+                    DirStr = Regex.Replace(DirStr, @"\\?" + Regex.Escape(RemoveStr), "");
                 }
             }
 

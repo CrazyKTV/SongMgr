@@ -1082,7 +1082,7 @@ namespace CrazyKTV_SongMgr
                                         foreach (Match m in CJKCharMatches)
                                         {
                                             RebuildList.Add(row["SingerSortItem"].ToString() + ((Global.SingerMgrLastNameSortMethod == "1") ? "劃" : "") + "|" + m.Value);
-                                            SingerLastName = Regex.Replace(SingerLastName, m.Value, "");
+                                            SingerLastName = SingerLastName.Replace(m.Value, "");
                                         }
                                         if (SingerLastName != "") RebuildList.Add(row["SingerSortItem"].ToString() + ((Global.SingerMgrLastNameSortMethod == "1") ? "劃" : "") + "|" + SingerLastName);
                                     }

@@ -216,7 +216,7 @@ namespace CrazyKTV_SongMgr
                         int index = int.Parse(SongAdd_SpecialStr_ListBox.SelectedIndex.ToString());
                         dt = (DataTable)SongAdd_SpecialStr_ListBox.DataSource;
                         dt.Rows.RemoveAt(index);
-                        Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|" + RemoveStr, "", RegexOptions.IgnoreCase);
+                        Global.SongAddSpecialStr = Global.SongAddSpecialStr.Replace(@"\|" + RemoveStr, "");
                         SongAdd_Tooltip_Label.Text = "已成功移除特殊歌手及歌曲名稱!";
                     }
                     else

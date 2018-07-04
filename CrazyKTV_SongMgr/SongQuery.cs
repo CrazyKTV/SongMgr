@@ -894,7 +894,8 @@ namespace CrazyKTV_SongMgr
 
                         foreach (string SpecialSingerName in SpecialStrlist)
                         {
-                            Regex SpecialStrRegex = new Regex("^" + SpecialSingerName + "&|&" + SpecialSingerName + "&|&" + SpecialSingerName + "$", RegexOptions.IgnoreCase);
+                            string sSingerName = Regex.Escape(SpecialSingerName);
+                            Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
                             if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
                             {
                                 if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
@@ -902,7 +903,7 @@ namespace CrazyKTV_SongMgr
                                 if (ChorusGroupSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(SpecialSingerName.ToLower());
                                 ChorusGroupSongSingerCount++;
 
-                                ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, SpecialSingerName + "&|&" + SpecialSingerName + "$", "", RegexOptions.IgnoreCase) : "";
+                                ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase) : "";
                             }
                         }
                         SpecialStrlist.Clear();
