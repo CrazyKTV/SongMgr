@@ -999,7 +999,7 @@ namespace CrazyKTV_SongMgr
                                 {
                                     Cashbox_QueryStatus_Label.Text = "錢櫃資料已是最新!";
                                 });
-                                return;
+                                break;
                             }
                         }
                         else if (dataline.IsMatch(line))
@@ -1036,7 +1036,7 @@ namespace CrazyKTV_SongMgr
             SongDateList.Clear();
             SongDateList = null;
 
-            if (SongDataList.Count >= 0)
+            if (SongDataList.Count > 0)
             {
                 using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
                 {
