@@ -1260,20 +1260,12 @@ namespace CrazyKTV_SongMgr
                                     SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
                                     SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
                                 }
-                                else
-                                {
-                                    SingerType = "10";
-                                }
                                 break;
                             case "SingerMgr":
                                 if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
                                 {
                                     SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
                                     SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
-                                }
-                                else
-                                {
-                                    SingerType = "10";
                                 }
                                 break;
                         }
