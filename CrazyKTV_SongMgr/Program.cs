@@ -284,5 +284,7 @@ namespace CrazyKTV_SongMgr
         public static bool CashboxSynonymousQuery = true;
         public static bool CashboxHasWideChar = false;
 
+        public static string RegexChorusSeparate = "[&+、]";
+
     }
 }

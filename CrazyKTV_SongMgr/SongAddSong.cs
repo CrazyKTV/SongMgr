@@ -291,45 +291,17 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    // 處理合唱歌曲中的特殊歌手名稱
-                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
-                    foreach (string SpecialSingerName in SpecialStrlist)
+                    List<string> list = CommonFunc.GetChorusSingerList(SingerName);
+                    foreach (string str in list)
                     {
-                        string sSingerName = Regex.Escape(SpecialSingerName);
-                        Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
-                        if (SpecialStrRegex.IsMatch(SingerName))
+                        string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                        if (ChorusSingerList.IndexOf(SingerStr) < 0)
                         {
-                            if (ChorusSingerList.IndexOf(SpecialSingerName) < 0)
-                            {
-                                ChorusSingerList.Add(SpecialSingerName);
-                            }
-                            SingerName = Regex.Replace(SingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
+                            ChorusSingerList.Add(SingerStr);
                         }
                     }
-
-                    if (SingerName != "")
-                    {
-                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                        if (r.IsMatch(SingerName))
-                        {
-                            string[] singers = Regex.Split(SingerName, "&", RegexOptions.None);
-                            foreach (string str in singers)
-                            {
-                                string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                if (ChorusSingerList.IndexOf(SingerStr) < 0)
-                                {
-                                    ChorusSingerList.Add(SingerStr);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (ChorusSingerList.IndexOf(SingerName) < 0)
-                            {
-                                ChorusSingerList.Add(SingerName);
-                            }
-                        }
-                    }
+                    list.Clear();
+                    list = null;
                 }
 
                 // 判斷是否要新增歌曲類別

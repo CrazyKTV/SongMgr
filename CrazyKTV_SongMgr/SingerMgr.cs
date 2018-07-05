@@ -469,19 +469,17 @@ namespace CrazyKTV_SongMgr
                                         }
                                         else
                                         {
-                                            Regex r = new Regex("%%.+?%%");
-                                            if (!r.IsMatch(OldSongSinger) && OldSongSinger.Contains("&"))
+                                            List<string> list = CommonFunc.GetChorusSingerList(OldSongSinger);
+                                            foreach (string singer in list)
                                             {
-                                                string[] singers = Regex.Split(OldSongSinger, "&", RegexOptions.None);
-                                                foreach (string singer in singers)
+                                                if (singer == valuelist[8])
                                                 {
-                                                    if (singer == valuelist[8])
-                                                    {
-                                                        SongSinger = OldSongSinger.Replace(singer, SingerName);
-                                                        SongSingerType = "3";
-                                                    }
+                                                    SongSinger = OldSongSinger.Replace(singer, SingerName);
+                                                    SongSingerType = "3";
                                                 }
                                             }
+                                            list.Clear();
+                                            list = null;
                                         }
 
                                         if (SongSinger.Contains(SingerName))

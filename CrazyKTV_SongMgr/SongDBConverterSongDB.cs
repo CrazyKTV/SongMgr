@@ -92,10 +92,10 @@ namespace CrazyKTV_SongMgr
             string SongSingerType = "";
             if (SongSinger != "")
             {
-                Regex r = new Regex("[&+、](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                Regex r = new Regex(Global.RegexChorusSeparate);
                 if (r.IsMatch(SongSinger))
                 {
-                    SongSinger = Regex.Replace(SongSinger, "[&+、]", "&", RegexOptions.IgnoreCase);
+                    SongSinger = Regex.Replace(SongSinger, Global.RegexChorusSeparate, "&", RegexOptions.IgnoreCase);
                     SongSingerType = "3";
                 }
                 else
@@ -326,10 +326,10 @@ namespace CrazyKTV_SongMgr
 
             if (SongSinger != "")
             {
-                Regex r = new Regex("[&+、](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
+                Regex r = new Regex(Global.RegexChorusSeparate);
                 if (r.IsMatch(SongSinger))
                 {
-                    SongSinger = Regex.Replace(SongSinger, "[&+、]", "&", RegexOptions.IgnoreCase);
+                    SongSinger = Regex.Replace(SongSinger, Global.RegexChorusSeparate, "&", RegexOptions.IgnoreCase);
                 }
             }
 

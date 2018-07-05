@@ -144,65 +144,21 @@ namespace CrazyKTV_SongMgr
                                     SongSinger = row["Song_Singer"].ToString();
                                     if (SongSinger.Contains("&"))
                                     {
-                                        // 處理合唱歌曲中的特殊歌手名稱
                                         string ChorusSongSingerName = SongSinger;
-                                        List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
-
-                                        foreach (string SpecialSingerName in SpecialStrlist)
+                                        List<string> list = CommonFunc.GetChorusSingerList(ChorusSongSingerName);
+                                        foreach (string str in list)
                                         {
-                                            string sSingerName = Regex.Escape(SpecialSingerName);
-                                            Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
-                                            if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                            if (SongSingerFilterList.IndexOf(SingerStr) < 0)
                                             {
-                                                if (SongSingerFilterList.IndexOf(SpecialSingerName) < 0)
+                                                if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
                                                 {
-                                                    if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
-                                                    {
-                                                        SongSingerFilterList.Add(SpecialSingerName);
-                                                    }
-                                                }
-                                                if (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower())
-                                                {
-                                                    ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
-                                                }
-                                                else
-                                                {
-                                                    ChorusSongSingerName = "";
+                                                    SongSingerFilterList.Add(SingerStr);
                                                 }
                                             }
                                         }
-                                        SpecialStrlist.Clear();
-
-                                        if (ChorusSongSingerName != "")
-                                        {
-                                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                            if (r.IsMatch(ChorusSongSingerName))
-                                            {
-                                                string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
-                                                foreach (string str in singers)
-                                                {
-                                                    string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                    if (SongSingerFilterList.IndexOf(SingerStr) < 0)
-                                                    {
-                                                        if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
-                                                        {
-                                                            SongSingerFilterList.Add(SingerStr);
-                                                        }
-
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if (SongSingerFilterList.IndexOf(ChorusSongSingerName) < 0)
-                                                {
-                                                    if (row["Song_Lang"].ToString() == Cashbox_LangFilter_ComboBox.Text || Cashbox_LangFilter_ComboBox.Text == "全部")
-                                                    {
-                                                        SongSingerFilterList.Add(ChorusSongSingerName);
-                                                    }
-                                                }
-                                            }
-                                        }
+                                        list.Clear();
+                                        list = null;
                                     }
                                     else
                                     {
@@ -474,20 +430,19 @@ namespace CrazyKTV_SongMgr
                                 if (query.Count<DataRow>() > 0)
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
-                                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
 
                                     foreach (DataRow row in query)
                                     {
-                                        if (r.IsMatch(row["Song_Singer"].ToString()))
+                                        string RemoveThisRow = "True";
+
+                                        List<string> list = CommonFunc.GetChorusSingerList(row["Song_Singer"].ToString());
+                                        foreach (string str in list)
                                         {
-                                            string RemoveThisRow = "True";
-                                            string[] singers = Regex.Split(row["Song_Singer"].ToString(), "&", RegexOptions.None);
-                                            foreach (string str in singers)
-                                            {
-                                                if (str == Cashbox_QueryValue_TextBox.Text) { RemoveThisRow = "False"; }
-                                            }
-                                            if (RemoveThisRow == "True") RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                            if (str.ToLower() == SongQueryValue.ToLower()) { RemoveThisRow = "False"; }
                                         }
+                                        list.Clear();
+                                        list = null;
+                                        if (RemoveThisRow == "True") RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
                                     }
 
                                     RemoveRowsIdxlist.Sort();
@@ -546,55 +501,19 @@ namespace CrazyKTV_SongMgr
                                                 
                                                 if (SongSinger.Contains("&"))
                                                 {
-                                                    // 處理合唱歌曲中的特殊歌手名稱
                                                     string ChorusSongSingerName = SongSinger;
-                                                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
-                                                    foreach (string SpecialSingerName in SpecialStrlist)
+                                                    List<string> list = CommonFunc.GetChorusSingerList(ChorusSongSingerName);
+                                                    foreach (string str in list)
                                                     {
-                                                        string sSingerName = Regex.Escape(SpecialSingerName);
-                                                        Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
-                                                        if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                                                        string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                                        if (SongSingerFilterList.IndexOf(SingerStr) < 0)
                                                         {
-                                                            if (SongSingerFilterList.IndexOf(SpecialSingerName) < 0)
-                                                            {
-                                                                SongSingerFilterList.Add(SpecialSingerName);
-                                                            }
-                                                            if (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower())
-                                                            {
-                                                                ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
-                                                            }
-                                                            else
-                                                            {
-                                                                ChorusSongSingerName = "";
-                                                            }
+                                                            SongSingerFilterList.Add(SingerStr);
                                                         }
                                                     }
-                                                    SpecialStrlist.Clear();
-
-                                                    if (ChorusSongSingerName != "")
-                                                    {
-                                                        Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                                        if (r.IsMatch(ChorusSongSingerName))
-                                                        {
-                                                            string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
-                                                            foreach (string str in singers)
-                                                            {
-                                                                string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                                if (SongSingerFilterList.IndexOf(SingerStr) < 0)
-                                                                {
-                                                                    SongSingerFilterList.Add(SingerStr);
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            if (SongSingerFilterList.IndexOf(ChorusSongSingerName) < 0)
-                                                            {
-                                                                SongSingerFilterList.Add(ChorusSongSingerName);
-                                                            }
-                                                        }
-                                                    }
+                                                    list.Clear();
+                                                    list = null;
                                                 }
                                                 else
                                                 {
@@ -915,56 +834,19 @@ namespace CrazyKTV_SongMgr
 
                                             if (SongSinger.Contains("&"))
                                             {
-                                                // 處理合唱歌曲中的特殊歌手名稱
                                                 string ChorusSongSingerName = SongSinger;
-                                                List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
-                                                foreach (string SpecialSingerName in SpecialStrlist)
+                                                List<string> list = CommonFunc.GetChorusSingerList(ChorusSongSingerName);
+                                                foreach (string str in list)
                                                 {
-                                                    string sSingerName = Regex.Escape(SpecialSingerName);
-                                                    Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
-                                                    if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
+                                                    string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                                                    if (SongSingerFilterList.IndexOf(SingerStr) < 0)
                                                     {
-                                                        if (SongSingerFilterList.IndexOf(SpecialSingerName) < 0)
-                                                        {
-                                                            SongSingerFilterList.Add(SpecialSingerName);
-                                                        }
-
-                                                        if (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower())
-                                                        {
-                                                            ChorusSongSingerName = Regex.Replace(ChorusSongSingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase);
-                                                        }
-                                                        else
-                                                        {
-                                                            ChorusSongSingerName = "";
-                                                        }
+                                                        SongSingerFilterList.Add(SingerStr);
                                                     }
                                                 }
-                                                SpecialStrlist.Clear();
-
-                                                if (ChorusSongSingerName != "")
-                                                {
-                                                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                                                    if (r.IsMatch(ChorusSongSingerName))
-                                                    {
-                                                        string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
-                                                        foreach (string str in singers)
-                                                        {
-                                                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                            if (SongSingerFilterList.IndexOf(SingerStr) < 0)
-                                                            {
-                                                                SongSingerFilterList.Add(SingerStr);
-                                                            }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if (SongSingerFilterList.IndexOf(ChorusSongSingerName) < 0)
-                                                        {
-                                                            SongSingerFilterList.Add(ChorusSongSingerName);
-                                                        }
-                                                    }
-                                                }
+                                                list.Clear();
+                                                list = null;
                                             }
                                             else
                                             {

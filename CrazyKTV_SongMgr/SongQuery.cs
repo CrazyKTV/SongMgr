@@ -585,20 +585,18 @@ namespace CrazyKTV_SongMgr
                                 if (query.Count<DataRow>() > 0)
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
-                                    Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
 
                                     foreach (DataRow row in query)
                                     {
-                                        if (r.IsMatch(row["Song_Singer"].ToString()))
+                                        bool RemoveRow = true;
+                                        List<string> list = CommonFunc.GetChorusSingerList(row["Song_Singer"].ToString());
+                                        foreach (string str in list)
                                         {
-                                            string RemoveThisRow = "True";
-                                            string[] singers = Regex.Split(row["Song_Singer"].ToString(), "&", RegexOptions.None);
-                                            foreach (string str in singers)
-                                            {
-                                                if (str == SongQuery_QueryValue_TextBox.Text) { RemoveThisRow = "False"; }
-                                            }
-                                            if (RemoveThisRow == "True") RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                            if (str.ToLower() == SongQueryValue.ToLower()) RemoveRow = false;
                                         }
+                                        if (RemoveRow) RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                        list.Clear();
+                                        list = null;
                                     }
 
                                     RemoveRowsIdxlist.Sort();
@@ -890,69 +888,40 @@ namespace CrazyKTV_SongMgr
                         bool MatchChorusGroupSongSinger = false;
                         List<string> ChorusSingerList = new List<string>();
                         List<string> ChorusGroupSingerList = new List<string>();
-                        List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
 
-                        foreach (string SpecialSingerName in SpecialStrlist)
+                        List<string> slist = CommonFunc.GetChorusSingerList(ChorusSongSingerName);
+                        foreach (string str in slist)
                         {
-                            string sSingerName = Regex.Escape(SpecialSingerName);
-                            Regex SpecialStrRegex = new Regex("^" + sSingerName + "&|&" + sSingerName + "&|&" + sSingerName + "$", RegexOptions.IgnoreCase);
-                            if (SpecialStrRegex.IsMatch(ChorusSongSingerName))
-                            {
-                                if (ChorusSongDatalist.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSongDatalist.Add(SpecialSingerName.ToLower());
-                                if (ChorusSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusSingerList.Add(SpecialSingerName.ToLower());
-                                if (ChorusGroupSingerList.IndexOf(SpecialSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(SpecialSingerName.ToLower());
-                                ChorusGroupSongSingerCount++;
+                            string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
+                            if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
+                            if (ChorusSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusSingerList.Add(SingerStr.ToLower());
 
-                                ChorusSongSingerName = (ChorusSongSingerName.ToLower() != SpecialSingerName.ToLower()) ? Regex.Replace(ChorusSongSingerName, sSingerName + "&|&" + sSingerName + "$", "", RegexOptions.IgnoreCase) : "";
-                            }
-                        }
-                        SpecialStrlist.Clear();
-
-                        if (ChorusSongSingerName != "")
-                        {
-                            Regex r = new Regex("[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))");
-                            if (r.IsMatch(ChorusSongSingerName))
+                            if (Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower()) >= 0)
                             {
-                                string[] singers = Regex.Split(ChorusSongSingerName, "&", RegexOptions.None);
-                                foreach (string str in singers)
+                                int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower())];
+                                List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
+                                if (GroupSingerList.Count > 0)
                                 {
-                                    string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                                    if (ChorusSongDatalist.IndexOf(SingerStr.ToLower()) < 0) ChorusSongDatalist.Add(SingerStr.ToLower());
-                                    if (ChorusSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusSingerList.Add(SingerStr.ToLower());
-
-                                    if (Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower()) >= 0)
+                                    foreach (string GroupSingerName in GroupSingerList)
                                     {
-                                        int SingerGroupId = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SingerStr.ToLower())];
-                                        List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
-                                        if (GroupSingerList.Count > 0)
+                                        if (ChorusGroupSingerList.IndexOf(GroupSingerName.ToLower()) < 0)
                                         {
-                                            foreach (string GroupSingerName in GroupSingerList)
-                                            {
-                                                if (ChorusGroupSingerList.IndexOf(GroupSingerName.ToLower()) < 0)
-                                                {
-                                                    ChorusGroupSingerList.Add(GroupSingerName.ToLower());
-                                                }
-                                            }
-                                            ChorusGroupSongSingerCount++;
-                                            MatchChorusGroupSongSinger = true;
-                                            GroupSingerList.Clear();
+                                            ChorusGroupSingerList.Add(GroupSingerName.ToLower());
                                         }
                                     }
-                                    else
-                                    {
-                                        if (ChorusGroupSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusGroupSingerList.Add(SingerStr.ToLower());
-                                        ChorusGroupSongSingerCount++;
-                                    }
+                                    ChorusGroupSongSingerCount++;
+                                    MatchChorusGroupSongSinger = true;
+                                    GroupSingerList.Clear();
                                 }
                             }
                             else
                             {
-                                if (ChorusSongDatalist.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSongDatalist.Add(ChorusSongSingerName.ToLower());
-                                if (ChorusSingerList.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusSingerList.Add(ChorusSongSingerName.ToLower());
-                                if (ChorusGroupSingerList.IndexOf(ChorusSongSingerName.ToLower()) < 0) ChorusGroupSingerList.Add(ChorusSongSingerName.ToLower());
+                                if (ChorusGroupSingerList.IndexOf(SingerStr.ToLower()) < 0) ChorusGroupSingerList.Add(SingerStr.ToLower());
                                 ChorusGroupSongSingerCount++;
                             }
                         }
+                        slist.Clear();
+                        slist = null;
 
                         List<string> FindResultList = new List<string>();
 
@@ -1491,12 +1460,18 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "9":
-                        SongQueryType = "MatchSingerType";
+                        SongQueryType = "MatchSingerData";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "10":
+                        SongQueryType = "MatchSingerType";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
+                        break;
+                    case "11":
                         SongQueryType = "MatchSongLang";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
@@ -1682,6 +1657,62 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                     RemoveRowsIdxlist.Clear();
+                                }
+                                break;
+                            case "MatchSingerData":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+                                    List<string> SingerLowCaseList = new List<string>();
+
+                                    string SongSingerQuerySqlStr = "select Singer_Id, Singer_Name, Singer_Type from ktv_Singer";
+                                    using (DataTable SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, ""))
+                                    {
+                                        foreach (DataRow SingerRow in SingerDT.AsEnumerable())
+                                        {
+                                            SingerLowCaseList.Add(SingerRow["Singer_Name"].ToString().ToLower());
+                                        }
+                                    }
+
+                                    var MatchSingerDataQuery = from row in dt.AsEnumerable()
+                                                               where SingerLowCaseList.IndexOf(row["Song_Singer"].ToString().ToLower()) >= 0 ||
+                                                                     row["Song_SingerType"].ToString() == "3"
+                                                               select row;
+
+                                    foreach (DataRow row in MatchSingerDataQuery)
+                                    {
+                                        bool RomoveRow = true;
+                                        if (row["Song_SingerType"].ToString() == "3")
+                                        {
+                                            List<string> list = CommonFunc.GetChorusSingerList(row["Song_Singer"].ToString());
+                                            foreach (string singer in list)
+                                            {
+                                                if (SingerLowCaseList.IndexOf(singer.ToLower()) < 0)
+                                                {
+                                                    RomoveRow = false;
+                                                    break;
+                                                }
+                                            }
+                                            list.Clear();
+                                            list = null;
+                                        }
+                                        if (RomoveRow) RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
+                                    }
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
+                                    RemoveRowsIdxlist = null;
+                                    SingerLowCaseList.Clear();
+                                    SingerLowCaseList = null;
                                 }
                                 break;
                             case "MatchSingerType":
@@ -2884,7 +2915,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略括號)", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手類別不符", "語系類別不符 (錢櫃)" };
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略括號)", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手未在資料庫", "歌手類別不符", "語系類別不符 (錢櫃)" };
 
                 foreach (string str in ItemList)
                 {
@@ -3130,6 +3161,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "MatchSongTrack":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
+                    break;
+                case "MatchSingerData":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Singer";
                     break;
                 case "MatchSingerType":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where Song_SingerType <> 3 order by Song_Singer";
