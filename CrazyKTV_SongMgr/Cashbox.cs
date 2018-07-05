@@ -981,53 +981,52 @@ namespace CrazyKTV_SongMgr
                 if (ms.Length > 0)
                 {
                     ms.Position = 0;
-                    using (StreamReader sr = new StreamReader(ms))
-                    {
-                        string line = string.Empty;
-                        Regex dateline = new Regex(@"^\d{4}\/\d{2}\/\d{2}");
-                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-                        while (!sr.EndOfStream)
-                        {
-                            line = sr.ReadLine();
-                            if (dateline.IsMatch(line))
-                            {
-                                if (CashboxUpdDate == "") CashboxUpdDate = line;
-                                SongDate = line;
-                                if (SongDateList.IndexOf(SongDate) >= 0)
-                                {
-                                    this.BeginInvoke((Action)delegate ()
-                                    {
-                                        Cashbox_QueryStatus_Label.Text = "錢櫃資料已是最新!";
-                                    });
-                                    return;
-                                }
-                            }
-                            else if (dataline.IsMatch(line))
-                            {
-                                if (SongDate == "") return;
-                                line = Regex.Replace(line, @"\s\s\t$", "");
-                                line = Regex.Replace(line, @"\s\t", "|");
-                                List<string> list = new List<string>(line.Split('|'));
-                                if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
-                                {
-                                    list.Add(SongDate);
-                                    if (list[1] == "") list[1] = "其它";
-                                    list[3] = Regex.Replace(list[3], "、", "&");
+                    string line = string.Empty;
+                    Regex dateline = new Regex(@"^\d{4}\/\d{2}\/\d{2}");
+                    Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
 
-                                    if (SongIdList.IndexOf(list[0]) < 0)
-                                    {
-                                        SongIdList.Add(list[0]);
-                                        list.Add("AddSong");
-                                    }
-                                    else
-                                    {
-                                        list.Add("UpdSong");
-                                    }
-                                    SongDataList.Add(string.Join("|", list));
-                                }
-                                list.Clear();
-                                list = null;
+                    StreamReader sr = new StreamReader(ms);
+                    while (!sr.EndOfStream)
+                    {
+                        line = sr.ReadLine();
+                        if (dateline.IsMatch(line))
+                        {
+                            if (CashboxUpdDate == "") CashboxUpdDate = line;
+                            SongDate = line;
+                            if (SongDateList.IndexOf(SongDate) >= 0)
+                            {
+                                this.BeginInvoke((Action)delegate ()
+                                {
+                                    Cashbox_QueryStatus_Label.Text = "錢櫃資料已是最新!";
+                                });
+                                return;
                             }
+                        }
+                        else if (dataline.IsMatch(line))
+                        {
+                            if (SongDate == "") return;
+                            line = Regex.Replace(line, @"\s\s\t$", "");
+                            line = Regex.Replace(line, @"\s\t", "|");
+                            List<string> list = new List<string>(line.Split('|'));
+                            if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
+                            {
+                                list.Add(SongDate);
+                                if (list[1] == "") list[1] = "其它";
+                                list[3] = Regex.Replace(list[3], "、", "&");
+
+                                if (SongIdList.IndexOf(list[0]) < 0)
+                                {
+                                    SongIdList.Add(list[0]);
+                                    list.Add("AddSong");
+                                }
+                                else
+                                {
+                                    list.Add("UpdSong");
+                                }
+                                SongDataList.Add(string.Join("|", list));
+                            }
+                            list.Clear();
+                            list = null;
                         }
                     }
                 }

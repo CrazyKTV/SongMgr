@@ -2391,26 +2391,25 @@ namespace CrazyKTV_SongMgr
                     if (ms.Length > 0)
                     {
                         ms.Position = 0;
-                        using (StreamReader sr = new StreamReader(ms))
+                        string line = string.Empty;
+                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+
+                        StreamReader sr = new StreamReader(ms);
+                        while (!sr.EndOfStream)
                         {
-                            string line = string.Empty;
-                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-                            while (!sr.EndOfStream)
+                            line = sr.ReadLine();
+                            if (dataline.IsMatch(line))
                             {
-                                line = sr.ReadLine();
-                                if (dataline.IsMatch(line))
+                                line = Regex.Replace(line, @"\s\s\t$", "");
+                                line = Regex.Replace(line, @"\s\t", "|");
+                                List<string> list = new List<string>(line.Split('|'));
+                                if (CommonFunc.IsSongId(list[4]) && list[5] != "")
                                 {
-                                    line = Regex.Replace(line, @"\s\s\t$", "");
-                                    line = Regex.Replace(line, @"\s\t", "|");
-                                    List<string> list = new List<string>(line.Split('|'));
-                                    if (CommonFunc.IsSongId(list[4]) && list[5] != "")
-                                    {
-                                        if (list[5] == "國語") { clist.Add(list[4]); }
-                                        else if (list[5] == "台語") { tlist.Add(list[4]); }
-                                    }
-                                    list.Clear();
-                                    list = null;
+                                    if (list[5] == "國語") { clist.Add(list[4]); }
+                                    else if (list[5] == "台語") { tlist.Add(list[4]); }
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }
@@ -2518,26 +2517,25 @@ namespace CrazyKTV_SongMgr
                     if (ms.Length > 0)
                     {
                         ms.Position = 0;
-                        using (StreamReader sr = new StreamReader(ms))
+                        string line = string.Empty;
+                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+
+                        StreamReader sr = new StreamReader(ms);
+                        while (!sr.EndOfStream)
                         {
-                            string line = string.Empty;
-                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-                            while (!sr.EndOfStream)
+                            line = sr.ReadLine();
+                            if (dataline.IsMatch(line))
                             {
-                                line = sr.ReadLine();
-                                if (dataline.IsMatch(line))
+                                line = Regex.Replace(line, @"\s\s\t$", "");
+                                line = Regex.Replace(line, @"\s\t", "|");
+                                List<string> list = new List<string>(line.Split('|'));
+                                if (CommonFunc.IsSongId(list[4]) && list[5] != "")
                                 {
-                                    line = Regex.Replace(line, @"\s\s\t$", "");
-                                    line = Regex.Replace(line, @"\s\t", "|");
-                                    List<string> list = new List<string>(line.Split('|'));
-                                    if (CommonFunc.IsSongId(list[4]) && list[5] != "")
-                                    {
-                                        if (list[5] == "國語") { clist.Add(list[4]); }
-                                        else if (list[5] == "台語") { tlist.Add(list[4]); }
-                                    }
-                                    list.Clear();
-                                    list = null;
+                                    if (list[5] == "國語") { clist.Add(list[4]); }
+                                    else if (list[5] == "台語") { tlist.Add(list[4]); }
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }
@@ -2647,27 +2645,26 @@ namespace CrazyKTV_SongMgr
                     if (ms.Length > 0)
                     {
                         ms.Position = 0;
-                        using (StreamReader sr = new StreamReader(ms))
+                        string line = string.Empty;
+                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+
+                        StreamReader sr = new StreamReader(ms);
+                        while (!sr.EndOfStream)
                         {
-                            string line = string.Empty;
-                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-                            while (!sr.EndOfStream)
+                            line = sr.ReadLine();
+                            if (dataline.IsMatch(line))
                             {
-                                line = sr.ReadLine();
-                                if (dataline.IsMatch(line))
+                                line = Regex.Replace(line, @"\s\s\t$", "");
+                                line = Regex.Replace(line, @"\s\t", "|");
+                                List<string> list = new List<string>(line.Split('|'));
+                                if (CommonFunc.IsSongId(list[1]) && list[2] != "")
                                 {
-                                    line = Regex.Replace(line, @"\s\s\t$", "");
-                                    line = Regex.Replace(line, @"\s\t", "|");
-                                    List<string> list = new List<string>(line.Split('|'));
-                                    if (CommonFunc.IsSongId(list[1]) && list[2] != "")
-                                    {
-                                        if (list[2] == "粵語") { hlist.Add(list[1]); }
-                                        else if (list[2] == "英語") { elist.Add(list[1]); }
-                                        else if (list[2] == "日語") { jlist.Add(list[1]); }
-                                    }
-                                    list.Clear();
-                                    list = null;
+                                    if (list[2] == "粵語") { hlist.Add(list[1]); }
+                                    else if (list[2] == "英語") { elist.Add(list[1]); }
+                                    else if (list[2] == "日語") { jlist.Add(list[1]); }
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }
@@ -2793,42 +2790,41 @@ namespace CrazyKTV_SongMgr
                     if (ms.Length > 0)
                     {
                         ms.Position = 0;
-                        using (StreamReader sr = new StreamReader(ms))
+                        string line = string.Empty;
+                        string type = string.Empty;
+                        Regex typeline = new Regex(@"^.{6}金曲$");
+                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
+
+                        StreamReader sr = new StreamReader(ms);
+                        while (!sr.EndOfStream)
                         {
-                            string line = string.Empty;
-                            string type = string.Empty;
-                            Regex typeline = new Regex(@"^.{6}金曲$");
-                            Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-                            while (!sr.EndOfStream)
+                            line = sr.ReadLine();
+                            if (typeline.IsMatch(line)) type = line;
+                            if (dataline.IsMatch(line))
                             {
-                                line = sr.ReadLine();
-                                if (typeline.IsMatch(line)) type = line;
-                                if (dataline.IsMatch(line))
+                                line = Regex.Replace(line, @"\s\s\t$", "");
+                                line = Regex.Replace(line, @"\s\t", "|");
+                                List<string> list = new List<string>(line.Split('|'));
+                                if (CommonFunc.IsSongId(list[0]))
                                 {
-                                    line = Regex.Replace(line, @"\s\s\t$", "");
-                                    line = Regex.Replace(line, @"\s\t", "|");
-                                    List<string> list = new List<string>(line.Split('|'));
-                                    if (CommonFunc.IsSongId(list[0]))
+                                    switch (type)
                                     {
-                                        switch (type)
-                                        {
-                                            case "三四年級國語金曲":
-                                                c34list.Add(list[0]);
-                                                break;
-                                            case "三四年級台語金曲":
-                                                t34list.Add(list[0]);
-                                                break;
-                                            case "五六年級國語金曲":
-                                                c56list.Add(list[0]);
-                                                break;
-                                            case "五六年級台語金曲":
-                                                t56list.Add(list[0]);
-                                                break;
-                                        }
+                                        case "三四年級國語金曲":
+                                            c34list.Add(list[0]);
+                                            break;
+                                        case "三四年級台語金曲":
+                                            t34list.Add(list[0]);
+                                            break;
+                                        case "五六年級國語金曲":
+                                            c56list.Add(list[0]);
+                                            break;
+                                        case "五六年級台語金曲":
+                                            t56list.Add(list[0]);
+                                            break;
                                     }
-                                    list.Clear();
-                                    list = null;
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }

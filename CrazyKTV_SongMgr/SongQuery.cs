@@ -1430,19 +1430,19 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "4":
-                        SongQueryType = "DuplicateSongIgnorebrackets";
+                        SongQueryType = "DuplicateSongIgnoreSongType";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "5":
-                        SongQueryType = "DuplicateSongIgnoreSinger";
+                        SongQueryType = "DuplicateSongIgnorebrackets";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
                     case "6":
-                        SongQueryType = "DuplicateSongIgnoreSongType";
+                        SongQueryType = "DuplicateSongIgnoreSinger";
                         SongQueryValue = "NA";
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
@@ -1554,6 +1554,62 @@ namespace CrazyKTV_SongMgr
                                     RemoveRowsIdxlist.Clear(); 
                                 }
                                 break;
+                            case "DuplicateSong":
+                            case "DuplicateSongIgnoreSongType":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                using (DataTable chorusdt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr("DuplicateSongOnlyChorusSinger", SongQueryValue), ""))
+                                {
+                                    if (chorusdt.Rows.Count > 0)
+                                    {
+                                        int rowid;
+                                        string SongLang = string.Empty;
+                                        string SongSinger = string.Empty;
+                                        string SongSongName = string.Empty;
+                                        string SongSongType = string.Empty;
+
+                                        List<int> rowidlist = new List<int>();
+                                        List<string> songdatalist = new List<string>();
+                                        foreach (DataRow row in chorusdt.Rows)
+                                        {
+                                            rowid = chorusdt.Rows.IndexOf(row);
+                                            List<string> list = CommonFunc.GetChorusSingerList(row["Song_Singer"].ToString());
+                                            list.Sort();
+
+                                            SongLang = row["Song_Lang"].ToString();
+                                            SongSinger = string.Join("|", list).ToLower();
+                                            SongSongName = row["Song_SongName"].ToString().ToLower();
+                                            SongSongType = row["Song_SongType"].ToString();
+                                            
+                                            if (songdatalist.IndexOf(SongLang + "|" + SongSinger + "|" + SongSongName + ((SongQueryType == "DuplicateSong") ? "|" + SongSongType : "")) >= 0)
+                                            {
+                                                int duprowid = songdatalist.IndexOf(SongLang + "|" + SongSinger + "|" + SongSongName + ((SongQueryType == "DuplicateSong") ? "|" + SongSongType : ""));
+                                                DataRow addrow = dt.NewRow();
+                                                foreach (DataColumn col in dt.Columns)
+                                                {
+                                                    addrow[col.ColumnName] = chorusdt.Rows[rowidlist[duprowid]][col.ColumnName];
+                                                }
+                                                if (dt.Rows.IndexOf(addrow) < 0) dt.Rows.Add(addrow);
+
+                                                addrow = dt.NewRow();
+                                                foreach (DataColumn col in dt.Columns)
+                                                {
+                                                    addrow[col.ColumnName] = row[col.ColumnName];
+                                                }
+                                                if (dt.Rows.IndexOf(addrow) < 0) dt.Rows.Add(addrow);
+                                            }
+                                            rowidlist.Add(rowid);
+                                            songdatalist.Add(SongLang + "|" + SongSinger + "|" + SongSongName + ((SongQueryType == "DuplicateSong") ? "|" + SongSongType : ""));
+                                            
+                                            list.Clear();
+                                            list = null;
+                                        }
+                                        rowidlist.Clear();
+                                        rowidlist = null;
+                                        songdatalist.Clear();
+                                        songdatalist = null;
+                                    }
+                                }
+                                break;
                             case "DuplicateSongIgnorebrackets":
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
 
@@ -1564,7 +1620,7 @@ namespace CrazyKTV_SongMgr
                                     Global.TotalList = new List<int>() { 0, 0, 0, 0 };
                                     this.BeginInvoke((Action)delegate()
                                     {
-                                        SongQuery_QueryStatus_Label.Text = "正在比對重複歌曲 (忽略括號),請稍待...";
+                                        SongQuery_QueryStatus_Label.Text = "正在比對重複歌曲 (忽略括號及歌曲類別),請稍待...";
                                     });
 
                                     Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
@@ -1577,10 +1633,23 @@ namespace CrazyKTV_SongMgr
                                         {
                                             List<string> SongDataList = new List<string>();
                                             List<int> RowIndexList = new List<int>();
+
                                             foreach (DataRow row in query)
                                             {
+                                                string SongSingerType = row["Song_SingerType"].ToString();
+                                                List<string> list = new List<string>();
+                                                if (SongSingerType == "3")
+                                                {
+                                                    list = CommonFunc.GetChorusSingerList(row["Song_Singer"].ToString());
+                                                    list.Sort();
+                                                }
+                                                else
+                                                {
+                                                    list.Add(row["Song_Singer"].ToString());
+                                                }
+
                                                 string SongLang = row["Song_Lang"].ToString();
-                                                string SongSinger = row["Song_Singer"].ToString();
+                                                string SongSinger = string.Join("|", list).ToLower();
                                                 string SongSongName = row["Song_SongName"].ToString();
                                                 string SongSongType = row["Song_SongType"].ToString();
                                                 SongSongName = Regex.Replace(SongSongName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
@@ -1589,6 +1658,8 @@ namespace CrazyKTV_SongMgr
                                                 string SongData = SongLang + "|" + SongSinger.ToLower() + "|" + SongSongName.ToLower();
                                                 SongDataList.Add(SongData);
                                                 RowIndexList.Add(dt.Rows.IndexOf(row));
+                                                list.Clear();
+                                                list = null;
                                             }
                                             
                                             if (SongDataList.Count > 0)
@@ -2915,7 +2986,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略括號)", "重複歌曲 (忽略歌手)", "重複歌曲 (忽略類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手未在資料庫", "歌手類別不符", "語系類別不符 (錢櫃)" };
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌曲類別)", "重複歌曲 (忽略括號及歌曲類別)", "重複歌曲 (忽略歌手及歌曲類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手未在資料庫", "歌手類別不符", "語系類別不符 (錢櫃)" };
 
                 foreach (string str in ItemList)
                 {

@@ -937,7 +937,7 @@
             this.SongQuery_FavoriteQuery_ComboBox.Location = new System.Drawing.Point(72, 58);
             this.SongQuery_FavoriteQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
             this.SongQuery_FavoriteQuery_ComboBox.Name = "SongQuery_FavoriteQuery_ComboBox";
-            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(200, 28);
+            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(240, 28);
             this.SongQuery_FavoriteQuery_ComboBox.TabIndex = 3;
             this.SongQuery_FavoriteQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_FavoriteQuery_ComboBox_SelectedIndexChanged);
             // 
@@ -971,7 +971,7 @@
             this.SongQuery_ExceptionalQuery_ComboBox.Location = new System.Drawing.Point(72, 12);
             this.SongQuery_ExceptionalQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SongQuery_ExceptionalQuery_ComboBox.Name = "SongQuery_ExceptionalQuery_ComboBox";
-            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(200, 28);
+            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(240, 28);
             this.SongQuery_ExceptionalQuery_ComboBox.TabIndex = 1;
             this.SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
             // 
