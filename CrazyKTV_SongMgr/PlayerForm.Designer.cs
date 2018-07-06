@@ -73,7 +73,7 @@
             this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(289, 550);
             this.Player_CurrentChannel_Label.Margin = new System.Windows.Forms.Padding(12, 9, 6, 10);
             this.Player_CurrentChannel_Label.Name = "Player_CurrentChannel_Label";
-            this.Player_CurrentChannel_Label.Size = new System.Drawing.Size(102, 25);
+            this.Player_CurrentChannel_Label.Size = new System.Drawing.Size(82, 21);
             this.Player_CurrentChannel_Label.TabIndex = 3;
             this.Player_CurrentChannel_Label.Text = "目前聲道: ";
             // 
@@ -99,7 +99,7 @@
             this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(397, 550);
             this.Player_CurrentChannelValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 10);
             this.Player_CurrentChannelValue_Label.Name = "Player_CurrentChannelValue_Label";
-            this.Player_CurrentChannelValue_Label.Size = new System.Drawing.Size(92, 25);
+            this.Player_CurrentChannelValue_Label.Size = new System.Drawing.Size(74, 21);
             this.Player_CurrentChannelValue_Label.TabIndex = 5;
             this.Player_CurrentChannelValue_Label.Text = "尚無資料";
             // 
@@ -131,7 +131,8 @@
             // 
             // PlayerForm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(682, 594);
             this.Controls.Add(this.Player_PlayControl_Button);
