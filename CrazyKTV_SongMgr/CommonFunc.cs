@@ -2320,8 +2320,8 @@ namespace CrazyKTV_SongMgr
 
             SongStr = Regex.Replace(SongStr, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", ""); // 排除計算括號字數
 
-            MatchCollection CJKCharMatches = Regex.Matches(SongStr, @"([\u2E80-\u2FFF]|[\u3040-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]|[\uac00-\ud7ff])");
-            int CharCount = Regex.Matches(SongStr, @"[0-9][0-9'\-.]*").Count + Regex.Matches(SongStr, @"[A-Za-z][A-Za-z'\-.]*").Count + CJKCharMatches.Count;
+            MatchCollection CJKCharMatches = Regex.Matches(SongStr, @"([\u2E80-\u2FFF]|[\u3040-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29\uFF10-\uFF19]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]|[\uac00-\ud7ff])");
+            int CharCount = Regex.Matches(SongStr, @"[0-9]").Count + Regex.Matches(SongStr, @"[A-Za-z][A-Za-z'\-.]*").Count + CJKCharMatches.Count;
 
             WordCountList[0] = CharCount.ToString();
             if (CJKCharMatches.Count == 0) { WordCountList[1] = "True"; }
