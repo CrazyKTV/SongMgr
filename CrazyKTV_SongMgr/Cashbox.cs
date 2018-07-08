@@ -291,35 +291,6 @@ namespace CrazyKTV_SongMgr
                         switch (SongQueryType)
                         {
                             case "SongName":
-                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
-
-                                if (Global.CashboxHasWideChar)
-                                {
-                                    List<int> RemoveRowsIdxlist = new List<int>();
-
-                                    var query = from row in dt.AsEnumerable()
-                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Song_SongName")).ToLower().Contains(CommonFunc.ConvToNarrow(SongQueryValue).ToLower())
-                                                select row;
-
-                                    if (query.Count<DataRow>() > 0)
-                                    {
-                                        foreach (DataRow row in query)
-                                        {
-                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                        }
-
-                                        RemoveRowsIdxlist.Sort();
-                                        if (RemoveRowsIdxlist.Count > 0)
-                                        {
-                                            for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
-                                            {
-                                                dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
-                                            }
-                                        }
-                                        RemoveRowsIdxlist.Clear();
-                                    }
-                                }
-
                                 if (Global.CashboxSynonymousQuery)
                                 {
                                     List<string> SynonymousSongNameList = new List<string>();
@@ -327,85 +298,48 @@ namespace CrazyKTV_SongMgr
 
                                     if (SynonymousSongNameList.Count > 0)
                                     {
-                                        DataTable SynonymousSongDT = new DataTable();
-                                        foreach (string SynonymousSongName in SynonymousSongNameList)
-                                        {
-                                            SynonymousSongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SynonymousSongName), "");
-                                            foreach (DataRow row in SynonymousSongDT.Rows)
-                                            {
-                                                dt.ImportRow(row);
-                                            }
-                                        }
-                                        SynonymousSongDT.Dispose();
-                                        SynonymousSongDT = null;
+                                        dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, SynonymousSongNameList), "");
                                     }
+                                    else
+                                    {
+                                        dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
+                                    }
+                                    SynonymousSongNameList.Clear();
+                                    SynonymousSongNameList = null;
+                                }
+                                else
+                                {
+                                    dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
                                 }
                                 break;
                             case "SingerName":
-                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
-
-                                if (Global.CashboxHasWideChar)
-                                {
-                                    List<int> RemoveRowsIdxlist = new List<int>();
-
-                                    var query = from row in dt.AsEnumerable()
-                                                where !CommonFunc.ConvToNarrow(row.Field<string>("Song_Singer")).ToLower().Contains(CommonFunc.ConvToNarrow(SongQueryValue).ToLower())
-                                                select row;
-
-                                    if (query.Count<DataRow>() > 0)
-                                    {
-                                        foreach (DataRow row in query)
-                                        {
-                                            RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                        }
-
-                                        RemoveRowsIdxlist.Sort();
-                                        if (RemoveRowsIdxlist.Count > 0)
-                                        {
-                                            for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
-                                            {
-                                                dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
-                                            }
-                                        }
-                                        RemoveRowsIdxlist.Clear();
-                                    }
-                                }
-
                                 if (Global.GroupSingerLowCaseList.IndexOf(SongQueryValue.ToLower()) >= 0)
                                 {
-                                    List<string> dtSongIdList = new List<string>();
-                                    foreach (DataRow row in dt.AsEnumerable())
-                                    {
-                                        dtSongIdList.Add(row["Cashbox_Id"].ToString());
-                                    }
+                                    List<string> GroupSingerList = new List<string>();
 
                                     int i = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(SongQueryValue.ToLower())];
                                     List<string> list = new List<string>(Global.SingerGroupList[i].Split(','));
-                                    if (list.Count > 0)
+                                    foreach (string GroupSingerName in list)
                                     {
-                                        foreach (string GroupSingerName in list)
+                                        if (GroupSingerName.ToLower() != SongQueryValue.ToLower())
                                         {
-                                            if (GroupSingerName.ToLower() != SongQueryValue.ToLower())
-                                            {
-                                                using (DataTable SingerGroupDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, GroupSingerName), ""))
-                                                {
-                                                    foreach (DataRow row in SingerGroupDT.Rows)
-                                                    {
-                                                        if (dtSongIdList.IndexOf(row["Cashbox_Id"].ToString()) < 0)
-                                                        {
-                                                            dtSongIdList.Add(row["Cashbox_Id"].ToString());
-                                                            dt.ImportRow(row);
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            GroupSingerList.Add(GroupSingerName);
                                         }
                                     }
-                                    dtSongIdList.Clear();
+                                    list.Clear();
+                                    list = null;
+
+                                    dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, GroupSingerList), "");
+                                    GroupSingerList.Clear();
+                                    GroupSingerList = null;
+                                }
+                                else
+                                {
+                                    dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
                                 }
                                 break;
                             default:
-                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
                                 break;
                         }
 
@@ -700,7 +634,7 @@ namespace CrazyKTV_SongMgr
                         switch (SongQueryType)
                         {
                             case "NonSong":
-                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
 
                                 if (dt.Rows.Count > 0)
                                 {
@@ -742,7 +676,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 break;
                             case "SongDate":
-                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
 
                                 string DateStr = DateTime.Parse(SongQueryValue).ToString("yyyy/MM/dd");
 
@@ -774,7 +708,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 break;
                             default:
-                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue), "");
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
                                 break;
                         }
 
@@ -1674,31 +1608,83 @@ namespace CrazyKTV_SongMgr
 
         #region --- Cashbox 取得 SQL 查詢字串 ---
 
-        public static string GetSongQuerySqlStr(string QueryType, string QueryValue)
+        public static string GetSongQuerySqlStr(string QueryType, string QueryValue, List<string> MultiQueryList)
         {
             string sqlCommonStr = " Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate, Song_HaveSong ";
-            string SongQuerySqlStr = "";
+            string SongQuerySqlStr = string.Empty;
+            string MultiQuerySqlStr = string.Empty;
             string SongQueryOrderStr = " order by Cashbox_Id";
-            string SongQueryFilterStr = "";
-            string QueryValueNarrow = QueryValue;
-            string QueryValueWide = QueryValue;
+            string SongQueryFilterStr = (Global.CashboxQueryFilter == "全部") ? "" : " and Song_Lang = '" + Global.CashboxQueryFilter + "'";
+            string SongQueryColumnName = string.Empty;
 
-            Global.CashboxHasWideChar = false;
+            List<string> QueryValueList = new List<string>();
 
             Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
+            Regex HasSymbols = new Regex("[']");
+
             if (QueryType == "SongName" | QueryType == "SingerName")
             {
-                if (Global.CashboxFuzzyQuery)
+                switch (QueryType)
                 {
-                    if (HasWideChar.IsMatch(QueryValue))
-                    {
-                        Global.CashboxHasWideChar = true;
-                        QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
-                        QueryValueWide = CommonFunc.ConvToWide(QueryValue);
-                    }
+                    case "SongName":
+                        SongQueryColumnName = "Song_SongName";
+                        break;
+                    case "SingerName":
+                        SongQueryColumnName = "Song_Singer";
+                        break;
                 }
 
-                Regex HasSymbols = new Regex("[']");
+                QueryValueList.Add(QueryValue);
+                if (MultiQueryList != null) QueryValueList.AddRange(MultiQueryList);
+
+                foreach (string value in QueryValueList)
+                {
+                    if (Global.CashboxFuzzyQuery)
+                    {
+                        string QueryValueDefault = value;
+                        if (HasWideChar.IsMatch(value))
+                        {
+                            string QueryValueNarrow = CommonFunc.ConvToNarrow(value);
+                            string QueryValueWide = CommonFunc.ConvToWide(value);
+
+                            if (HasSymbols.IsMatch(value))
+                            {
+                                QueryValueDefault = Regex.Replace(QueryValueDefault, "[']", delegate (Match match)
+                                {
+                                    string str = "'" + match.ToString();
+                                    return str;
+                                });
+                            }
+
+                            if (HasSymbols.IsMatch(QueryValueNarrow))
+                            {
+                                QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate (Match match)
+                                {
+                                    string str = "'" + match.ToString();
+                                    return str;
+                                });
+                            }
+                            if (value != QueryValue) MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueDefault + "'),0) <>0" + SongQueryFilterStr;
+                            if (QueryValueDefault != QueryValueNarrow) MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr;
+                            MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
+                        }
+                        else
+                        {
+                            if (HasSymbols.IsMatch(value))
+                            {
+                                QueryValueDefault = Regex.Replace(QueryValueDefault, "[']", delegate (Match match)
+                                {
+                                    string str = "'" + match.ToString();
+                                    return str;
+                                });
+                            }
+                            if (value != QueryValue) MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueDefault + "'),0) <>0" + SongQueryFilterStr;
+                        }
+                    }
+                }
+                QueryValueList.Clear();
+                QueryValueList = null;
+
                 if (HasSymbols.IsMatch(QueryValue))
                 {
                     QueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
@@ -1707,20 +1693,6 @@ namespace CrazyKTV_SongMgr
                         return str;
                     });
                 }
-
-                if (HasSymbols.IsMatch(QueryValueNarrow))
-                {
-                    QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate (Match match)
-                    {
-                        string str = "'" + match.ToString();
-                        return str;
-                    });
-                }
-            }
-
-            if (Global.CashboxQueryFilter != "全部")
-            {
-                SongQueryFilterStr = " and Song_Lang = '" + Global.CashboxQueryFilter + "'";
             }
 
             switch (QueryType)
@@ -1728,14 +1700,7 @@ namespace CrazyKTV_SongMgr
                 case "SongName":
                     if (Global.CashboxFuzzyQuery)
                     {
-                        if (Global.CashboxHasWideChar)
-                        {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
-                        }
-                        else
-                        {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr;
-                        }
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + MultiQuerySqlStr;
                     }
                     else
                     {
@@ -1745,14 +1710,7 @@ namespace CrazyKTV_SongMgr
                 case "SingerName":
                     if (Global.CashboxFuzzyQuery)
                     {
-                        if (Global.CashboxHasWideChar)
-                        {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
-                        }
-                        else
-                        {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr;
-                        }
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + MultiQuerySqlStr;
                     }
                     else
                     {

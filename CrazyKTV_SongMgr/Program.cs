@@ -280,7 +280,6 @@ namespace CrazyKTV_SongMgr
         public static string CashboxQueryFilter = "全部";
         public static string CashboxNonSymbolList = "、|。|！|，|．|？";
         public static bool CashboxSynonymousQuery = true;
-        public static bool CashboxHasWideChar = false;
 
         public static string RegexChorusSeparate = "[&+、]";
 

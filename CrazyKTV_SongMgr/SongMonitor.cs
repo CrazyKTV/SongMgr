@@ -33,8 +33,10 @@ namespace CrazyKTV_SongMgr
                 Global.MTotalList = new List<int>() { 0, 0, 0, 0 };
                 Common_SwitchSetUI(false);
 
-                var tasks = new List<Task>();
-                tasks.Add(Task.Factory.StartNew(() => SongMonitor_CheckCurSongTask()));
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMonitor_CheckCurSongTask())
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                 {
@@ -446,9 +448,10 @@ namespace CrazyKTV_SongMgr
                     SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
                     SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
 
-                    var tasks = new List<Task>();
-
-                    tasks.Add(Task.Factory.StartNew(() => SongMonitor_UpdateSongDBTask()));
+                    var tasks = new List<Task>()
+                    {
+                        Task.Factory.StartNew(() => SongMonitor_UpdateSongDBTask())
+                    };
 
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {

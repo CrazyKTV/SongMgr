@@ -15,10 +15,12 @@ namespace CrazyKTV_SongMgr
     {
         private void SongDBConverter_SrcDBFile_Button_Click(object sender, EventArgs e)
         {
-            OpenFileDialog opd = new OpenFileDialog();
-            opd.InitialDirectory = Application.StartupPath;
-            opd.Filter = "資料庫檔案 (*.mdb)|*.mdb";
-            opd.FilterIndex = 1;
+            OpenFileDialog opd = new OpenFileDialog()
+            {
+                InitialDirectory = Application.StartupPath,
+                Filter = "資料庫檔案 (*.mdb)|*.mdb",
+                FilterIndex = 1
+            };
             
             if (opd.ShowDialog() == DialogResult.OK && opd.FileName.Length > 0)
             {
@@ -106,10 +108,12 @@ namespace CrazyKTV_SongMgr
 
         private void SongDBConverter_DestDBFile_Button_Click(object sender, EventArgs e)
         {
-            OpenFileDialog opd = new OpenFileDialog();
-            opd.InitialDirectory = Application.StartupPath;
-            opd.Filter = "資料庫檔案 (*.mdb)|*.mdb";
-            opd.FilterIndex = 1;
+            OpenFileDialog opd = new OpenFileDialog()
+            {
+                InitialDirectory = Application.StartupPath,
+                Filter = "資料庫檔案 (*.mdb)|*.mdb",
+                FilterIndex = 1
+            };
 
             if (opd.ShowDialog() == DialogResult.OK && opd.FileName.Length > 0)
             {
@@ -266,8 +270,7 @@ namespace CrazyKTV_SongMgr
                 case "8":
                 case "9":
                 case "10":
-                    Global.SongDBConvJetktvLangList = new List<string>();
-                    Global.SongDBConvJetktvLangList.Add("未使用");
+                    Global.SongDBConvJetktvLangList = new List<string>() { "未使用" };
                     ComboBox[] SongDBConverter_JetktvLang_ComboBox = 
                     {
                         SongDBConverter_JetktvLang1_ComboBox,
@@ -469,11 +472,13 @@ namespace CrazyKTV_SongMgr
                         MaxSingerId++;
                     }
 
-                    valuelist = new List<string>();
-                    valuelist.Add(dt.Rows[i].Field<string>("Song_Singer"));
-                    valuelist.Add(dt.Rows[i].Field<Int16>("Song_SingerType").ToString());
-                    spelllist = new List<string>();
-                    spelllist = CommonFunc.GetSongNameSpell(valuelist[0]);
+                    valuelist = new List<string>()
+                    {
+                        dt.Rows[i].Field<string>("Song_Singer"),
+                        dt.Rows[i].Field<Int16>("Song_SingerType").ToString()
+                    };
+
+                    spelllist = new List<string>(CommonFunc.GetSongNameSpell(valuelist[0]));
 
                     singercmd.Parameters.AddWithValue("@SingerId", NextSingerId);
                     singercmd.Parameters.AddWithValue("@SingerName", valuelist[0]);
