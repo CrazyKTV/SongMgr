@@ -2888,29 +2888,11 @@ namespace CrazyKTV_SongMgr
             List<int> SongFileCount = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             string SongFilePath = "";
 
-            Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
+            Parallel.ForEach(SongStatisticsDT.AsEnumerable(), (row, loopState) =>
             {
-                var query = from row in SongStatisticsDT.AsEnumerable()
-                            where row.Field<string>("Song_Lang").Equals(langstr)
-                            select row;
-                if (query.Count<DataRow>() > 0)
-                {
-                    foreach (DataRow row in query)
-                    {
-                        SongFilePath = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
-                        if (File.Exists(SongFilePath)) SongFileCount[Global.CrazyktvSongLangList.IndexOf(langstr)]++;
-                    }
-                }
-                else
-                {
-                    SongFileCount[Global.CrazyktvSongLangList.IndexOf(langstr)] = 0;
-                }
+                SongFilePath = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
+                if (File.Exists(SongFilePath)) SongFileCount[10]++;
             });
-
-            for (int i = 0; i < 10; i++)
-            {
-                SongFileCount[10] += SongFileCount[i];
-            }
             return SongFileCount;
         }
 
