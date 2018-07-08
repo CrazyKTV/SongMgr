@@ -1029,6 +1029,7 @@ namespace CrazyKTV_SongMgr
                             list = null;
                         }
                     }
+                    sr.Close();
                 }
             }
             SongIdList.Clear();
