@@ -1681,7 +1681,6 @@ namespace CrazyKTV_SongMgr
             string SongQueryFilterStr = "";
             string QueryValueNarrow = QueryValue;
             string QueryValueWide = QueryValue;
-            string HasWideCharQueryValue = QueryValue;
 
             Global.CashboxHasWideChar = false;
 
@@ -1690,13 +1689,11 @@ namespace CrazyKTV_SongMgr
             {
                 if (Global.CashboxFuzzyQuery)
                 {
-                    if (HasWideChar.IsMatch(HasWideCharQueryValue))
+                    if (HasWideChar.IsMatch(QueryValue))
                     {
                         Global.CashboxHasWideChar = true;
                         QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
                         QueryValueWide = CommonFunc.ConvToWide(QueryValue);
-                        HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[\x21-\x7E\xFF01-\xFF5E]", "", RegexOptions.IgnoreCase);
-                        if (HasWideCharQueryValue == "" || HasWideCharQueryValue == " ") HasWideCharQueryValue = QueryValue;
                     }
                 }
 
@@ -1704,15 +1701,6 @@ namespace CrazyKTV_SongMgr
                 if (HasSymbols.IsMatch(QueryValue))
                 {
                     QueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
-                    {
-                        string str = "'" + match.ToString();
-                        return str;
-                    });
-                }
-
-                if (HasSymbols.IsMatch(HasWideCharQueryValue))
-                {
-                    HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[']", delegate (Match match)
                     {
                         string str = "'" + match.ToString();
                         return str;
@@ -1741,7 +1729,7 @@ namespace CrazyKTV_SongMgr
                     {
                         if (Global.CashboxHasWideChar)
                         {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + HasWideCharQueryValue + "'),0) <>0" + SongQueryFilterStr;
+                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_SongName),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
                         }
                         else
                         {
@@ -1758,7 +1746,7 @@ namespace CrazyKTV_SongMgr
                     {
                         if (Global.CashboxHasWideChar)
                         {
-                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + HasWideCharQueryValue + "'),0) <>0" + SongQueryFilterStr;
+                            SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Cashbox where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr + " or InStr(1,LCase(Song_Singer),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
                         }
                         else
                         {

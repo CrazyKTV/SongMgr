@@ -1616,35 +1616,23 @@ namespace CrazyKTV_SongMgr
             string SingerQueryOrderStr = " order by Singer_Name";
             string QueryValueNarrow = QueryValue;
             string QueryValueWide = QueryValue;
-            string HasWideCharQueryValue = QueryValue;
 
             Global.SingerMgrHasWideChar = false;
 
             Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
             if (QueryType == "SingerName")
             {
-                if (HasWideChar.IsMatch(HasWideCharQueryValue))
+                if (HasWideChar.IsMatch(QueryValue))
                 {
                     Global.SingerMgrHasWideChar = true;
                     QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
                     QueryValueWide = CommonFunc.ConvToWide(QueryValue);
-                    HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[\x21-\x7E\xFF01-\xFF5E]", "", RegexOptions.IgnoreCase);
-                    if (HasWideCharQueryValue == "" || HasWideCharQueryValue == " ") HasWideCharQueryValue = QueryValue;
                 }
 
                 Regex HasSymbols = new Regex("[']");
                 if (HasSymbols.IsMatch(QueryValue))
                 {
                     QueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
-                    {
-                        string str = "'" + match.ToString();
-                        return str;
-                    });
-                }
-
-                if (HasSymbols.IsMatch(HasWideCharQueryValue))
-                {
-                    HasWideCharQueryValue = Regex.Replace(HasWideCharQueryValue, "[']", delegate (Match match)
                     {
                         string str = "'" + match.ToString();
                         return str;
@@ -1666,7 +1654,7 @@ namespace CrazyKTV_SongMgr
                 case "SingerName":
                     if (Global.SingerMgrHasWideChar)
                     {
-                        SingerQuerySqlStr = "select" + sqlCommonStr + "from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueNarrow + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueWide + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + HasWideCharQueryValue + "'),0) <>0" + SingerQueryOrderStr;
+                        SingerQuerySqlStr = "select" + sqlCommonStr + "from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueNarrow + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueWide + "'),0) <>0" + SingerQueryOrderStr;
                     }
                     else
                     {
