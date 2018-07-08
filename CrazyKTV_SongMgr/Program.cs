@@ -169,7 +169,6 @@ namespace CrazyKTV_SongMgr
         public static string SongQueryFuzzyQuery = "True";
         public static string SongQueryFilter = "全部";
         public static bool SongQuerySynonymousQuery = true;
-        public static bool SongQueryHasWideChar = false;
 
         public static bool SongQueryMultiEdit;
         public static List<bool> SongQueryMultiEditUpdateList = new List<bool>() { false, false, false, false, false, false, false, false };
@@ -204,7 +203,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> SingerMgrDataGridViewSelectList = new List<string>();
         public static string SingerMgrDataGridViewRestoreCurrentRow = "";
         public static List<string> SingerMgrDataGridViewRestoreSelectList = new List<string>();
-        public static bool SingerMgrHasWideChar = false;
 
         public static bool CashboxMultiEdit;
         public static List<bool> CashboxMultiEditUpdateList = new List<bool>() { false, false, false };

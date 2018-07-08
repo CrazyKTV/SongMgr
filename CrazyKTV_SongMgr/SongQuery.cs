@@ -420,7 +420,6 @@ namespace CrazyKTV_SongMgr
                                     {
                                         if (GroupSingerName.ToLower() != SongQueryValue.ToLower())
                                         {
-                                            Console.WriteLine(GroupSingerName);
                                             GroupSingerList.Add(GroupSingerName);
                                         }
                                     }
@@ -2974,14 +2973,13 @@ namespace CrazyKTV_SongMgr
         {
             string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
             string SongQuerySqlStr = string.Empty;
-            string HasWideCharSqlStr = string.Empty;
+            string MultiQuerySqlStr = string.Empty;
             string SongQueryOrderStr = " order by Song_Id";
             string SongQueryFilterStr = (Global.SongQueryFilter == "全部") ? "" : " and Song_Lang = '" + Global.SongQueryFilter + "'";
             string SongQueryColumnName = string.Empty;
 
             List<string> QueryValueList = new List<string>();
 
-            Global.SongQueryHasWideChar = false;
             Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
             Regex HasSymbols = new Regex("[']");
 
@@ -3007,7 +3005,6 @@ namespace CrazyKTV_SongMgr
                         string QueryValueDefault = value;
                         if (HasWideChar.IsMatch(value))
                         {
-                            Global.SongQueryHasWideChar = true;
                             string QueryValueNarrow = CommonFunc.ConvToNarrow(value);
                             string QueryValueWide = CommonFunc.ConvToWide(value);
 
@@ -3028,9 +3025,9 @@ namespace CrazyKTV_SongMgr
                                     return str;
                                 });
                             }
-                            if (value != QueryValue) HasWideCharSqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueDefault + "'),0) <>0" + SongQueryFilterStr;
-                            if (QueryValueDefault != QueryValueNarrow) HasWideCharSqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr;
-                            HasWideCharSqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
+                            if (value != QueryValue) MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueDefault + "'),0) <>0" + SongQueryFilterStr;
+                            if (QueryValueDefault != QueryValueNarrow) MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueNarrow + "'),0) <>0" + SongQueryFilterStr;
+                            MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueWide + "'),0) <>0" + SongQueryFilterStr;
                         }
                         else
                         {
@@ -3042,7 +3039,7 @@ namespace CrazyKTV_SongMgr
                                     return str;
                                 });
                             }
-                            if (value != QueryValue) HasWideCharSqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueDefault + "'),0) <>0" + SongQueryFilterStr;
+                            if (value != QueryValue) MultiQuerySqlStr += " or InStr(1,LCase(" + SongQueryColumnName + "),LCase('" + QueryValueDefault + "'),0) <>0" + SongQueryFilterStr;
                         }
                     }
                 }
@@ -3064,7 +3061,7 @@ namespace CrazyKTV_SongMgr
                 case "SongName":
                     if (Global.SongQueryFuzzyQuery == "True")
                     {
-                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + HasWideCharSqlStr;
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_SongName),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + MultiQuerySqlStr;
                     }
                     else
                     {
@@ -3074,8 +3071,7 @@ namespace CrazyKTV_SongMgr
                 case "SingerName":
                     if (Global.SongQueryFuzzyQuery == "True")
                     {
-                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + HasWideCharSqlStr;
-                        Console.WriteLine(SongQuerySqlStr);
+                        SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song where InStr(1,LCase(Song_Singer),LCase('" + QueryValue + "'),0) <>0" + SongQueryFilterStr + MultiQuerySqlStr;
                     }
                     else
                     {

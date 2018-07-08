@@ -154,11 +154,34 @@ namespace CrazyKTV_SongMgr
             string SingerQuerySqlStr = string.Empty;
             if (QueryType == "SingerName")
             {
-                SingerQuerySqlStr = SingerMgr.GetSingerQuerySqlStr(QueryType, QueryValue);
+                if (Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower()) >= 0)
+                {
+                    List<string> GroupSingerList = new List<string>();
+
+                    int i = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower())];
+                    List<string> list = new List<string>(Global.SingerGroupList[i].Split(','));
+                    foreach (string GroupSingerName in list)
+                    {
+                        if (GroupSingerName.ToLower() != QueryValue.ToLower())
+                        {
+                            GroupSingerList.Add(GroupSingerName);
+                        }
+                    }
+                    list.Clear();
+                    list = null;
+
+                    SingerQuerySqlStr = SingerMgr.GetSingerQuerySqlStr(QueryType, QueryValue, GroupSingerList);
+                    GroupSingerList.Clear();
+                    GroupSingerList = null;
+                }
+                else
+                {
+                    SingerQuerySqlStr = SingerMgr.GetSingerQuerySqlStr(QueryType, QueryValue, null);
+                }
             }
             else
             {
-                SingerQuerySqlStr = SingerMgr.GetSingerQuerySqlStr(QueryType, SingerType);
+                SingerQuerySqlStr = SingerMgr.GetSingerQuerySqlStr(QueryType, SingerType, null);
             }
 
             if (Global.CrazyktvDatabaseStatus)
@@ -168,76 +191,6 @@ namespace CrazyKTV_SongMgr
                     string DatabaseFile = (Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile;
                     using (DataTable dt = CommonFunc.GetOleDbDataTable(DatabaseFile, SingerQuerySqlStr, ""))
                     {
-                        List<string> GroupSingerList = new List<string>();
-
-                        if (QueryType == "SingerName")
-                        {
-                            if (Global.SingerMgrHasWideChar)
-                            {
-                                List<int> RemoveRowsIdxlist = new List<int>();
-
-                                var query = from row in dt.AsEnumerable()
-                                            where !CommonFunc.ConvToNarrow(row.Field<string>("Singer_Name")).ToLower().Contains(CommonFunc.ConvToNarrow(QueryValue).ToLower())
-                                            select row;
-
-                                if (query.Count<DataRow>() > 0)
-                                {
-                                    foreach (DataRow row in query)
-                                    {
-                                        if (GroupSingerList.Count > 0)
-                                        {
-                                            if (GroupSingerList.IndexOf(row.Field<string>("Singer_Name")) < 0)
-                                            {
-                                                RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
-                                            }
-                                        }
-                                    }
-
-                                    if (RemoveRowsIdxlist.Count > 0)
-                                    {
-                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
-                                        {
-                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower()) >= 0)
-                            {
-                                List<string> dtSingerIdList = new List<string>();
-                                foreach (DataRow row in dt.AsEnumerable())
-                                {
-                                    dtSingerIdList.Add(row["Singer_Id"].ToString());
-                                }
-
-                                int i = Global.GroupSingerIdList[Global.GroupSingerLowCaseList.IndexOf(QueryValue.ToLower())];
-                                GroupSingerList.AddRange(Global.SingerGroupList[i].Split(','));
-                                if (GroupSingerList.Count > 0)
-                                {
-                                    foreach (string GroupSingerName in GroupSingerList)
-                                    {
-                                        if (GroupSingerName.ToLower() != QueryValue.ToLower())
-                                        {
-                                            SingerQuerySqlStr = SingerMgr.GetSingerQuerySqlStr(QueryType, GroupSingerName);
-                                            using (DataTable SingerGroupDT = CommonFunc.GetOleDbDataTable(DatabaseFile, SingerQuerySqlStr, ""))
-                                            {
-                                                foreach (DataRow row in SingerGroupDT.Rows)
-                                                {
-                                                    if (dtSingerIdList.IndexOf(row["Singer_Id"].ToString()) < 0)
-                                                    {
-                                                        dtSingerIdList.Add(row["Singer_Id"].ToString());
-                                                        dt.ImportRow(row);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                dtSingerIdList.Clear();
-                            }
-                        }
-
                         if (dt.Rows.Count == 0)
                         {
                             this.BeginInvoke((Action)delegate()
@@ -296,7 +249,6 @@ namespace CrazyKTV_SongMgr
                                 }
                             });
                         }
-                        GroupSingerList.Clear();
                     }
                 }
                 catch
@@ -1609,27 +1561,67 @@ namespace CrazyKTV_SongMgr
 
         #region --- SingerMgr 取得 SQL 查詢字串 ---
 
-        public static string GetSingerQuerySqlStr(string QueryType, string QueryValue)
+        public static string GetSingerQuerySqlStr(string QueryType, string QueryValue, List<string> MultiQueryList)
         {
             string sqlCommonStr = " Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle ";
-            string SingerQuerySqlStr = "";
+            string SingerQuerySqlStr = string.Empty;
+            string MultiQuerySqlStr = string.Empty;
             string SingerQueryOrderStr = " order by Singer_Name";
-            string QueryValueNarrow = QueryValue;
-            string QueryValueWide = QueryValue;
 
-            Global.SingerMgrHasWideChar = false;
+            List<string> QueryValueList = new List<string>();
 
             Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
+            Regex HasSymbols = new Regex("[']");
+
             if (QueryType == "SingerName")
             {
-                if (HasWideChar.IsMatch(QueryValue))
+                QueryValueList.Add(QueryValue);
+                if (MultiQueryList != null) QueryValueList.AddRange(MultiQueryList);
+
+                foreach (string value in QueryValueList)
                 {
-                    Global.SingerMgrHasWideChar = true;
-                    QueryValueNarrow = CommonFunc.ConvToNarrow(QueryValue);
-                    QueryValueWide = CommonFunc.ConvToWide(QueryValue);
+                    string QueryValueDefault = value;
+
+                    if (HasWideChar.IsMatch(value))
+                    {
+                        string QueryValueNarrow = CommonFunc.ConvToNarrow(value);
+                        string QueryValueWide = CommonFunc.ConvToWide(value);
+
+                        if (HasSymbols.IsMatch(value))
+                        {
+                            QueryValueDefault = Regex.Replace(QueryValueDefault, "[']", delegate (Match match)
+                            {
+                                string str = "'" + match.ToString();
+                                return str;
+                            });
+                        }
+
+                        if (HasSymbols.IsMatch(QueryValueNarrow))
+                        {
+                            QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate (Match match)
+                            {
+                                string str = "'" + match.ToString();
+                                return str;
+                            });
+                        }
+                        if (value != QueryValue) MultiQuerySqlStr += " or InStr(1,LCase(Singer_Name),LCase('" + QueryValueDefault + "'),0) <>0";
+                        if (QueryValueDefault != QueryValueNarrow) MultiQuerySqlStr += " or InStr(1,LCase(Singer_Name),LCase('" + QueryValueNarrow + "'),0) <>0";
+                        MultiQuerySqlStr += " or InStr(1,LCase(Singer_Name),LCase('" + QueryValueWide + "'),0) <>0";
+                    }
+                    else
+                    {
+                        if (HasSymbols.IsMatch(value))
+                        {
+                            QueryValueDefault = Regex.Replace(QueryValueDefault, "[']", delegate (Match match)
+                            {
+                                string str = "'" + match.ToString();
+                                return str;
+                            });
+                        }
+                        if (value != QueryValue) MultiQuerySqlStr += " or InStr(1,LCase(Singer_Name),LCase('" + QueryValueDefault + "'),0) <>0";
+                    }
                 }
 
-                Regex HasSymbols = new Regex("[']");
                 if (HasSymbols.IsMatch(QueryValue))
                 {
                     QueryValue = Regex.Replace(QueryValue, "[']", delegate (Match match)
@@ -1638,31 +1630,17 @@ namespace CrazyKTV_SongMgr
                         return str;
                     });
                 }
-
-                if (HasSymbols.IsMatch(QueryValueNarrow))
-                {
-                    QueryValueNarrow = Regex.Replace(QueryValueNarrow, "[']", delegate (Match match)
-                    {
-                        string str = "'" + match.ToString();
-                        return str;
-                    });
-                }
             }
+            QueryValueList.Clear();
+            QueryValueList = null;
 
             switch (QueryType)
             {
                 case "SingerName":
-                    if (Global.SingerMgrHasWideChar)
-                    {
-                        SingerQuerySqlStr = "select" + sqlCommonStr + "from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueNarrow + "'),0) <>0 or InStr(1,LCase(Singer_Name),LCase('" + QueryValueWide + "'),0) <>0" + SingerQueryOrderStr;
-                    }
-                    else
-                    {
-                        SingerQuerySqlStr = "select" + sqlCommonStr + "from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0" + SingerQueryOrderStr;
-                    }
+                    SingerQuerySqlStr = "select" + sqlCommonStr + "from " + Global.SingerMgrDefaultSingerDataTable + " where InStr(1,LCase(Singer_Name),LCase('" + QueryValue + "'),0) <>0" + MultiQuerySqlStr + SingerQueryOrderStr;
                     break;
                 case "SingerType":
-                    SingerQuerySqlStr = "select " + sqlCommonStr + " from " + Global.SingerMgrDefaultSingerDataTable + " where Singer_Type = '" + QueryValue + "'" + SingerQueryOrderStr;
+                    SingerQuerySqlStr = "select" + sqlCommonStr + "from " + Global.SingerMgrDefaultSingerDataTable + " where Singer_Type = '" + QueryValue + "'" + SingerQueryOrderStr;
                     break;
             }
             return SingerQuerySqlStr;
