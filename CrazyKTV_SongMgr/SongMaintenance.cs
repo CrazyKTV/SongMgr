@@ -2412,7 +2412,6 @@ namespace CrazyKTV_SongMgr
                                 list = null;
                             }
                         }
-                        sr.Close();
                     }
                 }
 
@@ -2539,7 +2538,6 @@ namespace CrazyKTV_SongMgr
                                 list = null;
                             }
                         }
-                        sr.Close();
                     }
                 }
 
@@ -2669,7 +2667,6 @@ namespace CrazyKTV_SongMgr
                                 list = null;
                             }
                         }
-                        sr.Close();
                     }
                 }
 
@@ -2830,7 +2827,6 @@ namespace CrazyKTV_SongMgr
                                 list = null;
                             }
                         }
-                        sr.Close();
                     }
                 }
 

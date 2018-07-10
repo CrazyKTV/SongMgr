@@ -149,7 +149,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "Cashbox_EditSongSinger_TextBox":
                 case "Cashbox_EditSongSongName_TextBox":
+                    #if DEBUG
                     if (Cashbox_EditMode_CheckBox.Checked && Global.CashboxMultiEdit) MultiEdit = true;
+                    #endif
                     i = 5;
                     break;
                 case "MainCfg_UIScale_TextBox":
@@ -2891,7 +2893,7 @@ namespace CrazyKTV_SongMgr
             Parallel.ForEach(SongStatisticsDT.AsEnumerable(), (row, loopState) =>
             {
                 SongFilePath = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
-                if (File.Exists(SongFilePath)) SongFileCount[10]++;
+                if (File.Exists(SongFilePath)) lock(LockThis) SongFileCount[10]++;
             });
             return SongFileCount;
         }

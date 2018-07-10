@@ -1130,7 +1130,7 @@ namespace CrazyKTV_SongMgr
 
         private void Cashbox_EditMode_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-#if DEBUG
+            #if DEBUG
             if (Cashbox_EditMode_CheckBox.Checked == true)
             {
                 Cashbox_DataGridView.Size = new Size(Convert.ToInt32(952 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor), Convert.ToInt32(270 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor));
@@ -1164,7 +1164,7 @@ namespace CrazyKTV_SongMgr
                 Cashbox_QueryStatus_Label.Text = "已進入檢視模式...";
             }
             Cashbox_DataGridView.Focus();
-#endif
+        #endif
         }
 
         private void Cashbox_EditSongLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
