@@ -541,12 +541,15 @@ namespace CrazyKTV_SongMgr
                             string FuzzyStr = string.Empty;
                             string SongSingerFuzzyStr = string.Empty;
                             string SongSongNameFuzzyStr = string.Empty;
+                            Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
+
                             foreach (string SongData in Global.CashboxSongDataLowCaseList)
                             {
                                 SongLang = Global.CashboxSongDataLangList[Global.CashboxSongDataLowCaseList.IndexOf(SongData)];
                                 List<string> list = new List<string>(SongData.Split('|'));
                                 SongSingerFuzzyStr = Regex.Replace(list[0], @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList , "");
                                 SongSongNameFuzzyStr = Regex.Replace(list[1], @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "");
+                                if ( HasWideChar.IsMatch(SongSongNameFuzzyStr)) SongSongNameFuzzyStr = CommonFunc.ConvToNarrow(SongSongNameFuzzyStr);
 
                                 FuzzyStr = SongSingerFuzzyStr + "|" + SongSongNameFuzzyStr;
 
@@ -568,6 +571,7 @@ namespace CrazyKTV_SongMgr
                                 }
                                 Global.CashboxSongDataFuzzyList.Add(FuzzyStr);
                                 list.Clear();
+                                list = null;
                             }
                         }
                     }));
@@ -592,6 +596,8 @@ namespace CrazyKTV_SongMgr
                             }
                             Global.SongAddSpecialStr = (Global.SongAddSpecialStr == "") ? SongAddSpecialStr : SongAddSpecialStr + Global.SongAddSpecialStr;
                             Global.SongAddSpecialStr = Regex.Replace(Global.SongAddSpecialStr, @"\|$", "");
+                            SpecialStrLowCaselist.Clear();
+                            SpecialStrLowCaselist = null;
                         }
                     }));
                 }
@@ -607,7 +613,6 @@ namespace CrazyKTV_SongMgr
                         if (Global.SongMgrSingerGroup != "")
                         {
                             List<string> SingerGroupList = new List<string>(Regex.Split(Global.SongMgrSingerGroup.ToLower(), @"\|", RegexOptions.IgnoreCase));
-
                             foreach (string SingerGroup in SingerGroupList)
                             {
                                 Global.SingerGroupList.Add(SingerGroup);
@@ -622,6 +627,8 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
                             }
+                            SingerGroupList.Clear();
+                            SingerGroupList = null;
                         }
 
                         string SongQuerySqlStr = "select * from ktv_SongMgr where Config_Type = 'SingerGroup' order by Config_Value";
@@ -685,6 +692,7 @@ namespace CrazyKTV_SongMgr
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
+                        Global.CashboxHaveSongList = new List<string>();
                         string CashboxLogFile = Application.StartupPath + @"\SongMgr\CashboxLog.txt";
                         if (File.Exists(CashboxLogFile))
                         {
@@ -705,6 +713,7 @@ namespace CrazyKTV_SongMgr
                     TaskFinished = true;
                 });
                 SpinWait.SpinUntil(() => TaskFinished == true);
+                GC.Collect();
                 Global.InitializeSongData = true;
 
                 this.BeginInvoke((Action)delegate()
@@ -3325,8 +3334,11 @@ namespace CrazyKTV_SongMgr
             string result = string.Empty;
             string findresult = string.Empty;
             string SongData = string.Empty;
+            Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
+            
             string SongSingerFuzzyStr = Regex.Replace(SongSinger, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "");
             string SongSongNameFuzzyStr = Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "");
+            if (HasWideChar.IsMatch(SongSongNameFuzzyStr)) SongSongNameFuzzyStr = CommonFunc.ConvToNarrow(SongSongNameFuzzyStr);
 
             switch (MatchType)
             {
@@ -3387,7 +3399,9 @@ namespace CrazyKTV_SongMgr
         public static List<string> GetFuzzyMatchList(string MatchType, string SongLang, string SongSongName)
         {
             List<string> result = new List<string>();
+            Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
             string SongSongNameFuzzyStr = Regex.Replace(SongSongName, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "");
+            if (HasWideChar.IsMatch(SongSongNameFuzzyStr)) SongSongNameFuzzyStr = CommonFunc.ConvToNarrow(SongSongNameFuzzyStr);
 
             switch (MatchType)
             {
