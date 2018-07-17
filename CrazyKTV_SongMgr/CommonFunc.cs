@@ -77,6 +77,7 @@ namespace CrazyKTV_SongMgr
                     i = 1;
                     break;
                 case "SongMaintenance_VolumeChange_TextBox":
+                case "SongMaintenance_ReplayGain_TextBox":
                     i = 4;
                     break;
                 case "MainCfg_UIScale_TextBox":
@@ -191,6 +192,7 @@ namespace CrazyKTV_SongMgr
                     case "SongQuery_EditSongVolume_TextBox":
                     case "SongAdd_DefaultSongVolume_TextBox":
                     case "SongMaintenance_VolumeChange_TextBox":
+                    case "SongMaintenance_ReplayGain_TextBox":
                     case "SongAdd_EditSongVolume_TextBox":
                         if (int.Parse(((TextBox)sender).Text) > 100)
                         {
@@ -221,6 +223,7 @@ namespace CrazyKTV_SongMgr
                     case "SongQuery_EditSongPlayCount_TextBox":
                     case "SongAdd_DefaultSongVolume_TextBox":
                     case "SongMaintenance_VolumeChange_TextBox":
+                    case "SongMaintenance_ReplayGain_TextBox":
                     case "SongAdd_EditSongVolume_TextBox":
                     case "SongAdd_EditSongPlayCount_TextBox":
                     case "MainCfg_UIScale_TextBox":
@@ -1749,12 +1752,23 @@ namespace CrazyKTV_SongMgr
             xmldoc.Save(ConfigFile);
         }
 
-        public static string LoadConfigXmlFile(string ConfigFile, string ConfigName)
+        public static string LoadConfigXmlFile(string ConfigFile, string ConfigName, Stream stream, bool isStream)
         {
             string Value = "";
             try
             {
-                XElement rootElement = XElement.Load(ConfigFile);
+                XElement rootElement;
+
+                if (isStream)
+                {
+                    stream.Position = 0;
+                    rootElement = XElement.Load(stream);
+                }
+                else
+                {
+                    rootElement = XElement.Load(ConfigFile);
+                }
+
                 var Query = from childNode in rootElement.Elements("setting")
                             where (string)childNode.Attribute("Name") == ConfigName
                             select childNode;

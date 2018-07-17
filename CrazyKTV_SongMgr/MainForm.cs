@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -133,7 +134,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", Global.MainCfgBackupRemoveSongDays);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath); // 已無用處
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList)); // 已無用處
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
@@ -153,57 +154,57 @@ namespace CrazyKTV_SongMgr
 
             List<string> list = new List<string>()
             { 
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSupportFormat"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongAddMode"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrChorusMerge"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMaxDigitCode"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrLangCode"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongInfoSeparate"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrChorusSeparate"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongLang"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSingerType"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongTrack"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongType"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongVolume"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrFolderStructure"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrFileStructure"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongTrackMode"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop"),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongDBConverterTabPage"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrDefaultSingerDataTable"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB"),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath")
-        };
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvDatabaseFile", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSupportFormat", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrDestFolder", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongAddMode", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrChorusMerge", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMaxDigitCode", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrLangCode", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongInfoSeparate", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrChorusSeparate", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongLang", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSingerType", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongTrack", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongType", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDefaultSongVolume", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddSpecialStr", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrFolderStructure", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrFileStructure", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongTrackMode", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddSongIdentificationMode", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddDupSongMode", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangStr", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangKeyWord", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongDBConverterTabPage", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupRemoveSongDays", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrDefaultSingerDataTable", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", null, false), // 已無用處
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrCustomSingerTypeStructure", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableAutoUpdate", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrEnableMonitorFolders", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMonitorFolders", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SingerMgrSyncSongSinger", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSingerGroup", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", null, false)
+            };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
             {
@@ -347,7 +348,7 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                string str = CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr");
+                string str = CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongLangIDStr", null, false);
                 Global.CrazyktvSongLangKeyWordList = new List<string>(str.Split('*'));
                 if (Global.CrazyktvSongLangKeyWordList.Count < 10)
                 {
@@ -408,10 +409,8 @@ namespace CrazyKTV_SongMgr
             MainCfg_UIScale_ComboBox.ValueMember = "Value";
             MainCfg_UIScale_ComboBox.SelectedValue = Global.MainCfgUIScale;
 
-            if (list[34] != "") Global.SongMaintenanceEnableMultiSongPath = list[34]; // 已無用處
-            SongMaintenance_EnableMultiSongPath_CheckBox.Checked = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
-            SongMaintenance_MultiSongPath_ListBox.Enabled = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
-            SongMaintenance_MultiSongPath_Button.Enabled = bool.Parse(Global.SongMaintenanceEnableMultiSongPath);
+            if (list[34] != "") Global.SongMaintenanceReplayGainVolume = list[34];
+            SongMaintenance_ReplayGain_TextBox.Text = Global.SongMaintenanceReplayGainVolume;
 
             if (list[35] != "") Global.SongMaintenanceMultiSongPathList = new List<string>(list[35].Split(',')); // 已無用處
             SongMaintenance_MultiSongPath_ListBox.DataSource = SongMaintenance.GetMultiSongPathList();
@@ -661,6 +660,7 @@ namespace CrazyKTV_SongMgr
                     switch (SongMaintenance_TabControl.SelectedTab.Name)
                     {
                         case "SongMaintenance_CustomLang_TabPage":
+                        case "SongMaintenance_FFmpeg_TabPage":
                         case "SongMaintenance_DBVer_TabPage":
                             if (SongMaintenance_TabControl.Enabled == true) SongMaintenance_Save_Button.Enabled = true;
                             break;
@@ -800,6 +800,162 @@ namespace CrazyKTV_SongMgr
                     SongMgrCfg_UpdateStructure_Button.Visible = false;
                     break;
             }
+        }
+
+
+        private void SongMaintenance_ReplayGain_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要使用音量平衡功能來變更音量嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                if (SongMaintenance_ReplayGain_TextBox.Text != Global.SongMaintenanceReplayGainVolume)
+                {
+                    Global.SongMaintenanceReplayGainVolume = SongMaintenance_ReplayGain_TextBox.Text;
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
+                }
+
+                SongMaintenance_Tooltip_Label.Text = "正在使用音量平衡功能來變更音量,請稍待...";
+
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_ReplayGain_VolumeChangeTask())
+                };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), VolumeChangeEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的音量資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            }
+        }
+
+        private void SongMaintenance_ReplayGain_VolumeChangeTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
+            List<string> list = new List<string>();
+
+            Parallel.ForEach(Global.SongDT.AsEnumerable(), (row, loopState) =>
+            {
+                lock (LockThis)
+                {
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "正在解析第 " + (list.Count + 1) + " 首歌曲的音量資料,請稍待...";
+                    });
+                }
+
+                string file = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
+                string gain = row["Song_ReplayGain"].ToString();
+
+                if (gain != "")
+                {
+                    double GainDB = Convert.ToDouble(gain);
+                    string SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20)).ToString();
+                    lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + row["Song_Id"].ToString());
+                }
+                else
+                {
+                    FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file, Convert.ToInt32(Global.SongMaintenanceReplayGainVolume));
+                    lock (LockThis) list.Add(result.SongVolume + "|" + result.GainDB + "|" + row["Song_Id"].ToString());
+                }
+                
+            });
+            Console.WriteLine(list.Count);
+
+            if (list.Count > 0)
+            {
+                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                {
+                    int mCount = 0;
+                    int lCount = 0;
+
+                    string sqlColumnStr = "Song_Volume = @SongVolume, Song_ReplayGain = @SongReplayGain";
+                    string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
+                    using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
+                    {
+                        List<string> valuelist = new List<string>();
+
+                        foreach (string str in list)
+                        {
+                            valuelist = new List<string>(str.Split('|'));
+
+                            if (Convert.ToInt32(valuelist[0]) > 100)
+                            {
+                                valuelist[0] = "100";
+                                mCount++;
+                            }
+                            else if (Convert.ToInt32(valuelist[0]) < 10)
+                            {
+                                valuelist[0] = "10";
+                                lCount++;
+                            }
+
+                            cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
+                            cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[1]);
+                            cmd.Parameters.AddWithValue("@SongId", valuelist[2]);
+
+                            try
+                            {
+                                cmd.ExecuteNonQuery();
+                                lock (LockThis) Global.TotalList[0]++;
+                            }
+                            catch
+                            {
+                                lock (LockThis) Global.TotalList[1]++;
+
+                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】更新資料庫時發生錯誤: " + str;
+                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                            }
+                            cmd.Parameters.Clear();
+                            valuelist.Clear();
+                            valuelist = null;
+
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的音量資料,請稍待...";
+                            });
+                        }
+                        list.Clear();
+                        list = null;
+                    }
+
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】檢測到 " + mCount.ToString() + " 首音量大於 100 的歌曲,已自動變更為 100。";
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】檢測到 " + lCount.ToString() + " 首音量小於 10 的歌曲,已自動變更為 10。";
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    if (mCount > lCount)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】建議調低基準音量。";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    else if (lCount > mCount)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】建議調高基準音量。";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                }
+            }
+
+                
+
+
+        
         }
 
 

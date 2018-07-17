@@ -22,7 +22,7 @@ namespace CrazyKTV_SongMgr
             {
                 case "儲存設定":
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
-                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceEnableMultiSongPath", Global.SongMaintenanceEnableMultiSongPath);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                     break;
                 case "更新語系":
@@ -3080,7 +3080,7 @@ namespace CrazyKTV_SongMgr
                     SongMaintenance_Save_Button.Text = "更新語系";
                     SongMaintenance_Save_Button.Enabled = true;
                     break;
-                case "SongMaintenance_MultiSongPath_TabPage":
+                case "SongMaintenance_FFmpeg_TabPage":
                     SongMaintenance_Save_Button.Text = "儲存設定";
                     SongMaintenance_Save_Button.Enabled = true;
                     break;
@@ -3313,7 +3313,7 @@ namespace CrazyKTV_SongMgr
         public static void CreateSongDataTable()
         {
             Global.SongDT = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path from ktv_Song order by Song_Id";
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path, Song_ReplayGain from ktv_Song order by Song_Id";
             Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
             Global.SingerList = new List<string>();
@@ -3350,11 +3350,17 @@ namespace CrazyKTV_SongMgr
         public static void DisposeSongDataTable()
         {
             Global.SingerList.Clear();
+            Global.SingerList = null;
             Global.SingerLowCaseList.Clear();
+            Global.SingerLowCaseList = null;
             Global.SingerTypeList.Clear();
+            Global.SingerTypeList = null;
             Global.AllSingerList.Clear();
+            Global.AllSingerList = null;
             Global.AllSingerLowCaseList.Clear();
+            Global.AllSingerLowCaseList = null;
             Global.AllSingerTypeList.Clear();
+            Global.AllSingerTypeList = null;
             Global.SongDT.Dispose();
             Global.SongDT = null;
             Global.SingerDT.Dispose();

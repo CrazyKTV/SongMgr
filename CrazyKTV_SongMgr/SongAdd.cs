@@ -860,7 +860,7 @@ namespace CrazyKTV_SongMgr
                             break;
                     }
 
-                    if (CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType") != Global.SongMgrSongType)
+                    if (CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", null, false) != Global.SongMgrSongType)
                     {
                         CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", Global.SongMgrSongType);
                     }
@@ -1003,7 +1003,7 @@ namespace CrazyKTV_SongMgr
                     Global.TimerEndTime = DateTime.Now;
                     SongAdd_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 首重複歌曲,移除原有歌曲 " + Global.TotalList[4] + " 首,失敗 " + Global.TotalList[2] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成更新。";
 
-                    if (CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType") != Global.SongMgrSongType)
+                    if (CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", null, false) != Global.SongMgrSongType)
                     {
                         CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrSongType", Global.SongMgrSongType);
                     }

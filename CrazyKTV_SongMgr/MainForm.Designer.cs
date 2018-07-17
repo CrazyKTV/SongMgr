@@ -426,6 +426,11 @@
             this.SongMaintenance_MultiSongPath_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_MultiSongPath_ListBox = new System.Windows.Forms.ListBox();
             this.SongMaintenance_EnableMultiSongPath_CheckBox = new System.Windows.Forms.CheckBox();
+            this.SongMaintenance_FFmpeg_TabPage = new System.Windows.Forms.TabPage();
+            this.SongMaintenance_ReplayGain_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongMaintenance_ReplayGain_TextBox = new System.Windows.Forms.TextBox();
+            this.SongMaintenance_ReplayGain_Label = new System.Windows.Forms.Label();
+            this.SongMaintenance_ReplayGain_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_DBVer_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_DBVerUpdate_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_EnableDBVerUpdate_CheckBox = new System.Windows.Forms.CheckBox();
@@ -647,6 +652,8 @@
             this.SongMaintenance_Favorite_TabPage.SuspendLayout();
             this.SongMaintenance_CustomLang_TabPage.SuspendLayout();
             this.SongMaintenance_MultiSongPath_TabPage.SuspendLayout();
+            this.SongMaintenance_FFmpeg_TabPage.SuspendLayout();
+            this.SongMaintenance_ReplayGain_GroupBox.SuspendLayout();
             this.SongMaintenance_DBVer_TabPage.SuspendLayout();
             this.SongMaintenance_DBVerUpdate_GroupBox.SuspendLayout();
             this.SongMaintenance_DBVerTooltip_GroupBox.SuspendLayout();
@@ -4755,6 +4762,7 @@
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_Favorite_TabPage);
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_CustomLang_TabPage);
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_MultiSongPath_TabPage);
+            this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_FFmpeg_TabPage);
             this.SongMaintenance_TabControl.Controls.Add(this.SongMaintenance_DBVer_TabPage);
             this.SongMaintenance_TabControl.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMaintenance_TabControl.Location = new System.Drawing.Point(382, 136);
@@ -5706,6 +5714,70 @@
             this.SongMaintenance_EnableMultiSongPath_CheckBox.Text = "啟用多重歌庫資料夾支援";
             this.SongMaintenance_EnableMultiSongPath_CheckBox.UseVisualStyleBackColor = true;
             this.SongMaintenance_EnableMultiSongPath_CheckBox.CheckedChanged += new System.EventHandler(this.SongMaintenance_EnableMultiSongPath_CheckBox_CheckedChanged);
+            // 
+            // SongMaintenance_FFmpeg_TabPage
+            // 
+            this.SongMaintenance_FFmpeg_TabPage.Controls.Add(this.SongMaintenance_ReplayGain_GroupBox);
+            this.SongMaintenance_FFmpeg_TabPage.Location = new System.Drawing.Point(4, 30);
+            this.SongMaintenance_FFmpeg_TabPage.Margin = new System.Windows.Forms.Padding(2);
+            this.SongMaintenance_FFmpeg_TabPage.Name = "SongMaintenance_FFmpeg_TabPage";
+            this.SongMaintenance_FFmpeg_TabPage.Padding = new System.Windows.Forms.Padding(10, 14, 10, 14);
+            this.SongMaintenance_FFmpeg_TabPage.Size = new System.Drawing.Size(584, 436);
+            this.SongMaintenance_FFmpeg_TabPage.TabIndex = 5;
+            this.SongMaintenance_FFmpeg_TabPage.Text = "FFmpeg";
+            this.SongMaintenance_FFmpeg_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // SongMaintenance_ReplayGain_GroupBox
+            // 
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_TextBox);
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_Label);
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_Button);
+            this.SongMaintenance_ReplayGain_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_ReplayGain_GroupBox.Location = new System.Drawing.Point(16, 18);
+            this.SongMaintenance_ReplayGain_GroupBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 2);
+            this.SongMaintenance_ReplayGain_GroupBox.Name = "SongMaintenance_ReplayGain_GroupBox";
+            this.SongMaintenance_ReplayGain_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.SongMaintenance_ReplayGain_GroupBox.Size = new System.Drawing.Size(342, 96);
+            this.SongMaintenance_ReplayGain_GroupBox.TabIndex = 3;
+            this.SongMaintenance_ReplayGain_GroupBox.TabStop = false;
+            this.SongMaintenance_ReplayGain_GroupBox.Text = "音量平衡";
+            // 
+            // SongMaintenance_ReplayGain_TextBox
+            // 
+            this.SongMaintenance_ReplayGain_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_ReplayGain_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.SongMaintenance_ReplayGain_TextBox.Location = new System.Drawing.Point(110, 40);
+            this.SongMaintenance_ReplayGain_TextBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 9);
+            this.SongMaintenance_ReplayGain_TextBox.MaxLength = 3;
+            this.SongMaintenance_ReplayGain_TextBox.Name = "SongMaintenance_ReplayGain_TextBox";
+            this.SongMaintenance_ReplayGain_TextBox.Size = new System.Drawing.Size(134, 29);
+            this.SongMaintenance_ReplayGain_TextBox.TabIndex = 1;
+            this.SongMaintenance_ReplayGain_TextBox.Text = "50";
+            this.SongMaintenance_ReplayGain_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
+            this.SongMaintenance_ReplayGain_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            // 
+            // SongMaintenance_ReplayGain_Label
+            // 
+            this.SongMaintenance_ReplayGain_Label.AutoSize = true;
+            this.SongMaintenance_ReplayGain_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_ReplayGain_Label.Location = new System.Drawing.Point(16, 44);
+            this.SongMaintenance_ReplayGain_Label.Margin = new System.Windows.Forms.Padding(6, 14, 6, 12);
+            this.SongMaintenance_ReplayGain_Label.Name = "SongMaintenance_ReplayGain_Label";
+            this.SongMaintenance_ReplayGain_Label.Size = new System.Drawing.Size(77, 20);
+            this.SongMaintenance_ReplayGain_Label.TabIndex = 0;
+            this.SongMaintenance_ReplayGain_Label.Text = "基準音量:";
+            // 
+            // SongMaintenance_ReplayGain_Button
+            // 
+            this.SongMaintenance_ReplayGain_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_ReplayGain_Button.Location = new System.Drawing.Point(256, 39);
+            this.SongMaintenance_ReplayGain_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SongMaintenance_ReplayGain_Button.Name = "SongMaintenance_ReplayGain_Button";
+            this.SongMaintenance_ReplayGain_Button.Size = new System.Drawing.Size(70, 32);
+            this.SongMaintenance_ReplayGain_Button.TabIndex = 2;
+            this.SongMaintenance_ReplayGain_Button.Text = "變更";
+            this.SongMaintenance_ReplayGain_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_ReplayGain_Button.Click += new System.EventHandler(this.SongMaintenance_ReplayGain_Button_Click);
             // 
             // SongMaintenance_DBVer_TabPage
             // 
@@ -8041,6 +8113,9 @@
             this.SongMaintenance_CustomLang_TabPage.PerformLayout();
             this.SongMaintenance_MultiSongPath_TabPage.ResumeLayout(false);
             this.SongMaintenance_MultiSongPath_TabPage.PerformLayout();
+            this.SongMaintenance_FFmpeg_TabPage.ResumeLayout(false);
+            this.SongMaintenance_ReplayGain_GroupBox.ResumeLayout(false);
+            this.SongMaintenance_ReplayGain_GroupBox.PerformLayout();
             this.SongMaintenance_DBVer_TabPage.ResumeLayout(false);
             this.SongMaintenance_DBVer_TabPage.PerformLayout();
             this.SongMaintenance_DBVerUpdate_GroupBox.ResumeLayout(false);
@@ -8661,6 +8736,11 @@
         private System.Windows.Forms.ComboBox SongMaintenance_Favorite_UpdateNewsong_ComboBox;
         private System.Windows.Forms.Label SongMaintenance_Favorite_UpdateNewsong_Label;
         private System.Windows.Forms.Button Debug_CashboxUpdateSong_Button;
+        private System.Windows.Forms.TabPage SongMaintenance_FFmpeg_TabPage;
+        private System.Windows.Forms.GroupBox SongMaintenance_ReplayGain_GroupBox;
+        private System.Windows.Forms.TextBox SongMaintenance_ReplayGain_TextBox;
+        private System.Windows.Forms.Label SongMaintenance_ReplayGain_Label;
+        private System.Windows.Forms.Button SongMaintenance_ReplayGain_Button;
     }
 }
 
