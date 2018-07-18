@@ -111,6 +111,7 @@ namespace CrazyKTV_SongMgr
             DupSongAddDT.Columns.Add("Song_PlayState", typeof(int));
             DupSongAddDT.Columns.Add("Song_SrcPath", typeof(string));
             DupSongAddDT.Columns.Add("Song_SortIndex", typeof(string));
+            DupSongAddDT.Columns.Add("Song_ReplayGain", typeof(string));
         }
 
         public static void DisposeSongDataTable()
@@ -189,6 +190,7 @@ namespace CrazyKTV_SongMgr
                         row2["Song_PlayState"] = SongAddDT.Rows[i].Field<int>("Song_PlayState");
                         row2["Song_SrcPath"] = SongAddDT.Rows[i].Field<string>("Song_SrcPath");
                         row2["Song_SortIndex"] = "1";
+                        row2["Song_ReplayGain"] = SongAddDT.Rows[i].Field<string>("Song_ReplayGain");
                         DupSongAddDT.Rows.Add(row2);
                         break;
                     case "3":
@@ -217,6 +219,7 @@ namespace CrazyKTV_SongMgr
                             row3["Song_PlayState"] = SongAddDT.Rows[i].Field<int>("Song_PlayState");
                             row3["Song_SrcPath"] = SongAddDT.Rows[i].Field<string>("Song_SrcPath");
                             row3["Song_SortIndex"] = "1";
+                            row3["Song_ReplayGain"] = SongAddDT.Rows[i].Field<string>("Song_ReplayGain");
                             DupSongAddDT.Rows.Add(row3);
                         }
                         else
@@ -253,6 +256,7 @@ namespace CrazyKTV_SongMgr
                 int SongSongStroke = SongAddDT.Rows[i].Field<int>("Song_SongStroke");
                 string SongPenStyle = SongAddDT.Rows[i].Field<string>("Song_PenStyle");
                 int SongPlayState = SongAddDT.Rows[i].Field<int>("Song_PlayState");
+                string SongReplayGain = SongAddDT.Rows[i].Field<string>("Song_ReplayGain");
 
                 string SongAddSinger = "0";
                 string SongAddAllSinger = "0";
@@ -570,7 +574,7 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError && !SingerNameisEmpty)
                     {
-                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger;
+                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger + "|" + SongReplayGain;
                         SongAddSong.SongAddValueList.Add(SongAddValue);
 
                         lock (LockThis)
@@ -610,6 +614,7 @@ namespace CrazyKTV_SongMgr
             int SongPlayState = DupSongAddDT.Rows[i].Field<int>("Song_PlayState");
             string SongSrcPath = DupSongAddDT.Rows[i].Field<string>("Song_SrcPath");
             string SongExtension = Path.GetExtension(SongSrcPath);
+            string SongReplayGain = DupSongAddDT.Rows[i].Field<string>("Song_ReplayGain");
 
             // 判斷是否要新增歌曲類別
             if (SongSongType != "")
@@ -772,7 +777,7 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError)
                     {
-                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState;
+                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongReplayGain;
                         SongAddSong.SongAddValueList.Add(SongAddValue);
                         lock (LockThis) { Global.TotalList[3]++; }
                     }

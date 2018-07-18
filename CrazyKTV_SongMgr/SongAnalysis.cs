@@ -53,6 +53,7 @@ namespace CrazyKTV_SongMgr
             SongAnalysisDT.Columns.Add("Song_PlayState", typeof(int));
             SongAnalysisDT.Columns.Add("Song_SrcPath", typeof(string));
             SongAnalysisDT.Columns.Add("Song_SortIndex", typeof(string));
+            SongAnalysisDT.Columns.Add("Song_ReplayGain", typeof(string));
 
             SongAnalysisSongList = new List<string>();
 
@@ -156,6 +157,7 @@ namespace CrazyKTV_SongMgr
             string SongPlayState = "";
             string SongSrcPath = Path.GetFullPath(file);
             string SongSortIndex = "";
+            string SongReplayGain = "";
 
             string SongLangStr = "";
             string SongSingerTypeStr = "";
@@ -457,7 +459,18 @@ namespace CrazyKTV_SongMgr
             // 套用預設歌曲音量
             if (SongVolume == "")
             {
-                SongVolume = Global.SongAddDefaultSongVolume;
+                if (Global.SongAddEnableVolumeDetect == "True")
+                {
+                    FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file, Convert.ToInt32(Global.SongMaintenanceReplayGainVolume));
+                    SongReplayGain = result.GainDB.ToString();
+                    if (result.SongVolume > 100) result.SongVolume = 100;
+                    if (result.SongVolume < 10) result.SongVolume = 10;
+                    SongVolume = result.SongVolume.ToString();
+                }
+                else
+                {
+                    SongVolume = Global.SongAddDefaultSongVolume;
+                }
             }
 
             int FileStrCount = 0;
@@ -862,16 +875,16 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex);
+                    CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex, SongReplayGain);
                 }
             }
             else
             {
-                CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex);
+                CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex, SongReplayGain);
             }
         }
 
-        public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, DateTime SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex)
+        public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, DateTime SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex, string SongReplayGain)
         {
             lock (LockThis)
             {
@@ -896,6 +909,7 @@ namespace CrazyKTV_SongMgr
                 row["Song_PlayState"] = SongPlayState;
                 row["Song_SrcPath"] = SongSrcPath;
                 row["Song_SortIndex"] = SongSortIndex;
+                row["Song_ReplayGain"] = SongReplayGain;
 
                 CommonFunc.DupSongStatus DupSongStatus = CommonFunc.IsDupSong(SongLang, SongSinger, Convert.ToInt32(SongSingerType), SongSongName, SongSongType, SongAnalysisSongList);
                 if (!DupSongStatus.IsDupSong)

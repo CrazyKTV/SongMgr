@@ -135,7 +135,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", Global.MainCfgUIScale);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList)); // 已無用處
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableVolumeDetect", Global.SongAddEnableVolumeDetect);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", Global.MainCfgUIFont);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", Global.MainCfgEnableUIScale);
@@ -189,7 +189,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIScale", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", null, false), // 已無用處
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableVolumeDetect", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUIFont", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgEnableUIScale", null, false),
@@ -412,10 +412,8 @@ namespace CrazyKTV_SongMgr
             if (list[34] != "") Global.SongMaintenanceReplayGainVolume = list[34];
             SongMaintenance_ReplayGain_TextBox.Text = Global.SongMaintenanceReplayGainVolume;
 
-            if (list[35] != "") Global.SongMaintenanceMultiSongPathList = new List<string>(list[35].Split(',')); // 已無用處
-            SongMaintenance_MultiSongPath_ListBox.DataSource = SongMaintenance.GetMultiSongPathList();
-            SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
-            SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
+            if (list[35] != "") Global.SongAddEnableVolumeDetect = list[35];
+            SongAdd_EnableVolumeDetect_CheckBox.Checked = bool.Parse(Global.SongAddEnableVolumeDetect);
 
             if (list[36] != "") Global.SongAddUseCustomSongID = list[36];
             SongAdd_UseCustomSongID_CheckBox.Checked = bool.Parse(Global.SongAddUseCustomSongID);
@@ -802,6 +800,10 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
+
+
 
 
 

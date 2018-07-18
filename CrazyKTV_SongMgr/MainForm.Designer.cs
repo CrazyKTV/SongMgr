@@ -147,6 +147,7 @@
             this.SongAdd_DefaultSingerType_Label = new System.Windows.Forms.Label();
             this.SongAdd_DefaultSongLang_Label = new System.Windows.Forms.Label();
             this.SongAdd_SongAddCfg_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongAdd_EnableVolumeDetect_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_EnableConvToTC_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_UseCustomSongID_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongAdd_EngSongNameFormat_CheckBox = new System.Windows.Forms.CheckBox();
@@ -945,7 +946,7 @@
             this.SongQuery_FavoriteQuery_ComboBox.Location = new System.Drawing.Point(72, 58);
             this.SongQuery_FavoriteQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
             this.SongQuery_FavoriteQuery_ComboBox.Name = "SongQuery_FavoriteQuery_ComboBox";
-            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(240, 28);
+            this.SongQuery_FavoriteQuery_ComboBox.Size = new System.Drawing.Size(260, 28);
             this.SongQuery_FavoriteQuery_ComboBox.TabIndex = 3;
             this.SongQuery_FavoriteQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_FavoriteQuery_ComboBox_SelectedIndexChanged);
             // 
@@ -979,7 +980,7 @@
             this.SongQuery_ExceptionalQuery_ComboBox.Location = new System.Drawing.Point(72, 12);
             this.SongQuery_ExceptionalQuery_ComboBox.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
             this.SongQuery_ExceptionalQuery_ComboBox.Name = "SongQuery_ExceptionalQuery_ComboBox";
-            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(240, 28);
+            this.SongQuery_ExceptionalQuery_ComboBox.Size = new System.Drawing.Size(260, 28);
             this.SongQuery_ExceptionalQuery_ComboBox.TabIndex = 1;
             this.SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
             // 
@@ -2085,6 +2086,7 @@
             // 
             // SongAdd_SongAddCfg_GroupBox
             // 
+            this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_EnableVolumeDetect_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_EnableConvToTC_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_UseCustomSongID_CheckBox);
             this.SongAdd_SongAddCfg_GroupBox.Controls.Add(this.SongAdd_EngSongNameFormat_CheckBox);
@@ -2102,12 +2104,25 @@
             this.SongAdd_SongAddCfg_GroupBox.TabStop = false;
             this.SongAdd_SongAddCfg_GroupBox.Text = "加歌設定";
             // 
+            // SongAdd_EnableVolumeDetect_CheckBox
+            // 
+            this.SongAdd_EnableVolumeDetect_CheckBox.AutoSize = true;
+            this.SongAdd_EnableVolumeDetect_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_EnableVolumeDetect_CheckBox.Location = new System.Drawing.Point(20, 234);
+            this.SongAdd_EnableVolumeDetect_CheckBox.Margin = new System.Windows.Forms.Padding(10, 5, 6, 5);
+            this.SongAdd_EnableVolumeDetect_CheckBox.Name = "SongAdd_EnableVolumeDetect_CheckBox";
+            this.SongAdd_EnableVolumeDetect_CheckBox.Size = new System.Drawing.Size(282, 24);
+            this.SongAdd_EnableVolumeDetect_CheckBox.TabIndex = 7;
+            this.SongAdd_EnableVolumeDetect_CheckBox.Text = "分析歌曲時啟用音量偵測功能 (緩慢)";
+            this.SongAdd_EnableVolumeDetect_CheckBox.UseVisualStyleBackColor = true;
+            this.SongAdd_EnableVolumeDetect_CheckBox.CheckedChanged += new System.EventHandler(this.SongAdd_EnableVolumeDetect_CheckBox_CheckedChanged);
+            // 
             // SongAdd_EnableConvToTC_CheckBox
             // 
             this.SongAdd_EnableConvToTC_CheckBox.AutoSize = true;
             this.SongAdd_EnableConvToTC_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EnableConvToTC_CheckBox.Location = new System.Drawing.Point(20, 215);
-            this.SongAdd_EnableConvToTC_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
+            this.SongAdd_EnableConvToTC_CheckBox.Location = new System.Drawing.Point(20, 200);
+            this.SongAdd_EnableConvToTC_CheckBox.Margin = new System.Windows.Forms.Padding(10, 5, 6, 5);
             this.SongAdd_EnableConvToTC_CheckBox.Name = "SongAdd_EnableConvToTC_CheckBox";
             this.SongAdd_EnableConvToTC_CheckBox.Size = new System.Drawing.Size(220, 24);
             this.SongAdd_EnableConvToTC_CheckBox.TabIndex = 6;
@@ -2119,8 +2134,8 @@
             // 
             this.SongAdd_UseCustomSongID_CheckBox.AutoSize = true;
             this.SongAdd_UseCustomSongID_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_UseCustomSongID_CheckBox.Location = new System.Drawing.Point(20, 178);
-            this.SongAdd_UseCustomSongID_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
+            this.SongAdd_UseCustomSongID_CheckBox.Location = new System.Drawing.Point(20, 166);
+            this.SongAdd_UseCustomSongID_CheckBox.Margin = new System.Windows.Forms.Padding(10, 5, 6, 5);
             this.SongAdd_UseCustomSongID_CheckBox.Name = "SongAdd_UseCustomSongID_CheckBox";
             this.SongAdd_UseCustomSongID_CheckBox.Size = new System.Drawing.Size(236, 24);
             this.SongAdd_UseCustomSongID_CheckBox.TabIndex = 5;
@@ -2132,8 +2147,8 @@
             // 
             this.SongAdd_EngSongNameFormat_CheckBox.AutoSize = true;
             this.SongAdd_EngSongNameFormat_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_EngSongNameFormat_CheckBox.Location = new System.Drawing.Point(20, 139);
-            this.SongAdd_EngSongNameFormat_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 6);
+            this.SongAdd_EngSongNameFormat_CheckBox.Location = new System.Drawing.Point(20, 132);
+            this.SongAdd_EngSongNameFormat_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 5);
             this.SongAdd_EngSongNameFormat_CheckBox.Name = "SongAdd_EngSongNameFormat_CheckBox";
             this.SongAdd_EngSongNameFormat_CheckBox.Size = new System.Drawing.Size(236, 24);
             this.SongAdd_EngSongNameFormat_CheckBox.TabIndex = 4;
@@ -8756,6 +8771,7 @@
         private System.Windows.Forms.Label SongMaintenance_ReplayGain_Label;
         private System.Windows.Forms.Button SongMaintenance_ReplayGain_Button;
         private System.Windows.Forms.Button SongMaintenance_ReplayGainReset_Button;
+        private System.Windows.Forms.CheckBox SongAdd_EnableVolumeDetect_CheckBox;
     }
 }
 

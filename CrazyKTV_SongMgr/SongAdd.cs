@@ -51,6 +51,7 @@ namespace CrazyKTV_SongMgr
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddUseCustomSongID", Global.SongAddUseCustomSongID);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableConvToTC", Global.SongAddEnableConvToTC);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEnableVolumeDetect", Global.SongAddEnableVolumeDetect);
                     break;
                 case "取消更新":
                     SongAdd_Add_Button.Text = "加入歌庫";
@@ -127,6 +128,11 @@ namespace CrazyKTV_SongMgr
         private void SongAdd_EnableConvToTC_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.SongAddEnableConvToTC = SongAdd_EnableConvToTC_CheckBox.Checked.ToString();
+        }
+
+        private void SongAdd_EnableVolumeDetect_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.SongAddEnableVolumeDetect = SongAdd_EnableVolumeDetect_CheckBox.Checked.ToString();
         }
 
         private void SongAdd_SpecialStr_ListBox_Enter(object sender, EventArgs e)
@@ -598,8 +604,19 @@ namespace CrazyKTV_SongMgr
 
             OleDbConnection SongAddConn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState";
-            string sqlValuesStr = "@SongId, @SongLang, @SongSingerType, @SongSinger, @SongSongName, @SongTrack, @SongSongType, @SongVolume, @SongWordCount, @SongPlayCount, @SongMB, @SongCreatDate, @SongFileName, @SongPath, @SongSpell, @SongSpellNum, @SongSongStroke, @SongPenStyle, @SongPlayState";
+
+            string sqlColumnStr = string.Empty;
+            string sqlValuesStr = string.Empty;
+            if (Global.SongAddEnableVolumeDetect == "True")
+            {
+                sqlColumnStr = "Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState, Song_ReplayGain";
+                sqlValuesStr = "@SongId, @SongLang, @SongSingerType, @SongSinger, @SongSongName, @SongTrack, @SongSongType, @SongVolume, @SongWordCount, @SongPlayCount, @SongMB, @SongCreatDate, @SongFileName, @SongPath, @SongSpell, @SongSpellNum, @SongSongStroke, @SongPenStyle, @SongPlayState, @SongReplayGain";
+            }
+            else
+            {
+                sqlColumnStr = "Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState";
+                sqlValuesStr = "@SongId, @SongLang, @SongSingerType, @SongSinger, @SongSongName, @SongTrack, @SongSongType, @SongVolume, @SongWordCount, @SongPlayCount, @SongMB, @SongCreatDate, @SongFileName, @SongPath, @SongSpell, @SongSpellNum, @SongSongStroke, @SongPenStyle, @SongPlayState";
+            }
             string SongAddSqlStr = "insert into ktv_Song ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
             cmd = new OleDbCommand(SongAddSqlStr, SongAddConn);
 
@@ -642,6 +659,7 @@ namespace CrazyKTV_SongMgr
                     cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
                     cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
                     cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
+                    if (Global.SongAddEnableVolumeDetect == "True") cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[21]);
 
                     try
                     {
@@ -944,8 +962,19 @@ namespace CrazyKTV_SongMgr
 
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
             OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId";
+            string sqlColumnStr = string.Empty;
+            string SongUpdateSqlStr = string.Empty;
+            if (Global.SongAddEnableVolumeDetect == "True")
+            {
+                sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState, Song_ReplayGain = @SongReplayGain";
+                SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId";
+            }
+            else
+            {
+                sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState";
+                SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId";
+            }
+
             cmd = new OleDbCommand(SongUpdateSqlStr, conn);
             List<string> valuelist = new List<string>();
 
@@ -972,6 +1001,7 @@ namespace CrazyKTV_SongMgr
                 cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
                 cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
                 cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
+                if (Global.SongAddEnableVolumeDetect == "True") cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[19]);
                 cmd.Parameters.AddWithValue("@OldSongId", valuelist[0]);
 
                 try
@@ -1771,6 +1801,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "Song_AddStatus":
                     list = new List<string>() { "加歌狀況", ColumnWidth_240, "none" };
+                    break;
+                case "Song_ReplayGain":
+                    list = new List<string>() { "播放增益", "0", "none" };
                     break;
             }
             return list;

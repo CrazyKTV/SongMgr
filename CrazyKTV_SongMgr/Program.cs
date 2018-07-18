@@ -89,6 +89,7 @@ namespace CrazyKTV_SongMgr
         public static string SongAddEngSongNameFormat = "False";
         public static string SongAddUseCustomSongID = "False";
         public static string SongAddEnableConvToTC = "False";
+        public static string SongAddEnableVolumeDetect = "False";
 
         public static string MainCfgAlwaysOnTop = "False";
         public static string MainCfgEnableAutoUpdate = "True";
