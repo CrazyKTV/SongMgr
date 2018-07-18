@@ -479,6 +479,7 @@ namespace CrazyKTV_SongMgr
 
                 if (InitSongId)
                 {
+                    SpinWait.SpinUntil(() => Global.DatabaseUpdateFinished == true);
                     int MaxDigitCode;
                     if (Global.SongMgrMaxDigitCode == "1") { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
                     tasks.Add(Task.Factory.StartNew(() => CommonFunc.GetMaxSongId(MaxDigitCode)));
@@ -718,12 +719,12 @@ namespace CrazyKTV_SongMgr
                 SpinWait.SpinUntil(() => TaskFinished == true);
                 GC.Collect();
                 Global.InitializeSongData = true;
-
                 this.BeginInvoke((Action)delegate()
                 {
                     SongQuery_QueryStatus_Label.Text = "資料初始化已完成。";
                     SongAdd_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
                     SongMgrCfg_Tooltip_Label.Text = SongQuery_QueryStatus_Label.Text;
+                    Common_SwitchDBVerErrorUI(Global.SongMgrDBVerErrorUIStatus);
                 });
             }
         }
@@ -1931,23 +1932,21 @@ namespace CrazyKTV_SongMgr
             return list;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢視 SQL 查詢中是否有安全性弱點")]
         public static List<string> GetOleDbColumnList(string Database, string Password, string TableName)
         {
             List<string> list = new List<string>();
 
             using (OleDbConnection conn = OleDbOpenConn(Database, Password))
             {
-                using (OleDbCommand cmd = new OleDbCommand("select * from " + TableName, conn))
+                String[] Restrictions = new String[4];
+                Restrictions[2] = TableName;
+                using (DataTable dt = conn.GetSchema("Columns", Restrictions))
                 {
-                    using (OleDbDataReader Reader = cmd.ExecuteReader())
+                    if (dt.Rows.Count > 0)
                     {
-                        using (DataTable dt = Reader.GetSchemaTable())
+                        foreach (DataRow row in dt.AsEnumerable())
                         {
-                            foreach (DataRow row in dt.AsEnumerable())
-                            {
-                                list.Add(row["ColumnName"].ToString());
-                            }
+                            list.Add(row["COLUMN_NAME"].ToString());
                         }
                     }
                 }
@@ -1970,10 +1969,9 @@ namespace CrazyKTV_SongMgr
                 "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + mdwfilename + ".tmp;Jet OLEDB:Engine Type=5"
             };
 
-            objJRO.GetType().InvokeMember("CompactDatabase", System.Reflection.BindingFlags.InvokeMethod, null, objJRO, oParams);
-
             try
             {
+                objJRO.GetType().InvokeMember("CompactDatabase", System.Reflection.BindingFlags.InvokeMethod, null, objJRO, oParams);
                 File.Copy(mdwfilename + ".tmp", mdwfilename, true);
             }
             catch

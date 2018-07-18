@@ -16,7 +16,8 @@ namespace CrazyKTV_SongMgr
         private static StreamReader RunFFmpeg(string fileName, string arguments)
         {
             if (!File.Exists(FFmpegPath)) return null;
-
+            
+            StreamReader sr;
             using (Process p = new Process())
             {
                 p.StartInfo.RedirectStandardError = true;
@@ -25,8 +26,10 @@ namespace CrazyKTV_SongMgr
                 p.StartInfo.FileName = fileName;
                 p.StartInfo.Arguments = arguments;
                 p.Start();
-                return p.StandardError;
+                sr = p.StandardError;
+                p.Close();
             }
+            return sr;
         }
 
         public class SongVolumeValue

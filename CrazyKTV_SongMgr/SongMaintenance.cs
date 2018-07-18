@@ -3293,6 +3293,157 @@ namespace CrazyKTV_SongMgr
         #endregion
 
 
+        #region --- FFmpeg - 音量平衡 ---
+
+        private void SongMaintenance_ReplayGain_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要使用音量平衡功能來變更音量嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                if (SongMaintenance_ReplayGain_TextBox.Text != Global.SongMaintenanceReplayGainVolume)
+                {
+                    Global.SongMaintenanceReplayGainVolume = SongMaintenance_ReplayGain_TextBox.Text;
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
+                }
+
+                SongMaintenance_Tooltip_Label.Text = "正在使用音量平衡功能來變更音量,請稍待...";
+
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_ReplayGain_VolumeChangeTask())
+                };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), VolumeChangeEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的音量資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            }
+        }
+
+        private void SongMaintenance_ReplayGain_VolumeChangeTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
+            List<string> list = new List<string>();
+
+            Parallel.ForEach(Global.SongDT.AsEnumerable(), new ParallelOptions { MaxDegreeOfParallelism = 2 }, (row, loopState) =>
+            {
+                this.BeginInvoke((Action)delegate ()
+                {
+                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + (list.Count + 1) + " 首歌曲的音量資料,請稍待...";
+                });
+
+                string file = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
+                string gain = row["Song_ReplayGain"].ToString();
+
+                if (gain != "")
+                {
+                    double GainDB = Convert.ToDouble(gain);
+                    string SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20)).ToString();
+                    lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + row["Song_Id"].ToString());
+                }
+                else
+                {
+                    FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file, Convert.ToInt32(Global.SongMaintenanceReplayGainVolume));
+                    lock (LockThis) list.Add(result.SongVolume + "|" + result.GainDB + "|" + row["Song_Id"].ToString());
+                }
+            });
+            Console.WriteLine(list.Count);
+
+            if (list.Count > 0)
+            {
+                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                {
+                    int mCount = 0;
+                    int lCount = 0;
+
+                    string sqlColumnStr = "Song_Volume = @SongVolume, Song_ReplayGain = @SongReplayGain";
+                    string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
+                    using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
+                    {
+                        List<string> valuelist = new List<string>();
+
+                        foreach (string str in list)
+                        {
+                            valuelist = new List<string>(str.Split('|'));
+
+                            if (Convert.ToInt32(valuelist[0]) > 100)
+                            {
+                                valuelist[0] = "100";
+                                mCount++;
+                            }
+                            else if (Convert.ToInt32(valuelist[0]) < 10)
+                            {
+                                valuelist[0] = "10";
+                                lCount++;
+                            }
+
+                            cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
+                            cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[1]);
+                            cmd.Parameters.AddWithValue("@SongId", valuelist[2]);
+
+                            try
+                            {
+                                cmd.ExecuteNonQuery();
+                                lock (LockThis) Global.TotalList[0]++;
+                            }
+                            catch
+                            {
+                                lock (LockThis) Global.TotalList[1]++;
+
+                                Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】更新資料庫時發生錯誤: " + str;
+                                Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                            }
+                            cmd.Parameters.Clear();
+                            valuelist.Clear();
+                            valuelist = null;
+
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的音量資料,請稍待...";
+                            });
+                        }
+                        list.Clear();
+                        list = null;
+                    }
+
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】檢測到 " + mCount.ToString() + " 首音量大於 100 的歌曲,已自動變更為 100。";
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】檢測到 " + lCount.ToString() + " 首音量小於 10 的歌曲,已自動變更為 10。";
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    if (mCount > lCount)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】建議調低基準音量。";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    else if (lCount > mCount)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】建議調高基準音量。";
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+
         #region --- 歌庫版本 ---
 
         private void SongMaintenance_EnableDBVerUpdate_CheckBox_CheckedChanged(object sender, EventArgs e)
