@@ -913,6 +913,7 @@ namespace CrazyKTV_SongMgr
                                 SongMaintenance_SrcSongPath_TextBox.Text = "";
                                 SongMaintenance_DestSongPath_TextBox.Text = "";
                                 SongMaintenance_SongPathChange_Button.Text = "瀏覽";
+                                Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                                 Common_SwitchSetUI(true);
                             });
                             SongMaintenance.DisposeSongDataTable();
