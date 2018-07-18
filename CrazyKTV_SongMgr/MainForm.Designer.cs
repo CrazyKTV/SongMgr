@@ -428,6 +428,7 @@
             this.SongMaintenance_EnableMultiSongPath_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_FFmpeg_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_ReplayGain_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongMaintenance_ReplayGainReset_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_ReplayGain_TextBox = new System.Windows.Forms.TextBox();
             this.SongMaintenance_ReplayGain_Label = new System.Windows.Forms.Label();
             this.SongMaintenance_ReplayGain_Button = new System.Windows.Forms.Button();
@@ -5729,6 +5730,7 @@
             // 
             // SongMaintenance_ReplayGain_GroupBox
             // 
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGainReset_Button);
             this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_TextBox);
             this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_Label);
             this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_Button);
@@ -5737,10 +5739,22 @@
             this.SongMaintenance_ReplayGain_GroupBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 2);
             this.SongMaintenance_ReplayGain_GroupBox.Name = "SongMaintenance_ReplayGain_GroupBox";
             this.SongMaintenance_ReplayGain_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SongMaintenance_ReplayGain_GroupBox.Size = new System.Drawing.Size(342, 96);
+            this.SongMaintenance_ReplayGain_GroupBox.Size = new System.Drawing.Size(428, 96);
             this.SongMaintenance_ReplayGain_GroupBox.TabIndex = 3;
             this.SongMaintenance_ReplayGain_GroupBox.TabStop = false;
             this.SongMaintenance_ReplayGain_GroupBox.Text = "音量平衡";
+            // 
+            // SongMaintenance_ReplayGainReset_Button
+            // 
+            this.SongMaintenance_ReplayGainReset_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_ReplayGainReset_Button.Location = new System.Drawing.Point(338, 40);
+            this.SongMaintenance_ReplayGainReset_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SongMaintenance_ReplayGainReset_Button.Name = "SongMaintenance_ReplayGainReset_Button";
+            this.SongMaintenance_ReplayGainReset_Button.Size = new System.Drawing.Size(70, 32);
+            this.SongMaintenance_ReplayGainReset_Button.TabIndex = 3;
+            this.SongMaintenance_ReplayGainReset_Button.Text = "重置";
+            this.SongMaintenance_ReplayGainReset_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_ReplayGainReset_Button.Click += new System.EventHandler(this.SongMaintenance_ReplayGainReset_Button_Click);
             // 
             // SongMaintenance_ReplayGain_TextBox
             // 
@@ -8741,6 +8755,7 @@
         private System.Windows.Forms.TextBox SongMaintenance_ReplayGain_TextBox;
         private System.Windows.Forms.Label SongMaintenance_ReplayGain_Label;
         private System.Windows.Forms.Button SongMaintenance_ReplayGain_Button;
+        private System.Windows.Forms.Button SongMaintenance_ReplayGainReset_Button;
     }
 }
 
