@@ -534,7 +534,17 @@ namespace CrazyKTV_SongMgr
 
                     if (RemoveGodLiuColumn)
                     {
+                        List<string> haveindexlist = new List<string>();
+                        using (DataTable dt = conn.GetSchema("Indexes"))
+                        {
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                if (haveindexlist.IndexOf(row["COLUMN_NAME"].ToString()) < 0) haveindexlist.Add(row["COLUMN_NAME"].ToString());
+                            }
+                        }
+
                         string cmdstr = string.Empty;
+                        string removeindex = string.Empty;
                         foreach (string GodLiuColumn in GodLiuColumnlist)
                         {
                             switch (GodLiuColumn)
@@ -558,15 +568,41 @@ namespace CrazyKTV_SongMgr
                                     cmdstr = "alter table ktv_Song drop column imgpath";
                                     break;
                                 case "cashboxsongid":
+                                    removeindex = "drop index cashboxsongid on ktv_Song";
                                     cmdstr = "alter table ktv_Song drop column cashboxsongid";
                                     break;
                                 case "cashboxdat":
                                     cmdstr = "alter table ktv_Song drop column cashboxdat";
                                     break;
                                 case "holidaysongid":
+                                    removeindex = "drop index holidaysongid on ktv_Song";
                                     cmdstr = "alter table ktv_Song drop column holidaysongid";
                                     break;
                             }
+
+                            if (GodLiuColumn == "cashboxsongid" || GodLiuColumn == "holidaysongid")
+                            {
+                                if (haveindexlist.IndexOf(GodLiuColumn) > 0)
+                                {
+                                    using (OleDbCommand cmd = new OleDbCommand(removeindex, conn))
+                                    {
+                                        try
+                                        {
+                                            cmd.ExecuteNonQuery();
+                                            cmd.Parameters.Clear();
+                                        }
+                                        catch
+                                        {
+                                            UpdateError = true;
+                                            this.BeginInvoke((Action)delegate ()
+                                            {
+                                                SongMaintenance_DBVerTooltip_Label.Text = "刪除 GodLiu 相關欄位失敗,已還原為原本的資料庫檔案。";
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+
                             using (OleDbCommand cmd = new OleDbCommand(cmdstr, conn))
                             {
                                 try
@@ -579,7 +615,7 @@ namespace CrazyKTV_SongMgr
                                     UpdateError = true;
                                     this.BeginInvoke((Action)delegate ()
                                     {
-                                        SongMaintenance_DBVerTooltip_Label.Text = "新增 Song_ReplayGain 欄位失敗,已還原為原本的資料庫檔案。";
+                                        SongMaintenance_DBVerTooltip_Label.Text = "刪除 GodLiu 相關欄位失敗,已還原為原本的資料庫檔案。";
                                     });
                                 }
                             }
@@ -590,6 +626,7 @@ namespace CrazyKTV_SongMgr
                 if (UpdateError)
                 {
                     File.Copy(SongDBBackupFile, Global.CrazyktvDatabaseFile, true);
+                    Global.DatabaseUpdateFinished = true;
                 }
                 else
                 {
