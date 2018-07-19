@@ -3361,7 +3361,6 @@ namespace CrazyKTV_SongMgr
                         lock (LockThis) list.Add(result.SongVolume + "|" + result.GainDB + "|" + row["Song_Id"].ToString());
                     }
                 });
-                Console.WriteLine(list.Count);
 
                 if (list.Count > 0)
                 {

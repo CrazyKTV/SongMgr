@@ -233,6 +233,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢閱 SQL 查詢中是否有安全性弱點")]
         private void SongDBUpdate_UpdateDatabaseFile(string UpdateType)
         {
             Global.TimerStartTime = DateTime.Now;

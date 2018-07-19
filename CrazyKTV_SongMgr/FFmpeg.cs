@@ -27,7 +27,6 @@ namespace CrazyKTV_SongMgr
                 p.StartInfo.Arguments = arguments;
                 p.Start();
                 sr = p.StandardError;
-                p.Close();
             }
             return sr;
         }
@@ -53,17 +52,33 @@ namespace CrazyKTV_SongMgr
                     string line = string.Empty;
 
                     double GainDB = 0;
-                    Regex r = new Regex(@"\[Parsed_volumedetect_0.+?\] max_volume");
+                    double RmsDB = 0;
+                    Regex maxline = new Regex(@"\[Parsed_volumedetect_0.+?\] max_volume");
+                    Regex meanline = new Regex(@"\[Parsed_volumedetect_0.+?\] mean_volume");
                     while (!sr.EndOfStream)
                     {
                         line = sr.ReadLine();
-                        if (r.IsMatch(line))
+                        if (meanline.IsMatch(line))
+                        {
+                            RmsDB = Convert.ToDouble(Regex.Replace(line, @"\[.+?\]|mean_volume:|dB|/s", "")) * -1;
+                        }
+
+                        if (maxline.IsMatch(line))
                         {
                             GainDB = Convert.ToDouble(Regex.Replace(line, @"\[.+?\]|max_volume:|dB|/s", "")) * -1;
-                            result.GainDB = GainDB;
                             if (GainDB != 0)
                             {
+                                result.GainDB = GainDB;
                                 result.SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20));
+                            }
+                            else
+                            {
+                                if (RmsDB < 18)
+                                {
+                                    GainDB = (18 - RmsDB) * -1;
+                                    result.GainDB = GainDB;
+                                    result.SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20));
+                                }
                             }
                         }
                     }
