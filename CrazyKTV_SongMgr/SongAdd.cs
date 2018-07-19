@@ -393,7 +393,7 @@ namespace CrazyKTV_SongMgr
                 strlist.Clear();
             }
 
-            if (Global.SongAddDefaultSongTrack == "6")
+            if (Global.SongAddDefaultSongTrack == "6" || Global.SongAddEnableVolumeDetect == "True")
             {
                 foreach(string str in filelist)
                 {
