@@ -2346,8 +2346,9 @@ namespace CrazyKTV_SongMgr
             MatchCollection CJKCharMatches = Regex.Matches(SongStr, @"([\u2E80-\u2FFF]|[\u3040-\u33FF]|[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]|[\uac00-\ud7ff])");
             MatchCollection HEngNumMatches = Regex.Matches(SongStr, @"([0-9]|[A-Za-z][A-Za-z']*)");
             MatchCollection FEngNumMatches = Regex.Matches(SongStr, @"([\uFF10-\uFF19]|[\uFF21-\uFF3A](?![\uFF41-\uFF5A]+)|[\uFF21-\uFF3A][\uFF41-\uFF5A]+|[\uFF41-\uFF5A])");
+            MatchCollection SymbolMatches = Regex.Matches(SongStr, @"([\u2260\uFF0B\uFF1D])");
 
-            int CharCount = CJKCharMatches.Count + HEngNumMatches.Count + FEngNumMatches.Count;
+            int CharCount = CJKCharMatches.Count + HEngNumMatches.Count + FEngNumMatches.Count + SymbolMatches.Count;
             WordCountList[0] = CharCount.ToString();
             if (CJKCharMatches.Count == 0 && FEngNumMatches.Count == 0) { WordCountList[1] = "True"; }
             return WordCountList;
