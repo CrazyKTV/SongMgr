@@ -6,7 +6,6 @@ using Declarations.Events;
 using Declarations.Media;
 using Declarations.Players;
 using Implementation;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CrazyKTV_SongMgr
@@ -21,6 +20,7 @@ namespace CrazyKTV_SongMgr
         string SongSinger;
         string SongSongName;
         string SongTrack;
+        string SongVolume;
         string SongFilePath;
         string dvRowIndex;
         string UpdateSongTrack;
@@ -42,15 +42,29 @@ namespace CrazyKTV_SongMgr
             SongSinger = PlayerSongInfoList[2];
             SongSongName = PlayerSongInfoList[3];
             SongTrack = PlayerSongInfoList[4];
-            SongFilePath = PlayerSongInfoList[5];
-            dvRowIndex = PlayerSongInfoList[6];
-            UpdateDataGridView = PlayerSongInfoList[7];
+            SongVolume = PlayerSongInfoList[5];
+            SongFilePath = PlayerSongInfoList[6];
+            dvRowIndex = PlayerSongInfoList[7];
+            UpdateDataGridView = PlayerSongInfoList[8];
 
             this.Text = "【" + SongLang + "】" + SongSinger + " - " + SongSongName;
 
-            m_factory = new MediaPlayerFactory(true);
+            var args = new string[]
+            {
+                "-I",
+                "dumy",
+                "--ignore-config",
+                "--no-osd",
+                "--disable-screensaver",
+                "--deinterlace-mode=yadif",
+                "--codec=x264,avcodec,all",
+                "--demux=avcodec,all"
+            };
+
+            m_factory = new MediaPlayerFactory(args, true);
             m_player = m_factory.CreatePlayer<IDiskPlayer>();
             m_player.WindowHandle = Player_Panel.Handle;
+            m_player.Events.PlayerPositionChanged += new EventHandler<MediaPlayerPositionChanged>(Events_PlayerPositionChanged);
 
             Player_ProgressTrackBar.ProgressBarValue = 0;
             Player_ProgressTrackBar.TrackBarValue = 0;
@@ -58,78 +72,60 @@ namespace CrazyKTV_SongMgr
             m_media = m_factory.CreateMedia<IMediaFromFile>(SongFilePath);
             m_player.Open(m_media);
             m_media.Parse(true);
-            m_player.Mute = true;
+            m_player.Volume = Convert.ToInt32(SongVolume);
             m_player.Play();
+        }
 
-            Thread.Sleep(1000);
-
-            bool WaitTrackInfo = false;
-            while (!WaitTrackInfo)
+        // Player PositionChanged Events
+        void Events_PlayerPositionChanged(object sender, MediaPlayerPositionChanged e)
+        {
+            if (TrackIdList.Count == 0)
             {
                 if (m_player.AudioTrackCount > 1)
                 {
                     foreach (Declarations.TrackDescription TrackDesc in m_player.AudioTracksInfo)
                     {
-                        if (TrackDesc.Id != -1)
+                        TrackIdList.Add(TrackDesc.Id);
+                    }
+
+                    if (TrackIdList.Count > 2)
+                    {
+                        float pos = m_player.Position;
+                        switch (SongTrack)
                         {
-                            WaitTrackInfo = true;
+                            case "1":
+                                if (m_player.AudioTrack != TrackIdList[1]) m_player.AudioTrack = TrackIdList[1];
+                                break;
+                            case "2":
+                                if (m_player.AudioTrack != TrackIdList[2]) m_player.AudioTrack = TrackIdList[2];
+                                break;
                         }
+                        Player_CurrentChannelValue_Label.InvokeIfRequired(lbl => lbl.Text = (TrackIdList.IndexOf(m_player.AudioTrack) == Convert.ToInt32(SongTrack)) ? "伴唱" : "人聲");
+                        m_player.Position = pos;
+                    }
+                    else
+                    {
+                        string ChannelValue = "";
+                        switch (SongTrack)
+                        {
+                            case "1":
+                                if (m_player.Channel != AudioChannelType.Left) m_player.Channel = AudioChannelType.Left;
+                                ChannelValue = "1";
+                                break;
+                            case "2":
+                                if (m_player.Channel != AudioChannelType.Right) m_player.Channel = AudioChannelType.Right;
+                                ChannelValue = "2";
+                                break;
+                        }
+                        Player_CurrentChannelValue_Label.InvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
                     }
                 }
             }
-
-            foreach (Declarations.TrackDescription TrackDesc in m_player.AudioTracksInfo)
-            {
-                TrackIdList.Add(TrackDesc.Id);
-            }
-
-            if (TrackIdList.Count > 2)
-            {
-                switch (SongTrack)
-                {
-                    case "1":
-                        if (m_player.AudioTrack != TrackIdList[1]) m_player.AudioTrack = TrackIdList[1];
-                        break;
-                    case "2":
-                        if (m_player.AudioTrack != TrackIdList[2]) m_player.AudioTrack = TrackIdList[2];
-                        break;
-                }
-                Player_CurrentChannelValue_Label.Text = (TrackIdList.IndexOf(m_player.AudioTrack) == Convert.ToInt32(SongTrack)) ? "伴唱" : "人聲";
-            }
-            else
-            {
-                string ChannelValue = "";
-                switch (SongTrack)
-                {
-                    case "1":
-                        if (m_player.Channel != AudioChannelType.Left) m_player.Channel = AudioChannelType.Left;
-                        ChannelValue = "1";
-                        break;
-                    case "2":
-                        if (m_player.Channel != AudioChannelType.Right) m_player.Channel = AudioChannelType.Right;
-                        ChannelValue = "2";
-                        break;
-                }
-                Player_CurrentChannelValue_Label.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲";
-            }
-
-            m_player.Events.PlayerPositionChanged += new EventHandler<MediaPlayerPositionChanged>(Events_PlayerPositionChanged);
-
-            m_player.Position = 0;
-            m_player.Mute = false;
-        }
-
-        // Player Events
-        void Events_PlayerPositionChanged(object sender, MediaPlayerPositionChanged e)
-        {
             this.BeginInvoke((Action)delegate()
             {
-                if (e.NewPosition > 0.999)
-                {
-                    this.Close();
-                }
-                Player_ProgressTrackBar.ProgressBarValue = (int)(e.NewPosition * 100);
-                Player_ProgressTrackBar.TrackBarValue = (int)(e.NewPosition * 100);
+                if (e.NewPosition > 0.999) this.Close();
+                Player_ProgressTrackBar.InvokeIfRequired(pbar => pbar.ProgressBarValue = (int)(e.NewPosition * 100));
+                Player_ProgressTrackBar.InvokeIfRequired(pbar => pbar.TrackBarValue = (int)(e.NewPosition * 100));
             });
         }
 
@@ -149,6 +145,7 @@ namespace CrazyKTV_SongMgr
         {
             if (TrackIdList.Count > 2)
             {
+                float pos = m_player.Position;
                 if (m_player.AudioTrack == TrackIdList[1])
                 {
                     m_player.AudioTrack = TrackIdList[2];
@@ -160,6 +157,7 @@ namespace CrazyKTV_SongMgr
                     UpdateSongTrack = "1";
                 }
                 Player_CurrentChannelValue_Label.Text = (TrackIdList.IndexOf(m_player.AudioTrack) == Convert.ToInt32(SongTrack)) ? "伴唱" : "人聲";
+                m_player.Position = pos;
             }
             else
             {
@@ -179,14 +177,7 @@ namespace CrazyKTV_SongMgr
                 Player_CurrentChannelValue_Label.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲";
             }
 
-            if (Player_CurrentChannelValue_Label.Text == "人聲")
-            {
-                Player_UpdateChannel_Button.Enabled = true;
-            }
-            else
-            {
-                Player_UpdateChannel_Button.Enabled = false;
-            }
+            Player_UpdateChannel_Button.Enabled = (Player_CurrentChannelValue_Label.Text == "人聲") ? true : false;
         }
 
         private void Player_UpdateChannel_Button_Click(object sender, EventArgs e)

@@ -1215,9 +1215,10 @@ namespace CrazyKTV_SongMgr
                     string SongSinger = SongAdd_EditSongSinger_TextBox.Text;
                     string SongSongName = SongAdd_EditSongSongName_TextBox.Text;
                     string SongTrack = SongAdd_EditSongTrack_ComboBox.SelectedValue.ToString();
+                    string SongVolume = SongAdd_EditSongVolume_TextBox.Text;
                     string SongFilePath = list[19];
 
-                    List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongFilePath, "0", "SongAdd" };
+                    List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongFilePath, "0", "SongAdd" };
 
                     Global.PlayerUpdateSongValueList = new List<string>();
                     PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
