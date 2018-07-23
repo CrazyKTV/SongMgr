@@ -17,11 +17,6 @@
             {
                 components.Dispose();
             }
-
-            if (disposing && (m_factory != null))
-            {
-                m_factory.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -34,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlayerForm));
-            this.Player_Panel = new System.Windows.Forms.Panel();
+            this.Player_VlcControl = new Vlc.DotNet.Forms.VlcControl();
             this.Player_SwithChannel_Button = new System.Windows.Forms.Button();
             this.Player_CurrentChannel_Label = new System.Windows.Forms.Label();
             this.Player_UpdateChannel_Button = new System.Windows.Forms.Button();
@@ -43,15 +38,14 @@
             this.Player_ProgressTrackBar = new CrazyKTV_SongMgr.ProgressTrackBar();
             this.SuspendLayout();
             // 
-            // Player_Panel
+            // Player_VlcControl
             // 
-            this.Player_Panel.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.Player_Panel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Player_Panel.Location = new System.Drawing.Point(21, 19);
-            this.Player_Panel.Margin = new System.Windows.Forms.Padding(12, 10, 12, 0);
-            this.Player_Panel.Name = "Player_Panel";
-            this.Player_Panel.Size = new System.Drawing.Size(640, 480);
-            this.Player_Panel.TabIndex = 0;
+            this.Player_VlcControl.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.Player_VlcControl.Location = new System.Drawing.Point(21, 19);
+            this.Player_VlcControl.Margin = new System.Windows.Forms.Padding(12, 10, 12, 0);
+            this.Player_VlcControl.Name = "Player_VlcControl";
+            this.Player_VlcControl.Size = new System.Drawing.Size(640, 480);
+            this.Player_VlcControl.TabIndex = 0;
             // 
             // Player_SwithChannel_Button
             // 
@@ -141,7 +135,7 @@
             this.Controls.Add(this.Player_CurrentChannel_Label);
             this.Controls.Add(this.Player_SwithChannel_Button);
             this.Controls.Add(this.Player_ProgressTrackBar);
-            this.Controls.Add(this.Player_Panel);
+            this.Controls.Add(this.Player_VlcControl);
             this.Font = new System.Drawing.Font("微軟正黑體", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -158,7 +152,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel Player_Panel;
+        private Vlc.DotNet.Forms.VlcControl Player_VlcControl;
         private ProgressTrackBar Player_ProgressTrackBar;
         private System.Windows.Forms.Button Player_SwithChannel_Button;
         private System.Windows.Forms.Label Player_CurrentChannel_Label;
