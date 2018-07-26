@@ -22,6 +22,7 @@ namespace CrazyKTV_SongMgr
                 case "儲存設定":
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", Global.SongMaintenanceMaxVolume);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                     break;
                 case "更新語系":
@@ -3295,6 +3296,25 @@ namespace CrazyKTV_SongMgr
 
         #region --- FFmpeg - 音量平衡 ---
 
+        private void SongMaintenance_MaxVolume_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (SongMaintenance_MaxVolume_ComboBox.SelectedValue.ToString())
+            {
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                case "10":
+                    Global.SongMaintenanceMaxVolume = SongMaintenance_MaxVolume_ComboBox.SelectedValue.ToString();
+                    break;
+            }
+        }
+
         private void SongMaintenance_ReplayGain_Button_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("你確定要使用音量平衡功能來變更音量嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -3333,11 +3353,17 @@ namespace CrazyKTV_SongMgr
         private void SongMaintenance_ReplayGain_VolumeChangeTask()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            
+
             if (File.Exists(Global.CrazyktvDatabaseFile))
             {
                 int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
-                List<string> list = new List<string>();
+                List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
+                int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
+                maxvolumelist.Clear();
+                maxvolumelist = null;
 
+                List<string> list = new List<string>();
                 Parallel.ForEach(Global.SongDT.AsEnumerable(), new ParallelOptions { MaxDegreeOfParallelism = 2 }, (row, loopState) =>
                 {
                     this.BeginInvoke((Action)delegate ()
@@ -3347,18 +3373,25 @@ namespace CrazyKTV_SongMgr
 
                     string file = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
                     string gain = row["Song_ReplayGain"].ToString();
+                    string mean = row["Song_MeanVolume"].ToString();
 
-                    if (gain != "")
+                    double GainDB = 0;
+                    double MeanDB = 0;
+                    string SongVolume = Global.SongMaintenanceReplayGainVolume;
+
+                    if (gain != "" && mean != "")
                     {
-                        double GainDB = Convert.ToDouble(gain);
-                        string SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20)).ToString();
-                        lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + row["Song_Id"].ToString());
+                        GainDB = Convert.ToDouble(gain);
+                        MeanDB = Convert.ToDouble(mean);
                     }
                     else
                     {
-                        FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file, Convert.ToInt32(Global.SongMaintenanceReplayGainVolume));
-                        lock (LockThis) list.Add(result.SongVolume + "|" + result.GainDB + "|" + row["Song_Id"].ToString());
+                        FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file);
+                        GainDB = result.GainDB;
+                        MeanDB = result.MeanDB;
                     }
+                    SongVolume = FFmpeg.CalSongVolume(basevolume, maxvolume, GainDB, MeanDB);
+                    lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + MeanDB.ToString() + "|" + row["Song_Id"].ToString());
                 });
 
                 if (list.Count > 0)
@@ -3368,7 +3401,7 @@ namespace CrazyKTV_SongMgr
                         int mCount = 0;
                         int lCount = 0;
 
-                        string sqlColumnStr = "Song_Volume = @SongVolume, Song_ReplayGain = @SongReplayGain";
+                        string sqlColumnStr = "Song_Volume = @SongVolume, Song_ReplayGain = @SongReplayGain, Song_MeanVolume = @SongMeanVolume";
                         string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
                         using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
                         {
@@ -3391,7 +3424,8 @@ namespace CrazyKTV_SongMgr
 
                                 cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
                                 cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[1]);
-                                cmd.Parameters.AddWithValue("@SongId", valuelist[2]);
+                                cmd.Parameters.AddWithValue("@SongMeanVolume", valuelist[2]);
+                                cmd.Parameters.AddWithValue("@SongId", valuelist[3]);
 
                                 try
                                 {
@@ -3425,18 +3459,6 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】檢測到 " + lCount.ToString() + " 首音量小於 10 的歌曲,已自動變更為 10。";
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        if (mCount > lCount)
-                        {
-                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】建議調低基準音量。";
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        }
-                        else if (lCount > mCount)
-                        {
-                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【音量平衡】建議調高基準音量。";
-                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                        }
                     }
                 }
             }
@@ -3491,7 +3513,7 @@ namespace CrazyKTV_SongMgr
             {
                 using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
                 {
-                    string sqlColumnStr = "Song_ReplayGain = null";
+                    string sqlColumnStr = "Song_ReplayGain = null, Song_MeanVolume = null";
                     string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr;
                     using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
                     {
@@ -3536,7 +3558,7 @@ namespace CrazyKTV_SongMgr
         public static void CreateSongDataTable()
         {
             Global.SongDT = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path, Song_ReplayGain from ktv_Song order by Song_Id";
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path, Song_ReplayGain, Song_MeanVolume from ktv_Song order by Song_Id";
             Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
             Global.SingerList = new List<string>();
@@ -3642,6 +3664,30 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
+
+                foreach (string str in ItemList)
+                {
+                    list.Rows.Add(list.NewRow());
+                    list.Rows[list.Rows.Count - 1][0] = str;
+                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
+                }
+                ItemList.Clear();
+                return list;
+            }
+        }
+
+        #endregion
+
+        #region --- SongMaintenance 最大音量下拉清單 ---
+
+        public static DataTable GetMaxVolumeList()
+        {
+            using (DataTable list = new DataTable())
+            {
+                list.Columns.Add(new DataColumn("Display", typeof(string)));
+                list.Columns.Add(new DataColumn("Value", typeof(int)));
+
+                List<string> ItemList = new List<string>() { "-18 dB", "-17 dB", "-16 dB", "-15 dB", "-14 dB", "-13 dB", "-12 dB", "-11 dB", "-10 dB", "-9 dB" };
 
                 foreach (string str in ItemList)
                 {

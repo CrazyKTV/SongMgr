@@ -108,6 +108,7 @@ namespace CrazyKTV_SongMgr
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";
         public static string SongMaintenanceReplayGainVolume = "50";
+        public static string SongMaintenanceMaxVolume = "1";
 
         public static List<int> MTotalList = new List<int>();
         public static List<int> TotalList = new List<int>();

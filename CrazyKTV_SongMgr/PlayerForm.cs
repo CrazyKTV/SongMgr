@@ -72,8 +72,9 @@ namespace CrazyKTV_SongMgr
             Player_ProgressTrackBar.ProgressBarValue = 0;
             Player_ProgressTrackBar.TrackBarValue = 0;
 
+            int GainVolume = 100 - Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
             Player_VlcControl.SetMedia(new FileInfo(SongFilePath));
-            Player_VlcControl.Audio.Volume = Convert.ToInt32(SongVolume);
+            Player_VlcControl.Audio.Volume = Convert.ToInt32(SongVolume) + GainVolume;
             Player_VlcControl.Play();
         }
 

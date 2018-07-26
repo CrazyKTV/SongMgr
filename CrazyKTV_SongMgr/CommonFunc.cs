@@ -1622,7 +1622,7 @@ namespace CrazyKTV_SongMgr
                         File.Delete(WebUpdaterTempFile);
                         if (RemoteSongMgrVerList.Count > 0)
                         {
-                            if (Convert.ToInt32(RemoteSongMgrVerList[1]) > Convert.ToInt32(Global.SongMgrVer))
+                            if (Convert.ToInt32(RemoteSongMgrVerList[1]) > Convert.ToInt32(Global.SongMgrVer.PadRight(5, '0')))
                             {
                                 if (MessageBox.Show("你確定要更新 CrazyKTV 加歌程式嗎?", "偵測到 CrazyKTV 加歌程式更新", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
@@ -1654,6 +1654,7 @@ namespace CrazyKTV_SongMgr
                 // 初始化所需資料
                 Common_InitializeSongData(true, false, false, true, true, false);
             }
+            Common_SwitchDBVerErrorUI(Global.SongMgrDBVerErrorUIStatus);
             MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
         }
 

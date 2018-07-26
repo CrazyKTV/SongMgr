@@ -50,6 +50,7 @@ namespace CrazyKTV_SongMgr
             bool TB_ktv_AllSinger = false;
             bool TB_ktv_Version = false;
             bool Col_Song_ReplayGain = false;
+            bool Col_Song_MeanVolume = false;
             bool Col_Langauage_KeyWord = false;
             bool Col_GodLiu = false;
 
@@ -98,6 +99,7 @@ namespace CrazyKTV_SongMgr
                     List<string> GodLiuColumnList = new List<string>() { "Song_SongNameFuzzy", "Song_SingerFuzzy", "Song_FuzzyVer", "DLspace", "Epasswd", "imgpath", "cashboxsongid", "cashboxdat", "holidaysongid" };
                     List<string> ktvSongColumnList = new List<string>(CommonFunc.GetOleDbColumnList(Global.CrazyktvDatabaseFile, "", "ktv_Song"));
                     if (ktvSongColumnList.IndexOf("Song_ReplayGain") >= 0) Col_Song_ReplayGain = true;
+                    if (ktvSongColumnList.IndexOf("Song_MeanVolume") >= 0) Col_Song_MeanVolume = true;
 
                     foreach (string ColumnName in GodLiuColumnList)
                     {
@@ -107,7 +109,7 @@ namespace CrazyKTV_SongMgr
                     GodLiuColumnList = null;
                     ktvSongColumnList.Clear();
                     ktvSongColumnList = null;
-                    if (TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Langauage_KeyWord || Col_GodLiu) Global.CrazyktvDatabaseIsOld = true;
+                    if (TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu) Global.CrazyktvDatabaseIsOld = true;
                 }
                 CrazyktvDBTableList.Clear();
                 CrazyktvDBTableList = null;
@@ -118,15 +120,13 @@ namespace CrazyKTV_SongMgr
 
             if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
             {
-                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Langauage_KeyWord || Col_GodLiu)
-                { Global.SongMgrDBVerErrorUIStatus = false; }
-                else { Global.CrazyktvDatabaseStatus = true; }
+                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu)
+                { Global.SongMgrDBVerErrorUIStatus = false; } else { Global.CrazyktvDatabaseStatus = true; }
             }
             else
             {
-                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || !SongMgrDestFolder || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Langauage_KeyWord || Col_GodLiu)
-                { Global.SongMgrDBVerErrorUIStatus = false; }
-                else { Global.CrazyktvDatabaseStatus = true; }
+                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || !SongMgrDestFolder || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu)
+                { Global.SongMgrDBVerErrorUIStatus = false; } else { Global.CrazyktvDatabaseStatus = true; }
             }
             return new List<bool>() { CrazyKTVDatabaseFile, TB_ktv_Version, TB_ktv_AllSinger, SongMgrDestFolder };
         }
@@ -299,6 +299,7 @@ namespace CrazyKTV_SongMgr
                     bool UpdatePhonetics = false;
                     bool UpdateLangauage = true;
                     bool AddSongReplayGainColumn = true;
+                    bool AddSongMeanVolumeColumn = true;
                     bool RemoveGodLiuColumn = false;
                     List<string> GodLiuColumnlist = new List<string>();
 
@@ -345,6 +346,9 @@ namespace CrazyKTV_SongMgr
                                     break;
                                 case "Song_ReplayGain":
                                     AddSongReplayGainColumn = false;
+                                    break;
+                                case "Song_MeanVolume":
+                                    AddSongMeanVolumeColumn = false;
                                     break;
                                 case "Singer_Name":
                                 case "Singer_Spell":
@@ -532,6 +536,26 @@ namespace CrazyKTV_SongMgr
                         }
                     }
 
+                    if (AddSongMeanVolumeColumn)
+                    {
+                        using (OleDbCommand cmd = new OleDbCommand("alter table ktv_Song add column Song_MeanVolume DOUBLE", conn))
+                        {
+                            try
+                            {
+                                cmd.ExecuteNonQuery();
+                                cmd.Parameters.Clear();
+                            }
+                            catch
+                            {
+                                UpdateError = true;
+                                this.BeginInvoke((Action)delegate ()
+                                {
+                                    SongMaintenance_DBVerTooltip_Label.Text = "加入 Song_MeanVolume 欄位失敗,已還原為原本的資料庫檔案。";
+                                });
+                            }
+                        }
+                    }
+
                     if (RemoveGodLiuColumn)
                     {
                         List<string> haveindexlist = new List<string>();
@@ -695,30 +719,27 @@ namespace CrazyKTV_SongMgr
                     int MaxDigitCode;
                     if (d5code.Count<DataRow>() > d6code.Count<DataRow>()) { MaxDigitCode = 5; } else { MaxDigitCode = 6; }
 
-                    this.BeginInvoke((Action)delegate()
+                    switch (MaxDigitCode)
                     {
-                        switch (MaxDigitCode)
-                        {
-                            case 5:
-                                SongMgrCfg_MaxDigitCode_ComboBox.Enabled = false;
-                                if (Global.SongMgrMaxDigitCode != "1")
-                                {
-                                    SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue = 1;
-                                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMaxDigitCode", Global.SongMgrMaxDigitCode);
-                                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrLangCode", Global.SongMgrLangCode);
-                                }
-                                break;
-                            case 6:
-                                SongMgrCfg_MaxDigitCode_ComboBox.Enabled = false;
-                                if (Global.SongMgrMaxDigitCode != "2")
-                                {
-                                    SongMgrCfg_MaxDigitCode_ComboBox.SelectedValue = 2;
-                                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMaxDigitCode", Global.SongMgrMaxDigitCode);
-                                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrLangCode", Global.SongMgrLangCode);
-                                }
-                                break;
-                        }
-                    });
+                        case 5:
+                            ControlExtensions.BeginInvokeIfRequired(SongMgrCfg_MaxDigitCode_ComboBox, cb => cb.Enabled = false);
+                            if (Global.SongMgrMaxDigitCode != "1")
+                            {
+                                ControlExtensions.BeginInvokeIfRequired(SongMgrCfg_MaxDigitCode_ComboBox, cb => cb.SelectedValue = 1);
+                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMaxDigitCode", Global.SongMgrMaxDigitCode);
+                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrLangCode", Global.SongMgrLangCode);
+                            }
+                            break;
+                        case 6:
+                            ControlExtensions.BeginInvokeIfRequired(SongMgrCfg_MaxDigitCode_ComboBox, cb => cb.Enabled = false);
+                            if (Global.SongMgrMaxDigitCode != "2")
+                            {
+                                ControlExtensions.BeginInvokeIfRequired(SongMgrCfg_MaxDigitCode_ComboBox, cb => cb.SelectedValue = 2);
+                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrMaxDigitCode", Global.SongMgrMaxDigitCode);
+                                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrLangCode", Global.SongMgrLangCode);
+                            }
+                            break;
+                    }
 
                     var query = from row in dt.AsEnumerable()
                                 where row.Field<string>("Song_Id").Length != MaxDigitCode
@@ -726,59 +747,51 @@ namespace CrazyKTV_SongMgr
 
                     if (query.Count<DataRow>() > 0)
                     {
-                        this.BeginInvoke((Action)delegate()
-                        {
-                            Global.SongMgrDBVerErrorUIStatus = false;
-                            SongMaintenance_CodeConvTo6_Button.Enabled = false;
-                            SongMaintenance_CodeCorrect_Button.Enabled = true;
-                            Global.CrazyktvDatabaseMaxDigitCode = false;
-                            Global.CrazyktvDatabaseStatus = false;
-                        });
+                        Global.SongMgrDBVerErrorUIStatus = false;
+                        ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeConvTo6_Button, btn => btn.Enabled = false);
+                        ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeCorrect_Button, btn => btn.Enabled = true);
+                        Global.CrazyktvDatabaseMaxDigitCode = false;
+                        Global.CrazyktvDatabaseStatus = false;
                     }
                     else
-                    {
-                        this.BeginInvoke((Action)delegate()
-                        {
-                            if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
-                            {
-                                Global.SongMgrDBVerErrorUIStatus = true;
-                            }
-                            else
-                            {
-                                if (SongMgrDestFolder) { Global.SongMgrDBVerErrorUIStatus = true; } else { Global.SongMgrDBVerErrorUIStatus = false; }
-                            }
-
-                            switch (Global.SongMgrMaxDigitCode)
-                            {
-                                case "1":
-                                    SongMaintenance_CodeConvTo6_Button.Enabled = true;
-                                    break;
-                                case "2":
-                                    SongMaintenance_CodeConvTo6_Button.Enabled = false;
-                                    break;
-                            }
-                            SongMaintenance_CodeCorrect_Button.Enabled = false;
-                            Global.CrazyktvDatabaseMaxDigitCode = true;
-                        });
-                    }
-                }
-                else // 空白資料庫
-                {
-                    this.BeginInvoke((Action)delegate()
                     {
                         if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
                         {
                             Global.SongMgrDBVerErrorUIStatus = true;
+
                         }
                         else
                         {
                             if (SongMgrDestFolder) { Global.SongMgrDBVerErrorUIStatus = true; } else { Global.SongMgrDBVerErrorUIStatus = false; }
                         }
-                            
-                        SongMaintenance_CodeConvTo6_Button.Enabled = false;
-                        SongMaintenance_CodeCorrect_Button.Enabled = false;
+
+                        switch (Global.SongMgrMaxDigitCode)
+                        {
+                            case "1":
+                                ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeConvTo6_Button, btn => btn.Enabled = true);
+                                break;
+                            case "2":
+                                ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeConvTo6_Button, btn => btn.Enabled = false);
+                                break;
+                        }
+                        ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeCorrect_Button, btn => btn.Enabled = false);
                         Global.CrazyktvDatabaseMaxDigitCode = true;
-                    });
+                    }
+                }
+                else // 空白資料庫
+                {
+                    if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
+                    {
+                        Global.SongMgrDBVerErrorUIStatus = true;
+                    }
+                    else
+                    {
+                        if (SongMgrDestFolder) { Global.SongMgrDBVerErrorUIStatus = true; } else { Global.SongMgrDBVerErrorUIStatus = false; }
+                    }
+
+                    ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeConvTo6_Button, btn => btn.Enabled = false);
+                    ControlExtensions.BeginInvokeIfRequired(SongMaintenance_CodeCorrect_Button, btn => btn.Enabled = false);
+                    Global.CrazyktvDatabaseMaxDigitCode = true;
                 }
                 dt.Dispose();
                 dt = null;

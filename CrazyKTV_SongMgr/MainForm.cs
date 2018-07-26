@@ -150,6 +150,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", Global.MainCfgBackupDB);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", Global.MainCfgBackupDBPath);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", Global.SongMaintenanceMaxVolume);
             }
 
             List<string> list = new List<string>()
@@ -203,7 +204,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideApplyCashboxIdButton", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", null, false)
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", null, false)
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -460,6 +462,12 @@ namespace CrazyKTV_SongMgr
 
             if (list[49] != "") Global.MainCfgBackupDBPath = list[49];
             MainCfg_BackupDB_TextBox.Text = Global.MainCfgBackupDBPath;
+
+            if (list[50] != "") Global.SongMaintenanceMaxVolume = list[50];
+            SongMaintenance_MaxVolume_ComboBox.DataSource = SongMaintenance.GetMaxVolumeList();
+            SongMaintenance_MaxVolume_ComboBox.DisplayMember = "Display";
+            SongMaintenance_MaxVolume_ComboBox.ValueMember = "Value";
+            SongMaintenance_MaxVolume_ComboBox.SelectedValue = Global.SongMaintenanceMaxVolume;
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
@@ -800,6 +808,8 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
 
 
 

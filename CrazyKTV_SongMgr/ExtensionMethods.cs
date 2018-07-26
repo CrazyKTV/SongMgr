@@ -27,8 +27,7 @@ namespace CrazyKTV_SongMgr
 
     public static class ControlExtensions
     {
-        public static T InvokeIfRequired<T>(this T source, Action<T> action)
-            where T : Control
+        public static T InvokeIfRequired<T>(this T source, Action<T> action) where T : Control
         {
             try
             {
@@ -40,6 +39,22 @@ namespace CrazyKTV_SongMgr
             catch (Exception ex)
             {
                 Console.Write("Error on 'InvokeIfRequired': {0}", ex.Message);
+            }
+            return source;
+        }
+
+        public static T BeginInvokeIfRequired<T>(this T source, Action<T> action) where T : Control
+        {
+            try
+            {
+                if (!source.InvokeRequired)
+                    action(source);
+                else
+                    source.BeginInvoke(new Action(() => action(source)));
+            }
+            catch (Exception ex)
+            {
+                Console.Write("Error on 'BeginInvokeIfRequired': {0}", ex.Message);
             }
             return source;
         }

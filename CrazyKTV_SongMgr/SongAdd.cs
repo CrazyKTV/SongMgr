@@ -609,8 +609,8 @@ namespace CrazyKTV_SongMgr
             string sqlValuesStr = string.Empty;
             if (Global.SongAddEnableVolumeDetect == "True")
             {
-                sqlColumnStr = "Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState, Song_ReplayGain";
-                sqlValuesStr = "@SongId, @SongLang, @SongSingerType, @SongSinger, @SongSongName, @SongTrack, @SongSongType, @SongVolume, @SongWordCount, @SongPlayCount, @SongMB, @SongCreatDate, @SongFileName, @SongPath, @SongSpell, @SongSpellNum, @SongSongStroke, @SongPenStyle, @SongPlayState, @SongReplayGain";
+                sqlColumnStr = "Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState, Song_ReplayGain, Song_MeanVolume";
+                sqlValuesStr = "@SongId, @SongLang, @SongSingerType, @SongSinger, @SongSongName, @SongTrack, @SongSongType, @SongVolume, @SongWordCount, @SongPlayCount, @SongMB, @SongCreatDate, @SongFileName, @SongPath, @SongSpell, @SongSpellNum, @SongSongStroke, @SongPenStyle, @SongPlayState, @SongReplayGain, @SongMeanVolume";
             }
             else
             {
@@ -659,7 +659,11 @@ namespace CrazyKTV_SongMgr
                     cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
                     cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
                     cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
-                    if (Global.SongAddEnableVolumeDetect == "True") cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[21]);
+                    if (Global.SongAddEnableVolumeDetect == "True")
+                    {
+                        cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[21]);
+                        cmd.Parameters.AddWithValue("@SongMeanVolume", valuelist[22]);
+                    }
 
                     try
                     {
@@ -966,7 +970,7 @@ namespace CrazyKTV_SongMgr
             string SongUpdateSqlStr = string.Empty;
             if (Global.SongAddEnableVolumeDetect == "True")
             {
-                sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState, Song_ReplayGain = @SongReplayGain";
+                sqlColumnStr = "Song_Id = @SongId, Song_Lang = @SongLang, Song_SingerType = @SongSingerType, Song_Singer = @SongSinger, Song_SongName = @SongSongName, Song_Track = @SongTrack, Song_SongType = @SongSongType, Song_Volume = @SongVolume, Song_WordCount = @SongWordCount, Song_PlayCount = @SongPlayCount, Song_MB = @SongMB, Song_CreatDate = @SongCreatDate, Song_FileName = @SongFileName, Song_Path = @SongPath, Song_Spell = @SongSpell, Song_SpellNum = @SongSpellNum, Song_SongStroke = @SongSongStroke, Song_PenStyle = @SongPenStyle, Song_PlayState = @SongPlayState, Song_ReplayGain = @SongReplayGain, Song_MeanVolume = @SongMeanVolume";
                 SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @OldSongId";
             }
             else
@@ -1001,7 +1005,11 @@ namespace CrazyKTV_SongMgr
                 cmd.Parameters.AddWithValue("@SongSongStroke", valuelist[16]);
                 cmd.Parameters.AddWithValue("@SongPenStyle", valuelist[17]);
                 cmd.Parameters.AddWithValue("@SongPlayState", valuelist[18]);
-                if (Global.SongAddEnableVolumeDetect == "True") cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[19]);
+                if (Global.SongAddEnableVolumeDetect == "True")
+                {
+                    cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[19]);
+                    cmd.Parameters.AddWithValue("@SongMeanVolume", valuelist[20]);
+                }
                 cmd.Parameters.AddWithValue("@OldSongId", valuelist[0]);
 
                 try
@@ -1805,6 +1813,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "Song_ReplayGain":
                     list = new List<string>() { "播放增益", "0", "none" };
+                    break;
+                case "Song_MeanVolume":
+                    list = new List<string>() { "平均音量", "0", "none" };
                     break;
             }
             return list;

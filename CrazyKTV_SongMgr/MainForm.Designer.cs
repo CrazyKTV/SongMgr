@@ -429,6 +429,9 @@
             this.SongMaintenance_EnableMultiSongPath_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongMaintenance_FFmpeg_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_ReplayGain_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongMaintenance_MaxVolume_Label2 = new System.Windows.Forms.Label();
+            this.SongMaintenance_MaxVolume_ComboBox = new System.Windows.Forms.ComboBox();
+            this.SongMaintenance_MaxVolume_Label1 = new System.Windows.Forms.Label();
             this.SongMaintenance_ReplayGainReset_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_ReplayGain_TextBox = new System.Windows.Forms.TextBox();
             this.SongMaintenance_ReplayGain_Label = new System.Windows.Forms.Label();
@@ -5745,6 +5748,9 @@
             // 
             // SongMaintenance_ReplayGain_GroupBox
             // 
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_MaxVolume_Label2);
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_MaxVolume_ComboBox);
+            this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_MaxVolume_Label1);
             this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGainReset_Button);
             this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_TextBox);
             this.SongMaintenance_ReplayGain_GroupBox.Controls.Add(this.SongMaintenance_ReplayGain_Label);
@@ -5754,10 +5760,44 @@
             this.SongMaintenance_ReplayGain_GroupBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 2);
             this.SongMaintenance_ReplayGain_GroupBox.Name = "SongMaintenance_ReplayGain_GroupBox";
             this.SongMaintenance_ReplayGain_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.SongMaintenance_ReplayGain_GroupBox.Size = new System.Drawing.Size(428, 96);
+            this.SongMaintenance_ReplayGain_GroupBox.Size = new System.Drawing.Size(428, 140);
             this.SongMaintenance_ReplayGain_GroupBox.TabIndex = 3;
             this.SongMaintenance_ReplayGain_GroupBox.TabStop = false;
             this.SongMaintenance_ReplayGain_GroupBox.Text = "音量平衡";
+            // 
+            // SongMaintenance_MaxVolume_Label2
+            // 
+            this.SongMaintenance_MaxVolume_Label2.AutoSize = true;
+            this.SongMaintenance_MaxVolume_Label2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_MaxVolume_Label2.Location = new System.Drawing.Point(225, 88);
+            this.SongMaintenance_MaxVolume_Label2.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.SongMaintenance_MaxVolume_Label2.Name = "SongMaintenance_MaxVolume_Label2";
+            this.SongMaintenance_MaxVolume_Label2.Size = new System.Drawing.Size(89, 20);
+            this.SongMaintenance_MaxVolume_Label2.TabIndex = 11;
+            this.SongMaintenance_MaxVolume_Label2.Text = "時降低音量";
+            // 
+            // SongMaintenance_MaxVolume_ComboBox
+            // 
+            this.SongMaintenance_MaxVolume_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SongMaintenance_MaxVolume_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_MaxVolume_ComboBox.FormattingEnabled = true;
+            this.SongMaintenance_MaxVolume_ComboBox.Location = new System.Drawing.Point(133, 84);
+            this.SongMaintenance_MaxVolume_ComboBox.Margin = new System.Windows.Forms.Padding(6);
+            this.SongMaintenance_MaxVolume_ComboBox.Name = "SongMaintenance_MaxVolume_ComboBox";
+            this.SongMaintenance_MaxVolume_ComboBox.Size = new System.Drawing.Size(80, 28);
+            this.SongMaintenance_MaxVolume_ComboBox.TabIndex = 10;
+            this.SongMaintenance_MaxVolume_ComboBox.SelectedIndexChanged += new System.EventHandler(this.SongMaintenance_MaxVolume_ComboBox_SelectedIndexChanged);
+            // 
+            // SongMaintenance_MaxVolume_Label1
+            // 
+            this.SongMaintenance_MaxVolume_Label1.AutoSize = true;
+            this.SongMaintenance_MaxVolume_Label1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_MaxVolume_Label1.Location = new System.Drawing.Point(16, 88);
+            this.SongMaintenance_MaxVolume_Label1.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.SongMaintenance_MaxVolume_Label1.Name = "SongMaintenance_MaxVolume_Label1";
+            this.SongMaintenance_MaxVolume_Label1.Size = new System.Drawing.Size(105, 20);
+            this.SongMaintenance_MaxVolume_Label1.TabIndex = 4;
+            this.SongMaintenance_MaxVolume_Label1.Text = "平均音量大於";
             // 
             // SongMaintenance_ReplayGainReset_Button
             // 
@@ -8772,6 +8812,9 @@
         private System.Windows.Forms.Button SongMaintenance_ReplayGain_Button;
         private System.Windows.Forms.Button SongMaintenance_ReplayGainReset_Button;
         private System.Windows.Forms.CheckBox SongAdd_EnableVolumeDetect_CheckBox;
+        private System.Windows.Forms.Label SongMaintenance_MaxVolume_Label2;
+        private System.Windows.Forms.ComboBox SongMaintenance_MaxVolume_ComboBox;
+        private System.Windows.Forms.Label SongMaintenance_MaxVolume_Label1;
     }
 }
 
