@@ -53,10 +53,7 @@ namespace CrazyKTV_SongMgr
             {
                 _TrackBarValue = value;
                 MoveThumb();
-                if (TrackBarValueChanged != null)
-                {
-                    TrackBarValueChanged(this, EventArgs.Empty);
-                }
+                TrackBarValueChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -69,10 +66,7 @@ namespace CrazyKTV_SongMgr
             set
             {
                 _ProgressBarValue = value;
-                if (ProgressBarValueChanged != null)
-                {
-                    ProgressBarValueChanged(this, EventArgs.Empty);
-                }
+                ProgressBarValueChanged?.Invoke(this, EventArgs.Empty);
                 float fractionMoved = (float)(_ProgressBarValue - _Minimum) /
                     (float)(_TrackBarValue - _Minimum); // 0 to 1
                 pbProgress.Width = (int)(fractionMoved * (float)btnThumb.Left);

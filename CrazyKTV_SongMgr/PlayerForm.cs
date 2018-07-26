@@ -17,6 +17,8 @@ namespace CrazyKTV_SongMgr
         string SongSongName;
         string SongTrack;
         string SongVolume;
+        string SongReplayGain;
+        string SongMeanVolume;
         string SongFilePath;
         string dvRowIndex;
         string UpdateSongTrack;
@@ -40,9 +42,11 @@ namespace CrazyKTV_SongMgr
             SongSongName = PlayerSongInfoList[3];
             SongTrack = PlayerSongInfoList[4];
             SongVolume = PlayerSongInfoList[5];
-            SongFilePath = PlayerSongInfoList[6];
-            dvRowIndex = PlayerSongInfoList[7];
-            UpdateDataGridView = PlayerSongInfoList[8];
+            SongReplayGain = PlayerSongInfoList[6];
+            SongMeanVolume = PlayerSongInfoList[7];
+            SongFilePath = PlayerSongInfoList[8];
+            dvRowIndex = PlayerSongInfoList[9];
+            UpdateDataGridView = PlayerSongInfoList[10];
 
             this.Text = "【" + SongLang + "】" + SongSinger + " - " + SongSongName;
 
@@ -72,9 +76,30 @@ namespace CrazyKTV_SongMgr
             Player_ProgressTrackBar.ProgressBarValue = 0;
             Player_ProgressTrackBar.TrackBarValue = 0;
 
-            int GainVolume = 100 - Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
+            int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
+            int GainVolume = 100 - basevolume;
+            List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
+            int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
+            maxvolumelist.Clear();
+            maxvolumelist = null;
+
+            double GainDB = Convert.ToDouble(SongReplayGain);
+            double MeanDB = Convert.ToDouble(SongMeanVolume);
+            if (GainDB * -1 > 0)
+            {
+                SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (GainDB * -1) / 20)).ToString();
+            }
+            else
+            {
+                if (MeanDB > maxvolume)
+                {
+                    SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (maxvolume - MeanDB) / 20)).ToString();
+                }
+            }
+
             Player_VlcControl.SetMedia(new FileInfo(SongFilePath));
             Player_VlcControl.Audio.Volume = Convert.ToInt32(SongVolume) + GainVolume;
+            Console.WriteLine(Player_VlcControl.Audio.Volume);
             Player_VlcControl.Play();
         }
 
@@ -96,8 +121,8 @@ namespace CrazyKTV_SongMgr
         {
             if (e.NewPosition < 100 && Convert.ToInt32(e.NewPosition * 100) - Player_ProgressTrackBar.ProgressBarValue > 1)
             {
-                Player_ProgressTrackBar.InvokeIfRequired(pbar => pbar.ProgressBarValue = (int)(e.NewPosition * 100));
-                Player_ProgressTrackBar.InvokeIfRequired(pbar => pbar.TrackBarValue = (int)(e.NewPosition * 100));
+                Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.ProgressBarValue = (int)(e.NewPosition * 100));
+                Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.TrackBarValue = (int)(e.NewPosition * 100));
             }
 
             if (AudioTracks != null && AudioTracks.Count == 0)
@@ -141,7 +166,7 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                     Player_VlcControl.Position = pos;
-                    Player_CurrentChannelValue_Label.InvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
+                    Player_CurrentChannelValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
                 }
             }
         }
@@ -164,7 +189,7 @@ namespace CrazyKTV_SongMgr
         private void Events_PlayerStopped(object sender, VlcMediaPlayerStoppedEventArgs e)
         {
             Player_VlcControl.PositionChanged -= Events_PlayerPositionChanged;
-            if (!CloseForm) Task.Factory.StartNew(() => ControlExtensions.InvokeIfRequired(this, f => f.Close()));
+            if (!CloseForm) Task.Factory.StartNew(() => ControlExtensions.BeginInvokeIfRequired(this, f => f.Close()));
         }
 
         private void Player_ProgressTrackBar_Click(object sender, EventArgs e)

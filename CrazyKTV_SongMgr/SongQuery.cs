@@ -2401,9 +2401,11 @@ namespace CrazyKTV_SongMgr
                     string SongSongName = SongQuery_EditSongSongName_TextBox.Text;
                     string SongTrack = SongQuery_EditSongTrack_ComboBox.SelectedValue.ToString();
                     string SongVolume = SongQuery_EditSongVolume_TextBox.Text;
+                    string SongReplayGain = list[20];
+                    string SongMeanVolume = list[21];
                     string SongFilePath = list[19];
 
-                    List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongFilePath, "0", "SongQueryEdit" };
+                    List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, "0", "SongQueryEdit" };
 
                     Global.PlayerUpdateSongValueList = new List<string>();
                     PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
@@ -2972,7 +2974,7 @@ namespace CrazyKTV_SongMgr
 
         public static string GetSongQuerySqlStr(string QueryType, string QueryValue, List<string> MultiQueryList)
         {
-            string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState ";
+            string sqlCommonStr = " Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_SongType, Song_Track, Song_Volume, Song_WordCount, Song_PlayCount, Song_MB, Song_CreatDate, Song_FileName, Song_Path, Song_Spell, Song_SpellNum, Song_SongStroke, Song_PenStyle, Song_PlayState, Song_ReplayGain, Song_MeanVolume ";
             string SongQuerySqlStr = string.Empty;
             string MultiQuerySqlStr = string.Empty;
             string SongQueryOrderStr = " order by Song_Id";
@@ -3282,6 +3284,12 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "Song_AddStatus":
                     list = new List<string>() { "加歌狀況", "0", "none" };
+                    break;
+                case "Song_ReplayGain":
+                    list = new List<string>() { "播放增益", "0", "none" };
+                    break;
+                case "Song_MeanVolume":
+                    list = new List<string>() { "平均音量", "0", "none" };
                     break;
             }
             return list;
