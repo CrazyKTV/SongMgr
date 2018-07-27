@@ -3354,9 +3354,9 @@ namespace CrazyKTV_SongMgr
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             
-
             if (File.Exists(Global.CrazyktvDatabaseFile))
             {
+                NativeMethods.SystemSleepManagement.PreventSleep(false);
                 int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
                 List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
                 int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
@@ -3389,6 +3389,7 @@ namespace CrazyKTV_SongMgr
                         FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file);
                         GainDB = result.GainDB;
                         MeanDB = result.MeanDB;
+                        NativeMethods.SystemSleepManagement.ResetSleepTimer(false);
                     }
                     SongVolume = FFmpeg.CalSongVolume(basevolume, maxvolume, GainDB, MeanDB);
                     lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + MeanDB.ToString() + "|" + row["Song_Id"].ToString());
@@ -3461,6 +3462,7 @@ namespace CrazyKTV_SongMgr
                         Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
                     }
                 }
+                NativeMethods.SystemSleepManagement.ResotreSleep();
             }
         }
 

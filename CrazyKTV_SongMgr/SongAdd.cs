@@ -395,7 +395,8 @@ namespace CrazyKTV_SongMgr
 
             if (Global.SongAddDefaultSongTrack == "6" || Global.SongAddEnableVolumeDetect == "True")
             {
-                foreach(string str in filelist)
+                NativeMethods.SystemSleepManagement.PreventSleep(false);
+                foreach (string str in filelist)
                 {
                     lock (LockThis)
                     {
@@ -414,6 +415,7 @@ namespace CrazyKTV_SongMgr
                         }
                     });
                 }
+                NativeMethods.SystemSleepManagement.ResotreSleep();
             }
             else
             {

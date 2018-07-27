@@ -14,6 +14,41 @@ namespace CrazyKTV_SongMgr
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern int LCMapString(int locale, int dwMapFlags, string lpSrcStr, int cchSrc, [Out] string lpDestStr, int cchDest);
 
+        public class SystemSleepManagement
+        {
+            [DllImport("kernel32.dll")]
+            static extern uint SetThreadExecutionState(ExecutionFlag flags);
+
+            [Flags]
+            enum ExecutionFlag : uint
+            {
+                System = 0x00000001,
+                Display = 0x00000002,
+                Continus = 0x80000000,
+            }
+
+            public static void PreventSleep(bool includeDisplay = false)
+            {
+                if (includeDisplay)
+                    SetThreadExecutionState(ExecutionFlag.System | ExecutionFlag.Display | ExecutionFlag.Continus);
+                else
+                    SetThreadExecutionState(ExecutionFlag.System | ExecutionFlag.Continus);
+            }
+
+            public static void ResotreSleep()
+            {
+                SetThreadExecutionState(ExecutionFlag.Continus);
+            }
+
+            public static void ResetSleepTimer(bool includeDisplay = false)
+            {
+                if (includeDisplay)
+                    SetThreadExecutionState(ExecutionFlag.System | ExecutionFlag.Display);
+                else
+                    SetThreadExecutionState(ExecutionFlag.System);
+            }
+        }
+
         #region --- ElevatedDragDrop ---
         public class ElevatedDragDropManager : IMessageFilter
         {

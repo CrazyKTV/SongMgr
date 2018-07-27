@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Vlc.DotNet.Forms;
 using System.IO;
 using Vlc.DotNet.Core;
-using System.Threading;
 
 namespace CrazyKTV_SongMgr
 {
@@ -76,30 +75,34 @@ namespace CrazyKTV_SongMgr
             Player_ProgressTrackBar.ProgressBarValue = 0;
             Player_ProgressTrackBar.TrackBarValue = 0;
 
-            int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
-            int GainVolume = 100 - basevolume;
-            List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
-            int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
-            maxvolumelist.Clear();
-            maxvolumelist = null;
+            int GainVolume = 0;
+            if (SongReplayGain != "" && SongMeanVolume != "")
+            {
+                int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
+                GainVolume = 100 - basevolume;
+                List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
+                int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
+                maxvolumelist.Clear();
+                maxvolumelist = null;
 
-            double GainDB = Convert.ToDouble(SongReplayGain);
-            double MeanDB = Convert.ToDouble(SongMeanVolume);
-            if (GainDB * -1 > 0)
-            {
-                SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (GainDB * -1) / 20)).ToString();
-            }
-            else
-            {
-                if (MeanDB > maxvolume)
+                double GainDB = Convert.ToDouble(SongReplayGain);
+                double MeanDB = Convert.ToDouble(SongMeanVolume);
+                if (GainDB * -1 > 0)
                 {
-                    SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (maxvolume - MeanDB) / 20)).ToString();
+                    SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (GainDB * -1) / 20)).ToString();
+                }
+                else
+                {
+                    if (MeanDB > maxvolume)
+                    {
+                        SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (maxvolume - MeanDB) / 20)).ToString();
+                    }
                 }
             }
 
+            NativeMethods.SystemSleepManagement.PreventSleep(true);
             Player_VlcControl.SetMedia(new FileInfo(SongFilePath));
             Player_VlcControl.Audio.Volume = Convert.ToInt32(SongVolume) + GainVolume;
-            Console.WriteLine(Player_VlcControl.Audio.Volume);
             Player_VlcControl.Play();
         }
 
@@ -123,6 +126,7 @@ namespace CrazyKTV_SongMgr
             {
                 Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.ProgressBarValue = (int)(e.NewPosition * 100));
                 Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.TrackBarValue = (int)(e.NewPosition * 100));
+                NativeMethods.SystemSleepManagement.ResetSleepTimer(true);
             }
 
             if (AudioTracks != null && AudioTracks.Count == 0)
@@ -273,6 +277,7 @@ namespace CrazyKTV_SongMgr
             }
             AudioTracks.Clear();
             AudioTracks = null;
+            NativeMethods.SystemSleepManagement.ResotreSleep();
             this.Owner.Show();
         }
     }

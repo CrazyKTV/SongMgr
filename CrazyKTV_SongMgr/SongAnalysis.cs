@@ -478,6 +478,7 @@ namespace CrazyKTV_SongMgr
                     SongMeanVolume = result.MeanDB.ToString();
                     if (Convert.ToInt32(SongVolume) > 100) SongVolume = "100";
                     if (Convert.ToInt32(SongVolume) < 10) SongVolume = "10";
+                    NativeMethods.SystemSleepManagement.ResetSleepTimer(false);
                 }
                 else
                 {
