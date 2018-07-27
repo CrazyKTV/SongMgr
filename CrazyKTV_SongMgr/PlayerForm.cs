@@ -124,8 +124,8 @@ namespace CrazyKTV_SongMgr
         {
             if (e.NewPosition < 100 && Convert.ToInt32(e.NewPosition * 100) - Player_ProgressTrackBar.ProgressBarValue > 1)
             {
-                Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.ProgressBarValue = (int)(e.NewPosition * 100));
                 Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.TrackBarValue = (int)(e.NewPosition * 100));
+                Player_ProgressTrackBar.BeginInvokeIfRequired(pbar => pbar.ProgressBarValue = (int)(e.NewPosition * 100));
                 NativeMethods.SystemSleepManagement.ResetSleepTimer(true);
             }
 
