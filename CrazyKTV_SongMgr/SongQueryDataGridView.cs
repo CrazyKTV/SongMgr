@@ -260,8 +260,12 @@ namespace CrazyKTV_SongMgr
                         List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, i.ToString(), "SongQuery" };
 
                         Global.PlayerUpdateSongValueList = new List<string>();
-                        PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+
+                        DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
                         newPlayerForm.Show();
+
+                        //PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+                        //newPlayerForm.Show();
                         this.Hide();
                     }
                     break;

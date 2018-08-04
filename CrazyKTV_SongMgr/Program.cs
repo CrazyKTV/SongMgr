@@ -12,11 +12,11 @@ namespace CrazyKTV_SongMgr
     {
         static Program()
         {
-            AppDomain.CurrentDomain.SetData("PRIVATE_BINPATH", @"SongMgr\Libs");
-            AppDomain.CurrentDomain.SetData("BINPATH_PROBE_ONLY", @"SongMgr\Libs");
+            AppDomain.CurrentDomain.SetData("PRIVATE_BINPATH", @"SongMgr\Libs;Codec");
+            AppDomain.CurrentDomain.SetData("BINPATH_PROBE_ONLY", @"SongMgr\Libs;Codec");
             var m = typeof(AppDomainSetup).GetMethod("UpdateContextProperty", BindingFlags.NonPublic | BindingFlags.Static);
             var funsion = typeof(AppDomain).GetMethod("GetFusionContext", BindingFlags.NonPublic | BindingFlags.Instance);
-            m.Invoke(null, new object[] { funsion.Invoke(AppDomain.CurrentDomain, null), "PRIVATE_BINPATH", @"SongMgr\Libs" });
+            m.Invoke(null, new object[] { funsion.Invoke(AppDomain.CurrentDomain, null), "PRIVATE_BINPATH", @"SongMgr\Libs;Codec" });
         }
 
         /// <summary>
