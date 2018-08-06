@@ -518,7 +518,6 @@
             this.MainCfg_HideSongLogTab_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_HideApplyCashboxIdButton_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_BackupRemoveSongDays_Label = new System.Windows.Forms.Label();
-            this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
             this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
             this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_Player_GroupBox = new System.Windows.Forms.GroupBox();
