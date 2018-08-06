@@ -35,6 +35,8 @@
             this.Player_CurrentChannelValue_Label = new System.Windows.Forms.Label();
             this.Player_PlayControl_Button = new System.Windows.Forms.Button();
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
+            this.Player_CurrentGainValue_Label = new System.Windows.Forms.Label();
+            this.Player_CurrentGain_Label = new System.Windows.Forms.Label();
             this.Player_ProgressTrackBar = new CrazyKTV_SongMgr.ProgressTrackBar();
             this.SuspendLayout();
             // 
@@ -58,7 +60,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Player_CurrentChannel_Label.AutoSize = true;
             this.Player_CurrentChannel_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(335, 516);
+            this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(303, 516);
             this.Player_CurrentChannel_Label.Margin = new System.Windows.Forms.Padding(12, 9, 6, 10);
             this.Player_CurrentChannel_Label.Name = "Player_CurrentChannel_Label";
             this.Player_CurrentChannel_Label.Size = new System.Drawing.Size(82, 21);
@@ -87,7 +89,7 @@
             this.Player_CurrentChannelValue_Label.AutoSize = true;
             this.Player_CurrentChannelValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Player_CurrentChannelValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(423, 516);
+            this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(391, 516);
             this.Player_CurrentChannelValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 10);
             this.Player_CurrentChannelValue_Label.Name = "Player_CurrentChannelValue_Label";
             this.Player_CurrentChannelValue_Label.Size = new System.Drawing.Size(74, 21);
@@ -121,6 +123,33 @@
             this.elementHost.Text = "elementHost";
             this.elementHost.Child = null;
             // 
+            // Player_CurrentGainValue_Label
+            // 
+            this.Player_CurrentGainValue_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Player_CurrentGainValue_Label.AutoSize = true;
+            this.Player_CurrentGainValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_CurrentGainValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.Player_CurrentGainValue_Label.Location = new System.Drawing.Point(579, 516);
+            this.Player_CurrentGainValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 10);
+            this.Player_CurrentGainValue_Label.Name = "Player_CurrentGainValue_Label";
+            this.Player_CurrentGainValue_Label.Size = new System.Drawing.Size(74, 21);
+            this.Player_CurrentGainValue_Label.TabIndex = 9;
+            this.Player_CurrentGainValue_Label.Text = "尚無資料";
+            // 
+            // Player_CurrentGain_Label
+            // 
+            this.Player_CurrentGain_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Player_CurrentGain_Label.AutoSize = true;
+            this.Player_CurrentGain_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_CurrentGain_Label.Location = new System.Drawing.Point(491, 516);
+            this.Player_CurrentGain_Label.Margin = new System.Windows.Forms.Padding(12, 9, 6, 10);
+            this.Player_CurrentGain_Label.Name = "Player_CurrentGain_Label";
+            this.Player_CurrentGain_Label.Size = new System.Drawing.Size(82, 21);
+            this.Player_CurrentGain_Label.TabIndex = 8;
+            this.Player_CurrentGain_Label.Text = "目前增益: ";
+            // 
             // Player_ProgressTrackBar
             // 
             this.Player_ProgressTrackBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -140,8 +169,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(824, 559);
+            this.ClientSize = new System.Drawing.Size(824, 561);
             this.Controls.Add(this.elementHost);
+            this.Controls.Add(this.Player_CurrentGainValue_Label);
+            this.Controls.Add(this.Player_CurrentGain_Label);
             this.Controls.Add(this.Player_PlayControl_Button);
             this.Controls.Add(this.Player_CurrentChannelValue_Label);
             this.Controls.Add(this.Player_UpdateChannel_Button);
@@ -155,6 +186,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DShowForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DShowForm_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DShowForm_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,5 +200,7 @@
         private System.Windows.Forms.Button Player_PlayControl_Button;
         private System.Windows.Forms.Integration.ElementHost elementHost;
         private ProgressTrackBar Player_ProgressTrackBar;
+        private System.Windows.Forms.Label Player_CurrentGainValue_Label;
+        private System.Windows.Forms.Label Player_CurrentGain_Label;
     }
 }

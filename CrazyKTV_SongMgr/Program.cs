@@ -104,6 +104,8 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgEnableUIScale = "False";
         public static string MainCfgBackupDB = "False";
         public static string MainCfgBackupDBPath = "";
+        public static string MainCfgPlayerCore = "1";
+        public static string MainCfgPlayerOutput = "1";
 
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";

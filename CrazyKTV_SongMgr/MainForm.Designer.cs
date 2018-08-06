@@ -509,11 +509,30 @@
             this.MainCfg_Save_Button = new System.Windows.Forms.Button();
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Tooltip_Label = new System.Windows.Forms.Label();
+            this.MainCfg_ＧroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_General_ＧroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_HideTab_Label = new System.Windows.Forms.Label();
+            this.MainCfg_AlwaysOnTop_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_HideSongDBConvTab_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_HideSongAddResultTab_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_HideSongLogTab_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_BackupRemoveSongDays_Label = new System.Windows.Forms.Label();
+            this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
+            this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
+            this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_Player_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_PlayerOutput_Panel = new System.Windows.Forms.Panel();
+            this.MainCfg_PlayerOutput_RadioButton1 = new System.Windows.Forms.RadioButton();
+            this.MainCfg_PlayerOutput_RadioButton2 = new System.Windows.Forms.RadioButton();
+            this.MainCfg_PlayerOutput_Label = new System.Windows.Forms.Label();
+            this.MainCfg_PlayerCore_Panel = new System.Windows.Forms.Panel();
+            this.MainCfg_PlayerCore_RadioButton1 = new System.Windows.Forms.RadioButton();
+            this.MainCfg_PlayerCore_RadioButton2 = new System.Windows.Forms.RadioButton();
+            this.MainCfg_PlayerCore_Label = new System.Windows.Forms.Label();
             this.MainCfg_BackupDB_Button = new System.Windows.Forms.Button();
             this.MainCfg_BackupDB_TextBox = new System.Windows.Forms.TextBox();
             this.MainCfg_BackupDB_CheckBox = new System.Windows.Forms.CheckBox();
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
             this.MainCfg_SubTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_MainTabWidth_Button = new System.Windows.Forms.Button();
@@ -529,14 +548,6 @@
             this.MainCfg_Report_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_NonPhoneticsWordLog_Button = new System.Windows.Forms.Button();
             this.MainCfg_NonSingerDataLog_Button = new System.Windows.Forms.Button();
-            this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
-            this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
-            this.MainCfg_BackupRemoveSongDays_Label = new System.Windows.Forms.Label();
-            this.MainCfg_HideSongLogTab_CheckBox = new System.Windows.Forms.CheckBox();
-            this.MainCfg_HideSongAddResultTab_CheckBox = new System.Windows.Forms.CheckBox();
-            this.MainCfg_HideSongDBConvTab_CheckBox = new System.Windows.Forms.CheckBox();
-            this.MainCfg_HideTab_Label = new System.Windows.Forms.Label();
-            this.MainCfg_AlwaysOnTop_CheckBox = new System.Windows.Forms.CheckBox();
             this.SongDBConverter_TabPage = new System.Windows.Forms.TabPage();
             this.SongDBConverter_ConvHelp_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongDBConverter_ConvHelp_RichTextBox = new System.Windows.Forms.RichTextBox();
@@ -679,7 +690,11 @@
             this.Cashbox_Edit_GroupBox.SuspendLayout();
             this.MainCfg_TabPage.SuspendLayout();
             this.MainCfg_Tooltip_GroupBox.SuspendLayout();
+            this.MainCfg_ＧroupBox.SuspendLayout();
             this.MainCfg_General_ＧroupBox.SuspendLayout();
+            this.MainCfg_Player_GroupBox.SuspendLayout();
+            this.MainCfg_PlayerOutput_Panel.SuspendLayout();
+            this.MainCfg_PlayerCore_Panel.SuspendLayout();
             this.MainCfg_UIScale_GroupBox.SuspendLayout();
             this.MainCfg_Report_GroupBox.SuspendLayout();
             this.SongDBConverter_TabPage.SuspendLayout();
@@ -6763,7 +6778,7 @@
             // 
             this.MainCfg_TabPage.Controls.Add(this.MainCfg_Save_Button);
             this.MainCfg_TabPage.Controls.Add(this.MainCfg_Tooltip_GroupBox);
-            this.MainCfg_TabPage.Controls.Add(this.MainCfg_General_ＧroupBox);
+            this.MainCfg_TabPage.Controls.Add(this.MainCfg_ＧroupBox);
             this.MainCfg_TabPage.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_TabPage.Location = new System.Drawing.Point(4, 33);
             this.MainCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -6810,34 +6825,281 @@
             this.MainCfg_Tooltip_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.MainCfg_Tooltip_Label.UseMnemonic = false;
             // 
+            // MainCfg_ＧroupBox
+            // 
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_General_ＧroupBox);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Player_GroupBox);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_Button);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_TextBox);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_CheckBox);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_SubTabWidth_Button);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_MainTabWidth_Button);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_UIScale_GroupBox);
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Report_GroupBox);
+            this.MainCfg_ＧroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_ＧroupBox.Location = new System.Drawing.Point(22, 22);
+            this.MainCfg_ＧroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.MainCfg_ＧroupBox.Name = "MainCfg_ＧroupBox";
+            this.MainCfg_ＧroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.MainCfg_ＧroupBox.Size = new System.Drawing.Size(952, 582);
+            this.MainCfg_ＧroupBox.TabIndex = 0;
+            this.MainCfg_ＧroupBox.TabStop = false;
+            this.MainCfg_ＧroupBox.Text = "程式設定";
+            // 
             // MainCfg_General_ＧroupBox
             // 
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_Button);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_TextBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_CheckBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideApplyCashboxIdButton_CheckBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideButton_Label);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_SubTabWidth_Button);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_MainTabWidth_Button);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_UIScale_GroupBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_Report_GroupBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_EnableAutoUpdate_CheckBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupRemoveSongDays_ComboBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupRemoveSongDays_Label);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongLogTab_CheckBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongAddResultTab_CheckBox);
-            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongDBConvTab_CheckBox);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideTab_Label);
             this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_AlwaysOnTop_CheckBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongDBConvTab_CheckBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongAddResultTab_CheckBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideSongLogTab_CheckBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideApplyCashboxIdButton_CheckBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupRemoveSongDays_Label);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_HideButton_Label);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_BackupRemoveSongDays_ComboBox);
+            this.MainCfg_General_ＧroupBox.Controls.Add(this.MainCfg_EnableAutoUpdate_CheckBox);
             this.MainCfg_General_ＧroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_General_ＧroupBox.Location = new System.Drawing.Point(22, 22);
-            this.MainCfg_General_ＧroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.MainCfg_General_ＧroupBox.Location = new System.Drawing.Point(18, 36);
+            this.MainCfg_General_ＧroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 12);
             this.MainCfg_General_ＧroupBox.Name = "MainCfg_General_ＧroupBox";
             this.MainCfg_General_ＧroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_General_ＧroupBox.Size = new System.Drawing.Size(952, 582);
-            this.MainCfg_General_ＧroupBox.TabIndex = 0;
+            this.MainCfg_General_ＧroupBox.Size = new System.Drawing.Size(545, 205);
+            this.MainCfg_General_ＧroupBox.TabIndex = 20;
             this.MainCfg_General_ＧroupBox.TabStop = false;
-            this.MainCfg_General_ＧroupBox.Text = "程式設定";
+            this.MainCfg_General_ＧroupBox.Text = "播放設定";
+            // 
+            // MainCfg_HideTab_Label
+            // 
+            this.MainCfg_HideTab_Label.AutoSize = true;
+            this.MainCfg_HideTab_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideTab_Label.Location = new System.Drawing.Point(23, 83);
+            this.MainCfg_HideTab_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.MainCfg_HideTab_Label.Name = "MainCfg_HideTab_Label";
+            this.MainCfg_HideTab_Label.Size = new System.Drawing.Size(109, 20);
+            this.MainCfg_HideTab_Label.TabIndex = 1;
+            this.MainCfg_HideTab_Label.Text = "隱藏功能頁面:";
+            // 
+            // MainCfg_AlwaysOnTop_CheckBox
+            // 
+            this.MainCfg_AlwaysOnTop_CheckBox.AutoSize = true;
+            this.MainCfg_AlwaysOnTop_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_AlwaysOnTop_CheckBox.Location = new System.Drawing.Point(27, 41);
+            this.MainCfg_AlwaysOnTop_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 8);
+            this.MainCfg_AlwaysOnTop_CheckBox.Name = "MainCfg_AlwaysOnTop_CheckBox";
+            this.MainCfg_AlwaysOnTop_CheckBox.Size = new System.Drawing.Size(156, 24);
+            this.MainCfg_AlwaysOnTop_CheckBox.TabIndex = 0;
+            this.MainCfg_AlwaysOnTop_CheckBox.Text = "程式視窗置頂顯示";
+            this.MainCfg_AlwaysOnTop_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_AlwaysOnTop_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_AlwaysOnTop_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_HideSongDBConvTab_CheckBox
+            // 
+            this.MainCfg_HideSongDBConvTab_CheckBox.AutoSize = true;
+            this.MainCfg_HideSongDBConvTab_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideSongDBConvTab_CheckBox.Location = new System.Drawing.Point(151, 81);
+            this.MainCfg_HideSongDBConvTab_CheckBox.Margin = new System.Windows.Forms.Padding(6);
+            this.MainCfg_HideSongDBConvTab_CheckBox.Name = "MainCfg_HideSongDBConvTab_CheckBox";
+            this.MainCfg_HideSongDBConvTab_CheckBox.Size = new System.Drawing.Size(92, 24);
+            this.MainCfg_HideSongDBConvTab_CheckBox.TabIndex = 2;
+            this.MainCfg_HideSongDBConvTab_CheckBox.Text = "歌庫轉換";
+            this.MainCfg_HideSongDBConvTab_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_HideSongDBConvTab_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideTab_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_HideSongAddResultTab_CheckBox
+            // 
+            this.MainCfg_HideSongAddResultTab_CheckBox.AutoSize = true;
+            this.MainCfg_HideSongAddResultTab_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideSongAddResultTab_CheckBox.Location = new System.Drawing.Point(263, 81);
+            this.MainCfg_HideSongAddResultTab_CheckBox.Margin = new System.Windows.Forms.Padding(6);
+            this.MainCfg_HideSongAddResultTab_CheckBox.Name = "MainCfg_HideSongAddResultTab_CheckBox";
+            this.MainCfg_HideSongAddResultTab_CheckBox.Size = new System.Drawing.Size(92, 24);
+            this.MainCfg_HideSongAddResultTab_CheckBox.TabIndex = 3;
+            this.MainCfg_HideSongAddResultTab_CheckBox.Text = "加歌結果";
+            this.MainCfg_HideSongAddResultTab_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_HideSongAddResultTab_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideTab_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_HideSongLogTab_CheckBox
+            // 
+            this.MainCfg_HideSongLogTab_CheckBox.AutoSize = true;
+            this.MainCfg_HideSongLogTab_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideSongLogTab_CheckBox.Location = new System.Drawing.Point(375, 81);
+            this.MainCfg_HideSongLogTab_CheckBox.Margin = new System.Windows.Forms.Padding(6);
+            this.MainCfg_HideSongLogTab_CheckBox.Name = "MainCfg_HideSongLogTab_CheckBox";
+            this.MainCfg_HideSongLogTab_CheckBox.Size = new System.Drawing.Size(92, 24);
+            this.MainCfg_HideSongLogTab_CheckBox.TabIndex = 4;
+            this.MainCfg_HideSongLogTab_CheckBox.Text = "操作記錄";
+            this.MainCfg_HideSongLogTab_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_HideSongLogTab_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideTab_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_HideApplyCashboxIdButton_CheckBox
+            // 
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.AutoSize = true;
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Location = new System.Drawing.Point(151, 117);
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Margin = new System.Windows.Forms.Padding(6);
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Name = "MainCfg_HideApplyCashboxIdButton_CheckBox";
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Size = new System.Drawing.Size(124, 24);
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.TabIndex = 15;
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Text = "套用錢櫃編號";
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_HideApplyCashboxIdButton_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideButton_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_BackupRemoveSongDays_Label
+            // 
+            this.MainCfg_BackupRemoveSongDays_Label.AutoSize = true;
+            this.MainCfg_BackupRemoveSongDays_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_BackupRemoveSongDays_Label.Location = new System.Drawing.Point(23, 155);
+            this.MainCfg_BackupRemoveSongDays_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.MainCfg_BackupRemoveSongDays_Label.Name = "MainCfg_BackupRemoveSongDays_Label";
+            this.MainCfg_BackupRemoveSongDays_Label.Size = new System.Drawing.Size(173, 20);
+            this.MainCfg_BackupRemoveSongDays_Label.TabIndex = 5;
+            this.MainCfg_BackupRemoveSongDays_Label.Text = "備份移除歌曲保留天數:";
+            // 
+            // MainCfg_HideButton_Label
+            // 
+            this.MainCfg_HideButton_Label.AutoSize = true;
+            this.MainCfg_HideButton_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_HideButton_Label.Location = new System.Drawing.Point(23, 119);
+            this.MainCfg_HideButton_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.MainCfg_HideButton_Label.Name = "MainCfg_HideButton_Label";
+            this.MainCfg_HideButton_Label.Size = new System.Drawing.Size(109, 20);
+            this.MainCfg_HideButton_Label.TabIndex = 14;
+            this.MainCfg_HideButton_Label.Text = "隱藏功能按鈕:";
+            // 
+            // MainCfg_BackupRemoveSongDays_ComboBox
+            // 
+            this.MainCfg_BackupRemoveSongDays_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MainCfg_BackupRemoveSongDays_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_BackupRemoveSongDays_ComboBox.FormattingEnabled = true;
+            this.MainCfg_BackupRemoveSongDays_ComboBox.Location = new System.Drawing.Point(219, 151);
+            this.MainCfg_BackupRemoveSongDays_ComboBox.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
+            this.MainCfg_BackupRemoveSongDays_ComboBox.Name = "MainCfg_BackupRemoveSongDays_ComboBox";
+            this.MainCfg_BackupRemoveSongDays_ComboBox.Size = new System.Drawing.Size(90, 28);
+            this.MainCfg_BackupRemoveSongDays_ComboBox.TabIndex = 6;
+            this.MainCfg_BackupRemoveSongDays_ComboBox.SelectedIndexChanged += new System.EventHandler(this.MainCfg_BackupRemoveSongDays_ComboBox_SelectedIndexChanged);
+            // 
+            // MainCfg_EnableAutoUpdate_CheckBox
+            // 
+            this.MainCfg_EnableAutoUpdate_CheckBox.AutoSize = true;
+            this.MainCfg_EnableAutoUpdate_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_EnableAutoUpdate_CheckBox.Location = new System.Drawing.Point(207, 41);
+            this.MainCfg_EnableAutoUpdate_CheckBox.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.MainCfg_EnableAutoUpdate_CheckBox.Name = "MainCfg_EnableAutoUpdate_CheckBox";
+            this.MainCfg_EnableAutoUpdate_CheckBox.Size = new System.Drawing.Size(156, 24);
+            this.MainCfg_EnableAutoUpdate_CheckBox.TabIndex = 7;
+            this.MainCfg_EnableAutoUpdate_CheckBox.Text = "啟用程式自動更新";
+            this.MainCfg_EnableAutoUpdate_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_EnableAutoUpdate_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_EnableAutoUpdate_CheckBox_CheckedChanged);
+            // 
+            // MainCfg_Player_GroupBox
+            // 
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerOutput_Panel);
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerCore_Panel);
+            this.MainCfg_Player_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_Player_GroupBox.Location = new System.Drawing.Point(18, 265);
+            this.MainCfg_Player_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 12, 12);
+            this.MainCfg_Player_GroupBox.Name = "MainCfg_Player_GroupBox";
+            this.MainCfg_Player_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.MainCfg_Player_GroupBox.Size = new System.Drawing.Size(545, 210);
+            this.MainCfg_Player_GroupBox.TabIndex = 19;
+            this.MainCfg_Player_GroupBox.TabStop = false;
+            this.MainCfg_Player_GroupBox.Text = "播放設定";
+            // 
+            // MainCfg_PlayerOutput_Panel
+            // 
+            this.MainCfg_PlayerOutput_Panel.Controls.Add(this.MainCfg_PlayerOutput_RadioButton1);
+            this.MainCfg_PlayerOutput_Panel.Controls.Add(this.MainCfg_PlayerOutput_RadioButton2);
+            this.MainCfg_PlayerOutput_Panel.Controls.Add(this.MainCfg_PlayerOutput_Label);
+            this.MainCfg_PlayerOutput_Panel.Location = new System.Drawing.Point(10, 68);
+            this.MainCfg_PlayerOutput_Panel.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.MainCfg_PlayerOutput_Panel.Name = "MainCfg_PlayerOutput_Panel";
+            this.MainCfg_PlayerOutput_Panel.Size = new System.Drawing.Size(525, 32);
+            this.MainCfg_PlayerOutput_Panel.TabIndex = 15;
+            // 
+            // MainCfg_PlayerOutput_RadioButton1
+            // 
+            this.MainCfg_PlayerOutput_RadioButton1.AutoSize = true;
+            this.MainCfg_PlayerOutput_RadioButton1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerOutput_RadioButton1.Location = new System.Drawing.Point(99, 5);
+            this.MainCfg_PlayerOutput_RadioButton1.Name = "MainCfg_PlayerOutput_RadioButton1";
+            this.MainCfg_PlayerOutput_RadioButton1.Size = new System.Drawing.Size(72, 24);
+            this.MainCfg_PlayerOutput_RadioButton1.TabIndex = 11;
+            this.MainCfg_PlayerOutput_RadioButton1.TabStop = true;
+            this.MainCfg_PlayerOutput_RadioButton1.Text = "VMR9";
+            this.MainCfg_PlayerOutput_RadioButton1.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerOutput_RadioButton1.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerOutput_RadioButton_CheckedChanged);
+            // 
+            // MainCfg_PlayerOutput_RadioButton2
+            // 
+            this.MainCfg_PlayerOutput_RadioButton2.AutoSize = true;
+            this.MainCfg_PlayerOutput_RadioButton2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerOutput_RadioButton2.Location = new System.Drawing.Point(193, 5);
+            this.MainCfg_PlayerOutput_RadioButton2.Name = "MainCfg_PlayerOutput_RadioButton2";
+            this.MainCfg_PlayerOutput_RadioButton2.Size = new System.Drawing.Size(57, 24);
+            this.MainCfg_PlayerOutput_RadioButton2.TabIndex = 12;
+            this.MainCfg_PlayerOutput_RadioButton2.TabStop = true;
+            this.MainCfg_PlayerOutput_RadioButton2.Text = "EVR";
+            this.MainCfg_PlayerOutput_RadioButton2.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerOutput_RadioButton2.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerOutput_RadioButton_CheckedChanged);
+            // 
+            // MainCfg_PlayerOutput_Label
+            // 
+            this.MainCfg_PlayerOutput_Label.AutoSize = true;
+            this.MainCfg_PlayerOutput_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerOutput_Label.Location = new System.Drawing.Point(13, 7);
+            this.MainCfg_PlayerOutput_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.MainCfg_PlayerOutput_Label.Name = "MainCfg_PlayerOutput_Label";
+            this.MainCfg_PlayerOutput_Label.Size = new System.Drawing.Size(77, 20);
+            this.MainCfg_PlayerOutput_Label.TabIndex = 10;
+            this.MainCfg_PlayerOutput_Label.Text = "輸出方式:";
+            // 
+            // MainCfg_PlayerCore_Panel
+            // 
+            this.MainCfg_PlayerCore_Panel.Controls.Add(this.MainCfg_PlayerCore_RadioButton1);
+            this.MainCfg_PlayerCore_Panel.Controls.Add(this.MainCfg_PlayerCore_RadioButton2);
+            this.MainCfg_PlayerCore_Panel.Controls.Add(this.MainCfg_PlayerCore_Label);
+            this.MainCfg_PlayerCore_Panel.Location = new System.Drawing.Point(10, 28);
+            this.MainCfg_PlayerCore_Panel.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.MainCfg_PlayerCore_Panel.Name = "MainCfg_PlayerCore_Panel";
+            this.MainCfg_PlayerCore_Panel.Size = new System.Drawing.Size(525, 32);
+            this.MainCfg_PlayerCore_Panel.TabIndex = 14;
+            // 
+            // MainCfg_PlayerCore_RadioButton1
+            // 
+            this.MainCfg_PlayerCore_RadioButton1.AutoSize = true;
+            this.MainCfg_PlayerCore_RadioButton1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerCore_RadioButton1.Location = new System.Drawing.Point(99, 5);
+            this.MainCfg_PlayerCore_RadioButton1.Name = "MainCfg_PlayerCore_RadioButton1";
+            this.MainCfg_PlayerCore_RadioButton1.Size = new System.Drawing.Size(113, 24);
+            this.MainCfg_PlayerCore_RadioButton1.TabIndex = 11;
+            this.MainCfg_PlayerCore_RadioButton1.TabStop = true;
+            this.MainCfg_PlayerCore_RadioButton1.Text = "DirectShow";
+            this.MainCfg_PlayerCore_RadioButton1.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerCore_RadioButton1.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerCore_RadioButton_CheckedChanged);
+            // 
+            // MainCfg_PlayerCore_RadioButton2
+            // 
+            this.MainCfg_PlayerCore_RadioButton2.AutoSize = true;
+            this.MainCfg_PlayerCore_RadioButton2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerCore_RadioButton2.Location = new System.Drawing.Point(234, 5);
+            this.MainCfg_PlayerCore_RadioButton2.Name = "MainCfg_PlayerCore_RadioButton2";
+            this.MainCfg_PlayerCore_RadioButton2.Size = new System.Drawing.Size(96, 24);
+            this.MainCfg_PlayerCore_RadioButton2.TabIndex = 12;
+            this.MainCfg_PlayerCore_RadioButton2.TabStop = true;
+            this.MainCfg_PlayerCore_RadioButton2.Text = "VlcPlayer";
+            this.MainCfg_PlayerCore_RadioButton2.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerCore_RadioButton2.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerCore_RadioButton_CheckedChanged);
+            // 
+            // MainCfg_PlayerCore_Label
+            // 
+            this.MainCfg_PlayerCore_Label.AutoSize = true;
+            this.MainCfg_PlayerCore_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerCore_Label.Location = new System.Drawing.Point(13, 7);
+            this.MainCfg_PlayerCore_Label.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
+            this.MainCfg_PlayerCore_Label.Name = "MainCfg_PlayerCore_Label";
+            this.MainCfg_PlayerCore_Label.Size = new System.Drawing.Size(77, 20);
+            this.MainCfg_PlayerCore_Label.TabIndex = 10;
+            this.MainCfg_PlayerCore_Label.Text = "播放核心:";
             // 
             // MainCfg_BackupDB_Button
             // 
@@ -6873,30 +7135,6 @@
             this.MainCfg_BackupDB_CheckBox.Text = "離開程式時備份資料庫檔案至指定資料夾";
             this.MainCfg_BackupDB_CheckBox.UseVisualStyleBackColor = true;
             this.MainCfg_BackupDB_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_BackupDB_CheckBox_CheckedChanged);
-            // 
-            // MainCfg_HideApplyCashboxIdButton_CheckBox
-            // 
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.AutoSize = true;
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Location = new System.Drawing.Point(144, 118);
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Name = "MainCfg_HideApplyCashboxIdButton_CheckBox";
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Size = new System.Drawing.Size(124, 24);
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.TabIndex = 15;
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.Text = "套用錢櫃編號";
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_HideApplyCashboxIdButton_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideButton_CheckBox_CheckedChanged);
-            // 
-            // MainCfg_HideButton_Label
-            // 
-            this.MainCfg_HideButton_Label.AutoSize = true;
-            this.MainCfg_HideButton_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_HideButton_Label.Location = new System.Drawing.Point(16, 120);
-            this.MainCfg_HideButton_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.MainCfg_HideButton_Label.Name = "MainCfg_HideButton_Label";
-            this.MainCfg_HideButton_Label.Size = new System.Drawing.Size(109, 20);
-            this.MainCfg_HideButton_Label.TabIndex = 14;
-            this.MainCfg_HideButton_Label.Text = "隱藏功能按鈕:";
             // 
             // MainCfg_SubTabWidth_Button
             // 
@@ -6936,7 +7174,7 @@
             this.MainCfg_UIScale_GroupBox.Controls.Add(this.MainCfg_UIScale_ComboBox);
             this.MainCfg_UIScale_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_UIScale_GroupBox.Location = new System.Drawing.Point(583, 36);
-            this.MainCfg_UIScale_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 20);
+            this.MainCfg_UIScale_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 12);
             this.MainCfg_UIScale_GroupBox.Name = "MainCfg_UIScale_GroupBox";
             this.MainCfg_UIScale_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
             this.MainCfg_UIScale_GroupBox.Size = new System.Drawing.Size(344, 205);
@@ -7046,11 +7284,11 @@
             this.MainCfg_Report_GroupBox.Controls.Add(this.MainCfg_NonPhoneticsWordLog_Button);
             this.MainCfg_Report_GroupBox.Controls.Add(this.MainCfg_NonSingerDataLog_Button);
             this.MainCfg_Report_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_Report_GroupBox.Location = new System.Drawing.Point(586, 273);
-            this.MainCfg_Report_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 8, 20);
+            this.MainCfg_Report_GroupBox.Location = new System.Drawing.Point(583, 265);
+            this.MainCfg_Report_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 12, 20);
             this.MainCfg_Report_GroupBox.Name = "MainCfg_Report_GroupBox";
             this.MainCfg_Report_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_Report_GroupBox.Size = new System.Drawing.Size(341, 96);
+            this.MainCfg_Report_GroupBox.Size = new System.Drawing.Size(344, 96);
             this.MainCfg_Report_GroupBox.TabIndex = 8;
             this.MainCfg_Report_GroupBox.TabStop = false;
             this.MainCfg_Report_GroupBox.Text = "回報資料";
@@ -7078,105 +7316,6 @@
             this.MainCfg_NonSingerDataLog_Button.Text = "記錄無資料歌手";
             this.MainCfg_NonSingerDataLog_Button.UseVisualStyleBackColor = true;
             this.MainCfg_NonSingerDataLog_Button.Click += new System.EventHandler(this.MainCfg_NonSingerDataLog_Button_Click);
-            // 
-            // MainCfg_EnableAutoUpdate_CheckBox
-            // 
-            this.MainCfg_EnableAutoUpdate_CheckBox.AutoSize = true;
-            this.MainCfg_EnableAutoUpdate_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_EnableAutoUpdate_CheckBox.Location = new System.Drawing.Point(200, 42);
-            this.MainCfg_EnableAutoUpdate_CheckBox.Margin = new System.Windows.Forms.Padding(6, 12, 6, 8);
-            this.MainCfg_EnableAutoUpdate_CheckBox.Name = "MainCfg_EnableAutoUpdate_CheckBox";
-            this.MainCfg_EnableAutoUpdate_CheckBox.Size = new System.Drawing.Size(156, 24);
-            this.MainCfg_EnableAutoUpdate_CheckBox.TabIndex = 7;
-            this.MainCfg_EnableAutoUpdate_CheckBox.Text = "啟用程式自動更新";
-            this.MainCfg_EnableAutoUpdate_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_EnableAutoUpdate_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_EnableAutoUpdate_CheckBox_CheckedChanged);
-            // 
-            // MainCfg_BackupRemoveSongDays_ComboBox
-            // 
-            this.MainCfg_BackupRemoveSongDays_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MainCfg_BackupRemoveSongDays_ComboBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_BackupRemoveSongDays_ComboBox.FormattingEnabled = true;
-            this.MainCfg_BackupRemoveSongDays_ComboBox.Location = new System.Drawing.Point(212, 152);
-            this.MainCfg_BackupRemoveSongDays_ComboBox.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
-            this.MainCfg_BackupRemoveSongDays_ComboBox.Name = "MainCfg_BackupRemoveSongDays_ComboBox";
-            this.MainCfg_BackupRemoveSongDays_ComboBox.Size = new System.Drawing.Size(90, 28);
-            this.MainCfg_BackupRemoveSongDays_ComboBox.TabIndex = 6;
-            this.MainCfg_BackupRemoveSongDays_ComboBox.SelectedIndexChanged += new System.EventHandler(this.MainCfg_BackupRemoveSongDays_ComboBox_SelectedIndexChanged);
-            // 
-            // MainCfg_BackupRemoveSongDays_Label
-            // 
-            this.MainCfg_BackupRemoveSongDays_Label.AutoSize = true;
-            this.MainCfg_BackupRemoveSongDays_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_BackupRemoveSongDays_Label.Location = new System.Drawing.Point(16, 156);
-            this.MainCfg_BackupRemoveSongDays_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.MainCfg_BackupRemoveSongDays_Label.Name = "MainCfg_BackupRemoveSongDays_Label";
-            this.MainCfg_BackupRemoveSongDays_Label.Size = new System.Drawing.Size(173, 20);
-            this.MainCfg_BackupRemoveSongDays_Label.TabIndex = 5;
-            this.MainCfg_BackupRemoveSongDays_Label.Text = "備份移除歌曲保留天數:";
-            // 
-            // MainCfg_HideSongLogTab_CheckBox
-            // 
-            this.MainCfg_HideSongLogTab_CheckBox.AutoSize = true;
-            this.MainCfg_HideSongLogTab_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_HideSongLogTab_CheckBox.Location = new System.Drawing.Point(368, 82);
-            this.MainCfg_HideSongLogTab_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.MainCfg_HideSongLogTab_CheckBox.Name = "MainCfg_HideSongLogTab_CheckBox";
-            this.MainCfg_HideSongLogTab_CheckBox.Size = new System.Drawing.Size(92, 24);
-            this.MainCfg_HideSongLogTab_CheckBox.TabIndex = 4;
-            this.MainCfg_HideSongLogTab_CheckBox.Text = "操作記錄";
-            this.MainCfg_HideSongLogTab_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_HideSongLogTab_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideTab_CheckBox_CheckedChanged);
-            // 
-            // MainCfg_HideSongAddResultTab_CheckBox
-            // 
-            this.MainCfg_HideSongAddResultTab_CheckBox.AutoSize = true;
-            this.MainCfg_HideSongAddResultTab_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_HideSongAddResultTab_CheckBox.Location = new System.Drawing.Point(256, 82);
-            this.MainCfg_HideSongAddResultTab_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.MainCfg_HideSongAddResultTab_CheckBox.Name = "MainCfg_HideSongAddResultTab_CheckBox";
-            this.MainCfg_HideSongAddResultTab_CheckBox.Size = new System.Drawing.Size(92, 24);
-            this.MainCfg_HideSongAddResultTab_CheckBox.TabIndex = 3;
-            this.MainCfg_HideSongAddResultTab_CheckBox.Text = "加歌結果";
-            this.MainCfg_HideSongAddResultTab_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_HideSongAddResultTab_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideTab_CheckBox_CheckedChanged);
-            // 
-            // MainCfg_HideSongDBConvTab_CheckBox
-            // 
-            this.MainCfg_HideSongDBConvTab_CheckBox.AutoSize = true;
-            this.MainCfg_HideSongDBConvTab_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_HideSongDBConvTab_CheckBox.Location = new System.Drawing.Point(144, 82);
-            this.MainCfg_HideSongDBConvTab_CheckBox.Margin = new System.Windows.Forms.Padding(6);
-            this.MainCfg_HideSongDBConvTab_CheckBox.Name = "MainCfg_HideSongDBConvTab_CheckBox";
-            this.MainCfg_HideSongDBConvTab_CheckBox.Size = new System.Drawing.Size(92, 24);
-            this.MainCfg_HideSongDBConvTab_CheckBox.TabIndex = 2;
-            this.MainCfg_HideSongDBConvTab_CheckBox.Text = "歌庫轉換";
-            this.MainCfg_HideSongDBConvTab_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_HideSongDBConvTab_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_HideTab_CheckBox_CheckedChanged);
-            // 
-            // MainCfg_HideTab_Label
-            // 
-            this.MainCfg_HideTab_Label.AutoSize = true;
-            this.MainCfg_HideTab_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_HideTab_Label.Location = new System.Drawing.Point(16, 84);
-            this.MainCfg_HideTab_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.MainCfg_HideTab_Label.Name = "MainCfg_HideTab_Label";
-            this.MainCfg_HideTab_Label.Size = new System.Drawing.Size(109, 20);
-            this.MainCfg_HideTab_Label.TabIndex = 1;
-            this.MainCfg_HideTab_Label.Text = "隱藏功能頁面:";
-            // 
-            // MainCfg_AlwaysOnTop_CheckBox
-            // 
-            this.MainCfg_AlwaysOnTop_CheckBox.AutoSize = true;
-            this.MainCfg_AlwaysOnTop_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_AlwaysOnTop_CheckBox.Location = new System.Drawing.Point(20, 42);
-            this.MainCfg_AlwaysOnTop_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 8);
-            this.MainCfg_AlwaysOnTop_CheckBox.Name = "MainCfg_AlwaysOnTop_CheckBox";
-            this.MainCfg_AlwaysOnTop_CheckBox.Size = new System.Drawing.Size(156, 24);
-            this.MainCfg_AlwaysOnTop_CheckBox.TabIndex = 0;
-            this.MainCfg_AlwaysOnTop_CheckBox.Text = "程式視窗置頂顯示";
-            this.MainCfg_AlwaysOnTop_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_AlwaysOnTop_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_AlwaysOnTop_CheckBox_CheckedChanged);
             // 
             // SongDBConverter_TabPage
             // 
@@ -8213,8 +8352,15 @@
             this.Cashbox_Edit_GroupBox.PerformLayout();
             this.MainCfg_TabPage.ResumeLayout(false);
             this.MainCfg_Tooltip_GroupBox.ResumeLayout(false);
+            this.MainCfg_ＧroupBox.ResumeLayout(false);
+            this.MainCfg_ＧroupBox.PerformLayout();
             this.MainCfg_General_ＧroupBox.ResumeLayout(false);
             this.MainCfg_General_ＧroupBox.PerformLayout();
+            this.MainCfg_Player_GroupBox.ResumeLayout(false);
+            this.MainCfg_PlayerOutput_Panel.ResumeLayout(false);
+            this.MainCfg_PlayerOutput_Panel.PerformLayout();
+            this.MainCfg_PlayerCore_Panel.ResumeLayout(false);
+            this.MainCfg_PlayerCore_Panel.PerformLayout();
             this.MainCfg_UIScale_GroupBox.ResumeLayout(false);
             this.MainCfg_UIScale_GroupBox.PerformLayout();
             this.MainCfg_Report_GroupBox.ResumeLayout(false);
@@ -8557,7 +8703,7 @@
         private System.Windows.Forms.Button MainCfg_Save_Button;
         private System.Windows.Forms.GroupBox MainCfg_Tooltip_GroupBox;
         private System.Windows.Forms.Label MainCfg_Tooltip_Label;
-        private System.Windows.Forms.GroupBox MainCfg_General_ＧroupBox;
+        private System.Windows.Forms.GroupBox MainCfg_ＧroupBox;
         private System.Windows.Forms.CheckBox MainCfg_AlwaysOnTop_CheckBox;
         private System.Windows.Forms.Label MainCfg_HideTab_Label;
         private System.Windows.Forms.CheckBox MainCfg_HideSongDBConvTab_CheckBox;
@@ -8815,6 +8961,16 @@
         private System.Windows.Forms.Label SongMaintenance_MaxVolume_Label2;
         private System.Windows.Forms.ComboBox SongMaintenance_MaxVolume_ComboBox;
         private System.Windows.Forms.Label SongMaintenance_MaxVolume_Label1;
+        private System.Windows.Forms.GroupBox MainCfg_Player_GroupBox;
+        private System.Windows.Forms.GroupBox MainCfg_General_ＧroupBox;
+        private System.Windows.Forms.RadioButton MainCfg_PlayerCore_RadioButton1;
+        private System.Windows.Forms.RadioButton MainCfg_PlayerCore_RadioButton2;
+        private System.Windows.Forms.Label MainCfg_PlayerCore_Label;
+        private System.Windows.Forms.Panel MainCfg_PlayerCore_Panel;
+        private System.Windows.Forms.Panel MainCfg_PlayerOutput_Panel;
+        private System.Windows.Forms.RadioButton MainCfg_PlayerOutput_RadioButton1;
+        private System.Windows.Forms.RadioButton MainCfg_PlayerOutput_RadioButton2;
+        private System.Windows.Forms.Label MainCfg_PlayerOutput_Label;
     }
 }
 

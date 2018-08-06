@@ -151,6 +151,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", Global.MainCfgBackupDB);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", Global.MainCfgBackupDBPath);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", Global.SongMaintenanceMaxVolume);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", Global.MainCfgPlayerCore);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", Global.MainCfgPlayerOutput);
             }
 
             List<string> list = new List<string>()
@@ -205,7 +207,9 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", null, false)
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", null, false)
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -468,6 +472,26 @@ namespace CrazyKTV_SongMgr
             SongMaintenance_MaxVolume_ComboBox.DisplayMember = "Display";
             SongMaintenance_MaxVolume_ComboBox.ValueMember = "Value";
             SongMaintenance_MaxVolume_ComboBox.SelectedValue = Global.SongMaintenanceMaxVolume;
+
+            if (list[51] != "") Global.MainCfgPlayerCore = list[51];
+            if (Global.MainCfgPlayerCore == "1")
+            {
+                MainCfg_PlayerCore_RadioButton1.Checked = true;
+            }
+            else
+            {
+                MainCfg_PlayerCore_RadioButton2.Checked = true;
+            }
+
+            if (list[52] != "") Global.MainCfgPlayerOutput = list[52];
+            if (Global.MainCfgPlayerOutput == "1")
+            {
+                MainCfg_PlayerOutput_RadioButton1.Checked = true;
+            }
+            else
+            {
+                MainCfg_PlayerOutput_RadioButton2.Checked = true;
+            }
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
@@ -808,6 +832,11 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
+
+
+
 
 
 

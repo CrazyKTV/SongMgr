@@ -31,6 +31,8 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", Global.MainCfgBackupDB);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", Global.MainCfgBackupDBPath);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", Global.MainCfgPlayerCore);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", Global.MainCfgPlayerOutput);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -188,6 +190,17 @@ namespace CrazyKTV_SongMgr
                     MainCfg_BackupDB_TextBox.Text = fbd.SelectedPath;
                 }
             }
+        }
+
+        private void MainCfg_PlayerCore_RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgPlayerCore = (((RadioButton)sender).Name == "MainCfg_PlayerCore_RadioButton1") ? "1" : "2";
+            MainCfg_PlayerOutput_Panel.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
+        }
+
+        private void MainCfg_PlayerOutput_RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgPlayerOutput = (((RadioButton)sender).Name == "MainCfg_PlayerOutput_RadioButton1") ? "1" : "2";
         }
 
         #endregion

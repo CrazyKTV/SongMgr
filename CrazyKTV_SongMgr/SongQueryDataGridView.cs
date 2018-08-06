@@ -260,12 +260,16 @@ namespace CrazyKTV_SongMgr
                         List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, i.ToString(), "SongQuery" };
 
                         Global.PlayerUpdateSongValueList = new List<string>();
-
-                        DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
-                        newPlayerForm.Show();
-
-                        //PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
-                        //newPlayerForm.Show();
+                        if (Global.MainCfgPlayerCore == "1")
+                        {
+                            DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
+                            newPlayerForm.Show();
+                        }
+                        else
+                        {
+                            PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+                            newPlayerForm.Show();
+                        }
                         this.Hide();
                     }
                     break;
@@ -408,8 +412,17 @@ namespace CrazyKTV_SongMgr
                 List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, i.ToString(), "SongQuery" };
 
                 Global.PlayerUpdateSongValueList = new List<string>();
-                PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
-                newPlayerForm.Show();
+
+                if (Global.MainCfgPlayerCore == "1")
+                {
+                    DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
+                    newPlayerForm.Show();
+                }
+                else
+                {
+                    PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+                    newPlayerForm.Show();
+                }
                 this.Hide();
             }
         }

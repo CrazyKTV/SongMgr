@@ -28,13 +28,8 @@ namespace CrazyKTV_SongMgr
         string UpdateDataGridView;
 
         private MediaUriElement mediaUriElement;
-        private double mWidth;
-        private double mHeight;
-        private int eWidth;
-        private int eHeight;
         private bool sliderInit;
         private bool sliderDrag;
-        private bool sliderMediaChange;
 
         public DShowForm()
         {
@@ -68,16 +63,45 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.EndInit();
 
             mediaUriElement.MediaUriPlayer.CodecsDirectory = System.Windows.Forms.Application.StartupPath + @"\Codec";
-            mediaUriElement.VideoRenderer = CrazyKTV_MediaKit.DirectShow.MediaPlayers.VideoRendererType.VideoMixingRenderer9;
+            mediaUriElement.VideoRenderer = (Global.MainCfgPlayerOutput == "1") ? CrazyKTV_MediaKit.DirectShow.MediaPlayers.VideoRendererType.VideoMixingRenderer9 : CrazyKTV_MediaKit.DirectShow.MediaPlayers.VideoRendererType.EnhancedVideoRenderer;
+            mediaUriElement.DeeperColor = (Global.MainCfgPlayerOutput == "1") ? false : true;
             mediaUriElement.Stretch = System.Windows.Media.Stretch.Fill;
 
-
             mediaUriElement.MediaFailed += MediaUriElement_MediaFailed;
-            mediaUriElement.MediaUriPlayer.MediaPositionChanged += MediaUriPlayer_MediaPositionChanged;
             mediaUriElement.MediaEnded += MediaUriElement_MediaEnded;
             mediaUriElement.MouseLeftButtonDown += mediaUriElement_MouseLeftButtonDown;
+            mediaUriElement.MediaUriPlayer.MediaPositionChanged += MediaUriPlayer_MediaPositionChanged;
 
             mediaUriElement.Source = new Uri(SongFilePath);
+
+            // 音量平衡
+            int GainVolume = Convert.ToInt32(SongVolume);
+            if (SongReplayGain != "" && SongMeanVolume != "")
+            {
+                int basevolume = 100;
+                GainVolume = basevolume;
+
+                List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
+                int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
+                maxvolumelist.Clear();
+                maxvolumelist = null;
+
+                double GainDB = Convert.ToDouble(SongReplayGain);
+                double MeanDB = Convert.ToDouble(SongMeanVolume);
+                if (GainDB * -1 > 0)
+                {
+                    GainVolume = Convert.ToInt32(basevolume * Math.Pow(10, (GainDB * -1) / 20));
+                }
+                else
+                {
+                    if (MeanDB > maxvolume)
+                    {
+                        GainVolume = Convert.ToInt32(basevolume * Math.Pow(10, (maxvolume - MeanDB) / 20));
+                    }
+                }
+            }
+            mediaUriElement.AudioAmplify = GainVolume;
+            Player_CurrentGainValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = GainVolume + " %");
 
             SpinWait.SpinUntil(() => mediaUriElement.GetAudioTrackList().Count > 0);
 
@@ -112,7 +136,8 @@ namespace CrazyKTV_SongMgr
                 }
             }
             Player_CurrentChannelValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
-            mediaUriElement.AudioAmplify = 800;
+
+            NativeMethods.SystemSleepManagement.PreventSleep(true);
         }
 
         private void MediaUriElement_MediaFailed(object sender, CrazyKTV_MediaKit.DirectShow.MediaPlayers.MediaFailedEventArgs e)
@@ -125,19 +150,21 @@ namespace CrazyKTV_SongMgr
             if (sliderDrag)
                 return;
 
-            this.BeginInvoke((Action)delegate ()
+            if (!sliderInit)
             {
-                if (!sliderInit)
+                this.Invoke((Action)delegate ()
                 {
                     if (mediaUriElement.MediaDuration > 0)
                     {
-                        Player_ProgressTrackBar.Maximum = (int)mediaUriElement.MediaDuration * -1;
+                        Player_ProgressTrackBar.Maximum = ((int)mediaUriElement.MediaDuration < 0) ? (int)mediaUriElement.MediaDuration * -1 : (int)mediaUriElement.MediaDuration;
                         sliderInit = true;
                     }
-                }
-                if (sliderInit)
-                    ChangeSlideValue();
-            });
+                });
+            }
+            else
+            {
+                this.BeginInvoke(new Action(ChangeSlideValue), null);
+            }
         }
 
         private void ChangeSlideValue()
@@ -147,40 +174,38 @@ namespace CrazyKTV_SongMgr
 
             if (sliderInit)
             {
-                sliderMediaChange = true;
                 double perc = (double)mediaUriElement.MediaPosition / mediaUriElement.MediaDuration;
-                Player_ProgressTrackBar.TrackBarValue = (int)(Player_ProgressTrackBar.Maximum * perc);
-                Player_ProgressTrackBar.ProgressBarValue = (int)(Player_ProgressTrackBar.Maximum * perc);
-                sliderMediaChange = false;
+                int newValue = (int)(Player_ProgressTrackBar.Maximum * perc);
+                if (newValue - Player_ProgressTrackBar.ProgressBarValue < 500000) return;
+                Player_ProgressTrackBar.TrackBarValue = newValue;
+                Player_ProgressTrackBar.ProgressBarValue = newValue;
             }
-        }
-
-        private void ChangeMediaPosition()
-        {
-            if (sliderMediaChange || !sliderInit)
-                return;
-
-            sliderDrag = true;
-            double perc = (double)Player_ProgressTrackBar.TrackBarValue / Player_ProgressTrackBar.Maximum;
-            mediaUriElement.MediaPosition = (long)(mediaUriElement.MediaDuration * perc);
-            sliderDrag = false;
         }
 
         private void Player_ProgressTrackBar_Click(object sender, EventArgs e)
         {
-            if (sliderMediaChange || !sliderInit)
+            if (!sliderInit)
                 return;
 
-            this.BeginInvoke((Action)delegate ()
-            {
-                ChangeMediaPosition();
-            });
+            this.BeginInvoke(new Action(ChangeMediaPosition), null);
+        }
+
+        private void ChangeMediaPosition()
+        {
+            sliderDrag = true;
+            double perc = (double)Player_ProgressTrackBar.TrackBarValue / Player_ProgressTrackBar.Maximum;
+            mediaUriElement.MediaPosition = (long)(mediaUriElement.MediaDuration * perc);
+            Player_ProgressTrackBar.ProgressBarValue = Player_ProgressTrackBar.TrackBarValue;
+            sliderDrag = false;
         }
 
         private void MediaUriElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             mediaUriElement.Stop();
             mediaUriElement.MediaPosition = 0;
+            Player_ProgressTrackBar.TrackBarValue = 0;
+            Player_ProgressTrackBar.ProgressBarValue = 0;
+            Player_PlayControl_Button.Text = "播放";
         }
 
         private void Player_SwithChannel_Button_Click(object sender, EventArgs e)
@@ -241,6 +266,10 @@ namespace CrazyKTV_SongMgr
                     mediaUriElement.Play();
                     ((Button)sender).Text = "暫停播放";
                     break;
+                case "播放":
+                    mediaUriElement.Play();
+                    ((Button)sender).Text = "暫停播放";
+                    break;
             }
         }
 
@@ -252,46 +281,49 @@ namespace CrazyKTV_SongMgr
             }
         }
 
+        private FormWindowState winState;
+        private System.Drawing.Point winLoc;
+        private int winWidth;
+        private int winHeight;
+        private int eHostWidth;
+        private int eHostHeight;
+        
         private void ToggleFullscreen()
         {
             if (this.FormBorderStyle == FormBorderStyle.None)
             {
+                this.WindowState = winState;
+
+                this.Hide();
                 this.FormBorderStyle = FormBorderStyle.Sizable;
                 this.TopMost = false;
-                this.WindowState = FormWindowState.Normal;
-                this.Player_ProgressTrackBar.Visible = true;
-                this.Player_PlayControl_Button.Visible = true;
-                this.Player_SwithChannel_Button.Visible = true;
-                this.Player_CurrentChannel_Label.Visible = true;
-                this.Player_CurrentChannelValue_Label.Visible = true;
-                this.Player_UpdateChannel_Button.Visible = true;
+                this.Location = winLoc;
+                this.Width = winWidth;
+                this.Height = winHeight;
 
-
+                elementHost.Dock = DockStyle.None;
+                elementHost.Location = new System.Drawing.Point(12, 12);
+                elementHost.Width = eHostWidth;
+                elementHost.Height = eHostHeight;
+                elementHost.Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left;
+                this.Show();
             }
             else
             {
+                winState = this.WindowState;
+                winLoc = this.Location;
+                winWidth = this.Width;
+                winHeight = this.Height;
+                eHostWidth = elementHost.Width;
+                eHostHeight = elementHost.Height;
+
+                this.Hide();
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.TopMost = true;
                 this.WindowState = FormWindowState.Normal;
                 this.WindowState = FormWindowState.Maximized;
-
-                this.Player_ProgressTrackBar.Visible = false;
-                this.Player_PlayControl_Button.Visible = false;
-                this.Player_SwithChannel_Button.Visible = false;
-                this.Player_CurrentChannel_Label.Visible = false;
-                this.Player_CurrentChannelValue_Label.Visible = false;
-                this.Player_UpdateChannel_Button.Visible = false;
-                this.Controls.Remove(Player_ProgressTrackBar);
-                this.Controls.Remove(Player_PlayControl_Button);
-                this.Controls.Remove(Player_SwithChannel_Button);
-                this.Controls.Remove(Player_CurrentChannel_Label);
-                this.Controls.Remove(Player_CurrentChannelValue_Label);
-                this.Controls.Remove(Player_UpdateChannel_Button);
-                elementHost.Location = new System.Drawing.Point(0, 0);
-                elementHost.Width = this.Width;
-                elementHost.Height = this.Height;
-
-
+                elementHost.Dock = DockStyle.Fill;
+                this.Show();
             }
         }
 
@@ -299,9 +331,16 @@ namespace CrazyKTV_SongMgr
         {
             mediaUriElement.Stop();
             mediaUriElement.Close();
-
+            mediaUriElement.Source = null;
+            
             NativeMethods.SystemSleepManagement.ResotreSleep();
             this.Owner.Show();
+        }
+
+        private void DShowForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Dispose();
+            GC.Collect();
         }
     }
 }
