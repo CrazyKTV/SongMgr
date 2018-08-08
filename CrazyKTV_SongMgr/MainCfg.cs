@@ -201,7 +201,7 @@ namespace CrazyKTV_SongMgr
             MainCfg_PlayerOutput_RadioButton2.Enabled = (Environment.OSVersion.Version.Major >= 6) ? true : false;
             MainCfg_PlayerEnableAudioCompressor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
             MainCfg_PlayerEnableAudioProcessor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
-            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
 
         }
 

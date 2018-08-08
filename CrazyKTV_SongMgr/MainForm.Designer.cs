@@ -7012,6 +7012,7 @@
             // 
             // MainCfg_PlayerSetAudioProcessor_Button
             // 
+            this.MainCfg_PlayerSetAudioProcessor_Button.Enabled = false;
             this.MainCfg_PlayerSetAudioProcessor_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_PlayerSetAudioProcessor_Button.ForeColor = System.Drawing.SystemColors.ControlText;
             this.MainCfg_PlayerSetAudioProcessor_Button.Location = new System.Drawing.Point(252, 147);
