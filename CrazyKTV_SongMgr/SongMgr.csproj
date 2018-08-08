@@ -39,8 +39,8 @@
     <ProductName>CrazyKTV 加歌程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
     <SuiteName>CrazyKTV 加歌程式</SuiteName>
-    <ApplicationRevision>9</ApplicationRevision>
-    <ApplicationVersion>1.4.8.09</ApplicationVersion>
+    <ApplicationRevision>15</ApplicationRevision>
+    <ApplicationVersion>1.4.8.15</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
@@ -127,7 +127,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrazyKTV_MediaKit">
+    <Reference Include="CrazyKTV_MediaKit, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CrazyKTV_MediaKit\Source\bin\x86\Release\CrazyKTV_MediaKit.dll</HintPath>
     </Reference>
     <Reference Include="MediaInfoDotNet, Version=0.7.79.40925, Culture=neutral, processorArchitecture=MSIL">
