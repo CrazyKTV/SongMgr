@@ -34,6 +34,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", Global.MainCfgPlayerCore);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", Global.MainCfgPlayerOutput);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioProcessor", Global.MainCfgPlayerEnableAudioProcessor);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -207,6 +208,11 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_PlayerEnableAudioCompressor_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.MainCfgPlayerEnableAudioCompressor = MainCfg_PlayerEnableAudioCompressor_CheckBox.Checked.ToString();
+        }
+
+        private void MainCfg_PlayerEnableAudioProcessor_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgPlayerEnableAudioProcessor = MainCfg_PlayerEnableAudioProcessor_CheckBox.Checked.ToString();
         }
 
         #endregion

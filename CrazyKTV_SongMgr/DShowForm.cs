@@ -67,7 +67,7 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.DeeperColor = (Global.MainCfgPlayerOutput == "1") ? false : true;
             mediaUriElement.Stretch = System.Windows.Media.Stretch.Fill;
             mediaUriElement.EnableAudioCompressor = bool.Parse(Global.MainCfgPlayerEnableAudioCompressor);
-            mediaUriElement.EnableAudioProcessor = true;
+            mediaUriElement.EnableAudioProcessor = bool.Parse(Global.MainCfgPlayerEnableAudioProcessor);
 
             mediaUriElement.MediaFailed += MediaUriElement_MediaFailed;
             mediaUriElement.MediaEnded += MediaUriElement_MediaEnded;

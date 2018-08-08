@@ -522,6 +522,7 @@
             this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
             this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_Player_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_PlayerOutput_Panel = new System.Windows.Forms.Panel();
             this.MainCfg_PlayerOutput_RadioButton1 = new System.Windows.Forms.RadioButton();
@@ -6993,6 +6994,7 @@
             // 
             // MainCfg_Player_GroupBox
             // 
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerEnableAudioProcessor_CheckBox);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerEnableAudioCompressor_CheckBox);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerOutput_Panel);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerCore_Panel);
@@ -7006,12 +7008,25 @@
             this.MainCfg_Player_GroupBox.TabStop = false;
             this.MainCfg_Player_GroupBox.Text = "播放設定";
             // 
+            // MainCfg_PlayerEnableAudioProcessor_CheckBox
+            // 
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.AutoSize = true;
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Location = new System.Drawing.Point(27, 151);
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Name = "MainCfg_PlayerEnableAudioProcessor_CheckBox";
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Size = new System.Drawing.Size(213, 24);
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.TabIndex = 17;
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Text = "啟用音效處理器 (ffdshow)";
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerEnableAudioProcessor_CheckBox_CheckedChanged);
+            // 
             // MainCfg_PlayerEnableAudioCompressor_CheckBox
             // 
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox.AutoSize = true;
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Location = new System.Drawing.Point(27, 115);
-            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 8);
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 6);
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Name = "MainCfg_PlayerEnableAudioCompressor_CheckBox";
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Size = new System.Drawing.Size(202, 24);
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox.TabIndex = 16;
@@ -8987,6 +9002,7 @@
         private System.Windows.Forms.RadioButton MainCfg_PlayerOutput_RadioButton2;
         private System.Windows.Forms.Label MainCfg_PlayerOutput_Label;
         private System.Windows.Forms.CheckBox MainCfg_PlayerEnableAudioCompressor_CheckBox;
+        private System.Windows.Forms.CheckBox MainCfg_PlayerEnableAudioProcessor_CheckBox;
     }
 }
 
