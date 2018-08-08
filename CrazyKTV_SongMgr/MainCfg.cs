@@ -198,6 +198,11 @@ namespace CrazyKTV_SongMgr
         {
             Global.MainCfgPlayerCore = (((RadioButton)sender).Name == "MainCfg_PlayerCore_RadioButton1") ? "1" : "2";
             MainCfg_PlayerOutput_Panel.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
+            MainCfg_PlayerOutput_RadioButton2.Enabled = (Environment.OSVersion.Version.Major >= 6) ? true : false;
+            MainCfg_PlayerEnableAudioCompressor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
+            MainCfg_PlayerEnableAudioProcessor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
+
         }
 
         private void MainCfg_PlayerOutput_RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -213,7 +218,7 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_PlayerEnableAudioProcessor_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.MainCfgPlayerEnableAudioProcessor = MainCfg_PlayerEnableAudioProcessor_CheckBox.Checked.ToString();
-            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerEnableAudioProcessor == "True" && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
         }
 
         private void MainCfg_PlayerSetAudioProcessor_Button_Click(object sender, EventArgs e)
