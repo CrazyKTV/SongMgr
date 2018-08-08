@@ -213,6 +213,12 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_PlayerEnableAudioProcessor_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.MainCfgPlayerEnableAudioProcessor = MainCfg_PlayerEnableAudioProcessor_CheckBox.Checked.ToString();
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerEnableAudioProcessor == "True" && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+        }
+
+        private void MainCfg_PlayerSetAudioProcessor_Button_Click(object sender, EventArgs e)
+        {
+            CrazyKTV_MediaKit.DirectShow.MediaPlayers.DirectShowUtil.SetAudioProcessor(this.Handle);
         }
 
         #endregion

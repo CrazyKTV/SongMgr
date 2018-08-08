@@ -522,6 +522,7 @@
             this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
             this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_Player_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_PlayerSetAudioProcessor_Button = new System.Windows.Forms.Button();
             this.MainCfg_PlayerEnableAudioProcessor_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_PlayerEnableAudioCompressor_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_PlayerOutput_Panel = new System.Windows.Forms.Panel();
@@ -6994,6 +6995,7 @@
             // 
             // MainCfg_Player_GroupBox
             // 
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerSetAudioProcessor_Button);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerEnableAudioProcessor_CheckBox);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerEnableAudioCompressor_CheckBox);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerOutput_Panel);
@@ -7007,6 +7009,19 @@
             this.MainCfg_Player_GroupBox.TabIndex = 19;
             this.MainCfg_Player_GroupBox.TabStop = false;
             this.MainCfg_Player_GroupBox.Text = "播放設定";
+            // 
+            // MainCfg_PlayerSetAudioProcessor_Button
+            // 
+            this.MainCfg_PlayerSetAudioProcessor_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerSetAudioProcessor_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.MainCfg_PlayerSetAudioProcessor_Button.Location = new System.Drawing.Point(252, 147);
+            this.MainCfg_PlayerSetAudioProcessor_Button.Margin = new System.Windows.Forms.Padding(6, 6, 6, 10);
+            this.MainCfg_PlayerSetAudioProcessor_Button.Name = "MainCfg_PlayerSetAudioProcessor_Button";
+            this.MainCfg_PlayerSetAudioProcessor_Button.Size = new System.Drawing.Size(60, 30);
+            this.MainCfg_PlayerSetAudioProcessor_Button.TabIndex = 18;
+            this.MainCfg_PlayerSetAudioProcessor_Button.Text = "設定";
+            this.MainCfg_PlayerSetAudioProcessor_Button.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerSetAudioProcessor_Button.Click += new System.EventHandler(this.MainCfg_PlayerSetAudioProcessor_Button_Click);
             // 
             // MainCfg_PlayerEnableAudioProcessor_CheckBox
             // 
@@ -9003,6 +9018,7 @@
         private System.Windows.Forms.Label MainCfg_PlayerOutput_Label;
         private System.Windows.Forms.CheckBox MainCfg_PlayerEnableAudioCompressor_CheckBox;
         private System.Windows.Forms.CheckBox MainCfg_PlayerEnableAudioProcessor_CheckBox;
+        private System.Windows.Forms.Button MainCfg_PlayerSetAudioProcessor_Button;
     }
 }
 
