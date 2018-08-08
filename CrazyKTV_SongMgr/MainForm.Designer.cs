@@ -518,9 +518,11 @@
             this.MainCfg_HideSongLogTab_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_HideApplyCashboxIdButton_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_BackupRemoveSongDays_Label = new System.Windows.Forms.Label();
+            this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
             this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
             this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_Player_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_PlayerOutput_Panel = new System.Windows.Forms.Panel();
             this.MainCfg_PlayerOutput_RadioButton1 = new System.Windows.Forms.RadioButton();
             this.MainCfg_PlayerOutput_RadioButton2 = new System.Windows.Forms.RadioButton();
@@ -532,7 +534,6 @@
             this.MainCfg_BackupDB_Button = new System.Windows.Forms.Button();
             this.MainCfg_BackupDB_TextBox = new System.Windows.Forms.TextBox();
             this.MainCfg_BackupDB_CheckBox = new System.Windows.Forms.CheckBox();
-            this.MainCfg_HideButton_Label = new System.Windows.Forms.Label();
             this.MainCfg_SubTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_MainTabWidth_Button = new System.Windows.Forms.Button();
             this.MainCfg_UIScale_GroupBox = new System.Windows.Forms.GroupBox();
@@ -6865,7 +6866,7 @@
             this.MainCfg_General_ＧroupBox.Size = new System.Drawing.Size(545, 205);
             this.MainCfg_General_ＧroupBox.TabIndex = 20;
             this.MainCfg_General_ＧroupBox.TabStop = false;
-            this.MainCfg_General_ＧroupBox.Text = "播放設定";
+            this.MainCfg_General_ＧroupBox.Text = "一般設定";
             // 
             // MainCfg_HideTab_Label
             // 
@@ -6992,6 +6993,7 @@
             // 
             // MainCfg_Player_GroupBox
             // 
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerEnableAudioCompressor_CheckBox);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerOutput_Panel);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerCore_Panel);
             this.MainCfg_Player_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -7003,6 +7005,19 @@
             this.MainCfg_Player_GroupBox.TabIndex = 19;
             this.MainCfg_Player_GroupBox.TabStop = false;
             this.MainCfg_Player_GroupBox.Text = "播放設定";
+            // 
+            // MainCfg_PlayerEnableAudioCompressor_CheckBox
+            // 
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.AutoSize = true;
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Location = new System.Drawing.Point(27, 115);
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Margin = new System.Windows.Forms.Padding(10, 12, 6, 8);
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Name = "MainCfg_PlayerEnableAudioCompressor_CheckBox";
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Size = new System.Drawing.Size(202, 24);
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.TabIndex = 16;
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.Text = "啟用音量平衡器 (壓限器)";
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_PlayerEnableAudioCompressor_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerEnableAudioCompressor_CheckBox_CheckedChanged);
             // 
             // MainCfg_PlayerOutput_Panel
             // 
@@ -7140,7 +7155,7 @@
             this.MainCfg_SubTabWidth_Button.AutoSize = true;
             this.MainCfg_SubTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_SubTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(843, 422);
+            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(569, 491);
             this.MainCfg_SubTabWidth_Button.Name = "MainCfg_SubTabWidth_Button";
             this.MainCfg_SubTabWidth_Button.Size = new System.Drawing.Size(84, 31);
             this.MainCfg_SubTabWidth_Button.TabIndex = 13;
@@ -7153,7 +7168,7 @@
             this.MainCfg_MainTabWidth_Button.AutoSize = true;
             this.MainCfg_MainTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_MainTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(831, 382);
+            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(467, 490);
             this.MainCfg_MainTabWidth_Button.Name = "MainCfg_MainTabWidth_Button";
             this.MainCfg_MainTabWidth_Button.Size = new System.Drawing.Size(96, 34);
             this.MainCfg_MainTabWidth_Button.TabIndex = 12;
@@ -8356,6 +8371,7 @@
             this.MainCfg_General_ＧroupBox.ResumeLayout(false);
             this.MainCfg_General_ＧroupBox.PerformLayout();
             this.MainCfg_Player_GroupBox.ResumeLayout(false);
+            this.MainCfg_Player_GroupBox.PerformLayout();
             this.MainCfg_PlayerOutput_Panel.ResumeLayout(false);
             this.MainCfg_PlayerOutput_Panel.PerformLayout();
             this.MainCfg_PlayerCore_Panel.ResumeLayout(false);
@@ -8970,6 +8986,7 @@
         private System.Windows.Forms.RadioButton MainCfg_PlayerOutput_RadioButton1;
         private System.Windows.Forms.RadioButton MainCfg_PlayerOutput_RadioButton2;
         private System.Windows.Forms.Label MainCfg_PlayerOutput_Label;
+        private System.Windows.Forms.CheckBox MainCfg_PlayerEnableAudioCompressor_CheckBox;
     }
 }
 

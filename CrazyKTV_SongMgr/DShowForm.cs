@@ -66,6 +66,8 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.VideoRenderer = (Global.MainCfgPlayerOutput == "1") ? CrazyKTV_MediaKit.DirectShow.MediaPlayers.VideoRendererType.VideoMixingRenderer9 : CrazyKTV_MediaKit.DirectShow.MediaPlayers.VideoRendererType.EnhancedVideoRenderer;
             mediaUriElement.DeeperColor = (Global.MainCfgPlayerOutput == "1") ? false : true;
             mediaUriElement.Stretch = System.Windows.Media.Stretch.Fill;
+            mediaUriElement.EnableAudioCompressor = bool.Parse(Global.MainCfgPlayerEnableAudioCompressor);
+            mediaUriElement.EnableAudioProcessor = true;
 
             mediaUriElement.MediaFailed += MediaUriElement_MediaFailed;
             mediaUriElement.MediaEnded += MediaUriElement_MediaEnded;

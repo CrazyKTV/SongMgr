@@ -153,6 +153,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", Global.SongMaintenanceMaxVolume);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", Global.MainCfgPlayerCore);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", Global.MainCfgPlayerOutput);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
             }
 
             List<string> list = new List<string>()
@@ -209,7 +210,8 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", null, false)
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", null, false)
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -492,6 +494,9 @@ namespace CrazyKTV_SongMgr
             {
                 MainCfg_PlayerOutput_RadioButton2.Checked = true;
             }
+
+            if (list[53] != "") Global.MainCfgPlayerEnableAudioCompressor = list[53];
+            MainCfg_PlayerEnableAudioCompressor_CheckBox.Checked = bool.Parse(Global.MainCfgPlayerEnableAudioCompressor);
 
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
@@ -832,6 +837,10 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
+
+
 
 
 
