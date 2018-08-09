@@ -396,34 +396,40 @@ namespace CrazyKTV_SongMgr
                 if (e.RowIndex < 0) return;
 
                 int i = e.RowIndex;
-
-                string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
-                string SongLang = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
-                string SongSinger = SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
-                string SongSongName = SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
-                string SongTrack = SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
-                string SongVolume = SongQuery_DataGridView.Rows[i].Cells["Song_Volume"].Value.ToString();
-                string SongFileName = SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                 string SongPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString();
-                string SongReplayGain = SongQuery_DataGridView.Rows[i].Cells["Song_ReplayGain"].Value.ToString();
-                string SongMeanVolume = SongQuery_DataGridView.Rows[i].Cells["Song_MeanVolume"].Value.ToString();
-                string SongFilePath = Path.Combine(SongPath, SongFileName);
-
-                List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, i.ToString(), "SongQuery" };
-
-                Global.PlayerUpdateSongValueList = new List<string>();
-
-                if (Global.MainCfgPlayerCore == "1")
+                string SongFileName = SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
+                string file = Path.Combine(SongPath, SongFileName);
+                if (!File.Exists(file))
                 {
-                    DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
-                    newPlayerForm.Show();
+                    SongQuery_QueryStatus_Label.Text = "【" + SongFileName + "】檔案不存在...";
                 }
                 else
                 {
-                    PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
-                    newPlayerForm.Show();
+                    string SongId = SongQuery_DataGridView.Rows[i].Cells["Song_Id"].Value.ToString();
+                    string SongLang = SongQuery_DataGridView.Rows[i].Cells["Song_Lang"].Value.ToString();
+                    string SongSinger = SongQuery_DataGridView.Rows[i].Cells["Song_Singer"].Value.ToString();
+                    string SongSongName = SongQuery_DataGridView.Rows[i].Cells["Song_SongName"].Value.ToString();
+                    string SongTrack = SongQuery_DataGridView.Rows[i].Cells["Song_Track"].Value.ToString();
+                    string SongVolume = SongQuery_DataGridView.Rows[i].Cells["Song_Volume"].Value.ToString();
+                    string SongReplayGain = SongQuery_DataGridView.Rows[i].Cells["Song_ReplayGain"].Value.ToString();
+                    string SongMeanVolume = SongQuery_DataGridView.Rows[i].Cells["Song_MeanVolume"].Value.ToString();
+                    string SongFilePath = Path.Combine(SongPath, SongFileName);
+
+                    List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, i.ToString(), "SongQuery" };
+
+                    Global.PlayerUpdateSongValueList = new List<string>();
+                    if (Global.MainCfgPlayerCore == "1")
+                    {
+                        DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
+                        newPlayerForm.Show();
+                    }
+                    else
+                    {
+                        PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+                        newPlayerForm.Show();
+                    }
+                    this.Hide();
                 }
-                this.Hide();
             }
         }
 
