@@ -1220,30 +1220,38 @@ namespace CrazyKTV_SongMgr
                 {
                     List<string> list = new List<string>(Global.SongAddDataGridViewSelectList[0].Split('|'));
 
-                    string SongId = SongAdd_EditSongId_TextBox.Text;
-                    string SongLang = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
-                    string SongSinger = SongAdd_EditSongSinger_TextBox.Text;
-                    string SongSongName = SongAdd_EditSongSongName_TextBox.Text;
-                    string SongTrack = SongAdd_EditSongTrack_ComboBox.SelectedValue.ToString();
-                    string SongVolume = SongAdd_EditSongVolume_TextBox.Text;
-                    string SongReplayGain = list[20];
-                    string SongMeanVolume = list[21];
                     string SongFilePath = list[19];
-
-                    List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, "0", "SongAdd" };
-
-                    Global.PlayerUpdateSongValueList = new List<string>();
-                    if (Global.MainCfgPlayerCore == "1")
+                    if (!File.Exists(SongFilePath))
                     {
-                        DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
-                        newPlayerForm.Show();
+                        SongQuery_QueryStatus_Label.Text = "檔案不存在...";
                     }
                     else
                     {
-                        PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
-                        newPlayerForm.Show();
+                        string SongId = SongAdd_EditSongId_TextBox.Text;
+                        string SongLang = ((DataRowView)SongAdd_EditSongLang_ComboBox.SelectedItem)[0].ToString();
+                        string SongSinger = SongAdd_EditSongSinger_TextBox.Text;
+                        string SongSongName = SongAdd_EditSongSongName_TextBox.Text;
+                        string SongTrack = SongAdd_EditSongTrack_ComboBox.SelectedValue.ToString();
+                        string SongVolume = SongAdd_EditSongVolume_TextBox.Text;
+                        string SongReplayGain = list[20];
+                        string SongMeanVolume = list[21];
+
+
+                        List<string> PlayerSongInfoList = new List<string>() { SongId, SongLang, SongSinger, SongSongName, SongTrack, SongVolume, SongReplayGain, SongMeanVolume, SongFilePath, "0", "SongAdd" };
+
+                        Global.PlayerUpdateSongValueList = new List<string>();
+                        if (Global.MainCfgPlayerCore == "1")
+                        {
+                            DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
+                            newPlayerForm.Show();
+                        }
+                        else
+                        {
+                            PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
+                            newPlayerForm.Show();
+                        }
+                        this.Hide();
                     }
-                    this.Hide();
                 }
             }
         }
