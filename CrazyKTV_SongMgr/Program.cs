@@ -294,5 +294,7 @@ namespace CrazyKTV_SongMgr
 
         public static string RegexChorusSeparate = "[&+、]";
 
+        public static bool FFDShowAudioProcessorRegistered = false;
+
     }
 }

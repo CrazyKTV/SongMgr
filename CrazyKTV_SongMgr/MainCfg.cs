@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
@@ -201,8 +203,8 @@ namespace CrazyKTV_SongMgr
             MainCfg_PlayerOutput_RadioButton2.Enabled = (Environment.OSVersion.Version.Major >= 6) ? true : false;
             MainCfg_PlayerEnableAudioCompressor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
             MainCfg_PlayerEnableAudioProcessor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1") ? true : false;
-            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
-
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+            MainCfg_PlayerRegAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && !Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
         }
 
         private void MainCfg_PlayerOutput_RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -218,12 +220,34 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_PlayerEnableAudioProcessor_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Global.MainCfgPlayerEnableAudioProcessor = MainCfg_PlayerEnableAudioProcessor_CheckBox.Checked.ToString();
-            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+            MainCfg_PlayerRegAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && !Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
         }
 
         private void MainCfg_PlayerSetAudioProcessor_Button_Click(object sender, EventArgs e)
         {
-            CrazyKTV_MediaKit.DirectShow.MediaPlayers.DirectShowUtil.SetAudioProcessor(this.Handle);
+            CrazyKTV_MediaKit.DirectShow.MediaPlayers.DirectShowUtil.ShowPropertyPages(this.Handle, "ffdshow Audio Processor", new Guid("B86F6BEE-E7C0-4D03-8D52-5B4430CF6C88"), "ffdshow.ax");
+        }
+
+        private void MainCfg_PlayerRegAudioProcessor_Button_Click(object sender, EventArgs e)
+        {
+            using (Process p = new Process())
+            {
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.Verb = "runas";
+                p.StartInfo.FileName = "regsvr32.exe";
+                p.StartInfo.Arguments = "/s " + Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax";
+                p.Start();
+                p.WaitForExit();
+            }
+
+            // 檢查解碼器登錄狀態
+            RegistryKey regKey = Registry.ClassesRoot.OpenSubKey("CLSID\\{083863F1-70DE-11D0-BD40-00A0C911CE86}\\Instance\\{B86F6BEE-E7C0-4D03-8D52-5B4430CF6C88}");
+            Global.FFDShowAudioProcessorRegistered = (regKey == null) ? false : true;
+
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+            MainCfg_PlayerRegAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && !Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
         }
 
         #endregion

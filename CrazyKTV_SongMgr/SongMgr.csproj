@@ -339,6 +339,7 @@
     <Content Include="FFmpeg\xp\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\UAC.png" />
     <Content Include="SongMgr\CrazySongMgr.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

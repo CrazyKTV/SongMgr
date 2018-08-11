@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Threading.Tasks;
-using Vlc.DotNet.Forms;
-using System.IO;
-using Vlc.DotNet.Core;
-using System.Windows.Forms.Integration;
 using CrazyKTV_MediaKit.DirectShow.Controls;
 using System.Windows;
 using System.Threading;
@@ -341,6 +336,7 @@ namespace CrazyKTV_SongMgr
 
         private void DShowForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            mediaUriElement = null;
             this.Dispose();
             GC.Collect();
         }

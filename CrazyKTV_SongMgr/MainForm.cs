@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -514,6 +515,12 @@ namespace CrazyKTV_SongMgr
             Global.SongLogDT.Columns.Add(new DataColumn("Display", typeof(string)));
             Global.SongLogDT.Columns.Add(new DataColumn("Value", typeof(int)));
 
+            // 檢查解碼器登錄狀態
+            RegistryKey regKey = Registry.ClassesRoot.OpenSubKey("CLSID\\{083863F1-70DE-11D0-BD40-00A0C911CE86}\\Instance\\{B86F6BEE-E7C0-4D03-8D52-5B4430CF6C88}");
+            Global.FFDShowAudioProcessorRegistered = (regKey == null) ? false : true;
+            MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+            MainCfg_PlayerRegAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && !Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+
             // 檢查程式更新
             Common_CheckSongMgrVer();
 
@@ -631,7 +638,6 @@ namespace CrazyKTV_SongMgr
             {
                 MainTabControl_SelectedIndexChanged(new TabControl(), new EventArgs());
             }
-
             Global.SongMgrInitializeStatus = true;
         }
 
@@ -842,6 +848,8 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
 
 
 
