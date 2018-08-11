@@ -7046,6 +7046,7 @@
             // MainCfg_PlayerEnableAudioProcessor_CheckBox
             // 
             this.MainCfg_PlayerEnableAudioProcessor_CheckBox.AutoSize = true;
+            this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Enabled = false;
             this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Location = new System.Drawing.Point(27, 151);
             this.MainCfg_PlayerEnableAudioProcessor_CheckBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 6);

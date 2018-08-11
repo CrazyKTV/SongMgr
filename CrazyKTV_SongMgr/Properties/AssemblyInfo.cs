@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CrazyKTV SongMgr")]
 [assembly: AssemblyDescription("CrazyKTV SongMgr 是基於 CrazyKTV 卡拉OK點歌軟體的輔助工具,主要用來管理歌庫。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("CrazyKTV")]
 [assembly: AssemblyProduct("CrazyKTV SongMgr")]
-[assembly: AssemblyCopyright("Copyright ©  2015-2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © 2015-2018 Ken Luo")]
+[assembly: AssemblyTrademark("CrazyKTV")]
 [assembly: AssemblyCulture("")]
 
 // 將 ComVisible 設定為 false 會使得這個組件中的類型
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 您可以指定所有的值，也可以依照以下的方式，使用 '*' 將組建和修訂編號
 // 指定為預設值: 
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.4.8.16")]
-[assembly: AssemblyFileVersion("1.4.8.16")]
+[assembly: AssemblyVersion("1.4.8.20")]
+[assembly: AssemblyFileVersion("1.4.8.20")]
