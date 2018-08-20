@@ -226,6 +226,7 @@ namespace CrazyKTV_SongMgr
         public static List<string> CashboxDataGridViewRestoreSelectList = new List<string>();
 
         public static List<string> PlayerUpdateSongValueList = new List<string>();
+        public static List<string> PlayerRandomVideoList = new List<string>();
         public static bool PlayerInitialized = false;
 
         public static List<List<string>> UnusedSongIdList = new List<List<string>>();

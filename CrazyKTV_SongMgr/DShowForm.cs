@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using CrazyKTV_MediaKit.DirectShow.Controls;
 using System.Windows;
+using System.Windows.Forms;
+using System.Linq;
 using System.Threading;
+using CrazyKTV_MediaKit.DirectShow.Controls;
+using CrazyKTV_MediaKit.DirectShow.MediaPlayers;
 
 namespace CrazyKTV_SongMgr
 {
@@ -69,6 +72,21 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.MouseLeftButtonDown += mediaUriElement_MouseLeftButtonDown;
             mediaUriElement.MediaUriPlayer.MediaPositionChanged += MediaUriPlayer_MediaPositionChanged;
 
+            // 隨選視訊
+            if (Global.PlayerRandomVideoList.Count == 0)
+            {
+                string dir = System.Windows.Forms.Application.StartupPath + @"\Video";
+                if (Directory.Exists(dir))
+                {
+                    Global.PlayerRandomVideoList.AddRange(Directory.GetFiles(dir));
+                    if (Global.PlayerRandomVideoList.Count > 0)
+                    {
+                        Random rand = new Random(Guid.NewGuid().GetHashCode());
+                        Global.PlayerRandomVideoList = Global.PlayerRandomVideoList.OrderBy(str => rand.Next()).ToList<string>();
+                    }
+                }
+            }
+            mediaUriElement.VideoSource = (Global.PlayerRandomVideoList.Count > 0) ? new Uri(Global.PlayerRandomVideoList[0]) : null;
             mediaUriElement.Source = new Uri(SongFilePath);
 
             // 音量平衡
@@ -100,7 +118,7 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.AudioAmplify = GainVolume;
             Player_CurrentGainValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = GainVolume + " %");
 
-            SpinWait.SpinUntil(() => mediaUriElement.GetAudioTrackList().Count > 0);
+            SpinWait.SpinUntil(() => mediaUriElement.MediaUriPlayer.PlayerState == PlayerState.Opened);
 
             mediaUriElement.AudioTrackList = mediaUriElement.GetAudioTrackList();
             string ChannelValue = string.Empty;
@@ -133,6 +151,9 @@ namespace CrazyKTV_SongMgr
                 }
             }
             Player_CurrentChannelValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
+
+            if (mediaUriElement.IsAudioOnly && Global.PlayerRandomVideoList.Count > 0)
+                Global.PlayerRandomVideoList.RemoveAt(0);
 
             NativeMethods.SystemSleepManagement.PreventSleep(true);
         }
