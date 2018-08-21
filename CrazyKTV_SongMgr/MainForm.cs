@@ -521,17 +521,16 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-
             // 檢查程式更新
             Common_CheckSongMgrVer();
+
+            // 檢查資料庫檔案是否為舊版資料庫
+            SongDBUpdate_CheckDatabaseFile();
 
             // 初始化所需資料
             SongMgrDB_CheckDatabaseFile();
             Common_SwitchDBVerErrorUI(Global.SongMgrDBVerErrorUIStatus);
             Task.Factory.StartNew(() => Common_InitializeSongData(true, true, true, true, true, true));
-            
-            // 檢查資料庫檔案是否為舊版資料庫
-            SongDBUpdate_CheckDatabaseFile();
 
             // 歌曲查詢 - 載入下拉選單清單及設定
             SongQuery_QueryType_ComboBox.DataSource = SongQuery.GetSongQueryTypeList();
