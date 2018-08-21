@@ -1245,11 +1245,6 @@ namespace CrazyKTV_SongMgr
                             DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
                             newPlayerForm.Show();
                         }
-                        else
-                        {
-                            PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
-                            newPlayerForm.Show();
-                        }
                         this.Hide();
                     }
                 }

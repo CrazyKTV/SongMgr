@@ -230,11 +230,12 @@ namespace CrazyKTV_SongMgr
 
         private void MainCfg_PlayerRegAudioProcessor_Button_Click(object sender, EventArgs e)
         {
+
             using (Process p = new Process())
             {
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.Verb = "runas";
+                p.StartInfo.Verb = (CommonFunc.IsAdministrator()) ? null : "runas";
                 p.StartInfo.FileName = "regedit.exe";
                 p.StartInfo.Arguments = "/s " + Application.StartupPath + @"\Codec\ffdshow\ffdshow.reg";
                 p.Start();
@@ -245,7 +246,7 @@ namespace CrazyKTV_SongMgr
             {
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.Verb = "runas";
+                p.StartInfo.Verb = (CommonFunc.IsAdministrator()) ? null : "runas";
                 p.StartInfo.FileName = "regsvr32.exe";
                 p.StartInfo.Arguments = "/s " + Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax";
                 p.Start();

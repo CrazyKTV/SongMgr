@@ -265,11 +265,6 @@ namespace CrazyKTV_SongMgr
                             DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
                             newPlayerForm.Show();
                         }
-                        else
-                        {
-                            PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
-                            newPlayerForm.Show();
-                        }
                         this.Hide();
                     }
                     break;
@@ -421,11 +416,6 @@ namespace CrazyKTV_SongMgr
                     if (Global.MainCfgPlayerCore == "1")
                     {
                         DShowForm newPlayerForm = new DShowForm(this, PlayerSongInfoList);
-                        newPlayerForm.Show();
-                    }
-                    else
-                    {
-                        PlayerForm newPlayerForm = new PlayerForm(this, PlayerSongInfoList);
                         newPlayerForm.Show();
                     }
                     this.Hide();

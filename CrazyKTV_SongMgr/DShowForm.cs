@@ -152,7 +152,7 @@ namespace CrazyKTV_SongMgr
             }
             Player_CurrentChannelValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
 
-            if (mediaUriElement.IsAudioOnly && Global.PlayerRandomVideoList.Count > 0)
+            if (mediaUriElement.MediaUriPlayer.IsAudioOnly && Global.PlayerRandomVideoList.Count > 0)
                 Global.PlayerRandomVideoList.RemoveAt(0);
 
             NativeMethods.SystemSleepManagement.PreventSleep(true);

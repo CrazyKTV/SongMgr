@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -478,15 +477,8 @@ namespace CrazyKTV_SongMgr
             SongMaintenance_MaxVolume_ComboBox.ValueMember = "Value";
             SongMaintenance_MaxVolume_ComboBox.SelectedValue = Global.SongMaintenanceMaxVolume;
 
-            if (list[51] != "") Global.MainCfgPlayerCore = list[51];
-            if (Global.MainCfgPlayerCore == "1")
-            {
-                MainCfg_PlayerCore_RadioButton1.Checked = true;
-            }
-            else
-            {
-                MainCfg_PlayerCore_RadioButton2.Checked = true;
-            }
+            if (list[51] != "") Global.MainCfgPlayerCore = "1";
+            MainCfg_PlayerCore_RadioButton1.Checked = true;
 
             if (list[52] != "") Global.MainCfgPlayerOutput = list[52];
             if (Global.MainCfgPlayerOutput == "1")

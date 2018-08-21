@@ -532,7 +532,6 @@
             this.MainCfg_PlayerOutput_Label = new System.Windows.Forms.Label();
             this.MainCfg_PlayerCore_Panel = new System.Windows.Forms.Panel();
             this.MainCfg_PlayerCore_RadioButton1 = new System.Windows.Forms.RadioButton();
-            this.MainCfg_PlayerCore_RadioButton2 = new System.Windows.Forms.RadioButton();
             this.MainCfg_PlayerCore_Label = new System.Windows.Forms.Label();
             this.MainCfg_BackupDB_Button = new System.Windows.Forms.Button();
             this.MainCfg_BackupDB_TextBox = new System.Windows.Forms.TextBox();
@@ -7121,7 +7120,6 @@
             // MainCfg_PlayerCore_Panel
             // 
             this.MainCfg_PlayerCore_Panel.Controls.Add(this.MainCfg_PlayerCore_RadioButton1);
-            this.MainCfg_PlayerCore_Panel.Controls.Add(this.MainCfg_PlayerCore_RadioButton2);
             this.MainCfg_PlayerCore_Panel.Controls.Add(this.MainCfg_PlayerCore_Label);
             this.MainCfg_PlayerCore_Panel.Location = new System.Drawing.Point(10, 28);
             this.MainCfg_PlayerCore_Panel.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
@@ -7141,19 +7139,6 @@
             this.MainCfg_PlayerCore_RadioButton1.Text = "DirectShow";
             this.MainCfg_PlayerCore_RadioButton1.UseVisualStyleBackColor = true;
             this.MainCfg_PlayerCore_RadioButton1.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerCore_RadioButton_CheckedChanged);
-            // 
-            // MainCfg_PlayerCore_RadioButton2
-            // 
-            this.MainCfg_PlayerCore_RadioButton2.AutoSize = true;
-            this.MainCfg_PlayerCore_RadioButton2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_PlayerCore_RadioButton2.Location = new System.Drawing.Point(234, 5);
-            this.MainCfg_PlayerCore_RadioButton2.Name = "MainCfg_PlayerCore_RadioButton2";
-            this.MainCfg_PlayerCore_RadioButton2.Size = new System.Drawing.Size(96, 24);
-            this.MainCfg_PlayerCore_RadioButton2.TabIndex = 12;
-            this.MainCfg_PlayerCore_RadioButton2.TabStop = true;
-            this.MainCfg_PlayerCore_RadioButton2.Text = "VlcPlayer";
-            this.MainCfg_PlayerCore_RadioButton2.UseVisualStyleBackColor = true;
-            this.MainCfg_PlayerCore_RadioButton2.CheckedChanged += new System.EventHandler(this.MainCfg_PlayerCore_RadioButton_CheckedChanged);
             // 
             // MainCfg_PlayerCore_Label
             // 
@@ -9030,7 +9015,6 @@
         private System.Windows.Forms.GroupBox MainCfg_Player_GroupBox;
         private System.Windows.Forms.GroupBox MainCfg_General_ＧroupBox;
         private System.Windows.Forms.RadioButton MainCfg_PlayerCore_RadioButton1;
-        private System.Windows.Forms.RadioButton MainCfg_PlayerCore_RadioButton2;
         private System.Windows.Forms.Label MainCfg_PlayerCore_Label;
         private System.Windows.Forms.Panel MainCfg_PlayerCore_Panel;
         private System.Windows.Forms.Panel MainCfg_PlayerOutput_Panel;
