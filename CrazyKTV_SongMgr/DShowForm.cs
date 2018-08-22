@@ -350,7 +350,8 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.Stop();
             mediaUriElement.Close();
             mediaUriElement.Source = null;
-            
+            mediaUriElement.VideoSource = null;
+
             NativeMethods.SystemSleepManagement.ResotreSleep();
             this.Owner.Show();
         }

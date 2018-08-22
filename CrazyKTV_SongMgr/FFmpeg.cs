@@ -11,7 +11,7 @@ namespace CrazyKTV_SongMgr
 {
     class FFmpeg
     {
-        private static string FFmpegPath = Application.StartupPath + @"\FFmpeg\" + ((Environment.OSVersion.Version.Major >= 6) ? @"bin\ffmpeg.exe" : @"xp\ffmpeg.exe");
+        private static string FFmpegPath = Application.StartupPath + @"\FFmpeg\bin\ffmpeg.exe";
 
         private static StreamReader RunFFmpeg(string fileName, string arguments)
         {
