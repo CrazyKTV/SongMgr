@@ -354,6 +354,7 @@ namespace CrazyKTV_SongMgr
 
             NativeMethods.SystemSleepManagement.ResotreSleep();
             this.Owner.Show();
+            this.Owner.TopMost = (Global.MainCfgAlwaysOnTop == "True") ? true : false;
         }
 
         private void DShowForm_FormClosed(object sender, FormClosedEventArgs e)
