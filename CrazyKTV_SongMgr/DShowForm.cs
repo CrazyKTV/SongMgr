@@ -26,6 +26,7 @@ namespace CrazyKTV_SongMgr
         string UpdateDataGridView;
 
         private MediaUriElement mediaUriElement;
+        private System.Timers.Timer mouseClickTimer;
         private bool sliderInit;
         private bool sliderDrag;
 
@@ -293,9 +294,38 @@ namespace CrazyKTV_SongMgr
 
         private void mediaUriElement_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 2)
+            if (mouseClickTimer == null)
             {
+                mouseClickTimer = new System.Timers.Timer();
+                mouseClickTimer.Interval = SystemInformation.DoubleClickTime;
+                mouseClickTimer.Elapsed += new System.Timers.ElapsedEventHandler(mouseClickTimer_Tick);
+            }
+
+            if (!mouseClickTimer.Enabled)
+            {
+                mouseClickTimer.Start();
+            }
+            else
+            {
+                mouseClickTimer.Stop();
                 ToggleFullscreen();
+            }
+        }
+
+        private void mouseClickTimer_Tick(object sender, EventArgs e)
+        {
+            mouseClickTimer.Stop();
+
+            switch (Player_PlayControl_Button.Text)
+            {
+                case "暫停播放":
+                    mediaUriElement.Dispatcher.Invoke(new Action(() => mediaUriElement.Pause()));
+                    Player_PlayControl_Button.InvokeIfRequired<Button>(btn => btn.Text = "繼續播放");
+                    break;
+                case "繼續播放":
+                    mediaUriElement.Dispatcher.Invoke(new Action(() => mediaUriElement.Play()));
+                    Player_PlayControl_Button.InvokeIfRequired<Button>(btn => btn.Text = "暫停播放");
+                    break;
             }
         }
 
@@ -351,6 +381,7 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.Close();
             mediaUriElement.Source = null;
             mediaUriElement.VideoSource = null;
+            mouseClickTimer.Dispose();
 
             NativeMethods.SystemSleepManagement.ResotreSleep();
             this.Owner.Show();
