@@ -172,12 +172,20 @@ namespace CrazyKTV_SongMgr
                     {
                         mediaUriElement.Volume += 0.05;
                     }
+                    else
+                    {
+                        mediaUriElement.Volume = 1.00;
+                    }
                 }
                 else
                 {
                     if (mediaUriElement.Volume >= 0.05)
                     {
                         mediaUriElement.Volume -= 0.05;
+                    }
+                    else
+                    {
+                        mediaUriElement.Volume = 0;
                     }
                 }
                 mediaUriElement.Volume = Math.Round(mediaUriElement.Volume, 2);
