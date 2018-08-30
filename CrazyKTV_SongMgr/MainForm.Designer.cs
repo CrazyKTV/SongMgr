@@ -522,6 +522,8 @@
             this.MainCfg_BackupRemoveSongDays_ComboBox = new System.Windows.Forms.ComboBox();
             this.MainCfg_EnableAutoUpdate_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_Player_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_PlayerDefaultVolume_TextBox = new System.Windows.Forms.TextBox();
+            this.MainCfg_PlayerDefaultVolume_Label = new System.Windows.Forms.Label();
             this.MainCfg_PlayerRegAudioProcessor_Button = new System.Windows.Forms.Button();
             this.MainCfg_PlayerSetAudioProcessor_Button = new System.Windows.Forms.Button();
             this.MainCfg_PlayerEnableAudioProcessor_CheckBox = new System.Windows.Forms.CheckBox();
@@ -6843,7 +6845,7 @@
             this.MainCfg_ＧroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.MainCfg_ＧroupBox.Name = "MainCfg_ＧroupBox";
             this.MainCfg_ＧroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_ＧroupBox.Size = new System.Drawing.Size(952, 582);
+            this.MainCfg_ＧroupBox.Size = new System.Drawing.Size(952, 584);
             this.MainCfg_ＧroupBox.TabIndex = 0;
             this.MainCfg_ＧroupBox.TabStop = false;
             this.MainCfg_ＧroupBox.Text = "程式設定";
@@ -6995,6 +6997,8 @@
             // 
             // MainCfg_Player_GroupBox
             // 
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerDefaultVolume_TextBox);
+            this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerDefaultVolume_Label);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerRegAudioProcessor_Button);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerSetAudioProcessor_Button);
             this.MainCfg_Player_GroupBox.Controls.Add(this.MainCfg_PlayerEnableAudioProcessor_CheckBox);
@@ -7006,10 +7010,36 @@
             this.MainCfg_Player_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 12, 12);
             this.MainCfg_Player_GroupBox.Name = "MainCfg_Player_GroupBox";
             this.MainCfg_Player_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_Player_GroupBox.Size = new System.Drawing.Size(545, 210);
+            this.MainCfg_Player_GroupBox.Size = new System.Drawing.Size(545, 230);
             this.MainCfg_Player_GroupBox.TabIndex = 19;
             this.MainCfg_Player_GroupBox.TabStop = false;
             this.MainCfg_Player_GroupBox.Text = "播放設定";
+            // 
+            // MainCfg_PlayerDefaultVolume_TextBox
+            // 
+            this.MainCfg_PlayerDefaultVolume_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerDefaultVolume_TextBox.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.MainCfg_PlayerDefaultVolume_TextBox.Location = new System.Drawing.Point(144, 184);
+            this.MainCfg_PlayerDefaultVolume_TextBox.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            this.MainCfg_PlayerDefaultVolume_TextBox.MaxLength = 3;
+            this.MainCfg_PlayerDefaultVolume_TextBox.Name = "MainCfg_PlayerDefaultVolume_TextBox";
+            this.MainCfg_PlayerDefaultVolume_TextBox.Size = new System.Drawing.Size(63, 29);
+            this.MainCfg_PlayerDefaultVolume_TextBox.TabIndex = 21;
+            this.MainCfg_PlayerDefaultVolume_TextBox.Text = "100";
+            this.MainCfg_PlayerDefaultVolume_TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Common_NumericOnly_TextBox_KeyPress);
+            this.MainCfg_PlayerDefaultVolume_TextBox.Validating += new System.ComponentModel.CancelEventHandler(this.Common_IsNullOrEmpty_TextBox_Validating);
+            this.MainCfg_PlayerDefaultVolume_TextBox.Validated += new System.EventHandler(this.MainCfg_PlayerDefaultVolume_TextBox_Validated);
+            // 
+            // MainCfg_PlayerDefaultVolume_Label
+            // 
+            this.MainCfg_PlayerDefaultVolume_Label.AutoSize = true;
+            this.MainCfg_PlayerDefaultVolume_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_PlayerDefaultVolume_Label.Location = new System.Drawing.Point(23, 187);
+            this.MainCfg_PlayerDefaultVolume_Label.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.MainCfg_PlayerDefaultVolume_Label.Name = "MainCfg_PlayerDefaultVolume_Label";
+            this.MainCfg_PlayerDefaultVolume_Label.Size = new System.Drawing.Size(109, 20);
+            this.MainCfg_PlayerDefaultVolume_Label.TabIndex = 20;
+            this.MainCfg_PlayerDefaultVolume_Label.Text = "預訯播放音量:";
             // 
             // MainCfg_PlayerRegAudioProcessor_Button
             // 
@@ -7154,7 +7184,7 @@
             // MainCfg_BackupDB_Button
             // 
             this.MainCfg_BackupDB_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_BackupDB_Button.Location = new System.Drawing.Point(866, 530);
+            this.MainCfg_BackupDB_Button.Location = new System.Drawing.Point(866, 536);
             this.MainCfg_BackupDB_Button.Margin = new System.Windows.Forms.Padding(6, 5, 6, 19);
             this.MainCfg_BackupDB_Button.Name = "MainCfg_BackupDB_Button";
             this.MainCfg_BackupDB_Button.Size = new System.Drawing.Size(70, 32);
@@ -7166,7 +7196,7 @@
             // MainCfg_BackupDB_TextBox
             // 
             this.MainCfg_BackupDB_TextBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_BackupDB_TextBox.Location = new System.Drawing.Point(20, 531);
+            this.MainCfg_BackupDB_TextBox.Location = new System.Drawing.Point(20, 537);
             this.MainCfg_BackupDB_TextBox.Margin = new System.Windows.Forms.Padding(10, 6, 6, 20);
             this.MainCfg_BackupDB_TextBox.Name = "MainCfg_BackupDB_TextBox";
             this.MainCfg_BackupDB_TextBox.ReadOnly = true;
@@ -7177,7 +7207,7 @@
             // 
             this.MainCfg_BackupDB_CheckBox.AutoSize = true;
             this.MainCfg_BackupDB_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_BackupDB_CheckBox.Location = new System.Drawing.Point(20, 495);
+            this.MainCfg_BackupDB_CheckBox.Location = new System.Drawing.Point(20, 505);
             this.MainCfg_BackupDB_CheckBox.Margin = new System.Windows.Forms.Padding(10, 8, 6, 6);
             this.MainCfg_BackupDB_CheckBox.Name = "MainCfg_BackupDB_CheckBox";
             this.MainCfg_BackupDB_CheckBox.Size = new System.Drawing.Size(316, 24);
@@ -7191,7 +7221,7 @@
             this.MainCfg_SubTabWidth_Button.AutoSize = true;
             this.MainCfg_SubTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_SubTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(569, 491);
+            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(843, 473);
             this.MainCfg_SubTabWidth_Button.Name = "MainCfg_SubTabWidth_Button";
             this.MainCfg_SubTabWidth_Button.Size = new System.Drawing.Size(84, 31);
             this.MainCfg_SubTabWidth_Button.TabIndex = 13;
@@ -7204,7 +7234,7 @@
             this.MainCfg_MainTabWidth_Button.AutoSize = true;
             this.MainCfg_MainTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_MainTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(467, 490);
+            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(734, 470);
             this.MainCfg_MainTabWidth_Button.Name = "MainCfg_MainTabWidth_Button";
             this.MainCfg_MainTabWidth_Button.Size = new System.Drawing.Size(96, 34);
             this.MainCfg_MainTabWidth_Button.TabIndex = 12;
@@ -9025,6 +9055,8 @@
         private System.Windows.Forms.CheckBox MainCfg_PlayerEnableAudioProcessor_CheckBox;
         private System.Windows.Forms.Button MainCfg_PlayerSetAudioProcessor_Button;
         private System.Windows.Forms.Button MainCfg_PlayerRegAudioProcessor_Button;
+        private System.Windows.Forms.TextBox MainCfg_PlayerDefaultVolume_TextBox;
+        private System.Windows.Forms.Label MainCfg_PlayerDefaultVolume_Label;
     }
 }
 

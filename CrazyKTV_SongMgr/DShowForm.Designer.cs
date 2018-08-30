@@ -37,6 +37,10 @@
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             this.Player_CurrentGainValue_Label = new System.Windows.Forms.Label();
             this.Player_CurrentGain_Label = new System.Windows.Forms.Label();
+            this.Player_CurrentVolumeValue_Label = new System.Windows.Forms.Label();
+            this.Player_CurrentVolume_Label = new System.Windows.Forms.Label();
+            this.Player_VideoSizeValue_Label = new System.Windows.Forms.Label();
+            this.Player_VideoSize_Label = new System.Windows.Forms.Label();
             this.Player_ProgressTrackBar = new CrazyKTV_SongMgr.ProgressTrackBar();
             this.SuspendLayout();
             // 
@@ -60,8 +64,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Player_CurrentChannel_Label.AutoSize = true;
             this.Player_CurrentChannel_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(303, 516);
-            this.Player_CurrentChannel_Label.Margin = new System.Windows.Forms.Padding(12, 9, 6, 10);
+            this.Player_CurrentChannel_Label.Location = new System.Drawing.Point(303, 531);
+            this.Player_CurrentChannel_Label.Margin = new System.Windows.Forms.Padding(12, 6, 0, 6);
             this.Player_CurrentChannel_Label.Name = "Player_CurrentChannel_Label";
             this.Player_CurrentChannel_Label.Size = new System.Drawing.Size(82, 21);
             this.Player_CurrentChannel_Label.TabIndex = 3;
@@ -89,8 +93,8 @@
             this.Player_CurrentChannelValue_Label.AutoSize = true;
             this.Player_CurrentChannelValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Player_CurrentChannelValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(391, 516);
-            this.Player_CurrentChannelValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 10);
+            this.Player_CurrentChannelValue_Label.Location = new System.Drawing.Point(385, 531);
+            this.Player_CurrentChannelValue_Label.Margin = new System.Windows.Forms.Padding(0, 6, 12, 6);
             this.Player_CurrentChannelValue_Label.Name = "Player_CurrentChannelValue_Label";
             this.Player_CurrentChannelValue_Label.Size = new System.Drawing.Size(74, 21);
             this.Player_CurrentChannelValue_Label.TabIndex = 5;
@@ -130,8 +134,8 @@
             this.Player_CurrentGainValue_Label.AutoSize = true;
             this.Player_CurrentGainValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Player_CurrentGainValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.Player_CurrentGainValue_Label.Location = new System.Drawing.Point(579, 516);
-            this.Player_CurrentGainValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 10);
+            this.Player_CurrentGainValue_Label.Location = new System.Drawing.Point(573, 531);
+            this.Player_CurrentGainValue_Label.Margin = new System.Windows.Forms.Padding(0, 6, 12, 6);
             this.Player_CurrentGainValue_Label.Name = "Player_CurrentGainValue_Label";
             this.Player_CurrentGainValue_Label.Size = new System.Drawing.Size(74, 21);
             this.Player_CurrentGainValue_Label.TabIndex = 9;
@@ -143,12 +147,66 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Player_CurrentGain_Label.AutoSize = true;
             this.Player_CurrentGain_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Player_CurrentGain_Label.Location = new System.Drawing.Point(491, 516);
-            this.Player_CurrentGain_Label.Margin = new System.Windows.Forms.Padding(12, 9, 6, 10);
+            this.Player_CurrentGain_Label.Location = new System.Drawing.Point(491, 531);
+            this.Player_CurrentGain_Label.Margin = new System.Windows.Forms.Padding(12, 6, 0, 6);
             this.Player_CurrentGain_Label.Name = "Player_CurrentGain_Label";
             this.Player_CurrentGain_Label.Size = new System.Drawing.Size(82, 21);
             this.Player_CurrentGain_Label.TabIndex = 8;
             this.Player_CurrentGain_Label.Text = "目前增益: ";
+            // 
+            // Player_CurrentVolumeValue_Label
+            // 
+            this.Player_CurrentVolumeValue_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Player_CurrentVolumeValue_Label.AutoSize = true;
+            this.Player_CurrentVolumeValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_CurrentVolumeValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.Player_CurrentVolumeValue_Label.Location = new System.Drawing.Point(573, 506);
+            this.Player_CurrentVolumeValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 6);
+            this.Player_CurrentVolumeValue_Label.Name = "Player_CurrentVolumeValue_Label";
+            this.Player_CurrentVolumeValue_Label.Size = new System.Drawing.Size(74, 21);
+            this.Player_CurrentVolumeValue_Label.TabIndex = 13;
+            this.Player_CurrentVolumeValue_Label.Text = "尚無資料";
+            // 
+            // Player_CurrentVolume_Label
+            // 
+            this.Player_CurrentVolume_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Player_CurrentVolume_Label.AutoSize = true;
+            this.Player_CurrentVolume_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_CurrentVolume_Label.Location = new System.Drawing.Point(491, 506);
+            this.Player_CurrentVolume_Label.Margin = new System.Windows.Forms.Padding(12, 9, 0, 6);
+            this.Player_CurrentVolume_Label.Name = "Player_CurrentVolume_Label";
+            this.Player_CurrentVolume_Label.Size = new System.Drawing.Size(82, 21);
+            this.Player_CurrentVolume_Label.TabIndex = 12;
+            this.Player_CurrentVolume_Label.Text = "目前音量: ";
+            // 
+            // Player_VideoSizeValue_Label
+            // 
+            this.Player_VideoSizeValue_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Player_VideoSizeValue_Label.AutoSize = true;
+            this.Player_VideoSizeValue_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_VideoSizeValue_Label.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.Player_VideoSizeValue_Label.Location = new System.Drawing.Point(385, 506);
+            this.Player_VideoSizeValue_Label.Margin = new System.Windows.Forms.Padding(0, 9, 12, 6);
+            this.Player_VideoSizeValue_Label.Name = "Player_VideoSizeValue_Label";
+            this.Player_VideoSizeValue_Label.Size = new System.Drawing.Size(74, 21);
+            this.Player_VideoSizeValue_Label.TabIndex = 11;
+            this.Player_VideoSizeValue_Label.Text = "尚無資料";
+            // 
+            // Player_VideoSize_Label
+            // 
+            this.Player_VideoSize_Label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Player_VideoSize_Label.AutoSize = true;
+            this.Player_VideoSize_Label.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Player_VideoSize_Label.Location = new System.Drawing.Point(303, 506);
+            this.Player_VideoSize_Label.Margin = new System.Windows.Forms.Padding(12, 9, 0, 6);
+            this.Player_VideoSize_Label.Name = "Player_VideoSize_Label";
+            this.Player_VideoSize_Label.Size = new System.Drawing.Size(82, 21);
+            this.Player_VideoSize_Label.TabIndex = 10;
+            this.Player_VideoSize_Label.Text = "畫面大小: ";
             // 
             // Player_ProgressTrackBar
             // 
@@ -171,6 +229,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(824, 561);
             this.Controls.Add(this.elementHost);
+            this.Controls.Add(this.Player_CurrentVolumeValue_Label);
+            this.Controls.Add(this.Player_CurrentVolume_Label);
+            this.Controls.Add(this.Player_VideoSizeValue_Label);
+            this.Controls.Add(this.Player_VideoSize_Label);
             this.Controls.Add(this.Player_CurrentGainValue_Label);
             this.Controls.Add(this.Player_CurrentGain_Label);
             this.Controls.Add(this.Player_PlayControl_Button);
@@ -202,5 +264,9 @@
         private ProgressTrackBar Player_ProgressTrackBar;
         private System.Windows.Forms.Label Player_CurrentGainValue_Label;
         private System.Windows.Forms.Label Player_CurrentGain_Label;
+        private System.Windows.Forms.Label Player_CurrentVolumeValue_Label;
+        private System.Windows.Forms.Label Player_CurrentVolume_Label;
+        private System.Windows.Forms.Label Player_VideoSizeValue_Label;
+        private System.Windows.Forms.Label Player_VideoSize_Label;
     }
 }

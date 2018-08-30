@@ -37,6 +37,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", Global.MainCfgPlayerOutput);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioProcessor", Global.MainCfgPlayerEnableAudioProcessor);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerDefaultVolume", Global.MainCfgPlayerDefaultVolume);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -260,6 +261,11 @@ namespace CrazyKTV_SongMgr
             MainCfg_PlayerEnableAudioProcessor_CheckBox.Enabled = (Global.MainCfgPlayerCore == "1" && Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
             MainCfg_PlayerSetAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && Global.MainCfgPlayerEnableAudioProcessor == "True" && Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
             MainCfg_PlayerRegAudioProcessor_Button.Enabled = (Global.MainCfgPlayerCore == "1" && !Global.FFDShowAudioProcessorRegistered && File.Exists(Application.StartupPath + @"\Codec\ffdshow\ffdshow.ax")) ? true : false;
+        }
+
+        private void MainCfg_PlayerDefaultVolume_TextBox_Validated(object sender, EventArgs e)
+        {
+            Global.MainCfgPlayerDefaultVolume = MainCfg_PlayerDefaultVolume_TextBox.Text;
         }
 
         #endregion

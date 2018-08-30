@@ -108,6 +108,7 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgPlayerOutput = "1";
         public static string MainCfgPlayerEnableAudioCompressor = "False";
         public static string MainCfgPlayerEnableAudioProcessor = "False";
+        public static string MainCfgPlayerDefaultVolume = "100";
 
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";

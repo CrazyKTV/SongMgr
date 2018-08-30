@@ -38,6 +38,7 @@ namespace CrazyKTV_SongMgr
         public DShowForm(Form ParentForm, List<string> PlayerSongInfoList)
         {
             InitializeComponent();
+            this.MouseWheel += new MouseEventHandler(DShowForm_MouseWheel);
 
             this.Owner = ParentForm;
             SongId = PlayerSongInfoList[0];
@@ -90,6 +91,7 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.VideoSource = (Global.PlayerRandomVideoList.Count > 0) ? new Uri(Global.PlayerRandomVideoList[0]) : null;
             mediaUriElement.Source = new Uri(SongFilePath);
 
+            mediaUriElement.Volume = Math.Round(Convert.ToDouble(Global.MainCfgPlayerDefaultVolume) / 100, 2);
             // 音量平衡
             int GainVolume = Convert.ToInt32(SongVolume);
             if (SongReplayGain != "" && SongMeanVolume != "")
@@ -152,11 +154,35 @@ namespace CrazyKTV_SongMgr
                 }
             }
             Player_CurrentChannelValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = (ChannelValue == SongTrack) ? "伴唱" : "人聲");
+            Player_CurrentVolumeValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = Convert.ToInt32(mediaUriElement.Volume * 100).ToString());
 
             if (mediaUriElement.MediaUriPlayer.IsAudioOnly && Global.PlayerRandomVideoList.Count > 0)
                 Global.PlayerRandomVideoList.RemoveAt(0);
 
             NativeMethods.SystemSleepManagement.PreventSleep(true);
+        }
+
+        private void DShowForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta != 0)
+            {
+                if (e.Delta > 0)
+                {
+                    if (mediaUriElement.Volume <= 0.95)
+                    {
+                        mediaUriElement.Volume += 0.05;
+                    }
+                }
+                else
+                {
+                    if (mediaUriElement.Volume >= 0.05)
+                    {
+                        mediaUriElement.Volume -= 0.05;
+                    }
+                }
+                mediaUriElement.Volume = Math.Round(mediaUriElement.Volume, 2);
+                Player_CurrentVolumeValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = Convert.ToInt32(mediaUriElement.Volume * 100).ToString());
+            }
         }
 
         private void MediaUriElement_MediaFailed(object sender, CrazyKTV_MediaKit.DirectShow.MediaPlayers.MediaFailedEventArgs e)
@@ -166,6 +192,17 @@ namespace CrazyKTV_SongMgr
 
         private void MediaUriPlayer_MediaPositionChanged(object sender, EventArgs e)
         {
+            if (Player_VideoSizeValue_Label.Text == "尚無資料")
+            {
+                this.Invoke((Action)delegate ()
+                {
+                    if (mediaUriElement.NaturalVideoWidth != 0 && mediaUriElement.NaturalVideoHeight != 0)
+                    {
+                        Player_VideoSizeValue_Label.Text = mediaUriElement.NaturalVideoWidth + "x" + mediaUriElement.NaturalVideoHeight;
+                    }
+                });
+            }
+
             if (sliderDrag)
                 return;
 
@@ -377,11 +414,14 @@ namespace CrazyKTV_SongMgr
 
         private void DShowForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            mediaUriElement.MediaUriPlayer.MediaPositionChanged -= MediaUriPlayer_MediaPositionChanged;
             mediaUriElement.Stop();
             mediaUriElement.Close();
             mediaUriElement.Source = null;
             mediaUriElement.VideoSource = null;
-            mouseClickTimer.Dispose();
+
+            if (mouseClickTimer != null)
+                mouseClickTimer.Dispose();
 
             NativeMethods.SystemSleepManagement.ResotreSleep();
             this.Owner.Show();

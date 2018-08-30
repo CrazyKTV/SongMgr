@@ -81,6 +81,7 @@ namespace CrazyKTV_SongMgr
                     i = 4;
                     break;
                 case "MainCfg_UIScale_TextBox":
+                case "MainCfg_PlayerDefaultVolume_TextBox":
                     i = 5;
                     break;
                 default:
@@ -156,6 +157,7 @@ namespace CrazyKTV_SongMgr
                     i = 5;
                     break;
                 case "MainCfg_UIScale_TextBox":
+                case "MainCfg_PlayerDefaultVolume_TextBox":
                     i = 6;
                     break;
                 default:
@@ -194,6 +196,7 @@ namespace CrazyKTV_SongMgr
                     case "SongMaintenance_VolumeChange_TextBox":
                     case "SongMaintenance_ReplayGain_TextBox":
                     case "SongAdd_EditSongVolume_TextBox":
+                    case "MainCfg_PlayerDefaultVolume_TextBox":
                         if (int.Parse(((TextBox)sender).Text) > 100)
                         {
                             Tooltip_Label[i].Text = "此項目只能輸入 0 ~ 100 的值!";
@@ -227,6 +230,7 @@ namespace CrazyKTV_SongMgr
                     case "SongAdd_EditSongVolume_TextBox":
                     case "SongAdd_EditSongPlayCount_TextBox":
                     case "MainCfg_UIScale_TextBox":
+                    case "MainCfg_PlayerDefaultVolume_TextBox":
                         if (int.Parse(((TextBox)sender).Text) > 0)
                         {
                             ((TextBox)sender).Text = ((TextBox)sender).Text.TrimStart('0');
