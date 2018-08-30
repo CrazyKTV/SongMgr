@@ -1616,7 +1616,7 @@ namespace CrazyKTV_SongMgr
             if (Global.MainCfgEnableAutoUpdate == "True" && File.Exists(WebUpdaterFile))
             {
                 string WebUpdaterTempFile = Application.StartupPath + @"\CrazyKTV_WebUpdater.tmp";
-                string WebUpdaterUrl = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/UpdateFile/CrazyKTV_WebUpdater.106";
+                string WebUpdaterUrl = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/UpdateFile/CrazyKTV_WebUpdater.ver";
 
                 if (CommonFunc.DownloadFile(WebUpdaterTempFile, WebUpdaterUrl))
                 {
