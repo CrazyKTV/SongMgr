@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace CrazyKTV_SongMgr
@@ -214,6 +213,8 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
+            MainCfg_PlayerRegAudioProcessor_Button.Image = MainUIScale.GetDPIScaleImage(Properties.Resources.UAC, ScalingFactor);
+
             MainTabControl.Visible = true;
             MainUIScale.UIScalingFactor = ScalingFactor;
         }
@@ -222,5 +223,20 @@ namespace CrazyKTV_SongMgr
     class MainUIScale
     {
         public static float UIScalingFactor = 1;
+
+        public static Image GetDPIScaleImage(Image image, float ScalingFactor)
+        {
+            int width = Convert.ToInt32(image.Width * Global.DPIScalingFactor * ScalingFactor);
+            int height = Convert.ToInt32(image.Height * Global.DPIScalingFactor * ScalingFactor);
+            Bitmap bitmap = new Bitmap(width, height);
+
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                g.DrawImage(image, new Rectangle(0, 0, width, height));
+            }
+            image.Dispose();
+            return bitmap;
+        }
     }
 }

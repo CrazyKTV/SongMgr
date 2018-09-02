@@ -7039,7 +7039,7 @@
             this.MainCfg_PlayerDefaultVolume_Label.Name = "MainCfg_PlayerDefaultVolume_Label";
             this.MainCfg_PlayerDefaultVolume_Label.Size = new System.Drawing.Size(109, 20);
             this.MainCfg_PlayerDefaultVolume_Label.TabIndex = 20;
-            this.MainCfg_PlayerDefaultVolume_Label.Text = "預訯播放音量:";
+            this.MainCfg_PlayerDefaultVolume_Label.Text = "預設播放音量:";
             // 
             // MainCfg_PlayerRegAudioProcessor_Button
             // 
