@@ -23,6 +23,12 @@ namespace CrazyKTV_SongMgr
             if (values.Count() <= 0) return false;
             return values.Where(x => source.Contains(x)).Count() == count;
         }
+
+        public static bool EqualsCount(this string source, int count, params string[] values)
+        {
+            if (values.Count() <= 0) return false;
+            return values.Where(x => source.Equals(x)).Count() == count;
+        }
     }
 
     public static class ControlExtensions

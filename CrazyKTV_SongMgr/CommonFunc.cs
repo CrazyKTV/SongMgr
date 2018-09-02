@@ -3433,6 +3433,21 @@ namespace CrazyKTV_SongMgr
             return result;
         }
 
+        public static bool MatchGroupSinger(int MatchCount, string MatchString, List<string> MatchList)
+        {
+            var SingerList = GetChorusSingerList(MatchString);
+            int SingerCount = 0;
+            foreach (string singer in SingerList)
+            {
+                if (singer.EqualsCount(1, MatchList.ToArray()))
+                    SingerCount += 1;
+            }
+            SingerList.Clear();
+            SingerList = null;
+
+            return (SingerCount == MatchCount) ? true : false;
+        }
+
         public static int MatchCashboxSong(string MatchType, DataRow row, string SongLang, string SongSinger, string SongSongName, List<string> SongDataLowCaseList, List<string> SongDataFuzzyList)
         {
             int MatchResult = -1;
@@ -3646,9 +3661,14 @@ namespace CrazyKTV_SongMgr
                                     MatchSingerStatus = GetChorusSongSingerStatus(list[1]);
                                     if (MatchSingerStatus.ChorusGroupSongSingerCount == SingerStatus.ChorusGroupSongSingerCount)
                                     {
-                                        if (MatchSingerStatus.ChorusGroupSongSingerCount == SingerStatus.ChorusGroupSongSingerCount)
+                                        if (list[1].ContainsCount(SingerStatus.ChorusGroupSongSingerCount, SingerStatus.ChorusGroupSingerList.ToArray()) && list[2] == SongSongName)
                                         {
-                                            if (list[1].ContainsCount(SingerStatus.ChorusGroupSongSingerCount, SingerStatus.ChorusGroupSingerList.ToArray()) && list[2] == SongSongName)
+                                            MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                            MatchSongStatus = true;
+                                        }
+                                        else if (list[2] == SongSongName)
+                                        {
+                                            if (MatchGroupSinger(SingerStatus.ChorusGroupSongSingerCount, list[1], SingerStatus.ChorusGroupSingerList))
                                             {
                                                 MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
                                                 MatchSongStatus = true;
@@ -3664,6 +3684,14 @@ namespace CrazyKTV_SongMgr
                                         {
                                             MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
                                             MatchSongStatus = true;
+                                        }
+                                        else if (list[1] == SongSongName)
+                                        {
+                                            if (MatchGroupSinger(SingerStatus.ChorusGroupSongSingerCount, list[0], SingerStatus.ChorusGroupSingerList))
+                                            {
+                                                MatchResult = (SongDataLowCaseList.IndexOf(FindResult) >= 0) ? SongDataLowCaseList.IndexOf(FindResult) : -1;
+                                                MatchSongStatus = true;
+                                            }
                                         }
                                     }
                                     break;
@@ -3694,6 +3722,14 @@ namespace CrazyKTV_SongMgr
                                             MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
                                             MatchSongStatus = true;
                                         }
+                                        else if (list[2] == SongSongNameFuzzyStr)
+                                        {
+                                            if (MatchGroupSinger(SingerStatus.ChorusGroupSongSingerCount, list[1], SingerStatus.ChorusGroupSingerFuzzyList))
+                                            {
+                                                MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
+                                                MatchSongStatus = true;
+                                            }
+                                        }
                                     }
                                     break;
                                 case "CashboxLang":
@@ -3704,6 +3740,14 @@ namespace CrazyKTV_SongMgr
                                         {
                                             MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
                                             MatchSongStatus = true;
+                                        }
+                                        else if (list[1] == SongSongNameFuzzyStr)
+                                        {
+                                            if (MatchGroupSinger(SingerStatus.ChorusGroupSongSingerCount, list[0], SingerStatus.ChorusGroupSingerFuzzyList))
+                                            {
+                                                MatchResult = (SongDataFuzzyList.IndexOf(FindResult) >= 0) ? SongDataFuzzyList.IndexOf(FindResult) : -1;
+                                                MatchSongStatus = true;
+                                            }
                                         }
                                     }
                                     break;
