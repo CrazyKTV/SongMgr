@@ -623,7 +623,9 @@ namespace CrazyKTV_SongMgr
                 Debug_ConfigData_ComboBox.SelectedValue = 1;
             #endif
 
-            if (Global.MainCfgEnableUIScale == "True") Common_ScalingUI();
+            // 縮放界面
+            Common_ScalingUI();
+
             SpinWait.SpinUntil(() => Global.DatabaseUpdateFinished == true);
 
             // 歌庫監視

@@ -1734,7 +1734,22 @@ namespace CrazyKTV_SongMgr
                     ScalingFactor = (float)96 * CustomScale / 100 / 96;
                     break;
             }
-            if (ScalingFactor != 0) MainUIScale_UIScale(ScalingFactor, Global.MainCfgUIFont);
+
+            if (Global.MainCfgEnableUIScale == "True" && ScalingFactor != 0)
+            {
+                MainUIScale_UIScale(ScalingFactor, Global.MainCfgUIFont);
+            }
+            else
+            {
+                CustomScale = 1 / Global.DPIScalingFactor;
+                double screenWidth = System.Windows.SystemParameters.WorkArea.Size.Width;
+                double screenHeight = System.Windows.SystemParameters.WorkArea.Size.Height;
+
+                if (screenWidth < this.Width || screenHeight < this.Height)
+                {
+                    if (CustomScale < 1) MainUIScale_UIScale(CustomScale, Global.MainCfgUIFont);
+                }
+            }
         }
 
         #endregion
