@@ -1399,22 +1399,102 @@ namespace CrazyKTV_SongMgr
         }
 
 
-        private void SongMaintenance_CompactAccessDB_Button_Click(object sender, EventArgs e)
+        private void SongMaintenance_DetectUnusedFiles_Button_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Global.CrazyktvDatabaseFile))
+            if (MessageBox.Show("你確定要偵測歌庫資料夾內的多餘檔案嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (MessageBox.Show("你確定要壓縮並修復資料庫嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
-                    File.Copy(Global.CrazyktvDatabaseFile, Application.StartupPath + @"\SongMgr\Backup\" + DateTime.Now.ToLongDateString() + "_Compact_CrazySong.mdb", true);
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                Common_SwitchSetUI(false);
 
-                    Common_SwitchSetUI(false);
-                    CommonFunc.CompactAccessDB("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Global.CrazyktvDatabaseFile + ";", Global.CrazyktvDatabaseFile);
-                    Common_SwitchSetUI(true);
-                }
+                Global.DetectUnusedFilePathList.Clear();
+                Global.DetectUnusedFilePathList = null;
+
+                DetectUnusedFileForm newDetectForm = new DetectUnusedFileForm(this);
+                this.Hide();
+                var DetectFormResult = newDetectForm.ShowDialog();
+
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_DetectUnusedFilesTask())
+                };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共在歌庫資料夾內偵測到 " + Global.TotalList[0] + " 個的多餘檔案,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                });
             }
         }
 
+        private void SongMaintenance_DetectUnusedFilesTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            if (Global.DetectUnusedFilePathList.Count == 0) return;
+
+            List<string> SongList = new List<string>();
+            List<string> FileList = new List<string>();
+            List<string> UnusedFileList = new List<string>();
+
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_FileName, Song_Path from ktv_Song order by Song_Id";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
+            {
+                Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
+                {
+                    var query = from row in dt.AsEnumerable()
+                                where row.Field<string>("Song_Lang").Equals(langstr)
+                                select row;
+
+                    if (query.Count<DataRow>() > 0)
+                    {
+                        foreach (DataRow row in query)
+                        {
+                            lock (LockThis)
+                            {
+                                SongList.Add(Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName")).ToLower());
+                            }
+                        }
+                    }
+                });
+            }
+
+            foreach (string dir in Global.DetectUnusedFilePathList)
+            {
+                FileList.AddRange(Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories).ToList<string>().ConvertAll(file => file.ToLower()));
+            }
+
+            Parallel.ForEach(FileList, (file, loopState) =>
+            {
+                if (SongList.IndexOf(file) < 0)
+                {
+                    lock(LockThis)
+                    {
+                        Global.TotalList[0]++;
+                        UnusedFileList.Add(file);
+                    }
+                }
+            });
+            SongList.Clear();
+            SongList = null;
+            FileList.Clear();
+            FileList = null;
+
+            if (UnusedFileList.Count > 0)
+            {
+                foreach (string file in UnusedFileList)
+                {
+                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【偵測歌庫多餘檔案】以下為偵測到的多餘檔案: " + file;
+                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                }
+            }
+            UnusedFileList.Clear();
+            UnusedFileList = null;
+        }
 
         #endregion
 

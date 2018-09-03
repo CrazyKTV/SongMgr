@@ -298,5 +298,6 @@ namespace CrazyKTV_SongMgr
 
         public static bool FFDShowAudioProcessorRegistered = false;
 
+        public static List<string> DetectUnusedFilePathList = new List<string>();
     }
 }

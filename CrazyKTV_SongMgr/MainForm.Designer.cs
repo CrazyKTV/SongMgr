@@ -366,7 +366,7 @@
             this.SongMaintenance_RemoteCfgImport_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Misc_GroupBox = new System.Windows.Forms.GroupBox();
             this.SongMaintenance_RemoveEmptyDirs_Button = new System.Windows.Forms.Button();
-            this.SongMaintenance_CompactAccessDB_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_DetectUnusedFiles_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_SongWordCountCorrect_Button = new System.Windows.Forms.Button();
             this.SongMaintenance_Favorite_TabPage = new System.Windows.Forms.TabPage();
             this.SongMaintenance_Favorite_UpdateNewsong_Label = new System.Windows.Forms.Label();
@@ -4954,7 +4954,7 @@
             // SongMaintenance_Misc_GroupBox
             // 
             this.SongMaintenance_Misc_GroupBox.Controls.Add(this.SongMaintenance_RemoveEmptyDirs_Button);
-            this.SongMaintenance_Misc_GroupBox.Controls.Add(this.SongMaintenance_CompactAccessDB_Button);
+            this.SongMaintenance_Misc_GroupBox.Controls.Add(this.SongMaintenance_DetectUnusedFiles_Button);
             this.SongMaintenance_Misc_GroupBox.Controls.Add(this.SongMaintenance_SongWordCountCorrect_Button);
             this.SongMaintenance_Misc_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SongMaintenance_Misc_GroupBox.Location = new System.Drawing.Point(16, 18);
@@ -4978,17 +4978,17 @@
             this.SongMaintenance_RemoveEmptyDirs_Button.UseVisualStyleBackColor = true;
             this.SongMaintenance_RemoveEmptyDirs_Button.Click += new System.EventHandler(this.SongMaintenance_RemoveEmptyDirs_Button_Click);
             // 
-            // SongMaintenance_CompactAccessDB_Button
+            // SongMaintenance_DetectUnusedFiles_Button
             // 
-            this.SongMaintenance_CompactAccessDB_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongMaintenance_CompactAccessDB_Button.Location = new System.Drawing.Point(338, 39);
-            this.SongMaintenance_CompactAccessDB_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.SongMaintenance_CompactAccessDB_Button.Name = "SongMaintenance_CompactAccessDB_Button";
-            this.SongMaintenance_CompactAccessDB_Button.Size = new System.Drawing.Size(169, 32);
-            this.SongMaintenance_CompactAccessDB_Button.TabIndex = 2;
-            this.SongMaintenance_CompactAccessDB_Button.Text = "壓縮並修復資料庫";
-            this.SongMaintenance_CompactAccessDB_Button.UseVisualStyleBackColor = true;
-            this.SongMaintenance_CompactAccessDB_Button.Click += new System.EventHandler(this.SongMaintenance_CompactAccessDB_Button_Click);
+            this.SongMaintenance_DetectUnusedFiles_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_DetectUnusedFiles_Button.Location = new System.Drawing.Point(338, 39);
+            this.SongMaintenance_DetectUnusedFiles_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SongMaintenance_DetectUnusedFiles_Button.Name = "SongMaintenance_DetectUnusedFiles_Button";
+            this.SongMaintenance_DetectUnusedFiles_Button.Size = new System.Drawing.Size(169, 32);
+            this.SongMaintenance_DetectUnusedFiles_Button.TabIndex = 2;
+            this.SongMaintenance_DetectUnusedFiles_Button.Text = "偵測歌庫多餘檔案";
+            this.SongMaintenance_DetectUnusedFiles_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_DetectUnusedFiles_Button.Click += new System.EventHandler(this.SongMaintenance_DetectUnusedFiles_Button_Click);
             // 
             // SongMaintenance_SongWordCountCorrect_Button
             // 
@@ -8779,7 +8779,7 @@
         private System.Windows.Forms.Label SongMaintenance_DBVer1_Label;
         private System.Windows.Forms.GroupBox SongMaintenance_DBVerTooltip_GroupBox;
         private System.Windows.Forms.Label SongMaintenance_DBVerTooltip_Label;
-        private System.Windows.Forms.Button SongMaintenance_CompactAccessDB_Button;
+        private System.Windows.Forms.Button SongMaintenance_DetectUnusedFiles_Button;
         private System.Windows.Forms.TabPage MainCfg_TabPage;
         private System.Windows.Forms.Button MainCfg_Save_Button;
         private System.Windows.Forms.GroupBox MainCfg_Tooltip_GroupBox;

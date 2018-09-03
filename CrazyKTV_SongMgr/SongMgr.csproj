@@ -163,6 +163,12 @@
     <Compile Include="Debug.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="DetectUnusedFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DetectUnusedFileForm.Designer.cs">
+      <DependentUpon>DetectUnusedFileForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FFmpeg.cs" />
     <Compile Include="MainCfg.cs">
@@ -228,6 +234,9 @@
     <Compile Include="SongQueryDataGridView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="DetectUnusedFileForm.resx">
+      <DependentUpon>DetectUnusedFileForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
