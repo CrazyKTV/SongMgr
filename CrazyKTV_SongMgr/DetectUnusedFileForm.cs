@@ -16,6 +16,7 @@ namespace CrazyKTV_SongMgr
         {
             InitializeComponent();
             this.Owner = ParentForm;
+            Global.DetectUnusedFilePathList = new List<string>();
             if (Global.SongMgrSongAddMode == "1" || Global.SongMgrSongAddMode == "2")
             {
                 if (Global.SongMgrDestFolder != "" && Directory.Exists(Global.SongMgrDestFolder))
@@ -25,7 +26,6 @@ namespace CrazyKTV_SongMgr
 
         private void DetectUnusedFile_Button_Click(object sender, EventArgs e)
         {
-            Global.DetectUnusedFilePathList = new List<string>();
             if (DetectUnusedFile_Path1_TextBox.Text != "") Global.DetectUnusedFilePathList.Add(DetectUnusedFile_Path1_TextBox.Text);
             if (DetectUnusedFile_Path2_TextBox.Text != "") Global.DetectUnusedFilePathList.Add(DetectUnusedFile_Path2_TextBox.Text);
             if (DetectUnusedFile_Path3_TextBox.Text != "") Global.DetectUnusedFilePathList.Add(DetectUnusedFile_Path3_TextBox.Text);
