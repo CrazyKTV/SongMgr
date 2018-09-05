@@ -439,7 +439,6 @@ namespace CrazyKTV_SongMgr
         private void DShowForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             mediaUriElement = null;
-            this.Dispose();
             GC.Collect();
         }
     }
