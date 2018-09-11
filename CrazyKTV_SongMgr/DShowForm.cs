@@ -27,6 +27,7 @@ namespace CrazyKTV_SongMgr
 
         private MediaUriElement mediaUriElement;
         private System.Timers.Timer mouseClickTimer;
+        private DateTime MediaPositionChangeTime;
         private bool sliderInit;
         private bool sliderDrag;
 
@@ -73,6 +74,7 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.MediaEnded += MediaUriElement_MediaEnded;
             mediaUriElement.MouseLeftButtonDown += mediaUriElement_MouseLeftButtonDown;
             mediaUriElement.MediaUriPlayer.MediaPositionChanged += MediaUriPlayer_MediaPositionChanged;
+            MediaPositionChangeTime = DateTime.Now;
 
             // 隨選視訊
             if (Global.PlayerRandomVideoList.Count == 0)
@@ -227,7 +229,9 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
+                if ((DateTime.Now - MediaPositionChangeTime).TotalMilliseconds < 500) return;
                 this.BeginInvoke(new Action(ChangeSlideValue), null);
+                MediaPositionChangeTime = DateTime.Now;
             }
         }
 
@@ -251,7 +255,7 @@ namespace CrazyKTV_SongMgr
             if (!sliderInit)
                 return;
 
-            this.BeginInvoke(new Action(ChangeMediaPosition), null);
+            ChangeMediaPosition();
         }
 
         private void ChangeMediaPosition()
@@ -399,6 +403,8 @@ namespace CrazyKTV_SongMgr
                 elementHost.Width = eHostWidth;
                 elementHost.Height = eHostHeight;
                 elementHost.Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left;
+                Player_ProgressTrackBar.TrackBarValue = Player_ProgressTrackBar.TrackBarValue;
+                Player_ProgressTrackBar.ProgressBarValue = Player_ProgressTrackBar.ProgressBarValue;
                 this.Show();
             }
             else
