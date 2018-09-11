@@ -202,17 +202,6 @@ namespace CrazyKTV_SongMgr
 
         private void MediaUriPlayer_MediaPositionChanged(object sender, EventArgs e)
         {
-            if (Player_VideoSizeValue_Label.Text == "尚無資料")
-            {
-                this.Invoke((Action)delegate ()
-                {
-                    if (mediaUriElement.NaturalVideoWidth != 0 && mediaUriElement.NaturalVideoHeight != 0)
-                    {
-                        Player_VideoSizeValue_Label.Text = mediaUriElement.NaturalVideoWidth + "x" + mediaUriElement.NaturalVideoHeight;
-                    }
-                });
-            }
-
             if (sliderDrag)
                 return;
 
@@ -220,6 +209,14 @@ namespace CrazyKTV_SongMgr
             {
                 this.Invoke((Action)delegate ()
                 {
+                    if (mediaUriElement.HasVideo)
+                    {
+                        if (mediaUriElement.NaturalVideoWidth != 0 && mediaUriElement.NaturalVideoHeight != 0)
+                        {
+                            Player_VideoSizeValue_Label.Text = mediaUriElement.NaturalVideoWidth + "x" + mediaUriElement.NaturalVideoHeight;
+                        }
+                    }
+
                     if (mediaUriElement.MediaDuration > 0)
                     {
                         Player_ProgressTrackBar.Maximum = ((int)mediaUriElement.MediaDuration < 0) ? (int)mediaUriElement.MediaDuration * -1 : (int)mediaUriElement.MediaDuration;
