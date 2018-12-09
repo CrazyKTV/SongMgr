@@ -402,6 +402,7 @@ namespace CrazyKTV_SongMgr
                 elementHost.Anchor = AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left;
                 Player_ProgressTrackBar.TrackBarValue = Player_ProgressTrackBar.TrackBarValue;
                 Player_ProgressTrackBar.ProgressBarValue = Player_ProgressTrackBar.ProgressBarValue;
+                Cursor.Show();
                 this.Show();
             }
             else
@@ -419,6 +420,7 @@ namespace CrazyKTV_SongMgr
                 this.WindowState = FormWindowState.Normal;
                 this.WindowState = FormWindowState.Maximized;
                 elementHost.Dock = DockStyle.Fill;
+                Cursor.Hide();
                 this.Show();
             }
         }
