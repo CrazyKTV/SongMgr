@@ -12,11 +12,11 @@ namespace CrazyKTV_SongMgr
     {
         static Program()
         {
-            AppDomain.CurrentDomain.SetData("PRIVATE_BINPATH", @"SongMgr\Libs;Codec");
-            AppDomain.CurrentDomain.SetData("BINPATH_PROBE_ONLY", @"SongMgr\Libs;Codec");
+            AppDomain.CurrentDomain.SetData("PRIVATE_BINPATH", @"Libs;SongMgr\Libs;Codec");
+            AppDomain.CurrentDomain.SetData("BINPATH_PROBE_ONLY", @"Libs;SongMgr\Libs;Codec");
             var m = typeof(AppDomainSetup).GetMethod("UpdateContextProperty", BindingFlags.NonPublic | BindingFlags.Static);
             var funsion = typeof(AppDomain).GetMethod("GetFusionContext", BindingFlags.NonPublic | BindingFlags.Instance);
-            m.Invoke(null, new object[] { funsion.Invoke(AppDomain.CurrentDomain, null), "PRIVATE_BINPATH", @"SongMgr\Libs;Codec" });
+            m.Invoke(null, new object[] { funsion.Invoke(AppDomain.CurrentDomain, null), "PRIVATE_BINPATH", @"Libs;SongMgr\Libs;Codec" });
         }
 
         /// <summary>
@@ -109,6 +109,7 @@ namespace CrazyKTV_SongMgr
         public static string MainCfgPlayerEnableAudioCompressor = "False";
         public static string MainCfgPlayerEnableAudioProcessor = "False";
         public static string MainCfgPlayerDefaultVolume = "100";
+        public static string MainCfgExportSQLite = "False";
 
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";

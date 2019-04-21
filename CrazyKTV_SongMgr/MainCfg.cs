@@ -38,6 +38,7 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioProcessor", Global.MainCfgPlayerEnableAudioProcessor);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerDefaultVolume", Global.MainCfgPlayerDefaultVolume);
+            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgExportSQLite", Global.MainCfgExportSQLite);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -266,6 +267,11 @@ namespace CrazyKTV_SongMgr
         private void MainCfg_PlayerDefaultVolume_TextBox_Validated(object sender, EventArgs e)
         {
             Global.MainCfgPlayerDefaultVolume = MainCfg_PlayerDefaultVolume_TextBox.Text;
+        }
+
+        private void MainCfg_ExportSQLite_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.MainCfgExportSQLite = MainCfg_ExportSQLite_CheckBox.Checked.ToString();
         }
 
         #endregion

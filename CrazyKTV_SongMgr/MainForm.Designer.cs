@@ -510,6 +510,8 @@
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Tooltip_Label = new System.Windows.Forms.Label();
             this.MainCfg_ＧroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_Other_GroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_ExportSQLite_CheckBox = new System.Windows.Forms.CheckBox();
             this.MainCfg_General_ＧroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_HideTab_Label = new System.Windows.Forms.Label();
             this.MainCfg_AlwaysOnTop_CheckBox = new System.Windows.Forms.CheckBox();
@@ -695,6 +697,7 @@
             this.MainCfg_TabPage.SuspendLayout();
             this.MainCfg_Tooltip_GroupBox.SuspendLayout();
             this.MainCfg_ＧroupBox.SuspendLayout();
+            this.MainCfg_Other_GroupBox.SuspendLayout();
             this.MainCfg_General_ＧroupBox.SuspendLayout();
             this.MainCfg_Player_GroupBox.SuspendLayout();
             this.MainCfg_PlayerOutput_Panel.SuspendLayout();
@@ -742,7 +745,7 @@
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1008, 727);
+            this.MainTabControl.Size = new System.Drawing.Size(1008, 729);
             this.MainTabControl.TabIndex = 0;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
             // 
@@ -759,7 +762,7 @@
             this.SongQuery_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongQuery_TabPage.Name = "SongQuery_TabPage";
             this.SongQuery_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongQuery_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongQuery_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongQuery_TabPage.TabIndex = 1;
             this.SongQuery_TabPage.Text = "歌庫查詢";
             this.SongQuery_TabPage.UseVisualStyleBackColor = true;
@@ -1846,7 +1849,7 @@
             this.SongAdd_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongAdd_TabPage.Name = "SongAdd_TabPage";
             this.SongAdd_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongAdd_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongAdd_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongAdd_TabPage.TabIndex = 3;
             this.SongAdd_TabPage.Text = "加歌頁面";
             this.SongAdd_TabPage.UseVisualStyleBackColor = true;
@@ -2646,7 +2649,7 @@
             this.SingerMgr_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SingerMgr_TabPage.Name = "SingerMgr_TabPage";
             this.SingerMgr_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SingerMgr_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SingerMgr_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SingerMgr_TabPage.TabIndex = 8;
             this.SingerMgr_TabPage.Text = "歌手管理";
             this.SingerMgr_TabPage.UseVisualStyleBackColor = true;
@@ -3497,7 +3500,7 @@
             this.SongMgrCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongMgrCfg_TabPage.Name = "SongMgrCfg_TabPage";
             this.SongMgrCfg_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongMgrCfg_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongMgrCfg_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongMgrCfg_TabPage.TabIndex = 2;
             this.SongMgrCfg_TabPage.Text = "歌庫設定";
             this.SongMgrCfg_TabPage.UseVisualStyleBackColor = true;
@@ -4654,7 +4657,7 @@
             this.SongMaintenance_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongMaintenance_TabPage.Name = "SongMaintenance_TabPage";
             this.SongMaintenance_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongMaintenance_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongMaintenance_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongMaintenance_TabPage.TabIndex = 7;
             this.SongMaintenance_TabPage.Text = "歌庫維護";
             this.SongMaintenance_TabPage.UseVisualStyleBackColor = true;
@@ -6147,7 +6150,7 @@
             this.Cashbox_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.Cashbox_TabPage.Name = "Cashbox_TabPage";
             this.Cashbox_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.Cashbox_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.Cashbox_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.Cashbox_TabPage.TabIndex = 11;
             this.Cashbox_TabPage.Text = "錢櫃資料";
             this.Cashbox_TabPage.UseVisualStyleBackColor = true;
@@ -6788,7 +6791,7 @@
             this.MainCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.MainCfg_TabPage.Name = "MainCfg_TabPage";
             this.MainCfg_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.MainCfg_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.MainCfg_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.MainCfg_TabPage.TabIndex = 9;
             this.MainCfg_TabPage.Text = "程式設定";
             this.MainCfg_TabPage.UseVisualStyleBackColor = true;
@@ -6831,6 +6834,7 @@
             // 
             // MainCfg_ＧroupBox
             // 
+            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Other_GroupBox);
             this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_General_ＧroupBox);
             this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Player_GroupBox);
             this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_Button);
@@ -6849,6 +6853,32 @@
             this.MainCfg_ＧroupBox.TabIndex = 0;
             this.MainCfg_ＧroupBox.TabStop = false;
             this.MainCfg_ＧroupBox.Text = "程式設定";
+            // 
+            // MainCfg_Other_GroupBox
+            // 
+            this.MainCfg_Other_GroupBox.Controls.Add(this.MainCfg_ExportSQLite_CheckBox);
+            this.MainCfg_Other_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_Other_GroupBox.Location = new System.Drawing.Point(583, 376);
+            this.MainCfg_Other_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 12, 20);
+            this.MainCfg_Other_GroupBox.Name = "MainCfg_Other_GroupBox";
+            this.MainCfg_Other_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.MainCfg_Other_GroupBox.Size = new System.Drawing.Size(344, 119);
+            this.MainCfg_Other_GroupBox.TabIndex = 21;
+            this.MainCfg_Other_GroupBox.TabStop = false;
+            this.MainCfg_Other_GroupBox.Text = "其它設定";
+            // 
+            // MainCfg_ExportSQLite_CheckBox
+            // 
+            this.MainCfg_ExportSQLite_CheckBox.AutoSize = true;
+            this.MainCfg_ExportSQLite_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_ExportSQLite_CheckBox.Location = new System.Drawing.Point(20, 32);
+            this.MainCfg_ExportSQLite_CheckBox.Margin = new System.Windows.Forms.Padding(10, 8, 6, 6);
+            this.MainCfg_ExportSQLite_CheckBox.Name = "MainCfg_ExportSQLite_CheckBox";
+            this.MainCfg_ExportSQLite_CheckBox.Size = new System.Drawing.Size(245, 24);
+            this.MainCfg_ExportSQLite_CheckBox.TabIndex = 17;
+            this.MainCfg_ExportSQLite_CheckBox.Text = "離開程式時匯出 SQLite 資料庫";
+            this.MainCfg_ExportSQLite_CheckBox.UseVisualStyleBackColor = true;
+            this.MainCfg_ExportSQLite_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_ExportSQLite_CheckBox_CheckedChanged);
             // 
             // MainCfg_General_ＧroupBox
             // 
@@ -7221,7 +7251,7 @@
             this.MainCfg_SubTabWidth_Button.AutoSize = true;
             this.MainCfg_SubTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_SubTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(843, 473);
+            this.MainCfg_SubTabWidth_Button.Location = new System.Drawing.Point(852, 501);
             this.MainCfg_SubTabWidth_Button.Name = "MainCfg_SubTabWidth_Button";
             this.MainCfg_SubTabWidth_Button.Size = new System.Drawing.Size(84, 31);
             this.MainCfg_SubTabWidth_Button.TabIndex = 13;
@@ -7234,7 +7264,7 @@
             this.MainCfg_MainTabWidth_Button.AutoSize = true;
             this.MainCfg_MainTabWidth_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainCfg_MainTabWidth_Button.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(734, 470);
+            this.MainCfg_MainTabWidth_Button.Location = new System.Drawing.Point(750, 501);
             this.MainCfg_MainTabWidth_Button.Name = "MainCfg_MainTabWidth_Button";
             this.MainCfg_MainTabWidth_Button.Size = new System.Drawing.Size(96, 34);
             this.MainCfg_MainTabWidth_Button.TabIndex = 12;
@@ -7410,7 +7440,7 @@
             this.SongDBConverter_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongDBConverter_TabPage.Name = "SongDBConverter_TabPage";
             this.SongDBConverter_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongDBConverter_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongDBConverter_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongDBConverter_TabPage.TabIndex = 5;
             this.SongDBConverter_TabPage.Text = "歌庫轉換";
             this.SongDBConverter_TabPage.UseVisualStyleBackColor = true;
@@ -7884,7 +7914,7 @@
             this.SongAddResult_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongAddResult_TabPage.Name = "SongAddResult_TabPage";
             this.SongAddResult_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongAddResult_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongAddResult_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongAddResult_TabPage.TabIndex = 4;
             this.SongAddResult_TabPage.Text = "加歌結果";
             this.SongAddResult_TabPage.UseVisualStyleBackColor = true;
@@ -7974,7 +8004,7 @@
             this.SongLog_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.SongLog_TabPage.Name = "SongLog_TabPage";
             this.SongLog_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.SongLog_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.SongLog_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.SongLog_TabPage.TabIndex = 6;
             this.SongLog_TabPage.Text = "操作記錄";
             this.SongLog_TabPage.UseVisualStyleBackColor = true;
@@ -8033,7 +8063,7 @@
             this.Debug_TabPage.Margin = new System.Windows.Forms.Padding(0);
             this.Debug_TabPage.Name = "Debug_TabPage";
             this.Debug_TabPage.Padding = new System.Windows.Forms.Padding(20);
-            this.Debug_TabPage.Size = new System.Drawing.Size(1000, 690);
+            this.Debug_TabPage.Size = new System.Drawing.Size(1000, 692);
             this.Debug_TabPage.TabIndex = 10;
             this.Debug_TabPage.Text = "Debug";
             this.Debug_TabPage.UseVisualStyleBackColor = true;
@@ -8312,7 +8342,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1008, 727);
+            this.ClientSize = new System.Drawing.Size(1008, 729);
             this.Controls.Add(this.MainTabControl);
             this.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -8434,6 +8464,8 @@
             this.MainCfg_Tooltip_GroupBox.ResumeLayout(false);
             this.MainCfg_ＧroupBox.ResumeLayout(false);
             this.MainCfg_ＧroupBox.PerformLayout();
+            this.MainCfg_Other_GroupBox.ResumeLayout(false);
+            this.MainCfg_Other_GroupBox.PerformLayout();
             this.MainCfg_General_ＧroupBox.ResumeLayout(false);
             this.MainCfg_General_ＧroupBox.PerformLayout();
             this.MainCfg_Player_GroupBox.ResumeLayout(false);
@@ -9057,6 +9089,8 @@
         private System.Windows.Forms.Button MainCfg_PlayerRegAudioProcessor_Button;
         private System.Windows.Forms.TextBox MainCfg_PlayerDefaultVolume_TextBox;
         private System.Windows.Forms.Label MainCfg_PlayerDefaultVolume_Label;
+        private System.Windows.Forms.GroupBox MainCfg_Other_GroupBox;
+        private System.Windows.Forms.CheckBox MainCfg_ExportSQLite_CheckBox;
     }
 }
 
