@@ -38,7 +38,6 @@ namespace CrazyKTV_SongMgr
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioProcessor", Global.MainCfgPlayerEnableAudioProcessor);
             CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerDefaultVolume", Global.MainCfgPlayerDefaultVolume);
-            CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgExportSQLite", Global.MainCfgExportSQLite);
         }
 
         private void MainCfg_AlwaysOnTop_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -269,9 +268,38 @@ namespace CrazyKTV_SongMgr
             Global.MainCfgPlayerDefaultVolume = MainCfg_PlayerDefaultVolume_TextBox.Text;
         }
 
-        private void MainCfg_ExportSQLite_CheckBox_CheckedChanged(object sender, EventArgs e)
+        private void MainCfg_ExportSQLite_Button_Click(object sender, EventArgs e)
         {
-            Global.MainCfgExportSQLite = MainCfg_ExportSQLite_CheckBox.Checked.ToString();
+            if (MessageBox.Show("你確定要匯出 SQLite 資料庫嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Common_SwitchSetUI(false);
+
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => MainCfg_ExportSQLiteTask())
+                };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), MainCfg_ExportSQLiteEndTask =>
+                {
+                    this.BeginInvoke((Action)delegate()
+                    {
+                        Common_SwitchSetUI(true);
+                    });
+                });
+            }
+        }
+
+        private void MainCfg_ExportSQLiteTask()
+        {
+            try
+            {
+                // Initialize AccessExporter
+                AccessExporter exporter = new AccessExporter(Global.CrazyktvDatabaseFile);
+                exporter.export(Path.GetDirectoryName(Global.CrazyktvDatabaseFile) + @"\" + Path.GetFileNameWithoutExtension(Global.CrazyktvDatabaseFile) + ".sqlite");
+                // Dispose after use.
+                exporter.Dispose();
+            }
+            catch { }
         }
 
         #endregion

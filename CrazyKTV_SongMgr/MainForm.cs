@@ -156,7 +156,6 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioProcessor", Global.MainCfgPlayerEnableAudioProcessor);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerDefaultVolume", Global.MainCfgPlayerDefaultVolume);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgExportSQLite", Global.MainCfgExportSQLite);
             }
 
             List<string> list = new List<string>()
@@ -216,8 +215,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioProcessor", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerDefaultVolume", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgExportSQLite", null, false)
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerDefaultVolume", null, false)
             };
 
             foreach (TabPage MainTabPage in MainTabControl.TabPages)
@@ -503,9 +501,6 @@ namespace CrazyKTV_SongMgr
             if (list[55] != "") Global.MainCfgPlayerDefaultVolume = list[55];
             MainCfg_PlayerDefaultVolume_TextBox.Text = Global.MainCfgPlayerDefaultVolume;
 
-            if (list[56] != "") Global.MainCfgExportSQLite = list[56];
-            MainCfg_ExportSQLite_CheckBox.Checked = bool.Parse(Global.MainCfgExportSQLite);
-
             if (list[3] != "") Global.SongMgrSongAddMode = list[3];
             SongMgrCfg_SongAddMode_ComboBox.DataSource = SongMgrCfg.GetSongAddModeList();
             SongMgrCfg_SongAddMode_ComboBox.DisplayMember = "Display";
@@ -667,18 +662,6 @@ namespace CrazyKTV_SongMgr
                         {
                             File.Copy(Global.CrazyktvDatabaseFile, Global.MainCfgBackupDBPath + @"\" + Path.GetFileName(Global.CrazyktvDatabaseFile), true);
                         } catch { }
-                    }
-                    if (Global.MainCfgExportSQLite == "True")
-                    {
-                        try
-                        {
-                            // Initialize AccessExporter
-                            AccessExporter exporter = new AccessExporter(Global.CrazyktvDatabaseFile);
-                            exporter.export(Path.GetDirectoryName(Global.CrazyktvDatabaseFile) + @"\" + Path.GetFileNameWithoutExtension(Global.CrazyktvDatabaseFile) + ".sqlite");
-                            // Dispose after use.
-                            exporter.Dispose();
-                        }
-                        catch { }
                     }
                 }
                 catch
@@ -872,6 +855,11 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
+
+
+
 
 
 

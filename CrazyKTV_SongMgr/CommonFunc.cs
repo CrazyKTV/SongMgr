@@ -353,7 +353,7 @@ namespace CrazyKTV_SongMgr
             Cashbox_Maintenance_GroupBox.Enabled = status;
             Cashbox_DataGridView.Enabled = status;
             Cashbox_Edit_GroupBox.Enabled = status;
-            MainCfg_Report_GroupBox.Enabled = status;
+            MainCfg_GroupBox.Enabled = status;
         }
         
         private void Common_SwitchSetUI(bool status)
@@ -408,7 +408,7 @@ namespace CrazyKTV_SongMgr
             Cashbox_Maintenance_GroupBox.Enabled = status;
             Cashbox_DataGridView.Enabled = status;
             Cashbox_Edit_GroupBox.Enabled = status;
-            MainCfg_Report_GroupBox.Enabled = status;
+            MainCfg_GroupBox.Enabled = status;
 
             if (Global.SongLogDT.Rows.Count > 0)
             {

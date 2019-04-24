@@ -509,9 +509,9 @@
             this.MainCfg_Save_Button = new System.Windows.Forms.Button();
             this.MainCfg_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Tooltip_Label = new System.Windows.Forms.Label();
-            this.MainCfg_ＧroupBox = new System.Windows.Forms.GroupBox();
+            this.MainCfg_GroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_Other_GroupBox = new System.Windows.Forms.GroupBox();
-            this.MainCfg_ExportSQLite_CheckBox = new System.Windows.Forms.CheckBox();
+            this.MainCfg_ExportSQLite_Button = new System.Windows.Forms.Button();
             this.MainCfg_General_ＧroupBox = new System.Windows.Forms.GroupBox();
             this.MainCfg_HideTab_Label = new System.Windows.Forms.Label();
             this.MainCfg_AlwaysOnTop_CheckBox = new System.Windows.Forms.CheckBox();
@@ -696,7 +696,7 @@
             this.Cashbox_Edit_GroupBox.SuspendLayout();
             this.MainCfg_TabPage.SuspendLayout();
             this.MainCfg_Tooltip_GroupBox.SuspendLayout();
-            this.MainCfg_ＧroupBox.SuspendLayout();
+            this.MainCfg_GroupBox.SuspendLayout();
             this.MainCfg_Other_GroupBox.SuspendLayout();
             this.MainCfg_General_ＧroupBox.SuspendLayout();
             this.MainCfg_Player_GroupBox.SuspendLayout();
@@ -6785,7 +6785,7 @@
             // 
             this.MainCfg_TabPage.Controls.Add(this.MainCfg_Save_Button);
             this.MainCfg_TabPage.Controls.Add(this.MainCfg_Tooltip_GroupBox);
-            this.MainCfg_TabPage.Controls.Add(this.MainCfg_ＧroupBox);
+            this.MainCfg_TabPage.Controls.Add(this.MainCfg_GroupBox);
             this.MainCfg_TabPage.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_TabPage.Location = new System.Drawing.Point(4, 33);
             this.MainCfg_TabPage.Margin = new System.Windows.Forms.Padding(0);
@@ -6832,31 +6832,31 @@
             this.MainCfg_Tooltip_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.MainCfg_Tooltip_Label.UseMnemonic = false;
             // 
-            // MainCfg_ＧroupBox
+            // MainCfg_GroupBox
             // 
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Other_GroupBox);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_General_ＧroupBox);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Player_GroupBox);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_Button);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_TextBox);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_BackupDB_CheckBox);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_SubTabWidth_Button);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_MainTabWidth_Button);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_UIScale_GroupBox);
-            this.MainCfg_ＧroupBox.Controls.Add(this.MainCfg_Report_GroupBox);
-            this.MainCfg_ＧroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_ＧroupBox.Location = new System.Drawing.Point(22, 22);
-            this.MainCfg_ＧroupBox.Margin = new System.Windows.Forms.Padding(2);
-            this.MainCfg_ＧroupBox.Name = "MainCfg_ＧroupBox";
-            this.MainCfg_ＧroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
-            this.MainCfg_ＧroupBox.Size = new System.Drawing.Size(952, 584);
-            this.MainCfg_ＧroupBox.TabIndex = 0;
-            this.MainCfg_ＧroupBox.TabStop = false;
-            this.MainCfg_ＧroupBox.Text = "程式設定";
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_Other_GroupBox);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_General_ＧroupBox);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_Player_GroupBox);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_BackupDB_Button);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_BackupDB_TextBox);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_BackupDB_CheckBox);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_SubTabWidth_Button);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_MainTabWidth_Button);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_UIScale_GroupBox);
+            this.MainCfg_GroupBox.Controls.Add(this.MainCfg_Report_GroupBox);
+            this.MainCfg_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_GroupBox.Location = new System.Drawing.Point(22, 22);
+            this.MainCfg_GroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.MainCfg_GroupBox.Name = "MainCfg_GroupBox";
+            this.MainCfg_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.MainCfg_GroupBox.Size = new System.Drawing.Size(952, 584);
+            this.MainCfg_GroupBox.TabIndex = 0;
+            this.MainCfg_GroupBox.TabStop = false;
+            this.MainCfg_GroupBox.Text = "程式設定";
             // 
             // MainCfg_Other_GroupBox
             // 
-            this.MainCfg_Other_GroupBox.Controls.Add(this.MainCfg_ExportSQLite_CheckBox);
+            this.MainCfg_Other_GroupBox.Controls.Add(this.MainCfg_ExportSQLite_Button);
             this.MainCfg_Other_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.MainCfg_Other_GroupBox.Location = new System.Drawing.Point(583, 376);
             this.MainCfg_Other_GroupBox.Margin = new System.Windows.Forms.Padding(8, 12, 12, 20);
@@ -6867,18 +6867,17 @@
             this.MainCfg_Other_GroupBox.TabStop = false;
             this.MainCfg_Other_GroupBox.Text = "其它設定";
             // 
-            // MainCfg_ExportSQLite_CheckBox
+            // MainCfg_ExportSQLite_Button
             // 
-            this.MainCfg_ExportSQLite_CheckBox.AutoSize = true;
-            this.MainCfg_ExportSQLite_CheckBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MainCfg_ExportSQLite_CheckBox.Location = new System.Drawing.Point(20, 32);
-            this.MainCfg_ExportSQLite_CheckBox.Margin = new System.Windows.Forms.Padding(10, 8, 6, 6);
-            this.MainCfg_ExportSQLite_CheckBox.Name = "MainCfg_ExportSQLite_CheckBox";
-            this.MainCfg_ExportSQLite_CheckBox.Size = new System.Drawing.Size(245, 24);
-            this.MainCfg_ExportSQLite_CheckBox.TabIndex = 17;
-            this.MainCfg_ExportSQLite_CheckBox.Text = "離開程式時匯出 SQLite 資料庫";
-            this.MainCfg_ExportSQLite_CheckBox.UseVisualStyleBackColor = true;
-            this.MainCfg_ExportSQLite_CheckBox.CheckedChanged += new System.EventHandler(this.MainCfg_ExportSQLite_CheckBox_CheckedChanged);
+            this.MainCfg_ExportSQLite_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MainCfg_ExportSQLite_Button.Location = new System.Drawing.Point(16, 35);
+            this.MainCfg_ExportSQLite_Button.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.MainCfg_ExportSQLite_Button.Name = "MainCfg_ExportSQLite_Button";
+            this.MainCfg_ExportSQLite_Button.Size = new System.Drawing.Size(172, 32);
+            this.MainCfg_ExportSQLite_Button.TabIndex = 4;
+            this.MainCfg_ExportSQLite_Button.Text = "匯出 SQLite 資料庫";
+            this.MainCfg_ExportSQLite_Button.UseVisualStyleBackColor = true;
+            this.MainCfg_ExportSQLite_Button.Click += new System.EventHandler(this.MainCfg_ExportSQLite_Button_Click);
             // 
             // MainCfg_General_ＧroupBox
             // 
@@ -8462,8 +8461,8 @@
             this.Cashbox_Edit_GroupBox.PerformLayout();
             this.MainCfg_TabPage.ResumeLayout(false);
             this.MainCfg_Tooltip_GroupBox.ResumeLayout(false);
-            this.MainCfg_ＧroupBox.ResumeLayout(false);
-            this.MainCfg_ＧroupBox.PerformLayout();
+            this.MainCfg_GroupBox.ResumeLayout(false);
+            this.MainCfg_GroupBox.PerformLayout();
             this.MainCfg_Other_GroupBox.ResumeLayout(false);
             this.MainCfg_Other_GroupBox.PerformLayout();
             this.MainCfg_General_ＧroupBox.ResumeLayout(false);
@@ -8816,7 +8815,7 @@
         private System.Windows.Forms.Button MainCfg_Save_Button;
         private System.Windows.Forms.GroupBox MainCfg_Tooltip_GroupBox;
         private System.Windows.Forms.Label MainCfg_Tooltip_Label;
-        private System.Windows.Forms.GroupBox MainCfg_ＧroupBox;
+        private System.Windows.Forms.GroupBox MainCfg_GroupBox;
         private System.Windows.Forms.CheckBox MainCfg_AlwaysOnTop_CheckBox;
         private System.Windows.Forms.Label MainCfg_HideTab_Label;
         private System.Windows.Forms.CheckBox MainCfg_HideSongDBConvTab_CheckBox;
@@ -9090,7 +9089,7 @@
         private System.Windows.Forms.TextBox MainCfg_PlayerDefaultVolume_TextBox;
         private System.Windows.Forms.Label MainCfg_PlayerDefaultVolume_Label;
         private System.Windows.Forms.GroupBox MainCfg_Other_GroupBox;
-        private System.Windows.Forms.CheckBox MainCfg_ExportSQLite_CheckBox;
+        private System.Windows.Forms.Button MainCfg_ExportSQLite_Button;
     }
 }
 
