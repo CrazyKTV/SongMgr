@@ -333,7 +333,7 @@ namespace CrazyKTV_SongMgr
             SongAdd_Edit_GroupBox.Enabled = status;
             SongMgrCfg_UpdateStructure_Button.Enabled = status;
             SongMaintenance_SpellCorrect_GroupBox.Enabled = status;
-            SongMaintenance_CodeConv_GroupBox.Enabled = status;
+            SongMaintenance_CodeConv_GroupBox.Enabled = (Global.CrazyktvDatabaseMaxDigitCode) ? status : true;
             SongMaintenance_TrackExchange_GroupBox.Enabled = status;
             SongMaintenance_VolumeChange_GroupBox.Enabled = status;
             SongMaintenance_TabControl.Enabled = status;
