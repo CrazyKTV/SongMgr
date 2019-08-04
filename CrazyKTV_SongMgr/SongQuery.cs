@@ -1414,6 +1414,12 @@ namespace CrazyKTV_SongMgr
                         SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
                         SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
                         break;
+                    case "12":
+                        SongQueryType = "SameNameSongIgnorebrackets";
+                        SongQueryValue = "NA";
+                        SongQueryStatusText = SongQuery_ExceptionalQuery_ComboBox.Text;
+                        SongQuery_QueryStatus_Label.Text = "正在查詢有關『" + SongQueryStatusText + "』的異常歌曲,請稍待...";
+                        break;
                 }
                 tasks.Add(Task.Factory.StartNew(() => SongQuery_ExceptionalQueryTask(SongQueryType, SongQueryValue, SongQueryStatusText)));
 
@@ -1821,6 +1827,81 @@ namespace CrazyKTV_SongMgr
                                                     RemoveRowsIdxlist.Add(dt.Rows.IndexOf(row));
                                                 }
                                             }
+                                        }
+                                    });
+
+                                    RemoveRowsIdxlist.Sort();
+                                    if (RemoveRowsIdxlist.Count > 0)
+                                    {
+                                        for (int i = RemoveRowsIdxlist.Count - 1; i >= 0; i--)
+                                        {
+                                            dt.Rows.RemoveAt(RemoveRowsIdxlist[i]);
+                                        }
+                                    }
+                                    RemoveRowsIdxlist.Clear();
+                                }
+                                break;
+                            case "SameNameSongIgnorebrackets":
+                                dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuery.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
+
+                                if (dt.Rows.Count > 0)
+                                {
+                                    List<int> RemoveRowsIdxlist = new List<int>();
+
+                                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                                    this.BeginInvoke((Action)delegate ()
+                                    {
+                                        SongQuery_QueryStatus_Label.Text = "正在比對同名歌曲 (忽略括號及歌曲類別),請稍待...";
+                                    });
+
+                                    Parallel.ForEach(Global.CrazyktvSongLangList, (langstr, loopState) =>
+                                    {
+                                        var query = from row in dt.AsEnumerable()
+                                                    where row.Field<string>("Song_Lang").Equals(langstr)
+                                                    select row;
+
+                                        if (query.Count<DataRow>() > 0)
+                                        {
+                                            List<string> SongDataList = new List<string>();
+                                            List<int> RowIndexList = new List<int>();
+
+                                            foreach (DataRow row in query)
+                                            {
+                                                string SongLang = row["Song_Lang"].ToString();
+                                                string SongSongName = row["Song_SongName"].ToString();
+                                                SongSongName = Regex.Replace(SongSongName, @"[\{\(\[｛（［【].+?[】］）｝\]\)\}]", "", RegexOptions.IgnoreCase);
+                                                SongSongName = Regex.Replace(SongSongName, @"^\s*|\s*$", ""); //去除頭尾空白
+
+                                                string SongData = SongLang + "|" + SongSongName.ToLower();
+                                                SongDataList.Add(SongData);
+                                                RowIndexList.Add(dt.Rows.IndexOf(row));
+                                            }
+
+                                            if (SongDataList.Count > 0)
+                                            {
+                                                List<string> FindResultList = new List<string>();
+                                                foreach (string SongData in SongDataList)
+                                                {
+                                                    FindResultList = SongDataList.FindAll(SongInfo => SongInfo.Equals(SongData));
+                                                    if (FindResultList.Count > 1)
+                                                    {
+                                                        lock (LockThis)
+                                                        {
+                                                            Global.TotalList[0]++;
+                                                            this.BeginInvoke((Action)delegate ()
+                                                            {
+                                                                SongQuery_QueryStatus_Label.Text = "已在歌庫比對到 " + Global.TotalList[0] + " 首同名歌曲...";
+                                                            });
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        lock (LockThis) { RemoveRowsIdxlist.Add(RowIndexList[SongDataList.IndexOf(SongData)]); }
+                                                    }
+                                                }
+                                            }
+                                            SongDataList.Clear();
+                                            RowIndexList.Clear();
                                         }
                                     });
 
@@ -2936,7 +3017,7 @@ namespace CrazyKTV_SongMgr
                 list.Columns.Add(new DataColumn("Display", typeof(string)));
                 list.Columns.Add(new DataColumn("Value", typeof(int)));
 
-                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌曲類別)", "重複歌曲 (忽略括號及歌曲類別)", "重複歌曲 (忽略歌手及歌曲類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手未在資料庫", "歌手類別不符", "語系類別不符 (錢櫃)" };
+                List<string> ItemList = new List<string>() { "無檔案歌曲", "同檔案歌曲", "重複歌曲", "重複歌曲 (忽略歌曲類別)", "重複歌曲 (忽略括號及歌曲類別)", "重複歌曲 (忽略歌手及歌曲類別)", "重複歌曲 (合唱歌曲)", "檔名不符 (歌曲聲道)", "歌手未在資料庫", "歌手類別不符", "語系類別不符 (錢櫃)", "同名歌曲 (忽略括號及歌曲類別)" };
 
                 foreach (string str in ItemList)
                 {
@@ -3206,6 +3287,9 @@ namespace CrazyKTV_SongMgr
                     break;
                 case "FavoriteSong":
                     SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Id";
+                    break;
+                case "SameNameSongIgnorebrackets":
+                    SongQuerySqlStr = "select" + sqlCommonStr + "from ktv_Song order by Song_Lang, Song_SongName";
                     break;
             }
 
