@@ -3056,7 +3056,6 @@ namespace CrazyKTV_SongMgr
         public static MemoryStream Download(string Url)
         {
             HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create(Url);
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             MemoryStream mStream = new MemoryStream();
 
             try

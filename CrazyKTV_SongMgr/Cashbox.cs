@@ -1002,7 +1002,6 @@ namespace CrazyKTV_SongMgr
                     return;
                 }
 
-                HtmlWeb hw = new HtmlWeb();
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 HtmlNode table;
                 HtmlNodeCollection child;

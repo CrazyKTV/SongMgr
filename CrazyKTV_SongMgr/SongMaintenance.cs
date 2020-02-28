@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -2429,9 +2430,9 @@ namespace CrazyKTV_SongMgr
                 SongMaintenance_Tooltip_Label.Text = "正在更新錢櫃新歌排行榜至我的最愛,請稍待...";
 
                 var tasks = new List<Task>()
-                    {
+                {
                         Task.Factory.StartNew(() => SongMaintenance_Favorite_UpdateNewbillTask())
-                    };
+                };
 
                 Task.Factory.ContinueWhenAll(tasks.ToArray(), FavoriteImportEndTask =>
                 {
@@ -2466,31 +2467,55 @@ namespace CrazyKTV_SongMgr
                 List<string> clist = new List<string>();
                 List<string> tlist = new List<string>();
 
-                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_newbill.md";
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                string url = "https://www.cashboxparty.com/billboard/billboard_newbill.asp";
                 using (MemoryStream ms = CommonFunc.Download(url))
                 {
                     if (ms.Length > 0)
                     {
                         ms.Position = 0;
-                        string line = string.Empty;
-                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-
-                        StreamReader sr = new StreamReader(ms);
-                        while (!sr.EndOfStream)
+                        using (StreamReader sr = new StreamReader(ms))
                         {
-                            line = sr.ReadLine();
-                            if (dataline.IsMatch(line))
+                            doc.Load(sr);
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                            child = table.SelectNodes("tr");
+                            foreach (HtmlNode childnode in child)
                             {
-                                line = Regex.Replace(line, @"\s\s\t$", "");
-                                line = Regex.Replace(line, @"\s\t", "|");
-                                List<string> list = new List<string>(line.Split('|'));
-                                if (CommonFunc.IsSongId(list[4]) && list[5] != "")
+                                List<string> list = new List<string>();
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                foreach (HtmlNode tdnode in td)
                                 {
-                                    if (list[5] == "國語") { clist.Add(list[4]); }
-                                    else if (list[5] == "台語") { tlist.Add(list[4]); }
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (td.IndexOf(tdnode) == 4)
+                                    {
+                                        if (CommonFunc.IsSongId(data))
+                                        {
+                                            clist.Add(data);
+                                        }
+                                    }
                                 }
-                                list.Clear();
-                                list = null;
+                            }
+
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                            child = table.SelectNodes("tr");
+                            foreach (HtmlNode childnode in child)
+                            {
+                                List<string> list = new List<string>();
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                foreach (HtmlNode tdnode in td)
+                                {
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (td.IndexOf(tdnode) == 4)
+                                    {
+                                        if (CommonFunc.IsSongId(data))
+                                        {
+                                            tlist.Add(data);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -2536,9 +2561,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 CUpdateList.Clear();
-                CUpdateList = null;
                 TUpdateList.Clear();
-                TUpdateList = null;
             }
         }
 

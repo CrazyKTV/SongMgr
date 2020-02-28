@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,6 +41,8 @@ namespace CrazyKTV_SongMgr
             {
                 this.Text += " (系統管理員)";
             }
+
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
             ElevatedDragDropManager.Instance.EnableDragDrop(SongAdd_DataGridView.Handle);
             ElevatedDragDropManager.Instance.EnableDragDrop(SongAdd_DragDrop_Label.Handle);
