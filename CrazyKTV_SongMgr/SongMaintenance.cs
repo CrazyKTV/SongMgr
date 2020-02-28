@@ -2916,11 +2916,8 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 HUpdateList.Clear();
-                HUpdateList = null;
                 EUpdateList.Clear();
-                EUpdateList = null;
                 JUpdateList.Clear();
-                JUpdateList = null;
             }
         }
 
@@ -2976,47 +2973,305 @@ namespace CrazyKTV_SongMgr
                 List<string> c56list = new List<string>();
                 List<string> t56list = new List<string>();
 
-                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_3456goldsong.md";
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                int pages = 0;
+                string url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=1";
                 using (MemoryStream ms = CommonFunc.Download(url))
                 {
                     if (ms.Length > 0)
                     {
                         ms.Position = 0;
-                        string line = string.Empty;
-                        string type = string.Empty;
-                        Regex typeline = new Regex(@"^.{6}金曲$");
-                        Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-
-                        StreamReader sr = new StreamReader(ms);
-                        while (!sr.EndOfStream)
+                        using (StreamReader sr = new StreamReader(ms))
                         {
-                            line = sr.ReadLine();
-                            if (typeline.IsMatch(line)) type = line;
-                            if (dataline.IsMatch(line))
+                            doc.Load(sr);
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                            child = table.SelectNodes("tr");
+
+                            this.BeginInvoke((Action)delegate ()
                             {
-                                line = Regex.Replace(line, @"\s\s\t$", "");
-                                line = Regex.Replace(line, @"\s\t", "|");
-                                List<string> list = new List<string>(line.Split('|'));
-                                if (CommonFunc.IsSongId(list[0]))
+                                SongMaintenance_Tooltip_Label.Text = "正在更新三四年級國語金曲至我的最愛,請稍待...";
+                            });
+
+                            foreach (HtmlNode childnode in child)
+                            {
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                foreach (HtmlNode tdnode in td)
                                 {
-                                    switch (type)
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (data.Contains("::::::"))
                                     {
-                                        case "三四年級國語金曲":
-                                            c34list.Add(list[0]);
+                                        MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                                        if (matches.Count > 0)
+                                        {
+                                            pages = Convert.ToInt32(matches[0].Groups[1].Value);
                                             break;
-                                        case "三四年級台語金曲":
-                                            t34list.Add(list[0]);
-                                            break;
-                                        case "五六年級國語金曲":
-                                            c56list.Add(list[0]);
-                                            break;
-                                        case "五六年級台語金曲":
-                                            t56list.Add(list[0]);
-                                            break;
+                                        }
                                     }
                                 }
-                                list.Clear();
-                                list = null;
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page <= pages; page++)
+                    {
+                        url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=" + page.ToString();
+                        using (MemoryStream ms = CommonFunc.Download(url))
+                        {
+                            if (ms.Length > 0)
+                            {
+                                ms.Position = 0;
+                                using (StreamReader sr = new StreamReader(ms))
+                                {
+                                    doc.Load(sr);
+                                    table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                                    child = table.SelectNodes("tr");
+                                    foreach (HtmlNode childnode in child)
+                                    {
+                                        HtmlNodeCollection td = childnode.SelectNodes("td");
+                                        foreach (HtmlNode tdnode in td)
+                                        {
+                                            string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                            if (td.IndexOf(tdnode) == 0)
+                                            {
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    c34list.Add(data);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                pages = 0;
+                url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=1";
+                using (MemoryStream ms = CommonFunc.Download(url))
+                {
+                    if (ms.Length > 0)
+                    {
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
+                        {
+                            doc.Load(sr);
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                            child = table.SelectNodes("tr");
+
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "正在更新三四年級台語金曲至我的最愛,請稍待...";
+                            });
+
+                            foreach (HtmlNode childnode in child)
+                            {
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                foreach (HtmlNode tdnode in td)
+                                {
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (data.Contains("::::::"))
+                                    {
+                                        MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                                        if (matches.Count > 0)
+                                        {
+                                            pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page <= pages; page++)
+                    {
+                        url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=" + page.ToString();
+                        using (MemoryStream ms = CommonFunc.Download(url))
+                        {
+                            if (ms.Length > 0)
+                            {
+                                ms.Position = 0;
+                                using (StreamReader sr = new StreamReader(ms))
+                                {
+                                    doc.Load(sr);
+                                    table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                                    child = table.SelectNodes("tr");
+                                    foreach (HtmlNode childnode in child)
+                                    {
+                                        HtmlNodeCollection td = childnode.SelectNodes("td");
+                                        foreach (HtmlNode tdnode in td)
+                                        {
+                                            string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                            if (td.IndexOf(tdnode) == 0)
+                                            {
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    t34list.Add(data);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                pages = 0;
+                url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=1";
+                using (MemoryStream ms = CommonFunc.Download(url))
+                {
+                    if (ms.Length > 0)
+                    {
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
+                        {
+                            doc.Load(sr);
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                            child = table.SelectNodes("tr");
+
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "正在更新五六年級國語金曲至我的最愛,請稍待...";
+                            });
+
+                            foreach (HtmlNode childnode in child)
+                            {
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                foreach (HtmlNode tdnode in td)
+                                {
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (data.Contains("::::::"))
+                                    {
+                                        MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                                        if (matches.Count > 0)
+                                        {
+                                            pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page <= pages; page++)
+                    {
+                        url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=" + page.ToString();
+                        using (MemoryStream ms = CommonFunc.Download(url))
+                        {
+                            if (ms.Length > 0)
+                            {
+                                ms.Position = 0;
+                                using (StreamReader sr = new StreamReader(ms))
+                                {
+                                    doc.Load(sr);
+                                    table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                                    child = table.SelectNodes("tr");
+                                    foreach (HtmlNode childnode in child)
+                                    {
+                                        HtmlNodeCollection td = childnode.SelectNodes("td");
+                                        foreach (HtmlNode tdnode in td)
+                                        {
+                                            string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                            if (td.IndexOf(tdnode) == 0)
+                                            {
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    c56list.Add(data);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                pages = 0;
+                url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=1";
+                using (MemoryStream ms = CommonFunc.Download(url))
+                {
+                    if (ms.Length > 0)
+                    {
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
+                        {
+                            doc.Load(sr);
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                            child = table.SelectNodes("tr");
+
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "正在更新五六年級台語金曲至我的最愛,請稍待...";
+                            });
+
+                            foreach (HtmlNode childnode in child)
+                            {
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                foreach (HtmlNode tdnode in td)
+                                {
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    if (data.Contains("::::::"))
+                                    {
+                                        MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                                        if (matches.Count > 0)
+                                        {
+                                            pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (pages > 0)
+                {
+                    for (int page = 1; page <= pages; page++)
+                    {
+                        url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=" + page.ToString();
+                        using (MemoryStream ms = CommonFunc.Download(url))
+                        {
+                            if (ms.Length > 0)
+                            {
+                                ms.Position = 0;
+                                using (StreamReader sr = new StreamReader(ms))
+                                {
+                                    doc.Load(sr);
+                                    table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                                    child = table.SelectNodes("tr");
+                                    foreach (HtmlNode childnode in child)
+                                    {
+                                        HtmlNodeCollection td = childnode.SelectNodes("td");
+                                        foreach (HtmlNode tdnode in td)
+                                        {
+                                            string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                            if (td.IndexOf(tdnode) == 0)
+                                            {
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    t56list.Add(data);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
