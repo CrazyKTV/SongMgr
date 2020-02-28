@@ -1545,7 +1545,7 @@ namespace CrazyKTV_SongMgr
                         {
                             if ((fi.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                             {
-                                fi.Attributes = fi.Attributes & ~FileAttributes.ReadOnly;
+                                fi.Attributes &= ~FileAttributes.ReadOnly;
                             }
                             RemoveFileList.Add(fi.FullName);
                         }
@@ -3056,6 +3056,7 @@ namespace CrazyKTV_SongMgr
         public static MemoryStream Download(string Url)
         {
             HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create(Url);
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             MemoryStream mStream = new MemoryStream();
 
             try

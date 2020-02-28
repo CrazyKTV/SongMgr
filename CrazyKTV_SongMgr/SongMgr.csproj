@@ -131,6 +131,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CrazyKTV_MediaKit\Source\bin\x86\Release\CrazyKTV_MediaKit.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>Libs\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="MediaInfoDotNet, Version=0.7.79.40925, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>SongMgr\Libs\MediaInfoDotNet.dll</HintPath>
     </Reference>
@@ -337,6 +340,9 @@
     </Content>
     <None Include="Resources\UAC.png" />
     <None Include="Libs\System.Data.SQLite.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Libs\HtmlAgilityPack.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Libs\SQLite.Interop.dll">

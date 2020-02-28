@@ -60,7 +60,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Visible = true;
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
-                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    SongQuery_Query_Button.PerformClick();
                     SongQuery_DataGridView.Focus();
                     break;
                 case "5":
@@ -71,7 +71,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Visible = true;
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
-                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    SongQuery_Query_Button.PerformClick();
                     SongQuery_DataGridView.Focus();
                     break;
                 case "6":
@@ -82,7 +82,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Visible = true;
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
-                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    SongQuery_Query_Button.PerformClick();
                     SongQuery_DataGridView.Focus();
                     break;
                 case "7":
@@ -141,7 +141,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Visible = true;
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
-                    SongQuery_Query_Button_Click(new Button(), new EventArgs());
+                    SongQuery_Query_Button.PerformClick();
                     SongQuery_DataGridView.Focus();
                     break;
             }
