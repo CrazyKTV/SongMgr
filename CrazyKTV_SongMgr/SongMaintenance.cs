@@ -898,6 +898,7 @@ namespace CrazyKTV_SongMgr
                         Common_SwitchSetUI(false);
 
                         string SrcSongPath = SongMaintenance_SrcSongPath_TextBox.Text;
+                        if (!SrcSongPath.EndsWith(@"\")) SrcSongPath += @"\";
                         string DestSongPath = SongMaintenance_DestSongPath_TextBox.Text;
 
                         var tasks = new List<Task>()
