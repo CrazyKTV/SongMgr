@@ -23,8 +23,6 @@ namespace CrazyKTV_SongMgr
                 case "儲存設定":
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "DBVerEnableDBVerUpdate", Global.DBVerEnableDBVerUpdate);
                     CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceReplayGainVolume", Global.SongMaintenanceReplayGainVolume);
-                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", Global.SongMaintenanceMaxVolume);
-                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMultiSongPath", string.Join(",", Global.SongMaintenanceMultiSongPathList));
                     break;
                 case "更新語系":
                     Global.CrazyktvSongLangList = new List<string>();
@@ -3615,152 +3613,8 @@ namespace CrazyKTV_SongMgr
         #endregion
 
 
-        #region --- 多重歌庫 --- 暫未使用
-
-
-        private void SongMaintenance_EnableMultiSongPath_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.SongMaintenanceEnableMultiSongPath = SongMaintenance_EnableMultiSongPath_CheckBox.Checked.ToString();
-            switch (Global.SongMaintenanceEnableMultiSongPath)
-            {
-                case "True":
-                    SongMaintenance_MultiSongPath_ListBox.Enabled = true;
-                    SongMaintenance_MultiSongPath_Button.Enabled = true;
-                    break;
-                case "False":
-                    SongMaintenance_MultiSongPath_ListBox.Enabled = false;
-                    SongMaintenance_MultiSongPath_Button.Enabled = false;
-                    break;
-            }
-        }
-
-
-        private void SongMaintenance_MultiSongPath_ListBox_Enter(object sender, EventArgs e)
-        {
-            SongMaintenance_MultiSongPath_Button.Text = "移除";
-        }
-
-
-        private void SongMaintenance_MultiSongPath_TextBox_Enter(object sender, EventArgs e)
-        {
-            if (SongMaintenance_MultiSongPath_TextBox.Text != "")
-            {
-                SongMaintenance_MultiSongPath_Button.Text = "加入";
-            }
-            else
-            {
-                SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
-            }
-        }
-
-
-        private void SongMaintenance_MultiSongPath_Button_Click(object sender, EventArgs e)
-        {
-            switch (SongMaintenance_MultiSongPath_Button.Text)
-            {
-                case "瀏覽":
-                    FolderBrowserDialog opd = new FolderBrowserDialog();
-                    if (SongMaintenance_MultiSongPath_TextBox.Text != "") opd.SelectedPath = SongMaintenance_MultiSongPath_TextBox.Text;
-
-                    if (opd.ShowDialog() == DialogResult.OK && opd.SelectedPath.Length > 0)
-                    {
-                        SongMaintenance_MultiSongPath_TextBox.Text = opd.SelectedPath + @"\";
-                        SongMaintenance_MultiSongPath_Button.Text = "加入";
-                    }
-                    break;
-                case "加入":
-                    DataTable dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
-                    if (SongMaintenance_MultiSongPath_ListBox.SelectedItems.Count > 0)
-                    {
-                        dt.Rows.Add(dt.NewRow());
-                        dt.Rows[dt.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
-                        dt.Rows[dt.Rows.Count - 1][1] = dt.Rows.Count;
-                    }
-                    else
-                    {
-                        using (DataTable NewDT = new DataTable())
-                        {
-                            NewDT.Columns.Add(new DataColumn("Display", typeof(string)));
-                            NewDT.Columns.Add(new DataColumn("Value", typeof(int)));
-
-                            NewDT.Rows.Add(NewDT.NewRow());
-                            NewDT.Rows[NewDT.Rows.Count - 1][0] = SongMaintenance_MultiSongPath_TextBox.Text;
-                            NewDT.Rows[NewDT.Rows.Count - 1][1] = NewDT.Rows.Count;
-                            dt = NewDT.Copy();
-                        }
-                        SongMaintenance_MultiSongPath_ListBox.DataSource = dt;
-                        SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
-                        SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
-                    }
-                    SongMaintenance_MultiSongPath_TextBox.Text = "";
-                    SongMaintenance_MultiSongPath_Button.Text = "瀏覽";
-
-                    SongMaintenance_MultiSongPath_ListBox.DataSource = dt;
-                    SongMaintenance_MultiSongPath_ListBox.DisplayMember = "Display";
-                    SongMaintenance_MultiSongPath_ListBox.ValueMember = "Value";
-
-                    Global.SongMaintenanceMultiSongPathList = new List<string>();
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        foreach (DataRow row in dt.AsEnumerable())
-                        {
-                            if (row["Display"].ToString() != "")
-                            {
-                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
-                            }
-                        }
-                    }
-                    break;
-                case "移除":
-                    if (SongMaintenance_MultiSongPath_ListBox.SelectedItem != null)
-                    {
-                        int index = SongMaintenance_MultiSongPath_ListBox.SelectedIndex;
-                        dt = (DataTable)SongMaintenance_MultiSongPath_ListBox.DataSource;
-                        dt.Rows.RemoveAt(index);
-
-                        Global.SongMaintenanceMultiSongPathList = new List<string>();
-
-                        foreach (DataRow row in dt.AsEnumerable())
-                        {
-                            if (row["Display"].ToString() != "")
-                            {
-                                Global.SongMaintenanceMultiSongPathList.Add(row["Display"].ToString());
-                            }
-                        }
-                    }
-                    else
-                    {
-                        SongMaintenance_Tooltip_Label.Text = "已無可以刪除的多重歌庫資料夾路徑!";
-                    }
-                    break;
-            }
-        }
-
-
-        #endregion
-
-
         #region --- FFmpeg - 音量平衡 ---
 
-        private void SongMaintenance_MaxVolume_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (SongMaintenance_MaxVolume_ComboBox.SelectedValue.ToString())
-            {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                case "10":
-                    Global.SongMaintenanceMaxVolume = SongMaintenance_MaxVolume_ComboBox.SelectedValue.ToString();
-                    break;
-            }
-        }
 
         private void SongMaintenance_ReplayGain_Button_Click(object sender, EventArgs e)
         {
@@ -3805,10 +3659,6 @@ namespace CrazyKTV_SongMgr
             {
                 NativeMethods.SystemSleepManagement.PreventSleep(false);
                 int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
-                List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
-                int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
-                maxvolumelist.Clear();
-                maxvolumelist = null;
 
                 List<string> list = new List<string>();
                 Parallel.ForEach(Global.SongDT.AsEnumerable(), new ParallelOptions { MaxDegreeOfParallelism = 2 }, (row, loopState) =>
@@ -3820,26 +3670,22 @@ namespace CrazyKTV_SongMgr
 
                     string file = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
                     string gain = row["Song_ReplayGain"].ToString();
-                    string mean = row["Song_MeanVolume"].ToString();
-
                     double GainDB = 0;
-                    double MeanDB = 0;
+
                     string SongVolume = Global.SongMaintenanceReplayGainVolume;
 
-                    if (gain != "" && mean != "")
+                    if (!string.IsNullOrEmpty(gain))
                     {
                         GainDB = Convert.ToDouble(gain);
-                        MeanDB = Convert.ToDouble(mean);
                     }
                     else
                     {
                         FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file);
                         GainDB = result.GainDB;
-                        MeanDB = result.MeanDB;
                         NativeMethods.SystemSleepManagement.ResetSleepTimer(false);
                     }
-                    SongVolume = FFmpeg.CalSongVolume(basevolume, maxvolume, GainDB, MeanDB);
-                    lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + MeanDB.ToString() + "|" + row["Song_Id"].ToString());
+                    SongVolume = FFmpeg.CalSongVolume(basevolume, GainDB);
+                    lock (LockThis) list.Add(SongVolume + "|" + GainDB.ToString() + "|" + row["Song_Id"].ToString());
                 });
 
                 if (list.Count > 0)
@@ -3849,7 +3695,7 @@ namespace CrazyKTV_SongMgr
                         int mCount = 0;
                         int lCount = 0;
 
-                        string sqlColumnStr = "Song_Volume = @SongVolume, Song_ReplayGain = @SongReplayGain, Song_MeanVolume = @SongMeanVolume";
+                        string sqlColumnStr = "Song_Volume = @SongVolume, Song_ReplayGain = @SongReplayGain";
                         string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
                         using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
                         {
@@ -3872,8 +3718,7 @@ namespace CrazyKTV_SongMgr
 
                                 cmd.Parameters.AddWithValue("@SongVolume", valuelist[0]);
                                 cmd.Parameters.AddWithValue("@SongReplayGain", valuelist[1]);
-                                cmd.Parameters.AddWithValue("@SongMeanVolume", valuelist[2]);
-                                cmd.Parameters.AddWithValue("@SongId", valuelist[3]);
+                                cmd.Parameters.AddWithValue("@SongId", valuelist[2]);
 
                                 try
                                 {
@@ -3962,7 +3807,7 @@ namespace CrazyKTV_SongMgr
             {
                 using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
                 {
-                    string sqlColumnStr = "Song_ReplayGain = null, Song_MeanVolume = null";
+                    string sqlColumnStr = "Song_ReplayGain = null";
                     string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr;
                     using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
                     {
@@ -4007,7 +3852,7 @@ namespace CrazyKTV_SongMgr
         public static void CreateSongDataTable()
         {
             Global.SongDT = new DataTable();
-            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path, Song_ReplayGain, Song_MeanVolume from ktv_Song order by Song_Id";
+            string SongQuerySqlStr = "select Song_Id, Song_Lang, Song_SingerType, Song_Singer, Song_SongName, Song_Track, Song_SongType, Song_Volume, Song_PlayCount, Song_FileName, Song_Path, Song_ReplayGain from ktv_Song order by Song_Id";
             Global.SongDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
 
             Global.SingerList = new List<string>();
@@ -4151,23 +3996,6 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        public static DataTable GetMultiSongPathList()
-        {
-            DataTable list = new DataTable();
-            list.Columns.Add(new DataColumn("Display", typeof(string)));
-            list.Columns.Add(new DataColumn("Value", typeof(int)));
-
-            if (Global.SongMaintenanceMultiSongPathList.Count > 0)
-            {
-                foreach (string s in Global.SongMaintenanceMultiSongPathList)
-                {
-                    list.Rows.Add(list.NewRow());
-                    list.Rows[list.Rows.Count - 1][0] = s;
-                    list.Rows[list.Rows.Count - 1][1] = list.Rows.Count;
-                }
-            }
-            return list;
-        }
 
         public static string GetNextSongId(string SongLang)
         {

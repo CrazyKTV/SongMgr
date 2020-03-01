@@ -113,7 +113,6 @@ namespace CrazyKTV_SongMgr
         public static string DBVerEnableDBVerUpdate = "True";
         public static string SongMaintenanceEnableMultiSongPath = "False";
         public static string SongMaintenanceReplayGainVolume = "50";
-        public static string SongMaintenanceMaxVolume = "1";
 
         public static List<int> MTotalList = new List<int>();
         public static List<int> TotalList = new List<int>();
@@ -152,7 +151,6 @@ namespace CrazyKTV_SongMgr
         public static List<string> CashboxFullAnalysisSongList = new List<string>();
         public static List<string> CashboxHaveSongList = new List<string>();
 
-        public static List<string> SongMaintenanceMultiSongPathList = new List<string>();
         public static List<string> SongDBConvValueList = new List<string>();
         public static List<string> SongDBConvJetktvLangList = new List<string>();
         public static List<string> SongDBConvJetktvPathList = new List<string>();

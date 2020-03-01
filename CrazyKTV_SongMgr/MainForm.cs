@@ -153,7 +153,6 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", Global.MainCfgUICustomScale);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", Global.MainCfgBackupDB);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", Global.MainCfgBackupDBPath);
-                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", Global.SongMaintenanceMaxVolume);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", Global.MainCfgPlayerCore);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", Global.MainCfgPlayerOutput);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", Global.MainCfgPlayerEnableAudioCompressor);
@@ -213,7 +212,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgUICustomScale", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDB", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgBackupDBPath", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMaintenanceMaxVolume", null, false), //已無用處
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerCore", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerOutput", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgPlayerEnableAudioCompressor", null, false),
@@ -476,12 +475,6 @@ namespace CrazyKTV_SongMgr
             if (list[49] != "") Global.MainCfgBackupDBPath = list[49];
             MainCfg_BackupDB_TextBox.Text = Global.MainCfgBackupDBPath;
 
-            if (list[50] != "") Global.SongMaintenanceMaxVolume = list[50];
-            SongMaintenance_MaxVolume_ComboBox.DataSource = SongMaintenance.GetMaxVolumeList();
-            SongMaintenance_MaxVolume_ComboBox.DisplayMember = "Display";
-            SongMaintenance_MaxVolume_ComboBox.ValueMember = "Value";
-            SongMaintenance_MaxVolume_ComboBox.SelectedValue = Global.SongMaintenanceMaxVolume;
-
             if (list[51] != "") Global.MainCfgPlayerCore = "1";
             MainCfg_PlayerCore_RadioButton1.Checked = true;
 
@@ -725,12 +718,6 @@ namespace CrazyKTV_SongMgr
                             SongMaintenance_Save_Button.Enabled = false;
                             break;
                     }
-
-                    if (SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_MultiSongPath_TabPage) >= 0)
-                    {
-                        SongMaintenance_MultiSongPath_TabPage.Hide();
-                        SongMaintenance_TabControl.TabPages.Remove(SongMaintenance_MultiSongPath_TabPage);
-                    }
                     break;
                 case "Cashbox_TabPage":
                     i = 5;
@@ -858,6 +845,8 @@ namespace CrazyKTV_SongMgr
                     break;
             }
         }
+
+
 
 
 

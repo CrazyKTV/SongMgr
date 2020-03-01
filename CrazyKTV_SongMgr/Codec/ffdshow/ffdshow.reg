@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00 
+
+[HKEY_CURRENT_USER\Software\GNU\ffdshow]
+"isWhitelist"=dword:00000000
+"lang"="TC"
+"trayIconType"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\GNU\ffdshow_audio_raw]
+"trayIcon"=dword:00000001
+"isWhitelist"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\GNU\ffdshow] 
+"pth"="E:\\CrazyKTV\\Codec\\ffdshow\\" 

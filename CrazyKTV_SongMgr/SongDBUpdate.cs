@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace CrazyKTV_SongMgr
 {
@@ -109,7 +108,7 @@ namespace CrazyKTV_SongMgr
                     GodLiuColumnList = null;
                     ktvSongColumnList.Clear();
                     ktvSongColumnList = null;
-                    if (TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu) Global.CrazyktvDatabaseIsOld = true;
+                    if (TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu) Global.CrazyktvDatabaseIsOld = true;
                 }
                 CrazyktvDBTableList.Clear();
                 CrazyktvDBTableList = null;
@@ -120,12 +119,12 @@ namespace CrazyKTV_SongMgr
 
             if (Global.SongMgrSongAddMode == "3" || Global.SongMgrSongAddMode == "4")
             {
-                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu)
+                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu)
                 { Global.SongMgrDBVerErrorUIStatus = false; } else { Global.CrazyktvDatabaseStatus = true; }
             }
             else
             {
-                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || !SongMgrDestFolder || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || !Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu)
+                if (!CrazyKTVDatabaseFile || !SongMgrDatabaseFile || Global.SongMgrDatabaseError || !SongMgrDestFolder || TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu)
                 { Global.SongMgrDBVerErrorUIStatus = false; } else { Global.CrazyktvDatabaseStatus = true; }
             }
             return new List<bool>() { CrazyKTVDatabaseFile, TB_ktv_Version, TB_ktv_AllSinger, SongMgrDestFolder };
@@ -299,7 +298,7 @@ namespace CrazyKTV_SongMgr
                     bool UpdatePhonetics = false;
                     bool UpdateLangauage = true;
                     bool AddSongReplayGainColumn = true;
-                    bool AddSongMeanVolumeColumn = true;
+                    bool RemoveSongMeanVolumeColumn = true;
                     bool RemoveGodLiuColumn = false;
                     List<string> GodLiuColumnlist = new List<string>();
 
@@ -348,7 +347,7 @@ namespace CrazyKTV_SongMgr
                                     AddSongReplayGainColumn = false;
                                     break;
                                 case "Song_MeanVolume":
-                                    AddSongMeanVolumeColumn = false;
+                                    RemoveSongMeanVolumeColumn = true;
                                     break;
                                 case "Singer_Name":
                                 case "Singer_Spell":
@@ -536,9 +535,9 @@ namespace CrazyKTV_SongMgr
                         }
                     }
 
-                    if (AddSongMeanVolumeColumn)
+                    if (RemoveSongMeanVolumeColumn)
                     {
-                        using (OleDbCommand cmd = new OleDbCommand("alter table ktv_Song add column Song_MeanVolume DOUBLE", conn))
+                        using (OleDbCommand cmd = new OleDbCommand("alter table ktv_Song drop column Song_MeanVolume", conn))
                         {
                             try
                             {
@@ -550,7 +549,7 @@ namespace CrazyKTV_SongMgr
                                 UpdateError = true;
                                 this.BeginInvoke((Action)delegate ()
                                 {
-                                    SongMaintenance_DBVerTooltip_Label.Text = "加入 Song_MeanVolume 欄位失敗,已還原為原本的資料庫檔案。";
+                                    SongMaintenance_DBVerTooltip_Label.Text = "移除 Song_MeanVolume 欄位失敗,已還原為原本的資料庫檔案。";
                                 });
                             }
                         }

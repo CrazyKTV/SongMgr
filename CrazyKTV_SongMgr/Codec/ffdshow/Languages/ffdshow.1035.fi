@@ -1,0 +1,1406 @@
+Suomi
+
+[Font]
+horizontalScale9x=125
+horizontalScaleNT=125
+
+[101]
+2=Peruuta
+3=Käytä
+1835=Vie kaikki asetukset
+1836=Lahjoita
+
+[102]
+0=Tietoa
+1071=libavcodec versio
+1072=ffdshow versio
+1073=XviD versio
+1251=ffdshow videodekooderi
+1839=Versiotiedot
+1849=Lisenssi
+
+[111]
+1162=Oletus
+1163=Ohje
+1164=Käsittele koko kuva
+1167=Vain oikea puolisko
+1723=Palauta järjestys
+
+[113]
+0=Tekstitys
+1105=Tekstitys
+1122=Vaakasijainti:
+1126=Pystysijainti:
+1133=Selaa
+1183=Tiedosto
+1244=Lataa nyt
+1279=Etsintä
+1280=Viive:
+1281=Nopeus:
+1360=Suuntaus:
+1364=Palauta
+1414=Päivitä muutokset
+1683=Stereoskooppinen
+1722=Parallaksi:
+1787=Salli sulautetut tekstit
+1788=Pura kuvaan sisällytetyt tekstit (CC)
+1789=Hyväksy SSA, ASS ja ASS2 -tekstitykset (kokeilu)
+1837=Heuristinen haku
+1968=Suosimisjärjestys
+
+[115]
+0=Koodekit
+1837=ohita deblocking kun turvallista
+1838=ohita deblocking aina
+
+[116]
+0=DirectShow-ohjaus
+1284=Tiedot
+1285=Vianetsintä
+1502=Useat ffdshown ilmentymät:
+1503=Painoarvo:
+1832=Käytä seuraavia laajennuksia (jos CPU niitä tukee):
+1935=Älä käytä ffdshowta:
+1970=Käytä ffdshowta vain:
+1973=...
+1974=...
+2051=Näytä ilmoitus kun tuntematon ohjelma yrittää käyttää ffdshowta
+
+[118]
+0=Dekooderin asetukset
+1047=Kierrä pakkaajan virheet:
+1268=Videon viive:
+1283=Libavcodec-asetukset
+1307=Automaattinen
+1308=Vanha lavc msmpeg4
+1309=Vanha XviD lomitusvirhe
+1311=Padding-virhe
+1313=XviD ja DivX qpel-virhe
+1314=Harmaasävyn dekoodaus
+1316=divx lomituksen chroma MC-virhe
+1365=Muut
+1542=Virhearviointi:
+1544=Virheen käsittely:
+1550=Oleta lomitetuksi jo korkeus >
+1552=pikseliä
+1572=Säikeiden määrä:
+1764=loppu
+1765=alku
+1916=Nykyiset kvantisaatiomatriisit
+1943=Pudota ruutu viiveellä
+1946=Laadunvalvonta
+1947=Ohita H264 deblocking viiveellä
+
+[119]
+0=Profiilit / esiasetukset
+1016=Uusi
+1017=6
+1044=Poista
+1045=Nimeä
+1051=Autom. asetusten lataus
+1080=Yritä ladata asetukset tiedostosta ensin
+1155=Tallenna
+1156=Avaa
+1157=Autom. latauksen ehdot...
+1278=Esiasetukset
+
+[120]
+0=Jälkikäsittely
+1008=Autom. laadunvalvonta
+1027=Esiasetukset
+1028=Mukautettu
+1035=Valoisuus
+1038=Koko valoisuusalue
+1073=Jälkikäsittely
+1158=Käsittelyn vahvuus:
+1160=Käsittelytapa:
+1239=Nicin
+1242=X-kynnys:
+1243=Y-kynnys:
+1270=Valoisuus
+1271=Väri
+1272=Palik. poisto (H)
+1273=Palik. poisto (V)
+1274=Renkaiden poisto
+1275=Tasonkorjaus
+1328=Nicin 1.
+1456=SPP palikoitum.
+1457=Nopea SPP palikoitumisen poisto
+1459=Pehmeä kynnys
+1534=Tarkka palikoitumisen poisto
+
+[121]
+0=Jono & muut
+1268=Videon viive:
+1365=Muut ohjaimet
+1550=Oleta lomitetuksi jos korkeus alle
+1552=pikseliä
+1764=loppu
+1944=Jonota ulostulonäytteet
+1958=Käytä jonoa vain:
+2206=Käytä jonoa myös VMR9-YV12:lla
+
+[125]
+0=Kuvan ominaisuudet
+1017=Valoisuuden vahvuus (kontrasti):
+1018=Valoisuuden offset (kirkkaus):
+1025=Sävy:
+1026=Värikylläisyys:
+1037=Gammakorjaus:
+1038=RGB-gammakorjaus:
+1072=Kuvan ominaisuudet
+1781=Väritys:
+1782=vahvuus:
+1787=Vain väri
+1830=Valoisuustason korjaus
+1831=Koko alue
+1932="Scanline"-efekti
+
+[126]
+0=Kohina
+1038=Kohina
+1039=Yhtenäinen kohina
+1041=Valoisuuden kohinan vahvuus:
+1049=Värin kohinan vahvuus:
+1050=Vilkkuminen:
+1051=Tärinä:
+1052=Pystysuoria linjoja:
+1054=Pöly ja naarmut:
+1067=Vanha kohina-algoritmi
+1068=Uusi kohina-algoritmi (avih)
+1069=mplayer-kohina
+1231=Kuvio
+1232=Keskiarvoinen
+
+[127]
+0=Terävöitys
+1019=Vahvuus:
+1021=Kynnys:
+1023=Mukautuva terävöitys:
+1065=Terävöitys
+1215=vain naamio
+1216=korkea laatu
+1217=korkean laadun palikkasuodatin
+
+[128]
+0=Pehmennys & kohi.poisto
+1134=Pehmennys ja kohinanpoisto
+1136=Pehmennä:
+1137=Tempora-tasoitus:
+1138=Valoisuuden tasoitus:
+1139=Värin tasoitus:
+1140=Asteittainen kohinanpoisto:
+1141=mplayer temporal -kohinan poisto:
+1142=swscaler gauss -pehmennys
+1232=Käsittele väri
+1415=Laadukas
+
+[132]
+0=Fontti
+1108=Vahvuus:
+1110=Koko:
+1114=Merkistö:
+1116=Kirjainväli:
+1118=Varjon voimakkuus:
+1120=Leveys:
+1124=Väri
+1130=Varjon säde:
+1259=Fontti
+1335=Autom. koko
+1827=Nopea piirto
+1978=Varjon tyyli:
+1980=Varjon koko:
+1981=Peittävyys:
+2052=Fontti:
+2053=Reunaviiva:
+2054=Varjo:
+2060=Peittävä tausta
+2065=Koko, väri && peitto
+2081=Pehmennys
+2087=Korvaa ASS/ASS2 -skaalaus
+2088=Korjaa kuvasuhde automaattisesti
+2090=Korkeus:
+
+[133]
+0=Koko & kuvasuhde
+1083=Muuta kokoa
+1100=Ei kuvasuhteen muutosta
+1101=Pidä alkuperäinen kuvasuhde
+1102=Manuaalinen:
+1185=Määrää koko
+1186=Määrää kuvasuhde
+1187=Laajenna luvun moninkertaan
+1188=Muuta aina
+1189=Muuta kokoa jos...
+1191=Muuta kokoa jos pikselien määrä...
+1234=Peittokuvan kuvasuhde:
+1285=Koko
+1286=Suhde
+1289=Kuvasuhde
+1540=Kerroin
+1986=Määrää vaaka- ja pystykoko
+1987=Määrää vaakakoko
+1988=Määritä pikselin sivusuhde
+2084=Näyttölaitteen pikselisivusuhde:
+2086=Muuta ruudun resoluutioon
+
+[134]
+0=Rajaus
+1105=Vaakasuuntainen suurennus:
+1107=Pystysuuntainen:
+1137=Rajaus && zoom
+1138=Zoom
+1139=Rajaus
+1140=Lukitse
+1252=Ylä
+1254=Vasen
+1255=Oikea
+1256=Ala
+2091=Autom. rajaus
+2094=Toleranssi
+2096=Päivitys (ms)
+2098=Pystysuunta
+2099=Vaakasuunta
+2100=Molemmat suunnat
+2101=Etsinnän lopetus (ms)
+
+[136]
+0=Kuvake, ikkuna & polut
+1070=Näytä kuvake
+1071=Muista ikkunan sijainti
+1072=Näytä työkaluvihjeet
+1073=Lisää kuvakkeen valikko soittimen raita/kieli -valikkoon
+1074=Näytä lisätiedot
+1257=Ilmoitusalueen kuvake
+1258=Asetusikkuna
+1259=Polut
+1293=Kieli:
+2016=Pois
+2017=Moderni
+2018=Vanha
+2019=Kuvake
+
+[137]
+0=Offset & kääntö
+1120=Värin offset Y:
+1148=Offset && kääntö
+1149=Valoisuuden offset X:
+1151=Valoisuuden offset Y:
+1153=Värin offset X:
+1939=Käännä pystysuunnassa
+1940=Käännä vaakasuorassa
+
+[138]
+0=Asetukset
+1019=Valoisuuden terävöitys:
+1020=Värin terävöitys:
+1021=Parametri:
+1022=Pystykääntö:
+1023=Parametri:
+1098=Valoisuuden gauss-pehmennys:
+1099=Värin gauss-pehmennys:
+1100=Vaakakääntö:
+1282=Koonmuutoksen asetukset
+1285=Valoisuus:
+1286=Väri:
+1360=Lomitettu
+1892=Lukitse
+1953=Tarkka pyöristys
+
+[139]
+0=Visualisoinnit
+1074=Liikevektorit
+1075=Kertoimet
+1337=Visualisoinnit
+1357=Kuvaaja
+
+[140]
+0=Lomituksen poisto
+1167=Lomituksen poisto
+1209=Vaihda kentät
+1523=Tapa:
+
+[141]
+1491=Käyttäjä:
+1493=Tallenna:
+1774=Vaakasijainti:
+1776=Pystysijainti:
+
+[142]
+0=Tasot
+1170=Tasot
+1179=Muokkaa vain valoisuutta
+1181=Gammakorjaus:
+1184=Näytä histogrammi
+1185=Koko alue
+1189=Posterisoi:
+1267=Ulostulo
+1291=Lähde
+1707=Tapa:
+1909=Automaattinen
+1933=Lataa käyrä...
+
+[143]
+0=Ohjaimet
+1202=Näppäimistö
+1329=Käsittele painallukset myös taustalla ollessa
+1330=Näytä OSD-viesti painalluksen jälkeen
+1472=Kaukosäätimen API
+1537=Käyttäjän oma:
+1539=Hyväksy näppäimistöviestit
+1829=Vie Girder-komennot
+1416=Selauksen pituus (sek):
+1418=Selauksen pituus, toinen toiminto (sek):
+
+[171]
+8=Sulje
+1211=videon koko on
+1212=Asetus '%s' ladataan automaattisesti...
+1276=<= leveys <=
+1277=<= korkeus <=
+1888=Erota useat kohdat puolipilkulla ;
+1915=ja
+
+[172]
+0=Kaappaus
+1216=Kaappaa
+1223=Jokainen ruutu
+1224=Yksi ruutu
+1226=Alue
+1228=Kaappaa nyt
+1230=Laatu:
+1232=Polku
+1261=Etuliite
+1262=Muoto
+1263=Numeroita
+1740=Joka
+1741=ruutu
+
+[173]
+0=Peittokuva
+1137=Kontrasti:
+1138=Sävy:
+1139=Värikylläisyys:
+1140=Terävyys:
+1235=Peittokuvan asetukset
+1236=Kirkkaus:
+
+[176]
+0=DScaler
+1308=DScaler
+1309=Suodin
+
+[177]
+0=Perspektiivin korjaus
+1317=Perspektiivin korjaus
+1319=Interpolointi
+1321=Nelikulmio lähteenä
+
+[179]
+1325=Kertoimet
+1917=Kerroinmatriisi
+1919=H.263-kertoimet
+1920=Kerroin:
+1922=MPEG-kertoimet
+
+[180]
+1333=Avaa
+1334=Tallenna
+1352=Lähteen värialueet:
+1353=Lisää ffdshow videolähde
+2021=Lisää ffdshow videolähde
+2023=3:2 muunto
+2024=Lähteen värialueet:
+2029=Taka-/etupuskuri:
+2032=Käytä nykyistä
+2033=Avaa
+2034=Tallenna
+
+[181]
+1019=Syvyys:
+1021=Kynnys:
+1023=Pehmennys:
+1339=alkuperäinen ffdshow warpsharp
+1341=Väri:
+1343=Pehmennys:
+
+[182]
+1162=Oletus
+1163=Ohje
+1723=Palauta järjestys
+
+[188]
+0=Äänenvoimakkuus
+1375=Päävoimakkuus:
+1377=Äänenvoimakkus
+1457=Normalisoi
+1600=Vas
+1601=Kes
+1602=Oik
+1603=S.Vas
+1604=S.Oik
+1637=Enimmäisvahvistus:
+1641=Nykyinen:
+1648=Vas
+1649=Kes
+1650=Oik
+1651=T.Vas
+1652=T.Oik
+1683=Näytä nykyiset äänentasot
+1922=V
+1924=V
+1926=V
+1928=V
+1930=V
+1932=V
+1937=Desibeliasteikko
+1956=Puskuri:
+1957=Nollaa haussa
+2194=S.Oik
+2195=S.Oik
+
+[189]
+0=Taajuuskorjain
+1378=Taajuuskorjain
+1814=Lataa Winampin esiasetus
+
+[190]
+0=Winamp
+1401=Valitse Winamp 2:n kansio...
+1404=Aseta
+1989=Salli monikanavainen äänen käsittely
+
+[191]
+0=Mikseri
+1405=Mikseri
+1406=Kaiutinasettelu:
+1586=Normalisoi matriisi
+1588=Äänenhallinta
+1630=Vas
+1631=Kes
+1632=S.V
+1633=S.O
+1635=Oik
+1636=Oma matriisi
+1637=Stereolaajennus
+1685=Kuulokkeiden etäisyys:
+1701=Ääni:
+
+[192]
+2=Peruuta
+1408=Asetuksen nimi näkyvissä, ruutua
+
+[193]
+2=Sulje
+
+[200]
+0=Yleiset
+1420=I-ruutujen väli enintään
+1422=I-ruutujen väli vähintään
+1424=b-ruudut
+1425=peräkkäisiä b-ruutuja enintään:
+1427=dynaaminen
+1494=Muut asetukset
+1572=Säikeiden määrä:
+1429=Suljettu GOP
+
+[202]
+1163=Ohje
+1446=Pakkaaja:
+1450=Tapa:
+1453=Asetukset
+1459=Esiasetukset
+1460=Älä tallenna asetuksia rekisteriin
+
+[203]
+0=Lopputekstit
+1461=Tekstit elokuvan alussa
+1462=Alkuruutu
+1464=Loppuruutu
+1466=Tekstit elokuvan lopussa
+1467=Alkuruutu
+1469=Loppuruutu
+1471=Tekstien pakkauslaadun heikennys
+1474=Kerroin
+1479=Koko (Kt)
+1480=Alku:
+1482=Loppu:
+1484=Harmaasävy
+
+[204]
+0=Vaihtoehtoinen pakk.
+1485=Käytä vaihtoehtoista käyräpakkausta
+
+[205]
+0=Käyräpakkaus
+1420=Alhainen bittinopeus:
+1423=ruutua
+1463=Korkea bittinopeus:
+
+[206]
+0=Kaksi kierrosta - Ensimmäinen
+1424=Tilastotiedosto:
+
+[207]
+0=Yleiset
+1425=Värialue:
+1426=Kooderin tyyppi:
+1420=Avainruutujen ero:
+
+[209]
+0=Yleiset
+1529=Värialue:
+
+[210]
+0=Yleiset
+1420=I-ruutujen väli enintään
+1422=I-ruutujen väli vähintään
+1424=Avainruutujen eroavaisuuden kynnys:
+1530=Korkea laatu
+1531=Pudota ruutuja
+
+[211]
+0=Tilastot
+1531=Kirjoita tiedot virheenetsintään
+1532=Näytä virheilmoitukset
+1533=Kirjoita tiedot tiedostoon
+1537=Näytä kuvaaja
+1538=Laske PSNR
+1541=Ruutua pakattu:
+1542=kb/s:
+1543=Kuvanopeus:
+1544=Keskim. PSNR:
+1545=Keskim. kerroin:
+1738=Tuo DirectShow-kuvaaja saataville graphedt:iin
+
+[212]
+0=Yleiset
+
+[213]
+0=Lähde
+1016=Käännä kuva pystysuunnassa
+1460=Kohinanpoiston vahvuus:
+1548=Pakota lähteen värialue
+1550=Oleta lomitetuksi jos korkeus alle
+1552=pikseliä
+1554=Käsittele kuvaa
+1555=Asetukset
+1556=Libavcodec's/x264 -kohinanpoisto
+
+[214]
+0=Maskit
+1569=kynnys
+1573=kynnys
+
+[215]
+0=Maskit
+1576=Valoisuusmaski
+1577=Värioptimoinnin esisuodatus
+
+[216]
+0=Liikkeen arviointi
+1583=Väri
+1586=Väri
+1589=Väri
+1598=Väri
+1604=Makropalikan ratkaisutapa:
+1587=Makropalikan vertailufunktio
+1581=Liikkeen arvioinnin vertailufunktio:
+1602=Puhdistuksen laatu:
+1579=Iteratiivinen liikkeen arviointi
+1584=Alipikselin liikkeen arvioinnin vert.funkio:
+1590=EPZS-timantin koko:
+1606=Yritä aina ilman liikettä
+1607=RD optimointi CBP:lle
+
+[218]
+0=Liikkeen arviointi
+1615=Liikkeenetsinnän tarkkuus:
+1626=VHQ-tila:
+
+[219]
+0=Tasonhallinta
+1635=Tiedostokoon toleranssi:
+1639=Yhden/ensimm. kierroksen kertoimen sumennus:
+1641=Toisen kierroksen kertoimen sumennus:
+1643=Kerrointen ero enintään:
+1637=Kerrointen pakkaus:
+1646=Bittinopeus vähintään:
+1648=Bittinopeus enintään:
+1650=Dekooderin bittivirran puskurin koko:
+1645=Käytä jatkuvaa funkitota rajoittamaan kertoimet qmin- ja qmax-arvojen väliin
+1446=bittiä
+
+[220]
+0=Tasonhallinta
+1435=Reaktioviiveen kerroin:
+1436=Keskiarvoistamisen jakso:
+1437=Pehmennys:
+
+[222]
+0=Ulostulo
+1438=Ulostulo
+1654=Tallenna ruudut AVI:iin
+1655=Tallenna ruudut ulkoiseen tiedostoon
+1659=Libavcodec/x264 -tilastot:
+1660=Älä käytä
+1661=Kirjoita
+1662=Käytä
+1663=Käytä && kirjoita
+1664=Bittinopeus
+1667=Pakota FPS
+
+[223]
+0=Kvantisaatio
+1441=Kvantisaatiotyyppi:
+1442=Min kvant.
+1443=Max kvant.
+1675=I-ruudut
+1676=P-ruudut
+1677=B-ruudut
+1678=Makropalikat
+1687=I-kerroin
+1689=I-offset
+1691=B-kerroin
+1693=B-offset
+1700=DCT-algoritmi:
+1703=Kvant. kohinan muotoilu
+1707=MPEG2 DC -tarkkuus:
+
+[225]
+1763=Inter-matriisi:
+1828=Avaa matriisi...
+1829=Tallenna matriisi...
+1840=Intra-matriisi:
+
+[226]
+0=Kaksi kierrosta - Toinen
+1424=1. kierroksen tilastotiedosto:
+1444=Bittinopeus enintään:
+1445=kb/s
+1450=Tehosta
+1452=I-ruudun keston ollessa alle
+1453=ruutua...
+1454=...vähennä niiden bittinopeutta
+1462=I-ruudut
+1842=Kirjoita uudet tiedot päälle
+1844=2. kierroksen tilastotiedosto
+1847=Simulaatio
+
+[227]
+1439=Kertoimien prosentit
+1440=Kertoimien määrät
+1854=Analysoi
+1855=Simuloi
+1861=Tavua:
+1862=Ruutuja:
+1863=Bittinopeus
+1864=Keskim. ruutukoko:
+1865=Keskim. kerroin:
+
+[228]
+0=Yleiset
+1866=Vie ruudut suoraan ASF-tiedostoon
+1420=Avainruutujen väli (sek):
+1868=Monimutkaisuus:
+1870=Rapeus:
+1872=Poista lomitus
+
+[230]
+1=Sulje
+1044=Poista
+1045=Nimeä
+1467=Esiasetus:
+1468=Tiedot:
+
+[231]
+0=Ulostulo
+1016=Käännä ylösalaisin
+1017=Salli ulostulon muodon muuttua toiston aikana
+1031=Käytä peittokuvatasoa
+1033=Laitteistopohjainen lomituksen poisto
+1034=Yhdistä vain yhteensopiviin suotimiin
+1036=Valitse lähin sopiva värialue
+1052=Korkealaatuinen YV12 - RGB -muunnos
+1284=Tuetut ulostulon värialueet
+1910=Muoto:
+1912=Tasainen YUV:
+1913=Pakattu YUV:
+1966=Tapa:
+
+[232]
+0=Yleiset
+1470=Värialue:
+
+[233]
+0=Näkyvät suotimet
+1473=Saatavilla olevat suotimet:
+1474=Näkyvät suotimet:
+
+[234]
+0=Maskit
+
+[235]
+0=Liikkeen arviointi
+
+[236]
+1019=Kuivataso:
+1038=Leveys:
+1485=Huoneen koko:
+1487=Vaimennus:
+1490=Märkätaso:
+
+[237]
+0=Uudelleennäytteistys
+1497=Uudelleennäytteistys
+1498=Haluttu taajuus
+1499=Tapa:
+1875=Uudelleennäytteistä aina
+1876=Uudelleennäytteistä kun lähteen taajuus...
+1877=suurempi kuin
+
+[238]
+0=Liikkeen arviointi
+1506=Intra-analysoijan liput:
+1508=Inter-analysoijan liput:
+1525=Liikevektorin enimmäispituus (pikseliä):
+1519=Viiteruutujen enimmäismäärä:
+1528=Liikkeen arvioinnin vaihteluväli:
+1782=Liikkeen arvointitapa:
+1780=B-ruutujen ennustus:
+
+[242]
+0=Logon poisto
+1542=Vasemmalta
+1544=Ylhäältä
+1546=Leveys
+1548=Korkeus
+1551=Tapa:
+1552=Logon poisto
+1553=Pehmennys:
+1555=X-Y voimakkuus:
+1558=Väri:
+1559=Lataa reunan esiasetus:
+1562=Lisäasetukset:
+1574=Vain kirkkaus
+1854=Logo kuvana:
+
+[243]
+0=Ulostulo
+1573=Tuetut ulostulon näytemuodot
+1743=Bittinopeus:
+1811=Älä käytä WAVEFORMATEXTENSIBLE-tunnusta kun sitä ei tarvita
+1813=Salli ulostulo suoraan tiedostoon
+1845=Yhdistä:
+1846=Lisää vain S/PDIF-ulostuloon
+1984=Monikanavalaitteet:
+1985=Koodaa vain monikanavaiset raidat
+
+[244]
+0=Dolby-dekooderi
+1656=Takakanavien viive:
+1657=Dolby-dekooderi
+
+[245]
+0=Viive
+1658=Vasemman kanavan viive:
+1663=Keskikanavan viive:
+1666=Oikean kanavan viive:
+1669=Vas. surroundkanavan viive:
+1672=Oikean surroundkanavan viive
+1675=LFE-kanavan viive:
+1676=Viive
+2178=Sivuvasemman kanavan viive:
+2181=Sivuoikean kanavan viive:
+2184=Takakeskikanavan viive:
+
+[246]
+0=FIR-suodin
+1683=Näytä kirjo
+1686=FIR-suodin
+1690=Tyyppi:
+1692=Ikkuna:
+1696=Taajuus:
+1698=Leveys:
+1700=Max. näyttötaajuus
+
+[247]
+0=Kohinanvaimennus
+1704=Kynnys:
+1706=Kohinanvaimennus
+
+[248]
+0=Raidan valinta
+1683=Käytössä
+1709=Raidan valinta
+1710=Raidat:
+
+[249]
+0=Kristallisointi
+1711=Kristallisointi
+1712=Kaistanleveyden laajennus:
+1714=Extenderis ylipäästösuodin:
+1716=Harmoninen tehostus:
+1718=Kaiun voimakkuus:
+1720=Kaiun kierto:
+1722=Lisästereo:
+
+[250]
+1725=Käytössä
+1726=Suositut kielet:
+1727=Tasoitustapa:
+1728=Nykyiset kielet:
+1729=Skaala:
+1730=Gaussinen pehmennys:
+1796=Noudata sijaintiasetuksia Tekstitys-sivulta
+
+[252]
+0=LFE-jakotaajuus
+1733=LFE-jakotaajuus
+1734=Alipäästötaajuus:
+1736=Vahvistus:
+1741=Poista LFE:n sisältämät taajuudet vasemmasta ja oikeasta kanavasta
+
+[253]
+0=Kanavien vaihto
+1670=Takakeski
+1745=Takaoikea
+1746=Takavasen
+1747=Etuoikea
+1748=Etukeski
+1749=Etuvasen
+1763=Vaihda kanavia
+
+[254]
+0=Teksti
+1571=Jaa pitkät tekstit riveille
+1572=Näytä päällekkäiset teksti samaan aikaan
+1723=Riviväli:
+1767=Pienin
+1772=kesto:
+1775=pikseliä
+1787=Korvaa  ' -> "  ja "" -> "
+1788=Yritä korjata I ja l
+1790=Yritä korjata merkit (?. -> ? ; !. -> ! yms.)
+1791=Yritä korjata isot kirjaimet
+1792=Poista tarpeettomat välit numeroiden välistä
+1793=Tekstimuotoiset tekstitykset
+1794=Korjaukset:
+1795=Yritä korjata kirjoitusasu
+1798=Poista kuulovammaisten tekstit
+1836=Vasen ja oikea reunus:
+
+[255]
+0=Bitmap-peittokuva
+1361=Tila:
+1798=Bitmap-peittokuva
+1799=Tiedosto:
+1802=Vaakasijainti:
+1803=Pystysijainti:
+1807=Peitto:
+1810=Suuntaus:
+
+[256]
+0=Yleiset
+1425=peräkkäisiä b-ruutuja enintään:
+1427=Dynaaminen
+1572=Säikeiden lukumäärä:
+1494=Muut asetukset
+1420=IDR-avainruutujen väli enintään
+1422=IDR-avainruutujen väli vähintään
+
+[258]
+0=Maskit
+1840=Terävyys:
+1842=Kohinaherkkyys:
+
+[259]
+0=Käsittely
+1578=Floating point - integer -muunnos
+1579=Sallitut näytemuodot äänen käsittelyyn
+1582=Kohinan muotoilu:
+1583=Koostaminen (Dithering)
+
+[261]
+0=Reunat
+1199=Lukitse
+1857=Reunat
+1858=Prosenttia (%)
+1859=Pikseliä
+1860=Sisällä
+1861=Ulkona
+1862=Vaaka
+1863=Pysty
+2079=Vaaka
+2080=Pysty
+2068=Vasen
+2069=Oikea
+2071=Ala
+2070=Ylä
+2067=Reunojen jako
+
+[262]
+1881=Äänitiedosto:
+1889=Sekoituksen vahvuus:
+1891=Automaattinen säätö
+1893=Tasonsäätö:
+1897=Pysyvä
+1902=Tiedosto...
+1903=Tyhjennä
+1905=Manuaalinen kanavien asetus:
+
+[266]
+0=Mukautetut taulukot
+
+[267]
+8=Sulje
+
+[269]
+0=Yleiset
+1472=Profiili:
+1572=Säikeiden määrä:
+
+[270]
+1941=Kynnys:
+
+[2020]
+0=Tiedot & CPU
+1284=Tiedot
+1832=Käytä seuraavia laajennuksia (jos CPU niitä tukee):
+
+[2112]
+0=RGB-muunnos
+2118=mustan leikkaus :
+2119=valkoisen leikkaus :
+2120=värin leikkaus :
+2121=Lukitse väri
+2122=Kontrasti
+2123=YCbCr-määritys
+2124=Standardi ( Y : 16-235, väri : 16-240 )
+2125=Koko alue ( Y : 0-255, väri : 1-255 )
+2126=Oma
+
+[-1]
+"not needed": no custom channel mapping="ei tarvita": ei mukautettua kanavien asetusta
+%i%%: %i frame(s)=%i%%: %i ruutu(a)
+10 bits=10 Bits
+11 bits=11 Bits
+16-bit integer=16-bit kokonaisluku
+24-bit integer=24-bit kokonaisluku
+3/0 - 3 front=3/0 - 3 etu
+3/0+LFE 3.1 front=3/0+LFE 3.1 etu
+3/2 - 5 channels=3/2 - 5 kanavaa
+3/2+LFE 5.1 channels=3/2+LFE 5.1 kanavaa
+32-bit float=32-bit liukuluku
+32-bit integer=32-bit ganzzahlig
+5-tap lowpass=5-tap alipäästö
+64-bit float=64-bit liukuluku
+8 bits=8 bittiä
+8-bit integer=8-bit kokonaisluku
+8-bit palletized=8-bit paletisoitu
+9 bits=9 bittiä
+Accurate deblocking=Tarkka deblocking
+Action=Toiminto
+Activation key 1=Toimintanäppäin 1
+Activation key 2=Toimintanäppäin 2
+Active preset name=Aktiivisen esiasetuksen nimi
+Adaptive sharpenning strength:=Mukautuvan terävöityksen vahvuus:
+add=lisää
+Add compatible executable file=Lisää yhteensopiva sovellus
+Add incompatible executable file=Lisää ei-yhteensopiva sovellus
+after I frames=I-ruutujen jälkeen
+aggressive=agressiivinen
+all float=kaikki liukuluvut
+all integer=kaikki tasaluvut
+all RGB=kaikki RGB
+all supported=kaikki tuetut
+all YUV=kaikki YUV
+always=aina
+amplitude=amplitudi
+and=ja
+any filter=mikä tahansa suodin
+Apply pulldown=Suorita muunto
+approximate=summittainen
+Arabic=Arabialainen
+Are you sure?=Oletko varma?
+Area=Alue
+Audio settings=Ääniasetukset
+automatic=Automaattinen
+AviSynth info=AviSynth-tiedot
+back center=takakeski
+back left=takavasen
+back right=takaoikea
+Baltic=Balttinen
+Bilinear=Bilineaarinen
+bilinear (fast and not too bad)=bilineaarinen (nopea, mutta melko hyvä)
+Bitrate (kbps)=Bittinopeus (kbps)
+black=musta
+blend=sekoita
+Blur:=Pehmennys:
+bold=lihavoitu
+bottom=ala
+box=neliö
+Bypass=Ohitus
+careful=varovainen
+center=keskellä
+Channel=Kanava
+Check for DTS in WAV=Etsi DTS-tiedot WAV:ista
+character=merkin
+Chinese=Kiinalainen
+chroma blur:=väri:
+Chroma sharpening:=Chroma-terävöitys:
+chroma:=väri:
+Classic shadow=Klassinen varjo
+closest=lähin sopiva
+Coded frame size=Koodatun ruudun koko
+color=väri
+compliant=myötäilevä
+constant=pysyvä
+CPU load=Prosessorikuorma
+Cubic=Kuutiollinen
+Cubic blending=Kuutiollinen sekoitus
+Cubic interpolation=Kuutiollinen interpolointi
+Current frame=Ruutu #
+Current input bitrate=Tulon bittinopeus
+Current playing time=Nykyinen toistoaika
+curve=käyrä
+Custom=Mukautettu
+Cyrillic=Kyrillinen
+Czech=Tsekki
+darken=tummenna
+Decoder=Dekooderi
+Decoder FPS=Dekooderin kuvanopeus
+Decrease video delay=Vähennä videon viivettä
+default=oletus
+Default=Oletus
+Delete preset=Poista asetus
+Details=Tiedot
+Deutsch=Saksa
+Direct=Suora
+disable=Ei käytössä
+Disabled=Ei käytössä
+disabled=ei käytössä
+Display aspect ratio=Näytön kuvasuhde
+do not use=älä käytä
+Do you really want to remove selected preset?=Haluatko varmasti poistaa valitun esiasetuksen?
+Doesn't support 24-bit compression.=Ei tue 24-bittistä pakkausta.
+downsampled=alinäytteistetty
+Easteurope=Itäeurooppalainen
+Edit=Muokkaa
+Encoder=Kooderi
+Encoder info=Pakkaajan tiedot
+English (may work with other languages)=Englanti (voi toimia myös muille kielille)
+Error=Virhe
+exclusion=poissulkeva
+experimental=kokeilu
+Exponent:=Eksponentti:
+extrabold=erittäin lihavoitu
+extralight=erittäin kevyt
+fast 1-pass=nopea 1-pass
+fast 3-pass=nopea 3-pass
+Fast bilinear=Nopea bilineaarinen
+ffdshow audio decoder=ffdshow äänidekooderi (Suomennos: M. Hietaranta)
+ffdshow audio decoder configuration=ffdshow äänidekooderin asetukset
+ffdshow default=ffdshow oletus
+ffdshow searches subtitle files in the folders which are configured in the edit box above.\nFor video.avi, ffdshow searches video.utf, video.idx, video.sub,... and use the file which is found at the first time.\nEnumerate extensions in the order you like and separate them by semicolons.\n\nutf;idx;sub;srt;smi;rt;txt;ssa;aqt;mpl;usf is the default settings.=ffdshow etsii tekstityksiä yllä luetelluista kansioista\nEsimerkiksi Video.avi:lle etsitään tiedostoa Video.uf, Video.idx, Video.sub... Ensimmäisenä löytynyt otetaan käyttöön.\nAseta tekstitysmuodot siihen järjestykseen missä toivot niitä ladattavan.
+ffdshow video decoder=ffdshow videodekooderi (Suomennos: M. Hietaranta)
+ffdshow video decoder configuration=ffdshow videodekooderin asetukset
+ffdshow video encoder=ffdshow videokooderi (Suomennos: M. Hietaranta)
+ffdshow video encoder configuration=ffdshow videopakkaajan asetukset
+ffmpeg deinterlacer=ffmpeg-lomituksenpoistaja
+File=Tiedosto
+Finnish=Finnish (Suomi)
+FLAC (Free Lossless Audio Codec);To play .flac files you also need a source filter.=FLAC (Free Lossless Audio Codec);Toistaaksesi .flac-tiedostoja, tarvitset myös lähdesuotimen.
+Format=Muoto
+Format: XXXX-YYYY=Muoto: XXXX-YYYY
+Frame duration=Ruudun kesto
+Frame mean quantizer=Ruudun keskikerroin
+Frame timestamps=Ruudun aikaleima
+Frame type=Ruudun tyyppi
+Framerate doubler=Kuvanopeuden tuplaus
+French=Ranska
+frequency=taajuus
+From default=Oletusasetusten pohjalta
+From file...=Tiedostosta...
+From selected=Valitun pohjalta
+front center=etukeski
+front left=etuvasen
+front right=etuoikea
+full (slowest)=täysi (hitain)
+Full search=Täysi etsintä
+Glowing shadow=Hohtava varjo
+GMC warp points=GMC warp pisteitä
+Grab frame=Kaappaa ruutu
+Gradient shadow=Liukuva varjo
+gray=harmaa
+greater than=suurempi kuin
+Greek=Kreikkalainen
+Greyscale=Harmaasävy
+guess MVS=arvaa MVS
+guess MVS + deblock=arvaa MVS + deblock
+headphone virtual spatialization=kuulokkeet tilatehosteella
+heavy=vahva
+Hebrew=Heprea
+High=Korkea
+High - sine curve=Korkea - sinikäyrä
+High accuracy mode is enabled for tremor.=Korkean tarkkuuden tila on käytössä tremorille.
+high quality 3-pass=korkean laadun 3-pass
+higher than=suurempi kuin
+highpass=ylipäästö
+Host application=Isäntäsovellus
+Ignore pulldown=Ohita muunto
+IMC compatible decoder=IMC-yhteensopiva dekooderi
+Increase video delay=Lisää videon viivettä
+independent=itsenäinen
+Input aspect ratio=Lähteen kuvasuhde
+Input bitrate=Lähteen bittinopeus
+Input colorspace=Lähteen värialue
+Input description=Lähteen kuvaus
+Input FOURCC=Lähteen FOURCC
+Input size=Lähdekoko
+Input size and aspect ratio=Lähteen koko ja kuvasuhde
+Insert exe file name=Anna sovelluksen nimi
+Insert file name=Anna tiedostonimi
+Interlaced encoding=Lomitettu pakkaus
+Interpolation=Interpolointi
+invalid=ei kelpaa
+Italian=Italia
+Jitter=Värinä
+Kernel deinterlacer=Kernel-lomituksenpoistaja
+Key=Näppäin
+left=vasen
+left arrow=vasen nuoli
+less than=pienempi kuin
+libavcodec high quality=libavcodec korkea laatu
+libavcodec highest quality=libavcodec korkein laatu
+libavcodec normal quality=libavcodec tavallinen laatu
+Library=Kirjasto
+libsamplerate sinc fastest=libsamplerate sinc nopein
+libsamplerate sinc high quality=libsamplerate sinc korkea laatu
+libsamplerate sinc medium quality=libsamplerate sinc keskiverto laatu
+light=kevyt
+lighten=kirkasta
+Limited search=Rajoitettu etsintä
+line=rivin
+Linear=Lineaarinen
+Linear blending=Linearinen sekoitus
+Linear interpolation=Lineaarinen interpolointi
+List of applications for which ffdshow should not load, separated by semicolons=Lista ohjelmista, joille ffdshowta ei ladata. Erotettu puolipilkuilla.
+List of applications which are compatible with ffdshow, separated by semicolons.=Lista ffdhown kanssa yhteensopivista ohjelmista. Erotettu puolipilkuilla.
+Load all=Lataa kaikki
+Load Avisynth script=Avaa Avisynth-skripti
+Load ffdshow preset=Lataa ffdshow-esiasetus
+Load image file=Avaa kuvatiedosto
+Load page=Lataa sivu
+Load subtitles file=Lataa tekstitys
+Low=Alhainen
+Low - cosine curve=Alhainen - kosinikäyrä
+lower than=pienempi kuin
+lowpass=alipäästö
+luma blur:=valo:
+luma:=valo:
+Luminance sharpening:=Luminanssin terävöitys:
+Manage presets...=Hallitse esiasetuksia...
+MD5 sum=MD5-summa
+Median=Mediaani
+medium=keskiverto
+Medium=Keskiverto
+Medium - linear=Keskiverto - suora
+Medium search=Keskiverto etsintä
+MJPG, LJPG (lossless)=MJPG, LJPG (häviötön)
+Mode decision=Tilan päätös
+Modulated=Moduloitu
+Modulated new=Moduloitu uusi
+Movie FPS=Videon kuvanopeus
+Movie length=Elokuvan pituus
+mpeg1/2 decoder only=vain mpeg1/2-dekooderi
+mute=vaimenna
+Names of DirectShow filters, wildcard allowed=DirectShow-suodattimien nimet, jokerimerkit sallittu
+NE=NE
+New=Uusi
+Next preset=Seuraava esiasetus
+No=Ei
+no limitations=ei rajoituksia
+No quantization matrices available.=Ei kvantisaatiomatriiseja saatavilla
+no simulation yet=ei vielä simulaatiota
+none=ei mitään
+None=Ei mitään
+none (fastest, most ugly)=ei mitään (nopea ja ruma)
+none - disabled=ei yhtään - ei käytössä
+normal=tavallinen
+Number of channels=Kanavamäärä
+Number of frames to buffer ahead=Puskuroitavien tulevien ruutujen määrä
+Number of used frames to keep in buffer=Puskurissa pidettävien menneiden ruutujen määrä
+NW=NW
+off=pois
+Off=Pois
+OGG (works with Theora only)=OGG (toimii vain Theoran kanssa)
+on a DirectShow filter presence=DirectShow-suodattimen ollessa
+on application exe file name match=sovelluksen tiedostonimen mukaan
+on decoder match=dekooderin mukaan
+on FOURCC match=FOURCC-koodin mukaan
+on frame rate match=kuvanopeuden mukaan
+on movie file name match=tiedostonimen mukaan
+on movie file name match (with wildcards)=tiedostonimen mukaan (myös jokerimerkit)
+on picture aspect ratio match=kuvan kuvasuhteen mukaan
+on pixel aspect ratio match=pikselien kuvasuhteen mukaan
+on volume name match=aseman nimen mukaan
+on volume serial match=aseman sarjanumeron mukaan
+one pass - constant bitrate=yksi kierros - tasainen bittinopeus
+one pass - quality=yksi kierros - laatu
+one pass - quantizer=yksi kierros - kerroin
+only one - check all filters in graph=vain yksi - tarkista kaikki suotimet kuvaajassa
+only one - check all previous filters=vain yksi - tarkista kaikki edelliset suotimet
+only one - check previous filter only=vain yksi - takista vain edellinen suodin
+opacity=peitto
+Opposite=Vastakkainen
+or=tai
+original=alkuperäinen
+Output aspect ratio=Ulostulon kuvasuhde
+Output colorspace=Ulostulon värialue
+Output description=Ulostulon kuvaus
+Output size=Ulostulokoko
+Output speakers=Kaiuttimen
+Over video=Videon päällä
+P frames=P-ruudut
+Parameter=Parametri
+Pixel aspect ratio=Pikselin sivusuhde
+Point=Piste
+Polish=Puola
+preferred=suosittu
+Preset '%s' will be autoloaded ...=Asetus '%s' ladataan automaattisesti...
+Preset name=Asetuksen nimi
+Previous preset=Edellinen esiasetus
+Property=Asetus
+Quality=Laatu
+Quantizer=Kerroin
+quantizer:%i, count:%i=kerroin:%i, määrä:%i
+quantizer:%i, percentage:%i=kerroin:%i, prosentti:%i
+Queued samples=Näytteitä jonossa
+radius:=säde:
+Raw frames=Raakaruudut
+Real Video (RV10, RV20, incomplete)=Real Video (RV10, RV20,epätäydellinen)
+Remaining time=Aikaa jäljellä
+Removing preset=Esiasetuksen poistaminen
+Rename=Nimeä uudelleen
+Rename preset...=Nimeä asetus uudelleen...
+Reset=Nollaa
+right=oikea
+right arrow=oikea nuoli
+same as input=sama kuin tulo
+Sample format=Näytemuoto
+Sample frequency=Näytteenottotaajuus
+Save all=Tallenna kaikki
+Save as...=Tallenna nimellä...
+Save Avisynth script=Tallenna Avisynth-skripti
+Save ffdshow preset=Tallenna ffdshow-esiasetus
+Save page=Tallenna sivu
+Scan of bars will stop after this position. Set 0 to always scan for bars=Mustien palkkien etsintä loppuu tämän ajan kuluttua. Aseta 0, jos haluat palkkeja etsittävän koko ajan.
+SE=SE
+Second function=Toinen toiminto
+Seek backward=Selaa taaksepäin
+Seek forward=Selaa eteenpäin
+Select directory for storing images=Valitse tallennuskansio kuville
+Select directory where subtitles are stored=Valitse kansio jossa säilytät tekstityksiä
+Select directory with installed DScaler=Valitse DScalerin asennuskansio
+Select DScaler filter=Valitse DScaler-suodin
+Select ffdshow instalation directory=Valitse ffdshown asennuskansio
+Select file for storing frames=Valitse tiedosto ruutujen tallennukseen
+Select file with stored encoding statistics=Valitse tallennettujen pakkaustilastojen tiedosto
+Select impulse file=Valitse äänitiedosto
+Select name of exported Girder file=Valitse nimi tallennettavalle Girder-tiedostolle
+Select stats file for storing first pass statistics=Valitse tiedosto ensimmäisen kierroksen tilastotietojen tallennukseen
+Select stats file processed with external program=Valitse ulkoisella ohjelmalla luotu tilastotiedosto
+Select stats file with stored first pass statistics=Valitse ensimmäisen kierroksen tilastot sisältävä tiedosto
+Select Winamp 2 directory (not the plugins directory!)=Valitse Winamp 2:n kansio (ei sen lisäosakansiota!)
+Select Winamp preset file=Valitse Winampin esiasetuksen tiedosto
+semibold=hieman lihavoitu
+Set all stable formats to libavcodec=Aseta kaikki vakaat muodot libavcodecille
+Set all supported formats to Xvid=Aseta kaikki tuetut muodot Xvidlle
+Set the delay in ms to rescan for the bars=Aseta palkkien etsintöjen välinen aika
+Shape XY=Muoto XY
+Short configuration description=Asetukset lyhyesti
+Show on startup=Näytä käynnistettäessä
+Simple resize=Simple resize
+size=koko
+skip deblocking always=ohita deblocking aina
+skip deblocking when safe=ohita deblocking kun turvallista
+Smooth timestamps=Pehmennä aikaleimat
+softlight=pehmeä valo
+Solid fill=Kiinteä täyttö
+solo=soolo
+Source file=Lähdetiedosto
+Source file name=Lähdetiedoston nimi
+Spacing - distance between characters.=Kirjainväli - kirjainten välinen ero.
+Square=Neliö
+subtitle=tekstityksen
+Subtitles delay=Tekstityksen viive
+Subtitles delay/size decrease=Tekstityksen viive/koko - vähennä
+Subtitles delay/size increase=Tekstityksen viive/koko - lisää
+Subtitles position decrease=Tekstityksen sijainti - vähennä
+Subtitles position increase=Tekstityksen sijainti - lisää
+Supported FOURCCs/remarks=Tuetut FOURCC-koodit/merkinnät
+SW=SW
+Symbol=Symboli
+System time=Kellonaika
+Thank you!=Kiitos!
+thin=ohut
+Time on ffdshow=Aika ffdshow:ssa
+time:=aika:
+Toggle avisynth=Kytke avisynth
+Toggle blur=Kytke pehmennys
+Toggle crop/zoom=Kytke rajaus/zoom
+Toggle deinterlace=Kytke lomituksen poisto
+Toggle flip=Kytke kääntö
+Toggle levels=Kytke tasot
+Toggle noise=Kytke kohina
+Toggle OSD=Kytke OSD
+Toggle picture properties=Kytke kuvan ominaisuudet
+Toggle postprocessing=Kytke jälkikäsittely
+Toggle resize=Kytke koon muutos
+Toggle sharpen=Kytke terävöitys
+Toggle subtitles=Kytke tekstitys
+Toggle visualizations=Kytke visualisoinnit
+Toggle warpsharp=Kytke warpsharp
+Tolerance when scanning bars=Palkkien etsinnän toleranssi
+top=ylä
+Top field first (for intelaced encoding only)=Ylin kenttä ensin (vain lomitetulle pakkaukselle)
+TTA (Lossless Audio Codec);To play .tta files you also need a source filter.=TTA (Lossless Audio Codec);Toistaaksesi .tta-tiedostoja, tarvitset myös lähdesuotimen.
+Turkish=Turkkilainen
+two passes - 1st pass=kaksi kierrosta - ensimmäinen
+two passes - 2nd pass ext=kaksi kierrosta - toinen (ulk.)
+two passes - 2nd pass int=kaksi kierrosta - toinen (sis.)
+Ultra high=Ultrakorkea
+unlikely=epätodennäköinen
+Unsharp masking threshold:=Unsharp mask -kynnys:
+use speedup tricks=Käytä nopeuttavia temppuja
+Use with care - can cause ffdshow to not unload after closing the movie.=Käytä varoen - saattaa aiheuttaa ffdshown päälle jäämisen elokuvan loputtuakin
+Useful for directly storing encoded ac3 to a file in graphedt with File Writer filter=Hyödyllinen kun halutaan suoraan tallentaa pakattu ac3-tiedosto grapheditiin tiedostonkirjoitus-suotimella
+Value=Arvo
+Version=Versio
+very aggressive=erittäin agressiivinen
+very high=erittäin korkea
+Very high=Erittäin korkea
+Very incomplete and experimental.\nSend me samples which don't work.=Hyvin keskeneräinen ja kokeellinen.\nLähetä toimimattomat meille esimerkeiksi.
+Very low=Hyvin alhainen
+Video delay=Videon viive
+Vietnamese=Vietnamilainen
+Weight - most fonts supports only small subset of listed weights.=Vahvuus - useimmat fontit tukevat vain muutamaa eri vahvuutta.
+when decoding H.264 video=kun puretaan H.264 -videota
+when decoding H.264 video and decoder deblocking is off=kun puretaan H.264 -videota ja purkajan deblocking on pois
+white=valkoinen
+Winamp2 application directory, not plugin directory.=Winamp2 ohjelmakansio, ei lisäosien kansiota.
+Works when the video has non-square pixel aspect ratio.=Toimii kun videon pikselien sivusuhde ei ole neliö.
+YCbCr <-> RGB conversion options=YCbCr <-> RGB -muunnoksen asetukset
+Smart wrapping, lines are evenly broken=Älykäs rivitys, rivit jaetaan tasaisesti
+Smart wrapping, lower line gets wider=Älykäs rivitys, alempi rivi leveämpi
+End-of-line word wrapping=Rivin lopun sanan rivitys
+Interlaced=Lomitettu
+Flat=Tasainen
+All frames=Kaikki ruudut
+one pass - average bitrate=yksi kierros - keskimääräinen bittinopeus
+simple=yksinkertainen
+fewest bits=vähiten bittejä
+rate distortion=arvioi vääristymä
+high detail=yksityiskohtainen
+smooth=pehmeä

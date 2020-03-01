@@ -19,7 +19,6 @@ namespace CrazyKTV_SongMgr
         string SongTrack;
         string SongVolume;
         string SongReplayGain;
-        string SongMeanVolume;
         string SongFilePath;
         string dvRowIndex;
         string UpdateSongTrack;
@@ -49,10 +48,9 @@ namespace CrazyKTV_SongMgr
             SongTrack = PlayerSongInfoList[4];
             SongVolume = PlayerSongInfoList[5];
             SongReplayGain = PlayerSongInfoList[6];
-            SongMeanVolume = PlayerSongInfoList[7];
-            SongFilePath = PlayerSongInfoList[8];
-            dvRowIndex = PlayerSongInfoList[9];
-            UpdateDataGridView = PlayerSongInfoList[10];
+            SongFilePath = PlayerSongInfoList[7];
+            dvRowIndex = PlayerSongInfoList[8];
+            UpdateDataGridView = PlayerSongInfoList[9];
 
             this.Text = "【" + SongLang + "】" + SongSinger + " - " + SongSongName;
 
@@ -96,29 +94,14 @@ namespace CrazyKTV_SongMgr
             mediaUriElement.Volume = Math.Round(Convert.ToDouble(Global.MainCfgPlayerDefaultVolume) / 100, 2);
             // 音量平衡
             int GainVolume = Convert.ToInt32(SongVolume);
-            if (SongReplayGain != "" && SongMeanVolume != "")
+            if (!string.IsNullOrEmpty(SongReplayGain))
             {
                 int basevolume = 100;
                 GainVolume = basevolume;
 
-                List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
-                int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
-                maxvolumelist.Clear();
-                maxvolumelist = null;
-
                 double GainDB = Convert.ToDouble(SongReplayGain);
-                double MeanDB = Convert.ToDouble(SongMeanVolume);
-                if (GainDB * -1 > 0)
-                {
-                    GainVolume = Convert.ToInt32(basevolume * Math.Pow(10, (GainDB * -1) / 20));
-                }
-                else
-                {
-                    if (MeanDB > maxvolume)
-                    {
-                        GainVolume = Convert.ToInt32(basevolume * Math.Pow(10, (maxvolume - MeanDB) / 20));
-                    }
-                }
+                GainVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20));
+
             }
             mediaUriElement.AudioAmplify = GainVolume;
             Player_CurrentGainValue_Label.BeginInvokeIfRequired(lbl => lbl.Text = GainVolume + " %");

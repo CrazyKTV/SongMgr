@@ -1,0 +1,1471 @@
+Slovak
+
+[*Font]
+typeface9x=Times New Roman
+typefaceNT=Times New Roman
+pointsize9x=10
+pointsizeNT=12
+
+[-1]
+From default=Pod¾a prednastaveného
+From selected=Pod¾a zvoleného
+From file...=Naèíta zo súboru...
+Rename=Premenuj
+Insert file name=Vlo meno súboru
+Insert exe file name=Vlo meno exe súboru aplikácie
+off=vyp.
+flipped=prevrátenı
+default=pôvodnı
+2.35:1=2,35:1
+version=verzia
+API version=verzia API
+Easteurope=Vıchodoeurópska
+thin=úzke
+None=iadne
+Format=Formát
+Decoder=Dekodér
+Details=Poznámka
+Supported FOURCCs/remarks=Podporované FOURCC/poznámka
+currently broken=nepouite¾né
+incomplete=nekompletné
+MJPG, LJPG (lossless)=MJPG, LJPG (bezstratovı)
+AVIS (Avisynth AVI files)=AVIS (zástupné Avisynth AVI súbory)
+Filter has been successfully re-registered=Filter bol úspešne registrovanı
+Re-registration has failed=Registrácia nebola úspešná
+disabled=iadny
+Action=Akcia
+Key=Klávesa
+Activation key 1=1. aktivaèná klávesa
+Activation key 2=2. aktivaèná klávesa
+Second function=Druhá funkcia
+Seek forward=Posun dopredu
+Seek backward=Posun dozadu
+Toggle OSD=Zapni/vypni OSD
+Toggle visualizations=Zapni/vypni vizualizácie
+Toggle crop&zoom=Zapni/vypni orezanie
+Toggle deinterlace=Zapni/vypni deinterlacing
+Toggle levels=Zapni/vypni úrovne
+Toggle noise=Zapni/vypni šum
+Toggle picture properies=Zapni/vypni
+Toggle postprocessing=Zapni/vypni postprocessing
+Toggle blur=Zapni/vypni odšumenie
+Toggle subtitles=Zapni/vypni titulky
+Toggle sharpen=Zapni/vypni zostrenie
+Toggle flip=Zapni/vypni prevrátenie
+Toggle avisynth=Zapni/vypni avisynth
+Toggle warpsharp=Zapni/vypni warpsharp
+Grab frame=Ulo snímok
+Subtitles delay decrease=Zní posun titulkov
+Subtitles delay increase=Zvıš posun titulkov
+left arrow=¾avá šípka
+right arrow=pravá šípka
+No motion estimation - blend images=iadna kompenzácia pohybu - priemer
+Current location only=Len terajšia poloha
+1 pixel motion, left & right=Pohyb o jeden pixel
+3x3 square=Štvorec 3x3
+Unsharp masking threshold:=Hranica pre "unsharp masking":
+Adaptive sharpenning strength:=Sila adaptívneho zostrovania:
+Block adaptive sharpenning:=Blokovo adaptívne zostrovanie:
+Luminance sharpening:=Zostrenie jasu:
+Chroma sharpening:=Zostrenie farieb:
+none=iadne
+downsampled=s niším rozlíšením
+independant=nezávislé
+high quality 3-pass=kvalitné 3 prechody
+fast 3-pass=rıchle 3 prechody
+fast 1-pass=rıchly 1 prechod
+Linear=Lineárna
+Cubic=Kubická
+don't expand=nedopåòaj
+ffdshow default=pôvodné pre ffdshow
+left=v¾avo
+right=vpravo
+center=na stred
+ffdshow video encoder=ffdshow video kompresor
+ffdshow audio decoder=ffdshow audio dekodér
+ffdshow video decoder=ffdshow video dekodér
+Library=Kninica
+Version=Verzia
+New=Novı
+Save as...=Ulo ako...
+Rename preset...=Premenuj...
+Delete preset=Vyma
+New preset name=Nové meno prednastavenia
+Enter new preset name=Vlote nové meno prednastavenia
+Preset already exists=Také prednastavenie u existuje
+Error=Chyba
+Do you realy want to delete current OSD preset?=Ste si istı, e chcete vymaza zvolené prednastavenie OSD?
+Delete preset=Vymanie prednastavenia
+Preset name=Meno prednastavenia
+Load Avisynth script=Otvor skript pre Avisynth
+Save Avisynth script=Ulo skript pre Avisynth
+luma:=jas:
+chroma:=farba:
+time:=èas:
+radius:=polomer:
+luma blur:=jas:
+chroma blur:=farby:
+Select directory for storing images=Zvo¾te adresár pre ukladanie obrázkov
+Load ffdshow preset=Nahraj prednastavenie pre ffdshow
+Save ffdshow preset=Ulo prednastavenie ffdshow
+Do you really want to remove selected preset?=Ste si istı, e chcete vymaza zvolené prednatavenie?
+Removing preset=Vymazanie prednastavenia
+Audio settings=Prednatavenia zvuku
+Load subtitles file=Nahraj titulky
+Select directory where subtitles are stored=Zvo¾te adresár, kde sú uloené titulky
+Preset '%s' will be autoloaded ...=Prednastavenie '%s' bude nahraté...
+and=a
+or=alebo
+one pass - constant bitrate=jeden prechod - dátovı tok
+one pass - quality=jeden prechod - kvalita
+one pass - quantizer=jeden prechod - kvantizátor
+two passes - 1st pass=dva prechody - 1. prechod
+two passes - 2nd pass ext=dva prechody - 2. prechod ext.
+two passes - 2nd pass int=dva prechody - 2. prechod int.
+Bitrate (kbps)=Dát. tok (kbps)
+Quality=Kvalita
+Quantizer=Kvantizátor
+No settings=iadne nast.
+Size (Kbytes)=Ve¾kos (KB)
+Load all=Naèítaj všetko
+Load page=Naèítaj stránku
+Save all=Ulo všetko
+Save page=Ulo stránku
+Manage presets...=Správa prednastavení...
+Property=Vlastnos
+Value=Hodnota
+Rename preset=Premenovanie prednastavenia
+Are you sure you want to delete selected preset?=Ste si istı, e chcete vymaza zvolené prednastavenie?
+Confirm preset removal=Potvrdenie vymazania prednastavenia
+Select file for debug info=Vyber súbor kam sa majú zapisova pomocné informácie
+exact=presnı
+unknown=neznámy
+Raw frames=Samotné snímky
+Select file for storing frames=Vyberte súbor, do ktorého sa má uklada video
+Select file for storing encoding statistics=Vyberte súbor, do ktorého sa majú uklada štatistické informácie pre libavcodec
+Select file with stored encoding statistics=Vyberte súbor, ktorı obsahuje štatistické informácie pre libavcodec
+Low - cosine curve=Nizka - kosínusová
+Medium - linear=Stredná - lineárna
+High - sine curve=Vysoká - sínusová
+Select stats file with stored first pass statistics=Vyberte súbor s informáciami uloenımi pri prvom prechode
+Select stats file processed with external program=Vyberte súbor so štatistikami spracovanımi externım programom
+kbps (at 25 fps)=kbps (pri 25 fps)
+%i%%: %i frame(s)=%i%%: %i snímkov
+quantizer:%i, percentage:%i=kvantizátor:%i, percent:%i
+quantizer:%i, count:%i=kvantizátor:%i, poèet:%i
+no simulation yet=simulácia ešte neprebehla
+Select stats file for storing first pass statistics=Vyberte súbor kam sa budú uklada štatistické informácie o prvom prechode
+Load quantization matrices=Vyberte súbor s kvantizaènımi maticami
+Error while loading quantization matrices=Chyba pri nahrávaní kvantizaènıch matíc
+Save quantization matrices=Vyberte súbor, do ktorého sa uloia kvantizaèné matice
+Error while saving quantization matrices=Chyba pri ukladaní kvantizaènıch matíc
+Modulated=Modulovaná
+Modulated new=Nová modulovaná
+MPEG - Custom tables=MPEG - vlastné tabu¾ky
+automatic=automatickı
+disable=zruš
+reduce=redukuj
+keep=ponechaj
+8 bits=8 bitov
+9 bits=9 bitov
+10 bits=10 bitov
+11 bits=11 bitov
+simple=jednoduchı
+fewest bits=najmenej bitov
+never=nikdy
+after I frames=po I snímkach
+always=vdy
+adaptive with size 3=3 - adaptívna
+adaptive with size 2=2 - adaptívna
+experimental=experimentálna
+size 1 diamond=ve¾kos 1
+size 2 diamond=ve¾kos 2
+size 3 diamond=ve¾kos 3
+size 4 diamond=ve¾kos 4
+size 5 diamond=ve¾kos 5
+size 6 diamond=ve¾kos 6
+Very low=Ve¾mi nízka
+Low=Nízka
+Medium=Stredná
+High=Vysoká
+Very high=ve¾mi vysoká
+Ultra high=Ultra vysoká
+Off=Vypnutá
+Mode decision=Vıber módu
+Limited search=Obmedzené h¾adanie
+Medium search=Stredné h¾adanie
+Full search=Plné h¾adanie
+Store global headers in extradata=Ukladaj globálne hlavièky do bloku dodatoènıch dát
+Greyscale=Èiernobiely obraz
+Interlacing=Prekladanie
+Data partitioning="Data partitioning"
+Unlimited motion vector=Neobmedzené vektory pohybu
+Alternative inter vlc=Alternativne inter vlc
+Sliced structure=Sliced štruktúra
+Loop filter="Loop filter"
+Left=¼avı
+Plane=Pravı
+Median=Medián
+Generic MPEG1=Všeobecnı MPEG1
+Standard VCD=Štandardné VCD
+Generic MPEG2=Všeobecnı MPEG2
+Standard SVCD=Štandardné SVCD
+User SVCD=Pouívate¾ské SVCD
+VCD Stills sequences=VCD samostatné obrázky
+SVCD Stills sequences=SVCD samostatné obrázky
+none, progressive=iadne, progresívne
+frame pictures, field MC and DCT=snímky, polia pri ME a DCT
+field pictures=polia
+non-interlaced, progressive frame=iadne prekladanie, progresívne snímky
+interlaced, top-field first=prekladané, horné pole je prvé
+interlaced, bottom-field first=prekladané, dolné pole je prvé
+closest match=najblišia zhoda
+greater than=väèší
+less than=menší
+Direct=Priame
+Opposite=Proti¾ahlé
+Interpolation=Interpolácia
+Over video=Cez video
+Over top letterbox=Nad hornım èiernym okrajom
+Over top & left letterbox=Nad hornım a ¾avım èiernym okrajom
+Over top & right letterbox=Nad hornım a pravım èiernym okrajom
+Over bottom letterbox=Nad spodnım èiernym okrajom
+Over bottom & left letterbox=Nad spodnım a ¾avım èiernym okrajom
+Over bottom & right letterbox=Nad spodnım a pravım èiernym okrajom
+Over left letterbox=Nad ¾avım èiernym okrajom
+Over right letterbox=Nad pravım èiernym okrajom
+reference=referenènı
+integer=celoèíselnı
+no limitations=bez obmedzenia
+only one - check previous filter only=len jedna - skontroluj len predchádzajúci filter
+only one - check all previous filters=len jedna - skontroluj všetky predchádzajúce
+only one - check all filters in graph=len jedna - skontroluj všetky filtre v grafe
+none - disabled=iadna - nepouíva
+lowpass=dolnopriepustnı
+highpass=hornopriepustnı
+bandpass=pásmová priepustka
+bandstop=pásmové blokovanie
+box=obdånikové
+triangle=trojuholníkové
+same as input=rovnaká ako vstup
+headphone virtual spatialization=virtuálny priestor v slúchadlách
+front left=prednı ¾avı
+front center=prednı stredovı
+front right=prednı pravı
+back left=zadnı ¾avı
+back center=zadnı stred
+back right=zadnı pravı
+LFE=basovı
+preferred=uprednostnená
+normal=normálna
+unlikely=nepravdepodobná
+do not use=nepouíva
+equal number of frames, equal framerate=rovnakı poèet snímok, rovnakı poèet snímkov za sekundu
+double number of frames, double framerate=zdvojenı poèet snímok, zdvojenı poèet snímkov za sekundu
+double number of frames, equal framerate=zdvojenı poèet snímok, rovnakı poèet snímkov za sekundu
+Blur:=Rozostrenie:
+gray=šedá
+color=farba
+opacity=sila
+duration=trvanie
+frequency=frekvencia
+amplitude=amplitúda
+size=sila
+original=originálny
+Didée's Ylevels=Didéeho Ylevels
+Didée's YlevelsG=Didéeho YlevelsG
+Didée's YlevelsS=Didéeho YlevelsS
+Didée's YlevelsC=Didéeho YlevelsC
+subtitle=titulok
+line=riadok
+character=znak
+none (fastest, most ugly)=iadny (rıchly, najškaredší)
+approximate=priblinı
+full (slowest)=úplnı (najpomalší)
+bilinear (fast and not too bad)=bilineárny (rıchly a nie a tak zlı)
+swscaler gaussian=swscaler gausovskı
+careful=opatrne
+aggressive=agresívne
+very aggressive=ve¾mi aggresívne
+Select ffdshow instalation directory=Zvo¾te adresár, kde je nainštalovanı ffdshow
+Select directory with installed DScaler=Zvo¾te adresár, kde je nainštalovanı DScaler
+doesn't support 24 bit compression=nepodporuje 24 bitovú kompresiu
+all supported=všetky
+very high=ve¾mi vysoká
+Very incomplete and experimental.\nSend me samples which don't work.=Ve¾mi nekompletné a experimentálne.\nPošlite mi titulky, ktoré sa nezobrazia správne.
+Load image file=Nahraj obrázok
+Export ffdshow settings=Export nastavenia ffdshow
+constant=stále
+start=zaèiatok
+Select Winamp 2 directory (not the plugins directory!)=Zvo¾te adresár kde je Winamp 2 (nie, kde sú pluginy!)
+Select Winamp preset file=Zvo¾te súbor s prednastaveniami ekvalizérov pre Winamp
+libavcodec normal quality=libavcodec normálna kvalita
+libavcodec high quality=libavcodec vysoká kvalita
+libavcodec highest quality=libavcodec najvyššia kvalita
+libsamplerate sinc high quality=libsamplerate sinc vysoká kvalita
+libsamplerate sinc medium quality=libsamplerate sinc stredná kvalita
+libsamplerate sinc fastest=libsamplerate sinc najrıchlejší
+low accuracy enabled, inform me if you'd notice distortions=zapnutá malá presnos, ak budete poèu šum dajte mi vedie
+halfpel only=len halfpel
+1 iteration of qpel on the winner=1 iterácia qpel pre víaza
+2 iterations of qpel=2 iterácie pre qpel
+halfpel on all MB types, qpel on the winner=halfpel pre všetky typy MB, qpel pre víaza
+qpel on all=qpel pre všetky
+more iterations=viac iterácií
+Pixel aspect ratio=Pomer strán bodu
+Display aspect ratio=Pomer strán obrazu
+Square=Štvorec
+blend=priemer
+darken=tmavší
+lighten=svetlejší
+add=súèet
+softlight=jemné svetlo
+exclusion=negácia
+Toggle crop/zoom=Zapni/vypni orezanie
+Toggle picture properties=Zapni/vypni vlastnosti obrazu
+Toggle resize=Zapni/vypni zmenu ve¾kosti
+Subtitles delay/size decrease=Zníenie oneskorenia/ve¾kosti titulkov
+Subtitles delay/size increase=Zvıšenie oneskorenia/ve¾kosti titulkov
+Subtitles position decrease=Posun titulkov v¾avo/hore
+Subtitles position increase=Posun titulkov vpravo/dole
+Decrease video delay=Zni oneskorenie videa
+Increase video delay=Zvıš oneskorenie videa
+Previous preset=Predchádzajúce prednastavenie
+Next preset=Nasledujúce prednastavenie
+Bypass=Niè nerob
+Linear interpolation=Lineárna interpolácia
+Linear blending=Lineárne prelínanie
+Cubic interpolation=Kubická interpolácia
+Cubic blending=Kubické prelínanie
+Framerate doubler=Zdvojenie poètu snímok
+NW=SZ
+NE=SV
+SW=JZ
+SE=JV
+light=slabı
+medium=strednı
+heavy=silnı
+Thank you!=Ïakujem.
+bottom=dole
+top=hore
+P frames=P snímky
+All frames=Všetky snímky
+Save as new preset=Ulo ako nové prednastavenie
+Dynamic range compression=Zníenie dynamického rozsahu
+Check for DTS in WAV=Kontroluj DTS zvuk vo WAV
+Input=Vstup
+Output=Vıstup
+Subtitle files=Súbory s titulkami
+ffdshow video decoder configuration=Konfigurácia ffdshow video dekodéra
+ffdshow audio decoer configuration=Konfigurácia ffdshow audio dekodéra
+ffdshow video encoder configuration=Konfigurácia ffdshow video kodeku
+Reset=Pôvodná hodnota
+Edit=Editovanie
+closest=najbliší
+curve=krivka
+when decoding H.264 video=len pri dekódovaní H.264 videa
+when decoding H.264 video and decoder deblocking is off=len pri dekódovaní H.264 videa a deblokovanie v dekodéri je vypnuté
+Source file=Zdrojovı súbor
+Input size and aspect ratio=Vstupná ve¾os a pomer strán
+Input FOURCC=Vstupnı FOURCC
+Movie FPS=Obr. za sek.
+Input bitrate=Vstupnı dát. tok
+Output colorspace=Vıstupnı formát farieb
+Current frame=Aktuálny snímok
+File where to write statistics=Vyberte súbor, do ktorého sa majú zapisova štatistiky
+Show on startup=Zobraz pri spustení
+No quantization matrices available.=iadne matice nie sú dostupné
+Input description=Popis vstupu
+Output description=Popis vıstupu
+Output speakers=Reproduktory na vıstupe
+Current input bitrate=Aktuálnı vstupnı dátovı tok
+Select impulse file=Vyberte súbor s impulzami
+Channel=Kanál
+File=Súbor
+any filter=¾ubovo¾nı filter
+OGG (works with Theora only)=OGG (pracuje len s Theorou)
+diamond=diamant
+hexagonal=šesuholníková
+exhaustive=dôkladná
+high detail=vysoké detaily
+smooth=neostré
+on movie file name match=pri zhode mena súboru
+on movie file name match (with wildcards)=pri zhode mena súboru (s ? a *)
+on application exe file name match=pri zhode mena aplikácie
+on volume name match=pri zhode mena disku
+on volume serial match=pri zhone sériového èisla disku
+Format: XXXX-YYYY=Formát: XXXX-YYYY
+on decoder match=pri zhode dekodéra
+on a DirectShow filter presence=pri prítomnosti DirectShow filtra
+Names of DirectShow filters, wildcard allowed=Mená DirectShow filtra, znaky * a ? sú povolené
+on FOURCC match=pri zhode FOURCC
+on pixel aspect ratio match=pri zhode pomeru strán bodu
+on picture aspect ratio match=pri zhode pomeru strán obrazu
+Enter logical expression with 'aspect' variable and comparison and arithmetic operators,\nfor example "16/9<aspect AND aspect<2.35" or "aspect=1".=Zadajte logickı vıraz s premennou 'aspect' a porovnávacími a aritmetickımi vırazmi,\nnapríklad "16/9<aspect AND aspect<2.35" alebo "aspect=1".
+on number of channels match=pri zhode poètu kanálov
+Select curve file=Vyberte súbor s krivkou
+MD5 sum=MD5 suma
+Input aspect ratio=Vstupnı pomer strán
+Output aspect ratio=Vıstupnı pomer strán
+Decoder FPS=Obr. za sek. dekodéra
+Accurate deblocking=Presnı deblok
+Frame type=Typ snímku
+Subtitles delay=Posun titulkov
+Coded frame size=Ve¾kos komprimovaného snímku
+Input size=Vstupná ve¾kos
+Output size=Vıstupná ve¾kos
+CPU load=Zaaenie procesora
+System time=Systémovı èas
+Frame mean quantizer=Priemernı kvantizátor snímku
+Frame timestamps=Èasové znaèky snímku
+Frame duration=Trvanie snímku
+Host application=Hostite¾ská aplikácia
+Remaining time=Zostávajúci èas
+Movie length=Dåka filmu
+Encoder info=Info o kompresnom programe
+Short configuration description=Krátky popis konfigurácie
+GMC warp points=GMC warp body
+List of applications for which ffdshow should not load, separated by semicolons=Zoznam aplikácií do ktorıch sa ffdshow nemá nahráva oddelenıch bodkoèiarkami.
+Current playing time=Terajší èas
+
+[111]
+1164=Spracuj celı obraz
+1162=Obnov
+1163=Pomoc
+1167=Len pravá polovica
+1723=Obnov poradie
+
+[115]
+0=Kodeky
+1283=Podporované kodeky
+1361=Znovu registruj len pre vybrané
+1837=nastavenie pre formát
+1838=nastavenie pre formát
+
+[116]
+0=Informácie
+1284=Informácie
+1050=Teraz hrá:
+1055=Kodek:
+1264=Vıstup:
+1054=Rozmery:
+1265=FPS:
+1059=Akt. snímok:
+1266=Dekod. FPS:
+1060=Dát. tok:
+1738=Sprístupni graf v aplikácii graphedit
+1832=Poui nasledujúce SIMD inštrukcie (ak sú podporované procesorom):
+1285=Odlaïovanie
+1503=Priorita:
+1502=Viac inštancií ffdshow:
+1935=Nepouiva ffdshow v:
+
+[132]
+0=Písmo
+1259=Písmo
+1110=Ve¾kos:
+1116=Medzery:
+1114=Sada
+1108=Hrúbka
+1124=Farba
+1118=Sila tieòa:
+1130=Priemer tieòa:
+1335=Automatická ve¾kos
+1827=Rıchle kreslenie
+1120=Šírka:
+
+[141]
+0=OSD
+1182=OSD
+1110=Ve¾kos:
+1116=Medzery:
+1114=Sada
+1108=Hrúbka
+1124=Farba
+1118=Sila tieòa:
+1130=Priemer tieòa:
+1491=Vlastné:
+1774=Horiz. umiestnenie:
+1776=Vert. umiestnenie:
+1493=Ulo do:
+
+[136]
+0=Ikona a dialóg
+1257=Ikona
+1070=Zobraz ikonu
+1258=Konfiguraènı dialóg
+1071=Obnov polohu dialógu
+1072=Zobrazuj bublinkovú pomoc
+1293=Jazyk
+1073=Pridaj menu z tray ikony do menu so stopami/jazykmi
+1074=Podrobnejšie informácie
+1259=Cesty
+1143=Ikona v trayi:\r\n  shows icon in system tray area \r\n  doubleclick shows configuration dialog\r\n  after right click on it menu with basic settings is displayed\r\nRestore dialog position\r\n  remembers position of configuration dialog (doesn't work in graphedt)
+
+[143]
+0=Klávesy
+1202=Ovládanie klávesami
+1329=Prijímaj stlaèenia aj keï nie je aplikácia aktívna
+1330=Zobraz oznam po stlaèení klávesy
+1416=Dåka posuvu v sek.:
+1418=, s 2. funkciou:
+1472=Rozhranie pre dia¾kové ovládanie
+1829=Exportuj príkazy pre Girder
+1539=Prijímaj správy klávesnice
+1537=Pouívate¾ská:
+
+[233]
+0=Uká/skry
+1473=Dostupné filtre:
+1474=Vidite¾né filtre:
+
+[119]
+0=Nastavenia spracovania
+1278=Prednastavenia
+1016=Novı
+1156=Èítaj z disku...
+1155=Ulo na disk...
+1045=Premenuj
+1044=Zma
+1051=Automatické nahrávanie
+1080=Najprv skús súbor
+1157=Podmienky autom. nahrávania...
+
+[120]
+0=Postprocessing
+1073=Postprocessing
+1027=Prednastavenia
+1008=Automatická vo¾ba kvality
+1028=Vlastné nastavenia
+1270=Jas
+1271=Farba
+1272=Deblok (X)
+1273=Deblok (Y)
+1274=Dering
+1158=Sila spracovania:
+1160=Spôsob spracovania:
+1238=mplayer
+1239=Nicov
+1037=Temporal odšumenie
+1275=Oprava úrovne
+1035=Jas
+1038=Plnı rozsah jasu
+1036=Farba (nie je implementované)
+1242=X prah:
+1243=Y prah:
+1456=SPP
+1459=Jemná hranica
+1534=Presnı deblok
+1328=Nicov prvı
+1899=H.264 deblokovanie:
+
+[125]
+0=Vlastnosti obrazu
+1072=Vlastnosti obrazu
+1017=Zisk jasu:
+1018=Posun jasu:
+1037=Gama korekcia:
+1025=Odtieò:
+1026=Sıtos:
+1038=RGB gama korekcia:
+1781=Sfarbenie:
+1782=sila:
+1787=Len farba
+1830=Oprava úrovne jasu
+1831=Plnı rozsah
+
+[142]
+0=Úrovne
+1170=Úrovne
+1179=Meò len jas
+1184=Zobrazuj histogram
+1185=Plnı rozsah
+1291=Vstup
+1267=Vıstup
+1181=Gama korekcia:
+1707=Mód:
+1189=Posterizácia:
+1933=Nahraj krivku...
+
+[126]
+0=Šum
+1038=Šum
+1067=Starı algoritmus
+1068=Novı algoritmus (avih)
+1069=Algoritmus z mplayera
+1232=Spriemerovanı
+1039=Rovnomernı šum
+1231=Vzorka
+1041=Sila zašumenia jasu:
+1049=Sila zašumenia farieb:
+1050=Blikanie:
+1051=Trasenie:
+1052=Zvislé èiary:
+1054=Prach:
+
+[127]
+0=Zostrenie
+1065=Zostrenie
+1063=xsharpen
+1064=unsharp mask
+1066=msharpen
+1216=Vysoká kvalita
+1215=Len maska
+1067=warpsharp
+1019=Sila:
+1021=Hranica:
+1068=asharp
+1217=Vysoká kvalita filtrovania blokov
+1023=Blokovo adaptívne zostrenie:
+
+[181]
+1338=Warpsharp
+1339=originálny ffdshow warpsharp
+1340=aWarpSharp
+1019=Håbka:
+1021=Hranica:
+1023=Rozostrenie:
+1341=Zpracovanie farieb:
+1343=Spôsob rozostrenia:
+
+[177]
+1317=Korekcia perspektívy
+1321=Zdrojovı obdånik
+1319=Interpolácia
+0=Perspektíva
+
+[128]
+0=Odšumenie
+1134=Zneostrenie a redukcia šumu
+1136=Zjemni:
+1137=Temporal smooth:
+1232=Spracuj farby
+1138=Zjemnenie jasu:
+1139=Zjemnenie farieb:
+1140=Stupòovité odšumenie:
+
+[137]
+0=Posun
+1148=Posun
+1149=Posun jasu X:
+1151=Posun jasu Y:
+1153=Posun farieb X:
+1120=Posun farieb Y:
+
+[139]
+0=Vizualizácie
+1337=Vizualizácie
+1075=Kvantizátory
+1357=Graf
+1074=Zobraz vektory pohybu
+1143=Skúste to, vyzerá to pekne.
+
+[179]
+1324=DCT
+1325=Koeficienty
+1917=Kvantizaèná matica
+1919=H.263 kvantizácia
+1922=MPEG kvantizácia
+1920=Kvantizátor:
+
+[172]
+0=Ulo snímok
+1216=Ulo snímok
+1223=Kadı snímok
+1224=Jeden snímok
+1226=Rozsah
+1183=Cesta
+1218=...
+1261=Predpona
+1263=Poèet èíslic v mene
+1262=Formát
+1228=Teraz
+1230=Kvalita:
+1740=Ulo kadı
+1741=. snímok
+1232=Cesta
+1143=
+
+[113]
+0=Titulky
+1105=Titulky
+1133=H¾adaj
+1183=Súbor
+1120=...
+1122=Horiz. umiestnenie:
+1126=Vert. umiestnenie:
+1280=Posun
+1281=Rıchlos
+1244=Nahraj
+1124=...
+1279=H¾adaj v
+1414=Sleduj zmeny súboru
+1358=Doplnenie na:
+1360=Zarovnanie:
+1683=Stereoskopické
+1722=Paralaxa:
+1364=Štart
+1787=Prijmi titulky v avi/ogm/mkv
+
+[133]
+0=Ve¾kos a pomer
+1083=Ve¾kos
+1185=Zadaj ve¾kos
+1285=Nová
+1186=Zadaj pomer strán
+1286=Pomer
+1187=Zväèši na násobok
+1189=Zmeò ak ...
+1287=x
+1190=a
+1288=y
+1191=Zmeò ak je poèet bodov ...
+1192=väèší ako
+1188=Zmeò vdy
+1289=Pomer strán
+1100=Bez úprav
+1101=Uchovaj pôvodnı pomer
+1102=Nastav pomer strán:
+1290=Èierne okraje
+1201=Horizont.
+1200=Vertikál.
+1199=Zámok
+1234=Pomer strán pre overlay:
+1540=Vynásob
+
+[138]
+0=Nastavenia
+1282=Nastavenia zmeny ve¾kosti
+1285=Jas
+1098=Zneostrenie jasu:
+1099=Zneostrenie farieb:
+1019=Zostrenie jasu:
+1020=Zostrenie farieb:
+1021=Parameter:
+1100=Horizontálny warp:
+1022=Vertikálny warp:
+1360=Prekladané
+1286=Farba
+1892=Zamkni
+
+[134]
+0=Orezanie
+1137=Orezanie a zväèšenie
+1138=Zväèšenie
+1139=Orezanie
+1105=Horizontálne zväèšenie:
+1107=Vertikálne zväèšenie:
+1140=Zámka
+1252=Zhora
+1254=Z¾ava
+1255=Sprava
+1256=Zdola
+1141=Pan && scan
+1109=Zoom
+1111=Horizontal position
+1113=Vertical position
+
+[140]
+0=Deinterlacing
+1167=Deinterlacing
+1169=Lineárna interpolácia
+1170=Lineárne prelínanie
+1171=Kubická interpolácia
+1173=Kubické prelínanie
+1172=Medián
+1174=TomsMoComp
+1207=Dôkladnos:
+1209=Vymeò polia
+1175=Bob (?)
+1210=Vertikálny filter
+1176=Zdvojnásobenie poètu obrázkov
+1212=Spôsob h¾adania:
+1367=Hranica:
+1178=DScaler plugin
+1523=Spôsob:
+
+[178]
+1323=DScaler deinterlacer
+1309=Plugin
+
+[176]
+1308=DScaler filter
+1309=Filter
+
+[180]
+0=Avisynth
+1330=Avisynth
+1333=Otvor
+1334=Ulo
+1353=Pridaj zdroj videa z ffdshow
+1352=Vstupnı formát farieb:
+
+[173]
+0=Overlay
+1235=Ovládanie overlay
+1236=Jas:
+1137=Konstrast:
+1138=Farba:
+1139=Sıtos:
+1140=Ostros:
+1141=Gama:
+
+[118]
+0=Rôzne
+1283=Libavcodec
+1016=Prevrá obraz
+1045=IDCT
+1356=Automaticky
+1268=Oneskorenie:
+1269=ms
+1047=Oprav chyby kompresie
+1294=Zdecimuj s pomerom
+1365=Iné
+1764=koniec
+1314=Èiernobiely obraz
+1765=štart
+1916=Aktuálne kvantizaèné matice
+
+[231]
+0=Vıstup
+1284=Podporované vıstupné formáty farieb
+1031=Poui overlay
+1033=Hardvérovı deinterlacing
+1016=Prevrá obraz
+1017=Povo¾ zmenu vıstupného formátu poèas prehrávania
+1052=Vysokokvalitná konverzia z YV12 do RGB
+1912=Rovinné YUV:
+1913=Pakované YUV:
+1036=Vyber najvhodnejší formát farieb
+1034=Pripoj sa len na podporované filtre
+1910=Profil:
+
+[102]
+0=O programe
+1072=Dátum kompilácie DirectShow filtra:
+1835=Exportuj všetky nastavenia
+1836=Dary
+1849=Licencia
+1839=Detaily
+
+[193]
+0=Verzie
+2=Zavri
+
+[171]
+0=Podmienky automatického nahrania prednastavenia
+1210=pri zhode mena súboru
+1211=pri zhode rozmerov obrazu
+1276=<= šírka <=
+1277=<= vıška <=
+1213=pri zhode mena súboru
+1344=Odde¾te jednotlivé prípony bodkoèiarkou
+1215=pri zhode mena aplikácie
+1346=Odde¾te jednotlivé mená bodkoèiarkou
+8=Zavri
+1216=pri zhode mena zväzku
+1217=pri zhode sériového èísla zväzku
+1350=Formát: XXXX-YYYY
+65535=Jednotlivé poloky odde¾te bodkoèiarkou.
+
+[182]
+1162=Obnov
+1163=Pomoc
+1723=Obnov poradie
+
+[183]
+0=Formáty
+1283=Podporované formáty
+
+[185]
+0=Informácie
+1284=Informácie
+1050=Hrá sa:
+1368=Vstup:
+1194=SSE2
+1195=3DNOW
+1196=3DNOWEXT
+1056=Vıstup:
+1193=SSE
+1192=MMXEXT
+1191=MMX
+1738=Sprístupni graf v aplikácii graphedit
+1832=Poui nasledujúce SIMD inštrukcie (ak sú podporované procesorom):
+1503=Priorita:
+1502=Viac inštancií ffdshow:
+
+[191]
+0=Mixér
+1405=Mixér
+1406=Vıstupná konfigurácia:
+1636=Pouívate¾ská matica
+1685=Ve¾kos priestoru:
+1701=Hlas:
+1702=Priestor:
+1703=Håbky:
+1586=Normalizuj maticu
+1588=Riadenie hlasov
+1637=Zvırazneni stereo
+
+[189]
+0=Ekvalizér
+1378=Ekvalizér
+1814=Nahraj prednastavenie z Winampu
+
+[190]
+1401=Vyber adresár s programom Winamp 2
+1404=Konfigurácia
+
+[236]
+1485=Ve¾kos miestnosti:
+1487=Damping:
+1490=Wet level:
+1019=Dry level:
+1038=Šírka:
+
+[188]
+0=Hlasitos
+1377=Hlasitos
+1375=Hlavná hlasitos:
+1457=Normalizácia
+1637=Max. zosilnenie:
+1641=Teraz:
+1683=Zobraz aktuálnu hlasitos
+
+[202]
+1446=Formát:
+1448=FOURCC:
+1450=Mód:
+1163=Pomoc
+1459=Prednastavenia
+1460=Neukladaj nastavenia do registrov
+
+[230]
+0=Správa prednastavení kompresora
+1467=Prednastavenie:
+1045=Premenuj
+1044=Odstráò
+1468=Údaje:
+1=Zavri
+
+[211]
+0=Štatistiky
+1531=Posielaj do odlaïovacieho programu
+1532=Pri chybe zobraz oznam
+1533=Zapisuj informácie do súboru
+1537=Zobraz graf
+1538=Poèítaj PSNR
+1541=Poèet snímok:
+1542=kbps:
+1543=FPS:
+1544=Priemernı PSNR:
+1545=Priemernı kvantizátor:
+1738=Sprístupni graf v aplikácii graphedit
+
+[222]
+0=Vıstup
+1438=Vıstup
+1654=Ukladaj do AVI
+1655=Ukladaj do externého súboru
+1658=...
+1659=Štatistické informácie pre libavcodec:
+1660=Nepouíva
+1661=Zapísa
+1662=Poui
+1663=Poui a zapísa
+1664=Dát. tok
+1666=...
+1667=Zmena FPS
+1669=Pomer strán
+1671=:
+
+[221]
+0=Kalkulaèka dátového toku
+1649=Poèet snímok:
+1418=FPS:
+1651=Èas
+1419=Poadovaná ve¾kos videa v KB:
+1653=Dátovı tok pre video:
+1=OK
+2=Zruši
+
+[213]
+0=Vstup
+1548=Vstupnı formát farieb
+1550=Obraz je prekladanı ak je vyšší ako
+1552=pixlov
+1016=Prevrá obraz
+1554=Predspracovanie obrazu
+1555=Konfigurácia
+1556=Odšumenie cez libavcodec
+1460=Sila odšumenia:
+
+[204]
+0=Alt. kompresia
+1485=Poui alternatívnu kompresiu krivky
+1486=Agresivita:
+1488=Horná vzdialenos od priemeru:
+1490=%
+1491=Dolná vzdialenos od priemeru:
+1493=%
+1494=Automatická minimálna relatívna sila kvality:
+1496=%
+1497=Manuálna minimálne relatívna sila kvality:
+1499=%
+1500=Manuálny posun:
+
+[205]
+0=Kompresia krivky
+1463=Nároèné scény:
+1464=%
+1420=Nenároèné scény:
+1421=%
+1422=Zdranie vyrovnania dát. toku:
+1423=snímok
+1505=Vyrovnaj cez posuv
+1506=Vyrovnaj proporcionálne
+
+[226]
+0=Dva prechody - 2. prechod
+1424=Súbor s informáciami o 1. prechode
+1842=Prepíš novımi informáciami
+1508=...
+1844=Súbor s informáciami pre 2. prechod
+1846=...
+1847=Simulácia
+1444=Maximálny dátovı tok:
+1445=kbits/s
+1446=Maximálne zlepšenie preteèenia:
+1447=%
+1448=Maximálne zhoršenie preteèenia:
+1449=%
+1462=I-snímky
+1450=Zväèši o
+1451=%
+1452=Pri vzdialenosti I-snímok menšej ako
+1453=...
+1454=...zmenši I snímky o
+1455=%
+
+[227]
+0=Simulovanie druhého prechodu
+1854=Analyzuj
+1855=Simuluj
+1439=Percento kvantizátorov
+1440=Poèet kvantizátorov
+1861=Dåka v bajtoch:
+1862=Poèet snímok:
+1863=Dátovı tok:
+1864=Priemerná ve¾kos snímku:
+1865=Priemernı kvantizátor:
+
+[206]
+0=Dva prechody - 1. prechod
+1424=Meno súboru pre štatistiky
+1508=...
+
+[203]
+0=Titulky
+1461=Titulky na zaèiatku filmu
+1462=Zaèiatoènı snímok
+1464=Koncovı snímok
+1466=Titulky na konci filmu
+1467=Zaèiatoènı snímok
+1469=Koncovı snímok
+1471=Redukcia titulkov
+1472=%:
+1474=Kvantizátor
+1475=I:
+1477=P:
+1479=Ve¾kos (KB)
+1480=Zaèiatoèné:
+1482=Koncové:
+1484=Èiernobiele titulky
+
+[219]
+0=Riadenie dátového toku
+1635=Tolerancia pre ve¾kos súboru:
+1431=KB
+1637=Kompresia kvant.:
+1432=%
+1639=Rozloenie kvant. pre jeden/1. prechod:
+1433=%
+1641=Rozloenie kvant. pre 2. prechod:
+1434=%
+1643=Max. rozdiel kvantizátorov:
+1645=Poui spojitú funkciu pre ohranièenie kvantizátorov
+1646=Minimálny dátovı tok:
+1648=Maximálny dátovı tok:
+1650=Ve¾kos pamäte pre dekódovanie dát:
+
+[220]
+0=Riadenie dátového toku
+1435=Koeficient zdrania reakcie:
+1436=Perióda priemerovania:
+1437=Zjemnenie:
+
+[214]
+0=Maskovanie
+1556=Maskovanie jasu:
+1558=Maskovanie èasovej komplexnosti:
+1560=Maskovanie priestorovej komplex.:
+1562=Maskovanie P blokov:
+1564=Maskovanie temnoty:
+1566=Normalizuj adaptívnu kvantizáciu
+1567=Eliminácia rovnakıch koeficientov
+1568=Jas
+1569=hranica
+1571=tie DC
+1572=Farba
+1573=hranica
+1575=tie DC
+
+[215]
+0=Maskovanie
+1576=Maskovanie jasu
+1577=Optimalizácia farieb
+
+[234]
+0=Maskovanie
+1478=Maskovanie jasu
+1479=Amplitúda
+
+[225]
+0=Vlastné tabu¾ky
+1840=Intra matica:
+1763=Inter matica:
+1828=Nahraj maticu...
+1829=Ulo maticu...
+
+[223]
+0=Kvantizácia
+1441=Typ kvantizácie:
+1675=I snímky
+1676=P snímky
+1677=B snímky
+1678=Makrobloky
+1442=Min kvantizátor
+1443=Max kvantizátor
+1687=I násobite¾
+1689=I posuv
+1691=B násobite¾
+1693=B posuv
+1695=Vlastnı posuv inter kvant.
+1697=Vlastnı posuv intra kvant.
+1699=Trellisova metóda
+1700=Algoritmus DCT:
+1703=Quantizer noise shaping
+1707=MPEG2 DC presnos:
+
+[224]
+0=Kvantizácia
+1703=Vysoké frekvencie:
+1705=Redukcia kvantizácie:
+1707=Presnos MPEG2 DC:
+
+[216]
+0=Pohyb
+1604=Vıber makroblokov:
+1606=Vdy skús bez pohybu
+1607=RD optimalizácia pre CBP
+1581=Funkcia pre ME:
+1583=Farby
+1584=Funkcia pre subpixely:
+1586=Farby
+1587=Funkcie pre porovnani makroblokov:
+1589=Farby
+1590=Ve¾kos EPZS diamantu:
+1592=Poèet poslednıch prediktorov:
+1594=ME pred-prechod:
+1596=Porovnávacia funkcia:
+1598=Farba
+1599=Ve¾kos EPZS diamantu:
+1601=Qpel
+1602=Kvalita:
+
+[218]
+0=Pohyb
+1601=Qpel
+1613=GMC
+1614=Pohyb farieb
+1615=Presnos h¾adania pohybu:
+1626=Ve¾mi vysoká kvalita:
+
+[217]
+0=Pohyb
+1606=Polomer h¾adania:
+1608=Redukcia 4x4:
+1610=Redukcia 2x2:
+
+[235]
+0=Pohyb
+1481=Meranie pohybu:
+
+[200]
+0=Všeobecné
+1420=Maximálny interval medzi I snímkami:
+1422=Minimálny interval medzi I snímkami:
+1424=b snímky
+1425=max. b snímok za sebou:
+1427=dynamicky
+1428=Zhustenı tok dát
+1429=Uzavreté GOP
+1494=Iné nastavenia
+1572=Poèet vlákien:
+
+[212]
+0=Všeobecné
+1428=Formát farieb:
+1429=Prediktor:
+1314=Èiernobiele
+
+[228]
+0=Všeobecné
+1866=Vıstupné snímky priamo do súboru ASF
+1420=Sekundy medzi I snímkami:
+1868=Komplexnos:
+1870=Ostros:
+
+[208]
+0=Všeobecné
+1430=Preddefinovanı formát:
+1515=Snímok z sekundu:
+1517=Ve¾kos GOP:
+1425=max. b snímok za sebou:
+1427=dynamicky
+1523=Uzavreté GOP
+1524=Interlacing:
+1526=Poradie polí:
+
+[210]
+0=Všeobecné
+1420=Maximálny interval medzi I snímkami:
+1422=Minimálny interval medzi I snímkami:
+1530=Vysoká kvalita
+1531=Vynechávaj snímky
+
+[209]
+0=Všeobecné
+1529=Formát farieb:
+
+[207]
+0=Všeobecné
+1425=Formát farieb:
+1426=Typ kódovaèa:
+1427=Kontext:
+1420=Vzdialenos I snímok:
+
+[242]
+0=Logopreè
+1552=Logopreè
+1542=¼avı
+1544=Hornı
+1546=Šírka
+1548=Vıška
+1551=Mód:
+1553=Rozostrenie:
+1558=Farba:
+1555=X-Y váha:
+1559=Nahraj prednastavenie okrajov:
+1562=Pokroèilé:
+1574=Len jas
+1854=Obrázok:
+
+[254]
+1571=Rozde¾ dlhé riadky
+1723=Medzera medzi riadkami:
+1572=Titulky s rovnakım èasom zobraz súèasne
+1767=Minimum
+1772=trvanie:
+1793=Textové titulky
+1792=Odstráò nadbytoèné medzery medzi èíslami
+1791=Pokús sa opravi ve¾ké písmená
+1795=Pokús sa opravi "preklepy"
+1790=Pokús sa opravi ?. na ?,  !. na ! a podobne
+1788=Pokús sa opravi I and l
+1787=Nahraï dvojité apostrofy úvodzovkami
+1794=Opravy
+1836=Okraje z¾ava s sprava:
+1775=bodov
+
+[250]
+1725=Povo¾
+1726=Prioritné jazyky:
+1727=Spôsob zjemnenia:
+1730=Gaussovské:
+1729=Mierka:
+1796=Riaï polohu nastaveniami zo stránky Titulky
+1728=Terajší jazyk:
+
+[255]
+1798=Obrázok
+1799=Súbor:
+1810=Zarovnanie:
+1361=Mód:
+1807=Vidite¾nos:
+0=Obrázok
+1802=Horiz. poloha:
+1803=Vert. poloha:
+
+[247]
+0=Odšumenie
+1706=Odšumenie
+1704=Hranica:
+
+[248]
+0=Prepínaè stôp
+1683=Aktivuj
+1709=Prepínaè stôp
+1710=Stopy:
+
+[244]
+0=Dolby dekodér
+1657=Dolby dekodér
+1656=Oneskorenie zadnıch kanálov:
+
+[246]
+1690=Typ:
+1696=Frekvencia:
+1692=Okno:
+1698=Šírka:
+1700=Max. zobr. frekv.
+1683=Zobraz spektrum
+
+[249]
+1712=Zväèšenie šírky pásma:
+1714=Hornopriepustnı filter rozširovaèa:
+1716=Zvıraznenie harmonickıch:
+1718=Hlasitos ozveny:
+1720=Spätná väzba ozveny:
+1722=Extra stereo:
+
+[237]
+0=Zmena frekvencie
+1497=Zmena frekvencie
+1498=Nová frekvencia:
+1499=Algoritmus:
+
+[245]
+0=Zdranie
+1676=Zdranie
+1658=Zdranie ¾avého kanála:
+1663=Zdranie stredového kanála:
+1666=Zdranie pravého kanála:
+1669=Zdranie ¾avého zadného kanála:
+1672=Zdranie pravého zadného kanála:
+1675=Zdranie basového kanála:
+
+[253]
+0=Zmena kanálov
+1763=Zmena kanálov
+1749=Prednı ¾avı
+1748=Prednı stredovı
+1747=Prednı pravı
+1746=Zadnı ¾avı
+1670=Zadnı stredovı
+1745=Zadnı pravı
+1744=Basovı
+1143=Kanály môu by prehodené aj v Mixéri, ale toto je rıchlejšie.
+
+[243]
+0=Vstup/Vıstup
+1813=Povo¾ priamy vıstup do súboru
+1573=Podporované vıstupné formáty
+1578=Konverzia z pohyblivej rádovej èiarky do celıch èísel
+1579=Podporované formáty pre spracovanie zvuku
+1580=16 bitovı celoèíselnı
+1585=32 bitovı celoèíselnı
+1574=16 bitovı celoèíselnı
+1575=24 bitovı celoèíselnı
+1576=32 bitovı celoèíselnı
+1577=pohyblivá rádová èiarka
+1586=pohyblivá rádová èiarka
+1743=Dát. tok:
+1811=Nepouívaj WAVEFORMATEXTENSIBLE keï to nie je potrebné
+1846=Len pre S/PDIF vıstup
+1845=Pripoj sa na
+
+[251]
+1728=Mód:
+1730=Hranica:
+1727=Ochrana proti chybám obrazu
+
+[239]
+1207=Dôkladnos h¾adania:
+1210=Vertikálny filter
+
+[240]
+1212=H¾adanie:
+1367=Hranica:
+
+[241]
+1526=Hranica:
+1528=Ostré
+1529=Dve cesty
+1530=Mapa
+
+[252]
+1734=Spodná frekvencia:
+1736=Hlasitos:
+1741=Odstráò z ¾avého a pravého kanála frekvencie pridané do LFE
+
+[256]
+1420=Maximálny interval medzi I snímkami:
+1422=Minimálny interval medzi I snímkami:
+1807=Interval IDR
+1827=Deblok alfa:
+1829=Deblok beta:
+1424=b snímky
+1425=max. b snímok za sebou:
+1494=Iné nastavenia
+0=Všeobecné
+
+[238]
+1506=Intra analıza:
+1508=Inter analıza:
+1779=Subpel zjemnenie:
+1519=Maximálny poèet referenènıch snímok:
+1782=Spôsob h¾adania pohybu:
+1528=Rozsah h¾adana pohybu:
+0=Pohyb
+
+[260]
+0=Prevrátene
+
+[101]
+1836=Dary
+1835=Export nastavení
+2=Zruši
+3=Aplikova
+
+[261]
+1860=Vnútorné
+1861=Vonkajšie
+1857=Okraje
+1858=Percentá
+1859=Pixely
+1862=Horizontálne
+1863=Vertikálne
+1199=Zamkni
+0=Okraje
+
+[262]
+1880=Konvolúcia
+0=Konvolúcia
+1881=Súbor s impulsami
+1902=Vyber súbor
+1903=iadny
+1905=Manuálne nastavenia kanálov
+1891=Automatické
+1893=Nastavenie úrovne
+1889=Pomer zmiešavana
+1897=neplatnı
+
+[258]
+1840=Ostros
+1842=Citlivos na šum
+0=Maskovanie
+
+[232]
+0=Všeobecné
+1470=Formát farieb:

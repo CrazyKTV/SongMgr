@@ -34,61 +34,39 @@ namespace CrazyKTV_SongMgr
         public class SongVolumeValue
         {
             public double GainDB { get; set; }
-            public double MeanDB { get; set; }
         }
 
         public static SongVolumeValue GetSongVolume(string file)
         {
             SongVolumeValue result = new SongVolumeValue
             {
-                GainDB = 0,
-                MeanDB = 0
+                GainDB = 0
             };
 
-            using (StreamReader sr = RunFFmpeg(FFmpegPath, string.Format("-i \"{0}\" -af \"volumedetect\" -vn -sn -dn -f null /dev/null", file)))
+            using (StreamReader sr = RunFFmpeg(FFmpegPath, string.Format("-i \"{0}\" -af \"replaygain\" -vn -sn -dn -f null /dev/null", file)))
             {
                 if (sr != null)
                 {
-                    string line = string.Empty;
-
                     double GainDB = 0;
-                    double MeanDB = 0;
-                    Regex maxline = new Regex(@"\[Parsed_volumedetect_0.+?\] max_volume");
-                    Regex meanline = new Regex(@"\[Parsed_volumedetect_0.+?\] mean_volume");
+                    Regex gainline = new Regex(@"\[Parsed_replaygain_0.+?\] track_gain =");
+
                     while (!sr.EndOfStream)
                     {
-                        line = sr.ReadLine();
-                        if (meanline.IsMatch(line))
+                        string line = sr.ReadLine();
+                        if (gainline.IsMatch(line))
                         {
-                            MeanDB = Convert.ToDouble(Regex.Replace(line, @"\[.+?\]|mean_volume:|dB|/s", ""));
-                        }
-
-                        if (maxline.IsMatch(line))
-                        {
-                            GainDB = Convert.ToDouble(Regex.Replace(line, @"\[.+?\]|max_volume:|dB|/s", ""));
+                            GainDB = Convert.ToDouble(Regex.Replace(line, @"\[.+?\]|track_gain =|dB|/s", ""));
                         }
                     }
                     result.GainDB = Math.Round(GainDB, 2);
-                    result.MeanDB = Math.Round(MeanDB, 2);
                 }
             }
             return result;
         }
 
-        public static string CalSongVolume(int basevolume, int maxvolume, double GainDB, double MeanDB)
+        public static string CalSongVolume(int basevolume, double GainDB)
         {
-            string SongVolume = basevolume.ToString();
-            if (GainDB * -1 > 0)
-            {
-                SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (GainDB * -1) / 20)).ToString();
-            }
-            else
-            {
-                if (MeanDB > maxvolume)
-                {
-                    SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, (maxvolume - MeanDB) / 20)).ToString();
-                }
-            }
+            string SongVolume = Convert.ToInt32(basevolume * Math.Pow(10, GainDB / 20)).ToString();
             return SongVolume;
         }
 

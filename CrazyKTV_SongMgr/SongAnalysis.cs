@@ -54,7 +54,6 @@ namespace CrazyKTV_SongMgr
             SongAnalysisDT.Columns.Add("Song_SrcPath", typeof(string));
             SongAnalysisDT.Columns.Add("Song_SortIndex", typeof(string));
             SongAnalysisDT.Columns.Add("Song_ReplayGain", typeof(string));
-            SongAnalysisDT.Columns.Add("Song_MeanVolume", typeof(string));
 
             SongAnalysisSongList = new List<string>();
 
@@ -159,7 +158,6 @@ namespace CrazyKTV_SongMgr
             string SongSrcPath = Path.GetFullPath(file);
             string SongSortIndex = "";
             string SongReplayGain = "";
-            string SongMeanVolume = "";
 
             string SongLangStr = "";
             string SongSingerTypeStr = "";
@@ -451,18 +449,11 @@ namespace CrazyKTV_SongMgr
                 if (Global.SongAddEnableVolumeDetect == "True")
                 {
                     int basevolume = Convert.ToInt32(Global.SongMaintenanceReplayGainVolume);
-                    List<int> maxvolumelist = new List<int>() { -18, -17, -16, -15, -14, -13, -12, -11, -10, -9 };
-                    int maxvolume = maxvolumelist[Convert.ToInt32(Global.SongMaintenanceMaxVolume) - 1];
-                    maxvolumelist.Clear();
-                    maxvolumelist = null;
 
                     FFmpeg.SongVolumeValue result = FFmpeg.GetSongVolume(file);
-                    double GainDB = result.GainDB;
-                    double MeanDB = result.MeanDB;
-
-                    SongVolume = FFmpeg.CalSongVolume(basevolume, maxvolume, result.GainDB, result.MeanDB);
+                    SongVolume = FFmpeg.CalSongVolume(basevolume, result.GainDB);
                     SongReplayGain = result.GainDB.ToString();
-                    SongMeanVolume = result.MeanDB.ToString();
+
                     if (Convert.ToInt32(SongVolume) > 100) SongVolume = "100";
                     if (Convert.ToInt32(SongVolume) < 10) SongVolume = "10";
                     NativeMethods.SystemSleepManagement.ResetSleepTimer(false);
@@ -913,16 +904,16 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex, SongReplayGain, SongMeanVolume);
+                    CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex, SongReplayGain);
                 }
             }
             else
             {
-                CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex, SongReplayGain, SongMeanVolume);
+                CreateDataRow(SongAddStatus, SongID, SongLang, SongSingerType, SongSinger, SongSongName, SongTrack, SongSongType, SongVolume, SongWordCount, SongPlayCount, SongMB, SongCreatDate, SongSpell, SongSpellNum, SongSongStroke, SongPenStyle, SongPlayState, SongSrcPath, SongSortIndex, SongReplayGain);
             }
         }
 
-        public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, DateTime SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex, string SongReplayGain, string SongMeanVolume)
+        public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, DateTime SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex, string SongReplayGain)
         {
             lock (LockThis)
             {
@@ -948,7 +939,6 @@ namespace CrazyKTV_SongMgr
                 row["Song_SrcPath"] = SongSrcPath;
                 row["Song_SortIndex"] = SongSortIndex;
                 row["Song_ReplayGain"] = SongReplayGain;
-                row["Song_MeanVolume"] = SongMeanVolume;
 
                 CommonFunc.DupSongStatus DupSongStatus = CommonFunc.IsDupSong(SongLang, SongSinger, Convert.ToInt32(SongSingerType), SongSongName, SongSongType, SongAnalysisSongList);
                 if (!DupSongStatus.IsDupSong)
