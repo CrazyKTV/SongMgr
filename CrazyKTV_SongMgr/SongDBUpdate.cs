@@ -298,7 +298,7 @@ namespace CrazyKTV_SongMgr
                     bool UpdatePhonetics = false;
                     bool UpdateLangauage = true;
                     bool AddSongReplayGainColumn = true;
-                    bool RemoveSongMeanVolumeColumn = true;
+                    bool RemoveSongMeanVolumeColumn = false;
                     bool RemoveGodLiuColumn = false;
                     List<string> GodLiuColumnlist = new List<string>();
 
