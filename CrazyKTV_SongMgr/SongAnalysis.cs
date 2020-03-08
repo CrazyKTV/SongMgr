@@ -43,7 +43,7 @@ namespace CrazyKTV_SongMgr
             SongAnalysisDT.Columns.Add("Song_WordCount", typeof(int));
             SongAnalysisDT.Columns.Add("Song_PlayCount", typeof(int));
             SongAnalysisDT.Columns.Add("Song_MB", typeof(float));
-            SongAnalysisDT.Columns.Add("Song_CreatDate", typeof(DateTime));
+            SongAnalysisDT.Columns.Add("Song_CreatDate", typeof(string));
             SongAnalysisDT.Columns.Add("Song_FileName", typeof(string));
             SongAnalysisDT.Columns.Add("Song_Path", typeof(string));
             SongAnalysisDT.Columns.Add("Song_Spell", typeof(string));
@@ -149,7 +149,7 @@ namespace CrazyKTV_SongMgr
             string SongWordCount = "";
             string SongPlayCount = "";
             float SongMB = 0;
-            DateTime SongCreatDate = new DateTime();
+            string SongCreatDate = "";
             string SongSpell = "";
             string SongSpellNum = "";
             string SongSongStroke = "";
@@ -869,7 +869,7 @@ namespace CrazyKTV_SongMgr
             SongMB = float.Parse(((f.Length / 1024f) / 1024f).ToString("F2"));
 
             // 取得加歌日期
-            SongCreatDate = DateTime.Now;
+            SongCreatDate = DateTime.Now.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
             // 取得歌曲拼音
             List<string> SongSpellList = new List<string>();
@@ -913,7 +913,7 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, DateTime SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex, string SongReplayGain)
+        public static void CreateDataRow(string SongAddStatus, string SongID, string SongLang, string SongSingerType, string SongSinger, string SongSongName, string SongTrack, string SongSongType, string SongVolume, string SongWordCount, string SongPlayCount, float SongMB, string SongCreatDate, string SongSpell,string SongSpellNum, string SongSongStroke, string SongPenStyle, string SongPlayState, string SongSrcPath, string SongSortIndex, string SongReplayGain)
         {
             lock (LockThis)
             {

@@ -173,7 +173,7 @@ namespace CrazyKTV_SongMgr
             #endif
         }
 
-        #if DEBUG
+#if DEBUG
         private void Debug_CashboxUpdateSongTask(string file)
         {
             string CashboxUpdDate = string.Empty;
@@ -187,7 +187,7 @@ namespace CrazyKTV_SongMgr
             {
                 Parallel.ForEach(dt.AsEnumerable(), (row, loopState) =>
                 {
-                    string SongCreatDate = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd");
+                    string SongCreatDate = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                     lock (LockThis)
                     {
                         SongIdList.Add(row["Cashbox_Id"].ToString());
@@ -352,7 +352,7 @@ namespace CrazyKTV_SongMgr
                 });
             }
         }
-        #endif
+#endif
 
         #endregion
 
@@ -360,7 +360,7 @@ namespace CrazyKTV_SongMgr
 
         private void Debug_CashboxUpdateLostSong_Button_Click(object sender, EventArgs e)
         {
-            #if DEBUG
+#if DEBUG
             if (Global.CrazyktvDatabaseStatus)
             {
                 if (MessageBox.Show("你確定要更新錢櫃遺漏歌曲嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -386,9 +386,9 @@ namespace CrazyKTV_SongMgr
                                 {
                                     for (int i = 1; i < ts.Days; i++)
                                     {
-                                        if (updatelist.IndexOf(dt2.AddDays(i).ToString("yyyy/MM/dd")) < 0)
+                                        if (updatelist.IndexOf(dt2.AddDays(i).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)) < 0)
                                         {
-                                            updatelist.Add(dt2.AddDays(i).ToString("yyyy/MM/dd"));
+                                            updatelist.Add(dt2.AddDays(i).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture));
                                         }
                                     }
                                 }
@@ -414,14 +414,14 @@ namespace CrazyKTV_SongMgr
                     */
                 }
             }
-            #endif
+#endif
         }
 
-        #if DEBUG
+#if DEBUG
         private void Debug_CashboxUpdateLostSongTask(List<string> sDateList)
         {
         }
-        #endif
+#endif
 
         #endregion
 
@@ -1007,7 +1007,7 @@ namespace CrazyKTV_SongMgr
                         SongId = row.Cells["Cashbox_Id"].Value.ToString();
                         SongLang = (Global.CashboxMultiEditUpdateList[0]) ? ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString() : row.Cells["Song_Lang"].Value.ToString();
                         SongSongName = row.Cells["Song_SongName"].Value.ToString();
-                        SongCreatDate = (Global.CashboxMultiEditUpdateList[1]) ? Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString() : row.Cells["Song_CreatDate"].Value.ToString();
+                        SongCreatDate = (Global.CashboxMultiEditUpdateList[1]) ? Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture) : row.Cells["Song_CreatDate"].Value.ToString();
                         SongSinger = (Global.CashboxMultiEditUpdateList[2]) ? Cashbox_EditSongSinger_TextBox.Text : row.Cells["Song_Singer"].Value.ToString();
 
                         UpdateList.Add(SongId + "|" + SongLang + "|" + SongSongName + "|" + SongSinger + "|" + SongCreatDate);
@@ -1020,7 +1020,7 @@ namespace CrazyKTV_SongMgr
                         SongId = row.Cells["Cashbox_Id"].Value.ToString();
                         SongLang = ((DataRowView)Cashbox_EditSongLang_ComboBox.SelectedItem)[0].ToString();
                         SongSongName = Cashbox_EditSongSongName_TextBox.Text;
-                        SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString();
+                        SongCreatDate = Cashbox_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                         SongSinger = Cashbox_EditSongSinger_TextBox.Text;
 
                         UpdateList.Add(SongId + "|" + SongLang + "|" + SongSongName + "|" + SongSinger + "|" + SongCreatDate);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -34,7 +35,7 @@ namespace CrazyKTV_SongMgr
                     e.FormattingApplied = true;
                     break;
                 case "Song_CreatDate":
-                    e.Value = DateTime.Parse(e.Value.ToString()).ToString("yyyy/MM/dd");
+                    e.Value = DateTime.Parse(e.Value.ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                     e.FormattingApplied = true;
                     break;
                 case "Song_WordCount":

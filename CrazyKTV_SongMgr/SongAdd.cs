@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -1329,7 +1330,7 @@ namespace CrazyKTV_SongMgr
 
                         if (Global.SongAddMultiEditUpdateList[1])
                         {
-                            SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
+                            SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                         }
 
                         if (Global.SongAddMultiEditUpdateList[2])
@@ -1389,7 +1390,7 @@ namespace CrazyKTV_SongMgr
                         SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
                         SongWordCount = SongWordCountList[0];
 
-                        SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString();
+                        SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
                         // 取得歌曲拼音
                         List<string> SongSpellList = new List<string>();

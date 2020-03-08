@@ -678,14 +678,14 @@ namespace CrazyKTV_SongMgr
                             case "SongDate":
                                 dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, Cashbox.GetSongQuerySqlStr(SongQueryType, SongQueryValue, null), "");
 
-                                string DateStr = DateTime.Parse(SongQueryValue).ToString("yyyy/MM/dd");
+                                string DateStr = DateTime.Parse(SongQueryValue).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
                                 if (dt.Rows.Count > 0)
                                 {
                                     List<int> RemoveRowsIdxlist = new List<int>();
 
                                     var query = from row in dt.AsEnumerable()
-                                                where !row.Field<DateTime>("Song_CreatDate").ToString("yyyy/MM/dd").Equals(DateStr)
+                                                where !row.Field<DateTime>("Song_CreatDate").ToString("yyyy/MM/dd", CultureInfo.InvariantCulture).Equals(DateStr)
                                                 select row;
 
                                     if (query.Count<DataRow>() > 0)
@@ -900,7 +900,7 @@ namespace CrazyKTV_SongMgr
             {
                 Parallel.ForEach(dt.AsEnumerable(), (row, loopState) =>
                 {
-                    string SongCreatDate = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd");
+                    string SongCreatDate = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                     lock (LockThis)
                     {
                         SongIdList.Add(row["Cashbox_Id"].ToString());
@@ -1012,9 +1012,9 @@ namespace CrazyKTV_SongMgr
 
                 for (int i = 1; i <= DaysCount; i++)
                 {
-                    if (sDateList.IndexOf(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd")) < 0) sDateList.Add(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd"));
+                    if (sDateList.IndexOf(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)) < 0) sDateList.Add(DatePrevUpdDate.AddDays(i).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture));
                 }
-                if (sDateList.IndexOf(DateEndDate.ToString("yyyy/MM/dd")) < 0) sDateList.Add(DateEndDate.ToString("yyyy/MM/dd"));
+                if (sDateList.IndexOf(DateEndDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)) < 0) sDateList.Add(DateEndDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture));
 
                 foreach (string sdate in sDateList)
                 {
@@ -1166,7 +1166,7 @@ namespace CrazyKTV_SongMgr
 
                     using (OleDbCommand Versioncmd = new OleDbCommand(CashboxUpdDateUpdateSqlStr, conn))
                     {
-                        Versioncmd.Parameters.AddWithValue("@CashboxUpdDate", Global.CashboxUpdDate.ToString());
+                        Versioncmd.Parameters.AddWithValue("@CashboxUpdDate", Global.CashboxUpdDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture));
                         Versioncmd.Parameters.AddWithValue("@Id", "1");
                         Versioncmd.ExecuteNonQuery();
                     }
@@ -1694,7 +1694,7 @@ namespace CrazyKTV_SongMgr
                     {
                         foreach (DataRow row in dt.AsEnumerable())
                         {
-                            string DateItem = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd");
+                            string DateItem = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                             if (ItemList.IndexOf(DateItem) < 0)
                             {
                                 ItemList.Add(DateItem);

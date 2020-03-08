@@ -3432,7 +3432,7 @@ namespace CrazyKTV_SongMgr
                         foreach (string date in UpdateDateList)
                         {
                             var query = from row in CashboxDT.AsEnumerable()
-                                        where row.Field<DateTime>("Song_CreatDate").ToString("yyyy/MM/dd").Equals(date)
+                                        where row.Field<DateTime>("Song_CreatDate").ToString("yyyy/MM/dd", CultureInfo.InvariantCulture).Equals(date)
                                         select row;
                             
                             if (query.Count<DataRow>() > 0)
@@ -3931,7 +3931,7 @@ namespace CrazyKTV_SongMgr
                         foreach (DataRow row in dt.AsEnumerable())
                         {
                             string DateItem = (CultureInfo.CurrentCulture.Name == "zh-TW") ? DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy年MM月份") : DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM");
-                            string DateValue = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd");
+                            string DateValue = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                             if (ItemList.IndexOf(DateItem) < 0)
                             {
                                 ItemList.Add(DateItem);

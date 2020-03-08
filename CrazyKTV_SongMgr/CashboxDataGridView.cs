@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -16,7 +17,7 @@ namespace CrazyKTV_SongMgr
             switch (Cashbox_DataGridView.Columns[e.ColumnIndex].Name)
             {
                 case "Song_CreatDate":
-                    e.Value = DateTime.Parse(e.Value.ToString()).ToString("yyyy/MM/dd");
+                    e.Value = DateTime.Parse(e.Value.ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
                     e.FormattingApplied = true;
                     break;
             }
