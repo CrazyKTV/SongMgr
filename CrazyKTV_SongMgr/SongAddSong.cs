@@ -575,7 +575,7 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError && !SingerNameisEmpty)
                     {
-                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture) + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger + "|" + SongReplayGain;
+                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture) + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongAddSinger + "|" + SongAddAllSinger + "|" + SongReplayGain;
                         SongAddSong.SongAddValueList.Add(SongAddValue);
 
                         lock (LockThis)
@@ -778,7 +778,7 @@ namespace CrazyKTV_SongMgr
 
                     if (!FileIOError)
                     {
-                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture) + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongReplayGain;
+                        string SongAddValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture) + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongReplayGain;
                         SongAddSong.SongAddValueList.Add(SongAddValue);
                         lock (LockThis) { Global.TotalList[3]++; }
                     }

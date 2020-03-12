@@ -1330,7 +1330,7 @@ namespace CrazyKTV_SongMgr
 
                         if (Global.SongAddMultiEditUpdateList[1])
                         {
-                            SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+                            SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                         }
 
                         if (Global.SongAddMultiEditUpdateList[2])
@@ -1390,7 +1390,7 @@ namespace CrazyKTV_SongMgr
                         SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
                         SongWordCount = SongWordCountList[0];
 
-                        SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+                        SongCreatDate = SongAdd_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
 
                         // 取得歌曲拼音
                         List<string> SongSpellList = new List<string>();

@@ -2606,7 +2606,7 @@ namespace CrazyKTV_SongMgr
 
                         if (Global.SongQueryMultiEditUpdateList[1])
                         {
-                            SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+                            SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                         }
 
                         if (Global.SongQueryMultiEditUpdateList[2])
@@ -2686,7 +2686,7 @@ namespace CrazyKTV_SongMgr
 
                         SongPlayCount = SongQuery_EditSongPlayCount_TextBox.Text;
                         SongMB = row.Cells["Song_MB"].Value.ToString();
-                        SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+                        SongCreatDate = SongQuery_EditSongCreatDate_DateTimePicker.Value.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                         SongFileName = row.Cells["Song_FileName"].Value.ToString();
                         SongPath = row.Cells["Song_Path"].Value.ToString();
 

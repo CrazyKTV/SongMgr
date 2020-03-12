@@ -251,7 +251,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    SongCreatDate = DateTime.Now.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+                    SongCreatDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲加歌日期數值為空值,已自動將其數值改為現在日期: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
@@ -485,7 +485,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    SongCreatDate = DateTime.Now.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+                    SongCreatDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                     Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌庫轉換】此首歌曲加歌日期數值為空值,已自動將其數值改為現在日期: " + SongId + "|" + SongSongName;
                     Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
