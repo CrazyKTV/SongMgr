@@ -383,6 +383,7 @@ namespace CrazyKTV_SongMgr
                                 {
                                     foreach (DataRow row in SyncDT.AsEnumerable())
                                     {
+                                        bool SyncThisSong = false;
                                         string SongId = row["Song_Id"].ToString();
                                         string SongLang = row["Song_Lang"].ToString();
                                         string OldSongSinger = row["Song_Singer"].ToString();
@@ -418,6 +419,7 @@ namespace CrazyKTV_SongMgr
                                                     }
                                                 }
                                             }
+                                            SyncThisSong = true;
                                         }
                                         else
                                         {
@@ -428,13 +430,14 @@ namespace CrazyKTV_SongMgr
                                                 {
                                                     SongSinger = OldSongSinger.Replace(singer, SingerName);
                                                     SongSingerType = "3";
+                                                    SyncThisSong = true;
                                                 }
                                             }
                                             list.Clear();
                                             list = null;
                                         }
 
-                                        if (SongSinger.Contains(SingerName))
+                                        if (SyncThisSong)
                                         {
                                             bool MoveError = false;
                                             if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4")
@@ -516,15 +519,7 @@ namespace CrazyKTV_SongMgr
                                         }
                                         else
                                         {
-                                            Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【歌手管理】同步歌曲編號 " + SongId + " 的歌手資料時發生錯誤: " + SongSinger + " 不包含 " + SingerName;
-                                            Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                            lock (LockThis) { Global.TotalList[3]++; }
-
-                                            this.BeginInvoke((Action)delegate ()
-                                            {
-                                                SingerMgr_Tooltip_Label.Text = "已成功更新 " + Global.TotalList[0] + " 位歌手資料,失敗 " + Global.TotalList[1] + " 位,同步歌曲 " + Global.TotalList[2] + " 首,失敗 " + Global.TotalList[3] + " 首...";
-                                            });
+                                            continue;
                                         }
                                     }
                                 }
