@@ -39,8 +39,8 @@
     <ProductName>CrazyKTV 加歌程式</ProductName>
     <PublisherName>Ken Luo</PublisherName>
     <SuiteName>CrazyKTV 加歌程式</SuiteName>
-    <ApplicationRevision>57</ApplicationRevision>
-    <ApplicationVersion>1.4.8.57</ApplicationVersion>
+    <ApplicationRevision>58</ApplicationRevision>
+    <ApplicationVersion>1.4.8.58</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
@@ -141,7 +141,7 @@
       <HintPath>Libs\MediaInfoDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
