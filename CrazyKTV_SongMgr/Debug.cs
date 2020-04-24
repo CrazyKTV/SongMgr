@@ -1,4 +1,7 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -6,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -132,226 +136,387 @@ namespace CrazyKTV_SongMgr
 
         #endregion
 
-        #region --- Debug 更新錢櫃歌曲 ---
+        #region --- Debug 更新錢櫃線上資料 ---
 
-        private void Debug_CashboxUpdateSong_Button_Click(object sender, EventArgs e)
+        private void Debug_CashboxUpdateOnlineData_Button_Click(object sender, EventArgs e)
         {
             #if DEBUG
             if (Global.CrazyktvDatabaseStatus)
             {
-                if (MessageBox.Show("你確定要更新錢櫃歌曲嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("你確定要更新錢櫃線上資料嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    OpenFileDialog opd = new OpenFileDialog();
-                    if (SongMgrCfg_DBFile_TextBox.Text != "") opd.InitialDirectory = Application.StartupPath;
-                    opd.Filter = "錢櫃資料檔 (*.txt;*.md)|*.txt;*.md";
-                    opd.FilterIndex = 1;
-
                     string file = string.Empty;
-                    if (opd.ShowDialog() == DialogResult.OK && opd.FileName.Length > 0)
+                    Global.TimerStartTime = DateTime.Now;
+                    Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                    Common_SwitchSetUI(false);
+                    Debug_Tooltip_Label.Text = "正在更新錢櫃線上資料,請稍待...";
+
+                    var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CashboxUpdateOnlineDataTask()) };
+                    Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
                     {
-                        file = opd.FileName;
-
-                        Global.TimerStartTime = DateTime.Now;
-                        Global.TotalList = new List<int>() { 0, 0, 0, 0 };
-                        Common_SwitchSetUI(false);
-                        Debug_Tooltip_Label.Text = "正在更新錢櫃歌曲,請稍待...";
-
-                        var tasks = new List<Task>() { Task.Factory.StartNew(() => Debug_CashboxUpdateSongTask(file)) };
-                        Task.Factory.ContinueWhenAll(tasks.ToArray(), EndTask =>
+                        this.BeginInvoke((Action)delegate ()
                         {
-                            this.BeginInvoke((Action)delegate ()
-                            {
-                                Common_InitializeSongData(false, false, true, false, false, false);
-                                Common_SwitchSetUI(true);
-                                Global.TimerEndTime = DateTime.Now;
-                                Debug_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 筆資料,失敗 " + Global.TotalList[1] + " 筆,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
-                            });
+                            Common_InitializeSongData(false, false, true, false, false, false);
+                            Common_SwitchSetUI(true);
+                            Global.TimerEndTime = DateTime.Now;
+                            Debug_Tooltip_Label.Text = "總共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成資料更新。";
                         });
-                    }
+                    });
                 }
             }
             #endif
         }
 
 #if DEBUG
-        private void Debug_CashboxUpdateSongTask(string file)
+        private void Debug_CashboxUpdateOnlineDataTask()
         {
-            string CashboxUpdDate = string.Empty;
-            string SongDate = string.Empty;
-            List<string> SongDataList = new List<string>();
-            List<string> SongIdList = new List<string>();
-            List<string> SongDateList = new List<string>();
-
-            string CashboxQuerySqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox order by Cashbox_Id";
+            string CashboxQuerySqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox where Song_CreatDate >= #2020/04/10# order by Cashbox_Id, Song_CreatDate";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, CashboxQuerySqlStr, ""))
             {
-                Parallel.ForEach(dt.AsEnumerable(), (row, loopState) =>
-                {
-                    string SongCreatDate = DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
-                    lock (LockThis)
-                    {
-                        SongIdList.Add(row["Cashbox_Id"].ToString());
-                        if (SongDateList.IndexOf(SongCreatDate) < 0) SongDateList.Add(SongCreatDate);
-                    }
-                });
+                if (!Directory.Exists(Application.StartupPath + @"\Cashbox")) Directory.CreateDirectory(Application.StartupPath + @"\Cashbox");
+                CommonFunc.ObjtoJSONFile(dt, Application.StartupPath + @"\Cashbox\cashbox_newsong.json");
             }
+            Debug_CashboxUpdateBillboard("https://www.cashboxparty.com/billboard/billboard_newbill.asp", 2, 4, "cashbox_newbill.json");
+            Debug_CashboxUpdateBillboard("https://www.cashboxparty.com/billboard/billboard_totalbill.asp", 2, 4, "cashbox_totalbill.json");
+            Debug_CashboxUpdateBillboard("https://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=2", 1, 1, "cashbox_cantonesebill.json");
+            Debug_CashboxUpdateBillboard("https://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=1", 1, 1, "cashbox_englishbill.json");
+            Debug_CashboxUpdateBillboard("https://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=3", 1, 1, "cashbox_japanesebill.json");
 
-            using (StreamReader sr = new StreamReader(file))
+            using (DataTable dt = new DataTable())
             {
-                string line = string.Empty;
-                Regex dateline = new Regex(@"^\d{4}\/\d{2}\/\d{2}");
-                Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-                while (!sr.EndOfStream)
-                {
-                    line = sr.ReadLine();
-                    if (dateline.IsMatch(line))
-                    {
-                        if (CashboxUpdDate == "") CashboxUpdDate = line;
-                        SongDate = line;
-                        if (SongDateList.IndexOf(SongDate) >= 0) return;
-                    }
-                    else if (dataline.IsMatch(line))
-                    {
-                        if (SongDate == "") return;
-                        line = Regex.Replace(line, @"\s\s\t$", "");
-                        line = Regex.Replace(line, @"\s\t", "|");
-                        List<string> list = new List<string>(line.Split('|'));
-                        if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
-                        {
-                            list.Add(SongDate);
-                            if (list[1] == "") list[1] = "其它";
-                            list[3] = Regex.Replace(list[3], "、", "&");
-
-                            if (SongIdList.IndexOf(list[0]) < 0)
-                            {
-                                SongIdList.Add(list[0]);
-                                list.Add("AddSong");
-                            }
-                            else
-                            {
-                                list.Add("UpdSong");
-                            }
-                            SongDataList.Add(string.Join("|", list));
-                        }
-                        list.Clear();
-                        list = null;
-                    }
-                }
-            }
-            SongIdList.Clear();
-            SongIdList = null;
-            SongDateList.Clear();
-            SongDateList = null;
-
-            if (SongDataList.Count >= 0)
-            {
-                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
-                {
-                    string sqlAddStr = "Cashbox_Id, Song_Lang, Song_SongName, Song_Singer, Song_CreatDate";
-                    string sqlValuesStr = "@CashboxId, @SongLang, @SongSongName, @SongSinger, @SongCreatDate";
-                    string AddSqlStr = "insert into ktv_Cashbox ( " + sqlAddStr + " ) values ( " + sqlValuesStr + " )";
-                    string sqlUpdStr = "Cashbox_Id = @CashboxId, Song_Lang = @SongLang, Song_SongName = @SongSongName, Song_Singer = @SongSinger, Song_CreatDate = @SongCreatDate";
-                    string UpdSqlStr = "update ktv_Cashbox set " + sqlUpdStr + " where Cashbox_Id = @OldCashboxId";
-
-                    OleDbCommand AddCmd = new OleDbCommand(AddSqlStr, conn);
-                    OleDbCommand UpdCmd = new OleDbCommand(UpdSqlStr, conn);
-
-                    foreach (string SongData in SongDataList)
-                    {
-                        List<string> valuelist = new List<string>(SongData.Split('|'));
-
-                        switch (valuelist[5])
-                        {
-                            case "AddSong":
-                                AddCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
-                                AddCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
-                                AddCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
-                                AddCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
-                                AddCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
-
-                                try
-                                {
-                                    AddCmd.ExecuteNonQuery();
-                                    Global.TotalList[0]++;
-                                    this.BeginInvoke((Action)delegate ()
-                                    {
-                                        Debug_Tooltip_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
-                                    });
-                                }
-                                catch
-                                {
-                                    Global.TotalList[1]++;
-                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "加入錢櫃資料時發生未知的錯誤: " + SongData;
-                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                }
-                                AddCmd.Parameters.Clear();
-                                break;
-                            case "UpdSong":
-                                UpdCmd.Parameters.AddWithValue("@CashboxId", valuelist[0]);
-                                UpdCmd.Parameters.AddWithValue("@SongLang", valuelist[1]);
-                                UpdCmd.Parameters.AddWithValue("@SongSongName", valuelist[2]);
-                                UpdCmd.Parameters.AddWithValue("@SongSinger", valuelist[3]);
-                                UpdCmd.Parameters.AddWithValue("@SongCreatDate", valuelist[4]);
-                                UpdCmd.Parameters.AddWithValue("@OldCashboxId", valuelist[0]);
-
-                                try
-                                {
-                                    UpdCmd.ExecuteNonQuery();
-                                    Global.TotalList[0]++;
-                                    this.BeginInvoke((Action)delegate ()
-                                    {
-                                        Debug_Tooltip_Label.Text = "正在將第 " + Global.TotalList[0] + " 首歌曲寫入資料庫,請稍待...";
-                                    });
-                                }
-                                catch
-                                {
-                                    Global.TotalList[1]++;
-                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "更新錢櫃資料時發生未知的錯誤: " + SongData;
-                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                                }
-                                UpdCmd.Parameters.Clear();
-                                break;
-                        }
-                        valuelist.Clear();
-                        valuelist = null;
-                    }
-                }
-                SongDataList.Clear();
-                SongDataList = null;
-
-                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
-                {
-                    Global.CashboxUpdDate = DateTime.Parse(CashboxUpdDate);
-                    string CashboxUpdDateSqlStr = "CashboxUpdDate = @CashboxUpdDate";
-                    string CashboxUpdDateUpdateSqlStr = "update ktv_Version set " + CashboxUpdDateSqlStr + " where Id = @Id";
-                    OleDbCommand Versioncmd = new OleDbCommand(CashboxUpdDateUpdateSqlStr, conn);
-
-                    Versioncmd.Parameters.AddWithValue("@CashboxUpdDate", Global.CashboxUpdDate.ToString());
-                    Versioncmd.Parameters.AddWithValue("@Id", "1");
-                    Versioncmd.ExecuteNonQuery();
-                    Versioncmd.Parameters.Clear();
-                }
-
-                this.BeginInvoke((Action)delegate ()
-                {
-                    Cashbox_UpdDateValue_Label.Text = (CultureInfo.CurrentCulture.Name == "zh-TW") ? Global.CashboxUpdDate.ToLongDateString() : Global.CashboxUpdDate.ToShortDateString();
-
-                    Cashbox_DateQuery_ComboBox.SelectedIndexChanged -= new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
-                    Cashbox_DateQuery_ComboBox.DataSource = Cashbox.GetDateQueryList();
-                    Cashbox_DateQuery_ComboBox.DisplayMember = "Display";
-                    Cashbox_DateQuery_ComboBox.ValueMember = "Value";
-                    Cashbox_DateQuery_ComboBox.SelectedValue = 1;
-                    Cashbox_DateQuery_ComboBox.SelectedIndexChanged += new EventHandler(Cashbox_DateQuery_ComboBox_SelectedIndexChanged);
-
-                    SongMaintenance_Favorite_UpdateNewsong_ComboBox.DataSource = SongMaintenance.GetNewsongDateList();
-                    SongMaintenance_Favorite_UpdateNewsong_ComboBox.DisplayMember = "Display";
-                    SongMaintenance_Favorite_UpdateNewsong_ComboBox.ValueMember = "Value";
-                    SongMaintenance_Favorite_UpdateNewsong_ComboBox.SelectedValue = 1;
-                });
+                dt.Columns.Add("Cashbox_Id", typeof(string));
+                dt.Columns.Add("Song_Lang", typeof(string));
+                dt.Columns.Add("Song_SongName", typeof(string));
+                dt.Columns.Add("Song_Singer", typeof(string));
+                dt.Columns.Add("Song_Type", typeof(string));
+                Debug_CashboxUpdateGoldSong("1", dt, "cashbox_3456goldsong.json");
+                Debug_CashboxUpdateGoldSong("2", dt, "cashbox_3456goldsong.json");
+                Debug_CashboxUpdateGoldSong("3", dt, "cashbox_3456goldsong.json");
+                Debug_CashboxUpdateGoldSong("4", dt, "cashbox_3456goldsong.json");
             }
         }
+        
+        private void Debug_CashboxUpdateBillboard(string url, int tablecount, int tdcount, string jsonfile)
+        {
+            using (DataTable dt = new DataTable())
+            {
+                dt.Columns.Add("Cashbox_Id", typeof(string));
+                dt.Columns.Add("Song_Lang", typeof(string));
+                dt.Columns.Add("Song_SongName", typeof(string));
+                dt.Columns.Add("Song_Singer", typeof(string));
+
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                HtmlNode table;
+                HtmlNodeCollection child;
+
+                using (MemoryStream ms = CommonFunc.Download(url))
+                {
+                    if (ms.Length > 0)
+                    {
+                        ms.Position = 0;
+                        using (StreamReader sr = new StreamReader(ms))
+                        {
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                switch (jsonfile)
+                                {
+                                    case "cashbox_newsong.json":
+                                        Debug_Tooltip_Label.Text = "正在更新錢櫃新歌快報,請稍待...";
+                                        break;
+                                    case "cashbox_newbill.json":
+                                        Debug_Tooltip_Label.Text = "正在更新錢櫃新歌排行榜,請稍待...";
+                                        break;
+                                    case "cashbox_totalbill.json":
+                                        Debug_Tooltip_Label.Text = "正在更新錢櫃點播總排行,請稍待...";
+                                        break;
+                                    case "cashbox_cantonesebill.json":
+                                        Debug_Tooltip_Label.Text = "正在更新錢櫃粵語排行榜,請稍待...";
+                                        break;
+                                    case "cashbox_englishbill.json":
+                                        Debug_Tooltip_Label.Text = "正在更新錢櫃英語排行榜,請稍待...";
+                                        break;
+                                    case "cashbox_japanesebill.json":
+                                        Debug_Tooltip_Label.Text = "正在更新錢櫃日語排行榜,請稍待...";
+                                        break;
+                                }
+                            });
+
+                            doc.Load(sr);
+                            table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                            child = table.SelectNodes("tr");
+                            foreach (HtmlNode childnode in child)
+                            {
+                                DataRow dtrow = dt.NewRow();
+                                HtmlNodeCollection td = childnode.SelectNodes("td");
+                                bool exitloop = false;
+                                foreach (HtmlNode tdnode in td)
+                                {
+                                    string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                    switch (td.IndexOf(tdnode))
+                                    {
+                                        case 1:
+                                            if (tdcount == 1)
+                                            {
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    dtrow["Cashbox_Id"] = data;
+                                                }
+                                                else
+                                                {
+                                                    exitloop = true;
+                                                }
+                                            }
+                                            break;
+                                        case 2:
+                                            if (tdcount == 1) dtrow["Song_Lang"] = data;
+                                            break;
+                                        case 3:
+                                            if (tdcount == 1) dtrow["Song_SongName"] = data;
+                                            break;
+                                        case 4:
+                                            if (tdcount == 1)
+                                            {
+                                                data = Regex.Replace(data, "、", "&");
+                                                dtrow["Song_Singer"] = data;
+                                            }
+                                            else if (tdcount == 4)
+                                            {
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    dtrow["Cashbox_Id"] = data;
+                                                }
+                                                else
+                                                {
+                                                    exitloop = true;
+                                                }
+                                            }
+                                            break;
+                                        case 5:
+                                            if (tdcount == 4) dtrow["Song_Lang"] = data;
+                                            break;
+                                        case 6:
+                                            if (tdcount == 4) dtrow["Song_SongName"] = data;
+                                            break;
+                                        case 7:
+                                            if (tdcount == 4)
+                                            {
+                                                data = Regex.Replace(data, "、", "&");
+                                                dtrow["Song_Singer"] = data;
+                                            }
+                                            break;
+                                    }
+                                    if (exitloop) break;
+                                }
+                                if(!exitloop) dt.Rows.Add(dtrow);
+                            }
+
+                            if (tablecount >= 2)
+                            {
+                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                                child = table.SelectNodes("tr");
+                                foreach (HtmlNode childnode in child)
+                                {
+                                    DataRow dtrow = dt.NewRow();
+                                    bool exitloop = false;
+                                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                                    foreach (HtmlNode tdnode in td)
+                                    {
+                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                        switch (td.IndexOf(tdnode))
+                                        {
+                                            case 1:
+                                                if (tdcount == 1)
+                                                {
+                                                    if (CommonFunc.IsSongId(data))
+                                                    {
+                                                        dtrow["Cashbox_Id"] = data;
+                                                    }
+                                                    else
+                                                    {
+                                                        exitloop = true;
+                                                    }
+                                                }
+                                                break;
+                                            case 2:
+                                                if (tdcount == 1) dtrow["Song_Lang"] = data;
+                                                break;
+                                            case 3:
+                                                if (tdcount == 1) dtrow["Song_SongName"] = data;
+                                                break;
+                                            case 4:
+                                                if (tdcount == 1)
+                                                {
+                                                    data = Regex.Replace(data, "、", "&");
+                                                    dtrow["Song_Singer"] = data;
+                                                }
+                                                else if (tdcount == 4)
+                                                {
+                                                    if (CommonFunc.IsSongId(data))
+                                                    {
+                                                        dtrow["Cashbox_Id"] = data;
+                                                    }
+                                                    else
+                                                    {
+                                                        exitloop = true;
+                                                    }
+                                                }
+                                                break;
+                                            case 5:
+                                                if (tdcount == 4) dtrow["Song_Lang"] = data;
+                                                break;
+                                            case 6:
+                                                if (tdcount == 4) dtrow["Song_SongName"] = data;
+                                                break;
+                                            case 7:
+                                                if (tdcount == 4)
+                                                {
+                                                    data = Regex.Replace(data, "、", "&");
+                                                    dtrow["Song_Singer"] = data;
+                                                }
+                                                break;
+                                        }
+                                        if (exitloop) break;
+                                    }
+                                    if (!exitloop) dt.Rows.Add(dtrow);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (dt.Rows.Count > 0)
+                {
+                    if (!Directory.Exists(Application.StartupPath + @"\Cashbox")) Directory.CreateDirectory(Application.StartupPath + @"\Cashbox");
+                    CommonFunc.ObjtoJSONFile(dt, Application.StartupPath + @"\Cashbox\" + jsonfile);
+                }
+            }
+        }
+
+        private void Debug_CashboxUpdateGoldSong(string songtype, DataTable dt, string jsonfile)
+        {
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            HtmlNode table;
+            HtmlNodeCollection child;
+
+            int pages = 0;
+            string url = string.Format("https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType={0}&page=1", songtype);
+            using (MemoryStream ms = CommonFunc.Download(url))
+            {
+                if (ms.Length > 0)
+                {
+                    ms.Position = 0;
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            switch (songtype)
+                            {
+                                case "1":
+                                    Debug_Tooltip_Label.Text = "正在更新錢櫃三四年級台語金曲,請稍待...";
+                                    break;
+                                case "2":
+                                    Debug_Tooltip_Label.Text = "正在更新錢櫃三四年級國語金曲,請稍待...";
+                                    break;
+                                case "3":
+                                    Debug_Tooltip_Label.Text = "正在更新錢櫃五六年級台語金曲,請稍待...";
+                                    break;
+                                case "4":
+                                    Debug_Tooltip_Label.Text = "正在更新錢櫃五六年級國語金曲,請稍待...";
+                                    break;
+                            }
+                        });
+
+                        doc.Load(sr);
+                        table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
+                        child = table.SelectNodes("tr");
+                        foreach (HtmlNode childnode in child)
+                        {
+                            DataRow dtrow = dt.NewRow();
+                            HtmlNodeCollection td = childnode.SelectNodes("td");
+                            foreach (HtmlNode tdnode in td)
+                            {
+                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                if (data.Contains("::::::"))
+                                {
+                                    MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
+                                    if (matches.Count > 0)
+                                    {
+                                        pages = Convert.ToInt32(matches[0].Groups[1].Value);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (pages > 0)
+            {
+                for (int page = 1; page <= pages; page++)
+                {
+                    url = string.Format("https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType={0}&page={1}", songtype, page);
+
+                    using (MemoryStream ms = CommonFunc.Download(url))
+                    {
+                        if (ms.Length > 0)
+                        {
+                            ms.Position = 0;
+                            using (StreamReader sr = new StreamReader(ms))
+                            {
+                                doc.Load(sr);
+                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
+                                child = table.SelectNodes("tr");
+                                foreach (HtmlNode childnode in child)
+                                {
+                                    DataRow dtrow = dt.NewRow();
+                                    bool exitloop = false;
+                                    HtmlNodeCollection td = childnode.SelectNodes("td");
+                                    foreach (HtmlNode tdnode in td)
+                                    {
+                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
+                                        switch (td.IndexOf(tdnode))
+                                        {
+                                            case 0:
+                                                if (CommonFunc.IsSongId(data))
+                                                {
+                                                    dtrow["Cashbox_Id"] = data;
+                                                }
+                                                else
+                                                {
+                                                    exitloop = true;
+                                                }
+                                                break;
+                                            case 1:
+                                                dtrow["Song_Lang"] = data;
+                                                break;
+                                            case 2:
+                                                dtrow["Song_SongName"] = data;
+                                                break;
+                                            case 3:
+                                                dtrow["Song_Singer"] = data;
+                                                break;
+                                        }
+                                        if (exitloop) break;
+                                    }
+                                    if (!exitloop)
+                                    {
+                                        dtrow["Song_Type"] = songtype;
+                                        dt.Rows.Add(dtrow);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (songtype == "4" && dt.Rows.Count > 0)
+            {
+                if (!Directory.Exists(Application.StartupPath + @"\Cashbox")) Directory.CreateDirectory(Application.StartupPath + @"\Cashbox");
+                CommonFunc.ObjtoJSONFile(dt, Application.StartupPath + @"\Cashbox\" + jsonfile);
+            }
+        }
+
 #endif
 
         #endregion

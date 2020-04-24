@@ -892,10 +892,40 @@ namespace CrazyKTV_SongMgr
             string SongDate = string.Empty;
             List<string> SongDataList = new List<string>();
             List<string> SongIdList = new List<string>();
-            List<string> SongDateList = new List<string>();
             bool GetDataFromCashboxWeb = false;
+            bool GetDataFromGithubWeb = false;
 
-            string CashboxQuerySqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox order by Cashbox_Id";
+            DateTime DatePrevUpdDate = DateTime.Parse(((DataTable)Cashbox_DateQuery_ComboBox.DataSource).Rows[0][0].ToString());
+            
+            if ((DateTime.Now - DatePrevUpdDate).Days < 7)
+            {
+                this.BeginInvoke((Action)delegate ()
+                {
+                    Cashbox_QueryStatus_Label.Text = "錢櫃資料已是最新!";
+                });
+                return;
+            }
+            else
+            {
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    GetDataFromCashboxWeb = true;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        Cashbox_QueryStatus_Label.Text = "正在從錢櫃網站獲取資料...";
+                    });
+                }
+                else
+                {
+                    GetDataFromGithubWeb = true;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        Cashbox_QueryStatus_Label.Text = "正在從 Github 網站獲取資料...";
+                    });
+                }
+            }
+
+            string CashboxQuerySqlStr = "select Cashbox_Id, Song_Lang, Song_Singer, Song_SongName, Song_CreatDate from ktv_Cashbox order by Cashbox_Id, Song_CreatDate";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, CashboxQuerySqlStr, ""))
             {
                 Parallel.ForEach(dt.AsEnumerable(), (row, loopState) =>
@@ -904,83 +934,12 @@ namespace CrazyKTV_SongMgr
                     lock (LockThis)
                     {
                         SongIdList.Add(row["Cashbox_Id"].ToString());
-                        if (SongDateList.IndexOf(SongCreatDate) < 0) SongDateList.Add(SongCreatDate);
                     }
                 });
             }
 
-            string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_newsong.md";
-            using (MemoryStream ms = CommonFunc.Download(url))
-            {
-                if (ms.Length > 0)
-                {
-                    ms.Position = 0;
-                    string line = string.Empty;
-                    Regex dateline = new Regex(@"^\d{4}\/\d{2}\/\d{2}");
-                    Regex dataline = new Regex(@"\d{5}\s\t.+?\s\t.+?\s\t");
-
-                    using (StreamReader sr = new StreamReader(ms))
-                    {
-                        while (!sr.EndOfStream)
-                        {
-                            line = sr.ReadLine();
-                            if (dateline.IsMatch(line))
-                            {
-                                SongDate = line;
-                                if (SongDateList.IndexOf(SongDate) >= 0)
-                                {
-                                    if ((DateTime.Now - DateTime.Parse(SongDate)).Days < 7)
-                                    {
-                                        this.BeginInvoke((Action)delegate ()
-                                        {
-                                            Cashbox_QueryStatus_Label.Text = "錢櫃資料已是最新!";
-                                        });
-                                    }
-                                    else
-                                    {
-                                        GetDataFromCashboxWeb = true;
-                                        this.BeginInvoke((Action)delegate ()
-                                        {
-                                            Cashbox_QueryStatus_Label.Text = "正在從錢櫃網站獲取資料...";
-                                        });
-                                    }
-                                    break;
-                                }
-                            }
-                            else if (dataline.IsMatch(line))
-                            {
-                                if (SongDate == "") return;
-                                line = Regex.Replace(line, @"\s\s\t$", "");
-                                line = Regex.Replace(line, @"\s\t", "|");
-                                List<string> list = new List<string>(line.Split('|'));
-                                if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
-                                {
-                                    list.Add(SongDate);
-                                    if (list[1] == "") list[1] = "其它";
-                                    list[3] = Regex.Replace(list[3], "、", "&");
-
-                                    if (SongIdList.IndexOf(list[0]) < 0)
-                                    {
-                                        SongIdList.Add(list[0]);
-                                        list.Add("AddSong");
-                                    }
-                                    else
-                                    {
-                                        list.Add("UpdSong");
-                                    }
-                                    SongDataList.Add(string.Join("|", list));
-                                }
-                                list.Clear();
-                                list = null;
-                            }
-                        }
-                    }
-                }
-            }
-
             if (GetDataFromCashboxWeb)
             {
-                DateTime DatePrevUpdDate = DateTime.Parse(((DataTable)Cashbox_DateQuery_ComboBox.DataSource).Rows[0][0].ToString());
                 DateTime DateValidDate = DateTime.Parse("2016/01/01");
                 DateTime DateEndDate = DateTime.Now;
 
@@ -1018,7 +977,7 @@ namespace CrazyKTV_SongMgr
 
                 foreach (string sdate in sDateList)
                 {
-                    url = "https://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + sdate;
+                    string url = "https://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + sdate;
 
                     using (MemoryStream ms = CommonFunc.Download(url))
                     {
@@ -1049,10 +1008,10 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
 
+                                    if (list[1] == "") list[1] = "其它";
                                     if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
                                     {
                                         list.Add(sdate);
-                                        if (list[1] == "") list[1] = "其它";
                                         list[3] = Regex.Replace(list[3], "、", "&");
 
                                         if (SongIdList.IndexOf(list[0]) < 0)
@@ -1073,11 +1032,70 @@ namespace CrazyKTV_SongMgr
                         }
                     }
                 }
+                SongIdList = null;
             }
-            SongIdList.Clear();
-            SongIdList = null;
-            SongDateList.Clear();
-            SongDateList = null;
+
+            if (GetDataFromGithubWeb)
+            {
+                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_newsong.json";
+                using (MemoryStream ms = CommonFunc.Download(url))
+                {
+                    if (ms.Length > 0)
+                    {
+                        ms.Position = 0;
+                        string jsonString = string.Empty;
+
+                        using (StreamReader sr = new StreamReader(ms))
+                        {
+                            jsonString = sr.ReadToEnd();
+                            using (DataTable dt = CommonFunc.JSONtoDataTable(jsonString))
+                            {
+                                if (dt.Rows.Count > 0)
+                                {
+                                    var query = from row in dt.AsEnumerable()
+                                                where row.Field<DateTime>("Song_CreatDate") >= DatePrevUpdDate
+                                                select row;
+
+                                    if (query.Count<DataRow>() > 0)
+                                    {
+                                        foreach (DataRow row in query)
+                                        {
+                                            List<string> list = new List<string>()
+                                            {
+                                                row["Cashbox_Id"].ToString(),
+                                                row["Song_Lang"].ToString(),
+                                                row["Song_SongName"].ToString(),
+                                                row["Song_Singer"].ToString(),
+                                                DateTime.Parse(row["Song_CreatDate"].ToString()).ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)
+                                            };
+
+                                            if (list[1] == "") list[1] = "其它";
+                                            if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "" && list[4] != "")
+                                            {
+                                                list[3] = Regex.Replace(list[3], "、", "&");
+
+                                                if (SongIdList.IndexOf(list[0]) < 0)
+                                                {
+                                                    SongIdList.Add(list[0]);
+                                                    list.Add("AddSong");
+                                                }
+                                                else
+                                                {
+                                                    list.Add("UpdSong");
+                                                }
+                                                SongDataList.Add(string.Join("|", list));
+                                            }
+                                            list.Clear();
+                                            list = null;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                SongIdList = null;
+            }
 
             if (SongDataList.Count > 0)
             {

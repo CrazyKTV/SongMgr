@@ -42,7 +42,7 @@ namespace CrazyKTV_SongMgr
                 this.Text += " (系統管理員)";
             }
 
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+            if(CommonFunc.CheckFor45PlusVersion()) ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
             ElevatedDragDropManager.Instance.EnableDragDrop(SongAdd_DataGridView.Handle);
             ElevatedDragDropManager.Instance.EnableDragDrop(SongAdd_DragDrop_Label.Handle);

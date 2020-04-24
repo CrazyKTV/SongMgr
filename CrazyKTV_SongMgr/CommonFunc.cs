@@ -1,4 +1,7 @@
 ﻿using MediaInfoLib;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -4032,5 +4035,72 @@ namespace CrazyKTV_SongMgr
         }
 
         #endregion
+
+        #region --- CommonFunc 偵測系統是否安裝 .NET Framework 4.5 以上版本 ---
+
+        public static bool CheckFor45PlusVersion()
+        {
+            if (Environment.OSVersion.Version.Major < 6) return false;
+            
+            string subkey = (Environment.Is64BitOperatingSystem) ? @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\" : @"SOFTWARE\Wow6432Node\Microsoft\NET Framework Setup\NDP\v4\Full\";
+            using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(subkey))
+            {
+                if (ndpKey != null && ndpKey.GetValue("Release") != null)
+                {
+                    if ((int)ndpKey.GetValue("Release") >= 378389) return true;
+                }
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region --- CommonFunc JSON 字串轉 DataTable ---
+
+        public static DataTable JSONtoDataTable(string jsonString)
+        {
+            try
+            {
+                var table = JsonConvert.DeserializeObject<System.Data.DataTable>(jsonString);
+                return (DataTable)table;
+            }
+            catch { return null; }
+        }
+
+        #endregion
+
+        #region --- CommonFunc DataTable轉 JSON 字串 ---
+
+        public static string DataTabletoJSON(DataTable dt)
+        {
+            try
+            {
+                var jsonString = JsonConvert.SerializeObject(dt, Formatting.Indented, new DataTableConverter());
+                return jsonString;
+            }
+            catch { return null; }
+        }
+
+        #endregion
+
+        #region --- CommonFunc 物件轉存 JSON 檔 ---
+
+        public static void ObjtoJSONFile(object obj, string file)
+        {
+            using (StreamWriter sw = File.CreateText(file))
+            {
+                using (JsonTextWriter writer = new JsonTextWriter(sw))
+                {
+                    writer.Formatting = Formatting.Indented;
+                    writer.Indentation = 4;
+                    JsonSerializer jsonSerializer = new JsonSerializer();
+                    jsonSerializer.Serialize(writer, obj);
+                }
+            }
+        }
+
+        #endregion
+
+
     }
 }
