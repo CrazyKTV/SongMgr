@@ -1548,8 +1548,11 @@ namespace CrazyKTV_SongMgr
 
                                 if (SongDataIndex >= 0)
                                 {
-                                    lock (LockThis) { Global.TotalList[0]++; }
-                                    UpdateList.Add(CashboxId);
+                                    lock (LockThis)
+                                    { 
+                                        Global.TotalList[0]++;
+                                        UpdateList.Add(CashboxId);
+                                    }
 
                                     this.BeginInvoke((Action)delegate()
                                     {
