@@ -1224,303 +1224,310 @@ namespace CrazyKTV_SongMgr
         private void Common_RebuildSingerDataTask(string TooltipName)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            OleDbConnection conn = new OleDbConnection();
-            OleDbCommand cmd = new OleDbCommand();
 
-            conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            string TruncateSqlStr = "delete * from ktv_Singer";
-            cmd = new OleDbCommand(TruncateSqlStr, conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+            {
+                string TruncateSqlStr = "delete * from ktv_Singer";
+                using (OleDbCommand cmd = new OleDbCommand(TruncateSqlStr, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
             int MaxSingerId = CommonFunc.GetMaxSingerId("ktv_Singer", Global.CrazyktvDatabaseFile) + 1;
-            List<string> NotExistsSingerId = new List<string>();
-            NotExistsSingerId = CommonFunc.GetUnusedSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
+            List<string> UnusedSingerId = CommonFunc.GetUnusedSingerId("ktv_Singer", Global.CrazyktvDatabaseFile);
 
-            DataTable dt = new DataTable();
             string SingerQuerySqlStr = "SELECT First(Song_Singer) AS Song_Singer, First(Song_SingerType) AS Song_SingerType, Count(Song_Singer) AS Song_SingerCount FROM ktv_Song GROUP BY Song_Singer HAVING First(Song_SingerType)<=10 AND First(Song_SingerType)<>8 AND First(Song_SingerType)<>9 AND Count(Song_Singer)>0 ORDER BY First(Song_SingerType), First(Song_Singer)";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, "");
-
-            if (dt.Rows.Count > 0)
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SingerQuerySqlStr, ""))
             {
-                string SingerId = "";
-                string SingerName = "";
-                string SingerType = "";
-
-                List<string> list = new List<string>();
-                List<string> Addlist = new List<string>();
-                List<string> spelllist = new List<string>();
-                List<string> ChorusSingerList = new List<string>();
-                List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
-
-                foreach (DataRow row in dt.AsEnumerable())
+                if (dt.Rows.Count > 0)
                 {
-                    SingerName = row["Song_Singer"].ToString();
-                    SingerType = row["Song_SingerType"].ToString();
-                    
-                    if (SingerType == "3")
-                    {
-                        List<string> SingerList = CommonFunc.GetChorusSingerList(SingerName);
+                    string SingerId = "";
+                    string SingerName = "";
+                    string SingerType = "";
 
-                        foreach (string str in SingerList)
+                    List<string> list = new List<string>();
+                    List<string> Addlist = new List<string>();
+                    List<string> spelllist = new List<string>();
+                    List<string> ChorusSingerList = new List<string>();
+                    List<string> SpecialStrlist = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
+
+                    foreach (DataRow row in dt.AsEnumerable())
+                    {
+                        SingerName = row["Song_Singer"].ToString();
+                        SingerType = row["Song_SingerType"].ToString();
+
+                        if (SingerType == "3")
                         {
-                            if (ChorusSingerList.IndexOf(str) < 0)
+                            List<string> SingerList = CommonFunc.GetChorusSingerList(SingerName);
+
+                            foreach (string str in SingerList)
                             {
-                                ChorusSingerList.Add(str);
+                                if (ChorusSingerList.ConvertAll(x => x.ToLower()).IndexOf(str.ToLower()) < 0)
+                                {
+                                    ChorusSingerList.Add(str);
+                                }
                             }
-                        }
-                        SingerList.Clear();
-                        SingerList = null;
-                    }
-                    else
-                    {
-                        switch (TooltipName)
-                        {
-                            case "SongMaintenance":
-                                if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
-                                {
-                                    SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
-                                    SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
-                                }
-                                break;
-                            case "SingerMgr":
-                                if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
-                                {
-                                    SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
-                                    SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
-                                }
-                                break;
-                        }
-
-                        if (NotExistsSingerId.Count > 0)
-                        {
-                            SingerId = NotExistsSingerId[0];
-                            NotExistsSingerId.RemoveAt(0);
+                            SingerList.Clear();
+                            SingerList = null;
                         }
                         else
                         {
-                            SingerId = MaxSingerId.ToString();
-                            MaxSingerId++;
-                        }
-
-                        spelllist = new List<string>();
-                        spelllist = CommonFunc.GetSongNameSpell(SingerName);
-                        Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
-                    }
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        switch (TooltipName)
-                        {
-                            case "SongMaintenance":
-                                SongMaintenance_Tooltip_Label.Text = "正在解析第 " + SingerId + " 位歌手資料,請稍待...";
-                                break;
-                            case "SingerMgr":
-                                SingerMgr_Tooltip_Label.Text = "正在解析第 " + SingerId + " 位歌手資料,請稍待...";
-                                break;
-                        }
-                    });
-                }
-                dt.Dispose();
-                dt = null;
-
-                string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
-                string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
-                string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-
-                conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-                cmd = new OleDbCommand(SingerAddSqlStr, conn);
-
-                foreach (string AddStr in Addlist)
-                {
-                    list = new List<string>(AddStr.Split('|'));
-
-                    switch (list[0])
-                    {
-                        case "ktv_Singer":
-                            cmd.Parameters.AddWithValue("@SingerId", list[1]);
-                            cmd.Parameters.AddWithValue("@SingerName", list[2]);
-                            cmd.Parameters.AddWithValue("@SingerType", list[3]);
-                            cmd.Parameters.AddWithValue("@SingerSpell", list[4]);
-                            cmd.Parameters.AddWithValue("@SingerStrokes", list[5]);
-                            cmd.Parameters.AddWithValue("@SingerSpellNum", list[6]);
-                            cmd.Parameters.AddWithValue("@SingerPenStyle", list[7]);
-
-                            cmd.ExecuteNonQuery();
-                            cmd.Parameters.Clear();
-                            lock (LockThis)
+                            switch (TooltipName)
                             {
-                                Global.TotalList[0]++;
+                                case "SongMaintenance":
+                                    if (Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                                    {
+                                        SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                        SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                    }
+                                    break;
+                                case "SingerMgr":
+                                    if (SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower()) >= 0)
+                                    {
+                                        SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                        SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(SingerName.ToLower())];
+                                    }
+                                    break;
                             }
-                            break;
-                    }
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        switch (TooltipName)
-                        {
-                            case "SongMaintenance":
-                                SongMaintenance_Tooltip_Label.Text = "正在重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
-                                break;
-                            case "SingerMgr":
-                                SingerMgr_Tooltip_Label.Text = "正在重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
-                                break;
+
+                            if (UnusedSingerId.Count > 0)
+                            {
+                                SingerId = UnusedSingerId[0];
+                                UnusedSingerId.RemoveAt(0);
+                            }
+                            else
+                            {
+                                SingerId = MaxSingerId.ToString();
+                                MaxSingerId++;
+                            }
+
+                            spelllist = new List<string>();
+                            spelllist = CommonFunc.GetSongNameSpell(SingerName);
+                            Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
                         }
-                    });
-                }
-                Addlist.Clear();
 
-                switch (TooltipName)
-                {
-                    case "SongMaintenance":
-                        Global.SingerList = new List<string>();
-                        Global.SingerLowCaseList = new List<string>();
-                        Global.SingerTypeList = new List<string>();
-                        break;
-                    case "SingerMgr":
-                        SingerMgr.SingerList = new List<string>();
-                        SingerMgr.SingerLowCaseList = new List<string>();
-                        SingerMgr.SingerTypeList = new List<string>();
-                        break;
-                }
-
-                string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
-                using (DataTable SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, ""))
-                {
-                    foreach (DataRow row in SingerDT.AsEnumerable())
-                    {
-                        switch (TooltipName)
+                        this.BeginInvoke((Action)delegate ()
                         {
-                            case "SongMaintenance":
-                                Global.SingerList.Add(row["Singer_Name"].ToString());
-                                Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
-                                Global.SingerTypeList.Add(row["Singer_Type"].ToString());
-                                break;
-                            case "SingerMgr":
-                                SingerMgr.SingerList.Add(row["Singer_Name"].ToString());
-                                SingerMgr.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
-                                SingerMgr.SingerTypeList.Add(row["Singer_Type"].ToString());
-                                break;
+                            switch (TooltipName)
+                            {
+                                case "SongMaintenance":
+                                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + SingerId + " 位歌手資料,請稍待...";
+                                    break;
+                                case "SingerMgr":
+                                    SingerMgr_Tooltip_Label.Text = "正在解析第 " + SingerId + " 位歌手資料,請稍待...";
+                                    break;
+                            }
+                        });
+                    }
+
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
+                        string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
+                        string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+                        using (OleDbCommand cmd = new OleDbCommand(SingerAddSqlStr, conn))
+                        {
+                            foreach (string AddStr in Addlist)
+                            {
+                                list = new List<string>(AddStr.Split('|'));
+                                switch (list[0])
+                                {
+                                    case "ktv_Singer":
+                                        cmd.Parameters.AddWithValue("@SingerId", list[1]);
+                                        cmd.Parameters.AddWithValue("@SingerName", list[2]);
+                                        cmd.Parameters.AddWithValue("@SingerType", list[3]);
+                                        cmd.Parameters.AddWithValue("@SingerSpell", list[4]);
+                                        cmd.Parameters.AddWithValue("@SingerStrokes", list[5]);
+                                        cmd.Parameters.AddWithValue("@SingerSpellNum", list[6]);
+                                        cmd.Parameters.AddWithValue("@SingerPenStyle", list[7]);
+
+                                        cmd.ExecuteNonQuery();
+                                        cmd.Parameters.Clear();
+                                        lock (LockThis)
+                                        {
+                                            Global.TotalList[0]++;
+                                        }
+                                        break;
+                                }
+                                this.BeginInvoke((Action)delegate ()
+                                {
+                                    switch (TooltipName)
+                                    {
+                                        case "SongMaintenance":
+                                            SongMaintenance_Tooltip_Label.Text = "正在重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                            break;
+                                        case "SingerMgr":
+                                            SingerMgr_Tooltip_Label.Text = "正在重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                            break;
+                                    }
+                                });
+                            }
+                            Addlist.Clear();
+                            Addlist = null;
                         }
                     }
-                }
 
-                Addlist = new List<string>();
-
-                // 判斷是否要加入合唱歌手資料至歌庫歌手資料庫
-                
-                foreach (string ChorusSinger in ChorusSingerList)
-                {
-                    string ChorusSingerName = Regex.Replace(ChorusSinger, @"^\s*|\s*$", ""); //去除頭尾空白
-                    bool AddChorusSinger = false;
-
-                    // 查找資料庫歌手資料表
                     switch (TooltipName)
                     {
                         case "SongMaintenance":
-                            if (Global.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
-                            {
-                                if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
-                                {
-                                    SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
-                                    SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
-                                }
-                                else
-                                {
-                                    SingerName = ChorusSingerName;
-                                    SingerType = "10";
-                                }
-                                AddChorusSinger = true;
-                            }
+                            Global.SingerList = new List<string>();
+                            Global.SingerLowCaseList = new List<string>();
+                            Global.SingerTypeList = new List<string>();
                             break;
                         case "SingerMgr":
-                            if (SingerMgr.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
-                            {
-                                if (SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
-                                {
-                                    SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
-                                    SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
-                                }
-                                else
-                                {
-                                    SingerName = ChorusSingerName;
-                                    SingerType = "10";
-                                }
-                                AddChorusSinger = true;
-                            }
+                            SingerMgr.SingerList = new List<string>();
+                            SingerMgr.SingerLowCaseList = new List<string>();
+                            SingerMgr.SingerTypeList = new List<string>();
                             break;
                     }
 
-                    if (AddChorusSinger)
+                    string SongSingerQuerySqlStr = "select Singer_Name, Singer_Type from ktv_Singer";
+                    using (DataTable SingerDT = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongSingerQuerySqlStr, ""))
                     {
-                        if (NotExistsSingerId.Count > 0)
+                        foreach (DataRow row in SingerDT.AsEnumerable())
                         {
-                            SingerId = NotExistsSingerId[0];
-                            NotExistsSingerId.RemoveAt(0);
-                        }
-                        else
-                        {
-                            SingerId = MaxSingerId.ToString();
-                            MaxSingerId++;
-                        }
-
-                        spelllist = new List<string>();
-                        spelllist = CommonFunc.GetSongNameSpell(SingerName);
-                        Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
-                    }
-
-                    this.BeginInvoke((Action)delegate()
-                    {
-                        switch (TooltipName)
-                        {
-                            case "SongMaintenance":
-                                SongMaintenance_Tooltip_Label.Text = "正在從第 " + ChorusSingerList.IndexOf(ChorusSinger) + " 組合唱歌手解析歌手資料,請稍待...";
-                                break;
-                            case "SingerMgr":
-                                SingerMgr_Tooltip_Label.Text = "正在從第 " + ChorusSingerList.IndexOf(ChorusSinger) + " 組合唱歌手解析歌手資料,請稍待...";
-                                break;
-                        }
-                    });
-                }
-
-                foreach (string AddStr in Addlist)
-                {
-                    list = new List<string>(AddStr.Split('|'));
-
-                    switch (list[0])
-                    {
-                        case "ktv_Singer":
-                            cmd.Parameters.AddWithValue("@SingerId", list[1]);
-                            cmd.Parameters.AddWithValue("@SingerName", list[2]);
-                            cmd.Parameters.AddWithValue("@SingerType", list[3]);
-                            cmd.Parameters.AddWithValue("@SingerSpell", list[4]);
-                            cmd.Parameters.AddWithValue("@SingerStrokes", list[5]);
-                            cmd.Parameters.AddWithValue("@SingerSpellNum", list[6]);
-                            cmd.Parameters.AddWithValue("@SingerPenStyle", list[7]);
-
-                            cmd.ExecuteNonQuery();
-                            cmd.Parameters.Clear();
-                            lock (LockThis)
+                            switch (TooltipName)
                             {
-                                Global.TotalList[0]++;
+                                case "SongMaintenance":
+                                    Global.SingerList.Add(row["Singer_Name"].ToString());
+                                    Global.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                                    Global.SingerTypeList.Add(row["Singer_Type"].ToString());
+                                    break;
+                                case "SingerMgr":
+                                    SingerMgr.SingerList.Add(row["Singer_Name"].ToString());
+                                    SingerMgr.SingerLowCaseList.Add(row["Singer_Name"].ToString().ToLower());
+                                    SingerMgr.SingerTypeList.Add(row["Singer_Type"].ToString());
+                                    break;
                             }
-                            break;
+                        }
                     }
-                    this.BeginInvoke((Action)delegate()
+
+                    Addlist = new List<string>();
+
+                    // 判斷是否要加入合唱歌手資料至歌庫歌手資料庫
+
+                    foreach (string ChorusSinger in ChorusSingerList)
                     {
+                        string ChorusSingerName = Regex.Replace(ChorusSinger, @"^\s*|\s*$", ""); //去除頭尾空白
+                        bool AddChorusSinger = false;
+
+                        // 查找資料庫歌手資料表
                         switch (TooltipName)
                         {
                             case "SongMaintenance":
-                                SongMaintenance_Tooltip_Label.Text = "正在從合唱歌手重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                if (Global.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                                {
+                                    if (Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
+                                    {
+                                        SingerName = Global.AllSingerList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                        SingerType = Global.AllSingerTypeList[Global.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                    }
+                                    else
+                                    {
+                                        SingerName = ChorusSingerName;
+                                        SingerType = "10";
+                                    }
+                                    AddChorusSinger = true;
+                                }
                                 break;
                             case "SingerMgr":
-                                SingerMgr_Tooltip_Label.Text = "正在從合唱歌手重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                if (SingerMgr.SingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) < 0)
+                                {
+                                    if (SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower()) >= 0)
+                                    {
+                                        SingerName = SingerMgr.AllSingerList[SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                        SingerType = SingerMgr.AllSingerTypeList[SingerMgr.AllSingerLowCaseList.IndexOf(ChorusSingerName.ToLower())];
+                                    }
+                                    else
+                                    {
+                                        SingerName = ChorusSingerName;
+                                        SingerType = "10";
+                                    }
+                                    AddChorusSinger = true;
+                                }
                                 break;
                         }
-                    });
+
+                        if (AddChorusSinger)
+                        {
+                            if (UnusedSingerId.Count > 0)
+                            {
+                                SingerId = UnusedSingerId[0];
+                                UnusedSingerId.RemoveAt(0);
+                            }
+                            else
+                            {
+                                SingerId = MaxSingerId.ToString();
+                                MaxSingerId++;
+                            }
+
+                            spelllist = new List<string>();
+                            spelllist = CommonFunc.GetSongNameSpell(SingerName);
+                            Addlist.Add("ktv_Singer" + "|" + SingerId + "|" + SingerName + "|" + SingerType + "|" + spelllist[0] + "|" + spelllist[2] + "|" + spelllist[1] + "|" + spelllist[3]);
+                        }
+
+                        this.BeginInvoke((Action)delegate ()
+                        {
+                            switch (TooltipName)
+                            {
+                                case "SongMaintenance":
+                                    SongMaintenance_Tooltip_Label.Text = "正在從第 " + ChorusSingerList.IndexOf(ChorusSinger) + " 組合唱歌手解析歌手資料,請稍待...";
+                                    break;
+                                case "SingerMgr":
+                                    SingerMgr_Tooltip_Label.Text = "正在從第 " + ChorusSingerList.IndexOf(ChorusSinger) + " 組合唱歌手解析歌手資料,請稍待...";
+                                    break;
+                            }
+                        });
+                    }
+
+                    using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                    {
+                        string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
+                        string sqlValuesStr = "@SingerId, @SingerName, @SingerType, @SingerSpell, @SingerStrokes, @SingerSpellNum, @SingerPenStyle";
+                        string SingerAddSqlStr = "insert into ktv_Singer ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+                        using (OleDbCommand cmd = new OleDbCommand(SingerAddSqlStr, conn))
+                        {
+                            foreach (string AddStr in Addlist)
+                            {
+                                list = new List<string>(AddStr.Split('|'));
+
+                                switch (list[0])
+                                {
+                                    case "ktv_Singer":
+                                        cmd.Parameters.AddWithValue("@SingerId", list[1]);
+                                        cmd.Parameters.AddWithValue("@SingerName", list[2]);
+                                        cmd.Parameters.AddWithValue("@SingerType", list[3]);
+                                        cmd.Parameters.AddWithValue("@SingerSpell", list[4]);
+                                        cmd.Parameters.AddWithValue("@SingerStrokes", list[5]);
+                                        cmd.Parameters.AddWithValue("@SingerSpellNum", list[6]);
+                                        cmd.Parameters.AddWithValue("@SingerPenStyle", list[7]);
+
+                                        cmd.ExecuteNonQuery();
+                                        cmd.Parameters.Clear();
+                                        lock (LockThis) { Global.TotalList[0]++; }
+                                        break;
+                                }
+                                this.BeginInvoke((Action)delegate ()
+                                {
+                                    switch (TooltipName)
+                                    {
+                                        case "SongMaintenance":
+                                            SongMaintenance_Tooltip_Label.Text = "正在從合唱歌手重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                            break;
+                                        case "SingerMgr":
+                                            SingerMgr_Tooltip_Label.Text = "正在從合唱歌手重建第 " + Global.TotalList[0] + " 位歌手資料,請稍待...";
+                                            break;
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    Addlist.Clear();
+                    Addlist = null;
+                    ChorusSingerList.Clear();
+                    ChorusSingerList = null;
                 }
-                Addlist.Clear();
-                ChorusSingerList.Clear();
-                conn.Close();
             }
         }
 
