@@ -2252,7 +2252,6 @@
             this.SongAdd_DataGridView.SelectionChanged += new System.EventHandler(this.SongAdd_DataGridView_SelectionChanged);
             this.SongAdd_DataGridView.Sorted += new System.EventHandler(this.SongAdd_DataGridView_Sorted);
             this.SongAdd_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SongAdd_DataGridView_KeyDown);
-            this.SongAdd_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SongAdd_DataGridView_MouseUp);
             // 
             // SongAdd_Edit_GroupBox
             // 
