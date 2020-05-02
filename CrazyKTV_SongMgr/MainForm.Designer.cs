@@ -3182,7 +3182,6 @@
             this.SingerMgr_DataGridView.SelectionChanged += new System.EventHandler(this.SingerMgr_DataGridView_SelectionChanged);
             this.SingerMgr_DataGridView.Sorted += new System.EventHandler(this.SingerMgr_DataGridView_Sorted);
             this.SingerMgr_DataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SingerMgr_DataGridView_KeyDown);
-            this.SingerMgr_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SingerMgr_DataGridView_MouseUp);
             // 
             // SingerMgr_Query_GroupBox
             // 

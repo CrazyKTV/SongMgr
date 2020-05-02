@@ -192,33 +192,6 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SingerMgr_DataGridView_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (SingerMgr_EditMode_CheckBox.Checked == true)
-            {
-                int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
-
-                if (SelectedRowsCount > 1)
-                {
-                    Global.SingerMgrDataGridViewSelectList = new List<string>();
-
-                    foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
-                    {
-                        string SingerId = row.Cells["Singer_Id"].Value.ToString();
-                        int SingerType = Convert.ToInt32(row.Cells["Singer_Type"].Value);
-                        string SingerName = row.Cells["Singer_Name"].Value.ToString();
-                        string SingerSpell = row.Cells["Singer_Spell"].Value.ToString();
-                        string SingerStrokes = row.Cells["Singer_Strokes"].Value.ToString();
-                        string SingerSpellNum = row.Cells["Singer_SpellNum"].Value.ToString();
-                        string SingerPenStyle = row.Cells["Singer_PenStyle"].Value.ToString();
-
-                        string SelectValue = SingerId + "|" + SingerType + "|" + SingerName + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle;
-                        Global.SingerMgrDataGridViewSelectList.Add(SelectValue);
-                    }
-                }
-            }
-        }
-
         #endregion
 
         #region --- SingerMgr 列表鍵盤點擊狀態事件 ---
@@ -325,6 +298,22 @@ namespace CrazyKTV_SongMgr
                         SingerMgr_EditSingerImg_Panel.Enabled = false;
                         SingerMgr_EditSingerImg_Panel.BackColor = Color.Transparent;
                         SingerMgr_EditSingerImg_Panel.BackgroundImage = null;
+                    }
+
+                    Global.SingerMgrDataGridViewSelectList = new List<string>();
+
+                    foreach (DataGridViewRow row in SingerMgr_DataGridView.SelectedRows)
+                    {
+                        string SingerId = row.Cells["Singer_Id"].Value.ToString();
+                        int SingerType = Convert.ToInt32(row.Cells["Singer_Type"].Value);
+                        string SingerName = row.Cells["Singer_Name"].Value.ToString();
+                        string SingerSpell = row.Cells["Singer_Spell"].Value.ToString();
+                        string SingerStrokes = row.Cells["Singer_Strokes"].Value.ToString();
+                        string SingerSpellNum = row.Cells["Singer_SpellNum"].Value.ToString();
+                        string SingerPenStyle = row.Cells["Singer_PenStyle"].Value.ToString();
+
+                        string SelectValue = SingerId + "|" + SingerType + "|" + SingerName + "|" + SingerSpell + "|" + SingerStrokes + "|" + SingerSpellNum + "|" + SingerPenStyle;
+                        Global.SingerMgrDataGridViewSelectList.Add(SelectValue);
                     }
                 }
                 else if (SelectedRowsCount == 1)

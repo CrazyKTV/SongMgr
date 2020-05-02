@@ -278,8 +278,6 @@ namespace CrazyKTV_SongMgr
 
                 int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
                 SingerMgr_DataGridView_SelectionChanged(new object(), new EventArgs());
-                if (SelectedRowsCount > 1) SingerMgr_DataGridView_MouseUp(new object(), null);
-
                 SingerMgr_Tooltip_Label.Text = "已進入編輯模式...";
             }
             else
