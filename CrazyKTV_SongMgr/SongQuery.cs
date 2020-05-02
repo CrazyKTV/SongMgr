@@ -62,7 +62,6 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
                     SongQuery_Query_Button.PerformClick();
-                    SongQuery_DataGridView.Focus();
                     break;
                 case "5":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
@@ -73,7 +72,6 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
                     SongQuery_Query_Button.PerformClick();
-                    SongQuery_DataGridView.Focus();
                     break;
                 case "6":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
@@ -84,7 +82,6 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
                     SongQuery_Query_Button.PerformClick();
-                    SongQuery_DataGridView.Focus();
                     break;
                 case "7":
                     SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
@@ -143,7 +140,6 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Paste_Button.Enabled = false;
                     SongQuery_Clear_Button.Enabled = false;
                     SongQuery_Query_Button.PerformClick();
-                    SongQuery_DataGridView.Focus();
                     break;
             }
         }
@@ -358,6 +354,7 @@ namespace CrazyKTV_SongMgr
                         SongQuery_QueryType_ComboBox.SelectedIndexChanged += new EventHandler(SongQuery_QueryType_ComboBox_SelectedIndexChanged);
                         Common_SwitchSetUI(true);
                         SongQuery_Query_Button.Enabled = true;
+                        if (SongQuery_DataGridView.Rows.Count > 0) SongQuery_DataGridView.Focus();
                     });
                 });
             }
@@ -652,8 +649,6 @@ namespace CrazyKTV_SongMgr
                                         SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                                         SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                     }
-                                    SongQuery_DataGridView.Focus();
-
                                     dt.Dispose();
                                     dt = null;
                                 });
@@ -1429,6 +1424,7 @@ namespace CrazyKTV_SongMgr
                         SongQuery_ExceptionalQuery_ComboBox.SelectedIndexChanged += new EventHandler(SongQuery_ExceptionalQuery_ComboBox_SelectedIndexChanged);
                         Common_SwitchSetUI(true);
                         SongQuery_Query_Button.Enabled = true;
+                        if (SongQuery_DataGridView.Rows.Count > 0) SongQuery_DataGridView.Focus();
                     });
                 });
             }
@@ -2014,7 +2010,6 @@ namespace CrazyKTV_SongMgr
                                     SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                                     SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                 }
-                                SongQuery_DataGridView.Focus();
                                 dt.Dispose();
                                 dt = null;
                             });
@@ -2101,6 +2096,7 @@ namespace CrazyKTV_SongMgr
                         {
                             Common_SwitchSetUI(true);
                             SongQuery_Query_Button.Enabled = true;
+                            if (SongQuery_DataGridView.Rows.Count > 0) SongQuery_DataGridView.Focus();
                         });
                     });
                 }
@@ -2241,7 +2237,6 @@ namespace CrazyKTV_SongMgr
                                         SongFullPath = SongQuery_DataGridView.Rows[i].Cells["Song_Path"].Value.ToString() + SongQuery_DataGridView.Rows[i].Cells["Song_FileName"].Value.ToString();
                                         SongQuery_DataGridView.Rows[i].Cells["Song_FullPath"].Value = SongFullPath;
                                     }
-                                    SongQuery_DataGridView.Focus();
                                     dt.Dispose();
                                 }
                             }
@@ -2276,41 +2271,40 @@ namespace CrazyKTV_SongMgr
 
         private void SongQuery_FavoriteAdd(object SongIdlist, object UserId)
         {
-            DataTable dt = new DataTable();
-            string SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, "");
-
             List<string> SongIdAddlist = (List<string>)SongIdlist;
-
-            var query = from row in dt.AsEnumerable()
-                        where row.Field<string>("User_Id").Equals((string)UserId)
-                        select row;
-
-            foreach (DataRow row in query)
+            string SongQuerySqlStr = "select User_Id, Song_Id from ktv_Favorite";
+            using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
             {
-                if (SongIdAddlist.Contains(row["Song_Id"].ToString()))
+                var query = from row in dt.AsEnumerable()
+                            where row.Field<string>("User_Id").Equals((string)UserId)
+                            select row;
+
+                foreach (DataRow row in query)
                 {
-                    SongIdAddlist.Remove(row["Song_Id"].ToString());
+                    if (SongIdAddlist.Contains(row["Song_Id"].ToString()))
+                    {
+                        SongIdAddlist.Remove(row["Song_Id"].ToString());
+                    }
                 }
             }
 
-            dt.Dispose();
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "User_Id, Song_Id";
-            string sqlValuesStr = "@UserId, @SongId";
-            string FavoriteAddSqlStr = "insert into ktv_Favorite ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
-            cmd = new OleDbCommand(FavoriteAddSqlStr, conn);
-
-            foreach (string str in SongIdAddlist)
+            using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
             {
-                cmd.Parameters.AddWithValue("@UserId", (string)UserId);
-                cmd.Parameters.AddWithValue("@SongId", str);
-                cmd.ExecuteNonQuery();
-                cmd.Parameters.Clear();
+                OleDbCommand cmd = new OleDbCommand();
+                string sqlColumnStr = "User_Id, Song_Id";
+                string sqlValuesStr = "@UserId, @SongId";
+                string FavoriteAddSqlStr = "insert into ktv_Favorite ( " + sqlColumnStr + " ) values ( " + sqlValuesStr + " )";
+                using (cmd = new OleDbCommand(FavoriteAddSqlStr, conn))
+                {
+                    foreach (string str in SongIdAddlist)
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", (string)UserId);
+                        cmd.Parameters.AddWithValue("@SongId", str);
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                    }
+                }
             }
-            conn.Close();
         }
 
         #endregion
