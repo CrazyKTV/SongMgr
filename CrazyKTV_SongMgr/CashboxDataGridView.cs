@@ -111,33 +111,6 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void Cashbox_DataGridView_MouseUp(object sender, MouseEventArgs e)
-        {
-            #if DEBUG
-            if (Cashbox_EditMode_CheckBox.Checked == true)
-            {
-                int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
-
-                if (SelectedRowsCount > 1)
-                {
-                    Global.CashboxDataGridViewSelectList = new List<string>();
-
-                    foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
-                    {
-                        string SongId = row.Cells["Cashbox_Id"].Value.ToString();
-                        string SongLang = row.Cells["Song_Lang"].Value.ToString();
-                        string SongSinger = row.Cells["Song_Singer"].Value.ToString();
-                        string SongSongName = row.Cells["Song_SongName"].Value.ToString();
-                        string SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
-
-                        string SelectValue = SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongCreatDate;
-                        Global.CashboxDataGridViewSelectList.Add(SelectValue);
-                    }
-                }
-            }
-            #endif
-        }
-
         #endregion
 
         #region --- Cashbox 列表選取項目變更事件 ---
@@ -172,6 +145,20 @@ namespace CrazyKTV_SongMgr
                         Cashbox_EditSongCreatDate_DateTimePicker.Value = DateTime.Now;
                         Cashbox_EditSongSinger_TextBox.Text = "";
                         Cashbox_EditSongSongName_TextBox.Text = "";
+                    }
+
+                    Global.CashboxDataGridViewSelectList = new List<string>();
+
+                    foreach (DataGridViewRow row in Cashbox_DataGridView.SelectedRows)
+                    {
+                        string SongId = row.Cells["Cashbox_Id"].Value.ToString();
+                        string SongLang = row.Cells["Song_Lang"].Value.ToString();
+                        string SongSinger = row.Cells["Song_Singer"].Value.ToString();
+                        string SongSongName = row.Cells["Song_SongName"].Value.ToString();
+                        string SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
+
+                        string SelectValue = SongId + "|" + SongLang + "|" + SongSinger + "|" + SongSongName + "|" + SongCreatDate;
+                        Global.CashboxDataGridViewSelectList.Add(SelectValue);
                     }
                 }
                 else if (SelectedRowsCount == 1)

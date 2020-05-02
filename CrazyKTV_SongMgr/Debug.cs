@@ -1076,8 +1076,6 @@ namespace CrazyKTV_SongMgr
 
                 int SelectedRowsCount = Cashbox_DataGridView.SelectedRows.Count;
                 Cashbox_DataGridView_SelectionChanged(new object(), new EventArgs());
-                if (SelectedRowsCount > 1) Cashbox_DataGridView_MouseUp(new object(), null);
-
                 Cashbox_QueryStatus_Label.Text = "已進入編輯模式...";
             }
             else

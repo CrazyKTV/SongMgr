@@ -6509,7 +6509,6 @@
             this.Cashbox_DataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.Cashbox_DataGridView_RowPrePaint);
             this.Cashbox_DataGridView.SelectionChanged += new System.EventHandler(this.Cashbox_DataGridView_SelectionChanged);
             this.Cashbox_DataGridView.Sorted += new System.EventHandler(this.Cashbox_DataGridView_Sorted);
-            this.Cashbox_DataGridView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cashbox_DataGridView_MouseUp);
             // 
             // Cashbox_Edit_GroupBox
             // 
