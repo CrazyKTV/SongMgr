@@ -690,7 +690,6 @@ namespace CrazyKTV_SongMgr
                 Global.SongQueryMultiEdit = false;
                 SongQuery_InitializeEditControl();
 
-                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
                 SongQuery_DataGridView_SelectionChanged(new object(), new EventArgs());
                 SongQuery_QueryStatus_Label.Text = "已進入編輯模式...";
             }
@@ -2255,9 +2254,8 @@ namespace CrazyKTV_SongMgr
         private void SongQuery_FavoriteRemove(object SongIdlist, object UserId)
         {
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
             string FavoriteRemoveSqlStr = "delete from ktv_Favorite where User_Id = @UserId and Song_Id = @SongId";
-            cmd = new OleDbCommand(FavoriteRemoveSqlStr, conn);
+            OleDbCommand cmd = new OleDbCommand(FavoriteRemoveSqlStr, conn);
 
             foreach (string str in (List<string>)SongIdlist)
             {
@@ -2356,7 +2354,6 @@ namespace CrazyKTV_SongMgr
             {
                 if (Global.SongQueryDataGridViewSelectList.Count <= 0) return;
                 int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
-                string SongSinger = SongQuery_EditSongSinger_TextBox.Text;
 
                 if (SelectedRowsCount > 1)
                 {
@@ -2401,13 +2398,11 @@ namespace CrazyKTV_SongMgr
                 {
                     string SongSongName = SongQuery_EditSongSongName_TextBox.Text;
                     // 計算歌曲字數
-                    List<string> SongWordCountList = new List<string>();
-                    SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
+                    List<string> SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
                     SongQuery_EditSongWordCount_TextBox.Text = SongWordCountList[0];
 
                     // 取得歌曲拼音
-                    List<string> SongSpellList = new List<string>();
-                    SongSpellList = CommonFunc.GetSongNameSpell(SongSongName);
+                    List<string> SongSpellList = CommonFunc.GetSongNameSpell(SongSongName);
                     SongQuery_EditSongSpell_TextBox.Text = SongSpellList[0];
 
                     if (Global.SongMgrSongAddMode != "3" && Global.SongMgrSongAddMode != "4") SongQuery_RefreshSongSrcPathTextBox();
@@ -2939,7 +2934,7 @@ namespace CrazyKTV_SongMgr
                 switch (ValueType)
                 {
                     case "SongType":
-                        string str = "";
+                        string str;
                         if (Global.SongMgrSongType != "") { str = "無類別," + Global.SongMgrSongType; } else { str = "無類別"; }
 
                         List<string> valuelist = new List<string>(str.Split(','));

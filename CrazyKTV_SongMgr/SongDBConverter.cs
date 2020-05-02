@@ -24,9 +24,9 @@ namespace CrazyKTV_SongMgr
             
             if (opd.ShowDialog() == DialogResult.OK && opd.FileName.Length > 0)
             {
-                List<string> list = new List<string>();
-                string SongQuerySqlStr = "";
-                
+                List<string> list;
+                string SongQuerySqlStr;
+
                 switch (SongDBConverter_SrcDBType_ComboBox.SelectedValue.ToString())
                 {
                     case "2":
@@ -228,8 +228,7 @@ namespace CrazyKTV_SongMgr
                     };
 
                     int cboxvalue = 0;
-                    List<int> list = new List<int>();
-                    list = new List<int>() { 1, 2, 3, 6, 5, 4, 10, 9, 10 };
+                    List<int> list = new List<int>() { 1, 2, 3, 6, 5, 4, 10, 9, 10 };
 
                     foreach (ComboBox cbox in SongDBConverter_JetktvLang_ComboBox)
                     {
@@ -360,7 +359,7 @@ namespace CrazyKTV_SongMgr
             string SongSrcDBFile = SongDBConverter_SrcDBFile_TextBox.Text;
             string SongDestDBFile = SongDBConverter_DestDBFile_TextBox.Text;
 
-            SongDBConverterSongDB.CreateSongDataTable((int)DBType, SongSrcDBFile, SongDestDBFile);
+            SongDBConverterSongDB.CreateSongDataTable((int)DBType, SongSrcDBFile);
 
             int count = Global.SongSrcDT.Rows.Count;
 
@@ -551,8 +550,6 @@ namespace CrazyKTV_SongMgr
 
         public static DataTable GetSongLangList()
         {
-            List<string> list = new List<string>();
-
             DataTable dt = new DataTable();
             dt.Columns.Add(new DataColumn("Display", typeof(string)));
             dt.Columns.Add(new DataColumn("Value", typeof(int)));

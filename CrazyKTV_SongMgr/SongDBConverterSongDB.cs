@@ -12,9 +12,9 @@ namespace CrazyKTV_SongMgr
     {
         private static object LockThis = new object();
 
-        public static void CreateSongDataTable(int SongSrcDBType, string SongSrcDBFile, string SongDestDBFile)
+        public static void CreateSongDataTable(int SongSrcDBType, string SongSrcDBFile)
         {
-            string SongQuerySqlStr = "";
+            string SongQuerySqlStr;
             switch (SongSrcDBType)
             {
                 case 1:
@@ -149,7 +149,7 @@ namespace CrazyKTV_SongMgr
                         {
                             if (File.Exists(Path.Combine(JetktvPath, SongFileName + format)))
                             {
-                                SongFileName = SongFileName + format;
+                                SongFileName += format;
                                 SongPath = JetktvPath + @"\";
                                 break;
                             }
@@ -383,7 +383,7 @@ namespace CrazyKTV_SongMgr
                         {
                             if (File.Exists(Path.Combine(HK2SongPath, SongFileName + format)))
                             {
-                                SongFileName = SongFileName + format;
+                                SongFileName += format;
                                 SongPath = HK2SongPath + @"\";
                                 break;
                             }

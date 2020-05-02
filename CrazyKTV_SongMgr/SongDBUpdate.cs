@@ -29,9 +29,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 TableList.Clear();
-                TableList = null;
                 SongMgrDBTableList.Clear();
-                SongMgrDBTableList = null;
             }
         }
 
@@ -70,7 +68,6 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 TableList.Clear();
-                TableList = null;
 
                 TableList = new List<string>() { "ktv_AllSinger", "ktv_Cashbox", "ktv_Phonetics", "ktv_SongMgr", "ktv_Version" };
                 List<string> SongMgrDBTableList = new List<string>(CommonFunc.GetOleDbTableList(Global.CrazyktvSongMgrDatabaseFile, ""));
@@ -83,14 +80,12 @@ namespace CrazyKTV_SongMgr
                     }
                 }
                 TableList.Clear();
-                TableList = null;
 
                 if (!Global.CrazyktvDatabaseError)
                 {
                     List<string> ktvLangauageColumnList = new List<string>(CommonFunc.GetOleDbColumnList(Global.CrazyktvDatabaseFile, "", "ktv_Langauage"));
                     if (ktvLangauageColumnList.IndexOf("Langauage_KeyWord") >= 0) Col_Langauage_KeyWord = true;
                     ktvLangauageColumnList.Clear();
-                    ktvLangauageColumnList = null;
 
                     if (CrazyktvDBTableList.IndexOf("ktv_AllSinger") >= 0) TB_ktv_AllSinger = true;
                     if (CrazyktvDBTableList.IndexOf("ktv_Version") >= 0) TB_ktv_Version = true;
@@ -105,13 +100,10 @@ namespace CrazyKTV_SongMgr
                         if (ktvSongColumnList.IndexOf(ColumnName) >= 0) Col_GodLiu = true;
                     }
                     GodLiuColumnList.Clear();
-                    GodLiuColumnList = null;
                     ktvSongColumnList.Clear();
-                    ktvSongColumnList = null;
                     if (TB_ktv_AllSinger || TB_ktv_Version || !Col_Song_ReplayGain || Col_Song_MeanVolume || !Col_Langauage_KeyWord || Col_GodLiu) Global.CrazyktvDatabaseIsOld = true;
                 }
                 CrazyktvDBTableList.Clear();
-                CrazyktvDBTableList = null;
             }
 
             // 檢查歌庫資料夾
@@ -148,21 +140,21 @@ namespace CrazyKTV_SongMgr
                 MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
                 SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
-                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("RemovektvVersion"));
+                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile());
             }
             else if (CrazyKTVDatabaseFile && !Global.CrazyktvDatabaseError && !Global.SongMgrDatabaseError && TB_ktv_AllSinger)
             {
                 MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
                 SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
-                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("RemovektvAllSinger"));
+                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile());
             }
             else if (CrazyKTVDatabaseFile && !Global.CrazyktvDatabaseError && !Global.SongMgrDatabaseError && Global.CrazyktvDatabaseIsOld)
             {
                 MainTabControl.SelectedIndex = MainTabControl.TabPages.IndexOf(SongMaintenance_TabPage);
                 SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                 SongMaintenance_DBVerTooltip_Label.Text = "偵測到資料庫結構更動,開始進行更新...";
-                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("UpdateVersion"));
+                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile());
             }
             else
             {
@@ -219,7 +211,7 @@ namespace CrazyKTV_SongMgr
                                                 SongMaintenance_TabControl.SelectedIndex = SongMaintenance_TabControl.TabPages.IndexOf(SongMaintenance_DBVer_TabPage);
                                                 SongMaintenance_DBVerTooltip_Label.Text = "開始進行歌庫版本更新...";
                                                 UpdateDBStatus = true;
-                                                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile("UpdateVersion"));
+                                                var UpdateDBTask = Task.Factory.StartNew(() => SongDBUpdate_UpdateDatabaseFile());
                                             }
                                         });
                                     }
@@ -233,7 +225,7 @@ namespace CrazyKTV_SongMgr
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:必須檢閱 SQL 查詢中是否有安全性弱點")]
-        private void SongDBUpdate_UpdateDatabaseFile(string UpdateType)
+        private void SongDBUpdate_UpdateDatabaseFile()
         {
             Global.TimerStartTime = DateTime.Now;
 

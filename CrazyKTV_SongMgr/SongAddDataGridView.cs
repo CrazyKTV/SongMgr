@@ -16,7 +16,7 @@ namespace CrazyKTV_SongMgr
         private void SongAdd_DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             int val;
-            string valStr = "";
+            string valStr;
             switch (SongAdd_DataGridView.Columns[e.ColumnIndex].Name)
             {
                 case "Song_AddStatus":

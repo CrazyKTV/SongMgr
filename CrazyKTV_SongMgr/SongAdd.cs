@@ -1139,7 +1139,6 @@ namespace CrazyKTV_SongMgr
             {
                 if (Global.SongAddDataGridViewSelectList.Count <= 0) return;
                 int SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
-                string SongSinger = SongAdd_EditSongSinger_TextBox.Text;
 
                 if (SelectedRowsCount > 1)
                 {
@@ -1176,13 +1175,11 @@ namespace CrazyKTV_SongMgr
                 {
                     string SongSongName = SongAdd_EditSongSongName_TextBox.Text;
                     // 計算歌曲字數
-                    List<string> SongWordCountList = new List<string>();
-                    SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
+                    List<string> SongWordCountList = CommonFunc.GetSongWordCount(SongSongName);
                     SongAdd_EditSongWordCount_TextBox.Text = SongWordCountList[0];
 
                     // 取得歌曲拼音
-                    List<string> SongSpellList = new List<string>();
-                    SongSpellList = CommonFunc.GetSongNameSpell(SongSongName);
+                    List<string> SongSpellList = CommonFunc.GetSongNameSpell(SongSongName);
                     SongAdd_EditSongSpell_TextBox.Text = SongSpellList[0];
                 }
             }

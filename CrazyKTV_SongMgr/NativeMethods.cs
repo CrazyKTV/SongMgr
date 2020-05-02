@@ -188,7 +188,7 @@ namespace CrazyKTV_SongMgr
                     }
                 }
 
-                POINT p = default(POINT);
+                POINT p = default;
                 DragQueryPoint(m.WParam, ref p);
                 DragFinish(m.WParam);
 

@@ -12,17 +12,17 @@ namespace CrazyKTV_SongMgr
 {
     public partial class DShowForm : Form
     {
-        string SongId;
-        string SongLang;
-        string SongSinger;
-        string SongSongName;
-        string SongTrack;
-        string SongVolume;
-        string SongReplayGain;
-        string SongFilePath;
-        string dvRowIndex;
-        string UpdateSongTrack;
-        string UpdateDataGridView;
+        private string SongId;
+        private string SongLang;
+        private string SongSinger;
+        private string SongSongName;
+        private string SongTrack;
+        private string SongVolume;
+        private string SongReplayGain;
+        private string SongFilePath;
+        private string dvRowIndex;
+        private string UpdateSongTrack;
+        private string UpdateDataGridView;
 
         private MediaUriElement mediaUriElement;
         private System.Timers.Timer mouseClickTimer;
@@ -258,7 +258,7 @@ namespace CrazyKTV_SongMgr
 
         private void Player_SwithChannel_Button_Click(object sender, EventArgs e)
         {
-            string ChannelValue = string.Empty;
+            string ChannelValue;
 
             if (mediaUriElement.AudioTrackList.Count > 1)
             {
@@ -325,8 +325,10 @@ namespace CrazyKTV_SongMgr
         {
             if (mouseClickTimer == null)
             {
-                mouseClickTimer = new System.Timers.Timer();
-                mouseClickTimer.Interval = SystemInformation.DoubleClickTime;
+                mouseClickTimer = new System.Timers.Timer
+                {
+                    Interval = SystemInformation.DoubleClickTime
+                };
                 mouseClickTimer.Elapsed += new System.Timers.ElapsedEventHandler(mouseClickTimer_Tick);
             }
 

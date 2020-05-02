@@ -276,7 +276,6 @@ namespace CrazyKTV_SongMgr
                 Global.SingerMgrMultiEdit = false;
                 SingerMgr_InitializeEditControl();
 
-                int SelectedRowsCount = SingerMgr_DataGridView.SelectedRows.Count;
                 SingerMgr_DataGridView_SelectionChanged(new object(), new EventArgs());
                 SingerMgr_Tooltip_Label.Text = "已進入編輯模式...";
             }
@@ -617,12 +616,10 @@ namespace CrazyKTV_SongMgr
         private void SingerMgr_SingerRemoveTask(object SingerIdlist)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-            OleDbConnection conn = new OleDbConnection();
-            conn = CommonFunc.OleDbOpenConn((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, "");
-            
-            OleDbCommand cmd = new OleDbCommand();
+
+            OleDbConnection conn = CommonFunc.OleDbOpenConn((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, "");
             string SingerRemoveSqlStr = "delete from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " where Singer_Id = @SingerId";
-            cmd = new OleDbCommand(SingerRemoveSqlStr, conn);
+            OleDbCommand cmd = new OleDbCommand(SingerRemoveSqlStr, conn);
 
             foreach (string str in (List<string>)SingerIdlist)
             {
@@ -747,12 +744,10 @@ namespace CrazyKTV_SongMgr
         private void SingerMgr_SingerExport_Button_Click(object sender, EventArgs e)
         {
             List<string> list = new List<string>();
-            string SingerQuerySqlStr = "";
-            DataTable dt = new DataTable();
 
             string sqlColumnStr = "Singer_Id, Singer_Name, Singer_Type, Singer_Spell, Singer_Strokes, Singer_SpellNum, Singer_PenStyle";
-            SingerQuerySqlStr = "select " + sqlColumnStr + " from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " order by Singer_Type, Singer_Name";
-            dt = CommonFunc.GetOleDbDataTable((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, SingerQuerySqlStr, "");
+            string SingerQuerySqlStr = "select " + sqlColumnStr + " from " + ((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? "ktv_Singer" : "ktv_AllSinger") + " order by Singer_Type, Singer_Name";
+            DataTable dt = CommonFunc.GetOleDbDataTable((Global.SingerMgrDefaultSingerDataTable == "ktv_Singer") ? Global.CrazyktvDatabaseFile : Global.CrazyktvSongMgrDatabaseFile, SingerQuerySqlStr, "");
 
             if (dt.Rows.Count > 0)
             {
@@ -773,7 +768,6 @@ namespace CrazyKTV_SongMgr
             sw.Close();
             list.Clear();
             dt.Dispose();
-            dt = null;
         }
 
         private void SingerMgr_SingerImport_Button_Click(object sender, EventArgs e)
@@ -1111,8 +1105,7 @@ namespace CrazyKTV_SongMgr
                 {
                     string SingerName = SingerMgr_EditSingerName_TextBox.Text;
                     // 取得歌手拼音
-                    List<string> SingerSpellList = new List<string>();
-                    SingerSpellList = CommonFunc.GetSongNameSpell(SingerName);
+                    List<string> SingerSpellList = CommonFunc.GetSongNameSpell(SingerName);
                     SingerMgr_EditSingerSpell_TextBox.Text = SingerSpellList[0];
                 }
             }

@@ -1370,7 +1370,7 @@ namespace CrazyKTV_SongMgr
                 DirectoryInfo dirinfo = new DirectoryInfo(dir);
                 if ((dirinfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                 {
-                    dirinfo.Attributes = dirinfo.Attributes & ~FileAttributes.ReadOnly;
+                    dirinfo.Attributes &= ~FileAttributes.ReadOnly;
                 }
 
                 try
@@ -1505,12 +1505,10 @@ namespace CrazyKTV_SongMgr
         private void SongMaintenance_RemoteCfgExport_Button_Click(object sender, EventArgs e)
         {
             List<string> list = new List<string>();
-            string RemoteQuerySqlStr = "";
-            DataTable dt = new DataTable();
 
             string sqlColumnStr = "Remote_Id, Remote_Subject, Remote_Controler, Remote_Controler2, Remote_Name";
-            RemoteQuerySqlStr = "select " + sqlColumnStr + " from ktv_Remote";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, RemoteQuerySqlStr, "");
+            string RemoteQuerySqlStr = "select " + sqlColumnStr + " from ktv_Remote";
+            DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, RemoteQuerySqlStr, "");
 
             if (dt.Rows.Count > 0)
             {
@@ -1633,12 +1631,10 @@ namespace CrazyKTV_SongMgr
         private void SongMaintenance_PhoneticsExport_Button_Click(object sender, EventArgs e)
         {
             List<string> list = new List<string>();
-            string PhoneticsQuerySqlStr = "";
-            DataTable dt = new DataTable();
 
             string sqlColumnStr = "Word, Code, Spell, PenStyle, SortIdx, Strokes";
-            PhoneticsQuerySqlStr = "select " + sqlColumnStr + " from ktv_Phonetics order by Code, SortIdx";
-            dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, PhoneticsQuerySqlStr, "");
+            string PhoneticsQuerySqlStr = "select " + sqlColumnStr + " from ktv_Phonetics order by Code, SortIdx";
+            DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, PhoneticsQuerySqlStr, "");
 
             if (dt.Rows.Count > 0)
             {
@@ -3842,10 +3838,9 @@ namespace CrazyKTV_SongMgr
             }
 
             OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
             string sqlColumnStr = "Langauage_Name = @LangauageName, Langauage_KeyWord = @LangauageKeyWord";
             string SongUpdateSqlStr = "update ktv_Langauage set " + sqlColumnStr + " where Langauage_Id = @LangauageId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
+            OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn);
 
             foreach (string str in Global.CrazyktvSongLangList)
             {

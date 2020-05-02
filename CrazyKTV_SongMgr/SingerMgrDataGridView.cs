@@ -17,7 +17,7 @@ namespace CrazyKTV_SongMgr
         private void SingerMgr_DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             int val;
-            string valStr = "";
+            string valStr;
             switch (SingerMgr_DataGridView.Columns[e.ColumnIndex].Name)
             {
                 case "Singer_Type":

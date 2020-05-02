@@ -66,7 +66,7 @@ namespace CrazyKTV_SongMgr
                 MainCfg_Tooltip_Label
             };
 
-            int i = 3;
+            int i;
 
             switch (((TextBox)sender).Name)
             {
@@ -1894,7 +1894,7 @@ namespace CrazyKTV_SongMgr
 
         public static OleDbConnection OleDbOpenConn(string Database, string Password)
         {
-            string cnstr = "";
+            string cnstr;
             if (Password != "")
             {
                 cnstr = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Database + ";Jet OLEDB:Database Password=" + Password + ";");
@@ -2063,7 +2063,7 @@ namespace CrazyKTV_SongMgr
         public static string GetSingerTypeStr(int SingerType, int ListType, string IndexOfList)
         {
             string Str;
-            List<string> list = new List<string>();
+            List<string> list;
             if (SingerType < 0) SingerType = 0;
 
             switch (ListType)
@@ -2101,7 +2101,7 @@ namespace CrazyKTV_SongMgr
         public static string GetSongTrackStr(int SongTrack, int ListType, string IndexOfList)
         {
             string Str;
-            List<string> list = new List<string>();
+            List<string> list;
             if (SongTrack < 0 || SongTrack > 5) SongTrack = 0;
 
             switch (ListType)
@@ -2983,7 +2983,7 @@ namespace CrazyKTV_SongMgr
 
         public static string GetWordUnicode(string word)
         {
-            string Unicode = "";
+            string Unicode;
             byte[] UnicodeByte = Encoding.UTF32.GetBytes(word);
             if (UnicodeByte[2] != 00)
             {
@@ -3094,7 +3094,7 @@ namespace CrazyKTV_SongMgr
 
         public static bool DownloadFile(string File, string Url)
         {
-            bool DownloadStatus = false;
+            bool DownloadStatus;
             FileStream FStream = new FileStream(File, FileMode.Create);
 
             try
@@ -3291,7 +3291,7 @@ namespace CrazyKTV_SongMgr
 
         public static string AutoDetectSongTrack(string SongFilePath)
         {
-            string SongTrack = string.Empty;
+            string SongTrack;
             MediaInfo MI = new MediaInfo();
             MI.Open(SongFilePath);
 
@@ -3376,7 +3376,7 @@ namespace CrazyKTV_SongMgr
         {
             string result = string.Empty;
             string findresult = string.Empty;
-            string SongData = string.Empty;
+            string SongData;
             Regex HasWideChar = new Regex("[\x21-\x7E\xFF01-\xFF5E]");
             
             string SongSingerFuzzyStr = Regex.Replace(SongSinger, @"\s?[\{\(\[｛（［【].+?[】］）｝\]\)\}]\s?|\s|" + Global.CashboxNonSymbolList, "");
@@ -3398,7 +3398,7 @@ namespace CrazyKTV_SongMgr
                             List<string> GroupSingerList = new List<string>(Global.SingerGroupList[SingerGroupId].Split(','));
                             if (GroupSingerList.Count > 0)
                             {
-                                string GroupSongData = string.Empty;
+                                string GroupSongData;
                                 foreach (string GroupSinger in GroupSingerList)
                                 {
                                     string GroupSingerName = GroupSinger.ToLower();
@@ -3468,7 +3468,6 @@ namespace CrazyKTV_SongMgr
                     SingerCount += 1;
             }
             SingerList.Clear();
-            SingerList = null;
 
             return (SingerCount == MatchCount) ? true : false;
         }
@@ -4019,18 +4018,15 @@ namespace CrazyKTV_SongMgr
 
         public static List<string> GetChorusSingerList(string SingerString)
         {
-            List<string> list = new List<string>();
-
             string SingerName = SingerString.ToString();
 
             // 特殊歌手及歌曲名稱處理
-            list = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
+            List<string> list = new List<string>(Regex.Split(Global.SongAddSpecialStr, @"\|", RegexOptions.IgnoreCase));
             foreach (string str in list)
             {
                 SingerName = Regex.Replace(SingerName, Regex.Escape(str), "%%" + str + "%%", RegexOptions.IgnoreCase);
             }
             list.Clear();
-            list = null;
 
             string[] singers = Regex.Split(SingerName, "[&+](?=(?:[^%]*%%[^%]*%%)*(?![^%]*%%))", RegexOptions.None);
             list = new List<string>();

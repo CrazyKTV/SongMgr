@@ -64,14 +64,13 @@ namespace CrazyKTV_SongMgr
         private List<string> GetTableNames()
         {
             List<string> tableNames = new List<string>();
-            DataTable dt = null;
 
             // use restrictions to get user tables, not system tables
             // Schema Restrictions  :  http://msdn.microsoft.com/en-us/library/cc716722(v=vs.110).aspx
             string[] restrictions = new string[4] { null, null, null, "Table" };
 
             // get list of user tables
-            dt = oleConn.GetSchema("Tables", restrictions);
+            DataTable dt = oleConn.GetSchema("Tables", restrictions);
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
