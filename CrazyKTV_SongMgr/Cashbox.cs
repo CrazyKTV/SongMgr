@@ -61,7 +61,6 @@ namespace CrazyKTV_SongMgr
                     Cashbox_Paste_Button.Enabled = false;
                     Cashbox_Clear_Button.Enabled = false;
                     Cashbox_Query_Button.PerformClick();
-                    Cashbox_DataGridView.Focus();
                     break;
                 case "5":
                     Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Close;
@@ -72,7 +71,6 @@ namespace CrazyKTV_SongMgr
                     Cashbox_Paste_Button.Enabled = false;
                     Cashbox_Clear_Button.Enabled = false;
                     Cashbox_Query_Button.PerformClick();
-                    Cashbox_DataGridView.Focus();
                     break;
             }
         }
@@ -262,6 +260,7 @@ namespace CrazyKTV_SongMgr
                     {
                         Common_SwitchSetUI(true);
                         Cashbox_Query_Button.Enabled = true;
+                        if (Cashbox_DataGridView.Rows.Count > 0) Cashbox_DataGridView.Focus();
                     });
                 });
             }
@@ -500,7 +499,6 @@ namespace CrazyKTV_SongMgr
                                     int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                     Cashbox_DataGridView.Columns["Song_CreatDate"].MinimumWidth = ColumnWidth_140;
                                     Cashbox_DataGridView.Columns["Song_CreatDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                                    Cashbox_DataGridView.Focus();
 
                                     dt.Dispose();
                                     dt = null;
@@ -832,7 +830,6 @@ namespace CrazyKTV_SongMgr
                                 int ColumnWidth_140 = Convert.ToInt32(140 * Global.DPIScalingFactor * MainUIScale.UIScalingFactor);
                                 Cashbox_DataGridView.Columns["Song_CreatDate"].MinimumWidth = ColumnWidth_140;
                                 Cashbox_DataGridView.Columns["Song_CreatDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                                Cashbox_DataGridView.Focus();
 
                                 dt.Dispose();
                                 dt = null;
