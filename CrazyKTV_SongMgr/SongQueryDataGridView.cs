@@ -440,47 +440,6 @@ namespace CrazyKTV_SongMgr
             }
         }
 
-        private void SongQuery_DataGridView_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (SongQuery_EditMode_CheckBox.Checked == true)
-            {
-                int SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
-
-                if (SelectedRowsCount > 1)
-                {
-                    Global.SongQueryDataGridViewSelectList = new List<string>();
-
-                    foreach (DataGridViewRow row in SongQuery_DataGridView.SelectedRows)
-                    {
-                        string SongId = row.Cells["Song_Id"].Value.ToString();
-                        string SongLang = row.Cells["Song_Lang"].Value.ToString();
-                        int SongSingerType = Convert.ToInt32(row.Cells["Song_SingerType"].Value);
-                        string SongSinger = row.Cells["Song_Singer"].Value.ToString();
-                        string SongSongName = row.Cells["Song_SongName"].Value.ToString();
-                        int SongTrack = Convert.ToInt32(row.Cells["Song_Track"].Value);
-                        string SongSongType = row.Cells["Song_SongType"].Value.ToString();
-                        string SongVolume = row.Cells["Song_Volume"].Value.ToString();
-                        string SongWordCount = row.Cells["Song_WordCount"].Value.ToString();
-                        string SongPlayCount = row.Cells["Song_PlayCount"].Value.ToString();
-                        string SongMB = row.Cells["Song_MB"].Value.ToString();
-                        string SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
-                        string SongFileName = row.Cells["Song_FileName"].Value.ToString();
-                        string SongPath = row.Cells["Song_Path"].Value.ToString();
-                        string SongSpell = row.Cells["Song_Spell"].Value.ToString();
-                        string SongSpellNum = row.Cells["Song_SpellNum"].Value.ToString();
-                        string SongSongStroke = row.Cells["Song_SongStroke"].Value.ToString();
-                        string SongPenStyle = row.Cells["Song_PenStyle"].Value.ToString();
-                        string SongPlayState = row.Cells["Song_PlayState"].Value.ToString();
-                        string SongReplayGain = row.Cells["Song_ReplayGain"].Value.ToString();
-                        string SongSrcPath = Path.Combine(SongPath, SongFileName);
-
-                        string SelectValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongSrcPath + "|" + SongReplayGain;
-                        Global.SongQueryDataGridViewSelectList.Add(SelectValue);
-                    }
-                }
-            }
-        }
-
         #endregion
 
         #region --- SongQuery 列表鍵盤點擊狀態事件 ---
@@ -599,6 +558,35 @@ namespace CrazyKTV_SongMgr
                         SongQuery_EditSongTrack_ComboBox.SelectedValue = 1;
                         SongQuery_EditSongVolume_TextBox.Text = "";
                         SongQuery_EditSongPlayCount_TextBox.Text = "";
+                    }
+                    
+                    Global.SongQueryDataGridViewSelectList = new List<string>();
+                    foreach (DataGridViewRow row in SongQuery_DataGridView.SelectedRows)
+                    {
+                        string SongId = row.Cells["Song_Id"].Value.ToString();
+                        string SongLang = row.Cells["Song_Lang"].Value.ToString();
+                        int SongSingerType = Convert.ToInt32(row.Cells["Song_SingerType"].Value);
+                        string SongSinger = row.Cells["Song_Singer"].Value.ToString();
+                        string SongSongName = row.Cells["Song_SongName"].Value.ToString();
+                        int SongTrack = Convert.ToInt32(row.Cells["Song_Track"].Value);
+                        string SongSongType = row.Cells["Song_SongType"].Value.ToString();
+                        string SongVolume = row.Cells["Song_Volume"].Value.ToString();
+                        string SongWordCount = row.Cells["Song_WordCount"].Value.ToString();
+                        string SongPlayCount = row.Cells["Song_PlayCount"].Value.ToString();
+                        string SongMB = row.Cells["Song_MB"].Value.ToString();
+                        string SongCreatDate = row.Cells["Song_CreatDate"].Value.ToString();
+                        string SongFileName = row.Cells["Song_FileName"].Value.ToString();
+                        string SongPath = row.Cells["Song_Path"].Value.ToString();
+                        string SongSpell = row.Cells["Song_Spell"].Value.ToString();
+                        string SongSpellNum = row.Cells["Song_SpellNum"].Value.ToString();
+                        string SongSongStroke = row.Cells["Song_SongStroke"].Value.ToString();
+                        string SongPenStyle = row.Cells["Song_PenStyle"].Value.ToString();
+                        string SongPlayState = row.Cells["Song_PlayState"].Value.ToString();
+                        string SongReplayGain = row.Cells["Song_ReplayGain"].Value.ToString();
+                        string SongSrcPath = Path.Combine(SongPath, SongFileName);
+
+                        string SelectValue = SongId + "|" + SongLang + "|" + SongSingerType + "|" + SongSinger + "|" + SongSongName + "|" + SongTrack + "|" + SongSongType + "|" + SongVolume + "|" + SongWordCount + "|" + SongPlayCount + "|" + SongMB + "|" + SongCreatDate + "|" + SongFileName + "|" + SongPath + "|" + SongSpell + "|" + SongSpellNum + "|" + SongSongStroke + "|" + SongPenStyle + "|" + SongPlayState + "|" + SongSrcPath + "|" + SongReplayGain;
+                        Global.SongQueryDataGridViewSelectList.Add(SelectValue);
                     }
                 }
                 else if (SelectedRowsCount == 1)
