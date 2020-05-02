@@ -44,7 +44,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Focus();
                     break;
                 case "3":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = true;
                     SongQuery_QueryValue_ComboBox.Visible = false;
@@ -54,7 +54,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_TextBox.Focus();
                     break;
                 case "4":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "*";
                     SongQuery_QueryValue_TextBox.Enabled = false;
                     SongQuery_QueryValue_ComboBox.Visible = false;
@@ -64,7 +64,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Query_Button.PerformClick();
                     break;
                 case "5":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "100";
                     SongQuery_QueryValue_TextBox.Enabled = true;
                     SongQuery_QueryValue_ComboBox.Visible = false;
@@ -74,7 +74,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Query_Button.PerformClick();
                     break;
                 case "6":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "*";
                     SongQuery_QueryValue_TextBox.Enabled = false;
                     SongQuery_QueryValue_ComboBox.Visible = false;
@@ -84,7 +84,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_Query_Button.PerformClick();
                     break;
                 case "7":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = false;
                     SongQuery_QueryValue_TextBox.Visible = false;
@@ -100,7 +100,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
                 case "8":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = false;
                     SongQuery_QueryValue_TextBox.Visible = false;
@@ -116,7 +116,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
                 case "9":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "";
                     SongQuery_QueryValue_TextBox.Enabled = false;
                     SongQuery_QueryValue_TextBox.Visible = false;
@@ -132,7 +132,7 @@ namespace CrazyKTV_SongMgr
                     SongQuery_QueryValue_ComboBox.Focus();
                     break;
                 case "10":
-                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    SongQuery_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     SongQuery_QueryValue_TextBox.Text = "*";
                     SongQuery_QueryValue_TextBox.Enabled = false;
                     SongQuery_QueryValue_ComboBox.Visible = false;

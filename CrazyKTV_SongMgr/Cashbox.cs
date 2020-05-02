@@ -43,7 +43,7 @@ namespace CrazyKTV_SongMgr
                     Cashbox_QueryValue_TextBox.Focus();
                     break;
                 case "3":
-                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     Cashbox_QueryValue_TextBox.Text = "";
                     Cashbox_QueryValue_TextBox.Enabled = true;
                     Cashbox_QueryValue_ComboBox.Visible = false;
@@ -53,7 +53,7 @@ namespace CrazyKTV_SongMgr
                     Cashbox_QueryValue_TextBox.Focus();
                     break;
                 case "4":
-                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     Cashbox_QueryValue_TextBox.Text = "*";
                     Cashbox_QueryValue_TextBox.Enabled = false;
                     Cashbox_QueryValue_ComboBox.Visible = false;
@@ -64,7 +64,7 @@ namespace CrazyKTV_SongMgr
                     Cashbox_DataGridView.Focus();
                     break;
                 case "5":
-                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Off;
+                    Cashbox_QueryValue_TextBox.ImeMode = ImeMode.Close;
                     Cashbox_QueryValue_TextBox.Text = "100";
                     Cashbox_QueryValue_TextBox.Enabled = true;
                     Cashbox_QueryValue_ComboBox.Visible = false;

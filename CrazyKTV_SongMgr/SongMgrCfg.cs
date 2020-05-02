@@ -516,11 +516,11 @@ namespace CrazyKTV_SongMgr
             {
                 case "1":
                     ((TextBox)sender).MaxLength = 5;
-                    ((TextBox)sender).ImeMode = ImeMode.Off;
+                    ((TextBox)sender).ImeMode = ImeMode.Close;
                     break;
                 case "2":
                     ((TextBox)sender).MaxLength = 6;
-                    ((TextBox)sender).ImeMode = ImeMode.Off;
+                    ((TextBox)sender).ImeMode = ImeMode.Close;
                     break;
             }
         }
