@@ -2466,7 +2466,7 @@ namespace CrazyKTV_SongMgr
                 List<string> clist = new List<string>();
                 List<string> tlist = new List<string>();
 
-                if (Environment.OSVersion.Version.Major >= 6)
+                if (CommonFunc.CheckFor45PlusVersion())
                 {
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     HtmlNode table;
@@ -2666,7 +2666,7 @@ namespace CrazyKTV_SongMgr
                 List<string> clist = new List<string>();
                 List<string> tlist = new List<string>();
 
-                if (Environment.OSVersion.Version.Major >= 6)
+                if (CommonFunc.CheckFor45PlusVersion())
                 {
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     HtmlNode table;
@@ -2868,7 +2868,7 @@ namespace CrazyKTV_SongMgr
                 List<string> elist = new List<string>();
                 List<string> jlist = new List<string>();
 
-                if (Environment.OSVersion.Version.Major >= 6)
+                if (CommonFunc.CheckFor45PlusVersion())
                 {
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     HtmlNode table;
@@ -3159,7 +3159,7 @@ namespace CrazyKTV_SongMgr
                 List<string> c56list = new List<string>();
                 List<string> t56list = new List<string>();
 
-                if (Environment.OSVersion.Version.Major >= 6)
+                if (CommonFunc.CheckFor45PlusVersion())
                 {
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     HtmlNode table;

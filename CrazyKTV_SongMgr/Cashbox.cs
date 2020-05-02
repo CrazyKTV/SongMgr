@@ -907,7 +907,7 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                if (Environment.OSVersion.Version.Major >= 6)
+                if (CommonFunc.CheckFor45PlusVersion())
                 {
                     GetDataFromCashboxWeb = true;
                     this.BeginInvoke((Action)delegate ()
