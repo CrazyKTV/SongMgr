@@ -300,7 +300,7 @@ namespace CrazyKTV_SongMgr
                     foreach (string str in list)
                     {
                         string SingerStr = Regex.Replace(str, @"^\s*|\s*$", ""); //去除頭尾空白
-                        if (ChorusSingerList.IndexOf(SingerStr) < 0)
+                        if (ChorusSingerList.ConvertAll(x => x.ToLower()).IndexOf(SingerStr.ToLower()) < 0)
                         {
                             ChorusSingerList.Add(SingerStr);
                         }
