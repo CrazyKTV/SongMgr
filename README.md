@@ -39,12 +39,25 @@ Windows 10 內建 .NET 4.6 版本,你也可以升級為 [Microsoft .NET Framewor
 ## 下載與使用
 * 下載位址: [CrazyKTV_WebUpdater.exe](https://github.com/CrazyKTV/WebUpdater/raw/master/CrazyKTV_WebUpdater/UpdateFile/CrazyKTV_WebUpdater.exe)
 
-**使用說明:**
+**初次使用:**
 
 1. 建立 CrazyKTV 資料夾
 2. 將 CrazyKTV_WebUpdater.exe 拷貝至 CrazyKTV 資料夾
 3. 執行 CrazyKTV_WebUpdater.exe 檔案以自動下載所有檔案
 4. 執行 CrazyKTV_SongMgr.exe 檔案 (加歌程式)
+
+**重置更新:**
+
+1. 備份 CrazyKTV.cfg 、 CrazyKTV_SongMgr.cfg 、 CrazySong.mdb 三個檔案
+2. 將 CrazyKTV 資料夾內的檔案全部刪除
+3. 將 CrazyKTV_WebUpdater.exe 拷貝至 CrazyKTV 資料夾
+4. 執行 CrazyKTV_WebUpdater.exe 檔案以自動下載所有檔案
+5. 將 CrazyKTV.cfg 、 CrazyKTV_SongMgr.cfg 、 CrazySong.mdb 三個備份檔案拷貝至 CrazyKTV 資料夾
+6. 執行 CrazyKTV_SongMgr.exe 檔案 (加歌程式)
+
+**一般更新:**
+
+1. 執行 CrazyKTV_WebUpdater.exe 檔案後即會自動更新所有檔案
 
 ## 功能需求或問題回報
 * 如果你有註冊 GitHub 帳號,可直接在 [Issues](https://github.com/KenLuoTW/CrazyKTVSongMgr/issues) 裡回報。
