@@ -129,11 +129,25 @@ namespace CrazyKTV_SongMgr
                 switch (SongTrack)
                 {
                     case "1":
-                        if (mediaUriElement.AudioTrackList.IndexOf(mediaUriElement.AudioTrack) != mediaUriElement.AudioTrackList[0]) mediaUriElement.AudioTrack = mediaUriElement.AudioTrackList[0];
+                        if (Global.SongMgrSongTrackMode == "True")
+                        {
+                            if (mediaUriElement.AudioTrackList.IndexOf(mediaUriElement.AudioTrack) != mediaUriElement.AudioTrackList[0]) mediaUriElement.AudioTrack = mediaUriElement.AudioTrackList[0];
+                        }
+                        else
+                        {
+                            if (mediaUriElement.AudioTrackList.IndexOf(mediaUriElement.AudioTrack) != mediaUriElement.AudioTrackList[1]) mediaUriElement.AudioTrack = mediaUriElement.AudioTrackList[1];
+                        }
                         ChannelValue = "1";
                         break;
                     case "2":
-                        if (mediaUriElement.AudioTrackList.IndexOf(mediaUriElement.AudioTrack) != mediaUriElement.AudioTrackList[1]) mediaUriElement.AudioTrack = mediaUriElement.AudioTrackList[1];
+                        if (Global.SongMgrSongTrackMode == "True")
+                        {
+                            if (mediaUriElement.AudioTrackList.IndexOf(mediaUriElement.AudioTrack) != mediaUriElement.AudioTrackList[1]) mediaUriElement.AudioTrack = mediaUriElement.AudioTrackList[1];
+                        }
+                        else
+                        {
+                            if (mediaUriElement.AudioTrackList.IndexOf(mediaUriElement.AudioTrack) != mediaUriElement.AudioTrackList[0]) mediaUriElement.AudioTrack = mediaUriElement.AudioTrackList[0];
+                        }
                         ChannelValue = "2";
                         break;
                 }

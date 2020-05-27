@@ -207,9 +207,9 @@ namespace CrazyKTV_SongMgr
             }
             else
             {
-                Global.CrazyktvSongTrackWordList = new List<string>() { "立體聲", "左聲道 / 音軌1", "右聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
-                Global.CrazyktvSongTrackList = new List<string>() { "V0", "VL", "VR", "V3", "V4", "V5" };
-                Global.CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vl,l,左", "vr,r,右", "v3", "v4", "v5" };
+                Global.CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌1", "左聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
+                Global.CrazyktvSongTrackList = new List<string>() { "V0", "VR", "VL", "V3", "V4", "V5" };
+                Global.CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
             }
 
             string SongTrackStr = "";

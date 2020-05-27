@@ -136,11 +136,6 @@
       <HintPath>Libs\HtmlAgilityPack.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MediaInfoDotNet, Version=0.7.79.40925, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\MediaInfoDotNet.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
@@ -554,12 +549,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\SongMgr.ico" />
-    <None Include="Libs\MediaInfo.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Libs\MediaInfoDotNet.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Content Include="SongMgr\Update\UpdateDB.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>

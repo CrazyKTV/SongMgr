@@ -1,5 +1,4 @@
-﻿using MediaInfoLib;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -3291,21 +3290,44 @@ namespace CrazyKTV_SongMgr
 
         public static string AutoDetectSongTrack(string SongFilePath)
         {
+            int AudioCount = 0;
             string SongTrack;
-            MediaInfo MI = new MediaInfo();
-            MI.Open(SongFilePath);
+            string ffprobePath = Application.StartupPath + @"\FFmpeg\bin\ffprobe.exe";
 
-            if (MI.Get(StreamKind.General, 0, "AudioCount") != "")
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(ffprobePath)
             {
-                switch (MI.Get(StreamKind.General, 0, "AudioCount"))
+                Arguments = (char)34 + SongFilePath + (char)34 + " -show_entries stream=index,codec_type -of compact=p=0 -v 0",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                StandardOutputEncoding = Encoding.UTF8
+            };
+
+            using (Process process = new Process())
+            {
+                process.StartInfo = processStartInfo;
+                process.Start();
+                process.WaitForExit();
+
+                string line;
+                while ((line = process.StandardOutput.ReadLine()) != null)
                 {
-                    case "1":
-                        SongTrack = (Global.SongMgrSongTrackMode == "True") ? "1" : "2";
+                    Regex r = new Regex(@"\w+=audio");
+                    if (r.IsMatch(line)) AudioCount += 1;
+                }
+            }
+
+            if (AudioCount != 0)
+            {
+                switch (AudioCount)
+                {
+                    case 1:
+                        SongTrack = "1";
                         break;
-                    case "2":
+                    case 2:
                         SongTrack = (Global.SongMgrSongTrackMode == "True") ? "2" : "1";
                         break;
-                    case "3":
+                    case 3:
                         SongTrack = "3";
                         break;
                     default:
@@ -3317,7 +3339,6 @@ namespace CrazyKTV_SongMgr
             {
                 SongTrack = "0";
             }
-            MI.Close();
             return SongTrack;
         }
 

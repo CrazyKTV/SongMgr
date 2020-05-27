@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -358,12 +359,12 @@ namespace CrazyKTV_SongMgr
         #endregion
 
 
-        #region --- 聲道互換 ---
+        #region --- 雙音軌聲道對映互換 ---
 
 
         private void SongMaintenance_LRTrackExchange_Button_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("你確定要互換左右聲道數值嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("你確定要互換雙音軌聲道對映嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Global.TimerStartTime = DateTime.Now;
                 Global.TotalList = new List<int>() { 0, 0, 0, 0 };
@@ -380,7 +381,15 @@ namespace CrazyKTV_SongMgr
                     Global.TimerEndTime = DateTime.Now;
                     this.BeginInvoke((Action)delegate()
                     {
-                        SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首歌曲的聲道資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        if (Global.TotalList[3] == 0)
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "總共更新 " + Global.TotalList[0] + " 首雙音軌歌曲的聲道資料,失敗 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        }
+                        else
+                        {
+                            SongMaintenance_Tooltip_Label.Text = "因部份歌曲檔案不存在,已取消互換雙音軌聲道對映作業,請參操作記錄。";
+                        }
+                        Task.Factory.StartNew(() => Common_GetSongStatisticsTask());
                         Common_SwitchSetUI(true);
                     });
                     SongMaintenance.DisposeSongDataTable();
@@ -393,69 +402,169 @@ namespace CrazyKTV_SongMgr
         {
             Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             List<string> list = new List<string>();
+            string ffprobePath = Application.StartupPath + @"\FFmpeg\bin\ffprobe.exe";
 
             var query = from row in Global.SongDT.AsEnumerable()
                          where row.Field<byte>("Song_Track").Equals(1) ||
                                row.Field<byte>("Song_Track").Equals(2)
                          select row;
 
-            foreach (DataRow row in query)
+            if (query.Count<DataRow>() > 0)
             {
-                switch (row["Song_Track"].ToString())
+                foreach (DataRow row in query)
                 {
-                    case "1":
-                        list.Add("2" + "|" + row["Song_Id"].ToString());
-                        break;
-                    case "2":
-                        list.Add("1" + "|" + row["Song_Id"].ToString());
-                        break;
-                }
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在解析第 " + list.Count + " 首歌曲的聲道資料,請稍待...";
-                });
-            }
-
-            OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, "");
-            OleDbCommand cmd = new OleDbCommand();
-            string sqlColumnStr = "Song_Track = @SongTrack";
-            string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
-            cmd = new OleDbCommand(SongUpdateSqlStr, conn);
-            List<string> valuelist = new List<string>();
-
-            foreach (string str in list)
-            {
-                valuelist = new List<string>(str.Split('|'));
-
-                cmd.Parameters.AddWithValue("@SongTrack", valuelist[0]);
-                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    lock (LockThis)
+                    int AudioCount = 0;
+                    string SongFilePath = Path.Combine(row.Field<string>("Song_Path"), row.Field<string>("Song_FileName"));
+                    if (File.Exists(SongFilePath))
                     {
-                        Global.TotalList[0]++;
+                        ProcessStartInfo processStartInfo = new ProcessStartInfo(ffprobePath)
+                        {
+                            Arguments = (char)34 + SongFilePath + (char)34 + " -show_entries stream=index,codec_type -of compact=p=0 -v 0",
+                            CreateNoWindow = true,
+                            UseShellExecute = false,
+                            RedirectStandardOutput = true,
+                            StandardOutputEncoding = Encoding.UTF8
+                        };
+
+                        using (Process process = new Process())
+                        {
+                            process.StartInfo = processStartInfo;
+                            process.Start();
+                            process.WaitForExit();
+
+                            string line;
+                            while ((line = process.StandardOutput.ReadLine()) != null)
+                            {
+                                Regex r = new Regex(@"\w+=audio");
+                                if (r.IsMatch(line)) AudioCount += 1;
+                            }
+                        }
+
+                        if (AudioCount == 2)
+                        {
+                            switch (row["Song_Track"].ToString())
+                            {
+                                case "1":
+                                    list.Add(string.Format("{0}|{1}|{2}|{3}", "2", row.Field<string>("Song_Id"), row.Field<string>("Song_Path"), row.Field<string>("Song_FileName")));
+                                    break;
+                                case "2":
+                                    list.Add(string.Format("{0}|{1}|{2}|{3}", "1", row.Field<string>("Song_Id"), row.Field<string>("Song_Path"), row.Field<string>("Song_FileName")));
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Global.TotalList[3]++;
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換雙音軌聲道對映】歌曲檔案不存在: " + SongFilePath;
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    
+                    Global.TotalList[2]++;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "正在解析第 " + Global.TotalList[2] + " 首歌曲的聲道資料,請稍待...";
+                    });
+                }
+            }
+            
+            if (list.Count > 0)
+            {
+                using (OleDbConnection conn = CommonFunc.OleDbOpenConn(Global.CrazyktvDatabaseFile, ""))
+                {
+                    string sqlColumnStr = "Song_Track = @SongTrack, Song_FileName = @SongFileName";
+                    string SongUpdateSqlStr = "update ktv_Song set " + sqlColumnStr + " where Song_Id = @SongId";
+                    using (OleDbCommand cmd = new OleDbCommand(SongUpdateSqlStr, conn))
+                    {
+                        List<string> valuelist = new List<string>();
+                        foreach (string str in list)
+                        {
+                            lock (LockThis) { Global.TotalList[0]++; }
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首雙音軌歌曲的聲道資料,失敗 " + Global.TotalList[1] + " 首,請稍待...";
+                            });
+
+                            valuelist = new List<string>(str.Split('|'));
+
+                            string SongFilePath = Path.Combine(valuelist[2], valuelist[3]);
+                            string SongFileName = Path.GetFileName(SongFilePath);
+                            string DestFileName = SongFileName;
+
+                            Regex vrRegex = new Regex(@"_vr[\.|_]", RegexOptions.IgnoreCase);
+                            Regex vlRegex = new Regex(@"_vl[\.|_]", RegexOptions.IgnoreCase);
+
+                            if (vrRegex.IsMatch(SongFileName.ToLower()))
+                            {
+                                DestFileName = Regex.Replace(DestFileName, @"_vr[\.|_]", delegate (Match match)
+                                {
+                                    return Regex.Replace(match.Value, "_vr", "_VL", RegexOptions.IgnoreCase);
+                                }, RegexOptions.IgnoreCase);
+                            }
+                            else if (vlRegex.IsMatch(SongFileName.ToLower()))
+                            {
+                                DestFileName = Regex.Replace(DestFileName, @"_vl[\.|_]", delegate (Match match)
+                                {
+                                    return Regex.Replace(match.Value, "_vl", "_VR", RegexOptions.IgnoreCase);
+                                }, RegexOptions.IgnoreCase);
+                            }
+                            
+                            bool MoveError = false;
+                            if ( DestFileName != SongFileName)
+                            {
+                                string SongDir = Path.GetDirectoryName(SongFilePath);
+                                string DestFilePath = Path.Combine(valuelist[2], DestFileName);
+
+                                if (File.Exists(DestFilePath))
+                                {
+                                    MoveError = true;
+                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換雙音軌聲道對映】目的檔案已存在: " + DestFilePath ;
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                    lock (LockThis) { Global.TotalList[1]++; }
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        File.Move(SongFilePath, DestFilePath);
+                                        valuelist[3] = DestFileName;
+                                    }
+                                    catch
+                                    {
+                                        MoveError = true;
+                                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換雙音軌聲道對映】異動檔案時發生錯誤: " + SongFilePath + " (檔案唯讀或正在使用)";
+                                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                        lock (LockThis) { Global.TotalList[1]++; }
+                                    }
+                                }
+                            }
+
+                            if (!MoveError)
+                            {
+                                cmd.Parameters.AddWithValue("@SongTrack", valuelist[0]);
+                                cmd.Parameters.AddWithValue("@SongFileName", valuelist[3]);
+                                cmd.Parameters.AddWithValue("@SongId", valuelist[1]);
+
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                }
+                                catch
+                                {
+                                    lock (LockThis) { Global.TotalList[1]++; }
+                                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換雙音軌聲道對映】更新資料庫時發生錯誤: " + str;
+                                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                                }
+                                cmd.Parameters.Clear();
+                            }
+                        }
                     }
                 }
-                catch
-                {
-                    lock (LockThis)
-                    {
-                        Global.TotalList[1]++;
-                    }
-                    Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【互換左右聲道】更新資料庫時發生錯誤: " + str;
-                    Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
-                }
-                cmd.Parameters.Clear();
-
-                this.BeginInvoke((Action)delegate()
-                {
-                    SongMaintenance_Tooltip_Label.Text = "正在轉換第 " + Global.TotalList[0] + " 首歌曲的聲道資料,請稍待...";
-                });
             }
-            conn.Close();
             list.Clear();
         }
 
@@ -922,7 +1031,6 @@ namespace CrazyKTV_SongMgr
                 }
             }
         }
-
 
         private void SongMaintenance_SongPathChangeTask(object ObjSrcSongPath, object ObjDestSongPath)
         {
