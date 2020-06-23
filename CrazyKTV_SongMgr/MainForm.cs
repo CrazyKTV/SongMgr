@@ -131,6 +131,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong", Global.SongMgrBackupRemoveSong);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", Global.SongAddEngSongNameFormat);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop", Global.MainCfgAlwaysOnTop);
+                CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongDBVer", Global.CrazyktvSongDBVer);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongDBConverterTabPage", Global.MainCfgHideSongDBConverterTabPage);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage", Global.MainCfgHideSongAddResultTabPage);
                 CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", Global.MainCfgHideSongLogTabPage);
@@ -188,7 +189,7 @@ namespace CrazyKTV_SongMgr
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongMgrBackupRemoveSong", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "SongAddEngSongNameFormat", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgAlwaysOnTop", null, false),
-                CommonFunc.LoadConfigXmlFile(Global.CrazyktvSongDBUpdateFile, "SongDBVer", null, false),
+                CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongDBVer", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongDBConverterTabPage", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongAddResultTabPage", null, false),
                 CommonFunc.LoadConfigXmlFile(Global.SongMgrCfgFile, "MainCfgHideSongLogTabPage", null, false),
@@ -384,7 +385,8 @@ namespace CrazyKTV_SongMgr
             if (list[25] != "") Global.MainCfgAlwaysOnTop = list[25];
             MainCfg_AlwaysOnTop_CheckBox.Checked = bool.Parse(Global.MainCfgAlwaysOnTop);
 
-            if (list[26] != "") Global.CrazyktvSongDBVer = list[26];
+            if (!string.IsNullOrEmpty(list[26])) Global.CrazyktvSongDBVer = list[26];
+            Console.WriteLine("Global.CrazyktvSongDBVer = " + Global.CrazyktvSongDBVer);
 
             if (list[27] != "") Global.MainCfgHideSongDBConverterTabPage = list[27];
             MainCfg_HideSongDBConvTab_CheckBox.Checked = bool.Parse(Global.MainCfgHideSongDBConverterTabPage);

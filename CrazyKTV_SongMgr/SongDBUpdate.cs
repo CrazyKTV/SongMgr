@@ -165,7 +165,7 @@ namespace CrazyKTV_SongMgr
         private void SongDBUpdate_CheckDatabaseVersion()
         {
             bool UpdateDBStatus = false;
-            double SongDBVer = 1.00;
+            double SongDBVer = Convert.ToDouble(Global.CrazyktvSongDBVer);
             string CashboxUpdDate = "";
 
             string VersionQuerySqlStr = "select * from ktv_Version";
@@ -175,7 +175,6 @@ namespace CrazyKTV_SongMgr
                 {
                     foreach (DataRow row in dt.Rows)
                     {
-                        SongDBVer = Convert.ToDouble(row["SongDB"]);
                         CashboxUpdDate = row["CashboxUpdDate"].ToString();
                     }
                     Global.CashboxUpdDate = DateTime.Parse(CashboxUpdDate);
@@ -672,6 +671,35 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+
+                    string SqlStr = "select * from ktv_Swan";
+                    using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SqlStr, ""))
+                    {
+                        if (dt.Rows.Count > 0)
+                        {
+                            if (Convert.ToString(dt.Rows[3][1]) == "合唱歌曲")
+                            {
+                                using (OleDbCommand cmd = new OleDbCommand("update ktv_Swan set Swan_Name = @SwanName where Swan_Id = @SwanId", conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@SwanName", "合唱");
+                                    cmd.Parameters.AddWithValue("@SwanId", "3");
+                                    try
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        cmd.Parameters.Clear();
+                                    }
+                                    catch
+                                    {
+                                        UpdateError = true;
+                                        this.BeginInvoke((Action)delegate ()
+                                        {
+                                            SongMaintenance_DBVerTooltip_Label.Text = "變更歌手類別資料失敗,已還原為原本的資料庫檔案。";
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (UpdateError)
@@ -681,16 +709,7 @@ namespace CrazyKTV_SongMgr
                 }
                 else
                 {
-                    using (OleDbConnection mgrconn = CommonFunc.OleDbOpenConn(Global.CrazyktvSongMgrDatabaseFile, ""))
-                    {
-                        using (OleDbCommand cmd = new OleDbCommand("update ktv_Version set SongDB = @SongDB where Id = @Id", mgrconn))
-                        {
-                            cmd.Parameters.AddWithValue("@SongDB", Global.CrazyktvSongDBVer);
-                            cmd.Parameters.AddWithValue("@Id", "1");
-                            cmd.ExecuteNonQuery();
-                            cmd.Parameters.Clear();
-                        }
-                    }
+                    CommonFunc.SaveConfigXmlFile(Global.SongMgrCfgFile, "CrazyktvSongDBVer", Global.CrazyktvSongDBVer);
 
                     string VersionQuerySqlStr = "select * from ktv_Version";
                     using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvSongMgrDatabaseFile, VersionQuerySqlStr, ""))
@@ -699,7 +718,6 @@ namespace CrazyKTV_SongMgr
                         {
                             foreach (DataRow row in dt.Rows)
                             {
-                                Global.CrazyktvSongDBVer = row["SongDB"].ToString();
                                 Global.CashboxUpdDate = DateTime.Parse(row["CashboxUpdDate"].ToString());
                             }
                         }
