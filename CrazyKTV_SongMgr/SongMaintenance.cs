@@ -2185,11 +2185,13 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
 
-                            for (int i = 21; i < 100; i++)
+                            for (int i = 1; i < 9999; i++)
                             {
-                                if (UserIdList.IndexOf(i.ToString("D4")) < 0)
+                                Console.WriteLine("^#" + i.ToString("D4"));
+                                Console.WriteLine(UserIdList.IndexOf("^#" + i.ToString("D4")));
+                                if (UserIdList.IndexOf("^#" + i.ToString("D4")) < 0)
                                 {
-                                    UserId = i.ToString("D4");
+                                    UserId = "^#" + i.ToString("D4");
                                     UserName = SongMaintenance_Favorite_TextBox.Text;
                                     break;
                                 }
@@ -2338,6 +2340,7 @@ namespace CrazyKTV_SongMgr
         public static void SongMaintenance_FavoriteExportTask()
         {
             List<string> list = new List<string>();
+            List<string> UserIDList = new List<string>();
 
             string SongQuerySqlStr = "select User_Id, User_Name from ktv_User";
             using (DataTable dt = CommonFunc.GetOleDbDataTable(Global.CrazyktvDatabaseFile, SongQuerySqlStr, ""))
@@ -2346,7 +2349,14 @@ namespace CrazyKTV_SongMgr
                 {
                     foreach (DataRow row in dt.AsEnumerable())
                     {
-                        list.Add("ktv_User|" + row["User_Id"].ToString() + "|" + row["User_Name"].ToString());
+                        string UserID = Convert.ToString(row["User_Id"]);
+                        Regex r = new Regex(@"^\*\*\*\*$|^####$|^\^CB\d$|^\^CN\d{6}$|^\^CG\d$|^9999$|^\^#\d{4}$");
+                        if (!r.IsMatch(UserID) && !Convert.ToString(row["User_Name"]).Contains("新歌快報"))
+                        {
+                            UserIDList.Add(UserID);
+                            UserID = "^#" + Convert.ToString(row["User_Id"]);
+                        }
+                        list.Add("ktv_User|" + UserID + "|" + Convert.ToString(row["User_Name"]));
                     }
                 }
             }
@@ -2366,13 +2376,21 @@ namespace CrazyKTV_SongMgr
                         {
                             foreach (DataRow songrow in query)
                             {
-                                list.Add("ktv_Favorite|" + row["User_Id"].ToString() + "|" + songrow["Song_Lang"].ToString() + "|" + songrow["Song_Singer"].ToString() + "|" + songrow["Song_SongName"].ToString());
+                                string UserID = Convert.ToString(row["User_Id"]);
+                                Regex r = new Regex(@"^\*\*\*\*$|^####$|^\^CB\d$|^\^CN\d{6}$|^\^CG\d$|^9999$|^\^#\d{4}$");
+                                if (!r.IsMatch(UserID) && UserIDList.IndexOf(UserID) >= 0)
+                                {
+                                    UserID = "^#" + Convert.ToString(row["User_Id"]);
+                                }
+                                list.Add("ktv_Favorite|" + UserID + "|" + Convert.ToString(songrow["Song_Lang"]) + "|" + Convert.ToString(songrow["Song_Singer"]) + "|" + Convert.ToString(songrow["Song_SongName"]));
                                 break;
                             }
                         }
                     }
                 }
             }
+            UserIDList.Clear();
+            UserIDList = null;
 
             if (!Directory.Exists(Application.StartupPath + @"\SongMgr\Backup")) Directory.CreateDirectory(Application.StartupPath + @"\SongMgr\Backup");
             StreamWriter sw = new StreamWriter(Application.StartupPath + @"\SongMgr\Backup\Favorite.txt");
@@ -2381,6 +2399,8 @@ namespace CrazyKTV_SongMgr
                 sw.WriteLine(str);
             }
             sw.Close();
+            list.Clear();
+            list = null;
         }
 
         private void SongMaintenance_FavoriteImport_Button_Click(object sender, EventArgs e)
@@ -3799,7 +3819,7 @@ namespace CrazyKTV_SongMgr
 
                     if (UpdateDateList.Count > 0)
                     {
-                        UpdateDate = DateTime.Parse(UpdateDateList[0]).ToString("yyMM");
+                        UpdateDate = "^CN" +  DateTime.Parse(UpdateDateList[0]).ToString("yyyyMM", CultureInfo.InvariantCulture);
                         foreach (string date in UpdateDateList)
                         {
                             var query = from row in CashboxDT.AsEnumerable()
@@ -3833,7 +3853,7 @@ namespace CrazyKTV_SongMgr
                         if (UpdateList.Count > 0)
                         {
                             Global.TotalList[0]++;
-                            SongMaintenance.UpdateFavoriteData(conn, UpdateDate, "新歌快報 (" + Regex.Replace(DateItem, "份", "") + ")", UpdateList);
+                            SongMaintenance.UpdateFavoriteData(conn, UpdateDate, Regex.Replace(DateItem, "份", ""), UpdateList);
                         }
                     }
                     UpdateList.Clear();

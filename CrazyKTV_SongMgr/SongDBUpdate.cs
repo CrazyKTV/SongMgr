@@ -289,12 +289,13 @@ namespace CrazyKTV_SongMgr
                     bool UpdateKtvSinger = false;
                     bool UpdatePhonetics = false;
                     bool UpdateLangauage = true;
+                    bool UpdateFavorite = false;
                     bool AddSongReplayGainColumn = true;
                     bool RemoveSongMeanVolumeColumn = false;
                     bool RemoveGodLiuColumn = false;
                     List<string> GodLiuColumnlist = new List<string>();
 
-                    List<string> tablelist = new List<string>() { "ktv_Singer", "ktv_Phonetics", "ktv_Langauage" };
+                    List<string> tablelist = new List<string>() { "ktv_Singer", "ktv_Phonetics", "ktv_Langauage", "ktv_User", "ktv_Favorite" };
                     String[] Restrictions = new String[4];
                     Restrictions[2] = "ktv_Song";
                     using (DataTable dt = conn.GetSchema("Columns", Restrictions))
@@ -352,6 +353,9 @@ namespace CrazyKTV_SongMgr
                                     break;
                                 case "Langauage_KeyWord":
                                     UpdateLangauage = false;
+                                    break;
+                                case "User_Id":
+                                    if (row["CHARACTER_MAXIMUM_LENGTH"].ToString() != "12") UpdateFavorite = true;
                                     break;
                                 case "Song_SongNameFuzzy":
                                 case "Song_SingerFuzzy":
@@ -504,6 +508,38 @@ namespace CrazyKTV_SongMgr
                                     SongMaintenance_DBVerTooltip_Label.Text = "更新語系資料表失敗,已還原為原本的資料庫檔案。";
                                 });
                             }
+                        }
+                    }
+
+                    if (UpdateFavorite)
+                    {
+                        List<string> cmdstrlist = new List<string>()
+                        {
+                            "alter table ktv_User alter column User_Id TEXT(12) WITH COMPRESSION",
+                            "alter table ktv_Favorite alter column User_Id TEXT(12) WITH COMPRESSION",
+                        };
+
+                        try
+                        {
+                            foreach (string cmdstr in cmdstrlist)
+                            {
+                                using (OleDbCommand cmd = new OleDbCommand(cmdstr, conn))
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    cmd.Parameters.Clear();
+                                }
+                            }
+                            cmdstrlist.Clear();
+                            cmdstrlist = null;
+                        }
+                        catch
+                        {
+                            UpdateError = true;
+                            this.BeginInvoke((Action)delegate ()
+                            {
+                                SongMaintenance_DBVerTooltip_Label.Text = "更新我的最愛資料表失敗,已還原為原本的資料庫檔案。";
+                            });
+
                         }
                     }
 

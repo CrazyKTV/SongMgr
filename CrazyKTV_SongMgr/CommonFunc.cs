@@ -2813,7 +2813,7 @@ namespace CrazyKTV_SongMgr
 
         public static bool IsUserId(String str)
         {
-            Regex r = new Regex(@"^(?:\d{4})?$");
+            Regex r = new Regex(@"^\^#\d{4}$");
             return r.IsMatch(str);
         }
 
