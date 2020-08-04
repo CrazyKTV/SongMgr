@@ -2187,8 +2187,6 @@ namespace CrazyKTV_SongMgr
 
                             for (int i = 1; i < 9999; i++)
                             {
-                                Console.WriteLine("^#" + i.ToString("D4"));
-                                Console.WriteLine(UserIdList.IndexOf("^#" + i.ToString("D4")));
                                 if (UserIdList.IndexOf("^#" + i.ToString("D4")) < 0)
                                 {
                                     UserId = "^#" + i.ToString("D4");

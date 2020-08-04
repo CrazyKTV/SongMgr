@@ -212,10 +212,9 @@ namespace CrazyKTV_SongMgr
                 Global.CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
             }
 
-            string SongTrackStr = "";
             int SelectedValue = 0;
             int SelectedRowsCount;
-
+            
             if (SongQuery_QueryType_ComboBox.SelectedValue != null)
             {
                 if (SongQuery_QueryType_ComboBox.SelectedValue.ToString() == "9")
@@ -227,31 +226,15 @@ namespace CrazyKTV_SongMgr
                 }
             }
 
-            SongTrackStr = ((DataRowView)SongAdd_DefaultSongTrack_ComboBox.SelectedItem)[0].ToString();
-            SelectedValue = 0;
-
+            SelectedValue = (int)SongAdd_DefaultSongTrack_ComboBox.SelectedValue;
             SongAdd_DefaultSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false, false);
             SongAdd_DefaultSongTrack_ComboBox.DisplayMember = "Display";
             SongAdd_DefaultSongTrack_ComboBox.ValueMember = "Value";
-
-            var trackquery = from row in ((DataTable)SongAdd_DefaultSongTrack_ComboBox.DataSource).AsEnumerable()
-                            where row.Field<string>("Display").Equals(SongTrackStr)
-                            select row;
-
-            if (trackquery.Count<DataRow>() > 0)
-            {
-                foreach (DataRow row in trackquery)
-                {
-                    SelectedValue = Convert.ToInt32(row["Value"]);
-                    break;
-                }
-            }
             SongAdd_DefaultSongTrack_ComboBox.SelectedValue = SelectedValue;
 
             if (SongQuery_EditMode_CheckBox.Checked)
             {
-                SongTrackStr = ((DataRowView)SongQuery_EditSongTrack_ComboBox.SelectedItem)[0].ToString();
-                SelectedValue = 0;
+                SelectedValue = (int)SongQuery_EditSongTrack_ComboBox.SelectedValue;
                 SelectedRowsCount = SongQuery_DataGridView.SelectedRows.Count;
 
                 if (SelectedRowsCount > 1)
@@ -266,26 +249,12 @@ namespace CrazyKTV_SongMgr
                     SongQuery_EditSongTrack_ComboBox.DisplayMember = "Display";
                     SongQuery_EditSongTrack_ComboBox.ValueMember = "Value";
                 }
-
-                var query = from row in ((DataTable)SongQuery_EditSongTrack_ComboBox.DataSource).AsEnumerable()
-                            where row.Field<string>("Display").Equals(SongTrackStr)
-                            select row;
-
-                if (query.Count<DataRow>() > 0)
-                {
-                    foreach (DataRow row in query)
-                    {
-                        SelectedValue = Convert.ToInt32(row["Value"]);
-                        break;
-                    }
-                }
                 SongQuery_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
             }
 
             if (SongAdd_Save_Button.Text == "取消加入")
             {
-                SongTrackStr = ((DataRowView)SongAdd_EditSongTrack_ComboBox.SelectedItem)[0].ToString();
-                SelectedValue = 0;
+                SelectedValue = (int)SongAdd_EditSongTrack_ComboBox.SelectedValue;
                 SelectedRowsCount = SongAdd_DataGridView.SelectedRows.Count;
 
                 if (SelectedRowsCount > 1)
@@ -299,19 +268,6 @@ namespace CrazyKTV_SongMgr
                     SongAdd_EditSongTrack_ComboBox.DataSource = SongAdd.GetDefaultSongInfo("DefaultSongTrack", false, true);
                     SongAdd_EditSongTrack_ComboBox.DisplayMember = "Display";
                     SongAdd_EditSongTrack_ComboBox.ValueMember = "Value";
-                }
-
-                var query = from row in ((DataTable)SongAdd_EditSongTrack_ComboBox.DataSource).AsEnumerable()
-                            where row.Field<string>("Display").Equals(SongTrackStr)
-                            select row;
-
-                if (query.Count<DataRow>() > 0)
-                {
-                    foreach (DataRow row in query)
-                    {
-                        SelectedValue = Convert.ToInt32(row["Value"]);
-                        break;
-                    }
                 }
                 SongAdd_EditSongTrack_ComboBox.SelectedValue = SelectedValue;
             }

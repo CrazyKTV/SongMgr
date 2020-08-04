@@ -332,18 +332,6 @@ namespace CrazyKTV_SongMgr
 
             if (list[18] != "") Global.SongMgrSongTrackMode = list[18];
             SongMgrCfg_SongTrackMode_CheckBox.Checked = bool.Parse(Global.SongMgrSongTrackMode);
-            if(Global.SongMgrSongTrackMode == "True")
-            {
-                Global.CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌2", "左聲道 / 音軌1", "音軌3", "音軌4", "音軌5" };
-                Global.CrazyktvSongTrackList = new List<string>() { "V0", "VR", "VL", "V3", "V4", "V5" };
-                Global.CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
-            }
-            else
-            {
-                Global.CrazyktvSongTrackWordList = new List<string>() { "立體聲", "右聲道 / 音軌1", "左聲道 / 音軌2", "音軌3", "音軌4", "音軌5" };
-                Global.CrazyktvSongTrackList = new List<string>() { "V0", "VR", "VL", "V3", "V4", "V5" };
-                Global.CrazyktvSongTrackKeyWordList = new List<string>() { "v0,立體", "vr,r,右", "vl,l,左", "v3", "v4", "v5" };
-            }
 
             if (list[19] != "") Global.SongAddSongIdentificationMode = list[19];
             SongAdd_SongIdentificationMode_ComboBox.DataSource = SongAdd.GetSongIdentificationModeList();
@@ -386,7 +374,6 @@ namespace CrazyKTV_SongMgr
             MainCfg_AlwaysOnTop_CheckBox.Checked = bool.Parse(Global.MainCfgAlwaysOnTop);
 
             if (!string.IsNullOrEmpty(list[26])) Global.CrazyktvSongDBVer = list[26];
-            Console.WriteLine("Global.CrazyktvSongDBVer = " + Global.CrazyktvSongDBVer);
 
             if (list[27] != "") Global.MainCfgHideSongDBConverterTabPage = list[27];
             MainCfg_HideSongDBConvTab_CheckBox.Checked = bool.Parse(Global.MainCfgHideSongDBConverterTabPage);
