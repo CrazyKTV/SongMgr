@@ -974,57 +974,48 @@ namespace CrazyKTV_SongMgr
 
                 foreach (string sdate in sDateList)
                 {
-                    string url = "https://www.cashboxparty.com/billboard/billboard_newsong.asp?sdate=" + sdate;
+                    string url = "https://www.cashboxparty.com/ashx/ah_Song.ashx";
+                    string poststr = string.Format("[{1}\"m\":\"sn\",\"lang\":\"01,02\",\"date\":\"{0}\"{2}]", sdate, "{", "}");
+                    string jsonString = CommonFunc.DownloadCashboxData(url, poststr);
 
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    using (DataTable dt = CommonFunc.JSONtoDataTable(jsonString))
                     {
-                        if (ms.Length > 0)
+                        if (dt.Rows.Count > 0 && dt.Columns.Contains("SongName"))
                         {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
+                            this.BeginInvoke((Action)delegate ()
                             {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
+                                Cashbox_QueryStatus_Label.Text = "正在分析第 " + (sDateList.IndexOf(sdate) + 1) + " / " + sDateList.Count + " 天的更新歌曲,請稍待...";
+                            });
 
-                                this.BeginInvoke((Action)delegate ()
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                List<string> list = new List<string>()
+                                 {
+                                     row["SongNo"].ToString(),
+                                     row["LangName"].ToString(),
+                                     row["SongName"].ToString(),
+                                     row["Singer"].ToString(),
+                                     row["Indate"].ToString()
+                                 };
+
+                                if (list[1] == "") list[1] = "其它";
+                                if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
                                 {
-                                    Cashbox_QueryStatus_Label.Text = "正在分析第 " + (sDateList.IndexOf(sdate) + 1) + " / " + sDateList.Count + " 天的更新歌曲,請稍待...";
-                                });
+                                    list[3] = Regex.Replace(list[3], "、", "&");
 
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
+                                    if (SongIdList.IndexOf(list[0]) < 0)
                                     {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (list.Count < 4)
-                                        {
-                                            list.Add(data);
-                                        }
+                                        SongIdList.Add(list[0]);
+                                        list.Add("AddSong");
                                     }
-
-                                    if (list[1] == "") list[1] = "其它";
-                                    if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "")
+                                    else
                                     {
-                                        list.Add(sdate);
-                                        list[3] = Regex.Replace(list[3], "、", "&");
-
-                                        if (SongIdList.IndexOf(list[0]) < 0)
-                                        {
-                                            SongIdList.Add(list[0]);
-                                            list.Add("AddSong");
-                                        }
-                                        else
-                                        {
-                                            list.Add("UpdSong");
-                                        }
-                                        SongDataList.Add(string.Join("|", list));
+                                        list.Add("UpdSong");
                                     }
-                                    list.Clear();
-                                    list = null;
+                                    SongDataList.Add(string.Join("|", list));
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }

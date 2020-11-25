@@ -3123,6 +3123,49 @@ namespace CrazyKTV_SongMgr
             return DownloadStatus;
         }
 
+        public class CashboxPostData
+        {
+            public string m { get; set; }
+            public string lang { get; set; }
+            public string date { get; set; }
+        }
+
+        public static string DownloadCashboxData(string Url, string PostStr)
+        {
+            HttpWebRequest Request = (HttpWebRequest)HttpWebRequest.Create(Url);
+            Request.Method = "POST";
+            Request.Host = "www.cashboxparty.com";
+            Request.Referer = "https://www.cashboxparty.com/Music/KTVMusic.aspx";
+            Request.Headers["Origin"] = "https://www.cashboxparty.com";
+            Request.Headers["Accept-Language"] = "zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3";
+            Request.Headers["Accept-Encoding"] = "gzip, deflate, br";
+            Request.Headers["X-Requested-With"] = "XMLHttpRequest";
+            Request.Accept = "application/json, text/javascript, */*; q=0.01";
+            Request.ContentType = "application/x-www-form-urlencoded; charset=utf-8";
+            Request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0";
+            Request.AutomaticDecompression = DecompressionMethods.GZip;
+            Request.KeepAlive = true;
+
+            using (StreamWriter sw = new StreamWriter(Request.GetRequestStream()))
+            {
+                sw.Write(PostStr);
+            }
+
+            string result = string.Empty;
+            try
+            {
+                using (HttpWebResponse Response = (HttpWebResponse)Request.GetResponse())
+                {
+                    using (StreamReader sr = new StreamReader(Response.GetResponseStream()))
+                    {
+                        result = sr.ReadToEnd();
+                    }
+                }
+            }
+            catch { }
+            return result;
+        }
+
         #endregion
 
         #region --- CommonFunc 轉換字串為繁體中文 ---

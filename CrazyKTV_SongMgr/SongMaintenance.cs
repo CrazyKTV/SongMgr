@@ -2590,56 +2590,39 @@ namespace CrazyKTV_SongMgr
 
                 if (CommonFunc.CheckFor45PlusVersion())
                 {
-                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                    HtmlNode table;
-                    HtmlNodeCollection child;
+                    string url = "https://www.cashboxparty.com/ashx/ah_Song.ashx";
+                    string poststr = string.Format("[{0}\"m\":\"bl\",\"t\":\"1\",\"lang\":\"01,02\"{1}]", "{", "}");
+                    string jsonString = CommonFunc.DownloadCashboxData(url, poststr);
 
-                    string url = "https://www.cashboxparty.com/billboard/billboard_newbill.asp";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    using (DataTable dt = CommonFunc.JSONtoDataTable(jsonString))
                     {
-                        if (ms.Length > 0)
+                        if (dt.Rows.Count > 0 && dt.Columns.Contains("SongName"))
                         {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
+                            foreach (DataRow row in dt.Rows)
                             {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 4)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                clist.Add(data);
-                                            }
-                                        }
-                                    }
-                                }
+                                List<string> list = new List<string>()
+                                 {
+                                     row["SongNo"].ToString(),
+                                     row["LangName"].ToString(),
+                                     row["SongName"].ToString(),
+                                     row["Singer"].ToString(),
+                                     row["LangCode"].ToString()
+                                 };
 
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
+                                if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "" && list[4] != "")
                                 {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
+                                    switch (list[4])
                                     {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 4)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                tlist.Add(data);
-                                            }
-                                        }
+                                        case "01":
+                                            clist.Add(list[0]);
+                                            break;
+                                        case "02":
+                                            tlist.Add(list[0]);
+                                            break;
                                     }
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }
@@ -2790,56 +2773,39 @@ namespace CrazyKTV_SongMgr
 
                 if (CommonFunc.CheckFor45PlusVersion())
                 {
-                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                    HtmlNode table;
-                    HtmlNodeCollection child;
+                    string url = "https://www.cashboxparty.com/ashx/ah_Song.ashx";
+                    string poststr = string.Format("[{0}\"m\":\"bl\",\"t\":\"2\",\"lang\":\"01,02\"{1}]", "{", "}");
+                    string jsonString = CommonFunc.DownloadCashboxData(url, poststr);
 
-                    string url = "https://www.cashboxparty.com/billboard/billboard_totalbill.asp";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    using (DataTable dt = CommonFunc.JSONtoDataTable(jsonString))
                     {
-                        if (ms.Length > 0)
+                        if (dt.Rows.Count > 0 && dt.Columns.Contains("SongName"))
                         {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
+                            foreach (DataRow row in dt.Rows)
                             {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 4)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                clist.Add(data);
-                                            }
-                                        }
-                                    }
-                                }
+                                List<string> list = new List<string>()
+                                 {
+                                     row["SongNo"].ToString(),
+                                     row["LangName"].ToString(),
+                                     row["SongName"].ToString(),
+                                     row["Singer"].ToString(),
+                                     row["LangCode"].ToString()
+                                 };
 
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
+                                if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "" && list[4] != "")
                                 {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
+                                    switch (list[4])
                                     {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 4)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                tlist.Add(data);
-                                            }
-                                        }
+                                        case "01":
+                                            clist.Add(list[0]);
+                                            break;
+                                        case "02":
+                                            tlist.Add(list[0]);
+                                            break;
                                     }
                                 }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }
@@ -2992,99 +2958,42 @@ namespace CrazyKTV_SongMgr
 
                 if (CommonFunc.CheckFor45PlusVersion())
                 {
-                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                    HtmlNode table;
-                    HtmlNodeCollection child;
+                    string url = "https://www.cashboxparty.com/ashx/ah_Song.ashx";
+                    string poststr = string.Format("[{0}\"m\":\"bl\",\"t\":\"2\",\"lang\":\"03,04,05\"{1}]", "{", "}");
+                    string jsonString = CommonFunc.DownloadCashboxData(url, poststr);
 
-                    string url = "https://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=2";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    using (DataTable dt = CommonFunc.JSONtoDataTable(jsonString))
                     {
-                        if (ms.Length > 0)
+                        if (dt.Rows.Count > 0 && dt.Columns.Contains("SongName"))
                         {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
+                            foreach (DataRow row in dt.Rows)
                             {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
+                                List<string> list = new List<string>()
+                                 {
+                                     row["SongNo"].ToString(),
+                                     row["LangName"].ToString(),
+                                     row["SongName"].ToString(),
+                                     row["Singer"].ToString(),
+                                     row["LangCode"].ToString()
+                                 };
+
+                                if (CommonFunc.IsSongId(list[0]) && list[1] != "" && list[2] != "" && list[3] != "" && list[4] != "")
                                 {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
+                                    switch (list[4])
                                     {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 1)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                hlist.Add(data);
-                                            }
-                                        }
+                                        case "03":
+                                            hlist.Add(list[0]);
+                                            break;
+                                        case "04":
+                                            jlist.Add(list[0]);
+                                            break;
+                                        case "05":
+                                            elist.Add(list[0]);
+                                            break;
                                     }
                                 }
-                            }
-                        }
-                    }
-
-                    url = "https://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=1";
-                    using (MemoryStream ms = CommonFunc.Download(url))
-                    {
-                        if (ms.Length > 0)
-                        {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
-                            {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 1)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                elist.Add(data);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    url = "https://www.cashboxparty.com/billboard/billboard_otherlangbill.asp?langcode=3";
-                    using (MemoryStream ms = CommonFunc.Download(url))
-                    {
-                        if (ms.Length > 0)
-                        {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
-                            {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    List<string> list = new List<string>();
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (td.IndexOf(tdnode) == 1)
-                                        {
-                                            if (CommonFunc.IsSongId(data))
-                                            {
-                                                jlist.Add(data);
-                                            }
-                                        }
-                                    }
-                                }
+                                list.Clear();
+                                list = null;
                             }
                         }
                     }
@@ -3281,383 +3190,74 @@ namespace CrazyKTV_SongMgr
                 List<string> c56list = new List<string>();
                 List<string> t56list = new List<string>();
 
-                if (CommonFunc.CheckFor45PlusVersion())
+                string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_3456goldsong.json";
+                using (MemoryStream ms = CommonFunc.Download(url))
                 {
-                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                    HtmlNode table;
-                    HtmlNodeCollection child;
-
-                    int pages = 0;
-                    string url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=1";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    if (ms.Length > 0)
                     {
-                        if (ms.Length > 0)
+                        ms.Position = 0;
+                        string jsonString = string.Empty;
+
+                        using (StreamReader sr = new StreamReader(ms))
                         {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
+                            jsonString = sr.ReadToEnd();
+                            DataTable dt = CommonFunc.JSONtoDataTable(jsonString);
+
+                            if (dt.Rows.Count > 0)
                             {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-
-                                this.BeginInvoke((Action)delegate ()
-                                {
-                                    SongMaintenance_Tooltip_Label.Text = "正在更新三四年級國語金曲至我的最愛,請稍待...";
-                                });
-
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (data.Contains("::::::"))
-                                        {
-                                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                                            if (matches.Count > 0)
-                                            {
-                                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (pages > 0)
-                    {
-                        for (int page = 1; page <= pages; page++)
-                        {
-                            url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=2&page=" + page.ToString();
-                            using (MemoryStream ms = CommonFunc.Download(url))
-                            {
-                                if (ms.Length > 0)
-                                {
-                                    ms.Position = 0;
-                                    using (StreamReader sr = new StreamReader(ms))
-                                    {
-                                        doc.Load(sr);
-                                        table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
-                                        child = table.SelectNodes("tr");
-                                        foreach (HtmlNode childnode in child)
-                                        {
-                                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                                            foreach (HtmlNode tdnode in td)
-                                            {
-                                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                if (td.IndexOf(tdnode) == 0)
-                                                {
-                                                    if (CommonFunc.IsSongId(data))
-                                                    {
-                                                        c34list.Add(data);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    pages = 0;
-                    url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=1";
-                    using (MemoryStream ms = CommonFunc.Download(url))
-                    {
-                        if (ms.Length > 0)
-                        {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
-                            {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-
-                                this.BeginInvoke((Action)delegate ()
-                                {
-                                    SongMaintenance_Tooltip_Label.Text = "正在更新三四年級台語金曲至我的最愛,請稍待...";
-                                });
-
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (data.Contains("::::::"))
-                                        {
-                                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                                            if (matches.Count > 0)
-                                            {
-                                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (pages > 0)
-                    {
-                        for (int page = 1; page <= pages; page++)
-                        {
-                            url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=1&page=" + page.ToString();
-                            using (MemoryStream ms = CommonFunc.Download(url))
-                            {
-                                if (ms.Length > 0)
-                                {
-                                    ms.Position = 0;
-                                    using (StreamReader sr = new StreamReader(ms))
-                                    {
-                                        doc.Load(sr);
-                                        table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
-                                        child = table.SelectNodes("tr");
-                                        foreach (HtmlNode childnode in child)
-                                        {
-                                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                                            foreach (HtmlNode tdnode in td)
-                                            {
-                                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                if (td.IndexOf(tdnode) == 0)
-                                                {
-                                                    if (CommonFunc.IsSongId(data))
-                                                    {
-                                                        t34list.Add(data);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    pages = 0;
-                    url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=1";
-                    using (MemoryStream ms = CommonFunc.Download(url))
-                    {
-                        if (ms.Length > 0)
-                        {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
-                            {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-
-                                this.BeginInvoke((Action)delegate ()
-                                {
-                                    SongMaintenance_Tooltip_Label.Text = "正在更新五六年級國語金曲至我的最愛,請稍待...";
-                                });
-
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (data.Contains("::::::"))
-                                        {
-                                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                                            if (matches.Count > 0)
-                                            {
-                                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (pages > 0)
-                    {
-                        for (int page = 1; page <= pages; page++)
-                        {
-                            url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=4&page=" + page.ToString();
-                            using (MemoryStream ms = CommonFunc.Download(url))
-                            {
-                                if (ms.Length > 0)
-                                {
-                                    ms.Position = 0;
-                                    using (StreamReader sr = new StreamReader(ms))
-                                    {
-                                        doc.Load(sr);
-                                        table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
-                                        child = table.SelectNodes("tr");
-                                        foreach (HtmlNode childnode in child)
-                                        {
-                                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                                            foreach (HtmlNode tdnode in td)
-                                            {
-                                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                if (td.IndexOf(tdnode) == 0)
-                                                {
-                                                    if (CommonFunc.IsSongId(data))
-                                                    {
-                                                        c56list.Add(data);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    pages = 0;
-                    url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=1";
-                    using (MemoryStream ms = CommonFunc.Download(url))
-                    {
-                        if (ms.Length > 0)
-                        {
-                            ms.Position = 0;
-                            using (StreamReader sr = new StreamReader(ms))
-                            {
-                                doc.Load(sr);
-                                table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[1]");
-                                child = table.SelectNodes("tr");
-
-                                this.BeginInvoke((Action)delegate ()
-                                {
-                                    SongMaintenance_Tooltip_Label.Text = "正在更新五六年級台語金曲至我的最愛,請稍待...";
-                                });
-
-                                foreach (HtmlNode childnode in child)
-                                {
-                                    HtmlNodeCollection td = childnode.SelectNodes("td");
-                                    foreach (HtmlNode tdnode in td)
-                                    {
-                                        string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                        if (data.Contains("::::::"))
-                                        {
-                                            MatchCollection matches = Regex.Matches(data, @"(\d+?)(\s{2}::::::$)");
-                                            if (matches.Count > 0)
-                                            {
-                                                pages = Convert.ToInt32(matches[0].Groups[1].Value);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (pages > 0)
-                    {
-                        for (int page = 1; page <= pages; page++)
-                        {
-                            url = "https://www.cashboxparty.com/billboard/billboard_3456gold.asp?SongType=3&page=" + page.ToString();
-                            using (MemoryStream ms = CommonFunc.Download(url))
-                            {
-                                if (ms.Length > 0)
-                                {
-                                    ms.Position = 0;
-                                    using (StreamReader sr = new StreamReader(ms))
-                                    {
-                                        doc.Load(sr);
-                                        table = doc.DocumentNode.SelectSingleNode("//form[@name='form1']//table[2]");
-                                        child = table.SelectNodes("tr");
-                                        foreach (HtmlNode childnode in child)
-                                        {
-                                            HtmlNodeCollection td = childnode.SelectNodes("td");
-                                            foreach (HtmlNode tdnode in td)
-                                            {
-                                                string data = Regex.Replace(tdnode.InnerText, @"^\s*|\s*$", ""); //去除頭尾空白
-                                                if (td.IndexOf(tdnode) == 0)
-                                                {
-                                                    if (CommonFunc.IsSongId(data))
-                                                    {
-                                                        t56list.Add(data);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_3456goldsong.json";
-                    using (MemoryStream ms = CommonFunc.Download(url))
-                    {
-                        if (ms.Length > 0)
-                        {
-                            ms.Position = 0;
-                            string jsonString = string.Empty;
-
-                            using (StreamReader sr = new StreamReader(ms))
-                            {
-                                jsonString = sr.ReadToEnd();
-                                DataTable dt = CommonFunc.JSONtoDataTable(jsonString);
-
-                                if (dt.Rows.Count > 0)
-                                {
-                                    var query = from row in dt.AsEnumerable()
-                                                where row.Field<string>("Song_Type") == "1"
-                                                select row;
-
-                                    if (query.Count<DataRow>() > 0)
-                                    {
-                                        string CashBoxID = string.Empty;
-                                        foreach (DataRow row in query)
-                                        {
-                                            CashBoxID = row["Cashbox_Id"].ToString();
-                                            if (CommonFunc.IsSongId(CashBoxID)) t34list.Add(CashBoxID);
-                                        }
-                                    }
-
-                                    query = from row in dt.AsEnumerable()
-                                            where row.Field<string>("Song_Type") == "2"
+                                var query = from row in dt.AsEnumerable()
+                                            where row.Field<string>("Song_Type") == "1"
                                             select row;
 
-                                    if (query.Count<DataRow>() > 0)
+                                if (query.Count<DataRow>() > 0)
+                                {
+                                    string CashBoxID = string.Empty;
+                                    foreach (DataRow row in query)
                                     {
-                                        string CashBoxID = string.Empty;
-                                        foreach (DataRow row in query)
-                                        {
-                                            CashBoxID = row["Cashbox_Id"].ToString();
-                                            if (CommonFunc.IsSongId(CashBoxID)) c34list.Add(CashBoxID);
-                                        }
+                                        CashBoxID = row["Cashbox_Id"].ToString();
+                                        if (CommonFunc.IsSongId(CashBoxID)) t34list.Add(CashBoxID);
                                     }
+                                }
 
-                                    query = from row in dt.AsEnumerable()
-                                            where row.Field<string>("Song_Type") == "3"
-                                            select row;
+                                query = from row in dt.AsEnumerable()
+                                        where row.Field<string>("Song_Type") == "2"
+                                        select row;
 
-                                    if (query.Count<DataRow>() > 0)
+                                if (query.Count<DataRow>() > 0)
+                                {
+                                    string CashBoxID = string.Empty;
+                                    foreach (DataRow row in query)
                                     {
-                                        string CashBoxID = string.Empty;
-                                        foreach (DataRow row in query)
-                                        {
-                                            CashBoxID = row["Cashbox_Id"].ToString();
-                                            if (CommonFunc.IsSongId(CashBoxID)) t56list.Add(CashBoxID);
-                                        }
+                                        CashBoxID = row["Cashbox_Id"].ToString();
+                                        if (CommonFunc.IsSongId(CashBoxID)) c34list.Add(CashBoxID);
                                     }
+                                }
 
-                                    query = from row in dt.AsEnumerable()
-                                            where row.Field<string>("Song_Type") == "4"
-                                            select row;
+                                query = from row in dt.AsEnumerable()
+                                        where row.Field<string>("Song_Type") == "3"
+                                        select row;
 
-                                    if (query.Count<DataRow>() > 0)
+                                if (query.Count<DataRow>() > 0)
+                                {
+                                    string CashBoxID = string.Empty;
+                                    foreach (DataRow row in query)
                                     {
-                                        string CashBoxID = string.Empty;
-                                        foreach (DataRow row in query)
-                                        {
-                                            CashBoxID = row["Cashbox_Id"].ToString();
-                                            if (CommonFunc.IsSongId(CashBoxID)) c56list.Add(CashBoxID);
-                                        }
+                                        CashBoxID = row["Cashbox_Id"].ToString();
+                                        if (CommonFunc.IsSongId(CashBoxID)) t56list.Add(CashBoxID);
+                                    }
+                                }
+
+                                query = from row in dt.AsEnumerable()
+                                        where row.Field<string>("Song_Type") == "4"
+                                        select row;
+
+                                if (query.Count<DataRow>() > 0)
+                                {
+                                    string CashBoxID = string.Empty;
+                                    foreach (DataRow row in query)
+                                    {
+                                        CashBoxID = row["Cashbox_Id"].ToString();
+                                        if (CommonFunc.IsSongId(CashBoxID)) c56list.Add(CashBoxID);
                                     }
                                 }
                             }
