@@ -4163,6 +4163,7 @@ namespace CrazyKTV_SongMgr
                     writer.Indentation = 4;
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(writer, obj);
+                    sw = null;
                 }
             }
             finally

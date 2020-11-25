@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.SongQuery_TabPage = new System.Windows.Forms.TabPage();
@@ -617,6 +617,8 @@
             this.Debug_Tooltip_GroupBox = new System.Windows.Forms.GroupBox();
             this.Debug_Tooltip_Label = new System.Windows.Forms.Label();
             this.Debug_CreateTestFile_Button = new System.Windows.Forms.Button();
+            this.SongMaintenance_VerifyFile_GroupBox = new System.Windows.Forms.GroupBox();
+            this.SongMaintenance_VerifyFile_Button = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.SongQuery_TabPage.SuspendLayout();
             this.SongQuery_TabControl.SuspendLayout();
@@ -715,6 +717,7 @@
             this.Debug_Singer_GroupBox.SuspendLayout();
             this.Debug_Cashbox_GroupBox.SuspendLayout();
             this.Debug_Tooltip_GroupBox.SuspendLayout();
+            this.SongMaintenance_VerifyFile_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -1421,25 +1424,25 @@
             this.SongQuery_DataGridView.AllowUserToAddRows = false;
             this.SongQuery_DataGridView.AllowUserToDeleteRows = false;
             this.SongQuery_DataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            this.SongQuery_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            this.SongQuery_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
             this.SongQuery_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SongQuery_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.SongQuery_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SongQuery_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.SongQuery_DataGridView.EnableHeadersVisualStyles = false;
             this.SongQuery_DataGridView.Location = new System.Drawing.Point(22, 365);
             this.SongQuery_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
             this.SongQuery_DataGridView.Name = "SongQuery_DataGridView";
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongQuery_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle15;
             this.SongQuery_DataGridView.RowTemplate.Height = 27;
             this.SongQuery_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.SongQuery_DataGridView.Size = new System.Drawing.Size(952, 296);
@@ -2222,25 +2225,25 @@
             this.SongAdd_DataGridView.AllowUserToAddRows = false;
             this.SongAdd_DataGridView.AllowUserToDeleteRows = false;
             this.SongAdd_DataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            this.SongAdd_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
+            this.SongAdd_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
             this.SongAdd_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.SongAdd_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SongAdd_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             this.SongAdd_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SongAdd_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.SongAdd_DataGridView.EnableHeadersVisualStyles = false;
             this.SongAdd_DataGridView.Location = new System.Drawing.Point(22, 365);
             this.SongAdd_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
             this.SongAdd_DataGridView.Name = "SongAdd_DataGridView";
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SongAdd_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongAdd_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle18;
             this.SongAdd_DataGridView.RowTemplate.Height = 27;
             this.SongAdd_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.SongAdd_DataGridView.Size = new System.Drawing.Size(952, 296);
@@ -3150,25 +3153,25 @@
             this.SingerMgr_DataGridView.AllowUserToAddRows = false;
             this.SingerMgr_DataGridView.AllowUserToDeleteRows = false;
             this.SingerMgr_DataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            this.SingerMgr_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
+            this.SingerMgr_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle19;
             this.SingerMgr_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.SingerMgr_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SingerMgr_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle20;
             this.SingerMgr_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SingerMgr_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.SingerMgr_DataGridView.EnableHeadersVisualStyles = false;
             this.SingerMgr_DataGridView.Location = new System.Drawing.Point(22, 365);
             this.SingerMgr_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
             this.SingerMgr_DataGridView.Name = "SingerMgr_DataGridView";
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SingerMgr_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SingerMgr_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle21;
             this.SingerMgr_DataGridView.RowTemplate.Height = 27;
             this.SingerMgr_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.SingerMgr_DataGridView.Size = new System.Drawing.Size(468, 296);
@@ -5681,6 +5684,7 @@
             // 
             // SongMaintenance_FFmpeg_TabPage
             // 
+            this.SongMaintenance_FFmpeg_TabPage.Controls.Add(this.SongMaintenance_VerifyFile_GroupBox);
             this.SongMaintenance_FFmpeg_TabPage.Controls.Add(this.SongMaintenance_ReplayGain_GroupBox);
             this.SongMaintenance_FFmpeg_TabPage.Location = new System.Drawing.Point(4, 30);
             this.SongMaintenance_FFmpeg_TabPage.Margin = new System.Windows.Forms.Padding(2);
@@ -6478,25 +6482,25 @@
             this.Cashbox_DataGridView.AllowUserToAddRows = false;
             this.Cashbox_DataGridView.AllowUserToDeleteRows = false;
             this.Cashbox_DataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            this.Cashbox_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
+            this.Cashbox_DataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
             this.Cashbox_DataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Cashbox_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Cashbox_DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
             this.Cashbox_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Cashbox_DataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.Cashbox_DataGridView.EnableHeadersVisualStyles = false;
             this.Cashbox_DataGridView.Location = new System.Drawing.Point(22, 365);
             this.Cashbox_DataGridView.Margin = new System.Windows.Forms.Padding(2, 14, 2, 2);
             this.Cashbox_DataGridView.Name = "Cashbox_DataGridView";
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Cashbox_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Cashbox_DataGridView.RowsDefaultCellStyle = dataGridViewCellStyle24;
             this.Cashbox_DataGridView.RowTemplate.Height = 27;
             this.Cashbox_DataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.Cashbox_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -8220,6 +8224,31 @@
             this.Debug_CreateTestFile_Button.UseVisualStyleBackColor = true;
             this.Debug_CreateTestFile_Button.Click += new System.EventHandler(this.Debug_CreateTestFile_Button_Click);
             // 
+            // SongMaintenance_VerifyFile_GroupBox
+            // 
+            this.SongMaintenance_VerifyFile_GroupBox.Controls.Add(this.SongMaintenance_VerifyFile_Button);
+            this.SongMaintenance_VerifyFile_GroupBox.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_VerifyFile_GroupBox.Location = new System.Drawing.Point(16, 122);
+            this.SongMaintenance_VerifyFile_GroupBox.Margin = new System.Windows.Forms.Padding(6, 2, 6, 2);
+            this.SongMaintenance_VerifyFile_GroupBox.Name = "SongMaintenance_VerifyFile_GroupBox";
+            this.SongMaintenance_VerifyFile_GroupBox.Padding = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.SongMaintenance_VerifyFile_GroupBox.Size = new System.Drawing.Size(428, 96);
+            this.SongMaintenance_VerifyFile_GroupBox.TabIndex = 4;
+            this.SongMaintenance_VerifyFile_GroupBox.TabStop = false;
+            this.SongMaintenance_VerifyFile_GroupBox.Text = "檔案驗證";
+            // 
+            // SongMaintenance_VerifyFile_Button
+            // 
+            this.SongMaintenance_VerifyFile_Button.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.SongMaintenance_VerifyFile_Button.Location = new System.Drawing.Point(16, 39);
+            this.SongMaintenance_VerifyFile_Button.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.SongMaintenance_VerifyFile_Button.Name = "SongMaintenance_VerifyFile_Button";
+            this.SongMaintenance_VerifyFile_Button.Size = new System.Drawing.Size(149, 32);
+            this.SongMaintenance_VerifyFile_Button.TabIndex = 0;
+            this.SongMaintenance_VerifyFile_Button.Text = "檢查檔案完整性";
+            this.SongMaintenance_VerifyFile_Button.UseVisualStyleBackColor = true;
+            this.SongMaintenance_VerifyFile_Button.Click += new System.EventHandler(this.SongMaintenance_VerifyFile_Button_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -8382,6 +8411,7 @@
             this.Debug_Singer_GroupBox.ResumeLayout(false);
             this.Debug_Cashbox_GroupBox.ResumeLayout(false);
             this.Debug_Tooltip_GroupBox.ResumeLayout(false);
+            this.SongMaintenance_VerifyFile_GroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -8964,6 +8994,8 @@
         private System.Windows.Forms.Label MainCfg_PlayerDefaultVolume_Label;
         private System.Windows.Forms.GroupBox MainCfg_Other_GroupBox;
         private System.Windows.Forms.Button MainCfg_ExportSQLite_Button;
+        private System.Windows.Forms.GroupBox SongMaintenance_VerifyFile_GroupBox;
+        private System.Windows.Forms.Button SongMaintenance_VerifyFile_Button;
     }
 }
 

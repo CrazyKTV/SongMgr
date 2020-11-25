@@ -70,5 +70,23 @@ namespace CrazyKTV_SongMgr
             return SongVolume;
         }
 
+
+        public static bool VerifyFile(string file)
+        {
+            bool result = true;
+
+            using (StreamReader sr = RunFFmpeg(FFmpegPath, string.Format("-y -i \"{0}\" -v error -f null /dev/null", file)))
+            {
+                if (sr != null)
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string line = sr.ReadLine();
+                        if (!string.IsNullOrEmpty(line)) result = false;
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

@@ -2681,6 +2681,7 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                 }
+                                ms = null;
                             }
                         }
                     }
@@ -2870,6 +2871,7 @@ namespace CrazyKTV_SongMgr
                                         }
                                     }
                                 }
+                                ms = null;
                             }
                         }
                     }
@@ -3042,6 +3044,7 @@ namespace CrazyKTV_SongMgr
                                         if (CommonFunc.IsSongId(CashBoxID)) hlist.Add(CashBoxID);
                                     }
                                 }
+                                ms = null;
                             }
                         }
                     }
@@ -3073,6 +3076,7 @@ namespace CrazyKTV_SongMgr
                                         if (CommonFunc.IsSongId(CashBoxID)) elist.Add(CashBoxID);
                                     }
                                 }
+                                ms = null;
                             }
                         }
                     }
@@ -3104,6 +3108,7 @@ namespace CrazyKTV_SongMgr
                                         if (CommonFunc.IsSongId(CashBoxID)) jlist.Add(CashBoxID);
                                     }
                                 }
+                                ms = null;
                             }
                         }
                     }
@@ -3296,6 +3301,7 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
                             }
+                            ms = null;
                         }
                     }
                 }
@@ -3853,6 +3859,87 @@ namespace CrazyKTV_SongMgr
                         cmd.Parameters.Clear();
                     }
                 }
+            }
+        }
+
+        #endregion
+
+
+        #region --- FFmpeg - 檢查檔案完整性 ---
+
+        private void SongMaintenance_VerifyFile_Button_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("你確定要開始檢查檔案完整性嗎?", "確認提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.TimerStartTime = DateTime.Now;
+                Global.TotalList = new List<int>() { 0, 0, 0, 0 };
+                SongMaintenance.CreateSongDataTable();
+                Common_SwitchSetUI(false);
+
+                SongMaintenance_Tooltip_Label.Text = "正在檢查檔案完整性,請稍待...";
+
+                var tasks = new List<Task>()
+                {
+                    Task.Factory.StartNew(() => SongMaintenance_VerifyFileTask())
+                };
+
+                Task.Factory.ContinueWhenAll(tasks.ToArray(), VolumeChangeEndTask =>
+                {
+                    Global.TimerEndTime = DateTime.Now;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "總共檢查 " + Global.TotalList[0] + " 首歌曲的檔案完整性資料,損壞 " + Global.TotalList[1] + " 首,共花費 " + (long)(Global.TimerEndTime - Global.TimerStartTime).TotalSeconds + " 秒完成。";
+                        Common_SwitchSetUI(true);
+                    });
+                    SongMaintenance.DisposeSongDataTable();
+                });
+            }
+        }
+
+        private void SongMaintenance_VerifyFileTask()
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            if (File.Exists(Global.CrazyktvDatabaseFile))
+            {
+                NativeMethods.SystemSleepManagement.PreventSleep(false);
+
+                List<string> badlist = new List<string>();
+                
+                Parallel.ForEach(Global.SongDT.AsEnumerable(), new ParallelOptions { MaxDegreeOfParallelism = 2 }, (row, loopState) =>
+                {
+                    lock (LockThis) Global.TotalList[0]++;
+                    this.BeginInvoke((Action)delegate ()
+                    {
+                        SongMaintenance_Tooltip_Label.Text = "正在解析第 " + Global.TotalList[0] + " 首歌曲的完整性資料,目前損壞 " + Global.TotalList[1] + " 首,請稍待...";
+                    });
+
+                    string file = Path.Combine(row["Song_Path"].ToString(), row["Song_FileName"].ToString());
+                    bool status = FFmpeg.VerifyFile(file);
+                    NativeMethods.SystemSleepManagement.ResetSleepTimer(false);
+
+                    if (!status)
+                    {
+                        lock (LockThis)
+                        {
+                            Global.TotalList[1]++;
+                            badlist.Add(row["Song_Id"].ToString());
+                        }
+                    }
+                });
+
+                if (badlist.Count > 0)
+                {
+                    foreach (string songid in badlist)
+                    {
+                        Global.SongLogDT.Rows.Add(Global.SongLogDT.NewRow());
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][0] = "【檔案完整性】這首歌曲的檔案可能有問題: " + songid;
+                        Global.SongLogDT.Rows[Global.SongLogDT.Rows.Count - 1][1] = Global.SongLogDT.Rows.Count;
+                    }
+                    badlist.Clear();
+                    badlist = null;
+                }
+                NativeMethods.SystemSleepManagement.ResotreSleep();
             }
         }
 

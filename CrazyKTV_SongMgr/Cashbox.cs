@@ -1080,6 +1080,7 @@ namespace CrazyKTV_SongMgr
                                     }
                                 }
                             }
+                            ms = null;
                         }
                     }
                 }
