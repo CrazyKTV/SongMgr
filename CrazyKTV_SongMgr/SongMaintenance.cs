@@ -2187,9 +2187,9 @@ namespace CrazyKTV_SongMgr
 
                             for (int i = 1; i < 9999; i++)
                             {
-                                if (UserIdList.IndexOf("^#" + i.ToString("D4")) < 0)
+                                if (UserIdList.IndexOf(i.ToString("D4")) < 0)
                                 {
-                                    UserId = "^#" + i.ToString("D4");
+                                    UserId = i.ToString("D4");
                                     UserName = SongMaintenance_Favorite_TextBox.Text;
                                     break;
                                 }
@@ -2348,11 +2348,15 @@ namespace CrazyKTV_SongMgr
                     foreach (DataRow row in dt.AsEnumerable())
                     {
                         string UserID = Convert.ToString(row["User_Id"]);
-                        Regex r = new Regex(@"^\*\*\*\*$|^####$|^\^CB\d$|^\^CN\d{6}$|^\^CG\d$|^9999$|^\^#\d{4}$");
+                        Regex r = new Regex(@"^\*\*\*\*$|^####$|^\^CB\d$|^\^CN\d{6}$|^\^CG\d$|^9999$");
                         if (!r.IsMatch(UserID) && !Convert.ToString(row["User_Name"]).Contains("新歌快報"))
                         {
                             UserIDList.Add(UserID);
-                            UserID = "^#" + Convert.ToString(row["User_Id"]);
+                            r = new Regex(@"^\^#\d{4}$");
+                            if (r.IsMatch(UserID))
+                            {
+                                UserID = Regex.Replace(UserID, @"\^#", "");
+                            }
                         }
                         list.Add("ktv_User|" + UserID + "|" + Convert.ToString(row["User_Name"]));
                     }
@@ -2375,10 +2379,14 @@ namespace CrazyKTV_SongMgr
                             foreach (DataRow songrow in query)
                             {
                                 string UserID = Convert.ToString(row["User_Id"]);
-                                Regex r = new Regex(@"^\*\*\*\*$|^####$|^\^CB\d$|^\^CN\d{6}$|^\^CG\d$|^9999$|^\^#\d{4}$");
+                                Regex r = new Regex(@"^\*\*\*\*$|^####$|^\^CB\d$|^\^CN\d{6}$|^\^CG\d$|^9999$");
                                 if (!r.IsMatch(UserID) && UserIDList.IndexOf(UserID) >= 0)
                                 {
-                                    UserID = "^#" + Convert.ToString(row["User_Id"]);
+                                    r = new Regex(@"^\^#\d{4}$");
+                                    if (r.IsMatch(UserID))
+                                    {
+                                        UserID = Regex.Replace(UserID, @"\^#", "");
+                                    }
                                 }
                                 list.Add("ktv_Favorite|" + UserID + "|" + Convert.ToString(songrow["Song_Lang"]) + "|" + Convert.ToString(songrow["Song_Singer"]) + "|" + Convert.ToString(songrow["Song_SongName"]));
                                 break;
@@ -2630,7 +2638,8 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_newbill.json";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    MemoryStream ms = CommonFunc.Download(url);
+                    try
                     {
                         if (ms.Length > 0)
                         {
@@ -2674,6 +2683,10 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
                         }
+                    }
+                    finally
+                    {
+                        ms?.Dispose();
                     }
                 }
 
@@ -2813,7 +2826,9 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_totalbill.json";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+
+                    MemoryStream ms = CommonFunc.Download(url);
+                    try
                     {
                         if (ms.Length > 0)
                         {
@@ -2857,6 +2872,10 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
                         }
+                    }
+                    finally
+                    {
+                        ms?.Dispose();
                     }
                 }
 
@@ -3001,7 +3020,8 @@ namespace CrazyKTV_SongMgr
                 else
                 {
                     string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_cantonesebill.json";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    MemoryStream ms = CommonFunc.Download(url);
+                    try
                     {
                         if (ms.Length > 0)
                         {
@@ -3025,9 +3045,14 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+                    finally
+                    {
+                        ms?.Dispose();
+                    }
                     
                     url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_englishbill.json";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    ms = CommonFunc.Download(url);
+                    try
                     {
                         if (ms.Length > 0)
                         {
@@ -3051,9 +3076,14 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+                    finally
+                    {
+                        ms?.Dispose();
+                    }
 
                     url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_japanesebill.json";
-                    using (MemoryStream ms = CommonFunc.Download(url))
+                    ms = CommonFunc.Download(url);
+                    try
                     {
                         if (ms.Length > 0)
                         {
@@ -3076,6 +3106,10 @@ namespace CrazyKTV_SongMgr
                                 }
                             }
                         }
+                    }
+                    finally
+                    {
+                        ms?.Dispose();
                     }
                 }
 
@@ -3191,7 +3225,8 @@ namespace CrazyKTV_SongMgr
                 List<string> t56list = new List<string>();
 
                 string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_3456goldsong.json";
-                using (MemoryStream ms = CommonFunc.Download(url))
+                MemoryStream ms = CommonFunc.Download(url);
+                try
                 {
                     if (ms.Length > 0)
                     {
@@ -3263,6 +3298,10 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+                }
+                finally
+                {
+                    ms?.Dispose();
                 }
 
                 List<string> C34UpdateList = new List<string>();

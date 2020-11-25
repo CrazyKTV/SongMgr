@@ -1026,7 +1026,8 @@ namespace CrazyKTV_SongMgr
             if (GetDataFromGithubWeb)
             {
                 string url = "https://raw.githubusercontent.com/CrazyKTV/WebUpdater/master/CrazyKTV_WebUpdater/Cashbox/cashbox_newsong.json";
-                using (MemoryStream ms = CommonFunc.Download(url))
+                MemoryStream ms = CommonFunc.Download(url);
+                try
                 {
                     if (ms.Length > 0)
                     {
@@ -1081,6 +1082,10 @@ namespace CrazyKTV_SongMgr
                             }
                         }
                     }
+                }
+                finally
+                {
+                    ms?.Dispose();
                 }
                 SongIdList = null;
             }

@@ -2813,7 +2813,7 @@ namespace CrazyKTV_SongMgr
 
         public static bool IsUserId(String str)
         {
-            Regex r = new Regex(@"^\^#\d{4}$");
+            Regex r = new Regex(@"^\d{4}$");
             return r.IsMatch(str);
         }
 
@@ -4154,7 +4154,8 @@ namespace CrazyKTV_SongMgr
 
         public static void ObjtoJSONFile(object obj, string file)
         {
-            using (StreamWriter sw = File.CreateText(file))
+            StreamWriter sw = File.CreateText(file);
+            try
             {
                 using (JsonTextWriter writer = new JsonTextWriter(sw))
                 {
@@ -4163,6 +4164,10 @@ namespace CrazyKTV_SongMgr
                     JsonSerializer jsonSerializer = new JsonSerializer();
                     jsonSerializer.Serialize(writer, obj);
                 }
+            }
+            finally
+            {
+                sw?.Dispose();
             }
         }
 
